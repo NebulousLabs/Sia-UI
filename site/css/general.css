@@ -1,6 +1,19 @@
+/* Known Issues:
+ * 		The mainbar will wrap poorly if the window is sized too small
+ * 	horizontally, such that the mainbar text does not fit but the min width of
+ * 	the sidebar is not yet reached.
+ * 		The sidebar will not fill properly if the window is too small vertically.
+ *
+ * Both of the known issues probably result from the use of -webkit-calc.
+ */
+html,body {
+	height: 100%;
+}
+
 /* UI Header */
 #header {
 	height: 80px;
+	width: 100%;
 	background-color: #F5F5F5;
 	color: #FAFAFA;
 }
@@ -9,12 +22,19 @@
 	padding-top: 14px;
 }
 
+#body {
+	-webkit-box-sizing:border-box;
+	height: -webkit-calc(100% - 80px);
+}
+
 /* Sidebar */
 #sidebar {
 	background-color: #FFFFFF;
+	max-width: 240px;
+	min-width: 160px;
 	z-index: 1000;
+	height: 100%;
 }
-
 #sidebar-button {
 	-webkit-box-sizing:border-box;
 	border-left: 2px solid #ECECEC;
@@ -22,21 +42,25 @@
 	border-bottom: 2px solid #ECECEC;
 	height: 60px;
 	padding-top: 20px;
+	position: relative;
 }
-
 #sidebar-button:hover {
 	background-color: #EEEEEE;
 }
-
+#sidebar-fill {
+	-webkit-box-sizing:border-box;
+	border-left: 2px solid #ECECEC;
+	border-right: 4px solid #ECECEC;
+	height: -webkit-calc(100% - 180px);
+}
 #sidebar-icon {
 	padding-left: 16px;
 }
-
 #sidebar-text {
 	padding-left: 8px;
 }
 
-/* Remove this */
-#removeme {
+#mainbar {
 	background-color: #CCCCCC;
+	flex-grow: 1;
 }
