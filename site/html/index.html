@@ -4,7 +4,7 @@
 		<title>Sia</title>
 		<link rel='stylesheet' href='../libs/font-awesome-4.3.0/css/font-awesome.min.css'>
 		<link rel='stylesheet' href='../libs/pure-min.css'>
-		<link rel='stylesheet' href='../libs/grids-responsie-min.css'>
+		<link rel='stylesheet' href='../libs/grids-responsive-min.css'>
 		<link rel='stylesheet' href='../css/general.css'>
 	</head>
 
@@ -13,13 +13,19 @@
 	<!-- Header for UI -->
 	<div class='pure-g' id='header'>
 		<div id='logo-container'>
-			<img src='../assets/sia.svg' height='50' style='opacity:.5;'>
+			<img src='../assets/sia.svg' height='50' id='logo'>
 		</div>
 	</div>
 
 	<!-- Full body of UI -->
 	<div class='pure-g' id='body'>
+		<!-- Sidebar -->
 		<div class='pure-u-1-5' id='sidebar'>
+			<!-- Fill the UI Height -->
+			<div class='pure-u-1-1' id='sidebar-fill'>
+			</div>
+
+			<!-- Buttons -->
 			<div class='pure-u-1-1' id='sidebar-button'>
 				<div class='pure-u' id='sidebar-icon'>
 					<i class='fa fa-bars'></i>
@@ -46,12 +52,9 @@
 					Wallet
 				</div>
 			</div>
-
-			<!-- Fill the UI Height -->
-			<div class='pure-u-1-1' id='sidebar-fill'>
-			</div>
 		</div>
 
+		<!-- Mainbar -->
 		<div class='pure-u' id='mainbar'>
 			Body
 		</div>

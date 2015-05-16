@@ -15,8 +15,8 @@ app.on('window-all-closed', function() {
 app.on('ready', function() {
 	// Create the browser and load the index page.
 	mainWindow = new BrowserWindow({
+		"height": 720,
 		"width": 1200,
-		"height": 800,
 		"title": "Sia"
 	});
 	mainWindow.loadUrl('file://' + __dirname + '/html/index.html');

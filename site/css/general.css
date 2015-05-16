@@ -1,57 +1,84 @@
-/* Known Issues:
- * 		The mainbar will wrap poorly if the window is sized too small
- * 	horizontally, such that the mainbar text does not fit but the min width of
- * 	the sidebar is not yet reached.
- * 		The sidebar will not fill properly if the window is too small vertically.
+/*	Style Guide:
+ *		Transparent: 70% Opacity
  *
- * Both of the known issues probably result from the use of -webkit-calc.
+ * 		White:      #FFFFFF
+ * 		Grey-White: #F5F5F5
+ *		Faint-Grey: #ECECEC
+ *		Light-Grey: #DDDDDD
+ *		Grey:       #C5C5C5
+ * 		Grey-Black: #4A4A4A
+ * 		Black:      #000000
  */
+
 html,body {
+	position: relative;
+
 	height: 100%;
+	min-height: 380px; /* 80 for header + 60 for up to 5 sidebar buttons */
+	min-width: 480px;
+
+	-webkit-user-select: none;
 }
 
 /* UI Header */
 #header {
 	height: 80px;
 	width: 100%;
+
 	background-color: #F5F5F5;
-	color: #FAFAFA;
 }
-#header #logo-container {
+#logo-container {
 	padding-left: 20px;
 	padding-top: 14px;
 }
+#logo {
+	opacity: 0.7;
+
+	pointer-events: none;
+}
 
 #body {
-	-webkit-box-sizing:border-box;
+	position: relative;
+
 	height: -webkit-calc(100% - 80px);
+	-webkit-box-sizing:border-box;
 }
 
 /* Sidebar */
 #sidebar {
+	position: relative;
+
 	background-color: #FFFFFF;
 	max-width: 240px;
 	min-width: 160px;
 	z-index: 1000;
 	height: 100%;
 }
+#sidebar-fill {
+	position: absolute;
+
+	-webkit-box-sizing:border-box;
+	border-left: 2px solid #ECECEC;
+	border-right: 4px solid #ECECEC;
+	height: 100%;
+}
 #sidebar-button {
+	position: relative;
+
+	height: 60px;
+	padding-top: 20px;
+
 	-webkit-box-sizing:border-box;
 	border-left: 2px solid #ECECEC;
 	border-right: 4px solid #ECECEC;
 	border-bottom: 2px solid #ECECEC;
-	height: 60px;
-	padding-top: 20px;
-	position: relative;
+
+	color: #4A4A4A
+
+	-webkit-user-select: text;
 }
 #sidebar-button:hover {
-	background-color: #EEEEEE;
-}
-#sidebar-fill {
-	-webkit-box-sizing:border-box;
-	border-left: 2px solid #ECECEC;
-	border-right: 4px solid #ECECEC;
-	height: -webkit-calc(100% - 180px);
+	background-color: #DDDDDD;
 }
 #sidebar-icon {
 	padding-left: 16px;
@@ -61,6 +88,7 @@ html,body {
 }
 
 #mainbar {
-	background-color: #CCCCCC;
 	flex-grow: 1;
+
+	background-color: #C5C5C5;
 }
