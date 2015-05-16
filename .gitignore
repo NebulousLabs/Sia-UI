@@ -1,4 +1,7 @@
-npm-debug.log
-test-ui-linux64.tar
+electron-v*
+sia-v*
+Sia-Linux
+Sia-Mac
+Sia-Windows
 node_modules
 *.swp
