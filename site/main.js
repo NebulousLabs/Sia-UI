@@ -1,7 +1,7 @@
-// Standard Electron header, see quick-start.md in the Electron repository.
+// Standard Electron header, see docs/quick-start.md in the Electron
+// repository.
 var app = require('app');
 var BrowserWindow = require('browser-window');
-require('crash-reporter').start();
 var mainWindow = null;
 
 // Respond to all windows being closed.
@@ -19,7 +19,7 @@ app.on('ready', function() {
 		"height": 800,
 		"title": "Sia"
 	});
-	mainWindow.loadUrl('file://' + __dirname + '/index.html');
+	mainWindow.loadUrl('file://' + __dirname + '/html/index.html');
 
 	// Dereference the window object so that the GC cleans up.
 	mainWindow.on('closed', function() {

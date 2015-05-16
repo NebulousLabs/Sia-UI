@@ -1,0 +1,42 @@
+/* UI Header */
+#header {
+	height: 80px;
+	background-color: #F5F5F5;
+	color: #FAFAFA;
+}
+#header #logo-container {
+	padding-left: 20px;
+	padding-top: 14px;
+}
+
+/* Sidebar */
+#sidebar {
+	background-color: #FFFFFF;
+	z-index: 1000;
+}
+
+#sidebar-button {
+	-webkit-box-sizing:border-box;
+	border-left: 2px solid #ECECEC;
+	border-right: 4px solid #ECECEC;
+	border-bottom: 2px solid #ECECEC;
+	height: 60px;
+	padding-top: 20px;
+}
+
+#sidebar-button:hover {
+	background-color: #EEEEEE;
+}
+
+#sidebar-icon {
+	padding-left: 16px;
+}
+
+#sidebar-text {
+	padding-left: 8px;
+}
+
+/* Remove this */
+#removeme {
+	background-color: #CCCCCC;
+}

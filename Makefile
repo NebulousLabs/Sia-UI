@@ -36,6 +36,7 @@ distributables:
 	zip sia-v0.4.0-windows.zip Sia-Windows/*
 
 run:
+	rm -r node_modules/electron-prebuilt/dist/resources/app/
 	cp -R site/ node_modules/electron-prebuilt/dist/resources/app/
 	./node_modules/electron-prebuilt/dist/electron
 
