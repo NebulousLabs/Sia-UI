@@ -6,14 +6,14 @@ clean:
 dependencies:
 	npm install electron-prebuilt
 
-distributables:
-	# Create the Linux distributable.
+dist-linux:
 	wget -nc https://github.com/atom/electron/releases/download/v0.26.0/electron-v0.26.0-linux-x64.zip
 	unzip -o electron-v0.26.0-linux-x64.zip -d Sia-Linux
 	mv Sia-Linux/electron Sia-Linux/Sia
 	cp -R site/ Sia-Linux/resources/app/
 	tar -cJvf sia-v0.4.0-linux.tar.xz Sia-Linux
-	# Create the Mac distributable.
+
+dist-mac:
 	wget -nc https://github.com/atom/electron/releases/download/v0.26.0/electron-v0.26.0-darwin-x64.zip
 	unzip -o electron-v0.26.0-darwin-x64.zip -d Sia-Mac
 	mv Sia-Mac/Electron.app/ Sia-Mac/Sia.app/
@@ -28,7 +28,8 @@ distributables:
 	sed -i.bak s/Electron/Sia/g Sia-Mac/Sia.app/Contents/Info.plist
 	sed -i.bak s/Electron/Sia/g Sia-Mac/Sia.app/Contents/Frameworks/Sia\ Helper.app/Contents/Info.plist
 	tar -cJvf sia-v0.4.0-mac.tar.xz Sia-Mac
-	# Create the Windows distributable.
+
+dist-windows:
 	wget -nc https://github.com/atom/electron/releases/download/v0.26.0/electron-v0.26.0-win32-x64.zip
 	unzip -o electron-v0.26.0-win32-x64.zip -d Sia-Windows
 	mv Sia-Windows/electron.exe Sia-Windows/Sia.exe
