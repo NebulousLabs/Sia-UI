@@ -1,7 +1,9 @@
 electron-v*
 sia-v*
-Sia-Linux
+Sia-Linux-ia32
+Sia-Linux-x64
 Sia-Mac
-Sia-Windows
+Sia-Windows-ia32
+Sia-Windows-x64
 node_modules
 *.swp
