@@ -2,61 +2,72 @@
 <html>
 	<head>
 		<title>Sia</title>
+
+		<!-- Stylesheets -->
 		<link rel='stylesheet' href='../libs/font-awesome-4.3.0/css/font-awesome.min.css'>
 		<link rel='stylesheet' href='../libs/pure-min.css'>
 		<link rel='stylesheet' href='../libs/grids-responsive-min.css'>
 		<link rel='stylesheet' href='../css/general.css'>
+
+		<!-- Javascript -->
+		<script type='text/javascript' src='../libs/jquery.js'></script>
+		<script type='text/javascript'>
+			window.$ = window.jQuery = require('../libs/jquery.js');
+		</script>
+		<script type='text/javascript' src='../js/viewLoader.js'></script>
 	</head>
 
 	<body>
 
 	<!-- Header for UI -->
-	<div class='pure-g' id='header'>
-		<div id='logo-container'>
-			<img src='../assets/sia.svg' height='50' id='logo'>
+	<div class='pure-g header'>
+		<div class='logo-container'>
+			<img src='../assets/sia.svg' height='50' class='logo'>
 		</div>
 	</div>
 
 	<!-- Full body of UI -->
-	<div class='pure-g' id='body'>
+	<div class='pure-g body'>
 		<!-- Sidebar -->
-		<div class='pure-u-1-5' id='sidebar'>
+		<div class='pure-u-1-5 sidebar'>
 			<!-- Fill the UI Height -->
-			<div class='pure-u-1-1' id='sidebar-fill'>
+			<div class='pure-u-1-1 sidebar-fill'>
 			</div>
 
 			<!-- Buttons -->
-			<div class='pure-u-1-1' id='sidebar-button'>
-				<div class='pure-u' id='sidebar-icon'>
+			<div class='pure-u-1-1 sidebar-button' id='sidebar-overview-button'>
+				<div class='pure-u sidebar-icon'>
 					<i class='fa fa-bars'></i>
 				</div>
-				<div class='pure-u' id='sidebar-text'>
+				<div class='pure-u sidebar-text'>
 					Overview
 				</div>
 			</div>
 
-			<div class='pure-u-1-1' id='sidebar-button'>
-				<div class='pure-u' id='sidebar-icon'>
+			<div class='pure-u-1-1 sidebar-button' id='sidebar-library-button'>
+				<div class='pure-u sidebar-icon'>
 					<i class='fa fa-file'></i>
 				</div>
-				<div class='pure-u' id='sidebar-text'>
+				<div class='pure-u sidebar-text'>
 					Library
 				</div>
 			</div>
 
-			<div class='pure-u-1-1' id='sidebar-button'>
-				<div class='pure-u' id='sidebar-icon'>
+			<div class='pure-u-1-1 sidebar-button' id='sidebar-wallet-button'>
+				<div class='pure-u sidebar-icon'>
 					<i class='fa fa-money'></i>
 				</div>
-				<div class='pure-u' id='sidebar-text'>
+				<div class='pure-u sidebar-text'>
 					Wallet
 				</div>
 			</div>
 		</div>
 
 		<!-- Mainbar -->
-		<div class='pure-u' id='mainbar'>
-			Body
+		<div class='pure-u mainbar'>
+			<div id='mainbar-content'>
+				<div id='view'></div>
+			</div>
 		</div>
 	</div>
 
