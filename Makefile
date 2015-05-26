@@ -5,7 +5,7 @@ clean:
 
 dependencies:
 	npm install electron-prebuilt
-	mkdir node_modules/electron-prebuilt/dist/resources/app
+	rm node_modules/electron-prebuilt/dist/resources/default_app
 
 run:
 	rm -r node_modules/electron-prebuilt/dist/resources/app/
