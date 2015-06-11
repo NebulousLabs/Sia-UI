@@ -2,12 +2,13 @@
 // repository.
 var app = require('app');
 var BrowserWindow = require('browser-window');
+var path = require('path');
 var mainWindow = null;
 
 // Respond to all windows being closed.
 app.on('window-all-closed', function() {
 	if (process.platform != 'darwin') {
-		app.quit();
+		app.exit();
 	}
 });
 
@@ -17,9 +18,14 @@ app.on('ready', function() {
 	mainWindow = new BrowserWindow({
 		"height": 720,
 		"width": 1200,
+        "min-width": 800,
+        "min-height": 600,
 		"title": "Sia"
+
 	});
 	mainWindow.loadUrl('file://' + __dirname + '/html/index.html');
+
+	mainWindow.openDevTools();
 
 	// Dereference the window object so that the GC cleans up.
 	mainWindow.on('closed', function() {
