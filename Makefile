@@ -8,8 +8,8 @@ dependencies:
 	mv node_modules/electron-prebuilt/dist/resources/default_app node_modules/electron-prebuilt/dist/resources/app
 
 run:
-	cp -R site/ node_modules/electron-prebuilt/dist/resources/app/
 	rm -r node_modules/electron-prebuilt/dist/resources/app/
+	cp -R site/ node_modules/electron-prebuilt/dist/resources/app/
 	./node_modules/electron-prebuilt/dist/electron
 
 dist-linux-32:
