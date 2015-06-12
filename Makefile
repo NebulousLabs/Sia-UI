@@ -5,10 +5,10 @@ clean:
 
 dependencies:
 	npm install electron-prebuilt
-	rm node_modules/electron-prebuilt/dist/resources/default_app
+	rm -rf node_modules/electron-prebuilt/dist/resources/default_app
 
 run:
-	rm -r node_modules/electron-prebuilt/dist/resources/app/
+	rm -rf node_modules/electron-prebuilt/dist/resources/app/
 	cp -R site/ node_modules/electron-prebuilt/dist/resources/app/
 	./node_modules/electron-prebuilt/dist/electron
 
@@ -59,4 +59,4 @@ dist-windows-64:
 
 dist: dist-linux-32 dist-linux-64 dist-mac dist-windows-32 dist-windows-64
 
-.PHONY: all clean depedencies run dist-linux-32 dist-linux-64 dist-mac dist-windows-32 dist-windows-64 dist
+.PHONY: all clean dependencies run dist-linux-32 dist-linux-64 dist-mac dist-windows-32 dist-windows-64 dist
