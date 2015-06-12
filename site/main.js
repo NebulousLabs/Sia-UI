@@ -18,14 +18,14 @@ app.on('ready', function() {
 	mainWindow = new BrowserWindow({
 		"height": 720,
 		"width": 1200,
-        "min-width": 800,
-        "min-height": 600,
+		"min-width": 800,
+		"min-height": 600,
 		"title": "Sia"
 
 	});
 	mainWindow.loadUrl('file://' + __dirname + '/html/index.html');
 
-	mainWindow.openDevTools();
+	// mainWindow.openDevTools();
 
 	// Dereference the window object so that the GC cleans up.
 	mainWindow.on('closed', function() {
