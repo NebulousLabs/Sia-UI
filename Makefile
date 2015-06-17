@@ -4,25 +4,27 @@ electron-version = v0.28.1
 sia-version = v0.4.0
 
 # runs the app
-all: run
+all: dependencies run
 
 # cleans distributable files
 clean:
 	rm -rf electron-$(electron-version)* sia-v* Sia-*
-
-# delete node_modules, used to not package these unnecessarily with distributions
-clean-node:
-	rm -rf app/node_modules
 
 # install node_modules
 dependencies:
 	( cd app ; npm install )
 
 # before running, node_modules needs to be installed
-run: dependencies
+run:
 	./app/node_modules/electron-prebuilt/dist/electron ./app
 
-dist: clean-node dist-linux-32 dist-linux-64 dist-mac dist-windows-32 dist-windows-64
+# delete node_modules, used to not package these unnecessarily with distributions
+clean-node-modules:
+	rm -rf app/node_modules
+
+# make distributables for each operating system, folders and executable files
+dist: clean-node-modules dist-linux-32 dist-linux-64 dist-mac dist-windows-32 dist-windows-64
+	rm -rf electron-$(electron-version)*
 
 dist-linux-32:
 	wget -nc $(electron-download-page)/$(electron-version)/electron-$(electron-version)-linux-ia32.zip
@@ -69,4 +71,4 @@ dist-windows-64:
 	cp -R app/ Sia-Windows-x64/resources/app/
 	zip sia-$(sia-version)-windows-x64.zip Sia-Windows-x64/*
 
-.PHONY: all clean clean-node dependencies run dist-linux-32 dist-linux-64 dist-mac dist-windows-32 dist-windows-64 dist
+.PHONY: all clean dependencies run clean-node-modules dist dist-linux-32 dist-linux-64 dist-mac dist-windows-32 dist-windows-64

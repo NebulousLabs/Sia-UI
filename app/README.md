@@ -9,7 +9,7 @@ This is the user interface for [Sia](https://github.com/NebulousLabs/Sia), it is
     - There are prebuilt binaries [here](https://github.com/NebulousLabs/Sia/releases).
 - [node & npm (packaged together)](https://nodejs.org/download/)
 
-## Building and Running
+## Installing modules & Running
 
 1. `npm install`
 2. `npm start`

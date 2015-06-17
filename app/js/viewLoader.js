@@ -1,6 +1,6 @@
 // viewLoader manages which view is currently being displayed in the mainbar of
 // the UI.
-
+var window = null;
 
 window.onload = function() {
 	var view = window.$('#view'),
