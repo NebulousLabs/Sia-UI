@@ -11,4 +11,5 @@ This is the user interface for [Sia](https://github.com/NebulousLabs/Sia), it is
 
 ## Building and Running
 
-1. `make`
+1. `npm install`
+2. `npm start`

@@ -23,7 +23,7 @@ app.on('ready', function() {
 		"title": "Sia"
 
 	});
-	mainWindow.loadUrl('file://' + __dirname + '/html/index.html');
+	mainWindow.loadUrl('file://' + __dirname + '/../html/index.html');
 
 	// mainWindow.openDevTools();
 
