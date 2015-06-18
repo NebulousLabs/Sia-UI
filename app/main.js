@@ -7,7 +7,7 @@ var mainWindow = null;
 
 // Respond to all windows being closed.
 app.on('window-all-closed', function() {
-	if (process.platform != 'darwin') {
+	if (process.platform !== 'darwin') {
 		app.exit();
 	}
 });
