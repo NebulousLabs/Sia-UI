@@ -1,0 +1,21 @@
+{
+  "name": "Test-UI",
+  "version": "0.4.0",
+  "main": "app/main.js",
+  "author": "NebulousLabs",
+  "description": "The development directory for Sia-UI",
+  "license": "MIT",
+  "dependencies": {
+    "electron-prebuilt": "latest"
+  },
+  "scripts": {
+    "start": "electron app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/NebulousLabs/test-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NebulousLabs/test-ui/issues"
+  }
+}
