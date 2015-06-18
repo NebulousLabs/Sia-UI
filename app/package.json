@@ -1,19 +1,21 @@
 {
   "name": "Sia-UI",
   "version": "0.4.0",
-  "main": "./js/main.js",
+  "main": "app/main.js",
   "author": "NebulousLabs",
   "description": "A UI application for interfacing with Sia",
   "license": "MIT",
   "devDependencies": {
-    "electron-prebuilt": "latest",
     "jshint": "latest",
     "mocha": "latest"
   },
+  "dependencies": {
+    "electron-prebuilt": "latest"
+  },
   "scripts": {
-    "lint": "jshint ./js/*.js",
-    "test": "mocha test/",
-    "start": "./node_modules/electron-prebuilt/dist/electron ./"
+    "lint": "jshint js/*.js main.js",
+    "test": "mocha test",
+    "start": "electron ."
   },
   "repository": {
     "type": "git",

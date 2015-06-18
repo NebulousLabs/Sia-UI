@@ -1,7 +1,7 @@
 The top level folder is pertinent mostly for its Makefile which holds the bash
-logic to make distributables for each OS through a `make dist` command
+logic to make distributables for each OS through a `make dist` command.
 
-The ./app/ folder holds all the code relevant to make test-ui into an npm module
+The `app/` folder holds all the code relevant to make test-ui into an npm module
 that people could develop with and on.
 
 You will need npm and gconf. Most linux installations will already have gconf.

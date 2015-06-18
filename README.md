@@ -1,7 +1,7 @@
 # Test UI
 
 This is the user interface for [Sia](https://github.com/NebulousLabs/Sia), it is a desktop application based off the
-[electron (formerly named atom-shell)](https://github.com/atom/electron) framework.
+[electron](https://github.com/atom/electron) framework.
 
 ## Prerequisites
 
