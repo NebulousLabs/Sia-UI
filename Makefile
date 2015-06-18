@@ -11,12 +11,12 @@ run:
 
 # cleans distributable files & dependencies
 clean:
-	rm -rf electron-* sia-v* Sia-*
+	rm -rf electron-* sia-v* Sia-* node_modules
 
 # install node_modules
 dependencies:
 	npm install
-	#rm -rf node_modules/electron-prebuilt/dist/resources/default_app
+	rm -rf node_modules/electron-prebuilt/dist/resources/default_app
 
 # make distributables for each operating system, folders and executable files
 dist: dist-linux-32 dist-linux-64 dist-mac dist-windows-32 dist-windows-64

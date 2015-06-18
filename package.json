@@ -5,7 +5,7 @@
   "author": "NebulousLabs",
   "description": "The development directory for Sia-UI",
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "electron-prebuilt": "latest"
   },
   "scripts": {
