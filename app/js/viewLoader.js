@@ -8,7 +8,32 @@ var path = require('path');
 window.onload = function() {
 	"use strict";
 	// Setup self-evident variable names
-	var winView = $('#view');
+	var winView = $('#view'), i;
+
+	// Get array of plugins
+	var pluginDir = __dirname + '/plugins/';
+	fs.readdir(pluginDir, function(error, plugins) {
+		if (error) {
+			console.log(error);
+			window.alert(error);
+			return;
+		}
+
+		// DEVTOOL: Log the directory names out
+		for (var i = 0; i < plugins.length; i+=1) {
+			console.log(plugins[i]);
+		}
+
+		// Populate sidebar with buttons
+		var sideBar = document.getElementById('sidebar');
+		for (i = 0; i < plugins.length; i+=1) {
+			var directory = plugins[i];
+			var tmpl = document.getElementById('plugin-template').content.cloneNode(true);
+			tmpl.querySelector('.sidebar-icon').innerHTML = '<i class=\'fa fa-bars\'></i>';
+			tmpl.querySelector('.sidebar-text').innerText = directory;
+			sideBar.appendChild(tmpl);
+		}
+	});
 	var sidebarOverviewButton = document.getElementById('sidebar-overview-button');
 	var sidebarLibraryButton = document.getElementById('sidebar-library-button');
 	var sidebarWalletButton = document.getElementById('sidebar-wallet-button');
@@ -17,19 +42,6 @@ window.onload = function() {
 	sidebarOverviewButton.style.cursor = 'pointer';
 	sidebarLibraryButton.style.cursor = 'pointer';
 	sidebarWalletButton.style.cursor = 'pointer';
-
-	// Get array of plugin directories
-	fs.readdir(__dirname + '/plugins', function(error, files) {
-		if (error) {
-			console.log(error);
-			window.alert(error);
-			return;
-		}
-		for (var i = 0; i < files.length; ++i) {
-			files[i] = path.join(__dirname + '/plugins', files[i]);
-			console.log(files[i]);
-		}
-	})
 
 	// Default to the 'Overview' view.
 	winView.load('html/overview.html');

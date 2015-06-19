@@ -20,7 +20,7 @@ app.on('window-all-closed', function() {
 // initialization and ready for creating browser windows.
 app.on('ready', function() {
 	"use strict";
-	console.log('main.js reached')
+	console.log('main.js reached');
 	// Create the browser
 	mainWindow = new BrowserWindow({
 		"height": 720,
@@ -32,7 +32,7 @@ app.on('ready', function() {
 	// and load the index.html of the app.
 	mainWindow.loadUrl('file://' + __dirname + '/index.html');
 
-	// Open the devtools.
+	// DEVTOOL: Open the devtools.
 	// mainWindow.openDevTools();
 
 	// Emitted when the window is closed.
