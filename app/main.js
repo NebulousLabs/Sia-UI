@@ -7,13 +7,15 @@ var mainWindow = null;
 
 // Respond to all windows being closed.
 app.on('window-all-closed', function() {
-	if (process.platform != 'darwin') {
+	"use strict";
+	if (process.platform !== 'darwin') {
 		app.exit();
 	}
 });
 
 // Create the windows.
 app.on('ready', function() {
+	"use strict";
 	// Create the browser and load the index page.
 	mainWindow = new BrowserWindow({
 		"height": 720,
@@ -23,7 +25,7 @@ app.on('ready', function() {
 		"title": "Sia"
 
 	});
-	mainWindow.loadUrl('file://' + __dirname + '/html/index.html');
+	mainWindow.loadUrl('file://' + __dirname + '/index.html');
 
 	// mainWindow.openDevTools();
 
