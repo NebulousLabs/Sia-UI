@@ -1,36 +1,43 @@
-// Standard Electron header, see docs/quick-start.md in the Electron
-// repository.
+// Module to control application life.
 var app = require('app');
+// Module to create native browser window.
 var BrowserWindow = require('browser-window');
+// Module to handle path resolution among different OSes
 var path = require('path');
-var mainWindow = null;
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the javascript object is GCed.
+var mainWindow;
 
-// Respond to all windows being closed.
+// Quit to all windows being closed.
 app.on('window-all-closed', function() {
 	"use strict";
 	if (process.platform !== 'darwin') {
-		app.exit();
+		app.quit();
 	}
 });
 
-// Create the windows.
+// This method will be called when Electron has done everything
+// initialization and ready for creating browser windows.
 app.on('ready', function() {
 	"use strict";
-	// Create the browser and load the index page.
+	console.log('main.js reached')
+	// Create the browser
 	mainWindow = new BrowserWindow({
 		"height": 720,
 		"width": 1200,
 		"min-width": 800,
 		"min-height": 600,
 		"title": "Sia"
-
 	});
+	// and load the index.html of the app.
 	mainWindow.loadUrl('file://' + __dirname + '/index.html');
 
+	// Open the devtools.
 	// mainWindow.openDevTools();
 
-	// Dereference the window object so that the GC cleans up.
+	// Emitted when the window is closed.
 	mainWindow.on('closed', function() {
+		// Dereference the window object so that the GC cleans up.
 		mainWindow = null;
 	});
 });
