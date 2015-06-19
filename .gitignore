@@ -7,3 +7,4 @@ Sia-Windows-ia32
 Sia-Windows-x64
 node_modules
 *.swp
+samples

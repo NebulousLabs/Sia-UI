@@ -7,7 +7,9 @@ sia-version = v0.4.0
 all: run
 
 run:
-	node_modules/.bin/electron app
+	npm start
+
+run-fresh: clean dependencies run
 
 # cleans distributable files & dependencies
 clean:
@@ -16,7 +18,6 @@ clean:
 # install node_modules
 dependencies:
 	npm install
-	rm -rf node_modules/electron-prebuilt/dist/resources/default_app
 
 # make distributables for each operating system, folders and executable files
 dist: dist-linux-32 dist-linux-64 dist-mac dist-windows-32 dist-windows-64
@@ -66,4 +67,4 @@ dist-windows-64:
 	cp -R app/ Sia-Windows-x64/resources/app/
 	zip sia-$(sia-version)-windows-x64.zip Sia-Windows-x64/*
 
-.PHONY: all clean dependencies dist dist-linux-32 dist-linux-64 dist-mac dist-windows-32 dist-windows-64 run
+.PHONY: all clean dependencies dist dist-linux-32 dist-linux-64 dist-mac dist-windows-32 dist-windows-64 run run-fresh

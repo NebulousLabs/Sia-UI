@@ -2,27 +2,29 @@
 // the UI.
 
 window.onload = function() {
-	// Default to the 'Overview' view.
-	$('#view').load('html/overview.html');
-
-	// Enable the overview button.
+	"use strict";
+	// Setup self-evident variable names
+	var winView = $('#view');
 	var sidebarOverviewButton = document.getElementById('sidebar-overview-button');
-	sidebarOverviewButton.style.cursor = 'pointer';
-	sidebarOverviewButton.onclick = function(){
-		$('#view').load('html/overview.html');
-	};
-
-	// Enable the library button.
 	var sidebarLibraryButton = document.getElementById('sidebar-library-button');
-	sidebarLibraryButton.style.cursor = 'pointer';
-	sidebarLibraryButton.onclick = function(){
-		$('#view').load('html/library.html');
-	};
-
-	// Enable the wallet button.
 	var sidebarWalletButton = document.getElementById('sidebar-wallet-button');
+
+	// Style the button cursors
+	sidebarOverviewButton.style.cursor = 'pointer';
+	sidebarLibraryButton.style.cursor = 'pointer';
 	sidebarWalletButton.style.cursor = 'pointer';
-	sidebarWalletButton.onclick = function(){
-		$('#view').load('html/wallet.html');
+
+	// Default to the 'Overview' view.
+	winView.load('html/overview.html');
+
+	// Enable button functionalities.
+	sidebarOverviewButton.onclick = function(){
+		winView.load('html/overview.html');
 	};
-}
+	sidebarLibraryButton.onclick = function(){
+		winView.load('html/library.html');
+	};
+	sidebarWalletButton.onclick = function(){
+		winView.load('html/wallet.html');
+	};
+};
