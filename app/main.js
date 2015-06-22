@@ -4,14 +4,38 @@ var app = require('app');
 var BrowserWindow = require('browser-window');
 // Module to handle path resolution among different OSes
 var path = require('path');
+// Module to access the file system
+var fs = require('fs');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
 var mainWindow;
-var pluginManager;
+
+function startMainWindow() {
+	'use strict';
+	// Create the browser
+	mainWindow = new BrowserWindow({
+		'height': 720,
+		'width': 1200,
+		'min-width': 800,
+		'min-height': 600,
+		'title': 'Sia'
+	});
+	// and load the index.html of the app.
+	mainWindow.loadUrl('file://' + __dirname + '/index.html');
+
+	// DEVTOOL: Open the devtools.
+	// mainWindow.openDevTools();
+
+	// Emitted when the window is closed.
+	mainWindow.on('closed', function() {
+		// Dereference the window object so that the GC cleans up.
+		mainWindow = null;
+	});
+}
 
 // Quit to all windows being closed.
 app.on('window-all-closed', function() {
-	"use strict";
+	'use strict';
 	if (process.platform !== 'darwin') {
 		app.quit();
 	}
@@ -20,25 +44,6 @@ app.on('window-all-closed', function() {
 // This method will be called when Electron has done everything
 // initialization and ready for creating browser windows.
 app.on('ready', function() {
-	"use strict";
-	console.log('main.js reached');
-	// Create the browser
-	mainWindow = new BrowserWindow({
-		"height": 720,
-		"width": 1200,
-		"min-width": 800,
-		"min-height": 600,
-		"title": "Sia"
-	});
-	// and load the index.html of the app.
-	mainWindow.loadUrl('file://' + __dirname + '/index.html');
-
-	// DEVTOOL: Open the devtools.
-	mainWindow.openDevTools();
-
-	// Emitted when the window is closed.
-	mainWindow.on('closed', function() {
-		// Dereference the window object so that the GC cleans up.
-		mainWindow = null;
-	});
+	'use strict';
+	startMainWindow();
 });

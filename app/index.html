@@ -11,17 +11,22 @@
 		</template>
 
 		<!-- Stylesheets -->
-		<link rel='stylesheet' href='lib/font-awesome-4.3.0/css/font-awesome.min.css'>
-		<link rel='stylesheet' href='lib/pure-min.css'>
-		<link rel='stylesheet' href='lib/grids-responsive-min.css'>
+		<link rel='stylesheet' href='libs/font-awesome-4.3.0/css/font-awesome.min.css'>
+		<link rel='stylesheet' href='libs/pure-min.css'>
+		<link rel='stylesheet' href='libs/grids-responsive-min.css'>
 		<link rel='stylesheet' href='css/general.css'>
 
 		<!-- Javascript -->
-		<script type='text/javascript' src='lib/jquery.js'></script>
+		<script type='text/javascript' src='libs/jquery.js'></script>
 		<script type='text/javascript'>
-			window.$ = window.jQuery = require('./lib/jquery.js');
+			window.$ = window.jQuery = require('./libs/jquery.js');
 		</script>
-		<script type='text/javascript' src='js/viewLoader.js'></script>
+		<script type='text/javascript' src='js/pluginsManager.js'></script>
+		<script>
+			$(window).ready(function() {
+				pluginsManager.init();
+			});
+		</script>
 	</head>
 
 	<body>
@@ -40,34 +45,6 @@
 			<!-- Fill the UI Height -->
 			<div class='pure-u-1-1 sidebar-fill'>
 			</div>
-
-
-			<!-- <div class='pure-u-1-1 sidebar-button' id='sidebar-overview-button'>
-				<div class='pure-u sidebar-icon'>
-					<i class='fa fa-bars'></i>
-				</div>
-				<div class='pure-u sidebar-text'>
-					Overview
-				</div>
-			</div>
-
-			<div class='pure-u-1-1 sidebar-button' id='sidebar-library-button'>
-				<div class='pure-u sidebar-icon'>
-					<i class='fa fa-file'></i>
-				</div>
-				<div class='pure-u sidebar-text'>
-					Library
-				</div>
-			</div>
-
-			<div class='pure-u-1-1 sidebar-button' id='sidebar-wallet-button'>
-				<div class='pure-u sidebar-icon'>
-					<i class='fa fa-money'></i>
-				</div>
-				<div class='pure-u sidebar-text'>
-					Wallet
-				</div>
-			</div> -->
 		</div>
 
 		<!-- Mainbar -->
