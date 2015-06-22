@@ -7,6 +7,7 @@ var path = require('path');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
 var mainWindow;
+var pluginManager;
 
 // Quit to all windows being closed.
 app.on('window-all-closed', function() {
@@ -33,7 +34,7 @@ app.on('ready', function() {
 	mainWindow.loadUrl('file://' + __dirname + '/index.html');
 
 	// DEVTOOL: Open the devtools.
-	// mainWindow.openDevTools();
+	mainWindow.openDevTools();
 
 	// Emitted when the window is closed.
 	mainWindow.on('closed', function() {

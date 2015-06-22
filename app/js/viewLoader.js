@@ -8,7 +8,7 @@ var path = require('path');
 window.onload = function() {
 	"use strict";
 	// Setup self-evident variable names
-	var winView = $('#view'), i;
+	var winView = $('#view');
 
 	// Get array of plugins
 	var pluginDir = __dirname + '/plugins/';
@@ -19,41 +19,34 @@ window.onload = function() {
 			return;
 		}
 
-		// DEVTOOL: Log the directory names out
-		for (var i = 0; i < plugins.length; i+=1) {
-			console.log(plugins[i]);
-		}
-
-		// Populate sidebar with buttons
+		// Populate index.html's sidebar with buttons
 		var sideBar = document.getElementById('sidebar');
-		for (i = 0; i < plugins.length; i+=1) {
-			var directory = plugins[i];
-			var tmpl = document.getElementById('plugin-template').content.cloneNode(true);
+		for (var i = 0; i < plugins.length; i+=1) {
+			var plugin = plugins[i];
+			var tmpl = document.getElementById('button-template').content.cloneNode(true);
+			var button = tmpl.querySelector('.sidebar-button');
+			button.id = plugin + '-button';
 			tmpl.querySelector('.sidebar-icon').innerHTML = '<i class=\'fa fa-bars\'></i>';
-			tmpl.querySelector('.sidebar-text').innerText = directory;
+			tmpl.querySelector('.sidebar-text').innerText = plugin;
+			button.style.cursor = 'pointer';
 			sideBar.appendChild(tmpl);
 		}
-	});
-	var sidebarOverviewButton = document.getElementById('sidebar-overview-button');
-	var sidebarLibraryButton = document.getElementById('sidebar-library-button');
-	var sidebarWalletButton = document.getElementById('sidebar-wallet-button');
+		var sidebarOverviewButton = document.getElementById('Overview-button');
+		var sidebarLibraryButton = document.getElementById('Library-button');
+		var sidebarWalletButton = document.getElementById('Wallet-button');
 
-	// Style the button cursors
-	sidebarOverviewButton.style.cursor = 'pointer';
-	sidebarLibraryButton.style.cursor = 'pointer';
-	sidebarWalletButton.style.cursor = 'pointer';
-
-	// Default to the 'Overview' view.
-	winView.load('html/overview.html');
-
-	// Enable button functionalities.
-	sidebarOverviewButton.onclick = function(){
+		// Default to the 'Overview' view.
 		winView.load('html/overview.html');
-	};
-	sidebarLibraryButton.onclick = function(){
-		winView.load('html/library.html');
-	};
-	sidebarWalletButton.onclick = function(){
-		winView.load('html/wallet.html');
-	};
+
+		// Enable button functionalities.
+		sidebarOverviewButton.onclick = function(){
+			winView.load('html/overview.html');
+		};
+		sidebarLibraryButton.onclick = function(){
+			winView.load('html/library.html');
+		};
+		sidebarWalletButton.onclick = function(){
+			winView.load('html/wallet.html');
+		};
+	});
 };
