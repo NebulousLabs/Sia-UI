@@ -1,3 +1,4 @@
+'use strict';
 // Module to control application life.
 var app = require('app');
 // Module to create native browser window.
@@ -11,7 +12,6 @@ var fs = require('fs');
 var mainWindow;
 
 function startMainWindow() {
-	'use strict';
 	// Create the browser
 	mainWindow = new BrowserWindow({
 		'height': 720,
@@ -35,7 +35,6 @@ function startMainWindow() {
 
 // Quit to all windows being closed.
 app.on('window-all-closed', function() {
-	'use strict';
 	if (process.platform !== 'darwin') {
 		app.quit();
 	}
@@ -44,6 +43,5 @@ app.on('window-all-closed', function() {
 // This method will be called when Electron has done everything
 // initialization and ready for creating browser windows.
 app.on('ready', function() {
-	'use strict';
 	startMainWindow();
 });

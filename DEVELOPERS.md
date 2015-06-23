@@ -2,7 +2,7 @@ I am only certain about development flow for linux. If you are developing on
 another operating system, please expand this documentation.
 
 You will need npm and gconf. Most linux installations will already have gconf.
-You should also have tar and zip. To get started, run 'make lib && make'.
+You should also have tar and zip. To get started, run 'make dependencies && make'.
 
 ## DEVTOOL:
 
@@ -14,7 +14,7 @@ should be commented out upon pull request
 The Makefile provides the most functionality and is the master set of commands.
 
 It uses npm commands where convenient. E.g. using `npm install` in make
-lib instead of manually getting the node_modules for electron and
+dependencies instead of manually getting the node_modules for electron and
 other dev tools from their github repos.
 
 NPM makes certain commands more efficient, but should not become overly
