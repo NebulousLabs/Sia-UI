@@ -4,7 +4,7 @@
 var fs = require('fs');
 var path = require('path');
 
-var pluginsManager = (function() {
+var views = (function() {
 	// Get array of plugins
 	var pluginDir = path.join(__dirname, '/plugins/');
 	var plugins;
