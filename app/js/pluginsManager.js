@@ -35,7 +35,8 @@ var pluginsManager = (function() {
 		for (var i = 0; i < plugins.length; i+=1) {
 			var plugin = plugins[i];
 			var tmpl = document.getElementById('button-template').content.cloneNode(true);
-			tmpl.querySelector('.sidebar-icon').innerHTML = '<i class=\'fa fa-bars\'></i>';
+			var iconDir = path.join(pluginDir, plugin, 'button.ico');
+			tmpl.querySelector('.sidebar-icon').innerHTML = '<link rel="icon" href=' + iconDir + ' />';
 			tmpl.querySelector('.sidebar-text').innerText = plugin;
 
 			var button = tmpl.querySelector('.sidebar-button');
