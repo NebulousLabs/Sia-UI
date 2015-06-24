@@ -1,14 +1,16 @@
-// pluginsManager manages plugin functionality and affects the DOM dynamically
-// according to the plugins folder
+// UI.js handles loading and transitioning between buttons and views
+// Pretty much all user interaction response should go through here
 'use strict';
 var fs = require('fs');
 var path = require('path');
 
-var views = (function() {
+// Defines the functions and private vars of UI.js
+var UI = (function() {
 	// Get array of plugins
 	var pluginDir = path.join(__dirname, '/plugins/');
 	var plugins;
 
+	// Called from window.on('ready') to initalize the view
 	function init() {
 		// Initialize buttons according to what's in app/plugins
 		// TODO: verify plugin folders
@@ -21,22 +23,24 @@ var views = (function() {
 		};
 	}
 
+	// Initializes sidebar buttons based on what's in plugins folder
 	function initButtons(plugins) {
 		// Detect if Overview plugin is installed and set it to be the 
 		// top button and autoloaded view if so
 		var ovIndex = $.inArray('Overview', plugins);
-		if (ovIndex && plugins[0] !== 'Overview') {
+		if (ovIndex !== 0 && plugins[0] !== 'Overview') {
 			plugins[ovIndex] = plugins[0];
 			plugins[0] = 'Overview';
 		}
 
 		// Populate index.html's sidebar with buttons
 		var sideBar = document.getElementById('sidebar');
-		for (var i = 0; i < plugins.length; i+=1) {
+		for (var i = 0; i < plugins.length; i++) {
 			var plugin = plugins[i];
 			var tmpl = document.getElementById('button-template').content.cloneNode(true);
 			var iconDir = path.join(pluginDir, plugin, 'button.ico');
 			tmpl.querySelector('.sidebar-icon').innerHTML = '<link rel="icon" href=' + iconDir + ' />';
+			console.log(tmpl.querySelector('.sidebar-icon').innerHTML);
 			tmpl.querySelector('.sidebar-text').innerText = plugin;
 
 			var button = tmpl.querySelector('.sidebar-button');

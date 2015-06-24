@@ -11,7 +11,7 @@ This is the user interface for [Sia](https://github.com/NebulousLabs/Sia), it is
 
 ## Running
 
-1. `make lib`
+1. `make dependencies`
 2. `make run`
 
 OR
