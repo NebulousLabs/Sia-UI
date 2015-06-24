@@ -7,20 +7,23 @@ var path = require('path');
 // Defines the functions and private vars of UI.js
 var UI = (function() {
 	// Get array of plugins
-	var pluginDir = path.join(__dirname, '/plugins/');
-	var plugins;
+	var pluginDir = path.join(__dirname, 'plugins');
 
-	// Called from window.on('ready') to initalize the view
+	// Called at $(window).ready to initalize the view
 	function init() {
 		// Initialize buttons according to what's in app/plugins
 		// TODO: verify plugin folders
-		plugins = fs.readdirSync(pluginDir);
-		initButtons(plugins);
+		fs.readdir(pluginDir, function (err, plugins) {
+			if (err) {
+				throw err;
+			}
 
-		// Default to Overview or first plugin
-		window.onload = function() {
-			$('#view').load(path.join(pluginDir, plugins[0], 'index.html'));
-		};
+			// Default to Overview or first plugin
+			window.onload = function() {
+				$('#view').load(path.join(pluginDir, plugins[0], 'index.html'));
+			};
+			initButtons(plugins);
+		});
 	}
 
 	// Initializes sidebar buttons based on what's in plugins folder
@@ -40,7 +43,6 @@ var UI = (function() {
 			var tmpl = document.getElementById('button-template').content.cloneNode(true);
 			var iconDir = path.join(pluginDir, plugin, 'button.ico');
 			tmpl.querySelector('.sidebar-icon').innerHTML = '<link rel="icon" href=' + iconDir + ' />';
-			console.log(tmpl.querySelector('.sidebar-icon').innerHTML);
 			tmpl.querySelector('.sidebar-text').innerText = plugin;
 
 			var button = tmpl.querySelector('.sidebar-button');
