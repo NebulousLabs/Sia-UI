@@ -1,17 +1,17 @@
+// main.js, the entry point of the app, handles starting up the app window. It
+// runs index.html which maps all other classes.
 'use strict';
 // Module to control application life.
 var app = require('app');
 // Module to create native browser window.
 var BrowserWindow = require('browser-window');
-// Module to handle path resolution among different OSes
-var path = require('path');
-// Module to access the file system
-var fs = require('fs');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
 var mainWindow;
 
+// startMainWindow creates the first window and loads and index.html.
 function startMainWindow() {
+
 	// Create the browser
 	mainWindow = new BrowserWindow({
 		'height': 720,
@@ -33,15 +33,14 @@ function startMainWindow() {
 	});
 }
 
-// Quit to all windows being closed.
+// Quit when all windows are closed.
 app.on('window-all-closed', function() {
 	if (process.platform !== 'darwin') {
 		app.quit();
 	}
 });
 
-// This method will be called when Electron has done everything
-// initialization and ready for creating browser windows.
+// When Electron loading has finished, call 'startMainWindow'
 app.on('ready', function() {
 	startMainWindow();
 });

@@ -36,9 +36,10 @@
 	"noarg"         : true,     // Prohibit use of `arguments.caller` and `arguments.callee`.
 	"noempty"       : true,     // Prohibit use of empty blocks.
 	"nonew"         : true,     // Prohibit use of constructors for side-effects.
-	"plusplus"      : true,     // Prohibit use of `++` & `--`.
+	"plusplus"      : false,    // Prohibit use of `++` & `--`.
 	"regexp"        : true,     // Prohibit `.` and `[^...]` in regular expressions.
-	"undef"         : true,     // Require all non-global variables be declared before they are used.
+	"undef"         : false,    // Require all non-global variables be declared before they are used.
+	"unused"		: true,		// Prohibits defining variables that don't get used.
 	"strict"        : true,     // Require `use strict` pragma in every file.
 	"trailing"      : true,     // Prohibit trailing whitespaces.
 
@@ -115,5 +116,10 @@
 		//"anotherCoolGlobal",
 		//"iLoveDouglas"
 	],
+	"globals"		: {
+		"fs"	: false,
+		"path"	: false,
+		"UI"	: false
+	},
 	"indent"        : 4         // Specify indentation spacing
 }
