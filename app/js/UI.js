@@ -12,7 +12,7 @@ var UI = (function() {
 
 	// Called at $(window).ready to initalize the view
 	function init() {
-		UI._pluginManager.init();
+		UI._plugins.init();
 	}
 
 	// Expose elements to be made public
