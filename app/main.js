@@ -20,7 +20,11 @@ function startMainWindow() {
 		'min-height': 600,
 		'title': 'Sia'
 	});
-	// and load the index.html of the app.
+
+	// Choose not to show the menubar
+	mainWindow.setMenuBarVisibility(false);
+	
+	// Load the index.html of the app.
 	mainWindow.loadUrl('file://' + __dirname + '/index.html');
 
 	// DEVTOOL: Open the devtools.
