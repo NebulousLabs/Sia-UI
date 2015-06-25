@@ -11,7 +11,7 @@
   },
   "scripts": {
 	"start": "electron app",
-	"lint": "jshint app/. --exclude app/libs/ --config ./.jshintrc",
+	"lint": "jshint app/. --exclude app/libs/ --verbose",
 	"env": "env"
   },
   "repository": {
