@@ -4,6 +4,11 @@ another operating system, please expand this documentation.
 You will need npm and gconf. Most linux installations will already have gconf.
 You should also have tar and zip. To get started, run 'make dependencies && make'.
 
+## DEVTOOL:
+
+grep for the term DEVTOOL: to find switches and console.log commands that
+should be commented out upon pull request
+
 ## Makefile/NPM-package.json philosophy:
 (perhaps this was unnecessary but throw me a bone)
 The Makefile provides the most functionality and is the master set of commands.

@@ -36,9 +36,10 @@
 	"noarg"         : true,     // Prohibit use of `arguments.caller` and `arguments.callee`.
 	"noempty"       : true,     // Prohibit use of empty blocks.
 	"nonew"         : true,     // Prohibit use of constructors for side-effects.
-	"plusplus"      : true,     // Prohibit use of `++` & `--`.
+	"plusplus"      : false,    // Prohibit use of `++` & `--`.
 	"regexp"        : true,     // Prohibit `.` and `[^...]` in regular expressions.
-	"undef"         : true,     // Require all non-global variables be declared before they are used.
+	"undef"         : false,    // Require all non-global variables be declared before they are used.
+	"unused"		: true,		// Prohibits defining variables that don't get used.
 	"strict"        : true,     // Require `use strict` pragma in every file.
 	"trailing"      : true,     // Prohibit trailing whitespaces.
 
@@ -57,7 +58,7 @@
 	"evil"          : false,    // Tolerate use of `eval`.
 	"expr"          : false,    // Tolerate `ExpressionStatement` as Programs.
 	"funcscope"     : false,    // Tolerate declarations of variables inside of control structures while accessing them later from the outside.
-	"globalstrict"  : false,    // Allow global "use strict" (also enables 'strict').
+	"globalstrict"  : true,     // Allow global "use strict" (also enables 'strict').
 	"iterator"      : false,    // Allow usage of __iterator__ property.
 	"lastsemic"     : false,    // Tolerat missing semicolons when the it is omitted for the last statement in a one-line block.
 	"laxbreak"      : false,    // Tolerate unsafe line breaks e.g. `return [\n] x` without semicolons.
@@ -115,5 +116,10 @@
 		//"anotherCoolGlobal",
 		//"iLoveDouglas"
 	],
+	"globals"		: {
+		"fs"	: false,
+		"path"	: false,
+		"UI"	: false
+	},
 	"indent"        : 4         // Specify indentation spacing
 }

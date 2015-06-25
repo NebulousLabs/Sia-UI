@@ -2,6 +2,13 @@
 <html>
 	<head>
 		<title>Sia</title>
+		<!-- Plugin HTML Template -->
+		<template id='button-template'>
+			<div class='pure-u-1-1 sidebar-button'>
+				<div class='pure-u sidebar-icon'></div>
+				<div class='pure-u sidebar-text'></div>
+			</div>
+		</template>
 
 		<!-- Stylesheets -->
 		<link rel='stylesheet' href='libs/font-awesome-4.3.0/css/font-awesome.min.css'>
@@ -14,7 +21,13 @@
 		<script type='text/javascript'>
 			window.$ = window.jQuery = require('./libs/jquery.js');
 		</script>
-		<script type='text/javascript' src='js/viewLoader.js'></script>
+		<script type='text/javascript' src='js/UI.js'></script>
+		<script type='text/javascript' src='js/pluginManager.js'></script>
+		<script>
+			$(window).ready(function() {
+				UI.init();
+			});
+		</script>
 	</head>
 
 	<body>
@@ -29,38 +42,7 @@
 	<!-- Full body of UI -->
 	<div class='pure-g body'>
 		<!-- Sidebar -->
-		<div class='pure-u-1-5 sidebar'>
-			<!-- Fill the UI Height -->
-			<div class='pure-u-1-1 sidebar-fill'>
-			</div>
-
-			<!-- Buttons -->
-			<div class='pure-u-1-1 sidebar-button' id='sidebar-overview-button'>
-				<div class='pure-u sidebar-icon'>
-					<i class='fa fa-bars'></i>
-				</div>
-				<div class='pure-u sidebar-text'>
-					Overview
-				</div>
-			</div>
-
-			<div class='pure-u-1-1 sidebar-button' id='sidebar-library-button'>
-				<div class='pure-u sidebar-icon'>
-					<i class='fa fa-file'></i>
-				</div>
-				<div class='pure-u sidebar-text'>
-					Library
-				</div>
-			</div>
-
-			<div class='pure-u-1-1 sidebar-button' id='sidebar-wallet-button'>
-				<div class='pure-u sidebar-icon'>
-					<i class='fa fa-money'></i>
-				</div>
-				<div class='pure-u sidebar-text'>
-					Wallet
-				</div>
-			</div>
+		<div class='pure-u-1-5 sidebar' id='sidebar'>
 		</div>
 
 		<!-- Mainbar -->
