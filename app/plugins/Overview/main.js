@@ -1,14 +1,23 @@
 // Global variables and require statements
 'use strict';
 
-// pluginManager manages all things to do with plugins for the UI
+// [PLUGIN] does so and so
 UI._Overview = (function(){
 
-	// init performs plugin startup logic
+    // [PLUGIN]'s resources
+    var cwd = path.join(__dirname, 'plugins', 'Overview');
+    var view = path.join(cwd, 'index.html');
+
+
+	// init performs startup logic
 	function init(){
+        $.get(view, function(data){ 
+            $('#view').append(data);
+        });
 	}
 
 	function update(){
+        console.log(cwd);
 	}
 
 	// Expose elements to be made public
