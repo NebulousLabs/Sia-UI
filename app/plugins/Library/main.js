@@ -1,21 +1,16 @@
 // Global variables and require statements
 'use strict';
 
-// pluginManager manages all things to do with plugins for the UI
-UI._Overview = (function(){
+// [PLUGIN] does so and so
+UI._Library = (function(){
 
-    // This plugin's resources
-    var cwd = path.join(__dirname, 'plugins', 'Overview');
+    // [PLUGIN]'s resources
+    var cwd = path.join(__dirname, 'plugins', 'Library');
     var view = path.join(cwd, 'index.html');
 
-
-	// init performs plugin startup logic
+	// init performs startup logic
 	function init(){
-        //$('#view').load(view);
-        $.get(view, function(data){ 
-            $("#view").append(data);
-        });
-        //$('#view').append(view);
+		console.log(view);
 	}
 
 	function update(){

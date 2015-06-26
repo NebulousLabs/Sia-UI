@@ -8,12 +8,9 @@ UI._Overview = (function(){
     var cwd = path.join(__dirname, 'plugins', 'Overview');
     var view = path.join(cwd, 'index.html');
 
-
 	// init performs startup logic
 	function init(){
-        $.get(view, function(data){ 
-            $('#view').append(data);
-        });
+		console.log(view);
 	}
 
 	function update(){
