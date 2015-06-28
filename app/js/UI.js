@@ -6,9 +6,18 @@
 'use strict';
 var fs = require('fs');
 var path = require('path');
+var webFrame = require('web-frame');
 
 // Defines the functions and private vars of UI.js
 var UI = (function() {
+
+	// DOM variable shortcuts
+	var atomScreen = require('screen');
+	var screenSize = atomScreen.getPrimaryDisplay().workAreaSize;
+	
+	// Used to make the app more readable on hidpi screens. web-frame has 
+	// TODO: Automate this based on screen size
+	webFrame.setZoomFactor(2);
 
 	// Called at $(window).ready to initalize the view
 	function init() {

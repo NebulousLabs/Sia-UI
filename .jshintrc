@@ -117,9 +117,6 @@
 		//"iLoveDouglas"
 	],
 	"globals"		: {
-		"fs"	: false,
-		"path"	: false,
-		"UI"	: false
 	},
 	"indent"        : 4         // Specify indentation spacing
 }

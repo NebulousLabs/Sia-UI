@@ -1,7 +1,7 @@
 // Global variables and require statements
 'use strict';
 
-// pluginManager manages all things to do with plugins for the UI
+// plugins manages all plugin logic on a more back-end level for the UI
 UI._plugins = (function(){
 	// Directory of plugins
 	var pluginsDir = path.join(__dirname, 'plugins');
@@ -29,10 +29,9 @@ UI._plugins = (function(){
 			// Do tasks per plugin found
 			pluginNames.forEach(function(plugin) {
 				// Load main.js entry-point into index.html, then initialize
-				// the plugin itself. We allow plugins to have their own init()
-				// functions while we load their index.html
+				// the plugin itself.
 				loadScript(path.join(pluginsDir, plugin, 'main.js'), function() {
-					initPlugin(plugin);
+					UI['_' + plugin].init();
 				});
 				// Give the plugin a sidebar button
 				addButton(plugin);
@@ -69,15 +68,6 @@ UI._plugins = (function(){
 		head.appendChild(script);
 	}
 	
-	// initPlugin loads up the plugin's index.html by default, also calling the
-	// plugin's init() function to allow their own custom logic
-	function initPlugin(plugin) {
-		$.get(path.join(pluginsDir, plugin, 'index.html'), function(data) {
-			$('#view').append(data);
-		});
-		UI['_' + plugin].init();
-	}
-	
 	// addButton, called from init on a per-plugin basis, creates the button
 	// html to be added and gives it a listener to trigger plugin's update()
 	function addButton(plugin) {
@@ -93,7 +83,7 @@ UI._plugins = (function(){
 		// Set inner values
 		btn.id = plugin + '-button';
 		btn.style.cursor = 'pointer';
-		icon.innerHTML = '<link rel="icon" href=' + iconDir + ' />'
+		icon.innerHTML = '<link rel="icon" href=' + iconDir + ' />';
 		text.innerText = plugin;
 
 		// Make the button responsive

@@ -11,7 +11,8 @@ var mainWindow;
 
 // startMainWindow creates the first window and loads and index.html.
 function startMainWindow() {
-	// Open the UI with full screen size
+	// Open the UI with full screen size. 'screen' can only be required after
+	// app.on('ready') 
 	var atomScreen = require('screen');
 	var size = atomScreen.getPrimaryDisplay().workAreaSize;
 
