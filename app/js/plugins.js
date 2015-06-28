@@ -6,16 +6,17 @@ UI._plugins = (function(){
 	// Directory of plugins
 	var pluginsDir = path.join(__dirname, 'plugins');
     // DOM element shortcuts
-	var head, sideBar, mainView;
+	var head, sideBar, mainBar;
 	// Default plugin
 	var home;
 
 	// init performs startup logic related to plugins
 	function init(){
+
 		// Initialize variables upon document completion
 		head = document.getElementsByTagName('head')[0];
         sideBar = document.getElementById('sidebar');
-		mainView = document.getElementById('view');
+		mainBar = document.getElementById('mainbar');
 
 		// Initialize UI components that require a read of /app/plugins
 		fs.readdir(pluginsDir, function (err, pluginNames) {
@@ -27,12 +28,19 @@ UI._plugins = (function(){
 			initHome(pluginNames);
 			
 			// Do tasks per plugin found
-			pluginNames.forEach(function(plugin) {
+			pluginNames.forEach(function(plugin, index) {
+
 				// Load main.js entry-point into index.html, then initialize
 				// the plugin itself.
-				loadScript(path.join(pluginsDir, plugin, 'main.js'), function() {
-					UI['_' + plugin].init();
+				loadWebView(mainBar, plugin + '-view', path.join(pluginsDir, plugin, 'index.html'), function(view) {
+
+					// show the home view
+					if (index === 0) {
+						console.log(index);
+						view.style.display = '';
+					}
 				});
+
 				// Give the plugin a sidebar button
 				addButton(plugin);
 			});
@@ -42,6 +50,7 @@ UI._plugins = (function(){
     // initHome detects Overview or otherwise the first plugin, alphabetically,
     // and loads it
     function initHome(pluginNames) {
+
         // Detect if Overview plugin is installed and set it to be the top
         // button and autoloaded view if so
 		var ovIndex = pluginNames.indexOf('Overview');
@@ -52,25 +61,26 @@ UI._plugins = (function(){
 		home = pluginNames[0];
 	}
 
-	// loadScript adds the plugin main.js code to index.html
-	function loadScript(url, callback) {
-		// Adding the script tag to the head
-		var script = document.createElement('script');
-		script.type = 'text/javascript';
-		script.src = url;
+	// loadWebView adds the webView to the HTML node 'section'
+	function loadWebView(section, viewID, url, callback) {
 
-		// Then bind the event to the callback function. There are two events
-		// for cross browser compatibility. onreadystatechange is for IE
-		script.onreadystatechange = callback;
-		script.onload = callback;
+		// Adding the webview tag
+		var view = document.createElement('webview');
+		view.id = viewID;
+		view.src = url;
 
-		// Fire the loading
-		head.appendChild(script);
+		// Hide the page to start with and start loading it
+		view.style.display = 'none';
+		section.appendChild(view);
+
+		// initiate callback and give it a reference to the appended child
+		callback(view);
 	}
 	
 	// addButton, called from init on a per-plugin basis, creates the button
 	// html to be added and gives it a listener to trigger plugin's update()
 	function addButton(plugin) {
+
 		// TODO: icons aren't working
 		// Reference to the button.ico that the plugin should have
 		var iconDir = path.join(pluginsDir, plugin, 'button.ico');
@@ -86,10 +96,12 @@ UI._plugins = (function(){
 		icon.innerHTML = '<link rel="icon" href=' + iconDir + ' />';
 		text.innerText = plugin;
 
-		// Make the button responsive
+		// Make the button show the plugin page on click 
 		btn.addEventListener('click', function () {
-			$('#' + plugin + '-view').show();
-			UI['_' + plugin].update();
+			[].slice.call(mainBar.children).forEach(function(view) {
+				view.style.display = 'none'
+			});
+			document.getElementById(plugin + '-view').style.display = '';
 		});
 
 		// Put it together
