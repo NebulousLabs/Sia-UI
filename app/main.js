@@ -11,21 +11,26 @@ var mainWindow;
 
 // startMainWindow creates the first window and loads and index.html.
 function startMainWindow() {
+	// Open the UI with full screen size
+	var atomScreen = require('screen');
+	var size = atomScreen.getPrimaryDisplay().workAreaSize;
 
 	// Create the browser
 	mainWindow = new BrowserWindow({
-		'height': 720,
-		'width': 1200,
+		'width': size.width,
+		'height': size.height,
 		'min-width': 800,
 		'min-height': 600,
+		'auto-hide-menu-bar' : true,
+		'use-content-size' : true,
 		'title': 'Sia'
 	});
 
-	// Choose not to show the menubar
-	mainWindow.setMenuBarVisibility(false);
-	
 	// Load the index.html of the app.
 	mainWindow.loadUrl('file://' + __dirname + '/index.html');
+
+	// Focus selector on test-ui	
+	mainWindow.focus();
 
 	// DEVTOOL: Open the devtools.
 	mainWindow.openDevTools();

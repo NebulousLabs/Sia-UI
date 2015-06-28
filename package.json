@@ -6,19 +6,20 @@
   "description": "The development directory for Sia-UI",
   "license": "MIT",
   "devDependencies": {
-	"electron-prebuilt": "latest",
-	"jshint": "latest"
+    "electron-prebuilt": "latest",
+    "jshint": "latest",
+    "electron-debug": "~0.1.0"
   },
   "scripts": {
-	"start": "electron app",
-	"lint": "jshint app/. --exclude app/libs/ --verbose",
-	"env": "env"
+    "start": "electron app",
+    "lint": "jshint app/. --exclude app/libs/ --verbose",
+    "env": "env"
   },
   "repository": {
-	"type": "git",
-	"url": "git://github.com/NebulousLabs/test-ui.git"
+    "type": "git",
+    "url": "git://github.com/NebulousLabs/test-ui.git"
   },
   "bugs": {
-	"url": "https://github.com/NebulousLabs/test-ui/issues"
+    "url": "https://github.com/NebulousLabs/test-ui/issues"
   }
 }
