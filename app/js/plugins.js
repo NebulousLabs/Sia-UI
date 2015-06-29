@@ -10,30 +10,6 @@ plugins = (function(){
 	// Default plugin
 	var home;
 
-	// loadWebView adds the webView to the HTML node 'section'
-	function loadWebView(section, viewID, url, callback) {
-		// Adding the webview tag
-		var view = document.createElement('webview');
-		view.id = viewID;
-		view.src = url;
-
-		// Give views nodeintegration
-		view.setAttribute('nodeintegration', 'on');
-
-		// Hide the page to start with and start loading it
-		view.style.display = 'none';
-		section.appendChild(view);
-
-		// Initiate callback and give it a reference to the appended view
-		callback(view);
-	}
-	
-	// viewLoadStart executes upon each plugin load, ensuring that it displays
-	// properly
-	function viewLoadStart(event) {
-		event.target.executeJavaScript('require("web-frame").setZoomFactor(' + webFrame.getZoomFactor() + ');');
-	}
-
 	// addButton, called from init on a per-plugin basis, creates the button
 	// html to be added and gives it a listener to trigger plugin's update()
 	function addButton(plugin) {
@@ -101,12 +77,12 @@ plugins = (function(){
 			
 			// Do tasks per plugin found
 			pluginNames.forEach(function(plugin, index) {
-				// Load plugin index.html's into respective webview, then hide it
-				loadWebView(mainBar, plugin + '-view', path.join(pluginsDir, plugin, 'index.html'), function(view) {
-					view.addEventListener("did-start-loading", viewLoadStart); 
-					// show the home view
-					if (index === 0) {
-						view.style.display = '';
+				// Load plugin index.html's into its own webview, then hide it
+				webview.load(mainBar, plugin + '-view', path.join(pluginsDir, plugin, 'index.html'), function(view) {
+					view.addEventListener("did-start-loading", webview.loadStarted); 
+					// Show only the home view
+					if (index !== 0) {
+						view.style.display = 'none';
 					}
 				});
 
