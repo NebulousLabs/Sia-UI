@@ -11,22 +11,20 @@ var UI = (function() {
 	// Constants used to calculate appropriate zoom
 	const screenSize = electronScreen.getPrimaryDisplay().workAreaSize;
 	const screenArea = screenSize.width * screenSize.height;
-	const screenUnit = 800 * 600;
+	const highRes = 3200 * 1745;
 
-	// configurable UI variables
-	// TODO: Allow these to be configurable by the user in some 'settings' page
-	var zoomScale = 2;
-
-	// setLogScaleZoom makes the app more readable on high dpi screens. 
-	// TODO: Take better approach, resolution doesn't mean high dpi.
-	function setLogScaleZoom() {
-		var zoomFactor = Math.floor(util.log(zoomScale, screenArea / screenUnit));
-		webFrame.setZoomFactor(zoomFactor);
+	// setDoubleZoom makes the app more readable on high dpi screens. 
+	// TODO: Take better approach, resolution doesn't mean high dpi. Though
+	// supposedly there's not a sure-fire way to find dpi on all platforms.
+	function setDoubleZoom() {
+		if (screenArea >= highRes) {
+			webFrame.setZoomFactor(2);
+		}
 	}
 	
 	// init, called at $(window).ready, initalizes the view
 	function init() {
-		setLogScaleZoom();
+		setDoubleZoom();
 		plugins.init();
 	}
 
