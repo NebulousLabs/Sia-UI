@@ -1,12 +1,10 @@
 // Global require statements
 'use strict';
-const webFrame = require('web-frame');
-const electronScreen = require('screen');
 
 // UI.js, the first renderer process, handles loading and transitioning between
 // buttons and views. Pretty much all user interaction response should go
 // through here.
-var UI = (function() {
+UI = (function() {
 	// UI specific constants
 	// Constants used to calculate appropriate zoom
 	const screenSize = electronScreen.getPrimaryDisplay().workAreaSize;
@@ -32,5 +30,4 @@ var UI = (function() {
 	return {
 		'init': init,
 	};
-
 })();

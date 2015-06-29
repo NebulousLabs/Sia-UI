@@ -1,10 +1,7 @@
-// Global require statements
 'use strict';
-const fs = require('fs');
-const path = require('path');
 
 // plugins.js manages all plugin logic on a more back-end level for the UI
-var plugins = (function(){
+plugins = (function(){
 	// Plugin specific constants and variables
 	// Directory of plugins
 	const pluginsDir = path.join(__dirname, 'plugins');
@@ -33,8 +30,8 @@ var plugins = (function(){
 	
 	// viewLoadStart executes upon each plugin load, ensuring that it displays
 	// properly
-	function viewLoadStart() {
-		this.executeJavaScript('require("web-frame").setZoomFactor(' + webFrame.getZoomFactor() + ');');
+	function viewLoadStart(event) {
+		event.target.executeJavaScript('require("web-frame").setZoomFactor(' + webFrame.getZoomFactor() + ');');
 	}
 
 	// addButton, called from init on a per-plugin basis, creates the button
@@ -58,7 +55,7 @@ var plugins = (function(){
 		// Make the button show the plugin page on click 
 		btn.addEventListener('click', function () {
 			[].slice.call(mainBar.children).forEach(function(view) {
-				view.style.display = 'none'
+				view.style.display = 'none';
 			});
 			document.getElementById(plugin + '-view').style.display = '';
 		});

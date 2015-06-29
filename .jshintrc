@@ -38,7 +38,7 @@
 	"nonew"			: true,		// Prohibit use of constructors for side-effects.
 	"plusplus"		: false,	// Prohibit use of `++` & `--`.
 	"regexp"		: true,		// Prohibit `.` and `[^...]` in regular expressions.
-	"undef"			: false,	// Require all non-global variables be declared before they are used.
+	"undef"			: true,		// Require all non-global variables be declared before they are used.
 	"unused"		: true,		// Prohibits defining variables that don't get used.
 	"strict"		: true,		// Require `use strict` pragma in every file.
 	"trailing"		: true,		// Prohibit trailing whitespaces.
@@ -54,7 +54,7 @@
 	"debug"			: false,	// Allow debugger statements e.g. browser breakpoints.
 	"eqnull"		: false,	// Tolerate use of `== null`.
 	"es5"			: false,	// Allow EcmaScript 5 syntax.
-	"esnext"		: false,	// Allow ES.next specific features such as `const` and `let`.
+	"esnext"		: true,		// Allow ES.next specific features such as `const` and `let`.
 	"evil"			: false,	// Tolerate use of `eval`.
 	"expr"			: false,	// Tolerate `ExpressionStatement` as Programs.
 	"funcscope"		: false,	// Tolerate declarations of variables inside of control structures while accessing them later from the outside.
@@ -111,11 +111,15 @@
 	// [4]: http://www.jshint.com/options/
 
 	"maxerr"		: 100,		// Maximum errors before stopping.
-	"globals"		: [			// Extra globals.
+	"globals"		: {			// Extra globals.
 		//"exampleVar",
 		//"anotherCoolGlobal",
-	],
-	"predef"		: {
+		"webFrame"		: false,
+		"electronScreen": false,
+		"fs"			: false,
+		"path"			: false,
+		"UI"			: true,
+		"plugins"		: true
 	},
 	"indent"		: 4			// Specify indentation spacing
 }
