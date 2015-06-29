@@ -8,6 +8,7 @@ const electronScreen = require('screen');
 // through here.
 var UI = (function() {
 	// UI specific constants
+	// Constants used to calculate appropriate zoom
 	const screenSize = electronScreen.getPrimaryDisplay().workAreaSize;
 	const screenArea = screenSize.width * screenSize.height;
 	const screenUnit = 800 * 600;
@@ -15,16 +16,15 @@ var UI = (function() {
 	// configurable UI variables
 	// TODO: Allow these to be configurable by the user in some 'settings' page
 	var zoomScale = 2;
-	var zoomFactor = 1;
 
 	// setLogScaleZoom makes the app more readable on high dpi screens. 
 	// TODO: Take better approach, resolution doesn't mean high dpi.
 	function setLogScaleZoom() {
-		zoomFactor = Math.floor(util.log(zoomScale, screenArea / screenUnit));
+		var zoomFactor = Math.floor(util.log(zoomScale, screenArea / screenUnit));
 		webFrame.setZoomFactor(zoomFactor);
 	}
 	
-	// Called at $(window).ready to initalize the view
+	// init, called at $(window).ready, initalizes the view
 	function init() {
 		setLogScaleZoom();
 		plugins.init();
@@ -33,7 +33,6 @@ var UI = (function() {
 	// Expose elements to be made public
 	return {
 		'init': init,
-		'zoomFactor': zoomFactor
 	};
 
 })();

@@ -89,6 +89,6 @@ html,body {
 
 .mainbar {
 	flex-grow: 1;
-
+	height: 100%;
 	background-color: #C5C5C5;
 }
