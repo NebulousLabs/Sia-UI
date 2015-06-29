@@ -1,30 +1,39 @@
+// Global require statements
+'use strict';
+const webFrame = require('web-frame');
+const electronScreen = require('screen');
+
 // UI.js, the first renderer process, handles loading and transitioning between
 // buttons and views. Pretty much all user interaction response should go
 // through here.
-
-// Global variables and require statements available to all renderer processes
-'use strict';
-var fs = require('fs');
-var path = require('path');
-var webFrame = require('web-frame');
-
-// Defines the functions and private vars of UI.js
 var UI = (function() {
+	// UI specific constants
+	const screenSize = electronScreen.getPrimaryDisplay().workAreaSize;
+	const screenArea = screenSize.width * screenSize.height;
+	const screenUnit = 800 * 600;
 
-	// Used to make the app more readable on hidpi screens. web-frame has 
-	// TODO: Automate this based on screen size
-	var atomScreen = require('screen');
-	var screenSize = atomScreen.getPrimaryDisplay().workAreaSize;
-	webFrame.setZoomFactor(2);
+	// configurable UI variables
+	// TODO: Allow these to be configurable by the user in some 'settings' page
+	var zoomScale = 2;
+	var zoomFactor = 1;
 
+	// setLogScaleZoom makes the app more readable on high dpi screens. 
+	// TODO: Take better approach, resolution doesn't mean high dpi.
+	function setLogScaleZoom() {
+		zoomFactor = Math.floor(util.log(zoomScale, screenArea / screenUnit));
+		webFrame.setZoomFactor(zoomFactor);
+	}
+	
 	// Called at $(window).ready to initalize the view
 	function init() {
-		UI._plugins.init();
+		setLogScaleZoom();
+		plugins.init();
 	}
 
 	// Expose elements to be made public
 	return {
-		"init": init
+		'init': init,
+		'zoomFactor': zoomFactor
 	};
 
 })();
