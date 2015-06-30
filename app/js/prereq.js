@@ -1,4 +1,5 @@
 'use strict';
+
 // Global require statements used across the project. This is mostly to get
 // JSHint to stop complaining about these variables being undefined or
 // redefined, but it's also a good way to overview what each variable does and

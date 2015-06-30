@@ -13,19 +13,18 @@ plugins = (function(){
 	// addButton, called from init on a per-plugin basis, creates the button
 	// html to be added and gives it a listener to trigger plugin's update()
 	function addButton(plugin) {
-		// TODO: icons aren't working
 		// Reference to the button.ico that the plugin should have
-		var iconDir = path.join(pluginsDir, plugin, 'button.ico');
+		var iconDir = path.join(pluginsDir, plugin, 'button16.png');
 		
 		// Make button elements to be combined
 		var btn = document.createElement('div');
-		var icon = document.createElement('div');
+		var icon = document.createElement('img');
 		var text = document.createElement('div');
 
 		// Set inner values
 		btn.id = plugin + '-button';
 		btn.style.cursor = 'pointer';
-		icon.innerHTML = '<link rel="icon" href=' + iconDir + ' />';
+		icon.src = iconDir;
 		text.innerText = plugin;
 
 		// Make the button show the plugin page on click 
