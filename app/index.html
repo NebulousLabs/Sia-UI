@@ -9,13 +9,10 @@
 		<link rel='stylesheet' href='css/general.css'>
 
 		<!-- Javascript -->
-		<script type='text/javascript' src='js/prereq.js'></script>
-		<script type='text/javascript' src='js/UI.js'></script>
-		<script type='text/javascript' src='js/webview.js'></script>
-		<script type='text/javascript' src='js/plugins.js'></script>
 		<script>
 			window.onload = function() {
-				UI.init();
+				// Lead into the entry point of the renderer process and initialize the app
+				var UI = require('./js/UI');
 			};
 		</script>
 	</head>

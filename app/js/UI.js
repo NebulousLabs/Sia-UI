@@ -1,10 +1,15 @@
 'use strict';
 
+// Global require statements used across the project.
+const webFrame = require('web-frame');
+const electronScreen = require('screen');
+var plugins = require('./plugins')
+
 // UI.js, the first renderer process, handles loading and transitioning between
 // buttons and views. Pretty much all user interaction response should go
 // through here.
-UI = (function() {
-	// UI specific constants
+var UI = (function() {
+	// Private/Encapsulated elements
 	// Constants used to calculate appropriate zoom
 	const screenSize = electronScreen.getPrimaryDisplay().workAreaSize;
 	const screenArea = screenSize.width * screenSize.height;
@@ -26,8 +31,8 @@ UI = (function() {
 		plugins.init();
 	}
 
-	// Expose elements to be made public
-	return {
-		'init': init,
-	};
+	// call init and start the UI
+	init();
 })();
+
+module.exports = UI;

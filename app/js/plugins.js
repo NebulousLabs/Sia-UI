@@ -1,10 +1,13 @@
 'use strict';
+const fs = require('fs');
+const path = require('path');
+var webview = require('./webview.js')
 
 // plugins.js manages all plugin logic on a more back-end level for the UI
-plugins = (function(){
+var plugins = (function(){
 	// Plugin specific constants and variables
 	// Directory of plugins
-	const pluginsDir = path.join(__dirname, 'plugins');
+	const pluginsDir = path.join(__dirname, '../plugins');
 	// DOM element shortcuts
 	var sideBar, mainBar;
 	// Default plugin
@@ -102,3 +105,5 @@ plugins = (function(){
 		'init': init
 	};
 })();
+
+module.exports = plugins;
