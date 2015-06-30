@@ -9,17 +9,14 @@
 		<link rel='stylesheet' href='css/general.css'>
 
 		<!-- Javascript -->
-		<script type='text/javascript'>
-			window.$ = window.jQuery = require('./libs/jquery.js');
-		</script>
 		<script type='text/javascript' src='js/prereq.js'></script>
 		<script type='text/javascript' src='js/UI.js'></script>
 		<script type='text/javascript' src='js/webview.js'></script>
 		<script type='text/javascript' src='js/plugins.js'></script>
 		<script>
-			$(window).load(function() {
+			window.onload = function() {
 				UI.init();
-			});
+			};
 		</script>
 	</head>
 
