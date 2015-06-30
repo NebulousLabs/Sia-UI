@@ -5,8 +5,12 @@
 'use strict';
 // Module to control application life.
 var app = require('app');
+// Module to normalize directories across OSes
+var path = require('path');
 // Module to create native browser window.
 var BrowserWindow = require('browser-window');
+// Module to give the app executable an icon
+var Tray = require('tray');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
 var mainWindow;
@@ -19,13 +23,19 @@ function startMainWindow() {
 	var atomScreen = require('screen');
 	var size = atomScreen.getPrimaryDisplay().workAreaSize;
 
+	// Give tray/taskbar icon path
+	var iconPath = path.join(__dirname,'assets', 'sia.png');
+	var appIcon = new Tray(iconPath);
+	appIcon.setToolTip('A highly efficient decentralized storage network.');
+
 	// Create the browser
 	mainWindow = new BrowserWindow({
 		'width': size.width,
 		'height': size.height,
 		'min-width': 800,
 		'min-height': 600,
-		'use-content-size' : true,
+		'use-content-size': true,
+		'icon': iconPath,
 		'title': 'Sia'
 	});
 
