@@ -119,7 +119,8 @@
 		"fs"			: false,
 		"path"			: false,
 		"UI"			: true,
-		"plugins"		: true
+		"plugins"		: true,
+		"webview"		: true
 	},
 	"indent"		: 4			// Specify indentation spacing
 }

@@ -10,10 +10,45 @@ plugins = (function(){
 	// Default plugin
 	var home;
 	
-	function addClickResponse(event) {
-		this.addEventListener('click', function () {
+	// addButton, called from init on a per-plugin basis, creates the button
+	// html to be added and gives it a listener to trigger plugin's update()
+	function addButton(plugin) {
+		// TODO: icons aren't working
+		// Reference to the button.ico that the plugin should have
+		var iconDir = path.join(pluginsDir, plugin, 'button.ico');
+		
+		// Make button elements to be combined
+		var btn = document.createElement('div');
+		var icon = document.createElement('div');
+		var text = document.createElement('div');
+
+		// Set inner values
+		btn.id = plugin + '-button';
+		btn.style.cursor = 'pointer';
+		icon.innerHTML = '<link rel="icon" href=' + iconDir + ' />';
+		text.innerText = plugin;
+
+		// Make the button show the plugin page on click 
+		addClickResponse(btn, plugin);
+
+		// Put it together
+		btn.appendChild(icon)
+			.className = 'pure-u sidebar-icon';
+		btn.appendChild(text)
+			.className = 'pure-u sidebar-text';
+
+		// Add it to the sideBar
+		sideBar.appendChild(btn)
+			.className = 'pure-u-1-1 sidebar-button';
+	}
+
+	// addClickResponse gives elements show the corresponding plugin-view
+	function addClickResponse(element, plugin) {
+		element.addEventListener('click', function () {
 			[].slice.call(mainBar.children).forEach(function(view) {
-				view.style.display = 'none';
+				if (view.id !== plugin + '-view') {
+					view.style.display = 'none';
+				}
 			});
 			document.getElementById(plugin + '-view').style.display = '';
 		});
@@ -58,16 +93,7 @@ plugins = (function(){
 				});
 
 				// Give the plugin a sidebar button
-				webview.load(sideBar, plugin + '-button', path.join(pluginsDir, plugin, 'button.html'), function(button) {
-					button.className = 'pure-u-1-1 sidebar-button';
-					button.addEventListener("did-start-loading", addClickResponse); 
-					//button.addEventListener('click', function () {
-					//	[].slice.call(mainBar.children).forEach(function(view) {
-					//		view.style.display = 'none';
-					//	});
-					//	document.getElementById(plugin + '-view').style.display = '';
-					//});
-				});
+				addButton(plugin);
 			});
 		});
 	}
