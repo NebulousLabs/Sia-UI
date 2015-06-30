@@ -1,4 +1,3 @@
-// Global require statements
 'use strict';
 
 // UI.js, the first renderer process, handles loading and transitioning between
@@ -9,7 +8,7 @@ UI = (function() {
 	// Constants used to calculate appropriate zoom
 	const screenSize = electronScreen.getPrimaryDisplay().workAreaSize;
 	const screenArea = screenSize.width * screenSize.height;
-	const highRes = 3200 * 1745;
+	const highRes = 2048*1152;
 
 	// setDoubleZoom makes the app more readable on high dpi screens. 
 	// TODO: Take better approach, resolution doesn't mean high dpi. Though

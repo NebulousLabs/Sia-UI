@@ -64,7 +64,7 @@ html,body {
 }
 .sidebar-button {
 	position: relative;
-
+	cursor: pointer;
 	height: 60px;
 	padding-top: 20px;
 

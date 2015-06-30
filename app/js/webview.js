@@ -17,19 +17,22 @@ webview = (function(){
 		// Start loading it
 		section.appendChild(view);
 
+		// Set the zoom by default to be the same as the UI
+		view.addEventListener("did-start-loading", setZoom); 
+
 		// Initiate callback and give it a reference to the appended webview
 		callback(view);
 	}
 	
-	// loadStarted executes upon each plugin load, ensuring that it displays
+	// setZoom executes upon each plugin load, ensuring that it displays
 	// properly
-	function loadStarted(event) {
-		event.target.executeJavaScript('require("web-frame").setZoomFactor(' + webFrame.getZoomFactor() + ');');
+	function setZoom(event) {
+		var zoomCode = 'require("web-frame").setZoomFactor(' + webFrame.getZoomFactor() + ');';
+		event.target.executeJavaScript(zoomCode);
 	}
 	
 	// Expose elements to be made public
 	return {
 		'load': load,
-		'loadStarted': loadStarted
 	};
 })();

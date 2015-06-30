@@ -9,44 +9,16 @@ plugins = (function(){
 	var sideBar, mainBar;
 	// Default plugin
 	var home;
-
-	// addButton, called from init on a per-plugin basis, creates the button
-	// html to be added and gives it a listener to trigger plugin's update()
-	function addButton(plugin) {
-		// TODO: icons aren't working
-		// Reference to the button.ico that the plugin should have
-		var iconDir = path.join(pluginsDir, plugin, 'button.ico');
-		
-		// Make button elements to be combined
-		var btn = document.createElement('div');
-		var icon = document.createElement('div');
-		var text = document.createElement('div');
-
-		// Set inner values
-		btn.id = plugin + '-button';
-		btn.style.cursor = 'pointer';
-		icon.innerHTML = '<link rel="icon" href=' + iconDir + ' />';
-		text.innerText = plugin;
-
-		// Make the button show the plugin page on click 
-		btn.addEventListener('click', function () {
+	
+	function addClickResponse(event) {
+		this.addEventListener('click', function () {
 			[].slice.call(mainBar.children).forEach(function(view) {
 				view.style.display = 'none';
 			});
 			document.getElementById(plugin + '-view').style.display = '';
 		});
-
-		// Put it together
-		btn.appendChild(icon)
-			.className = 'pure-u sidebar-icon';
-		btn.appendChild(text)
-			.className = 'pure-u sidebar-text';
-
-		// Add it to the sideBar
-		sideBar.appendChild(btn)
-			.className = 'pure-u-1-1 sidebar-button';
 	}
-		
+
 	// findHome detects Overview or otherwise the first plugin, alphabetically,
 	// and loads it
 	function findHome(pluginNames) {
@@ -79,7 +51,6 @@ plugins = (function(){
 			pluginNames.forEach(function(plugin, index) {
 				// Load plugin index.html's into its own webview, then hide it
 				webview.load(mainBar, plugin + '-view', path.join(pluginsDir, plugin, 'index.html'), function(view) {
-					view.addEventListener("did-start-loading", webview.loadStarted); 
 					// Show only the home view
 					if (index !== 0) {
 						view.style.display = 'none';
@@ -87,7 +58,16 @@ plugins = (function(){
 				});
 
 				// Give the plugin a sidebar button
-				addButton(plugin);
+				webview.load(sideBar, plugin + '-button', path.join(pluginsDir, plugin, 'button.html'), function(button) {
+					button.className = 'pure-u-1-1 sidebar-button';
+					button.addEventListener("did-start-loading", addClickResponse); 
+					//button.addEventListener('click', function () {
+					//	[].slice.call(mainBar.children).forEach(function(view) {
+					//		view.style.display = 'none';
+					//	});
+					//	document.getElementById(plugin + '-view').style.display = '';
+					//});
+				});
 			});
 		});
 	}

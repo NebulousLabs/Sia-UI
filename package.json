@@ -8,7 +8,7 @@
 	"devDependencies": {
 		"electron-prebuilt": "latest",
 		"jshint": "latest",
-		"electron-debug": "~0.1.0"
+		"electron-debug": "latest"
 	},
 	"scripts": {
 		"start": "electron app",
