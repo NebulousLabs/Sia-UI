@@ -63,10 +63,11 @@ html,body {
 	height: 100%;
 }
 .sidebar-button {
+	display:flex;
+	font-size: 16px;
+	align-items:center;
 	position: relative;
-	cursor: pointer;
 	height: 60px;
-	padding-top: 20px;
 
 	-webkit-box-sizing:border-box;
 	border-left: 2px solid #ECECEC;
@@ -78,12 +79,16 @@ html,body {
 	-webkit-user-select: text;
 }
 .sidebar-button:hover {
+	cursor: pointer;
 	background-color: #DDDDDD;
 }
 .sidebar-icon {
+	max-height: 30%;
+	max-width: 30%;
 	padding-left: 16px;
 }
 .sidebar-text {
+	padding: 4px;
 	padding-left: 8px;
 }
 

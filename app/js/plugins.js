@@ -14,7 +14,7 @@ plugins = (function(){
 	// html to be added and gives it a listener to trigger plugin's update()
 	function addButton(plugin) {
 		// Reference to the button.ico that the plugin should have
-		var iconDir = path.join(pluginsDir, plugin, 'button16.png');
+		var iconDir = path.join(pluginsDir, plugin, 'button64.png');
 		
 		// Make button elements to be combined
 		var btn = document.createElement('div');
