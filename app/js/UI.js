@@ -12,13 +12,15 @@ const defaultConfig = {
 	zoom : 1.5,
 	pluginsDir : path.join(__dirname, '../plugins'),
 	homePlugin : 'Overview'
-}
+};
 
 // UI.js, the first renderer process, handles loading and transitioning between
 // buttons and views. Pretty much all user interaction response should go
 // through here.
 var UI = (function() {
-	// These should be where configurable UI variables go
+	// Encapsulated 'private' elements
+	
+	// Configurable UI settings
 	// TODO: Allow configuration through some settings page
 	var config = defaultConfig;
 
@@ -38,7 +40,7 @@ var UI = (function() {
 	// init, called at $(window).ready, initalizes the view
 	function init() {
 		adjustZoom();
-		plugins(config).init();
+		plugins(config);
 	}
 
 	// call init and start the UI

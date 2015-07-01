@@ -1,12 +1,18 @@
 'use strict';
 
-// Elements used across this file.  These are not contained in
-// the module and are GCed after execution of this file.
+// Elements used across this file. GCed after file execution
 const fs = require('fs');
-var newPlugin = require('./pluginFactory');
+var newPlugin = require('./plugin');
 
 // pluginManager.js manages all plugin logic on a more back-end level for the UI
 var pluginManager = function(config) {
+	// Encapsulated 'private' elements
+	
+	// pointer to the currently viewed plugin
+	var currentPlugin;
+	// array of all loaded plugins
+	var plugins = [];
+
 	// setHome detects Overview or otherwise the alphabetically first plugin
 	function setHome(pluginNames) {
 		// Detect if Overview plugin is installed
@@ -18,8 +24,31 @@ var pluginManager = function(config) {
 		}
 	}
 
-	// initPlugins initializes plugins based on the passed config
-	function initPlugins() {
+	// addPlugin is used as a callback to process each new plugin
+	function addPlugin(err, plugin) {
+		if (err) { 
+			console.log(err);
+		}
+
+		// Show the default plugin view
+		if (plugin.name === config.homePlugin) {
+			plugin.show();
+			currentPlugin = plugin;
+		}
+
+		// Store the plugin
+		plugins.push(plugin);
+		
+		// Make the plugin-button show the corresponding plugin-view
+		plugin.button.addEventListener('click', function () {
+			currentPlugin.hide();
+			plugin.show();
+			currentPlugin = plugin;
+		});
+	}
+
+	// init initializes plugins based on the passed config
+	function init() {
 		fs.readdir(config.pluginsDir, function (err, pluginNames) {
 			if (err) {
 				throw err;
@@ -28,30 +57,17 @@ var pluginManager = function(config) {
 			// Determine default plugin
 			setHome(pluginNames);
 			
-			// Initialize each plugin as an attribute
+			// Initialize each plugin
 			pluginNames.forEach(function(name) {
-				newPlugin(name, function(err, plugin) {
-					if (err) { 
-						console.log(err);
-					}
-
-					// Show the default plugin view
-					if (name === config.homePlugin) {
-						plugin.show();
-					}
-
-					// Give the pluginManager ownership of the new plugin
-					pluginManager[name] = plugin;
-				});
+				newPlugin(config.pluginsDir, name, addPlugin);
 			});
 		});
 	}
 
-	// Expose elements to be made public
-	return {
-		init: initPlugins
-	}
-}
+	// Initialize all plugins
+	init();
+};
 
-// When required, pluginManager gives tools to manage plugins created
+// When required, pluginManager can be called with a config
+// object to initialize plugins
 module.exports = pluginManager;

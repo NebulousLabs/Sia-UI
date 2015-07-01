@@ -8,3 +8,4 @@ Sia-Windows-x64
 node_modules
 *.swp
 samples
+npm-debug.log
