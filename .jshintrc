@@ -114,13 +114,6 @@
 	"globals"		: {			// Extra globals.
 		//"exampleVar",
 		//"anotherCoolGlobal",
-		"webFrame"		: false,
-		"electronScreen": false,
-		"fs"			: false,
-		"path"			: false,
-		"UI"			: true,
-		"plugins"		: true,
-		"webview"		: true
 	},
 	"indent"		: 4			// Specify indentation spacing
 }

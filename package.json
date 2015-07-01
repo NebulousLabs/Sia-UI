@@ -12,7 +12,7 @@
 	},
 	"scripts": {
 		"start": "electron app",
-		"lint": "jshint app/. --exclude-path=.jshintignore --verbose",
+		"lint": "jshint app/. --verbose",
 		"env": "env"
 	},
 	"repository": {

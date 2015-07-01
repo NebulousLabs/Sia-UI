@@ -1,4 +1,8 @@
 'use strict';
+
+// Global require statements used across this file.  These are
+// not contained in the module and are GCed upon execution
+// of this file.
 const webFrame = require('web-frame');
 
 // webview.js manages UI logic that relates to electron elements of the
