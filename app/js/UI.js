@@ -9,19 +9,20 @@ UI = (function() {
 	const screenSize = electronScreen.getPrimaryDisplay().workAreaSize;
 	const screenArea = screenSize.width * screenSize.height;
 	const highRes = 2048*1152;
+	var coherentZoom = 1.5;
 
 	// setDoubleZoom makes the app more readable on high dpi screens. 
 	// TODO: Take better approach, resolution doesn't mean high dpi. Though
 	// supposedly there's not a sure-fire way to find dpi on all platforms.
-	function setDoubleZoom() {
+	function adjustZoom() {
 		if (screenArea >= highRes) {
-			webFrame.setZoomFactor(2);
+			webFrame.setZoomFactor(coherentZoom);
 		}
 	}
 	
 	// init, called at $(window).ready, initalizes the view
 	function init() {
-		setDoubleZoom();
+		adjustZoom();
 		plugins.init();
 	}
 
