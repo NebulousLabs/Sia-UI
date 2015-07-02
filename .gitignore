@@ -9,3 +9,4 @@ node_modules
 *.swp
 samples
 npm-debug.log
+app/Sia
