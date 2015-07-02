@@ -2,14 +2,6 @@
 <html>
 	<head>
 		<title>Sia</title>
-		<!-- Plugin HTML Template -->
-		<template id='button-template'>
-			<div class='pure-u-1-1 sidebar-button'>
-				<div class='pure-u sidebar-icon'></div>
-				<div class='pure-u sidebar-text'></div>
-			</div>
-		</template>
-
 		<!-- Stylesheets -->
 		<link rel='stylesheet' href='libs/font-awesome-4.3.0/css/font-awesome.min.css'>
 		<link rel='stylesheet' href='libs/pure-min.css'>
@@ -17,16 +9,14 @@
 		<link rel='stylesheet' href='css/general.css'>
 
 		<!-- Javascript -->
-		<script type='text/javascript' src='libs/jquery.js'></script>
-		<script type='text/javascript'>
-			window.$ = window.jQuery = require('./libs/jquery.js');
-		</script>
+		<script type='text/javascript' src='js/prereq.js'></script>
 		<script type='text/javascript' src='js/UI.js'></script>
-		<script type='text/javascript' src='js/pluginManager.js'></script>
+		<script type='text/javascript' src='js/webview.js'></script>
+		<script type='text/javascript' src='js/plugins.js'></script>
 		<script>
-			$(window).ready(function() {
+			window.onload = function() {
 				UI.init();
-			});
+			};
 		</script>
 	</head>
 
@@ -43,13 +33,13 @@
 	<div class='pure-g body'>
 		<!-- Sidebar -->
 		<div class='pure-u-1-5 sidebar' id='sidebar'>
+			<!-- Fill the UI Height -->
+			<div class='pure-u-1-1 sidebar-fill'>
+			</div>
 		</div>
 
 		<!-- Mainbar -->
-		<div class='pure-u mainbar'>
-			<div id='mainbar-content'>
-				<div id='view'></div>
-			</div>
+		<div class='pure-u mainbar' id='mainbar'>
 		</div>
 	</div>
 
