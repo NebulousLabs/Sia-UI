@@ -2,7 +2,7 @@
   "name": "Sia-UI",
   "version": "0.4.0",
   "description": "A UI application for interfacing with Sia",
-  "main": "main.js",
+  "main": "index.js",
   "author": "NebulousLabs",
   "license": "MIT"
 }
