@@ -2,8 +2,8 @@
 Module for stopping/starting the daemon
 */
 
-var child_process = require("child_process");
-var path = require("path");
+const child_process = require("child_process");
+const path = require("path");
 var daemonProcess;
 
 // Catches all messages of the daemon's Readable Streams

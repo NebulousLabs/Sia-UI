@@ -49,9 +49,10 @@ var pluginManager = function(config) {
 
 	// init initializes plugins based on the passed config
 	function init() {
-		fs.readdir(config.pluginsDir, function (err, pluginNames) {
+		fs.readdir(config.pluginsPath, function (err, pluginNames) {
 			if (err) {
-				throw err;
+				console.log(err);
+				console.log(err.stack);
 			}
 
 			// Determine default plugin
@@ -59,7 +60,7 @@ var pluginManager = function(config) {
 			
 			// Initialize each plugin
 			pluginNames.forEach(function(name) {
-				newPlugin(config.pluginsDir, name, addPlugin);
+				newPlugin(config.pluginsPath, name, addPlugin);
 			});
 		});
 	}
