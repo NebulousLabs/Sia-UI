@@ -12,7 +12,7 @@ Javascript -> Node.js -> Electron
 Javascript itself works with a fluid definition of objects. All primitives are
 pass by value, though objects themselves are passed by reference. This is
 called
-["call-by-sharing"](https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_sharing)
+["call-by-sharing"](https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_sharing).
 
 Working with Node.js, one has to get used to callbacks and asynchronous
 programming. Essentially, along series of operations that deal with Node
@@ -24,11 +24,6 @@ Lastly, our tool to develop desktop applications is Electron. It gives us a
 variety of tools to easily work with desktop tools like file paths to
 browser-windows. The best way to get acquainted with this tool quickly is to
 read the codebase, referring to electron's documentation when necessary.
-
-## DEVTOOL:
-
-grep for the term DEVTOOL: to find switches and console.log commands that
-should be commented out upon pull request
 
 ## Makefile/NPM-package.json philosophy:
 (perhaps this was unnecessary but throw me a bone)
