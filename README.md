@@ -19,6 +19,9 @@ OR
 1. `npm install`
 2. `npm start`
 
+OR
+
+1. `make run-fresh`
 
 ## Building Distributables
 

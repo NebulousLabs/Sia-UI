@@ -32,8 +32,6 @@ function startMainWindow() {
 	mainWindow = new BrowserWindow({
 		'width': size.width,
 		'height': size.height,
-		'min-width': 800,
-		'min-height': 600,
 		'use-content-size': true,
 		'icon': iconPath,
 		'title': 'Sia'
