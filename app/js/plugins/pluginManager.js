@@ -2,27 +2,26 @@
 
 // Elements used across this file. GCed after file execution
 'use strict';
-const fs = require('fs');
-var newPlugin = require('./plugin');
+const Fs = require('fs');
+var NewPlugin = require('./plugin');
 
 // When required, pluginManager can be called with a config object to
 // initialize plugins
 module.exports = function pluginManager(config) {
 	// Encapsulated 'private' elements
-	
-	// pointer to the currently viewed plugin
-	var currentPlugin;
-	// array of all loaded plugins
+	var home = config.homePlugin;
+	var path = config.pluginsPath;
+	var current;
 	var plugins = [];
 
 	// setHome detects Overview or otherwise the alphabetically first plugin
 	function setHome(pluginNames) {
 		// Detect if Overview plugin is installed
-		var ovIndex = pluginNames.indexOf(config.homePlugin);
-		if (ovIndex !== -1 && pluginNames[0] !== config.homePlugin) {
+		var ovIndex = pluginNames.indexOf(home);
+		if (ovIndex !== -1 && pluginNames[0] !== home) {
 			// Swap Overview to be first
 			pluginNames[ovIndex] = pluginNames[0];
-			pluginNames[0] = config.homePlugin;
+			pluginNames[0] = home;
 		}
 	}
 
@@ -33,9 +32,9 @@ module.exports = function pluginManager(config) {
 		}
 
 		// Show the default plugin view
-		if (plugin.name === config.homePlugin) {
+		if (plugin.name === home) {
 			plugin.show();
-			currentPlugin = plugin;
+			current = plugin;
 		}
 
 		// Store the plugin
@@ -43,15 +42,15 @@ module.exports = function pluginManager(config) {
 		
 		// Make the plugin-button show the corresponding plugin-view
 		plugin.button.addEventListener('click', function () {
-			currentPlugin.hide();
+			current.hide();
 			plugin.show();
-			currentPlugin = plugin;
+			current = plugin;
 		});
 	}
 
-	// init initializes plugins based on the passed config
+	// init initializes plugins
 	function init() {
-		fs.readdir(config.pluginsPath, function (err, pluginNames) {
+		Fs.readdir(path, function (err, pluginNames) {
 			if (err) {
 				console.log(err);
 			}
@@ -61,7 +60,7 @@ module.exports = function pluginManager(config) {
 			
 			// Initialize each plugin
 			pluginNames.forEach(function(name) {
-				newPlugin(config.pluginsPath, name, addPlugin);
+				NewPlugin(path, name, addPlugin);
 			});
 		});
 	}

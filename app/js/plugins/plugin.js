@@ -2,9 +2,9 @@
 
 // Elements used across this file. GCed after file execution
 'use strict';
-const webFrame = require('web-frame');
-const path = require('path');
-const factory = require('./pluginFactory.js');
+const WebFrame = require('web-frame');
+const Path = require('path');
+const Factory = require('./pluginFactory.js');
 
 // When required, plugin.js can be called as a function to create a plugin's
 // elements
@@ -12,8 +12,8 @@ module.exports = function plugin(pluginsPath, name, callback) {
 	// Encapsulated 'private' elements
 	
 	// Required elements of each plugin
-	var markupPath = path.join(pluginsPath, name, 'index.html');
-	var iconPath = path.join(pluginsPath, name, 'button64.png');
+	var markupPath = Path.join(pluginsPath, name, 'index.html');
+	var iconPath = Path.join(pluginsPath, name, 'button64.png');
 	
 	// The main parts to this plugin
 	var view, button;
@@ -30,7 +30,7 @@ module.exports = function plugin(pluginsPath, name, callback) {
 
 	// setZoom gives the view the same zoom as the UI
 	function setZoom() {
-		var zoomCode = 'require("web-frame").setZoomFactor(' + webFrame.getZoomFactor() + ');';
+		var zoomCode = 'require("web-frame").setZoomFactor(' + WebFrame.getZoomFactor() + ');';
 		view.executeJavaScript(zoomCode);
 	}
 
@@ -38,7 +38,7 @@ module.exports = function plugin(pluginsPath, name, callback) {
 	// init makes the separate UI components for a plugin
 	function init() {
 		// Load index.html into its own webview, then hide it
-		factory.addView(name, markupPath, function(addedView) {
+		Factory.addView(name, markupPath, function(addedView) {
 			view = addedView;
 			// Set the zoom by default to be the same as the UI, can
 			// only be done after webview starts loading
@@ -48,7 +48,7 @@ module.exports = function plugin(pluginsPath, name, callback) {
 		});
 
 		// Give the plugin a sidebar button
-		factory.addButton(name, iconPath, function(addedButton) {
+		Factory.addButton(name, iconPath, function(addedButton) {
 			button = addedButton;
 		});
 

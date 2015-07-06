@@ -51,6 +51,7 @@ module.exports = {
 		sideBar.appendChild(button)
 			.className = 'pure-u-1-1 sidebar-button';
 
+		// Initiate callback and give it a reference to the appended button
 		callback(button);
 	}
 };
