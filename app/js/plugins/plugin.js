@@ -1,17 +1,19 @@
-'use strict';
+// plugin.js is used to hold plugin components and functions
 
 // Elements used across this file. GCed after file execution
+'use strict';
 const webFrame = require('web-frame');
 const path = require('path');
 const factory = require('./pluginFactory.js');
 
-// plugin.js is used to hold plugin components and functions
-function plugin(pluginsDir, name, callback) {
+// When required, plugin.js can be called as a function to create a plugin's
+// elements
+module.exports = function plugin(pluginsPath, name, callback) {
 	// Encapsulated 'private' elements
 	
 	// Required elements of each plugin
-	var markupPath = path.join(pluginsDir, name, 'index.html');
-	var iconPath = path.join(pluginsDir, name, 'button64.png');
+	var markupPath = path.join(pluginsPath, name, 'index.html');
+	var iconPath = path.join(pluginsPath, name, 'button64.png');
 	
 	// The main parts to this plugin
 	var view, button;
@@ -66,7 +68,3 @@ function plugin(pluginsDir, name, callback) {
 	// Initialize this plugin
 	init();
 }
-
-// When required, plugin.js can be called as a function
-// to create a plugin's elements
-module.exports = plugin;

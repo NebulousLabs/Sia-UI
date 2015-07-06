@@ -1,6 +1,8 @@
+// pluginFactory offers creation logic to make plugin parts
+// Elements used across this file. GCed after file execution
 'use strict';
 
-// When required, pluginFactory.js offers creation logic to the plugin
+// When required, pluginFactory gives the functions addView() and addButton()
 module.exports = {
 	// load adds the webView to the HTML node 'section'
 	addView: function(name, path, callback) {
@@ -34,7 +36,7 @@ module.exports = {
 		var text = document.createElement('div');
 
 		// Set inner values
-		button.id = name + '-view';
+		button.id = name + '-button';
 		button.style.cursor = 'pointer';
 		icon.src = path;
 		text.innerText = name;

@@ -3,10 +3,10 @@
 
 // Global variables and require statements available to all main processes
 'use strict';
-var app = require('app');
-var path = require('path');
-var BrowserWindow = require('browser-window');
-var Tray = require('tray');
+const app = require('app');
+const path = require('path');
+const BrowserWindow = require('browser-window');
+const Tray = require('tray');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
 var mainWindow;
@@ -15,7 +15,7 @@ var mainWindow;
 function startMainWindow() {
 	// Open the UI with full screen size. 'screen' can only be required after
 	// app.on('ready') 
-	var atomScreen = require('screen');
+	const atomScreen = require('screen');
 	var size = atomScreen.getPrimaryDisplay().workAreaSize;
 
 	// Give tray/taskbar icon path

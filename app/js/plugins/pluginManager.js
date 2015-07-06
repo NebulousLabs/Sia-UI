@@ -1,11 +1,13 @@
-'use strict';
+// pluginManager.js manages all plugin logic on a more back-end level for the UI
 
 // Elements used across this file. GCed after file execution
+'use strict';
 const fs = require('fs');
 var newPlugin = require('./plugin');
 
-// pluginManager.js manages all plugin logic on a more back-end level for the UI
-var pluginManager = function(config) {
+// When required, pluginManager can be called with a config object to
+// initialize plugins
+module.exports = function pluginManager(config) {
 	// Encapsulated 'private' elements
 	
 	// pointer to the currently viewed plugin
@@ -52,7 +54,6 @@ var pluginManager = function(config) {
 		fs.readdir(config.pluginsPath, function (err, pluginNames) {
 			if (err) {
 				console.log(err);
-				console.log(err.stack);
 			}
 
 			// Determine default plugin
@@ -68,7 +69,3 @@ var pluginManager = function(config) {
 	// Initialize all plugins
 	init();
 };
-
-// When required, pluginManager can be called with a config
-// object to initialize plugins
-module.exports = pluginManager;
