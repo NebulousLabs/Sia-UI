@@ -12,7 +12,7 @@ var daemon = require('./daemonManager');
 var plugins = require('./plugins/pluginManager');
 
 // When required, the UI initializes itself through a single call to init()
-module.exports = function UI() {
+module.exports = (function UI() {
 	// Encapsulated 'private' elements
 	var configPath = path.join(__dirname, '../config.json');
 	var config;
@@ -83,4 +83,4 @@ module.exports = function UI() {
 
 	// call init and start the UI
 	init();
-}();
+})();

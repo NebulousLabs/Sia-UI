@@ -67,4 +67,4 @@ module.exports = function plugin(pluginsPath, name, callback) {
 
 	// Initialize this plugin
 	init();
-}
+};
