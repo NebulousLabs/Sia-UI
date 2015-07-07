@@ -33,21 +33,21 @@ dependencies:
 # make distributables for each operating system, folders and executable files
 dist: dist-linux-32 dist-linux-64 dist-mac dist-windows-32 dist-windows-64
 
-dist-linux-32: ;@echo "\n${project}: Building Linux 32 bit.....\n";
+dist-linux-32:
 	wget -nc $(electron-download-page)-linux-ia32.zip
 	unzip -o electron-$(electron-version)-linux-ia32.zip -d Sia-Linux-ia32
 	mv Sia-Linux-ia32/electron Sia-Linux-ia32/Sia
 	cp -R app/ Sia-Linux-ia32/resources/app/
 	tar -cJvf sia-$(sia-ui-version)-linux-ia32.tar.xz Sia-Linux-ia32
 
-dist-linux-64: ;@echo "\n${project}: Building Linux 64 bit.....\n";
+dist-linux-64:
 	wget -nc $(electron-download-page)-linux-x64.zip
 	unzip -o electron-$(electron-version)-linux-x64.zip -d Sia-Linux-x64
 	mv Sia-Linux-x64/electron Sia-Linux-x64/Sia
 	cp -R app/ Sia-Linux-x64/resources/app/
 	tar -cJvf sia-$(sia-ui-version)-linux-x64.tar.xz Sia-Linux-x64
 
-dist-mac: ;@echo "\n${project}: Building OSX.....\n";
+dist-mac:
 	wget -nc $(electron-download-page)-darwin-x64.zip
 	rm -rf Sia-Mac
 	unzip electron-$(electron-version)-darwin-x64.zip -d Sia-Mac
@@ -64,14 +64,14 @@ dist-mac: ;@echo "\n${project}: Building OSX.....\n";
 	sed -i.bak s/Electron/Sia/g Sia-Mac/Sia.app/Contents/Frameworks/Sia\ Helper.app/Contents/Info.plist
 	tar -cJvf sia-$(sia-ui-version)-mac.tar.xz Sia-Mac
 
-dist-windows-32: ;@echo "\n${project}: Building Windows 32 bit.....\n";
+dist-windows-32:
 	wget -nc $(electron-download-page)-win32-ia32.zip
 	unzip -o electron-$(electron-version)-win32-ia32.zip -d Sia-Windows-ia32
 	mv Sia-Windows-ia32/electron.exe Sia-Windows-ia32/Sia.exe
 	cp -R app/ Sia-Windows-ia32/resources/app/
 	zip sia-$(sia-ui-version)-windows-ia32.zip Sia-Windows-ia32/*
 
-dist-windows-64: ;@echo "\n${project}: Building Windows 64 bit.....\n";
+dist-windows-64:
 	wget -nc $(electron-download-page)-win32-x64.zip
 	unzip -o electron-$(electron-version)-win32-x64.zip -d Sia-Windows-x64
 	mv Sia-Windows-x64/electron.exe Sia-Windows-x64/Sia.exe

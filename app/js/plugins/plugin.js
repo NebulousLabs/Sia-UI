@@ -4,67 +4,83 @@
 'use strict';
 const WebFrame = require('web-frame');
 const Path = require('path');
-const Factory = require('./pluginFactory.js');
 
 // When required, plugin.js can be called as a function to create a plugin's
 // elements
-module.exports = function plugin(pluginsPath, name, callback) {
+module.exports = function plugin(path, name) {
 	// Encapsulated 'private' elements
-	
-	// Required elements of each plugin
-	var markupPath = Path.join(pluginsPath, name, 'index.html');
-	var iconPath = Path.join(pluginsPath, name, 'button64.png');
-	
-	// The main parts to this plugin
 	var view, button;
 
-	// show the view
+	// initialize plugin components
+	initView();
+	initButton();
+
+	// initView() loads up the webview
+	function initView(callback) {
+		// Make webview element
+		view = document.createElement('webview');
+
+		// Set inner values
+		view.id = name + '-view';
+		view.style.display = 'none';
+		view.src = Path.join(path, name, 'index.html');
+
+		// Give webviews nodeintegration
+		view.setAttribute('nodeintegration', 'on');
+
+		// Set the zoom by default to be the same as the UI, can
+		// only be done after webview starts loading
+		view.addEventListener("did-start-loading", function setZoom() {
+			var zoomCode = 'require("web-frame").setZoomFactor(' + WebFrame.getZoomFactor() + ');';
+			view.executeJavaScript(zoomCode);
+		});
+
+		// Start loading it to the mainbar
+		document.getElementById('mainbar').appendChild(view);
+	}
+
+	// initButton() loads up the sideBar button
+	function initButton(callback) {
+		// Make button elements to be combined
+		button = document.createElement('div');
+		var icon = document.createElement('img');
+		var text = document.createElement('div');
+
+		// Set inner values
+		button.id = name + '-button';
+		button.style.cursor = 'pointer';
+		button.className = 'pure-u-1-1 sidebar-button';
+		icon.src = Path.join(path, name, 'button64.png');
+		icon.className = 'pure-u sidebar-icon';
+		text.innerText = name;
+		text.className = 'pure-u sidebar-text';
+
+		// Put it together
+		button.appendChild(icon)
+		button.appendChild(text)
+
+		// Add it to the sidebar
+		document.getElementById('sidebar').appendChild(button)
+	}
+
+	// show() shows the plugin's view
 	function show() {
 		view.style.display = '';
 	}
 
-	// hide the view
+	// show() hides the plugin's view
 	function hide() {
 		view.style.display = 'none';
-	}	
-
-	// setZoom gives the view the same zoom as the UI
-	function setZoom() {
-		var zoomCode = 'require("web-frame").setZoomFactor(' + WebFrame.getZoomFactor() + ');';
-		view.executeJavaScript(zoomCode);
 	}
 
-
-	// init makes the separate UI components for a plugin
-	function init() {
-		// Load index.html into its own webview, then hide it
-		Factory.addView(name, markupPath, function(addedView) {
-			view = addedView;
-			// Set the zoom by default to be the same as the UI, can
-			// only be done after webview starts loading
-			view.addEventListener("did-start-loading", setZoom); 
-			// Hide view by default
-			hide();
-		});
-
-		// Give the plugin a sidebar button
-		Factory.addButton(name, iconPath, function(addedButton) {
-			button = addedButton;
-		});
-
-		// Expose public elements of this plugin
-		// TODO: verify plugin structure before opening or just deal with
-		// errors in async manner?
-		callback(null, {
-			name: name,
-			view: view,
-			button: button,
-			show: show,
-			hide: hide,
-			setZoom: setZoom
-		});
-	}	
-
-	// Initialize this plugin
-	init();
+	// Expose public elements of this plugin
+	// TODO: verify plugin structure before opening or just deal with
+	// errors in async manner?
+	return {
+		name: name,
+		view: view,
+		button: button,
+		show: show,
+		hide: hide,
+	};
 };

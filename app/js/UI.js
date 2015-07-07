@@ -17,7 +17,7 @@ module.exports = (function UI() {
 	var configPath = Path.join(__dirname, '../config.json');
 	var config;
 
-	// adjustZoom makes the app more readable on high dpi screens. 
+	// adjustZoom() makes the app more readable on high dpi screens. 
 	// TODO: Take better approach, resolution doesn't mean high dpi. Though
 	// supposedly there's not a sure-fire way to find dpi on all platforms.
 	function adjustHighResZoom() {
@@ -31,7 +31,7 @@ module.exports = (function UI() {
 		}
 	}
 	
-	// saveConfig writes the current config to defaultConfigPath
+	// saveConfig() writes the current config to defaultConfigPath
 	function saveConfig() {
 		Fs.writeFile(configPath, JSON.stringify(config, null, '\t'), function(err) {
 			if (err) {
@@ -40,7 +40,7 @@ module.exports = (function UI() {
 		});
 	}
 
-	// getDefaultConfig returns the default settings object
+	// getDefaultConfig() returns the default settings object
 	function getDefaultConfig() {
 		return {
 			appPath: Path.join(__dirname, '..'),
@@ -54,7 +54,7 @@ module.exports = (function UI() {
 		};
 	}
 
-	// loadConfig finds if a config file exists and uses default if not
+	// loadConfig() finds if a config file exists and uses default if not
 	function loadConfig(callback) {
 		Fs.readFile(configPath, function(err, data) {
 			if (err) {
@@ -68,22 +68,23 @@ module.exports = (function UI() {
 		});
 	}
 
-	// resetConfig erases the existing config.json and places a default
+	// resetConfig() erases the existing config.json and places a default
 	function resetConfig(callback) {
 		config = getDefaultConfig();
 		saveConfig();
+		callback();
 	}
 
-	// init, called at $(window).ready, initalizes the view
+	// init(), called at $(window).ready, initalizes the view
 	function init() {
 		loadConfig(function() {
 			saveConfig();
 			adjustHighResZoom();
-			Plugins(config);
+			Plugins.init(config);
 			// TODO: This is hardcoded. daemonManager could be a plugin, siad
 			// be a plugin itself, or even have a new class of initialized
 			// components called dependencies.
-			Daemon(config);
+			Daemon.init(config);
 		});
 	}
 

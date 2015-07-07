@@ -1,4 +1,4 @@
-// main.js, the entry point of the app, handles starting up the app window. It
+// index.js, the entry point of the app, handles starting up the app window. It
 // runs index.html which maps all other classes.
 
 // Global variables and require statements available to all main processes
