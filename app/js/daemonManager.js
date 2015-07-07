@@ -5,6 +5,7 @@
 const Spawn = require("child_process").spawn;
 const Path = require("path");
 const Fs = require('fs');
+var API = require('./daemonAPI');
 
 // When required, daemonManager can be called with a config
 // object to initialize siad as a background process
@@ -17,10 +18,10 @@ module.exports = function daemonManager(config) {
 	// testCalls logs the output from all API calls
 	function printTest(err, data) {
 		if (err) {
-			console.err(err);
+			console.error(err);
 		}
 		if (data) {
-			console.log(err);
+			console.log(data);
 		}
 	}
 

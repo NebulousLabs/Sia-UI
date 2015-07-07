@@ -17,6 +17,7 @@ module.exports = function daemonAPI(config) {
 		if (typeof params !== 'string') {
 			params = JSON.stringify(params);
 		}
+
 		// make request
 		var request = new XMLHttpRequest();
 		request.open('GET', port + url, true);

@@ -11,18 +11,18 @@ sia-ui-dependencies = $(ui-path)/app/dependencies/Sia
 # runs the app
 all: run
 
-run: ;@echo "\n${project}: Running.....\n";
+run:
 	npm start
 
 # simulates a fresh execution
 run-fresh: clean dependencies run
 
 # cleans distributable files & dependencies
-clean: ;@echo "\n${project}: Cleaning modules, siad, and distributables.....\n";
+clean:
 	rm -rf electron-* sia-v* Sia-* node_modules app/dependencies/Sia
 
 # install tools needed to run
-dependencies: ;@echo "\n${project}: Installing modules and siad.....\n";
+dependencies:
 	go get -u github.com/NebulousLabs/Sia/...
 	(cd $(GOPATH)/src/github.com/NebulousLabs/Sia && \
 	git fetch && git checkout $(sia-version) && \
