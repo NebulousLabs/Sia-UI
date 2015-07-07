@@ -1,30 +1,25 @@
-// main.js, the entry point of the app, handles starting up the app window. It
+// index.js, the entry point of the app, handles starting up the app window. It
 // runs index.html which maps all other classes.
 
 // Global variables and require statements available to all main processes
 'use strict';
-// Module to control application life.
-var app = require('app');
-// Module to normalize directories across OSes
-var path = require('path');
-// Module to create native browser window.
-var BrowserWindow = require('browser-window');
-// Module to give the app executable an icon
-var Tray = require('tray');
+const app = require('app');
+const path = require('path');
+const BrowserWindow = require('browser-window');
+const Tray = require('tray');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
 var mainWindow;
 
 // startMainWindow creates the first window and loads and index.html.
 function startMainWindow() {
-	
 	// Open the UI with full screen size. 'screen' can only be required after
 	// app.on('ready') 
-	var atomScreen = require('screen');
+	const atomScreen = require('screen');
 	var size = atomScreen.getPrimaryDisplay().workAreaSize;
 
 	// Give tray/taskbar icon path
-	var iconPath = path.join(__dirname,'assets', 'sia.png');
+	var iconPath = path.join(__dirname, 'dependencies', 'images', 'sia.png');
 	var appIcon = new Tray(iconPath);
 	appIcon.setToolTip('A highly efficient decentralized storage network.');
 
@@ -63,7 +58,7 @@ app.on('window-all-closed', function() {
 	}
 });
 
-// When Electron loading has finished, call 'startMainWindow'
+// When Electron loading has finished, start the daemon then the UI
 app.on('ready', function() {
 	startMainWindow();
 });
