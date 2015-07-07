@@ -10,7 +10,14 @@ const Path = require('path');
 module.exports = function plugin(path, name) {
 	// Encapsulated 'private' elements
 	var view, button;
+	var dependencies = {};
 
+	// Add plugin dependencies
+	function discernMessage(event) {
+		console.log(event.channel);
+		console.log('TEST');
+	};
+	
 	// initialize plugin components
 	initView();
 	initButton();
@@ -28,13 +35,19 @@ module.exports = function plugin(path, name) {
 		// Give webviews nodeintegration
 		view.setAttribute('nodeintegration', 'on');
 
+		// Listen to ipc communication
+		view.addEventListener('ipc-message', discernMessage);
+
 		// Set the zoom by default to be the same as the UI, can
 		// only be done after webview starts loading
 		view.addEventListener("did-start-loading", function setZoom() {
 			var zoomCode = 'require("web-frame").setZoomFactor(' + WebFrame.getZoomFactor() + ');';
 			view.executeJavaScript(zoomCode);
+		console.log('TEST');
+		view.send('init');
+		view.openDevTools();
 		});
-
+		
 		// Start loading it to the mainbar
 		document.getElementById('mainbar').appendChild(view);
 	}

@@ -1,18 +1,30 @@
 // main.js, the entry point of the plugin, handles updating the Overview fields
 'use strict';
-const ipc = require('ipc');
+var ipc = require('ipc');
 
-window.onload = function Overview() {
+function init() {
+	console.log('TEST');
 	// var pointers to markup elements
-	var balance
-	var peers = document.getElement
-	var blockHeight
+	/*
+	var balance = document.getElementByID('balance');
+	var peers = document.getElementByID('peers');
+	var blockHeight = document.getElementByID('blockHeight');
+	*/
+	ipc.sendToHost('YOYO TEST');
+}
 
-	ipc.on('update', update);
-	function update() {
-		eBalance.innerHTML = data.wallet.Balance;
-		ePeers.innerHTML = "Peers: " + data.peer.Peers.length;
-		eBlockHeight.innerHTML = "Block Height: " + data.consensus.Height;
-	}
-};
+function update(callResult) {
+	/*
+	eBalance.innerHTML = data.wallet.Balance;
+	ePeers.innerHTML = "Peers: " + data.peer.Peers.length;
+	eBlockHeight.innerHTML = "Block Height: " + data.consensus.Height;
+   */
+}
 
+ipc.on('init', function() {
+	console.log('RECEIVED INIT')
+	init();
+});
+ipc.on('update', update);
+
+console.log(ipc);
