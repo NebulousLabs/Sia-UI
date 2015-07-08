@@ -1,6 +1,8 @@
-// main.js, the entry point of the plugin, handles updating the Overview fields
+// index.js, the entry point of the plugin, handles updating the Overview fields
 'use strict';
-var ipc = require('ipc');
+var API = require('../../dependencies/Sia/daemonAPI.js')
+
+init();
 
 function init() {
 	console.log('TEST');
@@ -21,10 +23,12 @@ function update(callResult) {
    */
 }
 
+/* TODO: Generalize init and update handling to Sia-UI through IPC?
+ * Instead of update all plugins constantly like old-UI, plugins can specify
+ * frequency (e.g. .5Hz) or on condition (e.g. on open)
 ipc.on('init', function() {
 	console.log('RECEIVED INIT')
 	init();
 });
 ipc.on('update', update);
-
-console.log(ipc);
+*/

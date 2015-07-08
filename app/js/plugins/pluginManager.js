@@ -39,24 +39,23 @@ module.exports = (function pluginManager() {
 	// addPlugin is used as a callback to process each new plugin
 	function addPlugin(name) {
 		// Make the plugin, giving it a standard transition event to tie to its button
-		// TODO: allow plugins to customize their transition
-		var plugin = new SiaPlugin(path, name);
+		SiaPlugin(path, name, function(err, plugin) {
+			// Show the default plugin view
+			if (name === home) {
+				plugin.show();
+				current = plugin;
+			}
 
-		// Show the default plugin view
-		if (plugin.name === home) {
-			plugin.show();
-			current = plugin;
-		}
+			// Add button clickability
+			plugin.button.addEventListener('click', function() {
+				current.hide();
+				plugin.show();
+				current = plugin;
+			});
 
-		// Add button clickability
-		plugin.button.addEventListener('click', function() {
-			current.hide();
-			plugin.show();
-			current = plugin;
+			// Store the plugin
+			plugins.push(plugin);
 		});
-
-		// Store the plugin
-		plugins.push(plugin);
 	}
 
 	// initPlugins() actually makes the plugins to the UI

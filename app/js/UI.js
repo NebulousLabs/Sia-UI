@@ -8,7 +8,7 @@ const WebFrame = require('web-frame');
 const ElectronScreen = require('screen');
 const Path = require('path');
 const Fs = require('fs');
-var Daemon = require('./daemon/daemonManager');
+var Daemon = require('../dependencies/daemon/daemonManager');
 var Plugins = require('./plugins/pluginManager');
 
 // When required, the UI initializes itself through a single call to init()
@@ -50,7 +50,7 @@ module.exports = (function UI() {
 			siadCommand: process.platform === 'win32' ? './siad.exe' : './siad',
 			siadPath: Path.join(__dirname, '../dependencies/Sia'),
 			siadAddress: 'http://localhost:9980',
-			zoom: 1
+			zoom: 1,
 		};
 	}
 

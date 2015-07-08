@@ -4,10 +4,10 @@
 'use strict';
 
 // When required, daemonAPI gives its functions to the requirer. These
-// functions perform API calls to the siad port specified by setConfig
+// functions perform API calls to the siad address specified by setConfig
 module.exports = (function daemonAPI() {
 	// Encapsulated 'private' elements
-	var port;
+	var address;
 
 	// apiCall does the dirty work for API calls
 	// Callback is returned with either (err) or (null, data)
@@ -19,7 +19,7 @@ module.exports = (function daemonAPI() {
 
 		// make request
 		var request = new XMLHttpRequest();
-		request.open('GET', port + url, true);
+		request.open(type, address + url, true);
 
 		// add response listeners tied to the callback response
 		request.onload = function() {
@@ -43,10 +43,10 @@ module.exports = (function daemonAPI() {
 	// This module is mostly a gateway to javascript versions of the API calls
 	// and thus mostly has public functions
 	return {
-		// setConfig initializes the module based on the config and facilitates
+		// setAddress initializes the module based on the config and facilitates
 		// easy settings changing
-		setConfig: function (config) {
-			port = config.siadAddress;
+		setAddress: function (siadAddress) {
+			address = siadAddress;
 		},
 		// getCall does a get request to the API
 		// Callback is returned with either (err) or (null, data)

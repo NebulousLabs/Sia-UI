@@ -7,53 +7,41 @@ const Path = require('path');
 
 // When required, plugin.js can be called as a function to create a plugin's
 // elements
-module.exports = function plugin(path, name) {
+module.exports = function plugin(path, name, callback) {
 	// Encapsulated 'private' elements
 	var view, button;
-	var dependencies = {};
 
-	// Add plugin dependencies
-	function discernMessage(event) {
-		console.log(event.channel);
-		console.log('TEST');
-	};
-	
 	// initialize plugin components
 	initView();
 	initButton();
 
 	// initView() loads up the webview
-	function initView(callback) {
+	function initView() {
 		// Make webview element
 		view = document.createElement('webview');
 
 		// Set inner values
 		view.id = name + '-view';
-		view.style.display = 'none';
 		view.src = Path.join(path, name, 'index.html');
 
 		// Give webviews nodeintegration
 		view.setAttribute('nodeintegration', 'on');
-
-		// Listen to ipc communication
-		view.addEventListener('ipc-message', discernMessage);
-
-		// Set the zoom by default to be the same as the UI, can
-		// only be done after webview starts loading
-		view.addEventListener("did-start-loading", function setZoom() {
+		
+		// Logic that's necessarily after webview starts loading
+		view.addEventListener('did-start-loading', function () {
+			// Set the zoom by default to be the same as the UI, can only be done
 			var zoomCode = 'require("web-frame").setZoomFactor(' + WebFrame.getZoomFactor() + ');';
 			view.executeJavaScript(zoomCode);
-		console.log('TEST');
-		view.send('init');
-		view.openDevTools();
+			// Hide by default only after load start so plugin isn't lazily evaluated
+			view.style.display = 'none';
 		});
-		
+	
 		// Start loading it to the mainbar
 		document.getElementById('mainbar').appendChild(view);
 	}
 
 	// initButton() loads up the sideBar button
-	function initButton(callback) {
+	function initButton() {
 		// Make button elements to be combined
 		button = document.createElement('div');
 		var icon = document.createElement('img');
@@ -81,19 +69,20 @@ module.exports = function plugin(path, name) {
 		view.style.display = '';
 	}
 
-	// show() hides the plugin's view
+	// hides() hides the plugin's view
 	function hide() {
 		view.style.display = 'none';
 	}
 
-	// Expose public elements of this plugin
-	// TODO: verify plugin structure before opening or just deal with
-	// errors in async manner?
-	return {
-		name: name,
-		view: view,
-		button: button,
-		show: show,
-		hide: hide,
-	};
+	// Expose public elements of this plugin after all components done loading
+	// TODO: verify plugin structure or just deal with errors in async manner?
+	view.addEventListener('did-finish-load', function(event) {
+		callback(null, {
+			name: name,
+			view: view,
+			button: button,
+			show: show,
+			hide: hide,
+		});
+	});
 };

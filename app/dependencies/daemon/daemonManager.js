@@ -19,7 +19,7 @@ module.exports = (function daemonManager() {
 	function setConfig(config, callback) {
 		path = config.siadPath;
 		command = config.siadCommand;
-		API.setConfig(config);
+		API.setAddress(config.siadAddress);
 		callback();
 	}
 
