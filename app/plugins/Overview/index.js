@@ -1,34 +1,45 @@
 // index.js, the entry point of the plugin, handles updating the Overview fields
 'use strict';
-var API = require('../../dependencies/Sia/daemonAPI.js')
+// Library for communicating with Sia-UI
+const IPC = require('ipc');
+// Javascript functions for ease of using the API
+var API = require('../../dependencies/daemon/daemonAPI.js');
 
-init();
+// Pointers to markup elements
+var eBalance = document.getElementById('balance');
+var ePeers = document.getElementById('peers');
+var eBlockHeight = document.getElementById('blockHeight');
+// Variables to store API call values
+var b, p, bh;
 
-function init() {
-	console.log('TEST');
-	// var pointers to markup elements
-	/*
-	var balance = document.getElementByID('balance');
-	var peers = document.getElementByID('peers');
-	var blockHeight = document.getElementByID('blockHeight');
-	*/
-	ipc.sendToHost('YOYO TEST');
-}
-
-function update(callResult) {
-	/*
-	eBalance.innerHTML = data.wallet.Balance;
-	ePeers.innerHTML = "Peers: " + data.peer.Peers.length;
-	eBlockHeight.innerHTML = "Block Height: " + data.consensus.Height;
-   */
-}
-
-/* TODO: Generalize init and update handling to Sia-UI through IPC?
- * Instead of update all plugins constantly like old-UI, plugins can specify
- * frequency (e.g. .5Hz) or on condition (e.g. on open)
-ipc.on('init', function() {
-	console.log('RECEIVED INIT')
-	init();
+// Receive the configuration from Sia-UI
+IPC.on('init', function(address) {
+	// Start it all off
+	setInterval(callAPI(address), 1000);
 });
-ipc.on('update', update);
-*/
+
+function update(err, callResult) {
+	if (err) {
+		console.error('API call failed> ' + err);
+	}
+	
+	// update values
+	b = callResult.Balance || b;
+	p = callResult.Peers.length || p;
+	bh = callResult.Height || bh;
+
+	// update HTML
+	eBalance.innerHTML = b;
+	ePeers.innerHTML = "Peers: " + p;
+	eBlockHeight.innerHTML = "Block Height: " + bh;
+}
+
+function updateValue(element, newValue) {
+	element.innerHTML = newValue;
+}
+
+function callAPI(address) {
+	API.getCall(address + '/wallet/status', update);
+	API.getCall(address + '/gateway/status', update);
+	API.getCall(address + '/consensus/status', update);
+}

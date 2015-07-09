@@ -1,5 +1,5 @@
 // index.js, the entry point of the app, handles starting up the app window. It
-// runs index.html which maps all other classes.
+// runs index.html which, as a one window app, starts everything else.
 
 // Global variables and require statements available to all main processes
 'use strict';
