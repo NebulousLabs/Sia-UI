@@ -14,6 +14,7 @@ module.exports = (function pluginManager() {
 	var plugPath;
 	var current;
 	var plugins = [];
+	var siadAddress;
 
 	// setConfig() sets the member variables based on the passed config
 	// Callback, if there is one, returns no arguments
@@ -21,6 +22,7 @@ module.exports = (function pluginManager() {
 	function setConfig(config, callback) {
 		home = config.homePlugin;
 		plugPath = config.pluginsPath;
+		siadAddress = config.siadAddress;
 		callback(config);
 	}
 
@@ -38,7 +40,7 @@ module.exports = (function pluginManager() {
 	}
 
 	// addPlugin is used as a callback to process each new plugin
-	function addPlugin(name, config) {
+	function addPlugin(name) {
 		// Make the plugin, giving its button a standard transition
 		var plugin = new SiaPlugin(plugPath, name);
 
@@ -46,7 +48,7 @@ module.exports = (function pluginManager() {
 		plugin.on('did-finish-load', function() {
 			// Have all plugins start out at UI's zoom
 			plugin.adjustZoom();
-			plugin.sendIPC('init', config.siadAddress)
+			plugin.sendIPC('init', siadAddress)
 		});
 
 		// Show the default plugin view
@@ -77,7 +79,7 @@ module.exports = (function pluginManager() {
 	}
 
 	// initPlugins() actually creates the plugins to the UI
-	function initPlugins(config) {
+	function initPlugins() {
 		Fs.readdir(plugPath, function (err, pluginNames) {
 			if (err) {
 				console.log(err);
@@ -87,9 +89,7 @@ module.exports = (function pluginManager() {
 			setHome(pluginNames);
 			
 			// Initialize each plugin according to config
-			pluginNames.forEach(function(name) {
-				addPlugin(name, config);
-			});
+			pluginNames.forEach(addPlugin);
 		});
 	}
 

@@ -46,7 +46,7 @@ module.exports = (function daemonManager() {
 	}
 
 	// start() starts the daemon as a long running background process
-	function start() {
+	function start(callback) {
 		console.log('starting siad');
 		ifRunning(function() {
 			console.error('attempted to start siad when it was already running');
@@ -63,6 +63,9 @@ module.exports = (function daemonManager() {
 		};
 		var daemonProcess = new Process(command, processOptions);
 		daemonProcess.unref();
+		
+		// post start logic
+		callback(daemonProcess);
 	}
 
 	// stop() stops the daemon with an API call to the address
@@ -78,10 +81,30 @@ module.exports = (function daemonManager() {
 		});
 	}
 
+	// printCall() prints the results of the call
+	function printCall(err, callResult) {
+		if (err) {
+			console.error(err);
+		} else {
+			console.log(callResult);
+		}
+	}
+
+	// DEVTOOL: testCalls() for whether API calls work from the UI-perspective
+	function testCalls() {
+		APIJS.getCall(address + '/consensus/status', printCall);
+		APIJS.getCall(address + '/gateway/status', printCall);
+		APIJS.getCall(address + '/host/status', printCall);
+		APIJS.getCall(address + '/miner/status', printCall);
+		APIJS.getCall(address + '/wallet/status', printCall);
+		APIJS.getCall(address + '/blockexplorer/status', printCall);
+	}
+
 	// init() sets config and starts the daemon if it isn't on
 	function init(config) {
 		setConfig(config, function() {
 			ifNotRunning(start);
+			ifRunning(testCalls);
 		});
 	}
 

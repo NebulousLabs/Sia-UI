@@ -15,12 +15,14 @@ var b, p, bh;
 // Receive the configuration from Sia-UI
 IPC.on('init', function(address) {
 	// Start it all off
-	setInterval(callAPI(address), 1000);
+	callAPI(address);
 });
 
 function update(err, callResult) {
 	if (err) {
 		console.error('API call failed> ' + err);
+	} else {
+		console.log(callResult);
 	}
 	
 	// update values
