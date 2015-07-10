@@ -16,8 +16,9 @@ function apiCall(type, url, params, callback) {
 			// Success!
 			callback(null, JSON.parse(this.response));
 		} else {
-			// Error code returned
-			callback(new Error('Bad call to: ' + url + '\nError code: ' + this.status));
+			// Error returned
+			callback(this);
+			console.log(this);
 		}
 	};
 	request.onerror = function() {
