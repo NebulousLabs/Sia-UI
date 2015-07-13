@@ -31,7 +31,6 @@ module.exports = {
 		
 		// Turn nodeintegration on so plugins can use electron & node libraries
 		view.nodeintegration = 'on';
-		view.disablewebsecurity = 'on';
 		// TODO: If security becomes a concern, specify preload script to give
 		// plugins their dependencies and access to libraries, but turn off
 		// nodeintegration superpowers

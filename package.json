@@ -7,8 +7,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"electron-prebuilt": "latest",
-		"jshint": "latest",
-		"electron-debug": "latest"
+		"jshint": "latest"
 	},
 	"scripts": {
 		"start": "electron app",

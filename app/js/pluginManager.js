@@ -23,7 +23,8 @@ module.exports = (function pluginManager() {
 		home = config.homePlugin;
 		plugPath = config.pluginsPath;
 		siadAddress = config.siadAddress;
-		callback(config);
+		Daemon.init(config);
+		callback();
 	}
 
 	// setHome detects the home Plugin or otherwise the alphabetically first
@@ -39,40 +40,51 @@ module.exports = (function pluginManager() {
 		}
 	}
 
-	// addPlugin is used as a callback to process each new plugin
+	// addListeners(plugin) handles listening for plugin messages 
+	function addListeners(plugin) {
+		// Show the default plugin view
+		if (plugin.name === home) {
+			plugin.on('did-finish-load', plugin.show);
+			current = plugin;
+		}
+
+		// Handle any ipc messages from the plugin
+		plugin.on('ipc-message', function(event) {
+			switch(event.channel) {
+				case 'api-call':
+					Daemon.call(event.args[0], function(callResult) {
+						plugin.sendIPC('api-results', callResult);
+					});
+					break;
+				case 'devtools':
+					plugin.toggleDevTools();
+					break;
+				default:
+					console.log('Unknown ipc message: ' + event.channel);
+			}
+		});
+
+		// Display any console logs from the plugin
+		plugin.on('console-message', function(event) {
+			console.log(plugin.name + ' plugin logged> ', event.message);
+		});	
+	}
+
+	// addPlugin() makes a new plugin and 
 	function addPlugin(name) {
 		// Make the plugin, giving its button a standard transition
 		var plugin = new SiaPlugin(plugPath, name);
 
-		// Upon finishing view loading
-		plugin.on('did-finish-load', function() {
-			// Have all plugins start out at UI's zoom
-			plugin.adjustZoom();
-			plugin.sendIPC('init', siadAddress)
-		});
+		// addListeners deals with any webview related async tasks
+		addListeners(plugin);
 
-		// Show the default plugin view
-		if (name === home) {
-			plugin.on('did-finish-load', plugin.show);
-			current = plugin;
-		}
-		
 		// Add standard transition upon button click
+		// TODO: Add smoother transitions
 		plugin.transition(function() {
 			current.hide();
 			plugin.show();
 			current = plugin;
 		});
-
-		// Display any ipc messages from the plugin
-		plugin.on('ipc-message', function(event) {
-			console.log(name + ' plugin sent ipc> ', event.channel);
-		});
-
-		// Display any console logs from the plugin
-		plugin.on('console-message', function(event) {
-			console.log(name + ' plugin logged> ', event.message);
-		});	
 
 		// Store the plugin
 		plugins.push(plugin);
@@ -95,11 +107,10 @@ module.exports = (function pluginManager() {
 
 	// init() sets config and initializes the plugins
 	function init(config) {
-		setConfig(config, initPlugins);
 		// TODO: This is hardcoded. daemonManager could be a plugin, siad
 		// be a plugin itself, or even have a new class of initialized
 		// components called dependencies.
-		Daemon.init(config);
+		setConfig(config, initPlugins);
 	}
 
 	// expose 'public' elements and functions

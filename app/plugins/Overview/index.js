@@ -2,46 +2,42 @@
 'use strict';
 // Library for communicating with Sia-UI
 const IPC = require('ipc');
-// Javascript functions for ease of using the API
-var API = require('../../dependencies/daemon/daemonAPI.js');
 
 // Pointers to markup elements
-var eBalance = document.getElementById('balance');
-var ePeers = document.getElementById('peers');
-var eBlockHeight = document.getElementById('blockHeight');
+var eBalance;
+var ePeers;
+var eBlockHeight;
 // Variables to store API call values
-var b, p, bh;
+var calls = ['/wallet/status', '/gateway/status', '/consensus/status'];
+// Variables to store call results
+var b = 0;
+var p = 0;
+var h = 0;
 
-// Receive the configuration from Sia-UI
-IPC.on('init', function(address) {
-	// Start it all off
-	callAPI(address);
-});
+window.onload = function init() {
+	// Pointers to markup elements
+	eBalance = document.getElementById('balance');
+	ePeers = document.getElementById('peers');
+	eBlockHeight = document.getElementById('blockheight');
 
-function update(err, callResult) {
-	if (err) {
-		console.error('API call failed> ' + err);
-	} else {
-		console.log(callResult);
+	// DEVTOOL: uncomment to bring up devtools on plugin view
+	//IPC.sendToHost('devtools', 'toggle');
+
+	// Call the API regularly to update page
+	setInterval(function() {
+		IPC.sendToHost('api-call', calls);
+	}, 1000);
+}
+
+IPC.on('api-results', function update(results) {
+	if (results.length === 3) {
+		b = siamath.fksiacoin(results[0].Balance) || b;
+		p = results[1].Peers.length || p;
+		h = results[2].Height || h;
 	}
-	
-	// update values
-	b = callResult.Balance || b;
-	p = callResult.Peers.length || p;
-	bh = callResult.Height || bh;
-
 	// update HTML
 	eBalance.innerHTML = b;
 	ePeers.innerHTML = "Peers: " + p;
-	eBlockHeight.innerHTML = "Block Height: " + bh;
-}
+	eBlockHeight.innerHTML = "Block Height: " + h;
+});
 
-function updateValue(element, newValue) {
-	element.innerHTML = newValue;
-}
-
-function callAPI(address) {
-	API.getCall(address + '/wallet/status', update);
-	API.getCall(address + '/gateway/status', update);
-	API.getCall(address + '/consensus/status', update);
-}

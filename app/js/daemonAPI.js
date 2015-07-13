@@ -4,8 +4,13 @@
 'use strict';
 
 // apiCall() does the dirty work for API calls
-// Callback is returned with either (err) or (null, callResult)
+// Callback is returned with either (err) or (null, result)
 function apiCall(type, url, params, callback) {
+	// Detect improper calls, each one needs a url
+	if (!url) {
+		callback(new Error('Improper API call!'));
+		return;
+	}
 	// make request
 	var request = new XMLHttpRequest();
 	request.open(type, url, true);
@@ -18,7 +23,6 @@ function apiCall(type, url, params, callback) {
 		} else {
 			// Error returned
 			callback(this);
-			console.log(this);
 		}
 	};
 	request.onerror = function() {
@@ -31,55 +35,55 @@ function apiCall(type, url, params, callback) {
 } 
 
 // discernCall() takes an unknown call object, and apropriately calls apiCall()
-// Callback is returned with either (err) or (null, callResult)
+// Callback is returned with either (err) or (null, result)
 function discernCall(call, callback) {
 	// Extract call attributes, default call is 'GET'
-	var type = call.type || 'GET';
 	var url = call.url;
+	var type = (call.params) ? 'POST': 'GET';
 	var params = call.params || {};
+	if (params === {})
 
 	// The function can use JSON, but turns them into strings first
-	if (typeof params !== 'string') {
+	// if (typeof params !== 'string') {
+	var JSON;
+	if (JSON && typeof JSON.parse === 'function') {
 		params = JSON.stringify(params);
 	}
 
-	// Detect improper calls, each one needs a url and a callback response
-	if (!url) {
-		callback(new Error('Improper API call!'));
-	} else {
-		// Make the call
-		apiCall(type, url, params, callback);
-	}
+	// Make the call
+	apiCall(type, url, params, callback);
 }
 
 // When required, daemonAPI can be used for its functions to perform API calls
 // This module is just a javascript gateway to make API calls
 module.exports = {
 	// getCall specifically does a get request to the API
-	// Callback is returned with either (err) or (null, callResult)
+	// callback(err, result); if success, err is null
 	getCall: function getCall(url, callback) {
 		apiCall('GET', url, '', callback);
 	},
 	// postCall specifically does a post request to the API
-	// Callback is returned with either (err) or (null, callResult)
+	// callback(err, result); if success, err is null
 	postCall: function postCall(url, params, callback) {
 		apiCall('POST', url, params, callback);
 	},
+	makeCall: discernCall,
 	// makeCalls() handles multiple API calls that could be either GET or POST
-	// Callback is returned with callResults object, filled with either an
-	// error or the API call response per call with key of call.url
+	// callback(results); results is an array of error or JSON respectively
 	makeCalls: function makeCalls(calls, callback) {
-		var callResults = {};
-		calls.forEach(function(call) {
-			discernCall(call, function(err, callResult) {
+		var results = [];
+		calls.forEach(function(call, index) {
+			discernCall(call, function(err, result) {
 				if (err) {
-					callResults[call.address] = err;
+					results[index] = err;
 				}
 				else {
-					callResults[call.address] = callResult;
+					results[index] = result;
+				}
+				if (index === calls.length - 1) {
+					callback(results);
 				}
 			});
 		});
-		callback(callResults);
 	},
 };

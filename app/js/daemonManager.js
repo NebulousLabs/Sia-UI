@@ -5,7 +5,8 @@
 const Process = require("child_process").spawn;
 const Path = require("path");
 const Fs = require('fs');
-var APIJS = require('../dependencies/daemon/daemonAPI');
+const IPC = require('ipc');
+var APIJS = require('./daemonAPI');
 
 // When required, daemonManager should be initialized with a config object to
 // initialize siad as a background process. 
@@ -35,12 +36,12 @@ module.exports = (function daemonManager() {
 		});
 	}
 	
-	// ifRunning() is a shortcut use of touchSiad
+	// ifRunning() executes callback if siad is running
 	function ifRunning(callback) {
 		touchSiad(callback, function() {});
 	}
 
-	// ifNotRunning() is a shortcut use of touchSiad
+	// ifNotRunning() executes callback if siad is not running
 	function ifNotRunning(callback) {
 		touchSiad(function() {}, callback);
 	}
@@ -100,11 +101,38 @@ module.exports = (function daemonManager() {
 		APIJS.getCall(address + '/blockexplorer/status', printCall);
 	}
 
+	// addPort() interprets a call into a call object with the full url
+	function addPort(call) {
+		// Interpret address-only calls as 'GET'
+		if (typeof call === 'string') {
+			call = {url: call};
+		}
+		// Add the localhost and port to the url
+		call.url = address + call.url;
+		return call;
+	}
+
+	// apiCall() takes a call object or array of and returns the result
+	// callback(err, result); err is null if call was successful
+	// callback(errs, results); errs and results are same size arrays
+	function apiCall(arg, callback) {
+		if (Array.isArray(arg)) {
+			var calls = [];
+			arg.forEach(function(call) {
+				calls.push(addPort(call));
+			});
+			APIJS.makeCalls(calls, callback);
+		} else {
+			APIJS.makeCall(addPort(arg), callback);
+		}
+	}
+
 	// init() sets config and starts the daemon if it isn't on
 	function init(config) {
 		setConfig(config, function() {
 			ifNotRunning(start);
-			ifRunning(testCalls);
+			// DEVTOOL: ensure api calls are working
+			//ifRunning(testCalls);
 		});
 	}
 
@@ -114,5 +142,6 @@ module.exports = (function daemonManager() {
 		start: start,
 		stop: stop,
 		init: init,
+		call: apiCall,
 	};
 })();
