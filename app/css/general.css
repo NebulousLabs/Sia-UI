@@ -78,6 +78,9 @@ html,body {
 	color: #4A4A4A:
 	cursor: pointer;
 }
+.sidebar-button.current {
+	background-color: #DDDDDD;
+}
 .sidebar-button:hover {
 	cursor: pointer;
 	background-color: #DDDDDD;

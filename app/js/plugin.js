@@ -37,12 +37,14 @@ module.exports = function plugin(plugPath, name) {
 
 	// show() shows the plugin's view
 	function show() {
+		button.classList.add('current');
 		view.style.display = '';
 		view.send('show');
 	}
 
 	// hides() hides the plugin's view
 	function hide() {
+		button.classList.remove('current');
 		view.style.display = 'none';
 		view.send('hide');
 	}
