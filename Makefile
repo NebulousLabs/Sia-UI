@@ -19,7 +19,7 @@ run-fresh: clean dependencies run
 
 # cleans distributable files & dependencies
 clean:
-	rm -rf electron-* sia-v* Sia-* node_modules app/dependencies/Sia
+	rm -rf electron-* sia-v* Sia-* node_modules app/dependencies/Sia app/dependencies/daemon/*.log app/config.json **/*.swp npm-debug.log
 
 # install tools needed to run
 dependencies:

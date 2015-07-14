@@ -1,14 +1,13 @@
 {
 	"name": "Test-UI",
 	"version": "0.4.0",
-	"main": "app/main.js",
+	"main": "app/index.js",
 	"author": "NebulousLabs",
 	"description": "The development directory for Sia-UI",
 	"license": "MIT",
 	"devDependencies": {
 		"electron-prebuilt": "latest",
-		"jshint": "latest",
-		"electron-debug": "latest"
+		"jshint": "latest"
 	},
 	"scripts": {
 		"start": "electron app",

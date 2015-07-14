@@ -4,22 +4,26 @@
 'use strict';
 const Fs = require('fs');
 var SiaPlugin = require('./plugin');
+var Daemon = require('./daemonManager');
 
 // When required, pluginManager can be called with a config object to
 // initialize plugins
 module.exports = (function pluginManager() {
 	// Encapsulated 'private' elements
 	var home;
-	var path;
+	var plugPath;
 	var current;
 	var plugins = [];
+	var siadAddress;
 
 	// setConfig() sets the member variables based on the passed config
 	// Callback, if there is one, returns no arguments
 	// TODO: delete all plugins when a new path is set?
 	function setConfig(config, callback) {
 		home = config.homePlugin;
-		path = config.pluginsPath;
+		plugPath = config.pluginsPath;
+		siadAddress = config.siadAddress;
+		Daemon.init(config);
 		callback();
 	}
 
@@ -36,20 +40,47 @@ module.exports = (function pluginManager() {
 		}
 	}
 
-	// addPlugin is used as a callback to process each new plugin
-	function addPlugin(name) {
-		// Make the plugin, giving it a standard transition event to tie to its button
-		// TODO: allow plugins to customize their transition
-		var plugin = new SiaPlugin(path, name);
-
+	// addListeners(plugin) handles listening for plugin messages 
+	function addListeners(plugin) {
 		// Show the default plugin view
 		if (plugin.name === home) {
-			plugin.show();
+			plugin.on('did-finish-load', plugin.show);
 			current = plugin;
 		}
 
-		// Add button clickability
-		plugin.button.addEventListener('click', function() {
+		// Handle any ipc messages from the plugin
+		plugin.on('ipc-message', function(event) {
+			switch(event.channel) {
+				case 'api-call':
+					Daemon.call(event.args[0], function(callResult) {
+						plugin.sendIPC('api-results', callResult);
+					});
+					break;
+				case 'devtools':
+					plugin.toggleDevTools();
+					break;
+				default:
+					console.log('Unknown ipc message: ' + event.channel);
+			}
+		});
+
+		// Display any console logs from the plugin
+		plugin.on('console-message', function(event) {
+			console.log(plugin.name + ' plugin logged> ', event.message);
+		});	
+	}
+
+	// addPlugin() makes a new plugin and 
+	function addPlugin(name) {
+		// Make the plugin, giving its button a standard transition
+		var plugin = new SiaPlugin(plugPath, name);
+
+		// addListeners deals with any webview related async tasks
+		addListeners(plugin);
+
+		// Add standard transition upon button click
+		// TODO: Add smoother transitions
+		plugin.transition(function() {
 			current.hide();
 			plugin.show();
 			current = plugin;
@@ -59,9 +90,9 @@ module.exports = (function pluginManager() {
 		plugins.push(plugin);
 	}
 
-	// initPlugins() actually makes the plugins to the UI
+	// initPlugins() actually creates the plugins to the UI
 	function initPlugins() {
-		Fs.readdir(path, function (err, pluginNames) {
+		Fs.readdir(plugPath, function (err, pluginNames) {
 			if (err) {
 				console.log(err);
 			}
@@ -69,13 +100,16 @@ module.exports = (function pluginManager() {
 			// Determine default plugin
 			setHome(pluginNames);
 			
-			// Initialize each plugin
+			// Initialize each plugin according to config
 			pluginNames.forEach(addPlugin);
 		});
 	}
 
 	// init() sets config and initializes the plugins
 	function init(config) {
+		// TODO: This is hardcoded. daemonManager could be a plugin, siad
+		// be a plugin itself, or even have a new class of initialized
+		// components called dependencies.
 		setConfig(config, initPlugins);
 	}
 

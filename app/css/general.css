@@ -73,10 +73,13 @@ html,body {
 	border-left: 2px solid #ECECEC;
 	border-right: 4px solid #ECECEC;
 	border-bottom: 2px solid #ECECEC;
-
-	color: #4A4A4A
-
 	-webkit-user-select: text;
+
+	color: #4A4A4A:
+	cursor: pointer;
+}
+.sidebar-button.current {
+	background-color: #DDDDDD;
 }
 .sidebar-button:hover {
 	cursor: pointer;

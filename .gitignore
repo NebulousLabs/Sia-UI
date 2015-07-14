@@ -1,13 +1,9 @@
 electron-v*
 sia-v*
-Sia-Linux-ia32
-Sia-Linux-x64
-Sia-Mac
-Sia-Windows-ia32
-Sia-Windows-x64
+Sia-*
 node_modules
-*.swp
-samples
+**/*.swp
 npm-debug.log
 app/config.json
 app/dependencies/Sia
+app/dependencies/daemon/*.log
