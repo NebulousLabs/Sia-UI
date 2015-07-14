@@ -4,7 +4,7 @@
 'use strict';
 
 // apiCall() does the dirty work for API calls
-// Callback is returned with either (err) or (null, result)
+// callback(err, result); if success, err is null
 function apiCall(type, url, params, callback) {
 	// Detect improper calls, each one needs a url
 	if (!url) {
@@ -35,16 +35,15 @@ function apiCall(type, url, params, callback) {
 } 
 
 // discernCall() takes an unknown call object, and apropriately calls apiCall()
-// Callback is returned with either (err) or (null, result)
+// callback(err, result); if success, err is null
 function discernCall(call, callback) {
 	// Extract call attributes, default call is 'GET'
 	var url = call.url;
 	var type = (call.params) ? 'POST': 'GET';
 	var params = call.params || {};
-	if (params === {})
 
-	// The function can use JSON, but turns them into strings first
-	// if (typeof params !== 'string') {
+	// The function can use JSON, but turns them into strings first if (typeof
+	// params !== 'string') {
 	var JSON;
 	if (JSON && typeof JSON.parse === 'function') {
 		params = JSON.stringify(params);

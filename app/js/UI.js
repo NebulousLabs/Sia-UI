@@ -8,7 +8,6 @@ const WebFrame = require('web-frame');
 const ElectronScreen = require('screen');
 const Path = require('path');
 const Fs = require('fs');
-var Daemon = require('./js/daemonManager');
 var Plugins = require('./js/pluginManager');
 
 // config.json variables

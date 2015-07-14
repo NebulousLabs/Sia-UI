@@ -1,7 +1,9 @@
 // index.js, the entry point of the plugin, handles updating the Overview fields
 'use strict';
+
 // Library for communicating with Sia-UI
 const IPC = require('ipc');
+var siamath = require('../../dependencies/siamath.js');
 
 // Pointers to markup elements
 var eBalance;
@@ -27,7 +29,7 @@ window.onload = function init() {
 	setInterval(function() {
 		IPC.sendToHost('api-call', calls);
 	}, 1000);
-}
+};
 
 IPC.on('api-results', function update(results) {
 	if (results.length === 3) {

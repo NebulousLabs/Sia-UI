@@ -5,7 +5,6 @@
 const Process = require("child_process").spawn;
 const Path = require("path");
 const Fs = require('fs');
-const IPC = require('ipc');
 var APIJS = require('./daemonAPI');
 
 // Functions that don't need to be part of the daemon Manager itself
@@ -16,16 +15,6 @@ function printCall(err, callResult) {
 	} else {
 		console.log(callResult);
 	}
-}
-
-// DEVTOOL: testCalls() for whether API calls work from the UI-perspective
-function testCalls() {
-	APIJS.getCall(address + '/consensus/status', printCall);
-	APIJS.getCall(address + '/gateway/status', printCall);
-	APIJS.getCall(address + '/host/status', printCall);
-	APIJS.getCall(address + '/miner/status', printCall);
-	APIJS.getCall(address + '/wallet/status', printCall);
-	APIJS.getCall(address + '/blockexplorer/status', printCall);
 }
 
 // When required, daemonManager should be initialized with a config object to
@@ -49,7 +38,7 @@ module.exports = (function daemonManager() {
 				console.log('siad is not running');
 			};
 		}
-		APIJS.getCall(address + '/consensus/status', function(err, data) {
+		APIJS.getCall(address + '/consensus/status', function(err) {
 			if (!err) {
 				isRunning();
 			} else if (err) {
@@ -128,12 +117,22 @@ module.exports = (function daemonManager() {
 		}
 	}
 
+	// DEVTOOL: testCalls() for whether API calls work from the UI-perspective
+	function testCalls(address) {
+		APIJS.getCall(address + '/consensus/status', printCall);
+		APIJS.getCall(address + '/gateway/status', printCall);
+		APIJS.getCall(address + '/host/status', printCall);
+		APIJS.getCall(address + '/miner/status', printCall);
+		APIJS.getCall(address + '/wallet/status', printCall);
+		APIJS.getCall(address + '/blockexplorer/status', printCall);
+	}
+
 	// init() sets config and starts the daemon if it isn't on
 	function init(config) {
 		setConfig(config, function() {
 			ifSiad(null, start);
 			// DEVTOOL: ensure api calls are working
-			//ifRunning(testCalls);
+			//ifSiad(testCalls);
 		});
 	}
 

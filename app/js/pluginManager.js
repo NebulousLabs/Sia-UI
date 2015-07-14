@@ -4,7 +4,7 @@
 'use strict';
 const Fs = require('fs');
 var SiaPlugin = require('./plugin');
-var Daemon = require('./daemonManager')
+var Daemon = require('./daemonManager');
 
 // When required, pluginManager can be called with a config object to
 // initialize plugins

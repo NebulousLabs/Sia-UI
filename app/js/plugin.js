@@ -4,8 +4,7 @@
 'use strict';
 const WebFrame = require('web-frame');
 const Path = require('path');
-const Fs = require('fs');
-var Factory = require('./pluginFactory')
+var Factory = require('./pluginFactory');
 
 // When required, plugin.js can be called as a function to create a plugin
 module.exports = function plugin(plugPath, name) {
@@ -16,24 +15,6 @@ module.exports = function plugin(plugPath, name) {
 	document.getElementById('mainbar').appendChild(view);
 	// Add the button to the sidebar
 	document.getElementById('sidebar').appendChild(button);
-
-	// Have all plugins displaying UI's zoom and css
-	onView('did-finish-load', function() {
-		hide();
-
-		var zoomCode = 'require("web-frame").setZoomFactor(' + WebFrame.getZoomFactor() + ');';
-		view.executeJavaScript(zoomCode);
-		
-		// TODO: common css styling injected in plugins?
-		/*
-		Fs.readFile(Path.join(__dirname, '../css/general.css'), 'utf8', function(err, file) {
-			if (err) {
-				console.error(err);
-			}
-			view.insertCSS(file);
-		});
-	   */
-	});
 
 	// show() shows the plugin's view
 	function show() {
@@ -78,6 +59,24 @@ module.exports = function plugin(plugPath, name) {
 		}
 		return;
 	}
+
+	// Have all plugins displaying UI's zoom and css
+	onView('did-finish-load', function() {
+		hide();
+
+		var zoomCode = 'require("web-frame").setZoomFactor(' + WebFrame.getZoomFactor() + ');';
+		view.executeJavaScript(zoomCode);
+		
+		// TODO: common css styling injected in plugins?
+		/*
+		Fs.readFile(Path.join(__dirname, '../css/general.css'), 'utf8', function(err, file) {
+			if (err) {
+				console.error(err);
+			}
+			view.insertCSS(file);
+		});
+	   */
+	});
 
 	// return the newly made plugin and its public elements
 	return {
