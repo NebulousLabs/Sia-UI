@@ -27,7 +27,7 @@ function testCalls(address) {
 
 // daemonManager should be initialized with a config object to initialize siad
 // as a background process. 
-var daemonManager = (function() {
+var Daemon = (function() {
 	// Encapsulated 'private' elements
 	var siadPath;
 	var command;
@@ -144,4 +144,4 @@ var daemonManager = (function() {
 		init: init,
 		call: apiCall,
 	};
-})();
+}());

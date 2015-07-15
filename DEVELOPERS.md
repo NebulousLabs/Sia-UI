@@ -45,6 +45,7 @@ logical place, perhaps even with some other functions into another .js file
 ## When in doubt...
 
 [Consult this](http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml)
+[Or this](http://javascript.crockford.com/code.html)
 
 # Makefile/NPM-package.json philosophy:
 (perhaps this was unnecessary but throw me a bone)

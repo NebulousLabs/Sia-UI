@@ -6,4 +6,3 @@ node_modules
 npm-debug.log
 app/config.json
 app/dependencies/Sia
-app/dependencies/daemon/*.log

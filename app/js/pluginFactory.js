@@ -1,6 +1,4 @@
 // pluginFactory.js is used to create plugin components
-
-// Elements used across this file. GCed after file execution
 'use strict';
 
 // icon() creates the image element for a button

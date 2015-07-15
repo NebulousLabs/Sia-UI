@@ -37,14 +37,14 @@
 			</div>
 		</div>
 		<!-- Javascript -->
-		<script type='text/javascript' src='js/daemonManager.js'></script>
-		<script type='text/javascript' src='js/pluginManager.js'></script>
-		<script type='text/javascript' src='js/UI.js'></script>
+		<script src='js/daemonManager.js'></script>
+		<script src='js/pluginManager.js'></script>
+		<script src='js/UI.js'></script>
 		<script>
 			// Start the UI
 			window.onload = UI.init;
 			// before closing the UI, save the config as is
-			window.onbeforeunload = UI.saveConfig;
+			window.onbeforeunload = UI.close;
 		</script>
 	</body>
 </html>
