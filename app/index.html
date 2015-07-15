@@ -7,39 +7,44 @@
 		<link rel='stylesheet' href='dependencies/libs/pure-min.css'>
 		<link rel='stylesheet' href='dependencies/libs/grids-responsive-min.css'>
 		<link rel='stylesheet' href='css/general.css'>
-
-		<!-- Javascript -->
-		<script type='text/javascript' src='js/UI.js'></script>
 	</head>
 
 	<body>
-
-	<!-- Header for UI -->
-	<div class='pure-g header'>
-		<div class='pure-u-1-5 logo-container'>
-			<img src='dependencies/images/sia.svg' height='50' class='logo'>
-		</div>
-		<div class='pure-u-4-5 button-container'>
-			<div class='header-button' id='update-button'>
-			<i class='fa fa-arrow-circle-o-up'></i>
-			Check for Update
+		<!-- Header for UI -->
+		<div class='pure-g header'>
+			<div class='pure-u-1-5 logo-container'>
+				<img src='dependencies/images/sia.svg' height='50' class='logo'>
+			</div>
+			<div class='pure-u-4-5 button-container'>
+				<div class='header-button' id='update-button'>
+				<i class='fa fa-arrow-circle-o-up'></i>
+				Check for Update
+				</div>
 			</div>
 		</div>
-	</div>
-
-	<!-- Full body of UI -->
-	<div class='pure-g body'>
-		<!-- Sidebar -->
-		<div class='pure-u-1-5 sidebar' id='sidebar'>
-			<!-- Fill the UI Height -->
-			<div class='pure-u-1-1 sidebar-fill'>
+	
+		<!-- Full body of UI -->
+		<div class='pure-g body'>
+			<!-- Sidebar -->
+			<div class='pure-u-1-5 sidebar' id='sidebar'>
+				<!-- Fill the UI Height -->
+				<div class='pure-u-1-1 sidebar-fill'>
+				</div>
+			</div>
+	
+			<!-- Mainbar -->
+			<div class='pure-u mainbar' id='mainbar'>
 			</div>
 		</div>
-
-		<!-- Mainbar -->
-		<div class='pure-u mainbar' id='mainbar'>
-		</div>
-	</div>
-
+		<!-- Javascript -->
+		<script type='text/javascript' src='js/daemonManager.js'></script>
+		<script type='text/javascript' src='js/pluginManager.js'></script>
+		<script type='text/javascript' src='js/UI.js'></script>
+		<script>
+			// Start the UI
+			window.onload = UI.init;
+			// before closing the UI, save the config as is
+			window.onbeforeunload = UI.saveConfig;
+		</script>
 	</body>
 </html>

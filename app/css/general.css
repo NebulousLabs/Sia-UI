@@ -9,15 +9,28 @@
  * 		Grey-Black: #4A4A4A
  * 		Black:      #000000
  */
-
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300);
+/* Overall rules */
 html,body {
 	position: relative;
+
+	margin: 0px;
+	padding: 0px;
+	border-spacing: 0px;
 
 	height: 100%;
 	min-height: 380px; /* 80 for header + 60 for up to 5 sidebar buttons */
 	min-width: 480px;
 
+	font-family: 'Roboto Condensed', sans-serif;
+	font-weight: 300;
+	font-size: 18px;
+
 	-webkit-user-select: none;
+}
+.pure-g [class*="pure-u"] {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 300;
 }
 
 /* UI Header */

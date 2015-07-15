@@ -31,8 +31,6 @@ variety of tools to easily work with desktop tools like file paths to
 browser-windows. The best way to get acquainted with this tool quickly is to
 read the codebase, referring to electron's documentation when necessary.
 
-# Patterns of Development
-
 ## Modularize!
 
 Organize functions into a logically encompassing module. As a general rule of
@@ -43,6 +41,10 @@ In order to avoid [callback hell](http://callbackhell.com/):
 1. Try to name most anonymous functions
 2. If it makes sense for readability, move the named functions out to a more
 logical place, perhaps even with some other functions into another .js file
+
+## When in doubt...
+
+[Consult this](http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml)
 
 # Makefile/NPM-package.json philosophy:
 (perhaps this was unnecessary but throw me a bone)

@@ -1,6 +1,4 @@
 // daemonAPI.js gives plugins and the UI easy access to the API.
-
-// Elements used across this file. GCed after file execution
 'use strict';
 
 // apiCall() does the dirty work for API calls

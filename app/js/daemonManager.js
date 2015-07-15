@@ -3,9 +3,7 @@
 // Elements used across this file. GCed after file execution
 'use strict';
 const Process = require("child_process").spawn;
-const Path = require("path");
-const Fs = require('fs');
-var APIJS = require('./daemonAPI');
+var APIJS = require('./js/daemonAPI');
 
 // Functions that don't need to be part of the daemon Manager itself
 // printCall() prints the results of the call
@@ -27,9 +25,9 @@ function testCalls(address) {
 	APIJS.getCall(address + '/blockexplorer/status', printCall);
 }
 
-// When required, daemonManager should be initialized with a config object to
-// initialize siad as a background process. 
-module.exports = (function daemonManager() {
+// daemonManager should be initialized with a config object to initialize siad
+// as a background process. 
+var daemonManager = (function() {
 	// Encapsulated 'private' elements
 	var siadPath;
 	var command;

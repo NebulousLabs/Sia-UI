@@ -1,14 +1,8 @@
 // pluginManager.js manages all plugin logic for the UI
-
-// Elements used across this file. GCed after file execution
 'use strict';
-const Fs = require('fs');
-var SiaPlugin = require('./plugin');
-var Daemon = require('./daemonManager');
 
-// When required, pluginManager can be called with a config object to
-// initialize plugins
-module.exports = (function pluginManager() {
+// pluginManager can be called with a config object to initialize plugins
+var pluginManager = (function() {
 	// Encapsulated 'private' elements
 	var home;
 	var plugPath;
@@ -23,7 +17,6 @@ module.exports = (function pluginManager() {
 		home = config.homePlugin;
 		plugPath = config.pluginsPath;
 		siadAddress = config.siadAddress;
-		Daemon.init(config);
 		callback();
 	}
 
@@ -63,7 +56,7 @@ module.exports = (function pluginManager() {
 		plugin.on('ipc-message', function(event) {
 			switch(event.channel) {
 				case 'api-call':
-					Daemon.call(event.args[0], function(callResult) {
+					daemonManager.call(event.args[0], function(callResult) {
 						plugin.sendIPC('api-results', callResult);
 					});
 					break;
