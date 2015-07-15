@@ -17,6 +17,16 @@ function printCall(err, callResult) {
 	}
 }
 
+// DEVTOOL: testCalls() for whether API calls work from the UI-perspective
+function testCalls(address) {
+	APIJS.getCall(address + '/consensus/status', printCall);
+	APIJS.getCall(address + '/gateway/status', printCall);
+	APIJS.getCall(address + '/host/status', printCall);
+	APIJS.getCall(address + '/miner/status', printCall);
+	APIJS.getCall(address + '/wallet/status', printCall);
+	APIJS.getCall(address + '/blockexplorer/status', printCall);
+}
+
 // When required, daemonManager should be initialized with a config object to
 // initialize siad as a background process. 
 module.exports = (function daemonManager() {
@@ -117,22 +127,14 @@ module.exports = (function daemonManager() {
 		}
 	}
 
-	// DEVTOOL: testCalls() for whether API calls work from the UI-perspective
-	function testCalls(address) {
-		APIJS.getCall(address + '/consensus/status', printCall);
-		APIJS.getCall(address + '/gateway/status', printCall);
-		APIJS.getCall(address + '/host/status', printCall);
-		APIJS.getCall(address + '/miner/status', printCall);
-		APIJS.getCall(address + '/wallet/status', printCall);
-		APIJS.getCall(address + '/blockexplorer/status', printCall);
-	}
-
 	// init() sets config and starts the daemon if it isn't on
 	function init(config) {
 		setConfig(config, function() {
-			ifSiad(null, start);
+			ifSiad(function() {}, start);
 			// DEVTOOL: ensure api calls are working
-			//ifSiad(testCalls);
+			//ifSiad(function() {
+			//	testCalls(address);
+			//});
 		});
 	}
 

@@ -1,4 +1,4 @@
-// pluginManager.js manages all plugin logic on a more back-end level for the UI
+// pluginManager.js manages all plugin logic for the UI
 
 // Elements used across this file. GCed after file execution
 'use strict';
@@ -48,6 +48,17 @@ module.exports = (function pluginManager() {
 			current = plugin;
 		}
 
+		// Add standard transition upon button click
+		// TODO: Add smoother transitions
+		plugin.transition(function() {
+			if (current === plugin) {
+				return;
+			}
+			current.hide();
+			plugin.show();
+			current = plugin;
+		});
+		
 		// Handle any ipc messages from the plugin
 		plugin.on('ipc-message', function(event) {
 			switch(event.channel) {
@@ -77,14 +88,6 @@ module.exports = (function pluginManager() {
 
 		// addListeners deals with any webview related async tasks
 		addListeners(plugin);
-
-		// Add standard transition upon button click
-		// TODO: Add smoother transitions
-		plugin.transition(function() {
-			current.hide();
-			plugin.show();
-			current = plugin;
-		});
 
 		// Store the plugin
 		plugins.push(plugin);

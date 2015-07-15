@@ -27,14 +27,27 @@ html,body {
 
 	background-color: #F5F5F5;
 }
-.logo-container {
+.logo {
 	padding-left: 20px;
 	padding-top: 14px;
-}
-.logo {
 	opacity: 0.7;
 
 	pointer-events: none;
+}
+
+/* Header Buttons */
+.header .button-container {
+}
+.header-button {
+	float: right;
+	display: inline-block;
+	padding: 30px;
+	font-size: 16px;
+	color: #DDDDDD;
+}
+.header-button:hover {
+	color: #C5C5C5;
+	cursor: pointer;
 }
 
 .body {
@@ -58,8 +71,8 @@ html,body {
 	position: absolute;
 
 	-webkit-box-sizing:border-box;
-	border-left: 2px solid #ECECEC;
-	border-right: 4px solid #ECECEC;
+	border-left: 2px solid #F5F5F5;
+	border-right: 4px solid #F5F5F5;
 	height: 100%;
 }
 .sidebar-button {
@@ -70,20 +83,27 @@ html,body {
 	height: 60px;
 
 	-webkit-box-sizing:border-box;
-	border-left: 2px solid #ECECEC;
-	border-right: 4px solid #ECECEC;
-	border-bottom: 2px solid #ECECEC;
-	-webkit-user-select: text;
+	border-left: 2px solid #F5F5F5;
+	border-right: 4px solid #F5F5F5;
+	border-bottom: 2px solid #F5F5F5;
 
-	color: #4A4A4A:
-	cursor: pointer;
-}
-.sidebar-button.current {
-	background-color: #DDDDDD;
+	opacity: .70;
+	color: #4A4A4A;
 }
 .sidebar-button:hover {
 	cursor: pointer;
-	background-color: #DDDDDD;
+	background-color: #ECECEC;
+}
+.sidebar-button:active {
+	background-color: ;
+}
+.sidebar-button.current {
+	cursor: default;
+	background-color: #4A4A4A;
+	color: #F5F5F5;
+}
+.sidebar-button.current .sidebar-icon{
+	-webkit-filter: invert(100%);
 }
 .sidebar-icon {
 	max-height: 30%;

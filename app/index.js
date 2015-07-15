@@ -3,8 +3,8 @@
 
 // Global variables and require statements available to all main processes
 'use strict';
-const app = require('app');
-const path = require('path');
+const App = require('app');
+const Path = require('path');
 const BrowserWindow = require('browser-window');
 const Tray = require('tray');
 // Keep a global reference of the window object, if you don't, the window will
@@ -15,11 +15,11 @@ var mainWindow;
 function startMainWindow() {
 	// Open the UI with full screen size. 'screen' can only be required after
 	// app.on('ready') 
-	const atomScreen = require('screen');
-	var size = atomScreen.getPrimaryDisplay().workAreaSize;
+	const ElectronScreen = require('screen');
+	var size = ElectronScreen.getPrimaryDisplay().workAreaSize;
 
 	// Give tray/taskbar icon path
-	var iconPath = path.join(__dirname, 'dependencies', 'images', 'sia.png');
+	var iconPath = Path.join(__dirname, 'dependencies', 'images', 'sia.png');
 	var appIcon = new Tray(iconPath);
 	appIcon.setToolTip('A highly efficient decentralized storage network.');
 
@@ -27,7 +27,6 @@ function startMainWindow() {
 	mainWindow = new BrowserWindow({
 		'width': size.width,
 		'height': size.height,
-		'use-content-size': true,
 		'icon': iconPath,
 		'title': 'Sia'
 	});
@@ -52,13 +51,13 @@ function startMainWindow() {
 }
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function() {
+App.on('window-all-closed', function() {
 	if (process.platform !== 'darwin') {
-		app.quit();
+		App.quit();
 	}
 });
 
 // When Electron loading has finished, start the daemon then the UI
-app.on('ready', function() {
+App.on('ready', function() {
 	startMainWindow();
 });
