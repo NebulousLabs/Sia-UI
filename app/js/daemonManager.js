@@ -33,6 +33,15 @@ var Daemon = (function() {
 	var command;
 	var address;
 
+	// setConfig() sets variables, then passes the config to the api to serve requests
+	// Callback, if there is one, returns no arguments
+	function setConfig(config, callback) {
+		siadPath = Path.join(config.depsPath, 'Sia');
+		command = config.siadCommand;
+		address = config.siadAddress;
+		callback();
+	}
+
 	// ifSiad() detects whether siad is running on the current address,
 	// executing one of two functions based on the result
 	function ifSiad(isRunning, isNotRunning) {
@@ -53,15 +62,6 @@ var Daemon = (function() {
 				isNotRunning();
 			}
 		});
-	}
-
-	// setConfig() sets variables, then passes the config to the api to serve requests
-	// Callback, if there is one, returns no arguments
-	function setConfig(config, callback) {
-		siadPath = Path.join(config.depsPath, 'Sia');
-		command = config.siadCommand;
-		address = config.siadAddress;
-		callback();
 	}
 
 	// start() starts the daemon as a long running background process

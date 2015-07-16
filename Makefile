@@ -2,6 +2,7 @@
 electron-version = v0.28.1
 electron-download-page = https://github.com/atom/electron/releases/download/${electron-version}/electron-$(electron-version)
 sia-ui-version = v0.4.0
+sia-repo = $(GOPATH)/src/github.com/NebulousLabs/Sia
 sia-version = v0.3.3.3-beta
 sia-download-page = https://github.com/NebulousLabs/Sia/releases/download/${sia-version}
 project = "Sia-UI" ${sia-ui-version}
@@ -23,11 +24,11 @@ clean:
 
 # install tools needed to run
 dependencies:
-	go get -u github.com/NebulousLabs/Sia/...
-	(cd $(GOPATH)/src/github.com/NebulousLabs/Sia && \
-	git fetch && git checkout $(sia-version) && \
-	make dependencies && make && \
-	test -d $(sia-ui-dependencies) || mkdir -p $(sia-ui-dependencies) && cp $(GOPATH)/bin/siad $(sia-ui-dependencies))
+	test -d $(sia-repo) || go get -u github.com/NebulousLabs/Sia/...
+	(cd $(sia-repo) && git fetch && git checkout $(sia-version) \
+		&& make dependencies && make \
+		&& test -d $(sia-ui-dependencies) || mkdir -p $(sia-ui-dependencies) \
+		&& cp $(GOPATH)/bin/siad $(sia-ui-dependencies))
 	npm install
 
 # make distributables for each operating system, folders and executable files

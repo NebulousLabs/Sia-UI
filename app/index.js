@@ -40,9 +40,6 @@ function startMainWindow() {
 	// Focus selector on test-ui	
 	mainWindow.focus();
 
-	// DEVTOOL: Open the devtools.
-	// mainWindow.openDevTools();
-
 	// Emitted when the window is closed.
 	mainWindow.on('closed', function() {
 		// Dereference the window object so that the GC cleans up.

@@ -32,7 +32,12 @@ function apiCall(type, url, params, callback) {
 	request.send(params);
 } 
 
-// discernCall() takes an unknown call object, and apropriately calls apiCall()
+// discernCall() takes a call object of this format, and calls the api with it
+// {
+//   url: string
+//   type: string (optional)
+//   params: string (optional)
+// }
 // callback(err, result); if success, err is null
 function discernCall(call, callback) {
 	// Extract call attributes, default call is 'GET'

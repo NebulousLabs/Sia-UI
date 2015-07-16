@@ -1,24 +1,26 @@
 {
-	"name": "Test-UI",
-	"version": "0.4.0",
-	"main": "app/index.js",
-	"author": "NebulousLabs",
-	"description": "The development directory for Sia-UI",
-	"license": "MIT",
-	"devDependencies": {
-		"electron-prebuilt": "latest",
-		"jshint": "latest"
-	},
-	"scripts": {
-		"start": "electron app",
-		"lint": "jshint app/. --verbose",
-		"env": "env"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/NebulousLabs/test-ui.git"
-	},
-	"bugs": {
-		"url": "https://github.com/NebulousLabs/test-ui/issues"
-	}
+  "name": "Test-UI",
+  "version": "0.4.0",
+  "main": "app/index.js",
+  "author": "NebulousLabs",
+  "description": "The development directory for Sia-UI",
+  "license": "MIT",
+  "devDependencies": {
+    "electron-prebuilt": "latest",
+    "jsdoc": "latest",
+    "jshint": "latest"
+  },
+  "scripts": {
+    "start": "electron app",
+    "lint": "jshint app/. --verbose",
+    "doc": "jsdoc app/README.md app/package.json app/ --verbose -r -d docs",
+    "env": "env"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/NebulousLabs/test-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NebulousLabs/test-ui/issues"
+  }
 }

@@ -16,22 +16,10 @@ module.exports = function plugin(plugPath, name) {
 	// Add the button to the sidebar
 	document.getElementById('sidebar').appendChild(button);
 
-	// Have all plugins displaying UI's zoom and css
+	// Have all plugins displaying UI's zoom by default
 	view.addEventListener('did-finish-load', function() {
-		hide();
-
 		var zoomCode = 'require("web-frame").setZoomFactor(' + WebFrame.getZoomFactor() + ');';
 		view.executeJavaScript(zoomCode);
-		
-		// TODO: common css styling injected in plugins?
-		/*
-		Fs.readFile(Path.join(__dirname, '../css/general.css'), 'utf8', function(err, file) {
-			if (err) {
-				console.error(err);
-			}
-			view.insertCSS(file);
-		});
-	   */
 	});
 
 	// show() shows the plugin's view
