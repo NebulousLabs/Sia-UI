@@ -42,8 +42,8 @@ OR
 
 ## Building Distributables
 
-1. `npm run dist`
+1. `npm run build`
 
-## Cleaning up after building
+## Cleaning up
 
 1. `npm run clean`

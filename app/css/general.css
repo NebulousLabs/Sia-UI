@@ -49,8 +49,6 @@ html,body {
 }
 
 /* Header Buttons */
-.header .button-container {
-}
 .header-button {
 	float: right;
 	display: inline-block;
