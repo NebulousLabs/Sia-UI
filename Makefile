@@ -7,7 +7,7 @@ sia-version = v0.3.3.3-beta
 sia-download-page = https://github.com/NebulousLabs/Sia/releases/download/${sia-version}
 project = "Sia-UI" ${sia-ui-version}
 ui-path := $(shell pwd)
-sia-ui-dependencies = $(ui-path)/app/dependencies/Sia
+sia-ui-dependencies = $(ui-path)/app/dependencies
 
 # runs the app
 all: run
@@ -20,15 +20,15 @@ run-fresh: clean dependencies run
 
 # cleans distributable files & dependencies
 clean:
-	rm -rf electron-* sia-v* Sia-* node_modules app/dependencies/Sia app/dependencies/daemon/*.log app/config.json **/*.swp npm-debug.log
+	rm -rf electron-* sia-v* Sia-* node_modules $(sia-ui-dependencies) app/config.json **/*.swp npm-debug.log
 
 # install tools needed to run
 dependencies:
 	test -d $(sia-repo) || go get -u github.com/NebulousLabs/Sia/...
 	(cd $(sia-repo) && git fetch && git checkout $(sia-version) \
 		&& make dependencies && make \
-		&& test -d $(sia-ui-dependencies) || mkdir -p $(sia-ui-dependencies) \
-		&& cp $(GOPATH)/bin/siad $(sia-ui-dependencies))
+		&& test -d $(sia-ui-dependencies)/Sia || mkdir -p $(sia-ui-dependencies)/Sia \
+		&& cp $(GOPATH)/bin/siad $(sia-ui-dependencies)/Sia)
 	npm install
 
 # make distributables for each operating system, folders and executable files

@@ -3,7 +3,7 @@
 
 // Library for communicating with Sia-UI
 const IPC = require('ipc');
-var siamath = require('../../dependencies/siamath.js');
+var siamath = require('../../js/siamath.js');
 
 // Pointers to markup elements
 var eBalance;

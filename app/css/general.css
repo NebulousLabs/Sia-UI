@@ -133,3 +133,9 @@ html,body {
 	height: 100%;
 	background-color: #C5C5C5;
 }
+.mainbar-view.hidden {
+	display: none;
+}
+.mainbar-view.current {
+	display: inline;
+}

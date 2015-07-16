@@ -10,7 +10,7 @@ var Factory = require('./pluginFactory');
 module.exports = function plugin(plugPath, name) {
 	// initialize components
 	var view = new Factory.view(Path.join(plugPath, name, 'index.html'), name);
-	var button = new Factory.button(Path.join(plugPath, name, 'button64.png'), name);
+	var button = new Factory.button(Path.join(plugPath, name, 'button.png'), name);
 	// Start loading the view to the mainbar
 	document.getElementById('mainbar').appendChild(view);
 	// Add the button to the sidebar
@@ -25,14 +25,18 @@ module.exports = function plugin(plugPath, name) {
 	// show() shows the plugin's view
 	function show() {
 		button.classList.add('current');
-		view.style.display = '';
+		view.classList.remove('hidden');
+		view.classList.add('current');
+		//view.style.display = '';
 		view.send('show');
 	}
 
 	// hides() hides the plugin's view
 	function hide() {
 		button.classList.remove('current');
-		view.style.display = 'none';
+		view.classList.remove('current');
+		view.classList.add('hidden');
+		//view.style.display = 'none';
 		view.send('hide');
 	}
 

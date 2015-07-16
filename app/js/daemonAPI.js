@@ -42,7 +42,7 @@ function apiCall(type, url, params, callback) {
 function discernCall(call, callback) {
 	// Extract call attributes, default call is 'GET'
 	var url = call.url;
-	var type = (call.params) ? 'POST': 'GET';
+	var type = call.type || (call.params) ? 'POST': 'GET';
 	var params = call.params || {};
 
 	// The function can use JSON, but turns them into strings first if (typeof

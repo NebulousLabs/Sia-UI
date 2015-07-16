@@ -24,6 +24,7 @@ module.exports = {
 		// Make webview element
 		var v = document.createElement('webview');
 		v.id = name + '-view';
+		v.className = 'mainbar-view';
 		v.src = markupPath;
 		
 		// Turn nodeintegration on so plugins can use electron & node libraries

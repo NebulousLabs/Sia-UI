@@ -19,7 +19,7 @@ function startMainWindow() {
 	var size = ElectronScreen.getPrimaryDisplay().workAreaSize;
 
 	// Give tray/taskbar icon path
-	var iconPath = Path.join(__dirname, 'dependencies', 'images', 'sia.png');
+	var iconPath = Path.join(__dirname, 'assets', 'logo', 'sia.png');
 	var appIcon = new Tray(iconPath);
 	appIcon.setToolTip('A highly efficient decentralized storage network.');
 

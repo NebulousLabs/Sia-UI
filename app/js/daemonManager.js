@@ -29,14 +29,14 @@ function testCalls(address) {
 // as a background process. 
 var Daemon = (function() {
 	// Encapsulated 'private' elements
-	var siadPath;
+	var siaPath;
 	var command;
 	var address;
 
 	// setConfig() sets variables, then passes the config to the api to serve requests
 	// Callback, if there is one, returns no arguments
 	function setConfig(config, callback) {
-		siadPath = Path.join(config.depsPath, 'Sia');
+		siaPath = Path.join(config.depsPath, 'Sia');
 		command = config.siadCommand;
 		address = config.siadAddress;
 		callback();
@@ -72,13 +72,13 @@ var Daemon = (function() {
 			return;
 		}, function() {});
 		// daemon as a background process logs output to files
-		var out = Fs.openSync(Path.join(siadPath, 'daemonOut.log'), 'a');
-		var err = Fs.openSync(Path.join(siadPath, 'daemonErr.log'), 'a');
+		var out = Fs.openSync(Path.join(siaPath, 'daemonOut.log'), 'a');
+		var err = Fs.openSync(Path.join(siaPath, 'daemonErr.log'), 'a');
 		// daemon process has to be detached without parent stdio pipes
 		var processOptions = {
 			detached: true,
 			stdio: [ 'ignore', out, err ],
-			cwd: siadPath 
+			cwd: siaPath 
 		};
 		var daemonProcess = new Process(command, processOptions);
 		daemonProcess.unref();

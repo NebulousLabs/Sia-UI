@@ -5,4 +5,4 @@ node_modules
 **/*.swp
 npm-debug.log
 app/config.json
-app/dependencies/Sia
+app/dependencies
