@@ -2,17 +2,19 @@
 <html>
 	<head>
 		<title>Overview</title>
+		<link rel='stylesheet' href='overview.css'>
+    	<script type='text/javascript' src='overview.js'></script>
 	</head>
 	<body>
 		<div class='header'>
-			<div class='title'>Overview</div>
+			<div class='title' id='title'>Overview</div>
 			<div class='capsule'>
-				<div class='balance pod'></div>
-				<div class='peers pod'></div>
-				<div class='blockheight pod'></div>
+				<div class='pod' id='balance'></div>
+				<div class='pod' id='peers'></div>
+				<div class='pod' id='blockheight'></div>
 			</div>
 		</div>
-		<div class='subhead'>
+		<div class='frame'>
 			<div class='welcome'>
 				<div class='large'>Welcome to Sia</div>
 				<div class='small'>A highly efficient decentralized storage network.</div>

@@ -3,42 +3,48 @@
 	<head>
 		<title>Sia</title>
 		<!-- Stylesheets -->
-		<link rel='stylesheet' href='dependencies/libs/font-awesome-4.3.0/css/font-awesome.min.css'>
-		<link rel='stylesheet' href='dependencies/libs/pure-min.css'>
-		<link rel='stylesheet' href='dependencies/libs/grids-responsive-min.css'>
+		<link rel='stylesheet' href='assets/font-awesome-4.3.0/css/font-awesome.min.css'>
+		<link rel='stylesheet' href='assets/pure-min.css'>
+		<link rel='stylesheet' href='assets/grids-responsive-min.css'>
 		<link rel='stylesheet' href='css/general.css'>
-
-		<!-- Javascript -->
-		<script>
-			window.onload = function() {
-				// Lead into the entry point of the renderer process and initialize the app
-				var UI = require('./js/UI');
-			};
-		</script>
 	</head>
 
 	<body>
-
-	<!-- Header for UI -->
-	<div class='pure-g header'>
-		<div class='logo-container'>
-			<img src='dependencies/images/sia.svg' height='50' class='logo'>
-		</div>
-	</div>
-
-	<!-- Full body of UI -->
-	<div class='pure-g body'>
-		<!-- Sidebar -->
-		<div class='pure-u-1-5 sidebar' id='sidebar'>
-			<!-- Fill the UI Height -->
-			<div class='pure-u-1-1 sidebar-fill'>
+		<!-- Header for UI -->
+		<div class='pure-g header'>
+			<div class='pure-u-1-5 logo-container'>
+				<img src='assets/logo/sia.svg' height='50' class='logo'>
+			</div>
+			<div class='pure-u-4-5 button-container'>
+				<div class='header-button' id='update-button'>
+				<i class='fa fa-arrow-circle-o-up'></i>
+				Check for Update
+				</div>
 			</div>
 		</div>
-
-		<!-- Mainbar -->
-		<div class='pure-u mainbar' id='mainbar'>
+	
+		<!-- Full body of UI -->
+		<div class='pure-g body'>
+			<!-- Sidebar -->
+			<div class='pure-u-1-5 sidebar' id='sidebar'>
+				<!-- Fill the UI Height -->
+				<div class='pure-u-1-1 sidebar-fill'>
+				</div>
+			</div>
+	
+			<!-- Mainbar -->
+			<div class='pure-u mainbar' id='mainbar'>
+			</div>
 		</div>
-	</div>
-
+		<!-- Javascript -->
+		<script src='js/daemonManager.js'></script>
+		<script src='js/pluginManager.js'></script>
+		<script src='js/UI.js'></script>
+		<script>
+			// Start the UI
+			window.onload = UI.init;
+			// before closing the UI, save the config as is
+			window.onbeforeunload = UI.close;
+		</script>
 	</body>
 </html>

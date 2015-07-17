@@ -9,15 +9,28 @@
  * 		Grey-Black: #4A4A4A
  * 		Black:      #000000
  */
-
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300);
+/* Overall rules */
 html,body {
 	position: relative;
+
+	margin: 0px;
+	padding: 0px;
+	border-spacing: 0px;
 
 	height: 100%;
 	min-height: 380px; /* 80 for header + 60 for up to 5 sidebar buttons */
 	min-width: 480px;
 
+	font-family: 'Roboto Condensed', sans-serif;
+	font-weight: 300;
+	font-size: 18px;
+
 	-webkit-user-select: none;
+}
+.pure-g [class*="pure-u"] {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 300;
 }
 
 /* UI Header */
@@ -27,14 +40,25 @@ html,body {
 
 	background-color: #F5F5F5;
 }
-.logo-container {
+.logo {
 	padding-left: 20px;
 	padding-top: 14px;
-}
-.logo {
 	opacity: 0.7;
 
 	pointer-events: none;
+}
+
+/* Header Buttons */
+.header-button {
+	float: right;
+	display: inline-block;
+	padding: 30px;
+	font-size: 16px;
+	color: #DDDDDD;
+}
+.header-button:hover {
+	color: #C5C5C5;
+	cursor: pointer;
 }
 
 .body {
@@ -58,8 +82,8 @@ html,body {
 	position: absolute;
 
 	-webkit-box-sizing:border-box;
-	border-left: 2px solid #ECECEC;
-	border-right: 4px solid #ECECEC;
+	border-left: 2px solid #F5F5F5;
+	border-right: 4px solid #F5F5F5;
 	height: 100%;
 }
 .sidebar-button {
@@ -70,17 +94,27 @@ html,body {
 	height: 60px;
 
 	-webkit-box-sizing:border-box;
-	border-left: 2px solid #ECECEC;
-	border-right: 4px solid #ECECEC;
-	border-bottom: 2px solid #ECECEC;
+	border-left: 2px solid #F5F5F5;
+	border-right: 4px solid #F5F5F5;
+	border-bottom: 2px solid #F5F5F5;
 
-	color: #4A4A4A
-
-	-webkit-user-select: text;
+	opacity: .70;
+	color: #4A4A4A;
 }
 .sidebar-button:hover {
 	cursor: pointer;
-	background-color: #DDDDDD;
+	background-color: #ECECEC;
+}
+.sidebar-button:active {
+	background-color: ;
+}
+.sidebar-button.current {
+	cursor: default;
+	background-color: #4A4A4A;
+	color: #F5F5F5;
+}
+.sidebar-button.current .sidebar-icon{
+	-webkit-filter: invert(100%);
 }
 .sidebar-icon {
 	max-height: 30%;
@@ -96,4 +130,10 @@ html,body {
 	flex-grow: 1;
 	height: 100%;
 	background-color: #C5C5C5;
+}
+.mainbar-view.hidden {
+	display: none;
+}
+.mainbar-view.current {
+	display: inline;
 }
