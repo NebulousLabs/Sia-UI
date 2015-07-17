@@ -42,6 +42,8 @@ var Plugins = (function() {
 		if (plugin.name === home) {
 			plugin.on('did-finish-load', plugin.show);
 			current = plugin;
+		} else {
+			plugin.on('did-finish-load', plugin.hide);
 		}
 
 		// Add standard transition upon button click

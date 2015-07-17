@@ -25,19 +25,15 @@ module.exports = function plugin(plugPath, name) {
 	// show() shows the plugin's view
 	function show() {
 		button.classList.add('current');
-		view.classList.remove('hidden');
-		view.classList.add('current');
-		//view.style.display = '';
-		view.send('show');
+		view.style.display = '';
+		view.executeJavaScript('init();');
 	}
 
 	// hides() hides the plugin's view
 	function hide() {
 		button.classList.remove('current');
-		view.classList.remove('current');
-		view.classList.add('hidden');
-		//view.style.display = 'none';
-		view.send('hide');
+		view.style.display = 'none';
+		view.executeJavaScript('kill();');
 	}
 
 	// onButtonClick() is used to specify what happens when the plugin's

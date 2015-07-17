@@ -86,7 +86,7 @@ html,body {
 	border-right: 4px solid #F5F5F5;
 	height: 100%;
 }
-.sidebar-button {
+.sidebar .button {
 	display:flex;
 	font-size: 16px;
 	align-items:center;
@@ -101,39 +101,34 @@ html,body {
 	opacity: .70;
 	color: #4A4A4A;
 }
-.sidebar-button:hover {
+.button:hover {
 	cursor: pointer;
 	background-color: #ECECEC;
 }
-.sidebar-button:active {
+.button:active {
 	background-color: ;
 }
-.sidebar-button.current {
+.button.current {
 	cursor: default;
 	background-color: #4A4A4A;
 	color: #F5F5F5;
 }
-.sidebar-button.current .sidebar-icon{
+.button.current .icon{
 	-webkit-filter: invert(100%);
 }
-.sidebar-icon {
+.button .icon {
 	max-height: 30%;
 	max-width: 30%;
 	padding-left: 16px;
 }
-.sidebar-text {
+.button .text {
 	padding: 4px;
 	padding-left: 8px;
 }
 
+/* Mainbar */
 .mainbar {
 	flex-grow: 1;
 	height: 100%;
 	background-color: #C5C5C5;
-}
-.mainbar-view.hidden {
-	display: none;
-}
-.mainbar-view.current {
-	display: inline;
 }

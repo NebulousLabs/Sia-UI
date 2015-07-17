@@ -5,7 +5,7 @@
 function icon(path) {
 	var i = document.createElement('img');
 	i.src = path;
-	i.className = 'pure-u sidebar-icon';
+	i.className = 'pure-u icon';
 	return i;
 }
 
@@ -13,7 +13,7 @@ function icon(path) {
 function text(name) {
 	var t = document.createElement('div');
 	t.innerText = name;
-	t.className = 'pure-u sidebar-text';
+	t.className = 'pure-u text';
 	return t;
 }
 
@@ -24,7 +24,7 @@ module.exports = {
 		// Make webview element
 		var v = document.createElement('webview');
 		v.id = name + '-view';
-		v.className = 'mainbar-view';
+		v.className = 'plugin-view';
 		v.src = markupPath;
 		
 		// Turn nodeintegration on so plugins can use electron & node libraries
@@ -45,7 +45,7 @@ module.exports = {
 
 		// Set inner values
 		b.id = name + '-button';
-		b.className = 'pure-u-1-1 sidebar-button';
+		b.className = 'pure-u-1-1 button';
 
 		return b;
 	},
