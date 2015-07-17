@@ -15,7 +15,7 @@
 	"opts": {
 		"package": "package.json",
 		"readme": "README.md",
-		"destination": "./doc/",
+		"destination": "./jsdoc/",
 		"recurse": true,
 		"verbose": true
 	},

@@ -5,10 +5,10 @@
 'use strict';
 const WebFrame = require('web-frame');
 const ElectronScreen = require('screen');
+const Path = require('path');
 const Fs = require('fs');
 const Shell = require('shell');
-const Path = require('path');
-var Config = require('./js/config.js')
+var Config = require('./js/config.js');
 
 // UI exports one function, init, called by index.html
 var UI = (function() {
