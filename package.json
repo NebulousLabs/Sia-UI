@@ -17,7 +17,7 @@
 		"clean": "rm -rf build docs node_modules app/dependencies app/config.json **/*.swp npm-debug.log",
 		"fresh": "npm run clean && npm install && npm start",
 		"lint": "jshint app/. --verbose --exclude=node_modules",
-		"doc": "jsdoc README.md package.json app/ --verbose -r -d docs",
+		"doc": "jsdoc -c .jsdocrc",
 		"env": "env",
 		"sia-repo": "test -d $(sia-repo) || go get -u github.com/NebulousLabs/Sia/...",
 		"sia-master": "(cd $GOPATH/src/github.com/NebulousLabs/Sia && git fetch && git checkout master && make dependencies && make)",

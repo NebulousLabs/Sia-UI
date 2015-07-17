@@ -1,4 +1,3 @@
-// index.js, the entry point of the plugin, handles updating the Overview fields
 'use strict';
 
 // Library for communicating with Sia-UI
@@ -15,6 +14,12 @@ var calls = ['/wallet/status', '/gateway/status', '/consensus/status'];
 var b = 0;
 var p = 0;
 var h = 0;
+
+/**
+ * Overview Plugin to display generally important values from the Sia API
+ *
+ * @tutorial plugin-tutorial
+ */
 
 window.onload = function init() {
 	// Pointers to markup elements
