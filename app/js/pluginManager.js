@@ -1,12 +1,9 @@
 // pluginManager.js manages all plugin logic for the UI
-
-// Elements used across this file
 'use strict';
 var SiaPlugin = require('./js/plugin');
 
 // pluginManager can be called with a config object to initialize plugins
 var Plugins = (function() {
-	// Encapsulated 'private' elements
 	var home;
 	var plugPath;
 	var current;
@@ -61,8 +58,15 @@ var Plugins = (function() {
 		plugin.on('ipc-message', function(event) {
 			switch(event.channel) {
 				case 'api-call':
-					Daemon.call(event.args[0], function(callResult) {
-						plugin.sendIPC('api-results', callResult);
+					// TODO: Possibly have plugins send the address of a
+					// variable they wanted updated with the call so that the
+					// the general-UI can update the value upon result?
+					Daemon.call(event.args[0], function(err, callResult) {
+						if (err) {
+							console.error(err);
+							return;
+						} 
+						plugin.sendIPC('api-result', event.args[0], callResult);
 					});
 					break;
 				case 'devtools':
@@ -79,7 +83,7 @@ var Plugins = (function() {
 		});	
 	}
 
-	// addPlugin() makes a new plugin and 
+	// addPlugin() constructs the plugins and adds them
 	function addPlugin(name) {
 		// Make the plugin, giving its button a standard transition
 		var plugin = new SiaPlugin(plugPath, name);
@@ -91,7 +95,7 @@ var Plugins = (function() {
 		plugins.push(plugin);
 	}
 
-	// initPlugins() actually creates the plugins to the UI
+	// initPlugins() initializes the plugins to the UI
 	function initPlugins() {
 		Fs.readdir(plugPath, function (err, pluginNames) {
 			if (err) {

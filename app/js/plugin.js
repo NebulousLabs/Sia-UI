@@ -1,8 +1,5 @@
 // plugin.js is used to hold plugin components and functions
-
-// Elements used across this file. GCed after file execution
 'use strict';
-const WebFrame = require('web-frame');
 const Path = require('path');
 var Factory = require('./pluginFactory');
 
@@ -10,30 +7,20 @@ var Factory = require('./pluginFactory');
 module.exports = function plugin(plugPath, name) {
 	// initialize components
 	var view = new Factory.view(Path.join(plugPath, name, 'index.html'), name);
-	var button = new Factory.button(Path.join(plugPath, name, 'button.png'), name);
-	// Start loading the view to the mainbar
-	document.getElementById('mainbar').appendChild(view);
-	// Add the button to the sidebar
-	document.getElementById('sidebar').appendChild(button);
-
-	// Have all plugins displaying UI's zoom by default
-	view.addEventListener('did-finish-load', function() {
-		var zoomCode = 'require("web-frame").setZoomFactor(' + WebFrame.getZoomFactor() + ');';
-		view.executeJavaScript(zoomCode);
-	});
+	var button = new Factory.button(Path.join(plugPath, name, 'assets', 'button.png'), name);
 
 	// show() shows the plugin's view
 	function show() {
 		button.classList.add('current');
 		view.style.display = '';
-		view.executeJavaScript('init();');
+		view.executeJavaScript('if (typeof init === "function") init();');
 	}
 
 	// hides() hides the plugin's view
 	function hide() {
 		button.classList.remove('current');
 		view.style.display = 'none';
-		view.executeJavaScript('kill();');
+		view.executeJavaScript('if (typeof kill === "function") kill();');
 	}
 
 	// onButtonClick() is used to specify what happens when the plugin's
@@ -52,7 +39,8 @@ module.exports = function plugin(plugPath, name) {
 	// sendIPC is for communicating with the plugin's webview, while still
 	// keeping it private to plugin
 	function sendIPC(channel, args) {
-		view.send(channel, args);
+		view.send.apply(view, [].slice.call(arguments));
+		//view.send(channel, args);
 	}
 
 	// toggleDevTools() opens or closes the webviews devtools for more specific

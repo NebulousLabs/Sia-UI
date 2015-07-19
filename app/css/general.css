@@ -9,7 +9,6 @@
  * 		Grey-Black: #4A4A4A
  * 		Black:      #000000
  */
-@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300);
 /* Overall rules */
 html,body {
 	position: relative;
@@ -19,8 +18,6 @@ html,body {
 	border-spacing: 0px;
 
 	height: 100%;
-	min-height: 380px; /* 80 for header + 60 for up to 5 sidebar buttons */
-	min-width: 480px;
 
 	font-family: 'Roboto Condensed', sans-serif;
 	font-weight: 300;
@@ -29,9 +26,19 @@ html,body {
 	-webkit-user-select: none;
 }
 .pure-g [class*="pure-u"] {
-  font-family: 'Roboto Condensed', sans-serif;
-  font-weight: 300;
+	font-family: 'Roboto Condensed', sans-serif;
+	font-weight: 300;""
 }
+::-webkit-scrollbar { 
+	display: none; 
+}
+.body {
+	position: relative;
+
+	height: -webkit-calc(100% - 80px);
+	-webkit-box-sizing:border-box;
+}
+
 
 /* UI Header */
 .header {
@@ -61,13 +68,6 @@ html,body {
 	cursor: pointer;
 }
 
-.body {
-	position: relative;
-
-	height: -webkit-calc(100% - 80px);
-	-webkit-box-sizing:border-box;
-}
-
 /* Sidebar */
 .sidebar {
 	position: relative;
@@ -77,14 +77,10 @@ html,body {
 	min-width: 160px;
 	z-index: 1000;
 	height: 100%;
-}
-.sidebar-fill {
-	position: absolute;
 
 	-webkit-box-sizing:border-box;
 	border-left: 2px solid #F5F5F5;
 	border-right: 4px solid #F5F5F5;
-	height: 100%;
 }
 .sidebar .button {
 	display:flex;
@@ -94,8 +90,6 @@ html,body {
 	height: 60px;
 
 	-webkit-box-sizing:border-box;
-	border-left: 2px solid #F5F5F5;
-	border-right: 4px solid #F5F5F5;
 	border-bottom: 2px solid #F5F5F5;
 
 	opacity: .70;
@@ -118,7 +112,6 @@ html,body {
 }
 .button .icon {
 	max-height: 30%;
-	max-width: 30%;
 	padding-left: 16px;
 }
 .button .text {

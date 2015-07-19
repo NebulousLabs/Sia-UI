@@ -37,9 +37,6 @@ function startMainWindow() {
 	// Load the index.html of the app.
 	mainWindow.loadUrl('file://' + __dirname + '/index.html');
 
-	// Focus selector on test-ui	
-	mainWindow.focus();
-
 	// Emitted when the window is closed.
 	mainWindow.on('closed', function() {
 		// Dereference the window object so that the GC cleans up.

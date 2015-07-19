@@ -1,5 +1,6 @@
 // pluginFactory.js is used to create plugin components
 'use strict';
+const WebFrame = require('web-frame');
 
 // icon() creates the image element for a button
 function icon(path) {
@@ -33,7 +34,15 @@ module.exports = {
 		// plugins their dependencies and access to libraries, but turn off
 		// nodeintegration superpowers
 		// view.preload = Path.join(__dirname, 'preload.js')
-		
+
+		// Have all plugins displaying UI's zoom by default
+		v.addEventListener('did-finish-load', function() {
+			var zoomCode = 'require("web-frame").setZoomFactor(' + WebFrame.getZoomFactor() + ');';
+			v.executeJavaScript(zoomCode);
+		});
+
+		// Start loading the view to the mainbar
+		document.getElementById('mainbar').appendChild(v);
 		return v;
 	},
 	// button() creates the button to be put on the sidebar
@@ -47,6 +56,8 @@ module.exports = {
 		b.id = name + '-button';
 		b.className = 'pure-u-1-1 button';
 
+		// Add the button to the sidebar
+		document.getElementById('sidebar').appendChild(b);
 		return b;
 	},
 };

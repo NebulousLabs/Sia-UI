@@ -6,6 +6,7 @@
 		<link rel='stylesheet' href='assets/font-awesome-4.3.0/css/font-awesome.min.css'>
 		<link rel='stylesheet' href='assets/pure-min.css'>
 		<link rel='stylesheet' href='assets/grids-responsive-min.css'>
+		<link rel='stylesheet' href='assets/roboto-condensed-min.css'>
 		<link rel='stylesheet' href='css/general.css'>
 	</head>
 
@@ -27,9 +28,6 @@
 		<div class='pure-g body'>
 			<!-- Sidebar -->
 			<div class='pure-u-1-5 sidebar' id='sidebar'>
-				<!-- Fill the UI Height -->
-				<div class='pure-u-1-1 sidebar-fill'>
-				</div>
 			</div>
 	
 			<!-- Mainbar -->
@@ -41,9 +39,7 @@
 		<script src='js/pluginManager.js'></script>
 		<script src='js/UI.js'></script>
 		<script>
-			// Start the UI
 			window.onload = UI.init;
-			// before closing the UI, save the config as is
 			window.onbeforeunload = UI.close;
 		</script>
 	</body>

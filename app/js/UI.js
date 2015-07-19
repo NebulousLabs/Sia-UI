@@ -1,7 +1,4 @@
-// UI.js, the first renderer process, handles initializing all other manager
-// processes. 
-
-// Electron/Node libraries used across this file
+// UI.js, the first renderer process, handles initializing all other managers
 'use strict';
 const WebFrame = require('web-frame');
 const ElectronScreen = require('screen');
@@ -14,7 +11,8 @@ var Config = require('./js/config.js');
 var UI = (function() {
 	// config.json variables
 	var configPath = Path.join(__dirname, 'config.json');
-	var config;
+	// config variable held in working memory
+	var memConfig;
 
 	// TODO: upon release, enable this
 	/*
@@ -59,8 +57,8 @@ var UI = (function() {
 
 	// init(), called at window.onready, initalizes the view
 	function init() {
-		Config.load(configPath, function(cfg) {
-			config = cfg;
+		Config.load(configPath, function(config) {
+			memConfig = config;
 			adjustHighResZoom(config);
 			Plugins.init(config);
 			Daemon.init(config);
@@ -68,7 +66,7 @@ var UI = (function() {
 	}
 
 	function close() {
-		Config.save(config, configPath);
+		Config.save(memConfig, configPath);
 	}
 
 	// expose 'public' elements
