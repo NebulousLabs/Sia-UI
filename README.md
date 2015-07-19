@@ -10,6 +10,8 @@ This is the user interface for [Sia](https://github.com/NebulousLabs/Sia), it is
 
 ## Structure
 
+The top level structure is for all dev tool type things. You'll find 
+
 'index.js' is the entry point which initializes a browser window using
 'index.html'. This is the only html file since Sia-UI is intended to be a
 one-page desktop app.

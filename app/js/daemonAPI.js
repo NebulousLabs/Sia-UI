@@ -70,22 +70,4 @@ module.exports = {
 		apiCall('POST', url, params, callback);
 	},
 	makeCall: discernCall,
-	// makeCalls() handles multiple API calls that could be either GET or POST
-	// callback(results); results is an array of error or JSON respectively
-	makeCalls: function makeCalls(calls, callback) {
-		var results = [];
-		calls.forEach(function(call, index) {
-			discernCall(call, function(err, result) {
-				if (err) {
-					results[index] = err;
-				}
-				else {
-					results[index] = result;
-				}
-				if (index === calls.length - 1) {
-					callback(results);
-				}
-			});
-		});
-	},
 };

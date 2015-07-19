@@ -28,7 +28,7 @@ function startMainWindow() {
 		'width': size.width,
 		'height': size.height,
 		'icon': iconPath,
-		'title': 'Sia'
+		'title': 'Sia-UI'
 	});
 
 	// Choose not to show the menubar
@@ -36,9 +36,6 @@ function startMainWindow() {
 	
 	// Load the index.html of the app.
 	mainWindow.loadUrl('file://' + __dirname + '/index.html');
-
-	// Focus selector on test-ui	
-	mainWindow.focus();
 
 	// Emitted when the window is closed.
 	mainWindow.on('closed', function() {

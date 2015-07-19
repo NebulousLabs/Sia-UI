@@ -1,8 +1,6 @@
-electron-v*
-sia-v*
-Sia-*
 node_modules
-**/*.swp
+build
+*.swp
 npm-debug.log
 app/config.json
 app/dependencies

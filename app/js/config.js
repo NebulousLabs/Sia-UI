@@ -34,9 +34,8 @@ module.exports = {
 		});
 	},
 
-	// reset() erases the existing config.json and places a default
-	reset: function() {
-		saveConfig(defaultConfig);
-		callback();
+	// reset() returns the defaultConfig
+	reset: function(callback) {
+		callback(defaultConfig);
 	},
 };
