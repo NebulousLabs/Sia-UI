@@ -27,9 +27,7 @@ community interested in the Sia network to be able to:
 
 1. Use Sia-UI in the way they want with only the plugins they care about instead
 of using our rigid set of tools.
-
 2. Be able to design and implement their own plugins.
-
 3. Customize their own UI experience simply without obfuscating menubars.
 
 In the works already is a product that would serve up the locations of files on
@@ -47,7 +45,8 @@ distribution so it makes sense to dynamically load them with the UI.
 
 # How to write a plugin
 
-## Summary
+## It's a webpage... it's that simple.
+
 Plugins are loaded into Sia-UI on run-time through an electron utility called
 the [web-view tag](http://electron.atom.io/docs/v0.29.0/api/web-view-tag/).
 These tags open up the viewing of guest content by pointing to an HTML file
@@ -60,7 +59,57 @@ One could make a plugin that views Github.com by making a folder
 Suddenly, there's a button labeled 'Github' and upon click, shows ![Note: Though this is currently a bit buggy due to sites using global variables that
 conflict with nodeintegration being turned on.](/doc/assets/github-plugin.png)
 
-Having a simple button.png 
+## Making a Sidebar Button
 
+However, we don't want developers to launch a webpage on a server just to make
+a plugin. We're trying to make a basic plugin that serves an actual function.
+For this, we'll go through implementing the Overview plugin.
 
+Plugins are loaded dynamically based on the folders in the /app/plugins
+directory. The sidebar is handled on our part so plugins only need a properly
+placed png file and folder name for a button. 
+With a folder 'Overview' and a button.png to be our plugin's icon for
+navigation purposes. 
+This plugin directory should now be:
+```text
+Sia-UI/app/plugins/Overview/
+└── assets/
+	└── button.png
+```
+The Overview uses the 'bars' [font awesome icon in png form](http://fa2png.io/).
+Loading up Sia-UI again, we'll see: ![Impressive plugin ain't it?](/doc/assets/sidebar.png)
+
+## Making a Mainbar View
+
+Now to insert some content for our plugin. The overview plugin will be the home
+plugin for most everyone, so we'll add a nice little greeting and title to it:
+```html
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Overview</title>
+	</head>
+	<body>
+
+		<!-- Header -->
+		<div class='header'>
+			<div class='title' id='title'>Overview</div>
+		</div>
+
+		<!-- Frame -->
+		<div class='frame'>
+			<div class='welcome'>
+				<div class='large'>Welcome to Sia</div>
+				<div class='small'>A highly efficient decentralized storage network.</div>
+			</div>
+		</div>
+	</body>
+</html>
+```
+
+Loading up Sia-UI again, we'll see: ![Impressive plugin ain't it?](/doc/assets/basic-html.png)
+
+## Adding CSS
+
+We're thinking about 
 

@@ -2,12 +2,21 @@
 <html>
 	<head>
 		<title>Overview</title>
+
+		<!-- CSS -->
+		<link rel='stylesheet' href='css/roboto-condensed-min.css'>
+		<link rel='stylesheet' href='css/overview.css'>
 	</head>
 	<body>
 
 		<!-- Header -->
 		<div class='header'>
 			<div class='title' id='title'>Overview</div>
+			<div class='capsule'>
+				<div class='pod' id='balance'></div>
+				<div class='pod' id='peers'></div>
+				<div class='pod' id='block-height'></div>
+			</div>
 		</div>
 
 		<!-- Frame -->
@@ -17,5 +26,8 @@
 				<div class='small'>A highly efficient decentralized storage network.</div>
 			</div>
 		</div>
+		
+		<!-- JS -->
+		<script type='text/javascript' src='js/overview.js'></script>
 	</body>
 </html>

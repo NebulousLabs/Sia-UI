@@ -27,6 +27,7 @@ module.exports = {
 		v.id = name + '-view';
 		v.className = 'plugin-view';
 		v.src = markupPath;
+		v.autosize = 'on';
 		
 		// Turn nodeintegration on so plugins can use electron & node libraries
 		// TODO: nodeintegration breaks some global variables on sites, like

@@ -30,7 +30,10 @@ var Plugins = (function() {
 			// Swap it to be first
 			pluginNames[homeIndex] = pluginNames[0];
 			pluginNames[0] = home;
+			return;
 		}
+		// No home plugin installed
+		home = pluginNames[0];
 	}
 
 	// addListeners(plugin) handles listening for plugin messages 
