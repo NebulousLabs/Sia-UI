@@ -28,7 +28,7 @@ function startMainWindow() {
 		'width': size.width,
 		'height': size.height,
 		'icon': iconPath,
-		'title': 'Sia'
+		'title': 'Sia-UI'
 	});
 
 	// Choose not to show the menubar

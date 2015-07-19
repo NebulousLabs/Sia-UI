@@ -15,6 +15,7 @@ third-party developers interested in our project to make their own plugins.
 The structure of a plugin is the exact same as a webpage, with some added
 functionality via Node.js & Electron, the core library that supports the Atom
 text editor. There are only two hard-rules to a plugin:
+
 1. It must be self-contained in a directory of its name.
 2. It must have an index.html in this directory.
 
@@ -23,9 +24,12 @@ text editor. There are only two hard-rules to a plugin:
 We at NebulousLabs are all about decentralization... of everything! Thus we are
 redesigning our GUI desktop application with that in mind. We want the
 community interested in the Sia network to be able to:
+
 1. Use Sia-UI in the way they want with only the plugins they care about instead
 of using our rigid set of tools.
+
 2. Be able to design and implement their own plugins.
+
 3. Customize their own UI experience simply without obfuscating menubars.
 
 In the works already is a product that would serve up the locations of files on
@@ -44,9 +48,19 @@ distribution so it makes sense to dynamically load them with the UI.
 # How to write a plugin
 
 ## Summary
-Plugins are loaded into Sia-UI through an electron utility called the [web-view
-tag](http://electron.atom.io/docs/v0.29.0/api/web-view-tag/). These tags open
-up the viewing of guest content by pointing to an HTML file that displays the
-rest of the plugin, incorporating CSS, Javascript as is usually done in a
-webpage. One could open a plugin that access Github.com by incorporating
+Plugins are loaded into Sia-UI on run-time through an electron utility called
+the [web-view tag](http://electron.atom.io/docs/v0.29.0/api/web-view-tag/).
+These tags open up the viewing of guest content by pointing to an HTML file
+that displays the rest of the plugin, importing CSS, Javascript as is usually
+done in a webpage.
+
+One could make a plugin that views Github.com by making a folder
+`app/plugins/Github` and placing a one-line index.html file:
+`<meta http-equiv="refresh" content="0; url=http://Github.com/" />`
+Suddenly, there's a button labeled 'Github' and upon click, shows ![Note: Though this is currently a bit buggy due to sites using global variables that
+conflict with nodeintegration being turned on.](/doc/assets/github-plugin.png)
+
+Having a simple button.png 
+
+
 
