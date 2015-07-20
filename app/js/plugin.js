@@ -9,10 +9,6 @@ module.exports = function plugin(plugPath, name) {
 	var view = new Factory.view(Path.join(plugPath, name, 'index.html'), name);
 	var button = new Factory.button(Path.join(plugPath, name, 'assets', 'button.png'), name);
 
-	if (button) {
-		console.log('button works')
-	}
-
 	// show() shows the plugin's view
 	function show() {
 		button.classList.add('current');

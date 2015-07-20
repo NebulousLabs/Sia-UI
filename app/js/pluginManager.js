@@ -65,11 +65,7 @@ var Plugins = (function() {
 					// variable they wanted updated with the call so that the
 					// the general-UI can update the value upon result?
 					Daemon.call(event.args[0], function(err, callResult) {
-						if (err) {
-							console.error(err);
-							return;
-						} 
-						plugin.sendIPC('api-result', event.args[0], callResult);
+						plugin.sendIPC('api-result', event.args[0], err, callResult);
 					});
 					break;
 				case 'devtools':

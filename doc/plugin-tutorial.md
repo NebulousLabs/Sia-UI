@@ -71,11 +71,13 @@ directory. The sidebar is handled on our part so plugins only need a properly
 placed png file and folder name for a button. 
 
 The plugin directory should now be:
+
 ```text
 Sia-UI/app/plugins/Overview/
 └── assets/
-	└── button.png
+    └── button.png
 ```
+
 The Overview uses the 'bars' [font awesome icon in png form](http://fa2png.io/).
 Loading up Sia-UI again, we'll see: ![Impressive plugin ain't
 it?](/doc/assets/sidebar.png)
@@ -84,6 +86,7 @@ it?](/doc/assets/sidebar.png)
 
 Now to insert some content for our plugin. The overview plugin will be the home
 plugin for most everyone, so we'll add a nice little greeting and title to it:
+
 ```html
 <!DOCTYPE html>
 <html>
@@ -107,17 +110,6 @@ plugin for most everyone, so we'll add a nice little greeting and title to it:
 </html>
 ```
 
-The plugin directory should now include an index.html at the root level of the plugin:
-```text
-Sia-UI/app/plugins/Overview/
-├── index.html
-└── assets/
-	└── button.png
-```
-Loading up Sia-UI again, we'll see: ![Impressive plugin ain't it?](/doc/assets/basic-html.png)
-
-## Adding Data Fields
-
 We've got how our users will be greeted upon entering the UI, now we should
 determine what information should be regularly viewed upon entry by most every
 user. Inspired by the previous UI, we pick the block height, peer count, and
@@ -129,7 +121,8 @@ rent, or mine, will probably have some balance of Siacoin.
 We'll add a containing div, let's call it 'capsule' for our header section and
 div fields for each of these to our index.html, keeping them all the same class
 name, say 'pod' so that we can later style them alike CSS while giving them
-unique id's to fill each of them separately later in JS.
+unique id's to update each of them separately later in JS.
+
 ```html
 		<!-- Header -->
 		<div class='header'>
@@ -142,39 +135,15 @@ unique id's to fill each of them separately later in JS.
 		</div>
 ```
 
-Now we need to make a JS file to contain logic to fill these data fields. First
-let's include the JS file-to-be-made in our index.html at the bottom to load
-and fill our fields after the general skeleton has been parsed.
-```html
-		<!-- JS -->
-		<script type='text/javascript' src='js/overview.js'></script>
-	</body>
-</html>
-```
+The plugin directory should now be:
 
-Let's make it pretty basic for now and set all fields to 0 to modularize this
-tutorial. In our `js/overview.js` we'll put the following code.
-```js
-'use strict';
-// Variables to store values
-var balance = 0;
-var peerCount = 0;
-var blockHeight = 0;
-
-// Fill header capsule fields
-document.getElementById('balance').innerHTML = 'Balance: ' + balance;
-document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
-document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
-```
-
-The plugin directory should reflect our addition:
 ```text
 Sia-UI/app/plugins/Overview/
 ├── index.html
 └── assets/
-	└── button.png
+    └── button.png
 ```
-Loading up Sia-UI again, we'll see: ![Impressive plugin ain't it?](/doc/assets/data-fields.png)
+Loading up Sia-UI again, we'll see: ![Impressive plugin ain't it?](/doc/assets/basic-overview.png)
 
 ## Styling the View
 
@@ -184,12 +153,30 @@ use for the sidebar buttons called roboto condensed, so let's just copy paste
 that into our folder so our plugin remains modular.
 
 From terminal at the Sia-UI root directory:
+
 ```bash
 cp app/assets/roboto-condensed-min.css app/plugins/Overview/assets
 ```
 
+Then we're going to need the plugin's index.html to know about this font and
+our custom plugin CSS through adding two lines in the head section:
+
+```html
+	<head>
+		<title>Overview</title>
+
+		<!-- CSS -->
+		<link rel='stylesheet' href='assets/roboto-condensed-min.css'>
+		<link rel='stylesheet' href='css/overview.css'>
+	</head>
+
+```
+
 With a cool font, we need a cool layout. The following css was adopted from the
-old Sia-UI and we'll throw it in a css folder in our plugin directory.
+old Sia-UI and we'll throw it in a css folder in our plugin directory. We're
+skimming over this because it's not too important to review in this particular
+guide.
+
 ```css
 /*	Style Guide:
  *		Transparent: 70% Opacity
@@ -271,3 +258,212 @@ body {
 }
 ```
 
+Quite a lot to take in without review, but that's how styling webpages goes. 
+
+The plugin directory should reflect our css files:
+
+```text
+Sia-UI/app/plugins/Overview/
+├── index.html
+├── assets/
+│   ├── button.png
+│   └── roboto-condensed-min.css
+└── css/
+    └── overview.css
+```
+
+Loading up Sia-UI again, we'll see: ![Impressive plugin ain't it?](/doc/assets/styled-overview.png)
+
+## Updating our View
+
+Now we need to make a JS file to contain logic to fill these data fields. First
+let's include the JS file-to-be-made in our index.html at the bottom to load
+and fill our fields after the general skeleton has been parsed.
+
+```html
+		<!-- JS -->
+		<script type='text/javascript' src='js/overview.js'></script>
+	</body>
+</html>
+```
+
+After we make such a javascript file, we should cover the additional tools
+Sia-UI gives to its plugins beyond just a sidebar-button.
+
+### IPC
+
+We must first understand that plugins, due to their webview nature, run in a
+separate process with different permissions than the general UI. This is so
+plugin behavior is very controlled and encapsulated. Commmunication between it
+and the UI will be through an asynchronous electron library tool called 'ipc' or
+'inter-process-communication'. Thus, the top of our file should contain:
+
+```js
+'use strict';
+// Library for communicating with Sia-UI
+const IPC = require('ipc');
+```
+
+Asynchronous messages sent through ipc are picked up based on their channels.
+On can send primitives, objects, or nothing at all through these channels and
+the UI reacts accordingly. For example, turn chromium devtools on using:
+
+```js
+IPC.sendToHost('devtools');
+```
+
+It's like a mini API but the UI currently registers only 'devtools', 'api-call'
+and 'api-results' channels. For more detail, see app/js/pluginManager.js
+
+### Making API calls
+
+To send api calls through the UI to a hosted siad, call ipc's sendToHost()
+function along the message channel 'api-call' and pass in the string of the
+call address (for GET calls only).
+
+```js
+// Variables to store API call values
+var calls = ['/wallet/status', '/gateway/status', '/consensus/status'];
+
+function callAPI() {
+	calls.forEach(function(call) {
+		IPC.sendToHost('api-call', call);
+	});
+}
+```
+
+To do something with the result of said calls, one has to listen on the IPC
+channel 'api-result' and determine an action based on the first argument, the
+call that the result corresponds to
+
+```js
+function update(call, err, result) {
+	// Call returned an error
+	if (err) {
+		console.error(err);
+		return;
+	}
+	switch (call) {
+		case calls[0]:
+			document.getElementById('balance').innerHTML = 'Balance: ' + result.Balance;
+			break;
+		case calls[1]:
+			document.getElementById('peers').innerHTML = 'Peers: ' + result.Peers.length;
+			break;
+		case calls[2]:
+			document.getElementById('block-height').innerHTML = 'Block Height: ' + result.Height;
+			break;
+		default:
+			console.error('Unexpected call: ' + call + ' and result: ' + result);
+	}
+}
+
+// Update values per call
+IPC.on('api-result', update);
+```
+
+### Plugin Lifecycle
+
+Currently, the UI checks for and executes a function called init() upon loading
+and kill() upon transitioning away from said function. Thus a plugin needs to
+initialize and update its fields based on these two functions, even though it
+continues to exist in the background when another view is shown.
+
+A good way to do this is to have a global variable that points to a function
+being executed periodically using native Javascript's setInterval().
+
+```js
+// Keeps track of if the view is shown
+var updating;
+
+function init() {
+	// DEVTOOL: uncomment to bring up devtools on plugin view
+	// IPC.sendToHost('devtools');
+	
+	// Call the API regularly to update page
+	updating = setInterval(callAPI, 1000);
+}
+
+function kill() {
+	clearInterval(updating);
+}
+```
+
+### Usability
+
+This all functions well enough, but it's a bit of an amateur design when one
+actually uses the plugin. Numbers are jerky and we see a large amount of
+numbers for our balance since it's in 10^-24 Siacoin, or what we call
+baseunits, similar to Bitcoin and satoshis. Thus, we'll hack up a quick
+function to represent kilosiacoin balances to our users:
+
+```js
+function formatKSiacoin(baseUnits, precision) {
+	if (!precision) {
+		precision = 10;
+	}
+
+	var ksiaConversionFactor = Math.pow(10,27);
+	var display = parseFloat((baseUnits/ksiaConversionFactor).toFixed(1));
+
+	// Indicate if the user has some value with a last digit of '1'
+	if (baseUnits > 0 && string === parseFloat((0).toFixed(1))) {
+		string = parseFloat((0).toFixed(precision).substring(0,precision-1) + '1');
+	}
+
+	return display + ' KS';
+}
+```
+
+We should have global variables that are updated and not just update the markup
+directly, so as to maintain non-initial values and avoid that 0 to actual
+number jerk each and every time a user opens up our plugin.
+
+```js
+// Variables to store api result values
+var balance = 0;
+var peerCount = 0;
+var blockHeight = 0;
+
+function update(call, err, result) {
+	// Call returned an error
+	if (err) {
+		console.error(err);
+		return;
+	}
+	switch (call) {
+		case calls[0]:
+			balance = formatKSiacoin(result.Balance) || balance;
+			document.getElementById('balance').innerHTML = 'Balance: ' + balance;
+			break;
+		case calls[1]:
+			peerCount = result.Peers.length || peerCount;
+			document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
+			break;
+		case calls[2]:
+			blockHeight = result.Height || blockHeight;
+			document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
+			break;
+		default:
+			console.error('Unexpected call: ' + call + ' and result: ' + result);
+	}
+}
+```
+
+The final result of aggregated code can be viewed in app/plugins/Overview/js/overview.js
+```text
+Sia-UI/app/plugins/Overview/
+├── index.html
+├── assets/
+│   ├── button.png
+│   └── roboto-condensed-min.css
+├── css/
+│   └── overview.css
+└── js/
+	└── overview.js
+```
+
+Loading up Sia-UI again, we'll all see something different because the numbers
+should be pulled from the API and one's siad-state. In our case, the view shows
+the highly active dev network:
+![Impressive plugin ain't it?](/doc/assets/dev-overview.png)
