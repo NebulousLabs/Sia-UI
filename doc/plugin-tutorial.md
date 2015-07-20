@@ -56,7 +56,8 @@ done in a webpage.
 One could make a plugin that views Github.com by making a folder
 `app/plugins/Github` and placing a one-line index.html file:
 `<meta http-equiv="refresh" content="0; url=http://Github.com/" />`
-Suddenly, there's a button labeled 'Github' and upon click, shows ![Note: Though this is currently a bit buggy due to sites using global variables that
+Suddenly, there's a button labeled 'Github' and upon click, shows ![Note:
+Though this is currently a bit buggy due to sites using global variables that
 conflict with nodeintegration being turned on.](/doc/assets/github-plugin.png)
 
 ## Making a Sidebar Button
@@ -68,16 +69,16 @@ For this, we'll go through implementing the Overview plugin.
 Plugins are loaded dynamically based on the folders in the /app/plugins
 directory. The sidebar is handled on our part so plugins only need a properly
 placed png file and folder name for a button. 
-With a folder 'Overview' and a button.png to be our plugin's icon for
-navigation purposes. 
-This plugin directory should now be:
+
+The plugin directory should now be:
 ```text
 Sia-UI/app/plugins/Overview/
 └── assets/
 	└── button.png
 ```
 The Overview uses the 'bars' [font awesome icon in png form](http://fa2png.io/).
-Loading up Sia-UI again, we'll see: ![Impressive plugin ain't it?](/doc/assets/sidebar.png)
+Loading up Sia-UI again, we'll see: ![Impressive plugin ain't
+it?](/doc/assets/sidebar.png)
 
 ## Making a Mainbar View
 
@@ -90,7 +91,6 @@ plugin for most everyone, so we'll add a nice little greeting and title to it:
 		<title>Overview</title>
 	</head>
 	<body>
-
 		<!-- Header -->
 		<div class='header'>
 			<div class='title' id='title'>Overview</div>
@@ -107,9 +107,167 @@ plugin for most everyone, so we'll add a nice little greeting and title to it:
 </html>
 ```
 
+The plugin directory should now include an index.html at the root level of the plugin:
+```text
+Sia-UI/app/plugins/Overview/
+├── index.html
+└── assets/
+	└── button.png
+```
 Loading up Sia-UI again, we'll see: ![Impressive plugin ain't it?](/doc/assets/basic-html.png)
 
-## Adding CSS
+## Adding Data Fields
 
-We're thinking about 
+We've got how our users will be greeted upon entering the UI, now we should
+determine what information should be regularly viewed upon entry by most every
+user. Inspired by the previous UI, we pick the block height, peer count, and
+wallet balance. The first lets the user know they're up to date with the
+blockchain. The second lets the user further know that they're connected with
+other people on the network. Lastly each and every user, whether they host,
+rent, or mine, will probably have some balance of Siacoin.
+
+We'll add a containing div, let's call it 'capsule' for our header section and
+div fields for each of these to our index.html, keeping them all the same class
+name, say 'pod' so that we can later style them alike CSS while giving them
+unique id's to fill each of them separately later in JS.
+```html
+		<!-- Header -->
+		<div class='header'>
+			<div class='title' id='title'>Overview</div>
+			<div class='capsule'>
+				<div class='pod' id='balance'>Balance: 0</div>
+				<div class='pod' id='peers'>Peers: 0</div>
+				<div class='pod' id='block-height'>Block Height: 0</div>
+			</div>
+		</div>
+```
+
+Now we need to make a JS file to contain logic to fill these data fields. First
+let's include the JS file-to-be-made in our index.html at the bottom to load
+and fill our fields after the general skeleton has been parsed.
+```html
+		<!-- JS -->
+		<script type='text/javascript' src='js/overview.js'></script>
+	</body>
+</html>
+```
+
+Let's make it pretty basic for now and set all fields to 0 to modularize this
+tutorial. In our `js/overview.js` we'll put the following code.
+```js
+'use strict';
+// Variables to store values
+var balance = 0;
+var peerCount = 0;
+var blockHeight = 0;
+
+// Fill header capsule fields
+document.getElementById('balance').innerHTML = 'Balance: ' + balance;
+document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
+document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
+```
+
+The plugin directory should reflect our addition:
+```text
+Sia-UI/app/plugins/Overview/
+├── index.html
+└── assets/
+	└── button.png
+```
+Loading up Sia-UI again, we'll see: ![Impressive plugin ain't it?](/doc/assets/data-fields.png)
+
+## Styling the View
+
+Now that we have mock data to display to our user, we want this view to start
+taking shape, form, and last-but-not-least, style! The UI has a font that we
+use for the sidebar buttons called roboto condensed, so let's just copy paste
+that into our folder so our plugin remains modular.
+
+From terminal at the Sia-UI root directory:
+```bash
+cp app/assets/roboto-condensed-min.css app/plugins/Overview/assets
+```
+
+With a cool font, we need a cool layout. The following css was adopted from the
+old Sia-UI and we'll throw it in a css folder in our plugin directory.
+```css
+/*	Style Guide:
+ *		Transparent: 70% Opacity
+ *
+ * 		White:      #FFFFFF
+ * 		Grey-White: #F5F5F5
+ *		Faint-Grey: #ECECEC
+ *		Light-Grey: #DDDDDD
+ *		Grey:       #C5C5C5
+ * 		Grey-Black: #4A4A4A
+ * 		Black:      #000000
+ */
+body {
+	margin: 0px;
+	padding: 0px;
+	border-spacing: 0px;
+	font-family: 'Roboto Condensed', sans-serif;
+	font-weight: 300;
+	font-size: 18px;
+}
+.header {
+	opacity: .7;
+	padding: 20px;
+	border-bottom: 2px solid #f5f5f5;
+	background-color: #4a4a4a;
+	color: #fff;
+	height: 50px;
+	vertical-align: top;
+}
+.header .title {
+	display: inline-block;
+	font-size: 32px;
+	color: #fff;
+}
+.header .capsule {
+	float: right;
+}
+.capsule {
+	display: inline-block;
+	border: 1px solid #ffffff;
+	border-radius: 4px;
+	overflow: hidden;
+}
+.capsule .pod {
+	display: inline-block;
+	padding: 10px;
+	padding-left: 16px;
+	padding-right: 16px;
+	border-right: 1px solid #ffffff;
+	color: #f5f5f5;
+}
+.capsule .pod:last-child {
+	border: none;
+	padding-right: 20px;
+}
+.frame {
+	color: #f5f5f5;
+	font-size: 32px;
+	padding-top: 18px;
+	padding-bottom: 0px;
+	padding-left: 30px;
+	padding-right: 16px;
+}
+.frame .text {
+	color: #c5c5c5;
+}
+.welcome {
+	margin-top: 50px;
+	text-align: center;
+}
+.welcome .large {
+	font-size: 72px;
+	color: #c5c5c5;
+}
+.welcome .small {
+	margin-top: 20px;
+	font-size: 32px;
+	color: #c5c5c5;
+}
+```
 

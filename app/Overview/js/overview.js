@@ -38,25 +38,25 @@ function formatKSiacoin(baseUnits, precision) {
 
 	// Indicate if the user has some value with a last digit of '1'
 	if (baseUnits > 0 && string === parseFloat((0).toFixed(1))) {
-		string = parseFloat((0).toFixed(precision).substring(0,precision-1) + "1");
+		string = parseFloat((0).toFixed(precision).substring(0,precision-1) + '1');
 	}
 
-	return display + " KS";
+	return display + ' KS';
 }
 
 function update(call, result) {
 	switch (call) {
 		case calls[0]:
 			balance = formatKSiacoin(result.Balance) || balance;
-			document.getElementById('balance').innerHTML = balance;
+			document.getElementById('balance').innerHTML = 'Balance: ' balance;
 			break;
 		case calls[1]:
 			peerCount = result.Peers.length || peerCount;
-			document.getElementById('peers').innerHTML = "Peers: " + peerCount;
+			document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
 			break;
 		case calls[2]:
 			blockHeight = result.Height || blockHeight;
-			document.getElementById('block-height').innerHTML = "Block Height: " + blockHeight;
+			document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
 			break;
 		default:
 			console.error('Unexpected call: ' + call + ' and result: ' + result);
