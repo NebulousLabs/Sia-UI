@@ -22,6 +22,7 @@ OR
 
 ## Building Distributables
 
+Places into build/ folder, see the package.json for details
 1. `npm run build`
 
 ## Cleaning up

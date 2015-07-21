@@ -61,11 +61,11 @@ var Plugins = (function() {
 		plugin.on('ipc-message', function(event) {
 			switch(event.channel) {
 				case 'api-call':
-					// TODO: Possibly have plugins send the address of a
-					// variable they wanted updated with the call so that the
-					// the general-UI can update the value upon result?
-					Daemon.call(event.args[0], function(err, callResult) {
-						plugin.sendIPC('api-result', event.args[0], err, callResult);
+					// Send array of call params to Daemon, route result over
+					// channel of call's endpoint string
+					var callString = event.args[0];
+					Daemon.call(event.args, function(err, callResult) {
+						plugin.sendToView(callString, err, callResult);
 					});
 					break;
 				case 'devtools':

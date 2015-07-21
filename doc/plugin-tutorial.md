@@ -91,7 +91,6 @@ plugin for most everyone, so we'll add a nice little greeting and title to it:
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Overview</title>
 	</head>
 	<body>
 		<!-- Header -->
@@ -163,8 +162,6 @@ our custom plugin CSS through adding two lines in the head section:
 
 ```html
 	<head>
-		<title>Overview</title>
-
 		<!-- CSS -->
 		<link rel='stylesheet' href='assets/roboto-condensed-min.css'>
 		<link rel='stylesheet' href='css/overview.css'>
@@ -312,8 +309,8 @@ the UI reacts accordingly. For example, turn chromium devtools on using:
 IPC.sendToHost('devtools');
 ```
 
-It's like a mini API but the UI currently registers only 'devtools', 'api-call'
-and 'api-results' channels. For more detail, see app/js/pluginManager.js
+It's like a mini API but the UI currently registers only 'devtools', and
+'api-call' channels. For more detail, see app/js/pluginManager.js
 
 ### Making API calls
 
@@ -322,44 +319,27 @@ function along the message channel 'api-call' and pass in the string of the
 call address (for GET calls only).
 
 ```js
-// Variables to store API call values
-var calls = ['/wallet/status', '/gateway/status', '/consensus/status'];
-
 function callAPI() {
-	calls.forEach(function(call) {
-		IPC.sendToHost('api-call', call);
-	});
+	IPC.sendToHost('api-call', '/wallet/status');
+	IPC.sendToHost('api-call', '/gateway/status');
+	IPC.sendToHost('api-call', '/consensus/status');
 }
 ```
 
 To do something with the result of said calls, one has to listen on the IPC
-channel 'api-result' and determine an action based on the first argument, the
-call that the result corresponds to
+channel corresponding to the call string.
 
 ```js
-function update(call, err, result) {
-	// Call returned an error
-	if (err) {
-		console.error(err);
-		return;
-	}
-	switch (call) {
-		case calls[0]:
-			document.getElementById('balance').innerHTML = 'Balance: ' + result.Balance;
-			break;
-		case calls[1]:
-			document.getElementById('peers').innerHTML = 'Peers: ' + result.Peers.length;
-			break;
-		case calls[2]:
-			document.getElementById('block-height').innerHTML = 'Block Height: ' + result.Height;
-			break;
-		default:
-			console.error('Unexpected call: ' + call + ' and result: ' + result);
-	}
-}
-
 // Update values per call
-IPC.on('api-result', update);
+IPC.on('/wallet/status', function(err, result) {
+	document.getElementById('balance').innerHTML = 'Balance: ' + result.Balance;
+});
+IPC.on('/gateway/status', function(err, result) {
+	document.getElementById('peers').innerHTML = 'Peers: ' + result.Peers.length;
+});
+IPC.on('/consensus/status', function(err, result) {
+	document.getElementById('block-height').innerHTML = 'Block Height: ' + result.Height;
+});
 ```
 
 ### Plugin Lifecycle
@@ -425,32 +405,83 @@ var balance = 0;
 var peerCount = 0;
 var blockHeight = 0;
 
-function update(call, err, result) {
-	// Call returned an error
-	if (err) {
-		console.error(err);
-		return;
+// Update values per call
+IPC.on('/wallet/status', function(err, result) {
+	balance = formatKSiacoin(result.Balance) || balance;
+	document.getElementById('balance').innerHTML = 'Balance: ' + balance;
+});
+IPC.on('/gateway/status', function(err, result) {
+	peerCount = result.Peers.length || peerCount;
+	document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
+});
+IPC.on('/consensus/status', function(err, result) {
+	blockHeight = result.Height || blockHeight;
+	document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
+});
+```
+
+Finally, the aggregated Javascript code should look like this:
+
+```
+'use strict';
+// Library for communicating with Sia-UI
+const IPC = require('ipc');
+// Variables to store api result values
+var balance = 0;
+var peerCount = 0;
+var blockHeight = 0;
+// Keeps track of if the view is shown
+var updating;
+
+function callAPI() {
+	IPC.sendToHost('api-call', '/wallet/status');
+	IPC.sendToHost('api-call', '/gateway/status');
+	IPC.sendToHost('api-call', '/consensus/status');
+}
+
+function formatKSiacoin(baseUnits, precision) {
+	if (!precision) {
+		precision = 10;
 	}
-	switch (call) {
-		case calls[0]:
-			balance = formatKSiacoin(result.Balance) || balance;
-			document.getElementById('balance').innerHTML = 'Balance: ' + balance;
-			break;
-		case calls[1]:
-			peerCount = result.Peers.length || peerCount;
-			document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
-			break;
-		case calls[2]:
-			blockHeight = result.Height || blockHeight;
-			document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
-			break;
-		default:
-			console.error('Unexpected call: ' + call + ' and result: ' + result);
+
+	var ksiaConversionFactor = Math.pow(10,27);
+	var display = parseFloat((baseUnits/ksiaConversionFactor).toFixed(1));
+
+	// Indicate if the user has some value with a last digit of '1'
+	if (baseUnits > 0 && string === parseFloat((0).toFixed(1))) {
+		string = parseFloat((0).toFixed(precision).substring(0,precision-1) + '1');
 	}
+
+	return display + ' KS';
+}
+
+// Update values per call
+IPC.on('/wallet/status', function(err, result) {
+	balance = formatKSiacoin(result.Balance) || balance;
+	document.getElementById('balance').innerHTML = 'Balance: ' + balance;
+});
+IPC.on('/gateway/status', function(err, result) {
+	peerCount = result.Peers.length || peerCount;
+	document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
+});
+IPC.on('/consensus/status', function(err, result) {
+	blockHeight = result.Height || blockHeight;
+	document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
+});
+
+function init() {
+	// DEVTOOL: uncomment to bring up devtools on plugin view
+	// IPC.sendToHost('devtools');
+	
+	// Call the API regularly to update page
+	updating = setInterval(callAPI, 1000);
+}
+
+function kill() {
+	clearInterval(updating);
 }
 ```
 
-The final result of aggregated code can be viewed in app/plugins/Overview/js/overview.js
 ```text
 Sia-UI/app/plugins/Overview/
 ├── index.html
@@ -467,3 +498,4 @@ Loading up Sia-UI again, we'll all see something different because the numbers
 should be pulled from the API and one's siad-state. In our case, the view shows
 the highly active dev network:
 ![Impressive plugin ain't it?](/doc/assets/dev-overview.png)
+

@@ -7,25 +7,11 @@ var peerCount = 0;
 var blockHeight = 0;
 // Keeps track of if the view is shown
 var updating;
-// Variables to store API call values
-var calls = ['/wallet/status', '/gateway/status', '/consensus/status'];
 
 function callAPI() {
-	calls.forEach(function(call) {
-		IPC.sendToHost('api-call', call);
-	});
-}
-
-function init() {
-	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPC.sendToHost('devtools');
-	
-	// Call the API regularly to update page
-	updating = setInterval(callAPI, 1000);
-}
-
-function kill() {
-	clearInterval(updating);
+	IPC.sendToHost('api-call', '/wallet/status');
+	IPC.sendToHost('api-call', '/gateway/status');
+	IPC.sendToHost('api-call', '/consensus/status');
 }
 
 function formatKSiacoin(baseUnits, precision) {
@@ -44,29 +30,28 @@ function formatKSiacoin(baseUnits, precision) {
 	return display + ' KS';
 }
 
-function update(call, err, result) {
-	// Call returned an error
-	if (err) {
-		console.error(err);
-		return;
-	}
-	switch (call) {
-		case calls[0]:
-			balance = formatKSiacoin(result.Balance) || balance;
-			document.getElementById('balance').innerHTML = 'Balance: ' + balance;
-			break;
-		case calls[1]:
-			peerCount = result.Peers.length || peerCount;
-			document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
-			break;
-		case calls[2]:
-			blockHeight = result.Height || blockHeight;
-			document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
-			break;
-		default:
-			console.error('Unexpected call: ' + call + ' and result: ' + result);
-	}
+// Update values per call
+IPC.on('/wallet/status', function(err, result) {
+	balance = formatKSiacoin(result.Balance) || balance;
+	document.getElementById('balance').innerHTML = 'Balance: ' + balance;
+});
+IPC.on('/gateway/status', function(err, result) {
+	peerCount = result.Peers.length || peerCount;
+	document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
+});
+IPC.on('/consensus/status', function(err, result) {
+	blockHeight = result.Height || blockHeight;
+	document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
+});
+
+function init() {
+	// DEVTOOL: uncomment to bring up devtools on plugin view
+	// IPC.sendToHost('devtools');
+	
+	// Call the API regularly to update page
+	updating = setInterval(callAPI, 1000);
 }
 
-// Update values per call
-IPC.on('api-result', update);
+function kill() {
+	clearInterval(updating);
+}

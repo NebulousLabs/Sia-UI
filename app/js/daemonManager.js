@@ -19,6 +19,15 @@ var Daemon = (function() {
 		callback();
 	}
 
+	// apiCall() takes an array of call params, adds the siad
+	// address to the url and returns the result callback(err,
+	// result); err is null if call was successful
+	function apiCall(call, callback) {
+		// Add the localhost address and port to the url
+		call[0] = address + call[0];
+		APIJS.makeCall(call, callback);
+	}
+
 	// ifSiad() detects whether siad is running on the current address,
 	// executing one of two functions based on the result
 	function ifSiad(isRunning, isNotRunning) {
@@ -28,7 +37,7 @@ var Daemon = (function() {
 		if (!isNotRunning) {
 			isNotRunning = function() {};
 		}
-		apiCall('/consensus/status', function(err) {
+		apiCall(['/consensus/status'], function(err) {
 			if (!err) {
 				isRunning();
 			} else if (err) {
@@ -39,11 +48,12 @@ var Daemon = (function() {
 
 	// start() starts the daemon as a long running background process
 	function start() {
-		console.log('starting siad');
 		ifSiad(function() {
 			console.error('attempted to start siad when it was already running');
 			return;
-		}, null);
+		}, function() {
+			console.log('starting siad');
+		});
 		// daemon as a background process logs output to files
 		var out = Fs.openSync(Path.join(siaPath, 'daemonOut.log'), 'a');
 		var err = Fs.openSync(Path.join(siaPath, 'daemonErr.log'), 'a');
@@ -59,8 +69,9 @@ var Daemon = (function() {
 
 	// stop() stops the daemon using its API
 	function stop() {
-		console.log('stopping siad');
-		ifSiad(null, function() {
+		ifSiad(function() {
+			console.log('stopping siad');
+		}, function() {
 			console.err('attempted to stop siad when it was not running');
 			return;
 		});
@@ -70,27 +81,10 @@ var Daemon = (function() {
 		});
 	}
 
-	// apiCall() takes a call object and returns the result
-	// callback(err, result); err is null if call was successful
-	function apiCall(call, callback) {
-		// Interpret address-only calls as 'GET'
-		if (typeof call === 'string') {
-			call = {url: call};
-		}
-		// Add the localhost and port to the url
-		call.url = address + call.url;
-
-		APIJS.makeCall(call, callback);
-	}
-
 	// init() sets config and starts the daemon if it isn't on
 	function init(config) {
 		setConfig(config, function() {
 			ifSiad(function() {}, start);
-			// DEVTOOL: ensure api calls are working
-			//ifSiad(function() {
-			//	testCalls(address);
-			//});
 		});
 	}
 

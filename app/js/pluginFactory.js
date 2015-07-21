@@ -30,14 +30,7 @@ module.exports = {
 		v.autosize = 'on';
 		
 		// Turn nodeintegration on so plugins can use electron & node libraries
-		// TODO: nodeintegration breaks some global variables on sites, like
-		// jquery. We should turn nodeintegration on only for the plugins that
-		// need it.
 		v.nodeintegration = 'on';
-		// TODO: If security becomes a concern, specify preload script to give
-		// plugins their dependencies and access to libraries, but turn off
-		// nodeintegration superpowers
-		// view.preload = Path.join(__dirname, 'preload.js')
 
 		// Have all plugins displaying UI's zoom by default
 		v.addEventListener('did-finish-load', function() {

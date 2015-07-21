@@ -36,11 +36,10 @@ module.exports = function plugin(plugPath, name) {
 		view.addEventListener(event, listener);
 	}
 
-	// sendIPC is for communicating with the plugin's webview, while still
+	// sendToView() is for communicating with the plugin's webview, while still
 	// keeping it private to plugin
-	function sendIPC(channel, args) {
+	function sendToView() {
 		view.send.apply(view, [].slice.call(arguments));
-		//view.send(channel, args);
 	}
 
 	// toggleDevTools() opens or closes the webviews devtools for more specific
@@ -61,7 +60,7 @@ module.exports = function plugin(plugPath, name) {
 		hide: hide,
 		transition: onButtonClick,
 		on: onView,
-		sendIPC: sendIPC,
+		sendToView: sendToView,
 		toggleDevTools: toggleDevTools,
 	};
 };
