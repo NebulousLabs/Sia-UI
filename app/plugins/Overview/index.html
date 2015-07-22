@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Overview</title>
-		<link rel='stylesheet' href='overview.css'>
-    	<script type='text/javascript' src='overview.js'></script>
+		<!-- CSS -->
+		<link rel='stylesheet' href='assets/roboto-condensed-min.css'>
+		<link rel='stylesheet' href='css/overview.css'>
 	</head>
 	<body>
+		<!-- Header -->
 		<div class='header'>
 			<div class='title' id='title'>Overview</div>
 			<div class='capsule'>
-				<div class='pod' id='balance'></div>
-				<div class='pod' id='peers'></div>
-				<div class='pod' id='blockheight'></div>
+				<div class='pod' id='balance'>Balance: 0</div>
+				<div class='pod' id='peers'>Peers: 0</div>
+				<div class='pod' id='block-height'>Block Height: 0</div>
 			</div>
 		</div>
+
+		<!-- Frame -->
 		<div class='frame'>
 			<div class='welcome'>
 				<div class='large'>Welcome to Sia</div>
 				<div class='small'>A highly efficient decentralized storage network.</div>
 			</div>
 		</div>
+		
+		<!-- JS -->
+		<script type='text/javascript' src='js/overview.js'></script>
 	</body>
 </html>
