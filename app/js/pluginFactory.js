@@ -1,8 +1,12 @@
-// pluginFactory.js is used to create plugin components
 'use strict';
 const WebFrame = require('web-frame');
 
-// icon() creates the image element for a button
+/**
+ * Creates the image element for a button
+ * @param {string} path - The path to the icon.
+ * @private
+ * @returns {Object} - The button image element
+ */
 function icon(path) {
 	var i = document.createElement('img');
 	i.src = path;
@@ -10,7 +14,12 @@ function icon(path) {
 	return i;
 }
 
-// text() creates the text element for a button
+/**
+ * Creates the text element for a button
+ * @param {string} name - The name of the plugin.
+ * @private
+ * @returns {Object} - The button text element
+ */
 function text(name) {
 	var t = document.createElement('div');
 	t.innerText = name;
@@ -18,9 +27,17 @@ function text(name) {
 	return t;
 }
 
-// When required, pluginFactory gives plugin.js the functions to make its components
+/**
+ * Gives plugin.js the functions to make its components
+ * @module PluginFactory
+ */
 module.exports = {
-	// view() creates the webview to be put on the mainbar
+	/**
+	 * Creates the webview to be put on the mainbar
+	 * @param {string} markupPath - The directory of the index.html
+	 * @param {string} name - The name of the plugin.
+	 * @returns {Object} - The webview element
+	 */
 	view: function view(markupPath, name) {
 		// Make webview element
 		var v = document.createElement('webview');
@@ -42,7 +59,12 @@ module.exports = {
 		document.getElementById('mainbar').appendChild(v);
 		return v;
 	},
-	// button() creates the button to be put on the sidebar
+	/**
+	 * Creates the button to be put on the sidebar
+	 * @param {string} iconPath - The directory of the button.png
+	 * @param {string} name - The name of the plugin.
+	 * @returns {Object} - The button element
+	 */
 	button: function button(iconPath, name) {
 		// Make button elements and combine
 		var b= document.createElement('div');

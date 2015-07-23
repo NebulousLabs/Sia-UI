@@ -1,35 +1,36 @@
-// daemonManager.js provides functionality to start and deal with siad
 'use strict';
 const Process = require("child_process").spawn;
-var APIJS = require('./js/daemonAPI');
+var API = require('./js/daemonAPI');
 
-// daemonManager should be initialized with a config object to initialize siad
-// as a background process. 
-var Daemon = (function() {
+
+/**
+ * DaemonManager, a closure, initializes siad as a background process and
+ * provides functions to interact with it
+ * @class DaemonManager
+ */
+function DaemonManager() {
+	/**
+	 * The file system location of Sia and siad
+	 * @member {string} DaemonManager~siaPath
+	 */
 	var siaPath;
-	var command;
+	/**
+	 * The localhost:port (default is 9980)
+	 * @member {string} DaemonManager~address
+	 */
 	var address;
 
-	// setConfig() sets variables, then passes the config to the api to serve requests
-	// Callback, if there is one, returns no arguments
-	function setConfig(config, callback) {
-		siaPath = Path.join(config.depsPath, 'Sia');
-		command = config.siadCommand;
-		address = config.siadAddress;
-		callback();
-	}
-
-	// apiCall() takes an array of call params, adds the siad
-	// address to the url and returns the result callback(err,
-	// result); err is null if call was successful
 	function apiCall(call, callback) {
 		// Add the localhost address and port to the url
 		call[0] = address + call[0];
-		APIJS.makeCall(call, callback);
+		API.makeCall(call, callback);
 	}
 
-	// ifSiad() detects whether siad is running on the current address,
-	// executing one of two functions based on the result
+	/**
+	 * Detects whether siad is running on the current address
+	 * @param {function} isRunning - function to run if Siad is running
+	 * @param {function} isNotRunning - function to run if Siad is not running
+	 */
 	function ifSiad(isRunning, isNotRunning) {
 		if (!isRunning) {
 			isRunning = function() {};
@@ -46,7 +47,9 @@ var Daemon = (function() {
 		});
 	}
 
-	// start() starts the daemon as a long running background process
+	/**
+	 * Starts the daemon as a long running background process
+	 */
 	function start() {
 		ifSiad(function() {
 			console.error('attempted to start siad when it was already running');
@@ -63,11 +66,14 @@ var Daemon = (function() {
 			stdio: [ 'ignore', out, err ],
 			cwd: siaPath 
 		};
+		var command = process.platform === 'win32' ? './siad.exe' : './siad';
 		var daemonProcess = new Process(command, processOptions);
 		daemonProcess.unref();
 	}
 
-	// stop() stops the daemon using its API
+	/**
+	 * Stops the daemon
+	 */
 	function stop() {
 		ifSiad(function() {
 			console.log('stopping siad');
@@ -75,25 +81,39 @@ var Daemon = (function() {
 			console.err('attempted to stop siad when it was not running');
 			return;
 		});
-		apiCall('/daemon/stop', function(err, data) {
+		this.apiCall('/daemon/stop', function(err, data) {
 			console.assert(!err && data);
 			console.log(data);
 		});
 	}
 
-	// init() sets config and starts the daemon if it isn't on
-	function init(config) {
-		setConfig(config, function() {
-			ifSiad(function() {}, start);
-		});
+	/**
+	 * Sets the member variables based on the passed config
+	 * @param {config} config - the config object derived from config.json
+	 * @param {callback} callback
+	 */
+	function setConfig(config, callback) {
+		siaPath = Path.join(config.depsPath, 'Sia');
+		address = config.siadAddress;
+		callback();
 	}
 
-	// expose 'public' elements and functions
-	return {
-		setConfig: setConfig,
-		start: start,
-		stop: stop,
-		init: init,
-		call: apiCall,
-	};
-}());
+	/**
+	 * Initializes the daemon manager and starts siad
+	 * @function DaemonManager#init
+	 * @param {config} config - config in memory
+	 */
+	this.init = function(config) {
+		setConfig(config, function() {
+			ifSiad.call(this, function() {}, start);
+		});
+	}
+	/**
+	 * Makes an API call to to proper port using daemonAPI
+	 * @function DaemonManager#call
+	 * @param {APICall} call - the config object derived from config.json
+	 * @param {APIResponse} callback
+	 */
+	this.apiCall = apiCall
+}
+var Daemon = new DaemonManager();

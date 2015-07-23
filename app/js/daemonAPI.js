@@ -1,11 +1,31 @@
-// daemonAPI.js gives plugins and the UI easy access to the API.
 'use strict';
+/**
+ * The config object derived from the config.json file used to store UI settings
+ * @callback apiResponse
+ * @param {Object} error - null if the call was successful
+ * @param {Object} response - The resulting data from making the call
+ */
 
-// apiCall() does the dirty work for API calls
-// callback(err, result); if success, err is null
-function apiCall(url, type, params, callback) {
+/**
+ * The call object to store information necessary to a call to a RESTful API
+ * @typedef {Object} apiCall
+ * @property {string} url - The address (usually localhost) and port of siad
+ * @property {string} type - The call type, such as 'POST' or 'GET'
+ * @property {Object} sendInfo - The arguments to send with the call
+ */
+
+
+/**
+ * Creates an XMLHttpRequest to send
+ * @param {string} url - The address (usually localhost) and port of siad
+ * @param {string} type - The call type, such as 'POST' or 'GET'
+ * @param {Object} sendInfo - The arguments to send with the call
+ * @param {apiResponse} callback
+ * @private
+ */
+function sendCall(url, type, sendInfo, callback) {
 	// Detect improper calls, each one needs a url
-	if (!url) {
+	if (!url || !type || !sendInfo) {
 		process.nextTick(function() {
 			callback(new Error('Improper API call!'));
 		});
@@ -32,40 +52,57 @@ function apiCall(url, type, params, callback) {
 	};
 
 	// actually send the request
-	request.send(params);
+	request.send(sendInfo);
 } 
 
-// discernCall() takes an array of call params and calls the api
-// callback(err, result); if success, err is null
+/**
+ * Takes any call object and makes the correct call
+ * @param {apiCall} call - The call object with parameters
+ * @param {apiResponse} callback
+ * @private
+ */
 function discernCall(call, callback) {
 	// Extract call attributes, default call is 'GET'
 	var url = call[0];
 	var type = call[1] || 'GET';
-	var params = call[2] || {};
+	var sendInfo = call[2] || {};
 
-	// The function can use JSON, but turns them into strings first if (typeof
-	// params !== 'string') {
+	// The function can use JSON, but turns them into strings first
 	var JSON;
 	if (JSON && typeof JSON.parse === 'function') {
-		params = JSON.stringify(params);
+		sendInfo = JSON.stringify(sendInfo);
 	}
 
 	// Make the call
-	apiCall(url, type, params, callback);
+	sendCall(url, type, sendInfo, callback);
 }
 
-// When required, daemonAPI can be used for its functions to perform API calls
-// This module is just a javascript gateway to make API calls
+/**
+ * Can be used for its functions to perform API calls
+ * @module DaemonAPI
+ */
 module.exports = {
-	// getCall specifically does a get request to the API
-	// callback(err, result); if success, err is null
+	/**
+	 * Performs a 'GET' call
+	 * @param {string} url - The url to send the call to
+	 * @param {apiResponse} callback
+	 */
 	getCall: function getCall(url, callback) {
-		apiCall(url, 'GET', '', callback);
+		sendCall(url, 'GET', '', callback);
 	},
-	// postCall specifically does a post request to the API
-	// callback(err, result); if success, err is null
-	postCall: function postCall(url, params, callback) {
-		apiCall(url, 'POST', params, callback);
+	/**
+	 * Performs a 'POST' call
+	 * @param {string} url - The url to send the call to
+	 * @param {string|Object} url - The arguments to send with the call
+	 * @param {apiResponse} callback
+	 */
+	postCall: function postCall(url, sendInfo, callback) {
+		sendCall(url, 'POST', sendInfo, callback);
 	},
+	/**
+	 * Performs any API call
+	 * @param {apiCall} call - The call object with parameters
+	 * @param {apiResponse} callback
+	 */
 	makeCall: discernCall,
 };

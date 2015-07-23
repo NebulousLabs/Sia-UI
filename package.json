@@ -8,6 +8,7 @@
   "devDependencies": {
     "electron-packager": "latest",
     "electron-prebuilt": "latest",
+    "ink-docstrap": "^0.5.2",
     "jsdoc": "latest",
     "jshint": "latest",
     "node-inspector": "^0.11.1"
@@ -18,10 +19,10 @@
     "preinstall": "npm run sia-repo && npm run sia-master && npm run sia-import",
     "clean": "rm -rf build node_modules app/dependencies app/config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
-    "jslint": "jshint . --verbose --exclude=node_modules",
-    "jsdoc": "jsdoc -c .jsdocrc",
+    "lint": "jshint . --verbose --exclude=node_modules",
+    "doc": "jsdoc -c .jsdocrc",
     "sia-repo": "test -d $GOPATH/src/github.com/NebulousLabs/Sia || go get -u github.com/NebulousLabs/Sia/...",
-    "sia-master": "(cd $GOPATH/src/github.com/NebulousLabs/Sia && git fetch && git checkout master && make dependencies && make)",
+    "sia-master": "(cd $GOPATH/src/github.com/NebulousLabs/Sia && git fetch && git pull && git checkout master && make dependencies && make)",
     "sia-import": "test -d app/dependencies/Sia || mkdir -p app/dependencies/Sia && cp $GOPATH/bin/siad app/dependencies/Sia",
     "build": "electron-packager . Sia-UI --all --version=0.30.0 --out=build --ignore=node_modules|build --icon=app/assets/logo/sia.svg",
     "build-lin64": "electron-packager . Sia-UI --platform=linux --arch=x64 --version=0.30.0 --out=build --icon=app/assets/logo/sia.svg",

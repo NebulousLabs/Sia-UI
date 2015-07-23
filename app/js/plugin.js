@@ -1,66 +1,93 @@
-// plugin.js is used to hold plugin components and functions
 'use strict';
 const Path = require('path');
 var Factory = require('./pluginFactory');
 
-// When required, plugin.js can be called as a function to create a plugin
-module.exports = function plugin(plugPath, name) {
-	// initialize components
+/**
+ * Constructs the webview and button from a plugin folder
+ * @class Plugin
+ * @param {string} plugPath - The directory of this plugin
+ * @param {string} name - The name of the plugin.
+ */
+function Plugin(plugPath, name) {
+	/**
+	 * Html element for the webview
+	 * @member {Object} Plugin~view
+	 */
 	var view = new Factory.view(Path.join(plugPath, name, 'index.html'), name);
+	/**
+	 * Html element for the sidebar button
+	 * @member {Object} Plugin~button
+	 */
 	var button = new Factory.button(Path.join(plugPath, name, 'assets', 'button.png'), name);
 
-	// show() shows the plugin's view
-	function show() {
-		button.classList.add('current');
-		view.style.display = '';
-		view.executeJavaScript('if (typeof init === "function") init();');
-	}
+	return {
+		/**
+		* Name of the Plugin
+		* @member {string} Plugin#name
+		*/
+	   name: name,
+	   /**
+		* Function executed upon the sidebar button being clicked
+		* @member {transition} Plugin#transition
+		*/
+	   transition: function(transition) {
+		   button.onclick = transition;
+	   },
 
-	// hides() hides the plugin's view
-	function hide() {
-		button.classList.remove('current');
-		view.style.display = 'none';
-		view.executeJavaScript('if (typeof kill === "function") kill();');
-	}
+	   /**
+		* Used to interact with the view element in an easy manner.
+		* @function Plugin#on
+		* @param {string} event - webview event to listen for
+		* @param {Object} listener - function to execute upon the event firing
+		*/
+	   on: function(event, listener) {
+		   view.addEventListener(event, listener);
+	   },
 
-	// onButtonClick() is used to specify what happens when the plugin's
-	// sidebar button is clicked
-	function onButtonClick(transition) {
-		button.onclick = transition;
+	   /** 
+		* Shows the plugin's view
+		* @function Plugin#show
+		*/
+	   show: function() {
+		   button.classList.add('current');
+		   view.style.display = '';
+		   view.executeJavaScript('if (typeof init === "function") init();');
+	   },
+
+	   /** 
+		* Hides the plugin's view
+		* @function Plugin#hide
+		*/
+	   hide: function() {
+		   button.classList.remove('current');
+		   view.style.display = 'none';
+		   view.executeJavaScript('if (typeof kill === "function") kill();');
+	   },
+
+	   /**
+		* For communicating ipc messages with the plugin's webview, while still
+		* keeping it private to plugin
+		* @function Plugin#sendToView
+		* @param {string} channel - ipc channel to communicate over
+		* @param {...*} messages - ipc messages sent over channel to view
+		*/
+	   sendToView: function() {
+		   view.send.apply(view, [].slice.call(arguments));
+	   },
+
+	   /**
+		* Opens or closes the webviews devtools for detailed output viewing
+		* @function Plugin#toggleDevTools
+		*/
+	   toggleDevTools: function() {
+		   if (view.isDevToolsOpened()) {
+			   view.closeDevTools();
+		   } else {
+			   view.openDevTools();
+		   }
+		   return;
+	   },
 	}
 	
-	// onView() is used to interact with the view element in an easy manner.
-	// It's even exported as 'on' so the requirer can call
-	// `plugin.on(event,response);` to add a listener.
-	function onView(event, listener) {
-		view.addEventListener(event, listener);
-	}
-
-	// sendToView() is for communicating with the plugin's webview, while still
-	// keeping it private to plugin
-	function sendToView() {
-		view.send.apply(view, [].slice.call(arguments));
-	}
-
-	// toggleDevTools() opens or closes the webviews devtools for more specific
-	// output viewing
-	function toggleDevTools() {
-		if (view.isDevToolsOpened()) {
-			view.closeDevTools();
-		} else {
-			view.openDevTools();
-		}
-		return;
-	}
-
-	// return the newly made plugin and its public elements
-	return {
-		name: name,
-		show: show,
-		hide: hide,
-		transition: onButtonClick,
-		on: onView,
-		sendToView: sendToView,
-		toggleDevTools: toggleDevTools,
-	};
 };
+module.exports = Plugin;
