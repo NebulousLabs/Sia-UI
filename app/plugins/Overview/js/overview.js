@@ -1,6 +1,8 @@
 'use strict';
 // Library for communicating with Sia-UI
 const IPC = require('ipc');
+// Library for arbitrary precision in numbers
+const BigNumber = require('bignumber.js');
 // Variables to store api result values
 var balance = 0;
 var peerCount = 0;

@@ -66,7 +66,6 @@ function PluginManager() {
 		 * @todo Add smoother transitions
 		 */
 		plugin.transition(function() {
-			console.log('whut');
 			if (current === plugin) {
 				return;
 			}
