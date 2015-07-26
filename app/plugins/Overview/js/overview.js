@@ -16,25 +16,15 @@ function callAPI() {
 	IPC.sendToHost('api-call', '/consensus');
 }
 
-function formatKSiacoin(baseUnits, precision) {
-	if (!precision) {
-		precision = 10;
-	}
-
-	var ksiaConversionFactor = Math.pow(10,27);
-	var display = parseFloat((baseUnits/ksiaConversionFactor).toFixed(1));
-
-	// Indicate if the user has some value with a last digit of '1'
-	if (baseUnits > 0 && string === parseFloat((0).toFixed(1))) {
-		string = parseFloat((0).toFixed(precision).substring(0,precision-1) + '1');
-	}
-
-	return display + ' KS';
+function formatSiacoin(baseUnits) {
+	var ConversionFactor = new BigNumber(10).pow(24);
+	var display = new BigNumber(baseUnits).dividedBy(ConversionFactor);
+	return display + ' SC';
 }
 
 // Update values per call
 IPC.on('/wallet/status', function(err, result) {
-	balance = formatKSiacoin(result.Balance) || balance;
+	balance = formatSiacoin(result.Balance) || balance;
 	document.getElementById('balance').innerHTML = 'Balance: ' + balance;
 });
 IPC.on('/gateway/status', function(err, result) {
@@ -49,6 +39,10 @@ IPC.on('/consensus', function(err, result) {
 function init() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	// IPC.sendToHost('devtools');
+	
+	// Ensure precision
+	BigNumber.config({ DECIMAL_PLACES: 24 })
+	BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
 	
 	// Call the API regularly to update page
 	updating = setInterval(callAPI, 1000);

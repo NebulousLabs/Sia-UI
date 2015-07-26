@@ -12,32 +12,25 @@ function callAPI() {
 	IPC.sendToHost('api-call', '/wallet/status');
 }
 
-function formatKSiacoin(baseUnits) {
-	var ksiaConversionFactor = new BigNumber(10).pow(27);
-	var display = new BigNumber(baseUnits).dividedBy(ksiaConversionFactor);
-
-	return display.toPrecision(35) + ' KS';
+function formatSiacoin(baseUnits) {
+	var ConversionFactor = new BigNumber(10).pow(24);
+	var display = new BigNumber(baseUnits).dividedBy(ConversionFactor);
+	return display + ' SC';
 }
 
 // Update values per call
 IPC.on('/wallet/status', function(err, result) {
-	balance = formatKSiacoin(result.Balance) || balance;
+	balance = formatSiacoin(result.Balance) || balance;
 	document.getElementById('balance').innerHTML = 'Balance: ' + balance;
-
-	document.getElementById('t1').innerHTML = 'T1: ' + formatKSiacoin(new BigNumber(10).pow(27));
-	document.getElementById('t2').innerHTML = 'T2: ' + formatKSiacoin(new BigNumber(10).pow(27).add(1000000000));
-	document.getElementById('t3').innerHTML = 'T3: ' + formatKSiacoin(new BigNumber(10).pow(27).add(2));
-	document.getElementById('t4').innerHTML = 'T4: ' + formatKSiacoin(new BigNumber(10).pow(27).sub(100000000));
-	document.getElementById('t5').innerHTML = 'T5: ' + formatKSiacoin(new BigNumber(10).pow(27).sub(2));
 });
 
 function init() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPC.sendToHost('devtools');
+	//IPC.sendToHost('devtools');
 	
 	// Ensure precision
-	BigNumber.config({ DECIMAL_PLACES: 500 })
-
+	BigNumber.config({ DECIMAL_PLACES: 24 })
+	BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
 
 	// Call the API regularly to update page
 	updating = setInterval(callAPI, 1000);

@@ -374,24 +374,39 @@ function kill() {
 This all functions well enough, but it's a bit of an amateur design when one
 actually uses the plugin. Numbers are jerky and we see a large amount of
 numbers for our balance since it's in 10^-24 Siacoin, or what we call
-baseunits, similar to Bitcoin and satoshis. Thus, we'll hack up a quick
-function to represent kilosiacoin balances to our users:
+baseunits, similar to Bitcoin and satoshis.
 
 ```js
-function formatKSiacoin(baseUnits, precision) {
-	if (!precision) {
-		precision = 10;
-	}
+function formatSiacoin(baseUnits) {
+	var ConversionFactor = Math.pow(10, 24);
+	var display = baseUnits / ConversionFactor);
+	return display + ' SC';
+}
+```
 
-	var ksiaConversionFactor = Math.pow(10,27);
-	var display = parseFloat((baseUnits/ksiaConversionFactor).toFixed(1));
+There's an issue with Javascript that we must circumvent, and that is that all
+numbers are stored as 64 bit floating point values. Thus rounding occurs when
+one, say, subtracts 1 from 3. When displayed to enough precision, we'll find
+that the value is actually something like 1.9999999 instead of 2. We'll
+incorporate the [bignumber.js library](https://github.com/MikeMcl/bignumber.js/) to solve our problems.
 
-	// Indicate if the user has some value with a last digit of '1'
-	if (baseUnits > 0 && string === parseFloat((0).toFixed(1))) {
-		string = parseFloat((0).toFixed(precision).substring(0,precision-1) + '1');
-	}
+```js
+// Library for arbitrary precision in numbers
+const BigNumber = require('bignumber.js');
 
-	return display + ' KS';
+function formatSiacoin(baseUnits) {
+	var ConversionFactor = new BigNumber(10).pow(24);
+	var display = new BigNumber(baseUnits).dividedBy(ConversionFactor);
+	return display + ' SC';
+}
+
+function init() {
+	// Ensure precision
+	BigNumber.config({ DECIMAL_PLACES: 24 })
+	BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
+	
+	// Call the API regularly to update page
+	updating = setInterval(callAPI, 1000);
 }
 ```
 
@@ -407,7 +422,7 @@ var blockHeight = 0;
 
 // Update values per call
 IPC.on('/wallet/status', function(err, result) {
-	balance = formatKSiacoin(result.Balance) || balance;
+	balance = formatSiacoin(result.Balance) || balance;
 	document.getElementById('balance').innerHTML = 'Balance: ' + balance;
 });
 IPC.on('/gateway/status', function(err, result) {
@@ -426,6 +441,8 @@ Finally, the aggregated Javascript code should look like this:
 'use strict';
 // Library for communicating with Sia-UI
 const IPC = require('ipc');
+// Library for arbitrary precision in numbers
+const BigNumber = require('bignumber.js');
 // Variables to store api result values
 var balance = 0;
 var peerCount = 0;
@@ -436,35 +453,25 @@ var updating;
 function callAPI() {
 	IPC.sendToHost('api-call', '/wallet/status');
 	IPC.sendToHost('api-call', '/gateway/status');
-	IPC.sendToHost('api-call', '/consensus/status');
+	IPC.sendToHost('api-call', '/consensus');
 }
 
-function formatKSiacoin(baseUnits, precision) {
-	if (!precision) {
-		precision = 10;
-	}
-
-	var ksiaConversionFactor = Math.pow(10,27);
-	var display = parseFloat((baseUnits/ksiaConversionFactor).toFixed(1));
-
-	// Indicate if the user has some value with a last digit of '1'
-	if (baseUnits > 0 && string === parseFloat((0).toFixed(1))) {
-		string = parseFloat((0).toFixed(precision).substring(0,precision-1) + '1');
-	}
-
-	return display + ' KS';
+function formatSiacoin(baseUnits) {
+	var ConversionFactor = new BigNumber(10).pow(24);
+	var display = new BigNumber(baseUnits).dividedBy(ConversionFactor);
+	return display + ' SC';
 }
 
 // Update values per call
 IPC.on('/wallet/status', function(err, result) {
-	balance = formatKSiacoin(result.Balance) || balance;
+	balance = formatSiacoin(result.Balance) || balance;
 	document.getElementById('balance').innerHTML = 'Balance: ' + balance;
 });
 IPC.on('/gateway/status', function(err, result) {
 	peerCount = result.Peers.length || peerCount;
 	document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
 });
-IPC.on('/consensus/status', function(err, result) {
+IPC.on('/consensus', function(err, result) {
 	blockHeight = result.Height || blockHeight;
 	document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
 });
@@ -472,6 +479,10 @@ IPC.on('/consensus/status', function(err, result) {
 function init() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	// IPC.sendToHost('devtools');
+	
+	// Ensure precision
+	BigNumber.config({ DECIMAL_PLACES: 24 })
+	BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
 	
 	// Call the API regularly to update page
 	updating = setInterval(callAPI, 1000);
