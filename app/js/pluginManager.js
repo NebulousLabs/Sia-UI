@@ -78,11 +78,8 @@ function PluginManager() {
 		plugin.on('ipc-message', function(event) {
 			switch(event.channel) {
 				case 'api-call':
-					// Send array of call params to Daemon, route result over
-					// channel of call's endpoint string
-					var callString = event.args[0];
-					Daemon.apiCall(event.args, function(err, callResult) {
-						plugin.sendToView(callString, err, callResult);
+					Daemon.apiCall(event.args[0], function(err, callResult) {
+						plugin.sendToView(event.args[0], err, callResult);
 					});
 					break;
 				case 'devtools':

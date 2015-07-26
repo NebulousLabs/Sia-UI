@@ -20,9 +20,19 @@ function DaemonManager() {
 	 */
 	var address;
 
+	/**
+	 * Relays calls to daemonAPI with the localhost:port address appended
+	 * @param {apiCall} call - function to run if Siad is running
+	 * @param {apiResponse} callback
+	 */
 	function apiCall(call, callback) {
+		// Interpret address-only calls as 'GET'
+		if (typeof call === 'string') {
+			call = {url: call};
+		}
+
 		// Add the localhost address and port to the url
-		call[0] = address + call[0];
+		call.url = address + call.url;
 		API.makeCall(call, callback);
 	}
 
@@ -38,7 +48,7 @@ function DaemonManager() {
 		if (!isNotRunning) {
 			isNotRunning = function() {};
 		}
-		apiCall(['/consensus/status'], function(err) {
+		apiCall('/consensus/status', function(err) {
 			if (!err) {
 				isRunning();
 			} else if (err) {

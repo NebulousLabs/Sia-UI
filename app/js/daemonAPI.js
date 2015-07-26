@@ -14,7 +14,6 @@
  * @property {Object} sendInfo - The arguments to send with the call
  */
 
-
 /**
  * Creates an XMLHttpRequest to send
  * @param {string} url - The address (usually localhost) and port of siad
@@ -63,9 +62,9 @@ function sendCall(url, type, sendInfo, callback) {
  */
 function discernCall(call, callback) {
 	// Extract call attributes, default call is 'GET'
-	var url = call[0];
-	var type = call[1] || 'GET';
-	var sendInfo = call[2] || {};
+	var url = call.url;
+	var type = call.type || 'GET';
+	var sendInfo = call.sendInfo || {};
 
 	// The function can use JSON, but turns them into strings first
 	var JSON;
