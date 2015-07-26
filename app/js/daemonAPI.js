@@ -1,6 +1,6 @@
 'use strict';
 /**
- * The config object derived from the config.json file used to store UI settings
+ * The callback from an apiCall
  * @callback apiResponse
  * @param {Object} error - null if the call was successful
  * @param {Object} response - The resulting data from making the call

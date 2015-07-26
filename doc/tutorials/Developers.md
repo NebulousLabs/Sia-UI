@@ -6,8 +6,7 @@ The root level structure is for all dev tool type things. You'll find
 node_modules install to here, documentation, and most anything whose file name
 starts with a '.'
 
-## app/
- The app folder contains Sia-UI's functional files.
+The app folder contains Sia-UI's functional files.
 
 'index.js' is the entry point which initializes a browser window using
 'index.html'. This is the only non-plugin html file since Sia-UI is intended to
@@ -46,7 +45,8 @@ from viewing code and documentation, see the package.json file and [this npm
 documentation](https://docs.npmjs.com/misc/scripts) [A useful guide about using
 NPM as a build tool](http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/)
 
-## [Electron](http://electron.atom.io/) is the core set of libararies that power the Atom text editor and is
+## [Electron](http://electron.atom.io/)
+It's the core set of libararies that power the Atom text editor and is
 useful for creating cross-platform desktop applications. 
 
 Making this a desktop application instead of a webapp gives us libraries to

@@ -1,26 +1,45 @@
 {
 	"tags": {
-		"allowUnknownTags": true,
-		"dictionaries": ["jsdoc","closure"]
+		"allowUnknownTags"      : true,
+		"dictionaries"          : ["jsdoc","closure"]
 	},
 	"source": {
-		"include": ["app/"],
-		"includePattern": ".+\\.js(doc)?$",
-		"excludePattern": "(^|\\/|\\\\)_"
+		"include"               : ["app/"],
+		"includePattern"        : ".+\\.js(doc)?$",
+		"excludePattern"        : "(^|\\/|\\\\)_"
 	},
 	"plugins": [
-		"plugins/markdown",
-		"plugins/summarize"
+		"plugins/markdown"
 	],
 	"opts": {
-		"package": "package.json",
-		"readme": "README.md",
-		"destination": "./doc/",
-		"recurse": true,
-		"verbose": true
+		"template"              : "./node_modules/ink-docstrap/template",
+		"tutorials"             : "./doc/tutorials/",
+		"package"               : "package.json",
+		"readme"                : "README.md",
+		"destination"           : "./doc/",
+		"recurse"               : true,
+		"verbose"               : true
 	},
 	"templates": {
-		"cleverLinks": false,
-		"monospaceLinks": false
+		"default": {
+			"staticFiles": {
+				"paths": ["./doc/assets/"]
+			}
+		},
+		"cleverLinks"			: true,
+		"monospaceLinks"        : true,
+		"systemName"            : "Sia-UI",
+		"footer"                : "NebulousLabs",
+		"copyright"             : "",
+		"navType"               : "vertical",
+		"theme"                 : "spacelab",
+		"linenums"              : true,
+		"collapseSymbols"       : true,
+		"inverseNav"            : true,
+		"outputSourceFiles"     : true,
+		"outputSourcePath"      : true,
+		"dateFormat"            : "MM/DD/YYYY",
+		"highlightTutorialCode" : true,
+		"syntaxTheme"           : "default"
 	}
 }
