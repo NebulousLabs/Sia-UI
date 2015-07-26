@@ -1,17 +1,18 @@
-// index.js, the entry point of the app, handles starting up the app window. It
-// runs index.html which, as a one window app, starts everything else.
-
-// Global variables and require statements available to all main processes
 'use strict';
 const App = require('app');
 const Path = require('path');
 const BrowserWindow = require('browser-window');
 const Tray = require('tray');
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the javascript object is GCed.
+
+/**
+ * Global reference to the window object, so the window won't be closed
+ * automatically upon execution and garbage collection
+ */
 var mainWindow;
 
-// startMainWindow creates the first window and loads and index.html.
+/**
+ * Creates the window and loads index.html
+ */
 function startMainWindow() {
 	// Open the UI with full screen size. 'screen' can only be required after
 	// app.on('ready') 
@@ -44,14 +45,16 @@ function startMainWindow() {
 	});
 }
 
-// Quit when all windows are closed.
+/**
+ * Quit when all windows are closed.
+ */
 App.on('window-all-closed', function() {
 	if (process.platform !== 'darwin') {
 		App.quit();
 	}
 });
 
-// When Electron loading has finished, start the daemon then the UI
-App.on('ready', function() {
-	startMainWindow();
-});
+/**
+ * When Electron loading has finished, start the daemon then the UI
+ */
+App.on('ready', startMainWindow);

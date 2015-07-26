@@ -24,7 +24,7 @@
     "sia-repo": "test -d $GOPATH/src/github.com/NebulousLabs/Sia || go get -u github.com/NebulousLabs/Sia/...",
     "sia-master": "(cd $GOPATH/src/github.com/NebulousLabs/Sia && git fetch && git pull && git checkout master && make dependencies && make)",
     "sia-import": "test -d app/dependencies/Sia || mkdir -p app/dependencies/Sia && cp $GOPATH/bin/siad app/dependencies/Sia",
-    "build": "electron-packager . Sia-UI --all --version=0.30.0 --out=build --ignore=node_modules|build --icon=app/assets/logo/sia.svg",
+    "build": "electron-packager . Sia-UI --all --version=0.30.0 --prune --ignore='doc|build' --out=build --icon=app/assets/logo/sia.svg",
     "build-lin64": "electron-packager . Sia-UI --platform=linux --arch=x64 --version=0.30.0 --out=build --icon=app/assets/logo/sia.svg",
     "build-lin32": "electron-packager . Sia-UI --platform=linux --arch=ia32 --version=0.30.0 --out=build --icon=app/assets/logo/sia.svg",
     "build-win64": "electron-packager . Sia-UI --platform=win32 --arch=x64 --version=0.30.0 --out=build --icon=app/assets/logo/sia.svg",
