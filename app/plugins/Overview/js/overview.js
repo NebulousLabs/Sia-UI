@@ -9,11 +9,13 @@ var peerCount = 0;
 var blockHeight = 0;
 // Keeps track of if the view is shown
 var updating;
+var listening = false;
 
-function callAPI() {
-	IPC.sendToHost('api-call', '/wallet/status');
-	IPC.sendToHost('api-call', '/gateway/status');
-	IPC.sendToHost('api-call', '/consensus');
+// call api and listen for response to call
+function callAPI(call, callback) {
+	IPC.sendToHost('api-call', call);
+	// prevents adding duplicate listeners
+	if (!listening) IPC.on(call, callback);
 }
 
 function formatSiacoin(baseUnits) {
@@ -22,30 +24,32 @@ function formatSiacoin(baseUnits) {
 	return display + ' SC';
 }
 
-// Update values per call
-IPC.on('/wallet/status', function(err, result) {
-	balance = formatSiacoin(result.Balance) || balance;
-	document.getElementById('balance').innerHTML = 'Balance: ' + balance;
-});
-IPC.on('/gateway/status', function(err, result) {
-	peerCount = result.Peers.length || peerCount;
-	document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
-});
-IPC.on('/consensus', function(err, result) {
-	blockHeight = result.Height || blockHeight;
-	document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
-});
+function update() {
+	callAPI('/wallet/status', function(err, result) {
+		balance = formatSiacoin(result.Balance) || balance;
+		document.getElementById('balance').innerHTML = 'Balance: ' + balance;
+	});
+	callAPI('/gateway/status', function(err, result) {
+		peerCount = result.Peers.length || peerCount;
+		document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
+	});
+	callAPI('/consensus', function(err, result) {
+		blockHeight = result.Height || blockHeight;
+		document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
+	});
+	listening = true;
+}
 
 function init() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPC.sendToHost('devtools');
+	//IPC.sendToHost('devtools');
 	
 	// Ensure precision
 	BigNumber.config({ DECIMAL_PLACES: 24 })
 	BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
 	
 	// Call the API regularly to update page
-	updating = setInterval(callAPI, 1000);
+	updating = setInterval(update, 1000);
 }
 
 function kill() {

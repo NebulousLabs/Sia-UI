@@ -2,7 +2,6 @@
 const Process = require("child_process").spawn;
 var API = require('./js/daemonAPI');
 
-
 /**
  * DaemonManager, a closure, initializes siad as a background process and
  * provides functions to interact with it
