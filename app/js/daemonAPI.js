@@ -11,20 +11,20 @@
  * @typedef {Object} apiCall
  * @property {string} url - The address (usually localhost) and port of siad
  * @property {string} type - The call type, such as 'POST' or 'GET'
- * @property {Object} sendInfo - The arguments to send with the call
+ * @property {Object} args - The arguments to send with the call
  */
 
 /**
  * Creates an XMLHttpRequest to send
  * @param {string} url - The address (usually localhost) and port of siad
  * @param {string} type - The call type, such as 'POST' or 'GET'
- * @param {Object} sendInfo - The arguments to send with the call
+ * @param {Object} args - The arguments to send with the call
  * @param {apiResponse} callback
  * @private
  */
-function sendCall(url, type, sendInfo, callback) {
+function sendCall(url, type, args, callback) {
 	// Detect improper calls, each one needs a url
-	if (!url || !type || !sendInfo) {
+	if (!url || !type || !args) {
 		process.nextTick(function() {
 			callback(new Error('Improper API call!'));
 		});
@@ -51,7 +51,7 @@ function sendCall(url, type, sendInfo, callback) {
 	};
 
 	// actually send the request
-	request.send(sendInfo);
+	request.send(args);
 } 
 
 /**
@@ -64,16 +64,16 @@ function discernCall(call, callback) {
 	// Extract call attributes, default call is 'GET'
 	var url = call.url;
 	var type = call.type || 'GET';
-	var sendInfo = call.sendInfo || {};
+	var args = call.args || {};
 
 	// The function can use JSON, but turns them into strings first
 	var JSON;
 	if (JSON && typeof JSON.parse === 'function') {
-		sendInfo = JSON.stringify(sendInfo);
+		args = JSON.stringify(args);
 	}
 
 	// Make the call
-	sendCall(url, type, sendInfo, callback);
+	sendCall(url, type, args, callback);
 }
 
 /**
@@ -95,8 +95,8 @@ module.exports = {
 	 * @param {string|Object} url - The arguments to send with the call
 	 * @param {apiResponse} callback
 	 */
-	postCall: function postCall(url, sendInfo, callback) {
-		sendCall(url, 'POST', sendInfo, callback);
+	postCall: function postCall(url, args, callback) {
+		sendCall(url, 'POST', args, callback);
 	},
 	/**
 	 * Performs any API call

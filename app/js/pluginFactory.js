@@ -42,10 +42,9 @@ module.exports = {
 		// Make webview element
 		var v = document.createElement('webview');
 		v.id = name + '-view';
-		v.className = 'plugin-view';
+		v.className = 'webview';
 		v.src = markupPath;
-		v.autosize = 'on';
-		
+
 		// Turn nodeintegration on so plugins can use electron & node libraries
 		v.nodeintegration = 'on';
 

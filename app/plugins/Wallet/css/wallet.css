@@ -53,26 +53,66 @@ body {
 	padding-right: 20px;
 }
 .frame {
-	color: #f5f5f5;
+	color: #c5c5c5;
 	font-size: 32px;
 	padding-top: 18px;
 	padding-bottom: 0px;
-	padding-left: 30px;
+	padding-left: 16px;
 	padding-right: 16px;
 }
-.frame .text {
-	color: #4a4a4a
+/**
+.addresses, .transactions{
+    color:@g600;
+    font-size:18px;
+    border:1px solid @g300;
+    border-radius:4px;
 }
-.welcome {
-	margin-top: 50px;
-	text-align: center;
+.addresses .items, .transactions .items{
+    padding:8px;
+    padding-right:16px;
+    overflow-x:hidden;
+    overflow-y:auto;
+    height:200px;
 }
-.welcome .large {
-	font-size: 72px;
-	color: #c5c5c5;
+.transactions{
+    margin-right:20px;
 }
-.welcome .small {
-	margin-top: 20px;
-	font-size: 32px;
-	color: #c5c5c5;
+.addresses .title, .transactions .title{
+    font-size:24px;
+    margin-bottom:4px;
+    border-bottom:1px solid @g300;
+    padding:8px;
+    padding-left:16px;
 }
+.addresses .item .address{
+    .i;
+    font-size:14px;
+    font-family: "Courier New";
+}
+.addresses .item .amt{
+    .i;
+    display:none;
+    font-size:14px;
+}
+.transactions{
+}
+.transactions .item .date{
+    .i;
+}
+.transactions .item .icon{
+    .i;
+    float:right;
+    margin-right:8px;
+}
+.transactions .item .amt{
+    .i;
+    width:80px;
+    text-align:left;
+    float:right;
+}
+.account-control-buttons{
+    text-align:right;
+    padding-top:16px;
+    padding-right:32px;
+}
+*/

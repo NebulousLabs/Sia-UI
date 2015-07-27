@@ -18,6 +18,7 @@ html,body {
 	border-spacing: 0px;
 
 	height: 100%;
+	width: 100%;
 
 	font-family: 'Roboto Condensed', sans-serif;
 	font-weight: 300;
@@ -38,7 +39,6 @@ html,body {
 	height: -webkit-calc(100% - 80px);
 	-webkit-box-sizing:border-box;
 }
-
 
 /* UI Header */
 .header {
