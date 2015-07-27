@@ -18,6 +18,14 @@ function callAPI(call, callback) {
 	if (!listening) IPC.on(call, callback);
 }
 
+// updates DOM element
+function updateField(err, caption, newValue, elementID) {
+	if (err || newValue === null) {
+		console.error(err);
+	}
+	document.getElementById(elementID).innerHTML = caption + newValue;
+}
+
 function formatSiacoin(baseUnits) {
 	var ConversionFactor = new BigNumber(10).pow(24);
 	var display = new BigNumber(baseUnits).dividedBy(ConversionFactor);
@@ -26,23 +34,20 @@ function formatSiacoin(baseUnits) {
 
 function update() {
 	callAPI('/wallet/status', function(err, result) {
-		balance = formatSiacoin(result.Balance) || balance;
-		document.getElementById('balance').innerHTML = 'Balance: ' + balance;
+		updateField(err, 'Balance: ', formatSiacoin(result.Balance), 'balance');
 	});
 	callAPI('/gateway/status', function(err, result) {
-		peerCount = result.Peers.length || peerCount;
-		document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
+		updateField(err, 'Peers: ', result.Peers.length, 'peers');
 	});
-	callAPI('/consensus', function(err, result) {
-		blockHeight = result.Height || blockHeight;
-		document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
+	callAPI('/consensus/status', function(err, result) {
+		updateField(err, 'Block Height: ', result.Height, 'block-height');
 	});
 	listening = true;
 }
 
 function init() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
-	//IPC.sendToHost('devtools');
+	IPC.sendToHost('devtools');
 	
 	// Ensure precision
 	BigNumber.config({ DECIMAL_PLACES: 24 })
