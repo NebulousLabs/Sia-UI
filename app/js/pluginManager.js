@@ -1,28 +1,38 @@
-// pluginManager.js manages all plugin logic for the UI
 'use strict';
-var SiaPlugin = require('./js/plugin');
+var Plugin = require('./js/plugin');
 
-// pluginManager can be called with a config object to initialize plugins
-var Plugins = (function() {
+/**
+ * PluginManager manages all plugin logic for the UI
+ * @class PluginManager
+ */
+function PluginManager() {
+	/**
+	 * The home view to be opened first
+	 * @member {string} PluginManager~home
+	 */
 	var home;
+	/**
+	 * The plugins folder
+	 * @member {string} PluginManager~plugPath
+	 */
 	var plugPath;
+	/**
+	 * The current plugin
+	 * @member {Plugin} PluginManager~current
+	 */
 	var current;
+	/**
+	 * Array to store all plugins
+	 * @member {Plugin[]} PluginManager~plugins
+	 */
 	var plugins = [];
-	var siadAddress;
 
-	// setConfig() sets the member variables based on the passed config
-	// Callback, if there is one, returns no arguments
-	// TODO: delete all plugins when a new path is set?
-	function setConfig(config, callback) {
-		home = config.homePlugin;
-		plugPath = config.pluginsPath;
-		siadAddress = config.siadAddress;
-		callback();
-	}
-
-	// setHome detects the home Plugin or otherwise the alphabetically first
-	// plugin and sets its button to be first as well as it to be the first
-	// view
+	/**
+	 * Detects the home Plugin or otherwise the alphabetically first
+	 * plugin and sets its button and view to be first in order
+	 * @function PluginManager~setHome
+	 * @param {string[]} pluginNames - array of subdirectories of app/plugins/
+	 */
 	function setHome(pluginNames) {
 		// Detect if home plugin is installed
 		var homeIndex = pluginNames.indexOf(home);
@@ -36,7 +46,11 @@ var Plugins = (function() {
 		home = pluginNames[0];
 	}
 
-	// addListeners(plugin) handles listening for plugin messages 
+	/**
+	 * Handles listening for plugin messages and reacting to them
+	 * @function PluginManager~addListeners
+	 * @param {Plugin} plugin - a newly made plugin object
+	 */
 	function addListeners(plugin) {
 		// Only show the default plugin view
 		if (plugin.name === home) {
@@ -46,8 +60,11 @@ var Plugins = (function() {
 			plugin.on('did-finish-load', plugin.hide);
 		}
 
-		// Add standard transition upon button click
-		// TODO: Add smoother transitions
+		/** 
+		 * Standard transition upon button click.
+		 * @typedef transition
+		 * @todo Add smoother transitions
+		 */
 		plugin.transition(function() {
 			if (current === plugin) {
 				return;
@@ -61,11 +78,8 @@ var Plugins = (function() {
 		plugin.on('ipc-message', function(event) {
 			switch(event.channel) {
 				case 'api-call':
-					// Send array of call params to Daemon, route result over
-					// channel of call's endpoint string
-					var callString = event.args[0];
-					Daemon.call(event.args, function(err, callResult) {
-						plugin.sendToView(callString, err, callResult);
+					Daemon.apiCall(event.args[0], function(err, callResult) {
+						plugin.sendToView(event.args[0], err, callResult);
 					});
 					break;
 				case 'devtools':
@@ -82,10 +96,14 @@ var Plugins = (function() {
 		});	
 	}
 
-	// addPlugin() constructs the plugins and adds them
+	/**
+	 * Constructs the plugins and adds them to this manager 
+	 * @function PluginManager~addPlugin
+	 * @param {string} name - The plugin folder's name
+	 */
 	function addPlugin(name) {
 		// Make the plugin, giving its button a standard transition
-		var plugin = new SiaPlugin(plugPath, name);
+		var plugin = new Plugin(plugPath, name);
 
 		// addListeners deals with any webview related async tasks
 		addListeners(plugin);
@@ -94,7 +112,10 @@ var Plugins = (function() {
 		plugins.push(plugin);
 	}
 
-	// initPlugins() initializes the plugins to the UI
+	/**
+	 * Reads the config's plugPath for plugin folders
+	 * @function PluginManager~initPlugins
+	 */
 	function initPlugins() {
 		Fs.readdir(plugPath, function (err, pluginNames) {
 			if (err) {
@@ -109,17 +130,26 @@ var Plugins = (function() {
 		});
 	}
 
-	// init() sets config and initializes the plugins
-	function init(config) {
-		// TODO: This is hardcoded. daemonManager could be a plugin, siad
-		// be a plugin itself, or even have a new class of initialized
-		// components called dependencies.
-		setConfig(config, initPlugins);
-	}
-
-	// expose 'public' elements and functions
-	return {
-		setConfig: setConfig,
-		init: init
+	/**
+	 * Sets the member variables based on the passed config
+	 * @function PluginManager~setConfig
+	 * @param {config} config - config in memory
+	 * @param {callback} callback
+	 * @todo delete all plugins when a new path is set?
+	 */
+	function setConfig(config, callback) {
+		home = config.homePlugin;
+		plugPath = config.pluginsPath;
+		callback();
 	};
-}());
+
+	/**
+	 * Initializes the plugins to the UI
+	 * @function PluginManager~init
+	 * @param {config} config - config in memory
+	 */
+	this.init = function(config) {
+		setConfig(config, initPlugins);
+	};
+}
+var Plugins = new PluginManager();

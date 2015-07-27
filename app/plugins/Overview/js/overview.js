@@ -11,7 +11,7 @@ var updating;
 function callAPI() {
 	IPC.sendToHost('api-call', '/wallet/status');
 	IPC.sendToHost('api-call', '/gateway/status');
-	IPC.sendToHost('api-call', '/consensus/status');
+	IPC.sendToHost('api-call', '/consensus');
 }
 
 function formatKSiacoin(baseUnits, precision) {
@@ -39,7 +39,7 @@ IPC.on('/gateway/status', function(err, result) {
 	peerCount = result.Peers.length || peerCount;
 	document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
 });
-IPC.on('/consensus/status', function(err, result) {
+IPC.on('/consensus', function(err, result) {
 	blockHeight = result.Height || blockHeight;
 	document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
 });

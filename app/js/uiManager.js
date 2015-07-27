@@ -1,17 +1,25 @@
-// UI.js, the first renderer process, handles initializing all other managers
 'use strict';
 const WebFrame = require('web-frame');
 const ElectronScreen = require('screen');
 const Path = require('path');
 const Fs = require('fs');
 const Shell = require('shell');
-var Config = require('./js/config.js');
+var Config = require('./js/uiConfig.js');
 
-// UI exports one function, init, called by index.html
-var UI = (function() {
-	// config.json variables
+/**
+ * The first renderer process, handles initializing all other managers
+ * @class UIManager
+ */
+function UIManager() {
+	/**
+	 * Config.json variables
+	 * @member {string} UIManager~configPath
+	 */
 	var configPath = Path.join(__dirname, 'config.json');
-	// config variable held in working memory
+	/**
+	 * Config variable held in working memory
+	 * @member {config} UIManager~memConfig
+	 */
 	var memConfig;
 
 	// TODO: upon release, enable this
@@ -41,9 +49,13 @@ var UI = (function() {
 	}
 	*/
 
-	// adjustZoom() makes the app more readable on high dpi screens. 
-	// TODO: Take better approach, resolution doesn't mean high dpi. Though
-	// supposedly there's not a sure-fire way to find dpi on all platforms.
+	/**
+	 * Makes the app more readable on high dpi screens. 
+	 * @function UIManager~adjustHighResZoom
+	 * @param {config} config - config in memory
+	 * @todo Take better approach, resolution doesn't mean high dpi. Though
+	 * supposedly there's not a sure-fire way to find dpi on all platforms.
+	 */
 	function adjustHighResZoom(config) {
 		// Calculated upon function call to get appropriate zoom (even if the
 		// primary display were to change).
@@ -55,24 +67,25 @@ var UI = (function() {
 		}
 	}
 
-	// init(), called at window.onready, initalizes the view
-	function init() {
-		Config.load(configPath, function(config) {
-			memConfig = config;
-			adjustHighResZoom(config);
-			Plugins.init(config);
-			Daemon.init(config);
-		});
-	}
+	/**
+	* Called at window.onready, initalizes the UI
+	* @function UIManager#init
+	*/
+	this.init = function() {
+	   Config.load(configPath, function(config) {
+		   memConfig = config;
+		   adjustHighResZoom(config);
+		   Plugins.init(config);
+		   Daemon.init(config);
+	   });
+   },
 
-	function close() {
-		Config.save(memConfig, configPath);
-	}
-
-	// expose 'public' elements
-	return {
-		init: init,
-		close: close,
-	};
-}());
-
+   /**
+	* Called at window.beforeunload, closes the UI
+	* @function UIManager#kill
+	*/
+   this.kill = function() {
+	   Config.save(memConfig, configPath);
+   }
+};
+var UI = new UIManager();
