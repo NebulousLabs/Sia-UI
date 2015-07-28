@@ -141,7 +141,7 @@ function PluginManager() {
 		home = config.homePlugin;
 		plugPath = config.pluginsPath;
 		callback();
-	};
+	}
 
 	/**
 	 * Initializes the plugins to the UI
@@ -152,4 +152,3 @@ function PluginManager() {
 		setConfig(config, initPlugins);
 	};
 }
-var Plugins = new PluginManager();

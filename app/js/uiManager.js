@@ -1,9 +1,4 @@
 'use strict';
-const WebFrame = require('web-frame');
-const ElectronScreen = require('screen');
-const Path = require('path');
-const Fs = require('fs');
-const Shell = require('shell');
 var Config = require('./js/uiConfig.js');
 
 /**
@@ -78,7 +73,7 @@ function UIManager() {
 		   Plugins.init(config);
 		   Daemon.init(config);
 	   });
-   },
+   };
 
    /**
 	* Called at window.beforeunload, closes the UI
@@ -86,6 +81,5 @@ function UIManager() {
 	*/
    this.kill = function() {
 	   Config.save(memConfig, configPath);
-   }
-};
-var UI = new UIManager();
+   };
+}

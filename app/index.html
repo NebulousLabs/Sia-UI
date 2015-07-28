@@ -35,10 +35,20 @@
 			</div>
 		</div>
 		<!-- Javascript -->
+		<script> 
+			const WebFrame = require('web-frame');
+			const ElectronScreen = require('screen');
+			const Path = require('path');
+			const Fs = require('fs');
+			const Shell = require('shell');
+		</script>
 		<script src='js/daemonManager.js'></script>
 		<script src='js/pluginManager.js'></script>
 		<script src='js/uiManager.js'></script>
 		<script>
+			var UI = new UIManager();
+			var Daemon = new DaemonManager();
+			var Plugins = new PluginManager();
 			window.onload = UI.init;
 			window.onbeforeunload = UI.kill;
 		</script>

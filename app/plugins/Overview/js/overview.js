@@ -52,8 +52,8 @@ function init() {
 	// IPC.sendToHost('devtools');
 	
 	// Ensure precision
-	BigNumber.config({ DECIMAL_PLACES: 24 })
-	BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
+	BigNumber.config({ DECIMAL_PLACES: 24 });
+	BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 	
 	// Call the API regularly to update page
 	updating = setInterval(update, 1000);

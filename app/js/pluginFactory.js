@@ -1,5 +1,4 @@
 'use strict';
-const WebFrame = require('web-frame');
 
 /**
  * Creates the image element for a button

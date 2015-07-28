@@ -1,5 +1,4 @@
 'use strict';
-const Path = require('path');
 var Factory = require('./pluginFactory');
 
 /**
@@ -87,7 +86,6 @@ function Plugin(plugPath, name) {
 		   }
 		   return;
 	   },
-	}
-	
-};
+	};
+}
 module.exports = Plugin;

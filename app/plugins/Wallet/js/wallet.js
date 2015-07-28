@@ -8,12 +8,15 @@ var wallet = {};
 // Keeps track of if the view is shown
 var updating;
 // DOM shortcut
-var element = document.getElementById;
+var element = function makeAlias() {
+	return document.getElementById.apply(document, arguments);
+};
 
 function callAPI(call, callback) {
 	IPC.sendToHost('api-call', call);
-	if (callback)
-		IPC.on(call, callback)
+	if (callback) {
+		IPC.on(call, callback);
+	}
 }
 
 function formatSiacoin(baseUnits) {
@@ -22,7 +25,7 @@ function formatSiacoin(baseUnits) {
 	return display + ' SC';
 }
 
-function createdAddress() {
+function createAddress() {
 	callAPI("/wallet/address", function(err, result) {
 		wallet.addresses.push(result.Address);
 	});
@@ -32,7 +35,7 @@ function sendAmount(amount, destination) {
 	var transaction = {
 		amount: amount,
 		destination: destination,
-	}
+	};
 	var call = {
 		url: "/wallet/send",
 		type: "POST",
@@ -42,38 +45,30 @@ function sendAmount(amount, destination) {
 }
 
 function initListeners() {
-	element('create-address').onclick = function(){
+	element('create-address').onclick = function() {
 		//ui._tooltip(this, "Creating Address");
 		createAddress();
-	});
-	element('send-money').onclick = function(){
+	};
+	element('send-money').onclick = function() {
 		//ui._transferFunds.setFrom("account", accountName);
 		//ui._transferFunds.setTo("address");
 		//ui.switchView("transfer-funds");
-	});
+	};
 }
 
 function init() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
-	IPC.sendToHost('devtools');
+	// IPC.sendToHost('devtools');
 	
 	// Ensure precision
-	BigNumber.config({ DECIMAL_PLACES: 24 })
-	BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
-
-	// Populate addresses
-	wallet.addresses.forEach(function(address) {
-		var item = element('blueprint').cloneNode(true);
-		item.find(".address").textContent(address);
-		eItems.push(item);
-		element('list').appendChild(item);
-	}
+	BigNumber.config({ DECIMAL_PLACES: 24 });
+	BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 
 	// Enable click events
 	initListeners();
  
 	// Call the API regularly to update page
-	updating = setInterval(update, 1000);
+	// updating = setInterval(update, 1000);
 }
 
 function kill() {
@@ -87,6 +82,14 @@ function update() {
 		wallet.addresses = result.VisibleAddresses || wallet.addresses;
 	
 		element('balance').innerHTML = 'Balance: ' + formatSiacoin(wallet.balance);
+
+		// Populate addresses
+		wallet.addresses.forEach(function(address) {
+			var item = element('blueprint').cloneNode(true);
+			item.find(".address").textContent(address);
+			element('list').appendChild(item);
+		});
+
 	});
 }
 
