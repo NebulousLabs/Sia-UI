@@ -72,10 +72,10 @@ placed png file and folder name for a button.
 
 The plugin directory should now be:
 
-```text
-Sia-UI/app/plugins/Overview/
-└── assets/
-    └── button.png
+```diff
+ Sia-UI/app/plugins/Overview/
+ └── assets/
+     └── button.png
 ```
 
 The Overview uses the 'bars' [font awesome icon in png form](http://fa2png.io/).
@@ -136,11 +136,11 @@ unique id's to update each of them separately later in JS.
 
 The plugin directory should now be:
 
-```text
-Sia-UI/app/plugins/Overview/
-├── index.html
-└── assets/
-    └── button.png
+```diff
+ Sia-UI/app/plugins/Overview/
++├── index.html
+ └── assets/
+     └── button.png
 ```
 Loading up Sia-UI again, we'll see: ![Impressive plugin ain't it?](/doc/assets/basic-overview.png)
 
@@ -166,7 +166,6 @@ our custom plugin CSS through adding two lines in the head section:
 		<link rel='stylesheet' href='assets/roboto-condensed-min.css'>
 		<link rel='stylesheet' href='css/overview.css'>
 	</head>
-
 ```
 
 With a cool font, we need a cool layout. The following css was adopted from the
@@ -238,7 +237,7 @@ body {
 	padding-right: 16px;
 }
 .frame .text {
-	color: #c5c5c5;
+	color: #4a4a4a
 }
 .welcome {
 	margin-top: 50px;
@@ -259,14 +258,14 @@ Quite a lot to take in without review, but that's how styling webpages goes.
 
 The plugin directory should reflect our css files:
 
-```text
-Sia-UI/app/plugins/Overview/
-├── index.html
-├── assets/
-│   ├── button.png
-│   └── roboto-condensed-min.css
-└── css/
-    └── overview.css
+```diff
+ Sia-UI/app/plugins/Overview/
+ ├── index.html
+ ├── assets/
+ │   ├── button.png
++│   └── roboto-condensed-min.css
++└── css/
++    └── overview.css
 ```
 
 Loading up Sia-UI again, we'll see: ![Impressive plugin ain't it?](/doc/assets/styled-overview.png)
@@ -319,6 +318,7 @@ function along the message channel 'api-call' and pass in the string of the
 call address (for GET calls only).
 
 ```js
+// Send API calls to the UI
 function callAPI() {
 	IPC.sendToHost('api-call', '/wallet/status');
 	IPC.sendToHost('api-call', '/gateway/status');
@@ -356,6 +356,7 @@ being executed periodically using native Javascript's setInterval().
 // Keeps track of if the view is shown
 var updating;
 
+// Called upon showing
 function init() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	// IPC.sendToHost('devtools');
@@ -364,6 +365,7 @@ function init() {
 	updating = setInterval(callAPI, 1000);
 }
 
+// Called upon transitioning away from this view
 function kill() {
 	clearInterval(updating);
 }
@@ -377,6 +379,7 @@ numbers for our balance since it's in 10^-24 Siacoin, or what we call
 baseunits, similar to Bitcoin and satoshis.
 
 ```js
+// Convert to Siacoin
 function formatSiacoin(baseUnits) {
 	var ConversionFactor = Math.pow(10, 24);
 	var display = baseUnits / ConversionFactor);
@@ -394,13 +397,20 @@ incorporate the [bignumber.js library](https://github.com/MikeMcl/bignumber.js/)
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
 
+// Convert to Siacoin
 function formatSiacoin(baseUnits) {
+	var ConversionFactor = Math.pow(10, 24);
+	var display = baseUnits / ConversionFactor);
 	var ConversionFactor = new BigNumber(10).pow(24);
 	var display = new BigNumber(baseUnits).dividedBy(ConversionFactor);
 	return display + ' SC';
 }
 
+// Called upon showing
 function init() {
+	// DEVTOOL: uncomment to bring up devtools on plugin view
+	// IPC.sendToHost('devtools');
+
 	// Ensure precision
 	BigNumber.config({ DECIMAL_PLACES: 24 })
 	BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
@@ -410,52 +420,57 @@ function init() {
 }
 ```
 
-We should have global variables that are updated and not just update the markup
-directly, so as to maintain non-initial values and avoid that 0 to actual
-number jerk each and every time a user opens up our plugin.
+We should log errors and ensure that we have a result to show before we update
+the markup so as to maintain values and avoid displaying glitchy values like
+null or NaN.
 
 ```js
-// Variables to store api result values
-var balance = 0;
-var peerCount = 0;
-var blockHeight = 0;
-
 // Update values per call
 IPC.on('/wallet/status', function(err, result) {
-	balance = formatSiacoin(result.Balance) || balance;
-	document.getElementById('balance').innerHTML = 'Balance: ' + balance;
+	if (err) {
+		console.error(err);
+	}
+	if (result) {
+		document.getElementById('balance').innerHTML = 'Balance: ' + balance;
+	}
 });
 IPC.on('/gateway/status', function(err, result) {
-	peerCount = result.Peers.length || peerCount;
-	document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
+	if (err) {
+		console.error(err);
+	}
+	if (result) {
+		document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
+	}
 });
 IPC.on('/consensus/status', function(err, result) {
-	blockHeight = result.Height || blockHeight;
-	document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
+	if (err) {
+		console.error(err);
+	}
+	if (result) {
+		document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
+	}
 });
 ```
 
 Finally, the aggregated Javascript code should look like this:
 
-```
+```js
 'use strict';
 // Library for communicating with Sia-UI
 const IPC = require('ipc');
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
-// Variables to store api result values
-var balance = 0;
-var peerCount = 0;
-var blockHeight = 0;
 // Keeps track of if the view is shown
 var updating;
 
+// Send API calls to the UI
 function callAPI() {
 	IPC.sendToHost('api-call', '/wallet/status');
 	IPC.sendToHost('api-call', '/gateway/status');
 	IPC.sendToHost('api-call', '/consensus');
 }
 
+// Convert to Siacoin
 function formatSiacoin(baseUnits) {
 	var ConversionFactor = new BigNumber(10).pow(24);
 	var display = new BigNumber(baseUnits).dividedBy(ConversionFactor);
@@ -464,18 +479,31 @@ function formatSiacoin(baseUnits) {
 
 // Update values per call
 IPC.on('/wallet/status', function(err, result) {
-	balance = formatSiacoin(result.Balance) || balance;
-	document.getElementById('balance').innerHTML = 'Balance: ' + balance;
+	if (err) {
+		console.error(err);
+	}
+	if (result) {
+		document.getElementById('balance').innerHTML = 'Balance: ' + balance;
+	}
 });
 IPC.on('/gateway/status', function(err, result) {
-	peerCount = result.Peers.length || peerCount;
-	document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
+	if (err) {
+		console.error(err);
+	}
+	if (result) {
+		document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
+	}
 });
-IPC.on('/consensus', function(err, result) {
-	blockHeight = result.Height || blockHeight;
-	document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
+IPC.on('/consensus/status', function(err, result) {
+	if (err) {
+		console.error(err);
+	}
+	if (result) {
+		document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
+	}
 });
 
+// Called upon showing
 function init() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	// IPC.sendToHost('devtools');
@@ -488,21 +516,22 @@ function init() {
 	updating = setInterval(callAPI, 1000);
 }
 
+// Called upon transitioning away from this view
 function kill() {
 	clearInterval(updating);
 }
 ```
 
-```text
-Sia-UI/app/plugins/Overview/
-├── index.html
-├── assets/
-│   ├── button.png
-│   └── roboto-condensed-min.css
-├── css/
-│   └── overview.css
-└── js/
-	└── overview.js
+```diff
+ Sia-UI/app/plugins/Overview/
+ ├── index.html
+ ├── assets/
+ │   ├── button.png
+ │   └── roboto-condensed-min.css
+ ├── css/
+ │   └── overview.css
++└── js/
++    └── overview.js
 ```
 
 Loading up Sia-UI again, we'll all see something different because the numbers
@@ -510,3 +539,164 @@ should be pulled from the API and one's siad-state. In our case, the view shows
 the highly active dev network:
 ![Impressive plugin ain't it?](/doc/assets/dev-overview.png)
 
+### Bonus: Abstracting the Extra Mile
+
+Since any plugin is probably going to make many more calls than just the three
+that Overview uses, we can abstract the functions we've already defined so as
+to reduce unnecessary use of IPC, one of the few non-webdev-native tools used.
+
+Instead of callAPI() sending three hardcoded calls and having IPC listen on the
+channel of each call, we could make a more abstract function that both sends
+the call and listens for the response:
+
+```js
+// Keeps track of if listeners were already instantiated
+var listening = false;
+
+// Call API and listen for response to call
+function callAPI(call, callback) {
+	IPC.sendToHost('api-call', call);
+	// prevents adding duplicate listeners
+	if (!listening) IPC.on(call, callback);
+}
+```
+
+We can call it and use it like this:
+
+```diff
+-// Update values per call
+-IPC.on('/wallet/status', function(err, result) {
+-	if (err) {
+-		console.error(err);
+-	}
+-	if (result) {
+-		document.getElementById('balance').innerHTML = 'Balance: ' + balance;
+-	}
+-});
++// Define API calls and update values per call
++function update() {
++	callAPI('/wallet/status', function(err, result) {
++		if (err) {
++			console.error(err);
++		}
++		if (result) {
++			document.getElementById('balance').innerHTML = 'Balance: ' + balance;
++		}
++	});
++	/* The same approach for the other two calls */
++	listening = true;
++}
+```
+
+Keep in mind that any listener, `IPC.on(call, callback)` in this case,
+continues to listen after instantiation, so we keep a boolean, `listening`, to
+check if our plugin already has its listeners:
+
+Now we reflect the changed nature of our functions in our `init()`:
+
+```diff
+	// Call the API regularly to update page
+-	updating = setInterval(callAPI, 1000);
++	updating = setInterval(update, 1000);
+```
+
+While we're on a role with abstracting, we can see that we still have
+have repetitive code. Let's take the DOM editing lines and error checking into
+a function we can reuse:
+
+```diff
++// Updates element text
++function updateField(err, caption, newValue, elementID) {
++	if (err) {
++		console.error(err);
++	}
++	if (newValue !== null) {
++		document.getElementById(elementID).innerHTML = caption + newValue;
++	}
++}
++
+// Define API calls and update DOM per call
+function update() {
+	callAPI('/wallet/status', function(err, result) {
+-		if (err) {
+-			console.error(err);
+-		}
+-		if (result) {
+-			document.getElementById('balance').innerHTML = 'Balance: ' + balance;
+-		}
++		updateField(err, 'Balance: ', formatSiacoin(result.Balance), 'balance');
+	});
+	/* The same approach for the other two calls */
+	listening = true;
+}
+```
+
+Now the aggregated code again with these abstractions applied:
+
+```js
+'use strict';
+// Library for communicating with Sia-UI
+const IPC = require('ipc');
+// Library for arbitrary precision in numbers
+const BigNumber = require('bignumber.js');
+// Keeps track of if the view is shown
+var updating;
+// Keeps track of if listeners were already instantiated
+var listening = false;
+
+// Call API and listen for response to call
+function callAPI(call, callback) {
+	IPC.sendToHost('api-call', call);
+	// prevents adding duplicate listeners
+	if (!listening) IPC.on(call, callback);
+}
+
+// Updates element text
+function updateField(err, caption, newValue, elementID) {
+	if (err) {
+		console.error(err);
+	}
+	if (newValue !== null) {
+		document.getElementById(elementID).innerHTML = caption + newValue;
+	}
+}
+
+// Convert to Siacoin
+function formatSiacoin(baseUnits) {
+	var ConversionFactor = new BigNumber(10).pow(24);
+	var display = new BigNumber(baseUnits).dividedBy(ConversionFactor);
+	return display + ' SC';
+}
+
+// Define API calls and update DOM per call
+function update() {
+	callAPI('/wallet/status', function(err, result) {
+		updateField(err, 'Balance: ', formatSiacoin(result.Balance), 'balance');
+	});
+	callAPI('/gateway/status', function(err, result) {
+		updateField(err, 'Peers: ', result.Peers.length, 'peers');
+	});
+	callAPI('/consensus/status', function(err, result) {
+		updateField(err, 'Block Height: ', result.Height, 'block-height');
+	});
+	listening = true;
+}
+
+// Called upon showing
+function init() {
+	// DEVTOOL: uncomment to bring up devtools on plugin view
+	// IPC.sendToHost('devtools');
+	
+	// Ensure precision
+	BigNumber.config({ DECIMAL_PLACES: 24 })
+	BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
+	
+	// Call the API regularly to update page
+	updating = setInterval(update, 1000);
+}
+
+// Called upon transitioning away from this view
+function kill() {
+	clearInterval(updating);
+}
+```

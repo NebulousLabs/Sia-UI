@@ -3,35 +3,36 @@
 const IPC = require('ipc');
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
-// Variables to store api result values
-var balance = 0;
-var peerCount = 0;
-var blockHeight = 0;
 // Keeps track of if the view is shown
 var updating;
+// Keeps track of if listeners were already instantiated
 var listening = false;
 
-// call api and listen for response to call
+// Call API and listen for response to call
 function callAPI(call, callback) {
 	IPC.sendToHost('api-call', call);
 	// prevents adding duplicate listeners
 	if (!listening) IPC.on(call, callback);
 }
 
-// updates DOM element
+// Updates element text
 function updateField(err, caption, newValue, elementID) {
-	if (err || newValue === null) {
+	if (err) {
 		console.error(err);
 	}
-	document.getElementById(elementID).innerHTML = caption + newValue;
+	if (newValue !== null) {
+		document.getElementById(elementID).innerHTML = caption + newValue;
+	}
 }
 
+// Convert to Siacoin
 function formatSiacoin(baseUnits) {
 	var ConversionFactor = new BigNumber(10).pow(24);
 	var display = new BigNumber(baseUnits).dividedBy(ConversionFactor);
 	return display + ' SC';
 }
 
+// Define API calls and update DOM per call
 function update() {
 	callAPI('/wallet/status', function(err, result) {
 		updateField(err, 'Balance: ', formatSiacoin(result.Balance), 'balance');
@@ -45,9 +46,10 @@ function update() {
 	listening = true;
 }
 
+// Called upon showing
 function init() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
-	IPC.sendToHost('devtools');
+	// IPC.sendToHost('devtools');
 	
 	// Ensure precision
 	BigNumber.config({ DECIMAL_PLACES: 24 })
@@ -57,6 +59,7 @@ function init() {
 	updating = setInterval(update, 1000);
 }
 
+// Called upon transitioning away from this view
 function kill() {
 	clearInterval(updating);
 }
