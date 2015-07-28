@@ -16,7 +16,7 @@
 
 		<!-- Frame -->
 		<div class='frame'>
-			<div class='addresses'>
+			<div class='box'>
 				<div class='row'>
 					<div class='title'>
 						Addresses
@@ -25,14 +25,26 @@
 						<i class='fa fa-fw fa-plus'></i>
 						Create Address
 					</div>
+				</div>
+				<div class='list' id='address-list'>
+					<div class='entry' id='blueprint'>
+						<div class='address'></div>
+					</div>
+				</div>
+			</div>
+			<div class='box'>
+				<div class='row'>
+					<div class='title'>
+						Transaction
+					</div>
 					<div class='button' id='send-money'>
 						<i class='fa fa-fw fa-send'></i>
 						Send Money
 					</div>
 				</div>
-				<div class='list'>
-					<div class='item' id='blueprint'>
-						<div class='address'></div>
+				<div class='list' id='transaction-list'>
+					<div class='entry' id='blueprint'>
+						<div class='transaction'></div>
 					</div>
 				</div>
 			</div>

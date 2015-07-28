@@ -12,7 +12,9 @@ var listening = false;
 function callAPI(call, callback) {
 	IPC.sendToHost('api-call', call);
 	// prevents adding duplicate listeners
-	if (!listening) IPC.on(call, callback);
+	if (!listening) {
+		IPC.on(call, callback);
+	}
 }
 
 // Updates element text

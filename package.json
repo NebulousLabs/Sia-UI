@@ -19,7 +19,7 @@
     "clean": "rm -rf build node_modules app/dependencies app/config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
     "debug": "node-inspector & electron --debug=5858 . & xdg-open http://127.0.0.1:8080/debug?ws=127.0.0.1:8080&port=5858",
-    "lint": "jshint . --verbose --exclude=node_modules",
+    "lint": "jshint . --verbose --exclude-path=.jshintignore",
     "doc": "jsdoc -c .jsdocrc",
     "sia-repo": "test -d $GOPATH/src/github.com/NebulousLabs/Sia || go get -u github.com/NebulousLabs/Sia/...",
     "sia-master": "(cd $GOPATH/src/github.com/NebulousLabs/Sia && git fetch && git pull && git checkout master && make dependencies && make)",
