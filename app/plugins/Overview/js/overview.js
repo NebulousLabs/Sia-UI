@@ -28,9 +28,9 @@ function updateField(err, caption, newValue, elementID) {
 }
 
 // Convert to Siacoin
-function formatSiacoin(baseUnits) {
+function formatSiacoin(hastings) {
 	var ConversionFactor = new BigNumber(10).pow(24);
-	var display = new BigNumber(baseUnits).dividedBy(ConversionFactor);
+	var display = new BigNumber(hastings).dividedBy(ConversionFactor);
 	return display + ' SC';
 }
 

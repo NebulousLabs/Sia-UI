@@ -34,9 +34,9 @@ function updateField(err, caption, newValue, elementID) {
 }
 
 // Convert to Siacoin
-function formatSiacoin(baseUnits) {
+function formatSiacoin(hastings) {
 	var ConversionFactor = new BigNumber(10).pow(24);
-	var display = new BigNumber(baseUnits).dividedBy(ConversionFactor);
+	var display = new BigNumber(hastings).dividedBy(ConversionFactor);
 	return display + ' SC';
 }
 
@@ -60,7 +60,7 @@ function sendCoin(amount, destination) {
 }
 
 // Amount has to be a number
-// TODO: Convert between SC, baseUnits, KS, etc.
+// TODO: Convert between SC, hastings, KS, etc.
 function siacoinFormat(amount) {
 	if (parseInt(amount) !== Number(amount)) {
 		return false;
