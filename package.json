@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "electron .",
-    "dependencies": "npm run sia-repo && npm run sia-master && npm run sia-import",
+    "postinstall": "npm run sia-repo && npm run sia-master && npm run sia-import",
     "clean": "rm -rf build node_modules app/dependencies app/config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
     "debug": "node-inspector & electron --debug=5858 . & xdg-open http://127.0.0.1:8080/debug?ws=127.0.0.1:8080&port=5858",

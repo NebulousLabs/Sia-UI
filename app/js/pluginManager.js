@@ -69,9 +69,14 @@ function PluginManager() {
 			if (current === plugin) {
 				return;
 			}
-			current.hide();
-			plugin.show();
-			current = plugin;
+			var main = document.getElementById('mainbar').classList;
+			main.add('transition');
+			setTimeout(function() {
+				main.remove('transition');
+				current.hide();
+				plugin.show();
+				current = plugin;
+			}, 125);
 		});
 		
 		// Handle any ipc messages from the plugin

@@ -42,6 +42,7 @@ html,body {
 
 /* UI Header */
 .header {
+	opacity: .7;
 	height: 80px;
 	width: 100%;
 
@@ -83,16 +84,18 @@ html,body {
 	border-right: 4px solid #F5F5F5;
 }
 .sidebar .button {
+	opacity: .7;
 	display:flex;
 	font-size: 16px;
 	align-items:center;
 	position: relative;
 	height: 60px;
 
+    transition: all .25s;
+	-webkit-animation: fadein .25s;
 	-webkit-box-sizing:border-box;
 	border-bottom: 2px solid #F5F5F5;
 
-	opacity: .70;
 	color: #4A4A4A;
 }
 .button:hover {
@@ -103,12 +106,21 @@ html,body {
 	background-color: ;
 }
 .button.current {
+    transition: all .25s;
 	cursor: default;
 	background-color: #4A4A4A;
 	color: #F5F5F5;
 }
 .button.current .icon{
 	-webkit-filter: invert(100%);
+}
+@keyframes fadeout {
+	from { opacity: 1; }
+	to   { opacity: 0; }
+}
+@keyframes fadein {
+	from { opacity: 0; }
+	to   { opacity: default; }
 }
 .button .icon {
 	max-height: 30%;
@@ -121,7 +133,14 @@ html,body {
 
 /* Mainbar */
 .mainbar {
+    transition: all .125s;
+	-webkit-animation: fadein .125s;
 	flex-grow: 1;
 	height: 100%;
-	background-color: #C5C5C5;
+	background-color: #ffffff;
+}
+
+.mainbar.transition {
+    transition: all .125s;
+	opacity: 0;
 }
