@@ -3,7 +3,14 @@
 	<head>
 		<!-- CSS -->
 		<link rel='stylesheet' href='assets/roboto-condensed-min.css'>
+		<link rel='stylesheet' href='../../assets/font-awesome-4.3.0/css/font-awesome.min.css'>
 		<link rel='stylesheet' href='css/wallet.css'>
+					<div class='entry blueprint' id='tbp'>
+						<div class='transaction'></div>
+					</div>
+					<div class='entry blueprint' id='abp'>
+						<div class='address'></div>
+					</div>
 	</head>
 	<body>
 		<!-- Header -->
@@ -27,9 +34,6 @@
 					</div>
 				</div>
 				<div class='list' id='address-list'>
-					<div class='entry' id='blueprint'>
-						<div class='address'></div>
-					</div>
 				</div>
 			</div>
 			<div class='box'>
@@ -37,15 +41,18 @@
 					<div class='title'>
 						Transaction
 					</div>
+					<input type="text" id='transaction-address' placeholder="Address">
+					<input type="number" id='transaction-amount' placeholder="Amount (SC)">
 					<div class='button' id='send-money'>
 						<i class='fa fa-fw fa-send'></i>
 						Send Money
 					</div>
+					<div class='hidden button' id='confirm'>
+						<i class='fa fa-fw fa-check-circle'></i>
+						Confirm?
+					</div>
 				</div>
 				<div class='list' id='transaction-list'>
-					<div class='entry' id='blueprint'>
-						<div class='transaction'></div>
-					</div>
 				</div>
 			</div>
 		</div>

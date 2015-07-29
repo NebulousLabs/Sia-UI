@@ -42,9 +42,7 @@ function formatSiacoin(baseUnits) {
 
 // Create a new address
 function createAddress() {
-	callAPI("/wallet/address", function(err, result) {
-		wallet.addresses.push(result.Address);
-	});
+	callAPI("/wallet/address");
 }
 
 // Send the specified transaction
@@ -61,37 +59,62 @@ function sendCoin(amount, destination) {
 	callAPI(call);
 }
 
+// Amount has to be a number
+// TODO: Convert between SC, baseUnits, KS, etc.
+function siacoinFormat(amount) {
+	if (parseInt(amount) !== Number(amount)) {
+		return false;
+	}
+	return true;
+}
+
+// Transaction has to be legitimate
+function verifyTransaction() {
+	var address = eID('transaction-address').value;
+	var amount = eID('transaction-amount').value;
+	if (amount === null || !siacoinFormat(amount)) {
+		window.alert('Enter amount of Siacoin to send');
+	} else if (wallet.Balance < amount) {
+		window.alert('Balance too low!');
+	} else {
+		sendCoin(amount, address);
+	}
+	eID('confirm').classList.add('hidden');
+}
+
 // Give the buttons interactivity
 function initListeners() {
 	eID('create-address').onclick = function() {
 		//ui._tooltip(this, "Creating Address");
+		// TODO: Make this responsive such as above
 		createAddress();
 	};
 	eID('send-money').onclick = function() {
-		//ui._transferFunds.setFrom("account", accountName);
-		//ui._transferFunds.setTo("address");
-		//ui.switchView("transfer-funds");
+		eID('confirm').classList.remove('hidden');
 	};
+	eID('confirm').onclick = verifyTransaction;
 }
 
 // Define API calls and update DOM per call
 function update() {
 	callAPI('/wallet/status', function(err, result) {
-		wallet.balance = result.Balance || wallet.balance || 0;
-		wallet.numAddresses = result.NumAddresses || wallet.numAddresses || 0;
-		wallet.addresses = result.VisibleAddresses || wallet.addresses;
-	
-		updateField(err, 'Balance: ', formatSiacoin(wallet.balance), 'balance');
-
+		if (result) {
+			wallet = result;
+		}
+		
 		// Populate addresses
-		wallet.addresses.forEach(function(address) {
-			var entry = eID('blueprint').cloneNode(true);
-			entry.querySelector(".address").innerHTML = address;
-			entry.id = address;
-			if (!eID(address)) {
-				eID('address-list').appendChild(entry);
+		wallet.VisibleAddresses.forEach(function(address) {
+			if (eID(address)) {
+				return;
 			}
+			var entry = eID('abp').cloneNode(true);
+			entry.id = address;
+			entry.querySelector(".address").innerHTML = address;
+			entry.classList.remove('blueprint');
+			eID('address-list').appendChild(entry);
 		});
+		
+		updateField(err, 'Balance: ', formatSiacoin(wallet.Balance), 'balance');
 	});
 	listening = true;
 }

@@ -59,6 +59,8 @@ function UIManager() {
 		if (screenArea >= 2048*1152) {
 			config.zoom = 2;
 			WebFrame.setZoomFactor(config.zoom);
+			WebFrame.setZoomFactor(config.zoom);
+			WebFrame.setZoomFactor(config.zoom);
 		}
 	}
 
@@ -69,7 +71,7 @@ function UIManager() {
 	this.init = function() {
 	   Config.load(configPath, function(config) {
 		   memConfig = config;
-		   adjustHighResZoom(config);
+		   //adjustHighResZoom(config);
 		   Plugins.init(config);
 		   Daemon.init(config);
 	   });
