@@ -1,5 +1,5 @@
-'use strict';
-var Plugin = require('./js/plugin');
+"use strict";
+var Plugin = require("./js/plugin");
 
 /**
  * PluginManager manages all plugin logic for the UI
@@ -54,10 +54,10 @@ function PluginManager() {
 	function addListeners(plugin) {
 		// Only show the default plugin view
 		if (plugin.name === home) {
-			plugin.on('did-finish-load', plugin.show);
+			plugin.on("did-finish-load", plugin.show);
 			current = plugin;
 		} else {
-			plugin.on('did-finish-load', plugin.hide);
+			plugin.on("did-finish-load", plugin.hide);
 		}
 
 		/** 
@@ -69,10 +69,10 @@ function PluginManager() {
 			if (current === plugin) {
 				return;
 			}
-			var main = document.getElementById('mainbar').classList;
-			main.add('transition');
+			var main = document.getElementById("mainbar").classList;
+			main.add("transition");
 			setTimeout(function() {
-				main.remove('transition');
+				main.remove("transition");
 				current.hide();
 				plugin.show();
 				current = plugin;
@@ -80,31 +80,31 @@ function PluginManager() {
 		});
 		
 		// Handle any ipc messages from the plugin
-		plugin.on('ipc-message', function(event) {
+		plugin.on("ipc-message", function(event) {
 			switch(event.channel) {
-				case 'api-call':
+				case "api-call":
 					Daemon.apiCall(event.args[0], function(err, callResult) {
 						plugin.sendToView(event.args[0], err, callResult);
 					});
 					break;
-				case 'devtools':
+				case "devtools":
 					plugin.toggleDevTools();
 					break;
 				default:
-					console.log('Unknown ipc message: ' + event.channel);
+					console.log("Unknown ipc message: " + event.channel);
 			}
 		});
 
 		// Display any console logs from the plugin
-		plugin.on('console-message', function(event) {
-			console.log(plugin.name + ' plugin logged> ', event.message);
+		plugin.on("console-message", function(event) {
+			console.log(plugin.name + " plugin logged> ", event.message);
 		});	
 	}
 
 	/**
 	 * Constructs the plugins and adds them to this manager 
 	 * @function PluginManager~addPlugin
-	 * @param {string} name - The plugin folder's name
+	 * @param {string} name - The plugin folder"s name
 	 */
 	function addPlugin(name) {
 		// Make the plugin, giving its button a standard transition
@@ -118,7 +118,7 @@ function PluginManager() {
 	}
 
 	/**
-	 * Reads the config's plugPath for plugin folders
+	 * Reads the config"s plugPath for plugin folders
 	 * @function PluginManager~initPlugins
 	 */
 	function initPlugins() {

@@ -1,5 +1,5 @@
-'use strict';
-var Config = require('./js/uiConfig.js');
+"use strict";
+var Config = require("./js/uiConfig.js");
 
 /**
  * The first renderer process, handles initializing all other managers
@@ -10,7 +10,7 @@ function UIManager() {
 	 * Config.json variables
 	 * @member {string} UIManager~configPath
 	 */
-	var configPath = Path.join(__dirname, 'config.json');
+	var configPath = Path.join(__dirname, "config.json");
 	/**
 	 * Config variable held in working memory
 	 * @member {config} UIManager~memConfig
@@ -40,7 +40,7 @@ function UIManager() {
 	}
 
 	function updateClient(version) {
-		//Shell.openExternal('https://www.github.com/NebulousLabs/Sia-UI/releases');
+		//Shell.openExternal("https://www.github.com/NebulousLabs/Sia-UI/releases");
 	}
 	*/
 
@@ -48,8 +48,8 @@ function UIManager() {
 	 * Makes the app more readable on high dpi screens. 
 	 * @function UIManager~adjustHighResZoom
 	 * @param {config} config - config in memory
-	 * @todo Take better approach, resolution doesn't mean high dpi. Though
-	 * supposedly there's not a sure-fire way to find dpi on all platforms.
+	 * @todo Take better approach, resolution doesn"t mean high dpi. Though
+	 * supposedly there"s not a sure-fire way to find dpi on all platforms.
 	 */
 	function adjustHighResZoom(config) {
 		// Calculated upon function call to get appropriate zoom (even if the

@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 const Process = require("child_process").spawn;
-var API = require('./js/daemonAPI');
+var API = require("./js/daemonAPI");
 
 /**
  * DaemonManager, a closure, initializes siad as a background process and
@@ -25,8 +25,8 @@ function DaemonManager() {
 	 * @param {apiResponse} callback
 	 */
 	function apiCall(call, callback) {
-		// Interpret address-only calls as 'GET'
-		if (typeof call === 'string') {
+		// Interpret address-only calls as "GET"
+		if (typeof call === "string") {
 			call = {url: call};
 		}
 
@@ -47,7 +47,7 @@ function DaemonManager() {
 		if (!isNotRunning) {
 			isNotRunning = function() {};
 		}
-		apiCall('/consensus/status', function(err) {
+		apiCall("/consensus/status", function(err) {
 			if (!err) {
 				isRunning();
 			} else if (err) {
@@ -61,21 +61,21 @@ function DaemonManager() {
 	 */
 	function start() {
 		ifSiad(function() {
-			console.error('attempted to start siad when it was already running');
+			console.error("attempted to start siad when it was already running");
 			return;
 		}, function() {
-			console.log('starting siad');
+			console.log("starting siad");
 		});
 		// daemon as a background process logs output to files
-		var out = Fs.openSync(Path.join(siaPath, 'daemonOut.log'), 'a');
-		var err = Fs.openSync(Path.join(siaPath, 'daemonErr.log'), 'a');
+		var out = Fs.openSync(Path.join(siaPath, "daemonOut.log"), "a");
+		var err = Fs.openSync(Path.join(siaPath, "daemonErr.log"), "a");
 		// daemon process has to be detached without parent stdio pipes
 		var processOptions = {
 			detached: true,
-			stdio: [ 'ignore', out, err ],
+			stdio: [ "ignore", out, err ],
 			cwd: siaPath 
 		};
-		var command = process.platform === 'win32' ? './siad.exe' : './siad';
+		var command = process.platform === "win32" ? "./siad.exe" : "./siad";
 		var daemonProcess = new Process(command, processOptions);
 		daemonProcess.unref();
 	}
@@ -85,12 +85,12 @@ function DaemonManager() {
 	 */
 	function stop() {
 		ifSiad(function() {
-			console.log('stopping siad');
+			console.log("stopping siad");
 		}, function() {
-			console.err('attempted to stop siad when it was not running');
+			console.err("attempted to stop siad when it was not running");
 			return;
 		});
-		apiCall('/daemon/stop', function(err, data) {
+		apiCall("/daemon/stop", function(err, data) {
 			console.assert(!err && data);
 			console.log(data);
 		});
@@ -102,7 +102,7 @@ function DaemonManager() {
 	 * @param {callback} callback
 	 */
 	function setConfig(config, callback) {
-		siaPath = Path.join(config.depsPath, 'Sia');
+		siaPath = Path.join(config.depsPath, "Sia");
 		address = config.siadAddress;
 		callback();
 	}
