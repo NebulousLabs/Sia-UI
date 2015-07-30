@@ -73,10 +73,10 @@ function PluginManager() {
 			main.add("transition");
 			setTimeout(function() {
 				main.remove("transition");
-				current.hide();
-				plugin.show();
-				current = plugin;
-			}, 125);
+			}, 250);
+			current.hide();
+			current = plugin;
+			current.show();
 		});
 		
 		// Handle any ipc messages from the plugin

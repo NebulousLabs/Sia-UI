@@ -91,8 +91,8 @@ html,body {
 	position: relative;
 	height: 60px;
 
-    transition: all .25s;
-	-webkit-animation: fadein .25s;
+	transition: all .25s;
+	-webkit-animation: fadein 2s;
 	-webkit-box-sizing:border-box;
 	border-bottom: 2px solid #F5F5F5;
 
@@ -106,7 +106,7 @@ html,body {
 	background-color: ;
 }
 .button.current {
-    transition: all .25s;
+	transition: all .25s;
 	cursor: default;
 	background-color: #4A4A4A;
 	color: #F5F5F5;
@@ -133,14 +133,14 @@ html,body {
 
 /* Mainbar */
 .mainbar {
-    transition: all .125s;
-	-webkit-animation: fadein .125s;
+	transition: all .25s;
+	-webkit-animation: fadein 3s;
 	flex-grow: 1;
 	height: 100%;
 	background-color: #ffffff;
 }
 
 .mainbar.transition {
-    transition: all .125s;
+	transition: all .25s;
 	opacity: 0;
 }
