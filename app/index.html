@@ -34,6 +34,15 @@
 			<div class="pure-u mainbar" id="mainbar">
 			</div>
 		</div>
+		<span id='tooltip'>Tooltip</span>
+		<div class='notification-container'>
+			<div class='blueprint notification'>
+				<div class='icon'>
+					<i class='fa'></i>
+				</div>
+				<div class='content'></div>
+			</div>
+		</div>
 		<!-- Javascript -->
 		<script> 
 			const WebFrame = require("web-frame");
@@ -41,6 +50,7 @@
 			const Path = require("path");
 			const Fs = require("fs");
 			const Shell = require("shell");
+			const $ = require("jquery");
 		</script>
 		<script src="js/daemonManager.js"></script>
 		<script src="js/pluginManager.js"></script>
@@ -52,14 +62,5 @@
 			window.onload = UI.init;
 			window.onbeforeunload = UI.kill;
 		</script>
-		<span id='tooltip'>Tooltip</span>
-		<div class='notification-container'>
-			<div class='blueprint notification'>
-				<div class='icon'>
-					<i class='fa'></i>
-				</div>
-				<div class='content'></div>
-			</div>
-		</div>
 	</body>
 </html>

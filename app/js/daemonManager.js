@@ -7,10 +7,7 @@ var API = require('./js/daemonAPI');
  * provides functions to interact with it
  * @class DaemonManager
  */
-function DaemonManager() {
-	/**
-	 * The file system location of Sia and siad
-	 * @member {string} DaemonManager~siaPath
+function DaemonManager() { /** * The file system location of Sia and siad * @member {string} DaemonManager~siaPath
 	 */
 	var siaPath;
 	/**
@@ -56,7 +53,7 @@ function DaemonManager() {
 		});
 	}
 
-	function promptUserIfUpdateAvailable() {
+	function updatePrompt() {
 		apiCall("/daemon/updates/check", function(err, update) {
 			if (update.Available) {
 				UI.notify("New Sia Client Available: Click to update to " + update.Version + "!", "alert", function() {
@@ -71,7 +68,7 @@ function DaemonManager() {
 	/**
 	 * Starts the daemon as a long running background process
 	 */
-	function start() {
+	function start(callback) {
 		ifSiad(function() {
 			console.error('attempted to start siad when it was already running');
 			return;
@@ -90,6 +87,8 @@ function DaemonManager() {
 		var command = process.platform === 'win32' ? './siad.exe' : './siad';
 		var daemonProcess = new Process(command, processOptions);
 		daemonProcess.unref();
+
+		callback();
 	}
 
 	/**
@@ -126,8 +125,9 @@ function DaemonManager() {
 	 */
 	this.init = function(config) {
 		setConfig(config, function() {
-			ifSiad(null, start);
-			ifSiad(promptUserIfUpdateAvailable, null);
+			ifSiad(updatePrompt, function() {
+				start(updatePrompt());
+			});
 		});
 	};
 	/**
@@ -137,4 +137,5 @@ function DaemonManager() {
 	 * @param {APIResponse} callback
 	 */
 	this.apiCall = apiCall;
+	this.update = updatePrompt;
 }

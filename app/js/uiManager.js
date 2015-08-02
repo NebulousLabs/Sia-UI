@@ -93,8 +93,8 @@ function UIManager() {
 			WebFrame.setZoomFactor(config.zoom);
 		}
 	}
-
-	this.notify = function(message, type, clickAction){
+	
+	function notify(message, type, clickAction){
 		// CONTRIBUTE: This delay system is technically broken, but not noticably
 		// wait approximately 250ms between notifications
 		if (new Date().getTime() < lastNotificationTime + 250){
@@ -115,20 +115,25 @@ function UIManager() {
 		showNotification(message, type, clickAction);
 	}
 
+	this.notify = notify;
+
 	/**
 	* Called at window.onready, initalizes the UI
 	* @function UIManager#init
 	*/
 	this.init = function() {
-	   Config.load(configPath, function(config) {
-		   memConfig = config;
-		   //adjustHighResZoom(config);
-		   Plugins.init(config);
-		   Daemon.init(config);
-	   });
-   };
+		Config.load(configPath, function(config) {
+			memConfig = config;
+			Daemon.init(config);
+			//adjustHighResZoom(config);
+			Plugins.init(config);
+		});
+		$("#update-button").click(function(){
+			Daemon.update();
+		});
+	},
 
-   /**
+	/**
 	* Called at window.beforeunload, closes the UI
 	* @function UIManager#kill
 	*/
