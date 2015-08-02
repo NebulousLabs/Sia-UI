@@ -10,6 +10,10 @@
  * 		Black:      #000000
  */
 /* Overall rules */
+.blueprint {
+  display: none;
+}
+
 html,body {
 	position: relative;
 
@@ -143,4 +147,113 @@ html,body {
 .mainbar.transition {
 	transition: all .25s;
 	opacity: 0;
+}
+
+/* Notifications */
+.notification-container {
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+}
+.notification {
+  border-radius: 4px;
+  background-color: #fff;
+  border: 1px solid #bdbdbd;
+  margin-top: 20px;
+  box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.25);
+  overflow-x: hidden;
+  overflow-y: hidden;
+  -webkit-transition: box-shadow 2s;
+  transition: box-shadow 0.5s;
+}
+.notification .icon {
+  display: inline-block;
+  height: 80px;
+  width: 80px;
+  line-height: 80px;
+  font-size: 48px;
+  text-align: center;
+  color: #bdbdbd;
+  background-color: #f5f5f5;
+  border-right: 1px solid #eeeeee;
+}
+.notification .content {
+  display: inline-block;
+  padding: 14px;
+  vertical-align: top;
+  width: 300px;
+  height: 52px;
+  font-size: 18px;
+  color: #757575;
+}
+.notification.small .icon {
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  font-size: 24px;
+}
+.notification.small .content {
+  padding: 0px;
+  padding-left: 14px;
+  line-height: 40px;
+  height: 40px;
+  width: 360px;
+  overflow-x: hidden;
+}
+.notification.hoverable:hover {
+  cursor: pointer;
+  box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.4);
+}
+.notification.type-error .icon {
+  color: #E57373;
+  background-color: #FFCDD2;
+}
+.notification.type-success .icon {
+  color: #81C784;
+  background-color: #C8E6C9;
+}
+.downloadqueue {
+  border-radius: 4px;
+  background-color: #fff;
+  border: 1px solid #bdbdbd;
+  margin-top: 20px;
+  box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.25);
+  overflow-x: hidden;
+  overflow-y: hidden;
+  -webkit-transition: box-shadow 2s;
+  transition: box-shadow 0.5s;
+}
+.downloadqueue .icon {
+  display: inline-block;
+  height: 80px;
+  width: 80px;
+  line-height: 80px;
+  font-size: 48px;
+  text-align: center;
+  color: #bdbdbd;
+  background-color: #f5f5f5;
+  border-right: 1px solid #eeeeee;
+}
+.downloadqueue .content {
+  display: inline-block;
+  padding: 14px;
+  vertical-align: top;
+  width: 300px;
+  height: 52px;
+  font-size: 18px;
+  color: #757575;
+}
+.downloadqueue .progress {
+  background-color: rgba(0, 0, 255, 0.25);
+  width: 100%;
+  height: 20px;
+  margin-top: 14px;
+  border-radius: 5px;
+}
+.downloadqueue .progress .bar {
+  width: 0px;
+  height: 20px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  background-color: rgba(0, 0, 255, 0.5);
 }

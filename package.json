@@ -8,21 +8,22 @@
   "devDependencies": {
     "electron-packager": "latest",
     "electron-prebuilt": "latest",
-    "ink-docstrap": "^0.5.2",
+    "ink-docstrap": "latest",
     "jsdoc": "latest",
     "jshint": "latest",
-    "node-inspector": "^0.11.1"
+    "node-inspector": "latest"
   },
   "scripts": {
     "start": "electron .",
-    "postinstall": "npm run sia-repo && npm run sia-master && npm run sia-import",
+    "debug": "node-inspector & electron --debug=5858 . & xdg-open http://127.0.0.1:8080/debug?ws=127.0.0.1:8080&port=5858",
+    "get-siad": "npm run sia-repo && npm run sia-master && npm run sia-import",
     "clean": "rm -rf build node_modules app/dependencies app/config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
     "debug": "node-inspector & electron --debug=5858 . & xdg-open http://127.0.0.1:8080/debug?ws=127.0.0.1:8080&port=5858",
     "lint": "jshint . --verbose --exclude-path=.jshintignore",
     "doc": "jsdoc -c .jsdocrc",
     "sia-repo": "test -d $GOPATH/src/github.com/NebulousLabs/Sia || go get -u github.com/NebulousLabs/Sia/...",
-    "sia-master": "(cd $GOPATH/src/github.com/NebulousLabs/Sia && git fetch && git pull && git checkout master && make dependencies && make)",
+    "sia-master": "(cd $GOPATH/src/github.com/NebulousLabs/Sia && git fetch && git pull && git checkout v0.3.3.3-beta && make dependencies && make)",
     "sia-import": "test -d app/dependencies/Sia || mkdir -p app/dependencies/Sia && cp $GOPATH/bin/siad app/dependencies/Sia",
     "build": "npm run build-cmd -- --all",
     "build-lin64": "npm run build-cmd -- --platform=linux --arch=x64",
@@ -40,6 +41,6 @@
     "url": "https://github.com/NebulousLabs/test-ui/issues"
   },
   "dependencies": {
-    "bignumber.js": "^2.0.7"
+    "bignumber.js": "latest"
   }
 }

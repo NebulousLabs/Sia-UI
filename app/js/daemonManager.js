@@ -56,6 +56,18 @@ function DaemonManager() {
 		});
 	}
 
+	function promptUserIfUpdateAvailable() {
+		apiCall("/daemon/updates/check", function(err, update) {
+			if (update.Available) {
+				UI.notify("New Sia Client Available: Click to update to " + update.Version + "!", "alert", function() {
+					Shell.openExternal('https://www.github.com/NebulousLabs/Sia-UI/releases');
+				});
+			} else {
+				UI.notify("Sia client up to date!", "success");
+			}
+		});
+	}
+
 	/**
 	 * Starts the daemon as a long running background process
 	 */
@@ -114,7 +126,8 @@ function DaemonManager() {
 	 */
 	this.init = function(config) {
 		setConfig(config, function() {
-			ifSiad.call(this, function() {}, start);
+			ifSiad(null, start);
+			ifSiad(promptUserIfUpdateAvailable, null);
 		});
 	};
 	/**
