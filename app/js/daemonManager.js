@@ -1,5 +1,5 @@
 'use strict';
-const Process = require("child_process").spawn;
+const Process = require('child_process').spawn;
 var API = require('./js/daemonAPI');
 
 /**
@@ -90,7 +90,7 @@ function DaemonManager() {
 			console.err('attempted to stop siad when it was not running');
 			return;
 		});
-		this.apiCall('/daemon/stop', function(err, data) {
+		apiCall('/daemon/stop', function(err, data) {
 			console.assert(!err && data);
 			console.log(data);
 		});
@@ -116,13 +116,12 @@ function DaemonManager() {
 		setConfig(config, function() {
 			ifSiad.call(this, function() {}, start);
 		});
-	}
+	};
 	/**
 	 * Makes an API call to to proper port using daemonAPI
 	 * @function DaemonManager#call
 	 * @param {APICall} call - the config object derived from config.json
 	 * @param {APIResponse} callback
 	 */
-	this.apiCall = apiCall
+	this.apiCall = apiCall;
 }
-var Daemon = new DaemonManager();

@@ -3,7 +3,8 @@ const App = require('app');
 const Path = require('path');
 const BrowserWindow = require('browser-window');
 const Tray = require('tray');
-
+// visit localhost:9222 to see devtools remotely
+App.commandLine.appendSwitch('remote-debugging-port', '9222');
 /**
  * Global reference to the window object, so the window won't be closed
  * automatically upon execution and garbage collection
@@ -31,7 +32,6 @@ function startMainWindow() {
 		'icon': iconPath,
 		'title': 'Sia-UI'
 	});
-
 	// Choose not to show the menubar
 	mainWindow.setMenuBarVisibility(false);
 	

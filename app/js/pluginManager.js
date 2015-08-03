@@ -69,9 +69,14 @@ function PluginManager() {
 			if (current === plugin) {
 				return;
 			}
+			var main = document.getElementById('mainbar').classList;
+			main.add('transition');
+			setTimeout(function() {
+				main.remove('transition');
+			}, 250);
 			current.hide();
-			plugin.show();
 			current = plugin;
+			current.show();
 		});
 		
 		// Handle any ipc messages from the plugin
@@ -141,7 +146,7 @@ function PluginManager() {
 		home = config.homePlugin;
 		plugPath = config.pluginsPath;
 		callback();
-	};
+	}
 
 	/**
 	 * Initializes the plugins to the UI
@@ -152,4 +157,3 @@ function PluginManager() {
 		setConfig(config, initPlugins);
 	};
 }
-var Plugins = new PluginManager();

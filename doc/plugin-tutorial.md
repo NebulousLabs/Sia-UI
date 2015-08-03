@@ -376,13 +376,13 @@ function kill() {
 This all functions well enough, but it's a bit of an amateur design when one
 actually uses the plugin. Numbers are jerky and we see a large amount of
 numbers for our balance since it's in 10^-24 Siacoin, or what we call
-baseunits, similar to Bitcoin and satoshis.
+Hastings, similar to Bitcoin and satoshis.
 
 ```js
 // Convert to Siacoin
-function formatSiacoin(baseUnits) {
+function formatSiacoin(hastings) {
 	var ConversionFactor = Math.pow(10, 24);
-	var display = baseUnits / ConversionFactor);
+	var display = hastings / ConversionFactor);
 	return display + ' SC';
 }
 ```
@@ -398,11 +398,11 @@ incorporate the [bignumber.js library](https://github.com/MikeMcl/bignumber.js/)
 const BigNumber = require('bignumber.js');
 
 // Convert to Siacoin
-function formatSiacoin(baseUnits) {
+function formatSiacoin(hastings) {
 	var ConversionFactor = Math.pow(10, 24);
-	var display = baseUnits / ConversionFactor);
+	var display = hastings / ConversionFactor);
 	var ConversionFactor = new BigNumber(10).pow(24);
-	var display = new BigNumber(baseUnits).dividedBy(ConversionFactor);
+	var display = new BigNumber(hastings).dividedBy(ConversionFactor);
 	return display + ' SC';
 }
 
@@ -471,9 +471,9 @@ function callAPI() {
 }
 
 // Convert to Siacoin
-function formatSiacoin(baseUnits) {
+function formatSiacoin(hastings) {
 	var ConversionFactor = new BigNumber(10).pow(24);
-	var display = new BigNumber(baseUnits).dividedBy(ConversionFactor);
+	var display = new BigNumber(hastings).dividedBy(ConversionFactor);
 	return display + ' SC';
 }
 
@@ -662,9 +662,9 @@ function updateField(err, caption, newValue, elementID) {
 }
 
 // Convert to Siacoin
-function formatSiacoin(baseUnits) {
+function formatSiacoin(hastings) {
 	var ConversionFactor = new BigNumber(10).pow(24);
-	var display = new BigNumber(baseUnits).dividedBy(ConversionFactor);
+	var display = new BigNumber(hastings).dividedBy(ConversionFactor);
 	return display + ' SC';
 }
 

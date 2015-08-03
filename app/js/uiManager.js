@@ -1,9 +1,4 @@
 'use strict';
-const WebFrame = require('web-frame');
-const ElectronScreen = require('screen');
-const Path = require('path');
-const Fs = require('fs');
-const Shell = require('shell');
 var Config = require('./js/uiConfig.js');
 
 /**
@@ -27,21 +22,21 @@ function UIManager() {
 	function promptUserIfUpdateAvailable() {
 		checkForUpdate(function(update) {
 			if (update.Available) {
-				//ui.notify("New Sia Client Available: Click to update to " + update.Version + "!", "update", function() {
+				//ui.notify('New Sia Client Available: Click to update to ' + update.Version + '!', 'update', function() {
 				//	updateClient(update.Version);
 				//});
 			} else {
-				//ui.notify("Sia client up to date!", "success");
+				//ui.notify('Sia client up to date!', 'success');
 			}
 		});
 	}
 
 	function getVersion(callback) {
-		Daemon.call("/daemon/version", callback);
+		Daemon.call('/daemon/version', callback);
 	}
 
 	function checkForUpdate(callback) {
-		Daemon.call("/daemon/updates/check", callback);
+		Daemon.call('/daemon/updates/check', callback);
 	}
 
 	function updateClient(version) {
@@ -64,6 +59,8 @@ function UIManager() {
 		if (screenArea >= 2048*1152) {
 			config.zoom = 2;
 			WebFrame.setZoomFactor(config.zoom);
+			WebFrame.setZoomFactor(config.zoom);
+			WebFrame.setZoomFactor(config.zoom);
 		}
 	}
 
@@ -74,11 +71,11 @@ function UIManager() {
 	this.init = function() {
 	   Config.load(configPath, function(config) {
 		   memConfig = config;
-		   adjustHighResZoom(config);
+		   //adjustHighResZoom(config);
 		   Plugins.init(config);
 		   Daemon.init(config);
 	   });
-   },
+   };
 
    /**
 	* Called at window.beforeunload, closes the UI
@@ -86,6 +83,5 @@ function UIManager() {
 	*/
    this.kill = function() {
 	   Config.save(memConfig, configPath);
-   }
-};
-var UI = new UIManager();
+   };
+}

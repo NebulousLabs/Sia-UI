@@ -57,19 +57,16 @@ body {
 	font-size: 32px;
 	padding-top: 18px;
 	padding-bottom: 0px;
-	padding-left: 30px;
+	padding-left: 16px;
 	padding-right: 16px;
-}
-.frame .text {
-	color: #4a4a4a
 }
 .welcome {
 	margin-top: 50px;
 	text-align: center;
+	color: #c5c5c5;
 }
 .welcome .large {
 	font-size: 72px;
-	color: #c5c5c5;
 }
 .welcome .small {
 	margin-top: 20px;

@@ -2,45 +2,71 @@
 <html>
 	<head>
 		<!-- CSS -->
-		<link rel='stylesheet' href='assets/roboto-condensed-min.css'>
-		<link rel='stylesheet' href='css/wallet.css'>
+		<link rel="stylesheet" href="assets/roboto-condensed-min.css">
+		<link rel="stylesheet" href="../../assets/font-awesome-4.3.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/wallet.css">
+		<div class="entry blueprint" id="tbp">
+			<div class="transaction"></div>
+		</div>
+		<div class="entry blueprint" id="abp">
+			<div class="address"></div>
+		</div>
 	</head>
 	<body>
 		<!-- Header -->
-		<div class='header'>
-			<div class='title'>Wallet</div>
-			<div class='capsule'>
-				<div class='pod' id='balance'>Balance: 0</div>
+		<div class="header">
+			<div class="title">Wallet</div>
+			<div class="capsule">
+				<div class="pod" id="balance">Balance: 0 SC</div>
 			</div>
 		</div>
 
 		<!-- Frame -->
-		<div class='frame'>
-			<!--div class='addresses'>
-				<div class='title'>
-					Addresses
-				</div>
-				<div class='items'>
-					<div class='blueprint item'>
-						<div class='address'></div>
-						<div class='amt'></div>
+		<div class="frame">
+			<div class="box">
+				<div class="row">
+					<div class="title">
+						Addresses
+					</div>
+					<div class="button" id="create-address">
+						<i class="fa fa-fw fa-plus"></i>
+						Create Address
 					</div>
 				</div>
+				<div class="list" id="address-list">
+				</div>
 			</div>
-			<div class='account-control-buttons row'>
-				<div class='button create-address'>
-					<i class='fa fa-fw fa-plus'></i>
-					Create Address
+			<div class="box">
+				<div class="row">
+					<div class="title">
+						Transaction
+					</div>
+					<div class="controls">
+						<div class="hidden button" id="confirm">
+							<i class="fa fa-fw fa-check-circle"></i>
+							Confirm?
+						</div>
+						<div class="button" id="send-money">
+							<i class="fa fa-fw fa-send"></i>
+							Send Money
+						</div>
+						<input type="number" id="transaction-amount" placeholder="Amount">
+						<select id="send-unit">
+							<option value="1e30">MS</option>
+							<option value="1e27">kS</option>
+							<option value="1e24"selected="selected">S</option>
+							<option value="1e21">mS</option>
+							<option value="1e18">&#956S</option>
+						</select>	
+						<input type="text" id="transaction-address" placeholder="Address">
+					</div>
 				</div>
-				<div class='button send-money'>
-					<i class='fa fa-fw fa-send'></i>
-					Send Money
+				<div class="list" id="transaction-list">
 				</div>
-			</div-->
+			</div>
 		</div>
 		
 		<!-- JS -->
-		<script type='text/javascript' src='js/wallet.js'></script>
+		<script type="text/javascript" src="js/wallet.js"></script>
 	</body>
 </html>
-</div>

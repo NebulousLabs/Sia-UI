@@ -39,7 +39,6 @@
 	"plusplus"		: false,    // Prohibit use of `++` & `--`.
 	"regexp"		: true,	    // Prohibit `.` and `[^...]` in regular expressions.
 	"undef"			: true,	    // Require all non-global variables be declared before they are used.
-	"unused"		: true,	    // Prohibits defining variables that don't get used.
 	"strict"		: true,	    // Require `use strict` pragma in every file.
 	"trailing"		: true,	    // Prohibit trailing whitespaces.
 
@@ -112,6 +111,14 @@
 
 	"maxerr"		: 100,      // Maximum errors before stopping.
 	"globals"		: {		    // Extra globals.
+		"WebFrame": false,
+		"ElectronScreen": false,
+		"Path": false,
+		"Fs": false,
+		"Shell": false,
+		"UI": true,
+		"Daemon": true,
+		"Plugins": true
 		//"exampleVar",
 		//"anotherCoolGlobal",
 	},
