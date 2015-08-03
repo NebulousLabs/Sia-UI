@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /**
  * Creates the image element for a button
@@ -7,9 +7,9 @@
  * @returns {Object} - The button image element
  */
 function icon(path) {
-	var i = document.createElement("img");
+	var i = document.createElement('img');
 	i.src = path;
-	i.className = "pure-u icon";
+	i.className = 'pure-u icon';
 	return i;
 }
 
@@ -20,9 +20,9 @@ function icon(path) {
  * @returns {Object} - The button text element
  */
 function text(name) {
-	var t = document.createElement("div");
+	var t = document.createElement('div');
 	t.innerText = name;
-	t.className = "pure-u text";
+	t.className = 'pure-u text';
 	return t;
 }
 
@@ -39,22 +39,22 @@ module.exports = {
 	 */
 	view: function view(markupPath, name) {
 		// Make webview element
-		var v = document.createElement("webview");
-		v.id = name + "-view";
-		v.className = "webview";
+		var v = document.createElement('webview');
+		v.id = name + '-view';
+		v.className = 'webview';
 		v.src = markupPath;
 
 		// Turn nodeintegration on so plugins can use electron & node libraries
-		v.nodeintegration = "on";
+		v.nodeintegration = 'on';
 
-		// Have all plugins displaying UI"s zoom by default
-		v.addEventListener("did-finish-load", function() {
-			var zoomCode = "require('web-frame').setZoomFactor(" + WebFrame.getZoomFactor() + ");";
+		// Have all plugins displaying UI's zoom by default
+		v.addEventListener('did-finish-load', function() {
+			var zoomCode = 'require("web-frame").setZoomFactor(' + WebFrame.getZoomFactor() + ');';
 			v.executeJavaScript(zoomCode);
 		});
 
 		// Start loading the view to the mainbar
-		document.getElementById("mainbar").appendChild(v);
+		document.getElementById('mainbar').appendChild(v);
 		return v;
 	},
 	/**
@@ -65,16 +65,16 @@ module.exports = {
 	 */
 	button: function button(iconPath, name) {
 		// Make button elements and combine
-		var b= document.createElement("div");
+		var b= document.createElement('div');
 		b.appendChild(new icon(iconPath));
 		b.appendChild(new text(name));
 
 		// Set inner values
-		b.id = name + "-button";
-		b.className = "pure-u-1-1 button";
+		b.id = name + '-button';
+		b.className = 'pure-u-1-1 button';
 
 		// Add the button to the sidebar
-		document.getElementById("sidebar").appendChild(b);
+		document.getElementById('sidebar').appendChild(b);
 		return b;
 	},
 };

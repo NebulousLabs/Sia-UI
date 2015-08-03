@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /**
  * The callback from an apiCall
  * @callback apiResponse
@@ -10,14 +10,14 @@
  * The call object to store information necessary to a call to a RESTful API
  * @typedef {Object} apiCall
  * @property {string} url - The address (usually localhost) and port of siad
- * @property {string} type - The call type, such as "POST" or "GET"
+ * @property {string} type - The call type, such as 'POST' or 'GET'
  * @property {Object} args - The arguments to send with the call
  */
 
 /**
  * Creates an XMLHttpRequest to send
  * @param {string} url - The address (usually localhost) and port of siad
- * @param {string} type - The call type, such as "POST" or "GET"
+ * @param {string} type - The call type, such as 'POST' or 'GET'
  * @param {Object} args - The arguments to send with the call
  * @param {apiResponse} callback
  * @private
@@ -26,7 +26,7 @@ function sendCall(url, type, args, callback) {
 	// Detect improper calls, each one needs a url
 	if (!url || !type || !args) {
 		process.nextTick(function() {
-			callback(new Error("Improper API call!"));
+			callback(new Error('Improper API call!'));
 		});
 		return;
 	}
@@ -47,7 +47,7 @@ function sendCall(url, type, args, callback) {
 	};
 	// There was a connection error of some sort
 	request.onerror = function() {
-		callback(new Error("Server not reached"));
+		callback(new Error('Server not reached'));
 	};
 
 	// actually send the request
@@ -61,14 +61,14 @@ function sendCall(url, type, args, callback) {
  * @private
  */
 function discernCall(call, callback) {
-	// Extract call attributes, default call is "GET"
+	// Extract call attributes, default call is 'GET'
 	var url = call.url;
-	var type = call.type || "GET";
+	var type = call.type || 'GET';
 	var args = call.args || {};
 
 	// The function can use JSON, but turns them into strings first
 	var JSON;
-	if (JSON && typeof JSON.parse === "function") {
+	if (JSON && typeof JSON.parse === 'function') {
 		args = JSON.stringify(args);
 	}
 
@@ -82,21 +82,21 @@ function discernCall(call, callback) {
  */
 module.exports = {
 	/**
-	 * Performs a "GET" call
+	 * Performs a 'GET' call
 	 * @param {string} url - The url to send the call to
 	 * @param {apiResponse} callback
 	 */
 	getCall: function getCall(url, callback) {
-		sendCall(url, "GET", "", callback);
+		sendCall(url, 'GET', '', callback);
 	},
 	/**
-	 * Performs a "POST" call
+	 * Performs a 'POST' call
 	 * @param {string} url - The url to send the call to
 	 * @param {string|Object} url - The arguments to send with the call
 	 * @param {apiResponse} callback
 	 */
 	postCall: function postCall(url, args, callback) {
-		sendCall(url, "POST", args, callback);
+		sendCall(url, 'POST', args, callback);
 	},
 	/**
 	 * Performs any API call

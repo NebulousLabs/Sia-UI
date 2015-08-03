@@ -1,5 +1,5 @@
-"use strict";
-var Factory = require("./pluginFactory");
+'use strict';
+var Factory = require('./pluginFactory');
 
 /**
  * Constructs the webview and button from a plugin folder
@@ -12,12 +12,12 @@ function Plugin(plugPath, name) {
 	 * Html element for the webview
 	 * @member {Object} Plugin~view
 	 */
-	var view = new Factory.view(Path.join(plugPath, name, "index.html"), name);
+	var view = new Factory.view(Path.join(plugPath, name, 'index.html'), name);
 	/**
 	 * Html element for the sidebar button
 	 * @member {Object} Plugin~button
 	 */
-	var button = new Factory.button(Path.join(plugPath, name, "assets", "button.png"), name);
+	var button = new Factory.button(Path.join(plugPath, name, 'assets', 'button.png'), name);
 
 	return {
 		/**
@@ -44,31 +44,31 @@ function Plugin(plugPath, name) {
 		},
 
 		/** 
-		* Shows the plugin"s view
+		* Shows the plugin's view
 		* @function Plugin#show
 		*/
 		show: function() {
-			button.classList.add("current");
+			button.classList.add('current');
 			view.executeJavaScript('if (typeof init === "function") init();');
 			setTimeout(function() {
-				view.style.display = "";
+				view.style.display = '';
 			}, 250);
 		},
 
 		/** 
-		* Hides the plugin"s view
+		* Hides the plugin's view
 		* @function Plugin#hide
 		*/
 		hide: function() {
-			button.classList.remove("current");
+			button.classList.remove('current');
 			view.executeJavaScript('if (typeof kill === "function") kill();');
 			setTimeout(function() {
-				view.style.display = "none";
+				view.style.display = 'none';
 			}, 250);
 		},
 
 		/**
-		* For communicating ipc messages with the plugin"s webview, while still
+		* For communicating ipc messages with the plugin's webview, while still
 		* keeping it private to plugin
 		* @function Plugin#sendToView
 		* @param {string} channel - ipc channel to communicate over
