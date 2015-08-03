@@ -1,11 +1,15 @@
 'use strict';
-var Config = require('./js/uiConfig.js');
 
 /**
  * The first renderer process, handles initializing all other managers
  * @class UIManager
  */
 function UIManager() {
+	/**
+	 * Config namespace for config management logic
+	 * @member {UIConfig} UIManager~Config
+	 */
+	var Config = require('./js/uiConfig.js');
 	/**
 	 * Config.json variables
 	 * @member {string} UIManager~configPath

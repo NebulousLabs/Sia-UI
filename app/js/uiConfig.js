@@ -1,4 +1,5 @@
 'use strict';
+
 /** 
  * The default settings 
  * @private

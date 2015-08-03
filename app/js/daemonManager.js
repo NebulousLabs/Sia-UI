@@ -1,13 +1,18 @@
 'use strict';
-const Process = require('child_process').spawn;
-var API = require('./js/daemonAPI');
 
 /**
  * DaemonManager, a closure, initializes siad as a background process and
  * provides functions to interact with it
  * @class DaemonManager
  */
-function DaemonManager() { /** * The file system location of Sia and siad * @member {string} DaemonManager~siaPath
+function DaemonManager() {
+	/**
+	 * API namespace for API access logic
+	 * @member {daemonAPI} DaemonManager~API
+	 */
+	var API = require('./js/daemonAPI');
+	/**
+	 * The file system location of Sia and siad * @member {string} DaemonManager~siaPath
 	 */
 	var siaPath;
 	/**

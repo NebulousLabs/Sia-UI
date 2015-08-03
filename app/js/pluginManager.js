@@ -1,11 +1,15 @@
 'use strict';
-var Plugin = require('./js/plugin');
 
 /**
  * PluginManager manages all plugin logic for the UI
  * @class PluginManager
  */
 function PluginManager() {
+	/**
+	 * Plugin constructor
+	 * @member {Plugin} PluginManager~Plugin
+	 */
+	var Plugin = require('./js/plugin');
 	/**
 	 * The home view to be opened first
 	 * @member {string} PluginManager~home
