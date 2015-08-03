@@ -134,7 +134,7 @@ html,body {
 /* Mainbar */
 .mainbar {
 	transition: all .25s;
-	-webkit-animation: fadein 1.4s;
+	-webkit-animation: ease-in fadein 1.4s;
 	flex-grow: 1;
 	height: 100%;
 	background-color: #ffffff;
