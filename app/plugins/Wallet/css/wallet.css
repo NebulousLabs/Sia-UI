@@ -69,9 +69,9 @@ html, body {
 	height: 100%;
 	color: #c5c5c5;
 	font-size: 32px;
-    overflow: hidden;
-    position: relative;
-    width: 100%;
+	overflow: hidden;
+	position: relative;
+	width: 100%;
 }
 
 /* Information Box */
@@ -135,11 +135,11 @@ input:focus {
 
 /* Box List */
 .box {
-    height: 50%;
+	height: 50%;
 	padding-bottom: 32px;
 }
 .box .list {
-    height: calc(100% - 108px);
+	height: calc(100% - 108px);
 	padding: 16px;
 	padding-left: 24px;
 	overflow:auto;
