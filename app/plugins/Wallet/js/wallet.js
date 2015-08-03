@@ -111,7 +111,7 @@ function update() {
 		} else if (result) {
 			wallet = result;
 		} else {
-			console.error("Unknown occurence: no error and no result from callAPI!")
+			console.error("Unknown occurence: no error and no result from callAPI!");
 			return;
 		}
 		
@@ -126,7 +126,7 @@ function update() {
 			entry.querySelector(".address").innerHTML = address;
 			entry.classList.remove("blueprint");
 			eID("address-list").appendChild(entry);
-		};
+		}
 		
 		// Update balance
 		updateField(err, "Balance: ", formatSiacoin(wallet.Balance), "balance");
