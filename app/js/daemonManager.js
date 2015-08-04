@@ -8,22 +8,12 @@ var API = require('./js/daemonAPI');
  * @class DaemonManager
  */
 function DaemonManager() {
-	/**
-	 * The file system location of Sia and siad
-	 * @member {string} DaemonManager~siaPath
-	 */
+	// The file system location of Sia and siad
 	var siaPath;
-	/**
-	 * The localhost:port (default is 9980)
-	 * @member {string} DaemonManager~address
-	 */
+	// The localhost:port (default is 9980)
 	var address;
 
-	/**
-	 * Relays calls to daemonAPI with the localhost:port address appended
-	 * @param {apiCall} call - function to run if Siad is running
-	 * @param {apiResponse} callback
-	 */
+	// Relays calls to daemonAPI with the localhost:port address appended
 	function apiCall(call, callback) {
 		// Interpret address-only calls as 'GET'
 		if (typeof call === 'string') {
@@ -35,11 +25,7 @@ function DaemonManager() {
 		API.makeCall(call, callback);
 	}
 
-	/**
-	 * Detects whether siad is running on the current address
-	 * @param {function} isRunning - function to run if Siad is running
-	 * @param {function} isNotRunning - function to run if Siad is not running
-	 */
+	// Detects whether siad is running on the current address
 	function ifSiad(isRunning, isNotRunning) {
 		if (!isRunning) {
 			isRunning = function() {};
@@ -56,9 +42,7 @@ function DaemonManager() {
 		});
 	}
 
-	/**
-	 * Starts the daemon as a long running background process
-	 */
+	// Starts the daemon as a long running background process
 	function start() {
 		ifSiad(function() {
 			console.error('attempted to start siad when it was already running');
@@ -80,9 +64,7 @@ function DaemonManager() {
 		daemonProcess.unref();
 	}
 
-	/**
-	 * Stops the daemon
-	 */
+	// Stops the daemon
 	function stop() {
 		ifSiad(function() {
 			console.log('stopping siad');
@@ -96,11 +78,7 @@ function DaemonManager() {
 		});
 	}
 
-	/**
-	 * Sets the member variables based on the passed config
-	 * @param {config} config - the config object derived from config.json
-	 * @param {callback} callback
-	 */
+	// Sets the member variables based on the passed config
 	function setConfig(config, callback) {
 		siaPath = Path.join(config.depsPath, 'Sia');
 		address = config.siadAddress;

@@ -5,15 +5,11 @@ const BrowserWindow = require('browser-window');
 const Tray = require('tray');
 // visit localhost:9222 to see devtools remotely
 App.commandLine.appendSwitch('remote-debugging-port', '9222');
-/**
- * Global reference to the window object, so the window won't be closed
- * automatically upon execution and garbage collection
- */
+// Global reference to the window object, so the window won't be closed
+// automatically upon execution and garbage collection
 var mainWindow;
 
-/**
- * Creates the window and loads index.html
- */
+// Creates the window and loads index.html
 function startMainWindow() {
 	// Open the UI with full screen size. 'screen' can only be required after
 	// app.on('ready') 
@@ -45,16 +41,12 @@ function startMainWindow() {
 	});
 }
 
-/**
- * Quit when all windows are closed.
- */
+// Quit when all windows are closed.
 App.on('window-all-closed', function() {
 	if (process.platform !== 'darwin') {
 		App.quit();
 	}
 });
 
-/**
- * When Electron loading has finished, start the daemon then the UI
- */
+// When Electron loading has finished, start the daemon then the UI
 App.on('ready', startMainWindow);

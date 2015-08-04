@@ -8,15 +8,9 @@ var Factory = require('./pluginFactory');
  * @param {string} name - The name of the plugin.
  */
 function Plugin(plugPath, name) {
-	/**
-	 * Html element for the webview
-	 * @member {Object} Plugin~view
-	 */
+	// Html element for the webview
 	var view = new Factory.view(Path.join(plugPath, name, 'index.html'), name);
-	/**
-	 * Html element for the sidebar button
-	 * @member {Object} Plugin~button
-	 */
+	// Html element for the sidebar button
 	var button = new Factory.button(Path.join(plugPath, name, 'assets', 'button.png'), name);
 
 	return {

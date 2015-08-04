@@ -6,10 +6,7 @@ var Config = require('./js/uiConfig.js');
  * @class UIManager
  */
 function UIManager() {
-	/**
-	 * Config.json variables
-	 * @member {string} UIManager~configPath
-	 */
+	// Config.json variables
 	var configPath = Path.join(__dirname, 'config.json');
 	/**
 	 * Config variable held in working memory
