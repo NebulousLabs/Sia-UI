@@ -17,7 +17,9 @@
 	from { opacity: 0; }
 	to   { opacity: 1; }
 }
-body {
+html, body {
+	height: calc(100% - 80px);
+	min-width: calc(100% - 240px);
 	margin: 0px;
 	padding: 0px;
 	border-spacing: 0px;
@@ -64,12 +66,17 @@ body {
 
 /* Main Display */
 .frame {
+	height: 100%;
 	color: #c5c5c5;
 	font-size: 32px;
+	overflow: hidden;
+	position: relative;
+	width: 100%;
 }
 
 /* Information Box */
 .box .row {
+	background:#f5f5f5;
 	display: block;
 	border: 1px;
 	padding-top: 18px;
@@ -125,12 +132,17 @@ input:focus {
 	border: solid 1px #4a4a4a;
 	box-shadow: 0 0 5px 1px #c5c5c5;
 }
+
+/* Box List */
+.box {
+	height: 50%;
+	padding-bottom: 32px;
+}
 .box .list {
+	height: calc(100% - 108px);
 	padding: 16px;
 	padding-left: 24px;
-	height: 200px;
 	overflow:auto;
-	background:#f5f5f5;
 }
 .entry.blueprint {
 	display: none;

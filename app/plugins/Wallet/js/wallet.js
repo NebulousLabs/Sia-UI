@@ -37,6 +37,18 @@ function formatSiacoin(hastings) {
 	return display + " SC";
 }
 
+// Adds a given address to the list
+function appendAddress(address) {
+	if (eID(address)) {
+		return;
+	}
+	var entry = eID("abp").cloneNode(true);
+	entry.id = address;
+	entry.querySelector(".address").innerHTML = address;
+	entry.classList.remove("blueprint");
+	eID("address-list").appendChild(entry);
+}
+
 // Create a new address
 function createAddress() {
 	callAPI("/wallet/address");
@@ -117,15 +129,7 @@ function update() {
 		
 		// Populate addresses
 		for (var i = 0; i < wallet.VisibleAddresses.length; i++) {
-			var address = wallet.VisibleAddresses[i];
-			if (eID(address)) {
-				return;
-			}
-			var entry = eID("abp").cloneNode(true);
-			entry.id = address;
-			entry.querySelector(".address").innerHTML = address;
-			entry.classList.remove("blueprint");
-			eID("address-list").appendChild(entry);
+			appendAddress(wallet.VisibleAddresses[i]);
 		}
 		
 		// Update balance

@@ -59,8 +59,6 @@ function UIManager() {
 		if (screenArea >= 2048*1152) {
 			config.zoom = 2;
 			WebFrame.setZoomFactor(config.zoom);
-			WebFrame.setZoomFactor(config.zoom);
-			WebFrame.setZoomFactor(config.zoom);
 		}
 	}
 
