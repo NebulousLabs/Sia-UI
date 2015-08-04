@@ -19,39 +19,85 @@ function UIManager() {
 	 * Config variable held in working memory
 	 * @member {config} UIManager~memConfig
 	 */
+	// Involved in the notification queue
 	var memConfig;
-
 	var notifications = [];
 	var lastNotificationTime = 0;
 	var notificationsInQueue = 0;
 	var notificationIcons = {
-		"alert": "exclamation",
-		"error": "exclamation",
-		"update": "arrow-circle-o-up",
-		"upload": "upload",
-		"help": "question",
-		"sent": "send",
-		"received": "sign-in",
-		"fix": "wrench",
-		"download": "arrow-circle-down",
-		"peers": "group",
-		"success": "check"
+		alert: 'exclamation',
+		error: 'exclamation',
+		update: 'arrow-circle-o-up',
+		upload: 'upload',
+		help: 'question',
+		sent: 'send',
+		received: 'sign-in',
+		fix: 'wrench',
+		download: 'arrow-circle-down',
+		peers: 'group',
+		success: 'check'
 	};
+
+    // Shows tooltip with content on given element
+	var eTooltip = $('#tooltip');
+    var tooltipTimeout,tooltipVisible;
+
+    function tooltip(element, content, offset) {
+        offset = offset || {
+			top: 0,
+			left: 0,
+		};
+        element = $(element);
+
+        eTooltip.show();
+        eTooltip.html(content);
+        var middleX = element.offset().left + element.width()/2;
+        var topY = element.offset().top - element.height();
+
+        eTooltip.offset({
+            top: topY - eTooltip.height() + offset.top,
+            left: middleX - eTooltip.width()/2 + offset.left
+        });
+
+        if (!tooltipVisible){
+            eTooltip.stop();
+            eTooltip.css({'opacity':0});
+            tooltipVisible = true;
+            eTooltip.animate({
+                'opacity':1
+            },400);
+        }else{
+            eTooltip.stop();
+            eTooltip.show();
+            eTooltip.css({'opacity':1});
+        }
+
+        clearTimeout(tooltipTimeout);
+        tooltipTimeout = setTimeout(function(){
+            // eTooltip.hide();
+            eTooltip.animate({
+                'opacity':'0'
+            },400,function(){
+                tooltipVisible = false;
+                eTooltip.hide();
+            });
+        },1400);
+    }
 	
 	function showNotification(message, type, clickAction, small){
-		type = type || "alert";
+		type = type || 'alert';
 
-		var element = $(".notification.blueprint").clone().removeClass("blueprint");
-		element.find(".icon i").addClass("fa-" + notificationIcons[type]);
-		element.addClass("type-" + type);
+		var element = $('.notification.blueprint').clone().removeClass('blueprint');
+		element.find('.icon i').addClass('fa-' + notificationIcons[type]);
+		element.addClass('type-' + type);
 		if (small){
-			element.addClass("small");
+			element.addClass('small');
 		}
-		element.find(".content").text(message);
-		element.css({"opacity":0});
-		$(".notification-container").prepend(element);
+		element.find('.content').text(message);
+		element.css({'opacity':0});
+		$('.notification-container').prepend(element);
 		if (clickAction){
-			element.addClass("hoverable");
+			element.addClass('hoverable');
 			element.click(clickAction);
 		}
 
@@ -75,7 +121,7 @@ function UIManager() {
 		})
 
 		element.animate({
-			"opacity":1
+			'opacity':1
 		});
 		removeTimeout = setTimeout(removeElement, 4000);
 	}
@@ -132,7 +178,7 @@ function UIManager() {
 			//adjustHighResZoom(config);
 			Plugins.init(config);
 		});
-		$("#update-button").click(function(){
+		$('#update-button').click(function(){
 			Daemon.update();
 		});
 	},
