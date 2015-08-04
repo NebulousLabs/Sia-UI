@@ -19,14 +19,15 @@ function callAPI(call, callback) {
 	IPC.sendToHost("api-call", call);
 	// prevents adding duplicate listeners
 	if (!listening) {
-		IPC.on(call, callback);
-	}
-}
-
-// Updates element text
-function updateField(err, caption, newValue, elementID) {
-	if (newValue !== null) {
-		document.getElementById(elementID).innerHTML = caption + newValue;
+		IPC.on(call, function(err, result) {
+			if (err) {
+				console.error(err);
+			} else if (result) {
+				callback(result);
+			} else {
+				console.error("Unknown occurence: no error and no result from callAPI!");
+			}
+		});
 	}
 }
 
@@ -116,24 +117,16 @@ function initListeners() {
 
 // Define API calls and update DOM per call
 function update() {
-	callAPI("/wallet/status", function(err, result) {
-		if (err) {
-			console.error(err);
-			return;
-		} else if (result) {
-			wallet = result;
-		} else {
-			console.error("Unknown occurence: no error and no result from callAPI!");
-			return;
-		}
-		
+	callAPI("/wallet/status", function(result) {
+		wallet = result;
+
 		// Populate addresses
 		for (var i = 0; i < wallet.VisibleAddresses.length; i++) {
 			appendAddress(wallet.VisibleAddresses[i]);
 		}
 		
 		// Update balance
-		updateField(err, "Balance: ", formatSiacoin(wallet.Balance), "balance");
+		eID("balance").innerHTML = "Balance: " + formatSiacoin(wallet.Balance);
 	});
 	listening = true;
 }
