@@ -1,11 +1,6 @@
 'use strict';
 
-/**
- * Creates the image element for a button
- * @param {string} path - The path to the icon.
- * @private
- * @returns {Object} - The button image element
- */
+// Creates the image element for a button
 function icon(path) {
 	var i = document.createElement('img');
 	i.src = path;
@@ -13,12 +8,7 @@ function icon(path) {
 	return i;
 }
 
-/**
- * Creates the text element for a button
- * @param {string} name - The name of the plugin.
- * @private
- * @returns {Object} - The button text element
- */
+// Creates the text element for a button
 function text(name) {
 	var t = document.createElement('div');
 	t.innerText = name;

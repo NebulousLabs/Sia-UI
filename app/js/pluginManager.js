@@ -6,33 +6,17 @@ var Plugin = require('./js/plugin');
  * @class PluginManager
  */
 function PluginManager() {
-	/**
-	 * The home view to be opened first
-	 * @member {string} PluginManager~home
-	 */
+	// The home view to be opened first
 	var home;
-	/**
-	 * The plugins folder
-	 * @member {string} PluginManager~plugPath
-	 */
+	// The plugins folder
 	var plugPath;
-	/**
-	 * The current plugin
-	 * @member {Plugin} PluginManager~current
-	 */
+	// The current plugin
 	var current;
-	/**
-	 * Array to store all plugins
-	 * @member {Plugin[]} PluginManager~plugins
-	 */
+	// Array to store all plugins
 	var plugins = [];
 
-	/**
-	 * Detects the home Plugin or otherwise the alphabetically first
-	 * plugin and sets its button and view to be first in order
-	 * @function PluginManager~setHome
-	 * @param {string[]} pluginNames - array of subdirectories of app/plugins/
-	 */
+	// Detects the home Plugin or otherwise the alphabetically first
+	// plugin and sets its button and view to be first in order
 	function setHome(pluginNames) {
 		// Detect if home plugin is installed
 		var homeIndex = pluginNames.indexOf(home);
@@ -46,11 +30,7 @@ function PluginManager() {
 		home = pluginNames[0];
 	}
 
-	/**
-	 * Handles listening for plugin messages and reacting to them
-	 * @function PluginManager~addListeners
-	 * @param {Plugin} plugin - a newly made plugin object
-	 */
+	// Handles listening for plugin messages and reacting to them
 	function addListeners(plugin) {
 		// Only show the default plugin view
 		if (plugin.name === home) {
@@ -101,11 +81,7 @@ function PluginManager() {
 		});	
 	}
 
-	/**
-	 * Constructs the plugins and adds them to this manager 
-	 * @function PluginManager~addPlugin
-	 * @param {string} name - The plugin folder's name
-	 */
+	// Constructs the plugins and adds them to this manager 
 	function addPlugin(name) {
 		// Make the plugin, giving its button a standard transition
 		var plugin = new Plugin(plugPath, name);
@@ -117,10 +93,7 @@ function PluginManager() {
 		plugins.push(plugin);
 	}
 
-	/**
-	 * Reads the config's plugPath for plugin folders
-	 * @function PluginManager~initPlugins
-	 */
+	// Reads the config's plugPath for plugin folders
 	function initPlugins() {
 		Fs.readdir(plugPath, function (err, pluginNames) {
 			if (err) {
@@ -135,13 +108,8 @@ function PluginManager() {
 		});
 	}
 
-	/**
-	 * Sets the member variables based on the passed config
-	 * @function PluginManager~setConfig
-	 * @param {config} config - config in memory
-	 * @param {callback} callback
-	 * @todo delete all plugins when a new path is set?
-	 */
+	// Sets the member variables based on the passed config
+	// TODO: delete all plugins when a new path is set?
 	function setConfig(config, callback) {
 		home = config.homePlugin;
 		plugPath = config.pluginsPath;

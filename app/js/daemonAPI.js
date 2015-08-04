@@ -14,14 +14,7 @@
  * @property {Object} args - The arguments to send with the call
  */
 
-/**
- * Creates an XMLHttpRequest to send
- * @param {string} url - The address (usually localhost) and port of siad
- * @param {string} type - The call type, such as 'POST' or 'GET'
- * @param {Object} args - The arguments to send with the call
- * @param {apiResponse} callback
- * @private
- */
+// Creates an XMLHttpRequest to send
 function sendCall(url, type, args, callback) {
 	// Detect improper calls, each one needs a url
 	if (!url || !type || !args) {
@@ -54,12 +47,7 @@ function sendCall(url, type, args, callback) {
 	request.send(args);
 } 
 
-/**
- * Takes any call object and makes the correct call
- * @param {apiCall} call - The call object with parameters
- * @param {apiResponse} callback
- * @private
- */
+// Takes any call object and makes the correct call
 function discernCall(call, callback) {
 	// Extract call attributes, default call is 'GET'
 	var url = call.url;
