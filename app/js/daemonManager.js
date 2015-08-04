@@ -1,6 +1,4 @@
 'use strict';
-const Process = require('child_process').spawn;
-var API = require('./js/daemonAPI');
 
 /**
  * DaemonManager, a closure, initializes siad as a background process and
@@ -9,8 +7,12 @@ var API = require('./js/daemonAPI');
  */
 function DaemonManager() {
 	/**
-	 * The file system location of Sia and siad
-	 * @member {string} DaemonManager~siaPath
+	 * API namespace for API access logic
+	 * @member {daemonAPI} DaemonManager~API
+	 */
+	var API = require('./js/daemonAPI');
+	/**
+	 * The file system location of Sia and siad * @member {string} DaemonManager~siaPath
 	 */
 	var siaPath;
 	/**
@@ -56,10 +58,22 @@ function DaemonManager() {
 		});
 	}
 
+	function updatePrompt() {
+		apiCall("/daemon/updates/check", function(err, update) {
+			if (update.Available) {
+				UI.notify("New Sia Client Available: Click to update to " + update.Version + "!", "alert", function() {
+					Shell.openExternal('https://www.github.com/NebulousLabs/Sia-UI/releases');
+				});
+			} else {
+				UI.notify("Sia client up to date!", "success");
+			}
+		});
+	}
+
 	/**
 	 * Starts the daemon as a long running background process
 	 */
-	function start() {
+	function start(callback) {
 		ifSiad(function() {
 			console.error('attempted to start siad when it was already running');
 			return;
@@ -78,6 +92,8 @@ function DaemonManager() {
 		var command = process.platform === 'win32' ? './siad.exe' : './siad';
 		var daemonProcess = new Process(command, processOptions);
 		daemonProcess.unref();
+
+		callback();
 	}
 
 	/**
@@ -114,7 +130,9 @@ function DaemonManager() {
 	 */
 	this.init = function(config) {
 		setConfig(config, function() {
-			ifSiad.call(this, function() {}, start);
+			ifSiad(updatePrompt, function() {
+				start(updatePrompt());
+			});
 		});
 	};
 	/**
@@ -124,4 +142,5 @@ function DaemonManager() {
 	 * @param {APIResponse} callback
 	 */
 	this.apiCall = apiCall;
+	this.update = updatePrompt;
 }

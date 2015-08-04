@@ -1,4 +1,5 @@
 'use strict';
+
 /**
  * The callback from an apiCall
  * @callback apiResponse
