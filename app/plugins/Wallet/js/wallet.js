@@ -96,8 +96,7 @@ function verifyTransaction(callback) {
 // Give the buttons interactivity
 function initListeners() {
 	eID("create-address").onclick = function() {
-		//ui._tooltip(this, "Creating Address");
-		// TODO: Make this responsive such as above
+		IPC.sendToHost('tooltip', "Creating Address", this.getBoundingClientRect());
 		createAddress();
 	};
 	eID("send-money").onclick = function() {
@@ -110,7 +109,7 @@ function initListeners() {
 			sendCoin(amount, address);
 			window.alert(amount.dividedBy("1e24") + " Siacoin sent to " + address);
 			eID("transaction-amount").value = "";
-			eID("confirm").classList.add("hidden");
+		eID("confirm").classList.add("hidden");
 		});
 	};
 }

@@ -91,6 +91,9 @@ function PluginManager() {
 						plugin.sendToView(event.args[0], err, callResult);
 					});
 					break;
+				case 'tooltip':
+					UI.tooltip.apply(null, event.args);
+					break;
 				case 'devtools':
 					plugin.toggleDevTools();
 					break;

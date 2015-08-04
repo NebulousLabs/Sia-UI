@@ -38,51 +38,56 @@ function UIManager() {
 		success: 'check'
 	};
 
-    // Shows tooltip with content on given element
+	// Shows tooltip with content on given element
 	var eTooltip = $('#tooltip');
-    var tooltipTimeout,tooltipVisible;
+	var tooltipTimeout,tooltipVisible;
 
-    function tooltip(element, content, offset) {
-        offset = offset || {
+	this.tooltip = function(content, offset) {
+		offset = offset || {
 			top: 0,
 			left: 0,
 		};
-        element = $(element);
 
-        eTooltip.show();
-        eTooltip.html(content);
-        var middleX = element.offset().left + element.width()/2;
-        var topY = element.offset().top - element.height();
+		eTooltip.show();
+		eTooltip.html(content);
+		eTooltip.offset(offset);
+		console.log('content', content);
+		console.log('offset', offset);
+		console.log('eTooltip', eTooltip);
+		/*
+		var middleX = offset.left;
+		var topY = offset.top;
 
-        eTooltip.offset({
-            top: topY - eTooltip.height() + offset.top,
-            left: middleX - eTooltip.width()/2 + offset.left
-        });
+		eTooltip.offset({
+			top: topY - eTooltip.height() + offset.top,
+			left: middleX - eTooltip.width()/2 + offset.left
+		});
+	   */
 
-        if (!tooltipVisible){
-            eTooltip.stop();
-            eTooltip.css({'opacity':0});
-            tooltipVisible = true;
-            eTooltip.animate({
-                'opacity':1
-            },400);
-        }else{
-            eTooltip.stop();
-            eTooltip.show();
-            eTooltip.css({'opacity':1});
-        }
+		if (!tooltipVisible){
+			eTooltip.stop();
+			eTooltip.css({'opacity':0});
+			tooltipVisible = true;
+			eTooltip.animate({
+				'opacity':1
+			}, 400);
+		}else{
+			eTooltip.stop();
+			eTooltip.show();
+			eTooltip.css({'opacity':1});
+		}
 
-        clearTimeout(tooltipTimeout);
-        tooltipTimeout = setTimeout(function(){
-            // eTooltip.hide();
-            eTooltip.animate({
-                'opacity':'0'
-            },400,function(){
-                tooltipVisible = false;
-                eTooltip.hide();
-            });
-        },1400);
-    }
+		clearTimeout(tooltipTimeout);
+		tooltipTimeout = setTimeout(function(){
+			// eTooltip.hide();
+			eTooltip.animate({
+				'opacity':'0'
+			}, 400,function(){
+				tooltipVisible = false;
+				eTooltip.hide();
+			});
+		}, 1400);
+	}
 	
 	function showNotification(message, type, clickAction, small){
 		type = type || 'alert';
