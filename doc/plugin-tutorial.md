@@ -547,7 +547,7 @@ to reduce unnecessary use of IPC, one of the few non-webdev-native tools used.
 
 Instead of callAPI() sending three hardcoded calls and having IPC listen on the
 channel of each call, we could make a more abstract function that both sends
-the call and listens for the response:
+the call and listens for the response, handling errors in one place:
 
 ```js
 // Keeps track of if listeners were already instantiated
@@ -557,7 +557,17 @@ var listening = false;
 function callAPI(call, callback) {
 	IPC.sendToHost('api-call', call);
 	// prevents adding duplicate listeners
-	if (!listening) IPC.on(call, callback);
+	if (!listening) {
+		IPC.on(call, function(err, result) {
+			if (err) {
+				console.error(err);
+			} else if (result) {
+				callback(result);
+			} else {
+				console.error('Unknown occurence: no error and no result from callAPI!');
+			}
+		});
+	}
 }
 ```
 
@@ -575,13 +585,8 @@ We can call it and use it like this:
 -});
 +// Define API calls and update values per call
 +function update() {
-+	callAPI('/wallet/status', function(err, result) {
-+		if (err) {
-+			console.error(err);
-+		}
-+		if (result) {
-+			document.getElementById('balance').innerHTML = 'Balance: ' + balance;
-+		}
++	callAPI('/wallet/status', function(result) {
++		document.getElementById('balance').innerHTML = 'Balance: ' + balance;
 +	});
 +	/* The same approach for the other two calls */
 +	listening = true;
@@ -600,38 +605,7 @@ Now we reflect the changed nature of our functions in our `init()`:
 +	updating = setInterval(update, 1000);
 ```
 
-While we're on a role with abstracting, we can see that we still have
-have repetitive code. Let's take the DOM editing lines and error checking into
-a function we can reuse:
-
-```diff
-+// Updates element text
-+function updateField(err, caption, newValue, elementID) {
-+	if (err) {
-+		console.error(err);
-+	}
-+	if (newValue !== null) {
-+		document.getElementById(elementID).innerHTML = caption + newValue;
-+	}
-+}
-+
-// Define API calls and update DOM per call
-function update() {
-	callAPI('/wallet/status', function(err, result) {
--		if (err) {
--			console.error(err);
--		}
--		if (result) {
--			document.getElementById('balance').innerHTML = 'Balance: ' + balance;
--		}
-+		updateField(err, 'Balance: ', formatSiacoin(result.Balance), 'balance');
-	});
-	/* The same approach for the other two calls */
-	listening = true;
-}
-```
-
-Now the aggregated code again with these abstractions applied:
+The aggregated code again with these abstractions applied should look like:
 
 ```js
 'use strict';
@@ -648,16 +622,16 @@ var listening = false;
 function callAPI(call, callback) {
 	IPC.sendToHost('api-call', call);
 	// prevents adding duplicate listeners
-	if (!listening) IPC.on(call, callback);
-}
-
-// Updates element text
-function updateField(err, caption, newValue, elementID) {
-	if (err) {
-		console.error(err);
-	}
-	if (newValue !== null) {
-		document.getElementById(elementID).innerHTML = caption + newValue;
+	if (!listening) {
+		IPC.on(call, function(err, result) {
+			if (err) {
+				console.error(err);
+			} else if (result) {
+				callback(result);
+			} else {
+				console.error('Unknown occurence: no error and no result from callAPI!');
+			}
+		});
 	}
 }
 
@@ -670,14 +644,14 @@ function formatSiacoin(hastings) {
 
 // Define API calls and update DOM per call
 function update() {
-	callAPI('/wallet/status', function(err, result) {
-		updateField(err, 'Balance: ', formatSiacoin(result.Balance), 'balance');
+	callAPI('/wallet/status', function(result) {
+		document.getElementById('balance').innerHTML = 'Balance: ' + formatSiacoin(result.Balance);
 	});
-	callAPI('/gateway/status', function(err, result) {
-		updateField(err, 'Peers: ', result.Peers.length, 'peers');
+	callAPI('/gateway/status', function(result) {
+		document.getElementById('peers').innerHTML = 'Peers: ' + result.Peers.length;
 	});
-	callAPI('/consensus/status', function(err, result) {
-		updateField(err, 'Block Height: ', result.Height, 'block-height');
+	callAPI('/consensus/status', function(result) {
+		document.getElementById('block-height').innerHTML = 'Block Height: ' + result.Height;
 	});
 	listening = true;
 }
@@ -688,8 +662,8 @@ function init() {
 	// IPC.sendToHost('devtools');
 	
 	// Ensure precision
-	BigNumber.config({ DECIMAL_PLACES: 24 })
-	BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
+	BigNumber.config({ DECIMAL_PLACES: 24 });
+	BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 	
 	// Call the API regularly to update page
 	updating = setInterval(update, 1000);
