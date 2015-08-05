@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 // Library for communicating with Sia-UI
-const IPC = require("ipc");
+const IPC = require('ipc');
 // Library for arbitrary precision in numbers
-const BigNumber = require("bignumber.js");
+const BigNumber = require('bignumber.js');
 // Variables to store api result values
 var wallet = {};
 // Keeps track of if the view is shown
@@ -16,7 +16,7 @@ var eID = function() {
 
 // Call API and listen for response to call
 function callAPI(call, callback) {
-	IPC.sendToHost("api-call", call);
+	IPC.sendToHost('api-call', call);
 	// prevents adding duplicate listeners
 	if (!listening) {
 		IPC.on(call, function(err, result) {
@@ -27,7 +27,7 @@ function callAPI(call, callback) {
 					callback(result);
 				}
 			} else {
-				console.error("Unknown occurence: no error and no result from callAPI!");
+				console.error('Unknown occurence: no error and no result from callAPI!');
 			}
 		});
 	}
@@ -37,7 +37,7 @@ function callAPI(call, callback) {
 function formatSiacoin(hastings) {
 	var ConversionFactor = new BigNumber(10).pow(24);
 	var display = new BigNumber(hastings).dividedBy(ConversionFactor);
-	return display + " SC";
+	return display + ' SC';
 }
 
 // Adds a given address to the list
@@ -45,16 +45,16 @@ function appendAddress(address) {
 	if (eID(address)) {
 		return;
 	}
-	var entry = eID("abp").cloneNode(true);
+	var entry = eID('abp').cloneNode(true);
 	entry.id = address;
-	entry.querySelector(".address").innerHTML = address;
-	entry.classList.remove("blueprint");
-	eID("address-list").appendChild(entry);
+	entry.querySelector('.address').innerHTML = address;
+	entry.classList.remove('blueprint');
+	eID('address-list').appendChild(entry);
 }
 
 // Create a new address
 function createAddress() {
-	callAPI("/wallet/address");
+	callAPI('/wallet/address');
 }
 
 // Send the specified transaction
@@ -64,8 +64,8 @@ function sendCoin(amount, address) {
 		destination: address,
 	};
 	var call = {
-		url: "/wallet/send",
-		type: "POST",
+		url: '/wallet/send',
+		type: 'POST',
 		args: transaction,
 	};
 	callAPI(call);
@@ -76,19 +76,33 @@ function isNumber(n) {
 	return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
+// Ask UI to show tooltip bubble
+function tooltip(message, element) {
+	var rect = element.getBoundingClientRect();
+	IPC.sendToHost('tooltip', message, {
+		top: rect.top,
+		bottom: rect.bottom,
+		left: rect.left,
+		right: rect.right,
+		height: rect.height,
+		width: rect.width,
+		length: rect.length,
+	});
+};
+
 // Transaction has to be legitimate
 // TODO: verify address
 function verifyTransaction(callback) {
-	var amount = eID("transaction-amount").value;
-	var e = eID("send-unit");
+	var amount = eID('transaction-amount').value;
+	var e = eID('send-unit');
 	var unit = e.options[e.selectedIndex].value;
 
-	var address = eID("transaction-address").value;
+	var address = eID('transaction-address').value;
 
 	if (!isNumber(amount)) {
-		window.alert("Enter numeric amount of Siacoin to send");
+		tooltip('Enter numeric amount of Siacoin to send', eID('send-money'));
 	} else if (wallet.Balance < amount) {
-		window.alert("Balance too low!");
+		tooltip('Balance too low!', eID('send-money'));
 	} else if (callback) {
 		var total = new BigNumber(amount).times(unit).round();
 		callback(total, address);
@@ -97,37 +111,28 @@ function verifyTransaction(callback) {
 
 // Give the buttons interactivity
 function initListeners() {
-	eID("create-address").onclick = function() {
-		var rect = this.getBoundingClientRect();
-		IPC.sendToHost('tooltip', "Creating...", {
-			top: rect.top,
-			bottom: rect.bottom,
-			left: rect.left,
-			right: rect.right,
-			height: rect.height,
-			width: rect.width,
-			length: rect.length,
-		});
+	eID('create-address').onclick = function() {
+		tooltip('Creating...', this);
 		createAddress();
 	};
-	eID("send-money").onclick = function() {
+	eID('send-money').onclick = function() {
 		verifyTransaction(function() {
-			eID("confirm").classList.remove("hidden");
+			eID('confirm').classList.remove('hidden');
 		});
 	};
-	eID("confirm").onclick = function() {
+	eID('confirm').onclick = function() {
 		verifyTransaction(function(amount, address) {
 			sendCoin(amount, address);
-			window.alert(amount.dividedBy("1e24") + " Siacoin sent to " + address);
-			eID("transaction-amount").value = "";
-		eID("confirm").classList.add("hidden");
+			window.alert(amount.dividedBy('1e24') + ' Siacoin sent to ' + address);
+			eID('transaction-amount').value = '';
+			eID('confirm').classList.add('hidden');
 		});
 	};
 }
 
 // Define API calls and update DOM per call
 function update() {
-	callAPI("/wallet/status", function(result) {
+	callAPI('/wallet/status', function(result) {
 		wallet = result;
 
 		// Populate addresses
@@ -136,7 +141,7 @@ function update() {
 		}
 		
 		// Update balance
-		eID("balance").innerHTML = "Balance: " + formatSiacoin(wallet.Balance);
+		eID('balance').innerHTML = 'Balance: ' + formatSiacoin(wallet.Balance);
 	});
 	listening = true;
 }
@@ -144,7 +149,7 @@ function update() {
 // Called upon showing
 function init() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPC.sendToHost("devtools");
+	// IPC.sendToHost('devtools');
 	
 	// Ensure precision
 	BigNumber.config({ DECIMAL_PLACES: 24 });
