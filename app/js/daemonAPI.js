@@ -31,10 +31,25 @@ function sendCall(url, type, args, callback) {
 		});
 		return;
 	}
-
+	/*
+	$.ajax({
+		url: url,
+		type: type,
+		success: function(resp) {
+			callback(null, JSON.parse(resp));
+		},
+		error: function() {
+			callback("Oops");
+		},
+		data: args
+	});
+	*/
 	// make request
 	var request = new XMLHttpRequest();
 	request.open(type, url, true);
+	if (type == 'POST') {
+		request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	}
 
 	// add response listeners tied to the callback response
 	request.onload = function() {
@@ -68,8 +83,7 @@ function discernCall(call, callback) {
 	var args = call.args || {};
 
 	// The function can use JSON, but turns them into strings first
-	var JSON;
-	if (JSON && typeof JSON.parse === 'function') {
+	if (typeof args !== 'string') {
 		args = JSON.stringify(args);
 	}
 
