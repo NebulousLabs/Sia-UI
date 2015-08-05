@@ -58,7 +58,7 @@ function createAddress() {
 // Send the specified transaction
 function sendCoin(amount, address) {
 	var transaction = {
-		amount: amount.toString(),
+		amount: amount.toString,
 		destination: address,
 	};
 	var call = {
@@ -96,7 +96,16 @@ function verifyTransaction(callback) {
 // Give the buttons interactivity
 function initListeners() {
 	eID("create-address").onclick = function() {
-		IPC.sendToHost('tooltip', "Creating Address", this.getBoundingClientRect());
+		var rect = this.getBoundingClientRect();
+		IPC.sendToHost('tooltip', "Creating Address", {
+			top: rect.top,
+			bottom: rect.bottom,
+			left: rect.left,
+			right: rect.right,
+			height: rect.height,
+			width: rect.width,
+			length: rect.length,
+		});
 		createAddress();
 	};
 	eID("send-money").onclick = function() {

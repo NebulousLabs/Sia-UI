@@ -51,9 +51,6 @@ function UIManager() {
 		eTooltip.show();
 		eTooltip.html(content);
 		eTooltip.offset(offset);
-		console.log('content', content);
-		console.log('offset', offset);
-		console.log('eTooltip', eTooltip);
 		/*
 		var middleX = offset.left;
 		var topY = offset.top;
