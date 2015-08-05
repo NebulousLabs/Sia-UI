@@ -116,7 +116,7 @@ function appendAddress(address) {
 	if (eID(address)) {
 		return;
 	}
-	var entry = eID('abp').cloneNode(true);
+	var entry = eID('addressbp').cloneNode(true);
 	entry.id = address;
 	entry.querySelector('.address').innerHTML = address;
 	entry.classList.remove('blueprint');
