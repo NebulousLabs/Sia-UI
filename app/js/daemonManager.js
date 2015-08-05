@@ -93,7 +93,9 @@ function DaemonManager() {
 		var daemonProcess = new Process(command, processOptions);
 		daemonProcess.unref();
 
-		callback();
+		// Give siad time to load
+		// TODO: Imperfect way to go about this.
+		setTimeout(callback, 500);
 	}
 
 	/**
@@ -131,7 +133,7 @@ function DaemonManager() {
 	this.init = function(config) {
 		setConfig(config, function() {
 			ifSiad(updatePrompt, function() {
-				start(updatePrompt());
+				start(updatePrompt);
 			});
 		});
 	};
