@@ -91,6 +91,9 @@ function PluginManager() {
 						plugin.sendToView(event.args[0], err, callResult);
 					});
 					break;
+				case 'notify':
+					UI.notify.apply(null, event.args);
+					break;
 				case 'tooltip':
 					event.args[1].top += $('.header').height();
 					event.args[1].left += $('#sidebar').width();

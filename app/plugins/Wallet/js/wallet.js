@@ -37,7 +37,7 @@ function callAPI(call, callback) {
 function formatSiacoin(hastings) {
 	var ConversionFactor = new BigNumber(10).pow(24);
 	var display = new BigNumber(hastings).dividedBy(ConversionFactor);
-	return display + ' SC';
+	return display + ' S';
 }
 
 // Adds a given address to the list
@@ -123,7 +123,7 @@ function initListeners() {
 	eID('confirm').onclick = function() {
 		verifyTransaction(function(amount, address) {
 			sendCoin(amount, address);
-			window.alert(amount.dividedBy('1e24') + ' Siacoin sent to ' + address);
+			IPC.sendToHost('notify', amount.dividedBy('1e24') + ' Siacoin sent to ' + address, 'sent');
 			eID('transaction-amount').value = '';
 			eID('confirm').classList.add('hidden');
 		});

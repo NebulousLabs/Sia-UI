@@ -19,8 +19,9 @@ function UIManager() {
 	 * Config variable held in working memory
 	 * @member {config} UIManager~memConfig
 	 */
-	// Involved in the notification queue
 	var memConfig;
+
+	// Involved in the notification queue
 	var notifications = [];
 	var lastNotificationTime = 0;
 	var notificationsInQueue = 0;
@@ -38,82 +39,40 @@ function UIManager() {
 		success: 'check'
 	};
 
-	// Shows tooltip with content on given element
+	// Involved in showing tooltips
 	var eTooltip = $('#tooltip');
 	var tooltipTimeout,tooltipVisible;
 
-	this.tooltip = function(content, offset) {
-		offset = offset || {
-			top: 0,
-			left: 0,
-		};
-
-		eTooltip.show();
-		eTooltip.html(content);
-		var middleX = offset.left - (eTooltip.width()/2) + (offset.width/2);
-        var topY = offset.top - (eTooltip.height()) - (offset.height/2);
-        eTooltip.offset({
-            top: topY,
-            left: middleX,
-        });
-
-		if (!tooltipVisible){
-			eTooltip.stop();
-			eTooltip.css({'opacity':0});
-			tooltipVisible = true;
-			eTooltip.animate({
-				'opacity':1
-			}, 400);
-		}else{
-			eTooltip.stop();
-			eTooltip.show();
-			eTooltip.css({'opacity':1});
-		}
-
-		clearTimeout(tooltipTimeout);
-		tooltipTimeout = setTimeout(function(){
-			// eTooltip.hide();
-			eTooltip.animate({
-				'opacity':'0'
-			}, 400,function(){
-				tooltipVisible = false;
-				eTooltip.hide();
-			});
-		}, 1400);
-	}
-	
-	function showNotification(message, type, clickAction, small){
+	// constructs the notification to show
+	function showNotification(message, type, clickAction) {
 		type = type || 'alert';
 
 		var element = $('.notification.blueprint').clone().removeClass('blueprint');
 		element.find('.icon i').addClass('fa-' + notificationIcons[type]);
 		element.addClass('type-' + type);
-		if (small){
-			element.addClass('small');
-		}
 		element.find('.content').text(message);
 		element.css({'opacity':0});
 		$('.notification-container').prepend(element);
-		if (clickAction){
+		if (clickAction) {
 			element.addClass('hoverable');
 			element.click(clickAction);
 		}
 
 		// Removes the notification element
-		function removeElement(){
-			element.slideUp(function(){
+		function removeElement() {
+			element.slideUp(function() {
 				element.remove();
 			});
 		}
 
 		var removeTimeout;
-		element.mouseover(function(){
+		element.mouseover(function() {
 			// don't let the notification disappear if the user is debating
 			// clicking
 			clearTimeout(removeTimeout)
 		});
 
-		element.mouseout(function(){
+		element.mouseout(function() {
 			// the user isn't interested, restart deletion timer
 			removeTimeout = setTimeout(removeElement, 2500);
 		})
@@ -142,13 +101,64 @@ function UIManager() {
 		}
 	}
 	
-	function notify(message, type, clickAction){
-		// CONTRIBUTE: This delay system is technically broken, but not noticably
-		// wait approximately 250ms between notifications
-		if (new Date().getTime() < lastNotificationTime + 250){
+	/**
+	 * Shows tooltip with content on given element
+	 * @param {string} content The message to display in tooltip
+	 * @param {Object} offset The dimensions of the element to display over
+	 */
+	this.tooltip = function(content, offset) {
+		offset = offset || {
+			top: 0,
+			left: 0,
+		};
+
+		eTooltip.show();
+		eTooltip.html(content);
+		var middleX = offset.left - (eTooltip.width()/2) + (offset.width/2);
+        var topY = offset.top - (eTooltip.height()) - (offset.height/2);
+        eTooltip.offset({
+            top: topY,
+            left: middleX,
+        });
+
+		if (!tooltipVisible) {
+			eTooltip.stop();
+			eTooltip.css({'opacity':0});
+			tooltipVisible = true;
+			eTooltip.animate({
+				'opacity':1
+			}, 400);
+		}else{
+			eTooltip.stop();
+			eTooltip.show();
+			eTooltip.css({'opacity':1});
+		}
+
+		clearTimeout(tooltipTimeout);
+		tooltipTimeout = setTimeout(function() {
+			// eTooltip.hide();
+			eTooltip.animate({
+				'opacity':'0'
+			}, 400,function() {
+				tooltipVisible = false;
+				eTooltip.hide();
+			});
+		}, 1400);
+	}
+
+	/**
+	 * @param {string} message What to display in notification
+	 * @param {string} type The form of notification
+	 * @param {function} clickAction The function to call upon the user
+	 * clicking the notification
+	 */
+	this.notify = function notify(message, type, clickAction) {
+		// CONTRIBUTE: This delay system is technically broken, but not
+		// noticably wait approximately 250ms between notifications
+		if (new Date().getTime() < lastNotificationTime + 250) {
 			notificationsInQueue ++;
 
-			setTimeout(function(){
+			setTimeout(function() {
 				notify(message, type, clickAction);
 			}, notificationsInQueue * 250);
 
@@ -156,14 +166,12 @@ function UIManager() {
 		}
 
 		lastNotificationTime = new Date().getTime();
-		if (notificationsInQueue > 0){
+		if (notificationsInQueue > 0) {
 			notificationsInQueue --;
 		}
 
 		showNotification(message, type, clickAction);
 	}
-
-	this.notify = notify;
 
 	/**
 	* Called at window.onready, initalizes the UI
@@ -176,7 +184,7 @@ function UIManager() {
 			//adjustHighResZoom(config);
 			Plugins.init(config);
 		});
-		$('#update-button').click(function(){
+		$('#update-button').click(function() {
 			Daemon.update();
 		});
 	},
