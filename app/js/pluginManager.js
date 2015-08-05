@@ -92,6 +92,8 @@ function PluginManager() {
 					});
 					break;
 				case 'tooltip':
+					event.args[1].top += $('.header').height();
+					event.args[1].left += $('#sidebar').width();
 					UI.tooltip.apply(null, event.args);
 					break;
 				case 'devtools':

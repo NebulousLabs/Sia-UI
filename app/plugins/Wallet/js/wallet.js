@@ -23,7 +23,9 @@ function callAPI(call, callback) {
 			if (err) {
 				console.error(err);
 			} else if (result) {
-				callback(result);
+				if (typeof callback == 'function') {
+					callback(result);
+				}
 			} else {
 				console.error("Unknown occurence: no error and no result from callAPI!");
 			}
@@ -97,7 +99,7 @@ function verifyTransaction(callback) {
 function initListeners() {
 	eID("create-address").onclick = function() {
 		var rect = this.getBoundingClientRect();
-		IPC.sendToHost('tooltip', "Creating Address", {
+		IPC.sendToHost('tooltip', "Creating...", {
 			top: rect.top,
 			bottom: rect.bottom,
 			left: rect.left,

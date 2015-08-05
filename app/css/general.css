@@ -74,7 +74,7 @@ html,body {
 }
 
 /* Sidebar */
-.sidebar {
+#sidebar {
 	position: relative;
 
 	background-color: #FFFFFF;
@@ -87,7 +87,7 @@ html,body {
 	border-left: 2px solid #F5F5F5;
 	border-right: 4px solid #F5F5F5;
 }
-.sidebar .button {
+.button {
 	opacity: .7;
 	display:flex;
 	font-size: 16px;
@@ -136,7 +136,7 @@ html,body {
 }
 
 /* Mainbar */
-.mainbar {
+#mainbar {
 	transition: all .25s;
 	-webkit-animation: ease-in fadein 1.4s;
 	flex-grow: 1;
@@ -144,7 +144,7 @@ html,body {
 	background-color: #ffffff;
 }
 
-.mainbar.transition {
+#mainbar.transition {
 	transition: all .25s;
 	opacity: 0;
 }

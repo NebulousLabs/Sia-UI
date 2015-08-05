@@ -50,16 +50,14 @@ function UIManager() {
 
 		eTooltip.show();
 		eTooltip.html(content);
-		eTooltip.offset(offset);
-		/*
-		var middleX = offset.left;
-		var topY = offset.top;
-
-		eTooltip.offset({
-			top: topY - eTooltip.height() + offset.top,
-			left: middleX - eTooltip.width()/2 + offset.left
-		});
-	   */
+		// TODO: Should be width/2 and no divisor for height, though it looks
+		// bad if so. Need to perfect and revisit.
+		var middleX = offset.left + (offset.width/4);
+        var topY = offset.top - (offset.height/2);
+        eTooltip.offset({
+            top: topY,
+            left: middleX,
+        });
 
 		if (!tooltipVisible){
 			eTooltip.stop();
