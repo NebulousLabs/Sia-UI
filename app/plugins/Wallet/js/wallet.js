@@ -60,7 +60,7 @@ function createAddress() {
 // Send the specified transaction
 function sendCoin(amount, address) {
 	var transaction = {
-		amount: amount.toString,
+		amount: amount.toString(),
 		destination: address,
 	};
 	var call = {
