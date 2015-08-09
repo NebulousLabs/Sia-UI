@@ -33,7 +33,7 @@ var hostProperties = [
 		'conversion': 1/144
 	},{
 		'name': 'Price',
-		'unit': 'SC Per GB Per Month',
+		'unit': 'S Per GB Per Month',
 		'conversion': 4/1e12
 	}
 ];
@@ -54,10 +54,10 @@ function callAPI(call, callback) {
 	}
 }
 
-function formatSiacoin(baseUnits) {
-	var ConversionFactor = new BigNumber(10).pow(24);
-	var display = new BigNumber(baseUnits).dividedBy(ConversionFactor);
-	return display + ' S';
+function convertSiacoin(baseUnits) {
+	var conversionFactor = new BigNumber(10).pow(24);
+	var siacoin = new BigNumber(baseUnits).dividedBy(conversionFactor);
+	return siacoin;
 }
 
 // Controls data size representation
@@ -65,7 +65,7 @@ function formatBytes(bytes) {
 	if (bytes == 0) return '0B';
 	var k = 1000;
 	var sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-	var i = Math.log(bytes)/ Math.log(k);
+	var i = Math.floor((Math.log(bytes) + 1) / Math.log(k));
 	return (bytes / Math.pow(k, i)).toPrecision(3) + " " + sizes[i];
 }
 
@@ -83,54 +83,84 @@ function tooltip(message, element) {
 	});
 };
 
-function addListeners(){
-	eAnnounce.onclick = function(){
-		tooltip('Anouncing...', this);
-		callAPI('/host/announce');
-	};
-	eSave.onclick = function(){
-		tooltip('Saving...', this);
-		// var call = {};
-		callAPI('/host/configure');
-	};
-	eReset.onclick = function(){
-		tooltip('Reseting...', this);
-		for (var i = 0; i < editableProps.length; i++){
-			var item = $(eProps[i]);
-			var value = parseFloat(ui._hostStatus[editableProps[i]]);
-			item.querySelectorAll('.value').textContent = util.round(value * propConversion[i]);
+function callWithTooltips(call, operation, element) {
+	tooltip(operation + '...', element);
+	callAPI(call, function verifySuccess(response) {
+		if (response.Success) {
+			tooltip(operation + 'Succeeded!', element);
+		} else {
+			tooltip(operation + 'Failed!', element);
 		}
+	});
+}
+
+function addListeners() {
+	eAnnounce.onclick = function() {
+		callWithTooltips('/host/announce', 'Anouncing', this);
+	};
+	eSave.onclick = function() {
+		var call = {
+			url: '/host/configure',
+			type: 'PUT',
+			args: hostConfiguration(),
+		};
+		callWithTooltips(call, 'Saving', this);
+	};
+	eReset.onclick = function() {
+		tooltip('Reseting...', this);
+		hostProperties.forEach(function(prop) {
+			var item = eID(prop.name);
+			var value = hostStatus[prop.name];
+			item.querySelector('.value').textContent = value * prop.conversion;
+		});
 	};
 }
 
-function parseHostInfo(){
+function hostConfiguration() {
 	var newInfo = {};
-	for (var i = 0; i < editableProps.length; i++){
-		var item = $(eProps[i]);
-		var value = parseFloat(item.querySelectorAll('.value').text());
-		newInfo[editableProps[i].toLowerCase()] = value / propConversion[i];
-	}
+	hostProperties.forEach(function(prop) {
+		var item = eID(prop.name);
+		var value = item.querySelector('.value').textContent;
+		newInfo[prop.name.toLowerCase()] = value / prop.conversion;
+	});
 	return newInfo;
 }
 
-function update(){
-	var total = formatBytes(hostStatus.TotalStorage);
-	var remaining = formatBytes(hostStatus.StorageRemaining);
-	var storage = formatBytes(hostStatus.TotalStorage - hostStatus.StorageRemaining);
-	var profit = hostStatus.Profit;
-	var potentialProfit = hostStatus.PotentialProfit;
+function update() {
+	// Get HostInfo regularly
+	callAPI('/host/status', function(info) {
+		hostStatus = info;
 
-	eContracts.innerHTML = hostStatus.NumContracts + ' Contracts';
-	eStorage.innerHTML = storage + '/' + total + ' in use';
-	eRemaining.innerHTML = remaining + ' left';
-	eProfit.innerHTML = (util.siacoin(profit)).toFixed(4) + ' KS earned';
-	ePotentialProfit.innerHTML = (util.siacoin(potentialProfit)).toFixed(4) + ' KS to be earned';
+		// Only perform these once
+		if (!listening) {
+			// Make buttons reactive
+			addListeners();
+			// Create and load all properties
+			hostProperties.forEach(function(prop) {
+				var item = ePropBlueprint.cloneNode(true)
+				item.classList.remove('blueprint');
+				eProperties.appendChild(item);
+				item.querySelector('.name').textContent = prop.name + ' (' + prop.unit + ')';
+				var value = hostStatus[prop.name];
+				item.querySelector('.value').textContent = value * prop.conversion;
+				item.id = prop.name;
+			});
+			listening = true;
+		}
+			
+		// Update fields
+		eID('hmessage').innerHTML = 'Estimated Competitive Price: ' + 1000 * convertSiacoin(hostStatus.Competition).toFixed(3) + ' SC / GB / Month';
 
-	var d = new Date();
-	if (updateTime < d.getTime() - 15000) {
-		document.getElementById('hmessage').innerHTML = 'Estimated Competitive Price: ' + 1000 * util.siacoin(hostStatus.Competition).toFixed(3) + ' SC / GB / Month';
-		updateTime = d.getTime();
-	}
+		var total = formatBytes(hostStatus.TotalStorage);
+		var storage = formatBytes(hostStatus.TotalStorage - hostStatus.StorageRemaining);
+		var profit = hostStatus.Profit;
+		var potentialProfit = hostStatus.PotentialProfit;
+
+		eContracts.innerHTML = hostStatus.NumContracts + ' Contracts';
+		eStorage.innerHTML = storage + '/' + total + ' in use';
+		eProfit.innerHTML = convertSiacoin(profit).toFixed(4) + ' S earned';
+		ePotentialProfit.innerHTML = convertSiacoin(potentialProfit).toFixed(4) + ' S to be earned';
+	});
 }
 
 function init() {
@@ -152,20 +182,9 @@ function init() {
 	eProfit = eID('profit');
 	ePotentialProfit = eID('potentialprofit');
 
-	// Make buttons responsive
-	addListeners();
-
-	// Create and load all properties
-	hostProperties.forEach(function(prop) {
-		var item = ePropBlueprint.cloneNode(true).classList.remove('blueprint');
-		eProperties.appendChild(item);
-		item.querySelector('.name').textContent = prop.name + ' (' + prop.unit + ')';
-		var value = hostStatus[prop.name]);
-		item.querySelector('.value').textContent = value * prop.conversion;
-	});
-
 	// Start updating
-	updating = setInterval(update, 1000)
+	update();
+	updating = setInterval(update, 15000)
 }
 
 function kill() {
