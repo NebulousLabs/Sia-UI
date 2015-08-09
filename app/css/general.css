@@ -74,7 +74,7 @@ html,body {
 }
 
 /* Sidebar */
-.sidebar {
+#sidebar {
 	position: relative;
 
 	background-color: #FFFFFF;
@@ -87,7 +87,7 @@ html,body {
 	border-left: 2px solid #F5F5F5;
 	border-right: 4px solid #F5F5F5;
 }
-.sidebar .button {
+.button {
 	opacity: .7;
 	display:flex;
 	font-size: 16px;
@@ -136,7 +136,7 @@ html,body {
 }
 
 /* Mainbar */
-.mainbar {
+#mainbar {
 	transition: all .25s;
 	-webkit-animation: ease-in fadein 1.4s;
 	flex-grow: 1;
@@ -144,9 +144,35 @@ html,body {
 	background-color: #ffffff;
 }
 
-.mainbar.transition {
+#mainbar.transition {
 	transition: all .25s;
 	opacity: 0;
+}
+
+/* Tooltip Bubble */
+#tooltip {
+  display: inline-block;
+  display: none;
+  position: absolute;
+  padding: 8px;
+  font-size: 14px;
+  color: #fff;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.75);
+}
+#tooltip:after {
+  top: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-color: rgba(0, 0, 0, 0);
+  border-top-color: rgba(0, 0, 0, 0.75);
+  border-width: 8px;
+  margin-left: -8px;
 }
 
 /* Notifications */
@@ -211,49 +237,4 @@ html,body {
 .notification.type-success .icon {
   color: #81C784;
   background-color: #C8E6C9;
-}
-.downloadqueue {
-  border-radius: 4px;
-  background-color: #fff;
-  border: 1px solid #bdbdbd;
-  margin-top: 20px;
-  box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.25);
-  overflow-x: hidden;
-  overflow-y: hidden;
-  -webkit-transition: box-shadow 2s;
-  transition: box-shadow 0.5s;
-}
-.downloadqueue .icon {
-  display: inline-block;
-  height: 80px;
-  width: 80px;
-  line-height: 80px;
-  font-size: 48px;
-  text-align: center;
-  color: #bdbdbd;
-  background-color: #f5f5f5;
-  border-right: 1px solid #eeeeee;
-}
-.downloadqueue .content {
-  display: inline-block;
-  padding: 14px;
-  vertical-align: top;
-  width: 300px;
-  height: 52px;
-  font-size: 18px;
-  color: #757575;
-}
-.downloadqueue .progress {
-  background-color: rgba(0, 0, 255, 0.25);
-  width: 100%;
-  height: 20px;
-  margin-top: 14px;
-  border-radius: 5px;
-}
-.downloadqueue .progress .bar {
-  width: 0px;
-  height: 20px;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  background-color: rgba(0, 0, 255, 0.5);
 }
