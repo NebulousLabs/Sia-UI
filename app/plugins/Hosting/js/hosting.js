@@ -38,6 +38,23 @@ var hostProperties = [
 	}
 ];
 
+// Convert to Siacoin
+function convertSiacoin(hastings) {
+	var conversionFactor = new BigNumber(10).pow(24);
+	var siacoin = new BigNumber(hastings).dividedBy(conversionFactor);
+	return siacoin;
+}
+
+// Controls data size representation
+function formatBytes(bytes) {
+	if (bytes == 0) return '0B';
+	var k = 1000;
+	var sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+	var i = Math.floor((Math.log(bytes) + 1) / Math.log(k));
+	return (bytes / Math.pow(k, i)).toPrecision(3) + " " + sizes[i];
+}
+
+// Call API and listen for response to call
 function callAPI(call, callback) {
 	IPC.sendToHost('api-call', call);
 	// prevents adding duplicate listeners
@@ -52,21 +69,6 @@ function callAPI(call, callback) {
 			}
 		});
 	}
-}
-
-function convertSiacoin(baseUnits) {
-	var conversionFactor = new BigNumber(10).pow(24);
-	var siacoin = new BigNumber(baseUnits).dividedBy(conversionFactor);
-	return siacoin;
-}
-
-// Controls data size representation
-function formatBytes(bytes) {
-	if (bytes == 0) return '0B';
-	var k = 1000;
-	var sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-	var i = Math.floor((Math.log(bytes) + 1) / Math.log(k));
-	return (bytes / Math.pow(k, i)).toPrecision(3) + " " + sizes[i];
 }
 
 // Ask UI to show tooltip bubble
@@ -94,6 +96,16 @@ function callWithTooltips(call, operation, element) {
 	});
 }
 
+function hostConfiguration() {
+	var newInfo = {};
+	hostProperties.forEach(function(prop) {
+		var item = eID(prop.name);
+		var value = item.querySelector('.value').textContent;
+		newInfo[prop.name.toLowerCase()] = value / prop.conversion;
+	});
+	return newInfo;
+}
+
 function addListeners() {
 	eAnnounce.onclick = function() {
 		callWithTooltips('/host/announce', 'Anouncing', this);
@@ -116,16 +128,19 @@ function addListeners() {
 	};
 }
 
-function hostConfiguration() {
-	var newInfo = {};
+function addProperties() {
 	hostProperties.forEach(function(prop) {
-		var item = eID(prop.name);
-		var value = item.querySelector('.value').textContent;
-		newInfo[prop.name.toLowerCase()] = value / prop.conversion;
+		var item = ePropBlueprint.cloneNode(true)
+		item.classList.remove('blueprint');
+		eProperties.appendChild(item);
+		item.querySelector('.name').textContent = prop.name + ' (' + prop.unit + ')';
+		var value = hostStatus[prop.name];
+		item.querySelector('.value').textContent = value * prop.conversion;
+		item.id = prop.name;
 	});
-	return newInfo;
 }
 
+// Define API calls and update DOM per call
 function update() {
 	// Get HostInfo regularly
 	callAPI('/host/status', function(info) {
@@ -136,15 +151,8 @@ function update() {
 			// Make buttons reactive
 			addListeners();
 			// Create and load all properties
-			hostProperties.forEach(function(prop) {
-				var item = ePropBlueprint.cloneNode(true)
-				item.classList.remove('blueprint');
-				eProperties.appendChild(item);
-				item.querySelector('.name').textContent = prop.name + ' (' + prop.unit + ')';
-				var value = hostStatus[prop.name];
-				item.querySelector('.value').textContent = value * prop.conversion;
-				item.id = prop.name;
-			});
+			addProperties();
+
 			listening = true;
 		}
 			
@@ -158,11 +166,12 @@ function update() {
 
 		eContracts.innerHTML = hostStatus.NumContracts + ' Contracts';
 		eStorage.innerHTML = storage + '/' + total + ' in use';
-		eProfit.innerHTML = convertSiacoin(profit).toFixed(4) + ' S earned';
-		ePotentialProfit.innerHTML = convertSiacoin(potentialProfit).toFixed(4) + ' S to be earned';
+		eProfit.innerHTML = convertSiacoin(profit).toFixed(2) + ' S earned';
+		ePotentialProfit.innerHTML = convertSiacoin(potentialProfit).toFixed(2) + ' S to be earned';
 	});
 }
 
+// Called upon showing
 function init() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	//IPC.sendToHost('devtools');
@@ -187,6 +196,7 @@ function init() {
 	updating = setInterval(update, 15000)
 }
 
+// Called upon transitioning away from this view
 function kill() {
 	clearInterval(updating);
 }

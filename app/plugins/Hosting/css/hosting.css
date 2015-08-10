@@ -62,7 +62,6 @@
 	margin-bottom: 4px;
 }
 .row .button {
-	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
 	display: inline-block;
 	font-size: 18px;
 	padding: 16px;
@@ -71,11 +70,6 @@
 /* Controls */
 .controls {
 	display: inline-block;
-	float: right;
-}
-.controls .button.hidden {
-	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
-	opacity: 0;
 }
 .controls .button:hover {
 	color: #4a4a4a;
@@ -84,13 +78,13 @@
 
 /* Properties */
 .frame .properties {
-	height: 360px;
+	height: 50%;
 	overflow-x: hidden;
 	overflow-y: auto;
 }
 .frame .property {
 	border-bottom: 1px solid #e0e0e0;
-	color: #757575;
+	color: #c5c5c5;
 }
 .frame .property .name {
 	padding: 10px;
