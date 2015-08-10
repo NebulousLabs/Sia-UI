@@ -87,7 +87,8 @@ function tooltip(message, element) {
 
 function callWithTooltips(call, operation, element) {
 	tooltip(operation + '...', element);
-	callAPI(call, function verifySuccess(response) {
+	callAPI(call, function(response) {
+		console.log('Waiting for Success/Failure...')
 		if (response.Success) {
 			tooltip(operation + 'Succeeded!', element);
 		} else {
@@ -96,25 +97,21 @@ function callWithTooltips(call, operation, element) {
 	});
 }
 
-function hostConfiguration() {
-	var newInfo = {};
-	hostProperties.forEach(function(prop) {
-		var item = eID(prop.name);
-		var value = item.querySelector('.value').textContent;
-		newInfo[prop.name.toLowerCase()] = value / prop.conversion;
-	});
-	return newInfo;
-}
-
 function addListeners() {
 	eAnnounce.onclick = function() {
-		callWithTooltips('/host/announce', 'Anouncing', this);
+		callWithTooltips('/host/announce', 'Announcing', this);
 	};
 	eSave.onclick = function() {
+		var hostInfo = {};
+		hostProperties.forEach(function(prop) {
+			var item = eID(prop.name);
+			var value = item.querySelector('.value').textContent;
+			hostInfo[prop.name.toLowerCase()] = value / prop.conversion;
+		});
 		var call = {
 			url: '/host/configure',
-			type: 'PUT',
-			args: hostConfiguration(),
+			type: 'POST',
+			args: hostInfo,
 		};
 		callWithTooltips(call, 'Saving', this);
 	};

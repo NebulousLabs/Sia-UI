@@ -44,11 +44,12 @@ html, body {
 }
 .header .title {
 	display: inline-block;
-	font-size: 32px;
+	font-size: 40px;
 	color: #fff;
 }
 .header .capsule {
 	float: right;
+	font-size: 26px;
 }
 .capsule {
 	display: inline-block;
