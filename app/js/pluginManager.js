@@ -87,19 +87,29 @@ function PluginManager() {
 		plugin.on('ipc-message', function(event) {
 			switch(event.channel) {
 				case 'api-call':
-					Daemon.apiCall(event.args[0], function(err, callResult) {
-						plugin.sendToView(event.args[0], err, callResult);
+					var call = event.args[0];
+					Daemon.apiCall(call, function(err, callResult) {
+						// Send the reply back on a channel of the call's url
+						if (typeof call === 'string') {
+							plugin.sendToView(call, err, callResult);
+						}
+						else {
+							plugin.sendToView(call.url, err, callResult);
+						}
 					});
 					break;
 				case 'notify':
+					// Use UI notification system
 					UI.notify.apply(null, event.args);
 					break;
 				case 'tooltip':
+					// Use UI tooltip system
 					event.args[1].top += $('.header').height();
 					event.args[1].left += $('#sidebar').width();
 					UI.tooltip.apply(null, event.args);
 					break;
 				case 'devtools':
+					// Plugin called for its own devtools, toggle it
 					plugin.toggleDevTools();
 					break;
 				default:

@@ -31,28 +31,18 @@ function sendCall(url, type, args, callback) {
 		});
 		return;
 	}
-
-	// make request
-	var request = new XMLHttpRequest();
-	request.open(type, url, true);
-
-	// add response listeners tied to the callback response
-	request.onload = function() {
-		if (this.status >= 200 && this.status < 400) {
-			// Success!
-			callback(null, JSON.parse(this.response));
-		} else {
-			// Error returned
-			callback(this);
-		}
-	};
-	// There was a connection error of some sort
-	request.onerror = function() {
-		callback(new Error('Server not reached'));
-	};
-
-	// actually send the request
-	request.send(args);
+	// make request via jquery
+	$.ajax({
+		url: url,
+		type: type,
+		success: function(responseData, textStatus, jqXHR) {
+			callback(null, JSON.parse(responseData), textStatus, jqXHR);
+		},
+		error: function(jqXHR, textStatus, exception) {
+			callback(textStatus);
+		},
+		data: args
+	});
 } 
 
 /**
@@ -66,12 +56,6 @@ function discernCall(call, callback) {
 	var url = call.url;
 	var type = call.type || 'GET';
 	var args = call.args || {};
-
-	// The function can use JSON, but turns them into strings first
-	var JSON;
-	if (JSON && typeof JSON.parse === 'function') {
-		args = JSON.stringify(args);
-	}
 
 	// Make the call
 	sendCall(url, type, args, callback);
