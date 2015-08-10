@@ -8,23 +8,36 @@ the Sia network.
 
 ## Prerequisites
 
-- [golang](https://golang.org/) (with a proper GOPATH environment variable)
+- [golang 1.4+](https://golang.org/doc/install) (with a proper GOPATH environment variable)
 - [node & npm (packaged together)](https://nodejs.org/download/)
 
 ## Running
 
-1. `npm install`
-2. `npm start`
-
-OR
-
-1. `npm run fresh`
+* `npm install`
+* `npm start`
 
 ## Building Distributables
 
-Places into build/ folder, see the package.json for details
-1. `npm run build`
+Places packaged versions into build/ folder, see the package.json for details.
+
+* `npm run build`
 
 ## Cleaning up
 
-1. `npm run clean`
+**[CAUTION]** Removes node_modules, your Sia state kept in app/dependencies,
+and the configuration settings from config.json.
+
+* `npm run clean`
+
+## Other
+For other command scripts, look into the package.json file. However here are
+some useful ones.
+
+* `npm run fresh`
+will run clean, install, then start to simulate a fresh install run of the UI.
+* `npm run debug`
+will run the UI with a debug port to aide in inspecting the main process.
+* `npm run doc`
+will generate documentation about the UI's classes and functions. It's somewhat messy though.
+* `npm run lint`
+will output style suggestions for the UI's javascript, including for plugins.

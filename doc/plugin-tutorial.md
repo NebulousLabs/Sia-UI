@@ -147,34 +147,33 @@ Loading up Sia-UI again, we'll see: ![Impressive plugin ain't it?](/doc/assets/b
 ## Styling the View
 
 Now that we have mock data to display to our user, we want this view to start
-taking shape, form, and last-but-not-least, style! The UI has a font that we
-use for the sidebar buttons called roboto condensed, so let's just copy paste
-that into our folder so our plugin remains modular.
+taking shape, form, and last-but-not-least, style!
 
-From terminal at the Sia-UI root directory:
+The UI has a font that we use for the text called roboto condensed, so let's
+include that for consistency's sake.  With a cool font, we need a cool layout.
+We use a general css file among plugins we're making:
+app/css/plugin-standard.css. It was adapted from the old Sia-UI and applies to
+general header and frame styling.  We're skimming over this because it's not
+too important to review in this particular guide, though any css besides the
+standard can be used.
 
-```bash
-cp app/assets/roboto-condensed-min.css app/plugins/Overview/assets
-```
-
-Then we're going to need the plugin's index.html to know about this font and
-our custom plugin CSS through adding two lines in the head section:
+We're going to need the plugin's index.html to know about this font, the
+general css, and our custom plugin CSS through adding two lines in the head
+section:
 
 ```html
 	<head>
 		<!-- CSS -->
-		<link rel='stylesheet' href='assets/roboto-condensed-min.css'>
+		<link rel="stylesheet" href="../../css/roboto-condensed-min.css">
+		<link rel="stylesheet" href="../../css/plugin-standard.css">
 		<link rel='stylesheet' href='css/overview.css'>
 	</head>
 ```
 
-With a cool font, we need a cool layout. The following css was adopted from the
-old Sia-UI and we'll throw it in a css folder in our plugin directory. We're
-skimming over this because it's not too important to review in this particular
-guide.
+The plugin-standard.css:
 
 ```css
-/*	Style Guide:
+/*	Style Guide: 
  *		Transparent: 70% Opacity
  *
  * 		White:      #FFFFFF
@@ -185,7 +184,18 @@ guide.
  * 		Grey-Black: #4A4A4A
  * 		Black:      #000000
  */
-body {
+/* Overall Effects */
+@keyframes fadeout {
+	from { opacity: 1; }
+	to   { opacity: 0; }
+}
+@keyframes fadein {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+html, body {
+	height: calc(100% - 80px);
+	min-width: calc(100% - 240px);
 	margin: 0px;
 	padding: 0px;
 	border-spacing: 0px;
@@ -193,6 +203,11 @@ body {
 	font-weight: 300;
 	font-size: 18px;
 }
+.blueprint {
+	display: none;
+}
+
+/* Plugin header */
 .header {
 	opacity: .7;
 	padding: 20px;
@@ -218,7 +233,7 @@ body {
 }
 .capsule .pod {
 	display: inline-block;
-	padding: 10px;
+	padding: 8px;
 	padding-left: 16px;
 	padding-right: 16px;
 	border-right: 1px solid #ffffff;
@@ -228,29 +243,47 @@ body {
 	border: none;
 	padding-right: 20px;
 }
+
+/* Main Display */
+.frame {
+	height: 100%;
+	color: #c5c5c5;
+	font-size: 32px;
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+}
+```
+The Overview-specific css:
+
+```css
+/*	Style Guide:
+ *		Transparent: 70% Opacity
+ *
+ * 		White:      #FFFFFF
+ * 		Grey-White: #F5F5F5
+ *		Faint-Grey: #ECECEC
+ *		Light-Grey: #DDDDDD
+ *		Grey:       #C5C5C5
+ * 		Grey-Black: #4A4A4A
+ * 		Black:      #000000
+ */
 .frame {
 	color: #f5f5f5;
-	font-size: 32px;
-	padding-top: 18px;
-	padding-bottom: 0px;
-	padding-left: 30px;
-	padding-right: 16px;
-}
-.frame .text {
-	color: #4a4a4a
 }
 .welcome {
-	margin-top: 50px;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
 	text-align: center;
+	color: #c5c5c5;
 }
 .welcome .large {
 	font-size: 72px;
-	color: #c5c5c5;
 }
 .welcome .small {
 	margin-top: 20px;
 	font-size: 32px;
-	color: #c5c5c5;
 }
 ```
 

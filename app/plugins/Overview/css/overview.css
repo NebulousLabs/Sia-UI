@@ -11,14 +11,11 @@
  */
 .frame {
 	color: #f5f5f5;
-	font-size: 32px;
-	padding-top: 18px;
-	padding-bottom: 0px;
-	padding-left: 16px;
-	padding-right: 16px;
 }
 .welcome {
-	margin-top: 50px;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
 	text-align: center;
 	color: #c5c5c5;
 }
@@ -28,5 +25,4 @@
 .welcome .small {
 	margin-top: 20px;
 	font-size: 32px;
-	color: #c5c5c5;
 }
