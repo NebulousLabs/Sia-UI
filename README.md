@@ -13,22 +13,31 @@ the Sia network.
 
 ## Running
 
-1. `npm install`
-2. `npm start`
-
-OR
-
-1. `npm run fresh`
+* `npm install`
+* `npm start`
 
 ## Building Distributables
 
-Places packaged versions into build/ folder, see the package.json for details
+Places packaged versions into build/ folder, see the package.json for details.
 
-1. `npm run build`
+* `npm run build`
 
 ## Cleaning up
 
 **[CAUTION]** Removes node_modules, your Sia state kept in app/dependencies,
 and the configuration settings from config.json.
 
-1. `npm run clean`
+* `npm run clean`
+
+## Other
+For other command scripts, look into the package.json file. However here are
+some useful ones.
+
+* `npm run fresh`
+will run clean, install, then start to simulate a fresh install run of the UI.
+* `npm run debug`
+will run the UI with a debug port to aide in inspecting the main process.
+* `npm run doc`
+will generate documentation about the UI's classes and functions. It's somewhat messy though.
+* `npm run lint`
+will output style suggestions for the UI's javascript, including for plugins.

@@ -13,7 +13,7 @@
 	],
 	"opts": {
 		"template"              : "./node_modules/ink-docstrap/template",
-		"tutorials"             : "./doc/tutorials/",
+		"tutorials"             : "./doc/",
 		"package"               : "package.json",
 		"readme"                : "README.md",
 		"destination"           : "./doc/",
