@@ -35,11 +35,11 @@ function sendCall(url, type, args, callback) {
 	$.ajax({
 		url: url,
 		type: type,
-		success: function(resp) {
-			callback(null, JSON.parse(resp));
+		success: function(responseData, textStatus, jqXHR) {
+			callback(null, JSON.parse(responseData), textStatus, jqXHR);
 		},
-		error: function() {
-			callback("Oops");
+		error: function(jqXHR, textStatus, exception) {
+			callback(textStatus);
 		},
 		data: args
 	});
