@@ -8,7 +8,7 @@ the Sia network.
 
 ## Prerequisites
 
-- [golang](https://golang.org/) (with a proper GOPATH environment variable)
+- [golang 1.4+](https://golang.org/doc/install) (with a proper GOPATH environment variable)
 - [node & npm (packaged together)](https://nodejs.org/download/)
 
 ## Running
@@ -28,7 +28,7 @@ Places packaged versions into build/ folder, see the package.json for details
 
 ## Cleaning up
 
-Removes node_modules, and **IMPORTANT**, your Sia state kept in
-app/dependencies, and the configuration settings from config.json.
+**[CAUTION]** Removes node_modules, your Sia state kept in app/dependencies,
+and the configuration settings from config.json.
 
 1. `npm run clean`
