@@ -22,9 +22,13 @@ OR
 
 ## Building Distributables
 
-Places into build/ folder, see the package.json for details
+Places packaged versions into build/ folder, see the package.json for details
+
 1. `npm run build`
 
 ## Cleaning up
+
+Removes node_modules, and **IMPORTANT**, your Sia state kept in
+app/dependencies, and the configuration settings from config.json.
 
 1. `npm run clean`

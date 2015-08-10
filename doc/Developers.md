@@ -1,4 +1,5 @@
-To get started, run 'npm install && npm start'
+To get started, ensure you have proper golang, node, and npm environments and
+run 'npm install && npm start'
 
 # Structure
 
@@ -37,7 +38,7 @@ Javascript -> Node/NPM -> Electron.
 This should be familiar to most devs. We adhere to [certain style
 conventions](http://javascript.crockford.com/code.html)
 
-## NPM
+## [NPM](https://www.npmjs.com/)
 Node Package Manager gives easy package management.  We use NPM to manage our
 dependencies (such as Electron) and our development dependencies (such as
 JSHint or JSDoc). NPM also handles our command scripting.  To understand this
