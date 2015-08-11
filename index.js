@@ -21,7 +21,7 @@ function startMainWindow() {
 	var size = ElectronScreen.getPrimaryDisplay().workAreaSize;
 
 	// Give tray/taskbar icon path
-	var iconPath = Path.join(__dirname, 'assets', 'logo', 'sia.png');
+	var iconPath = Path.join(__dirname, 'app', 'assets', 'logo', 'sia.png');
 	var appIcon = new Tray(iconPath);
 	appIcon.setToolTip('A highly efficient decentralized storage network.');
 
@@ -36,7 +36,7 @@ function startMainWindow() {
 	mainWindow.setMenuBarVisibility(false);
 	
 	// Load the index.html of the app.
-	mainWindow.loadUrl('file://' + __dirname + '/index.html');
+	mainWindow.loadUrl('file://' + __dirname + '/app/index.html');
 
 	// Emitted when the window is closed.
 	mainWindow.on('closed', function() {
