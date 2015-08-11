@@ -23,7 +23,7 @@ function callAPI(call, callback) {
 			if (err) {
 				console.error(err);
 			} else if (result) {
-				if (typeof callback == 'function') {
+				if (typeof callback === 'function') {
 					callback(result);
 				}
 			} else {
@@ -88,7 +88,7 @@ function tooltip(message, element) {
 		width: rect.width,
 		length: rect.length,
 	});
-};
+}
 
 // Transaction has to be legitimate
 // TODO: verify address

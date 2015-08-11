@@ -84,7 +84,7 @@
 	"couch"			: false,    // Enable globals exposed by CouchDB.
 	"devel"			: false,    // Allow development statements e.g. `console.log();`.
 	"dojo"			: false,    // Enable globals exposed by Dojo Toolkit.
-	"jquery"		: false,    // Enable globals exposed by jQuery JavaScript library.
+	"jquery"		: true ,    // Enable globals exposed by jQuery JavaScript library.
 	"mootools"		: false,    // Enable globals exposed by MooTools JavaScript framework.
 	"node"			: true,	    // Enable globals available when code is running inside of the NodeJS runtime environment.
 	"nonstandard"	: false,    // Define non-standard but widely adopted globals such as escape and unescape.
@@ -116,6 +116,7 @@
 		"Path": false,
 		"Fs": false,
 		"Shell": false,
+		"Process": false,
 		"UI": true,
 		"Daemon": true,
 		"Plugins": true
