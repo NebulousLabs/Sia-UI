@@ -10,10 +10,11 @@ BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 var updating;
 
 // Make API calls, sending a channel name to listen for responses
-function callAPI() {
+function update() {
 	IPC.sendToHost('api-call', '/wallet/status', 'balance');
 	IPC.sendToHost('api-call', '/gateway/status', 'peers');
 	IPC.sendToHost('api-call', '/consensus/status', 'height');
+	updating = setTimeout(update, 1000);
 }
 
 // Updates element text
@@ -21,7 +22,7 @@ function updateField(err, caption, newValue, elementID) {
 	if (err) {
 		console.error(err);
 	} else if (!newValue) {
-		console.error('Unknown occurence: no error and no result from callAPI!');
+		console.error('Unknown occurence: no error and no result from API call!');
 	} else {
 		document.getElementById(elementID).innerHTML = caption + newValue;
 	}
@@ -40,12 +41,12 @@ function show() {
 	// IPC.sendToHost('devtools');
 	
 	// Call the API regularly to update page
-	updating = setInterval(callAPI, 1000);
+	updating = setTimeout(update, 0);
 }
 
 // Called upon transitioning away from this view
 function hide() {
-	clearInterval(updating);
+	clearTimeout(updating);
 }
 
 // Define IPC listeners and update DOM per call
