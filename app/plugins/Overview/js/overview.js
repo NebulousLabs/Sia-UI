@@ -21,7 +21,7 @@ function update() {
 function updateField(err, caption, newValue, elementID) {
 	if (err) {
 		console.error(err);
-	} else if (!newValue) {
+	} else if (newValue === null) {
 		console.error('Unknown occurence: no error and no result from API call!');
 	} else {
 		document.getElementById(elementID).innerHTML = caption + newValue;

@@ -3,34 +3,17 @@
 const IPC = require('ipc');
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
-// Variables to store api result values
+// Ensure precision
+BigNumber.config({ DECIMAL_PLACES: 24 });
+BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
+// Variable to store api result values
 var wallet = {};
 // Keeps track of if the view is shown
 var updating;
-// Keeps track of if listeners were already instantiated
-var listening = false;
-// DOM shortcut
-var eID = function() {
-	return document.getElementById.apply(document, [].slice.call(arguments));
-};
 
-// Call API and listen for response to call
-function callAPI(call, callback) {
-	IPC.sendToHost('api-call', call);
-	// prevents adding duplicate listeners
-	if (!listening) {
-		IPC.on(call, function(err, result) {
-			if (err) {
-				console.error(err);
-			} else if (result) {
-				if (typeof callback === 'function') {
-					callback(result);
-				}
-			} else {
-				console.error('Unknown occurence: no error and no result from callAPI!');
-			}
-		});
-	}
+// DOM shortcut
+function eID() {
+	return document.getElementById.apply(document, [].slice.call(arguments));
 }
 
 // Convert to Siacoin
@@ -38,37 +21,6 @@ function formatSiacoin(hastings) {
 	var ConversionFactor = new BigNumber(10).pow(24);
 	var display = new BigNumber(hastings).dividedBy(ConversionFactor);
 	return display + ' S';
-}
-
-// Adds a given address to the list
-function appendAddress(address) {
-	if (eID(address)) {
-		return;
-	}
-	var entry = eID('abp').cloneNode(true);
-	entry.id = address;
-	entry.querySelector('.address').innerHTML = address;
-	entry.classList.remove('blueprint');
-	eID('address-list').appendChild(entry);
-}
-
-// Create a new address
-function createAddress() {
-	callAPI('/wallet/address');
-}
-
-// Send the specified transaction
-function sendCoin(amount, address) {
-	var transaction = {
-		amount: amount.toString(),
-		destination: address,
-	};
-	var call = {
-		url: '/wallet/send',
-		type: 'POST',
-		args: transaction,
-	};
-	callAPI(call);
 }
 
 // Amount has to be a number
@@ -90,6 +42,26 @@ function tooltip(message, element) {
 	});
 }
 
+// Make API calls, sending a channel name to listen for responses
+function update() {
+	IPC.sendToHost('api-call', '/wallet/status', 'balance');
+	updating = setTimeout(update, 15000);
+}
+
+// Called upon showing
+function show() {
+	// DEVTOOL: uncomment to bring up devtools on plugin view
+	// IPC.sendToHost('devtools');
+	
+	// Call the API regularly to update page
+	updating = setTimeout(update, 0);
+}
+
+// Called upon transitioning away from this view
+function hide() {
+	clearTimeout(updating);
+}
+
 // Transaction has to be legitimate
 // TODO: verify address
 function verifyTransaction(callback) {
@@ -109,61 +81,83 @@ function verifyTransaction(callback) {
 	}
 }
 
+// Send the specified transaction
+function sendCoin(amount, address) {
+	var transaction = {
+		amount: amount.toString(),
+		destination: address,
+	};
+	var call = {
+		url: '/wallet/send',
+		type: 'POST',
+		args: transaction,
+	};
+	IPC.sendToHost('api-call', call, 'coin-sent');
+}
+
 // Give the buttons interactivity
-function initListeners() {
-	eID('create-address').onclick = function() {
-		tooltip('Creating...', this);
-		createAddress();
-	};
-	eID('send-money').onclick = function() {
-		verifyTransaction(function() {
-			eID('confirm').classList.remove('hidden');
-		});
-	};
-	eID('confirm').onclick = function() {
-		verifyTransaction(function(amount, address) {
-			sendCoin(amount, address);
-			IPC.sendToHost('notify', amount.dividedBy('1e24') + ' Siacoin sent to ' + address, 'sent');
-			eID('transaction-amount').value = '';
-			eID('confirm').classList.add('hidden');
-		});
-	};
-}
-
-// Define API calls and update DOM per call
-function update() {
-	callAPI('/wallet/status', function(result) {
-		wallet = result;
-
-		// Populate addresses
-		for (var i = 0; i < wallet.VisibleAddresses.length; i++) {
-			appendAddress(wallet.VisibleAddresses[i]);
-		}
-		
-		// Update balance
-		eID('balance').innerHTML = 'Balance: ' + formatSiacoin(wallet.Balance);
+eID('create-address').onclick = function() {
+	tooltip('Creating...', this);
+	IPC.sendToHost('api-call', '/wallet/address', 'new-address');
+};
+eID('send-money').onclick = function() {
+	verifyTransaction(function() {
+		eID('confirm').classList.remove('hidden');
 	});
-	listening = true;
+};
+eID('confirm').onclick = function() {
+	tooltip('Sending...', this);
+	verifyTransaction(function(amount, address) {
+		sendCoin(amount, address);
+	});
+};
+
+function appendAddress(address) {
+	if (eID(address)) {
+		return;
+	}
+	var entry = eID('abp').cloneNode(true);
+	entry.id = address;
+	entry.querySelector('.address').innerHTML = address;
+	entry.classList.remove('blueprint');
+	eID('address-list').appendChild(entry);
 }
 
-// Called upon showing
-function show() {
-	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPC.sendToHost('devtools');
+// Define IPC listeners
+IPC.on('balance', function(err, result) {
+	if (err) {
+		console.error(err);
+		return;
+	}
+
+	// Populate addresses
+	wallet = result;
+	for (var i = 0; i < wallet.VisibleAddresses.length; i++) {
+		appendAddress(wallet.VisibleAddresses[i]);
+	}
 	
-	// Ensure precision
-	BigNumber.config({ DECIMAL_PLACES: 24 });
-	BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
-
-	// Enable click events
-	initListeners();
- 
-	// Call the API regularly to update page
-	updating = setInterval(update, 1000);
-}
-
-// Called upon transitioning away from this view
-function hide() {
-	clearInterval(updating);
-}
+	// Update balance
+	eID('balance').innerHTML = 'Balance: ' + formatSiacoin(wallet.Balance);
+});
+IPC.on('coin-sent', function(err, result) {
+	if (err) {
+		console.error(err);
+		IPC.sendToHost('notify', 'Transaction errored!', 'error');
+		return;
+	} else if (!result.Success) {
+		IPC.sendToHost('notify', 'Transaction failed!', 'error');
+		return;
+	}
+	IPC.sendToHost('notify',  'Transaction sent!', 'sent');
+	eID('transaction-amount').value = '';
+	eID('confirm').classList.add('hidden');
+});
+IPC.on('new-address', function(err, result) {
+	if (err) {
+		console.error(err);
+		return;
+	}
+	IPC.sendToHost('notify', 'Address created!', 'success');
+	appendAddress(result.Address);
+});
 
