@@ -88,13 +88,10 @@ function PluginManager() {
 			switch(event.channel) {
 				case 'api-call':
 					var call = event.args[0];
-					Daemon.apiCall(call, function(err, callResult) {
-						// Send the reply back on a channel of the call's url
-						if (typeof call === 'string') {
-							plugin.sendToView(call, err, callResult);
-						}
-						else {
-							plugin.sendToView(call.url, err, callResult);
+					var responseChannel = event.args[1];
+					Daemon.apiCall(call, function(err, result) {
+						if (responseChannel) {
+							plugin.sendToView(responseChannel, err, result);
 						}
 					});
 					break;
