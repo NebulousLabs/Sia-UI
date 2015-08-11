@@ -3,46 +3,59 @@
 const IPC = require('ipc');
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
+// Ensure precision
+BigNumber.config({ DECIMAL_PLACES: 24 });
+BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
+// Variable to store api result values
+var hosting;
 // Keeps track of if the view is shown
 var updating;
-// Keeps track of if listeners were already instantiated
-var listening = false;
+
 // DOM shortcut
-var eID = function() {
+function eID() {
 	return document.getElementById.apply(document, [].slice.call(arguments));
 };
-var hostStatus;
 
 // Pointers to various DOM elements
-var view, ePropBlueprint, eProperties, eControl, eSave, eReset, eAnnounce;
-var eContracts, eStorage, eRemaining, eProfit, ePotentialProfit;
-var updateTime = 0;
+var ePropBlueprint, eProperties, eSave, eReset, eAnnounce;
+// Hidden div with the structure of a host property
+ePropBlueprint = eID('propertybp');
+// Section that holds properties
+eProperties = eID('properties');
+// Buttons for hosting controls
+eAnnounce = eID('announce');
+eSave = eID('save');
+eReset = eID('reset');
 
+// Host properties array
 var hostProperties = [
 	{
 		'name': 'TotalStorage',
 		'unit': 'GB',
-		'conversion': 1/1e9
+		// GB is 1e9 Bytes
+		'conversion': new BigNumber('1e+9'),
 	},{
 		'name': 'MaxFilesize',
 		'unit': 'MB',
-		'conversion': 1/1e6
+		// MB is 1e6 Bytes
+		'conversion': new BigNumber('1e+6'),
 	},{
 		'name': 'MaxDuration',
-		'unit': 'Day',
-		'conversion': 1/144
+		'unit': 'Days',
+		// 144 is the number of blocks in a day
+		'conversion': new BigNumber(144),
 	},{
 		'name': 'Price',
 		'unit': 'S Per GB Per Month',
-		'conversion': 4/1e12
-	}
+		// Siacoin (1e24) / GB (1e9) / blocks in a 30-day month (4320)
+		//'conversion': new BigNumber('1e+12').div('4'),
+		'conversion': new BigNumber('1e+24').div('1e+9').div(4320),
+	},
 ];
 
 // Convert to Siacoin
 function convertSiacoin(hastings) {
-	var conversionFactor = new BigNumber(10).pow(24);
-	var siacoin = new BigNumber(hastings).dividedBy(conversionFactor);
-	return siacoin;
+	return new BigNumber(hastings).div('1e+24');
 }
 
 // Controls data size representation
@@ -51,24 +64,7 @@ function formatBytes(bytes) {
 	var k = 1000;
 	var sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 	var i = Math.floor((Math.log(bytes) + 1) / Math.log(k));
-	return (bytes / Math.pow(k, i)).toPrecision(3) + " " + sizes[i];
-}
-
-// Call API and listen for response to call
-function callAPI(call, callback) {
-	IPC.sendToHost('api-call', call);
-	// prevents adding duplicate listeners
-	if (!listening) {
-		IPC.on(call, function(err, result) {
-			if (err) {
-				console.error(err);
-			} else if (result) {
-				callback(result);
-			} else {
-				console.error('Unknown occurence: no error and no result from callAPI!');
-			}
-		});
-	}
+	return (new BigNumber(bytes).div(Math.pow(k, i))) + " " + sizes[i];
 }
 
 // Ask UI to show tooltip bubble
@@ -85,116 +81,92 @@ function tooltip(message, element) {
 	});
 };
 
-function callWithTooltips(call, operation, element) {
-	tooltip(operation + '...', element);
-	callAPI(call, function(response) {
-		console.log('Waiting for Success/Failure...')
-		if (response.Success) {
-			tooltip(operation + 'Succeeded!', element);
-		} else {
-			tooltip(operation + 'Failed!', element);
-		}
-	});
-}
-
-function addListeners() {
-	eAnnounce.onclick = function() {
-		callWithTooltips('/host/announce', 'Announcing', this);
-	};
-	eSave.onclick = function() {
-		var hostInfo = {};
-		hostProperties.forEach(function(prop) {
-			var item = eID(prop.name);
-			var value = item.querySelector('.value').textContent;
-			hostInfo[prop.name.toLowerCase()] = value / prop.conversion;
-		});
-		var call = {
-			url: '/host/configure',
-			type: 'POST',
-			args: hostInfo,
-		};
-		callWithTooltips(call, 'Saving', this);
-	};
-	eReset.onclick = function() {
-		tooltip('Reseting...', this);
-		hostProperties.forEach(function(prop) {
-			var item = eID(prop.name);
-			var value = hostStatus[prop.name];
-			item.querySelector('.value').textContent = value * prop.conversion;
-		});
-	};
-}
-
-function addProperties() {
-	hostProperties.forEach(function(prop) {
-		var item = ePropBlueprint.cloneNode(true)
-		item.classList.remove('blueprint');
-		eProperties.appendChild(item);
-		item.querySelector('.name').textContent = prop.name + ' (' + prop.unit + ')';
-		var value = hostStatus[prop.name];
-		item.querySelector('.value').textContent = value * prop.conversion;
-		item.id = prop.name;
-	});
-}
-
 // Define API calls and update DOM per call
 function update() {
 	// Get HostInfo regularly
-	callAPI('/host/status', function(info) {
-		hostStatus = info;
-
-		// Only perform these once
-		if (!listening) {
-			// Make buttons reactive
-			addListeners();
-			// Create and load all properties
-			addProperties();
-
-			listening = true;
-		}
-			
-		// Update fields
-		eID('hmessage').innerHTML = 'Estimated Competitive Price: ' + 1000 * convertSiacoin(hostStatus.Competition).toFixed(3) + ' SC / GB / Month';
-
-		var total = formatBytes(hostStatus.TotalStorage);
-		var storage = formatBytes(hostStatus.TotalStorage - hostStatus.StorageRemaining);
-		var profit = hostStatus.Profit;
-		var potentialProfit = hostStatus.PotentialProfit;
-
-		eContracts.innerHTML = hostStatus.NumContracts + ' Contracts';
-		eStorage.innerHTML = storage + '/' + total + ' in use';
-		eProfit.innerHTML = convertSiacoin(profit).toFixed(2) + ' S earned';
-		ePotentialProfit.innerHTML = convertSiacoin(potentialProfit).toFixed(2) + ' S to be earned';
-	});
+	IPC.sendToHost('api-call', '/host/status', 'status');
+	updating = setTimeout(update, 15000);
 }
 
 // Called upon showing
-function init() {
+function show() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	//IPC.sendToHost('devtools');
-	
-	// Ensure precision
-	BigNumber.config({ DECIMAL_PLACES: 24 })
-	BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
-
-	// Assign DOM elements to var shortcuts
-	ePropBlueprint = eID('propertybp');
-	eProperties = eID('properties');
-	eAnnounce = eID('announce');
-	eSave = eID('save');
-	eReset = eID('reset');
-	eContracts = eID('contracts');
-	eStorage = eID('storage');
-	eProfit = eID('profit');
-	ePotentialProfit = eID('potentialprofit');
 
 	// Start updating
 	update();
-	updating = setInterval(update, 15000)
 }
 
 // Called upon transitioning away from this view
-function kill() {
-	clearInterval(updating);
+function hide() {
+	clearTimeout(updating);
 }
 
+// Enable buttons
+eAnnounce.onclick = function() {
+	tooltip('Anouncing...', this);
+	IPC.sendToHost('api-call', '/host/announce', 'announce');
+};
+eSave.onclick = function() {
+	tooltip('Saving...', this);
+	var hostInfo = {};
+	hostProperties.forEach(function(prop) {
+		var item = eID(prop.name);
+		var value = new BigNumber(item.querySelector('.value').textContent).mul(prop.conversion).round().toString();
+		hostInfo[prop.name[0].toLowerCase() + prop.name.substring(1)] = value;
+	});
+	var call = {
+		url: '/host/configure',
+		type: 'GET',
+		args: hostInfo,
+	};
+	IPC.sendToHost('api-call', call, 'configure');
+};
+eReset.onclick = function() {
+	tooltip('Reseting...', this);
+	hostProperties.forEach(function(prop) {
+		var item = eID(prop.name);
+		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion).round().toString();
+		item.querySelector('.value').textContent = value;
+	});
+};
+
+// Update host info
+IPC.on('status', function(err, result) {
+	if (err) {
+		console.error(err);
+		return;
+	} else if (!result) {
+		console.error('Unknown occurence: no error and no result from API call!');
+		return;
+	}
+	hosting = result;
+		
+	// Update competitive prices
+	eID('hmessage').innerHTML = 'Estimated Competitive Price: ' + convertSiacoin(hosting.Competition) + ' S / GB / Month';
+	// Calculate host finances
+	var total = formatBytes(hosting.TotalStorage);
+	var storage = formatBytes(hosting.TotalStorage - hosting.StorageRemaining);
+	var profit = (hosting.Profit).toFixed(2)
+	var potentialProfit = convertSiacoin(hosting.PotentialProfit).toFixed(2);
+	// Update host finances
+	eID('contracts').innerHTML = hosting.NumContracts + ' Contracts';
+	eID('storage').innerHTML = storage + '/' + total + ' in use';
+	eID('profit').innerHTML = profit + ' S earned';
+	eID('potentialprofit').innerHTML = potentialProfit + ' S to be earned';
+
+	// From hostProperties and blueprint, make properties
+	hostProperties.forEach(function(prop) {
+		if (eID(prop.name)) {
+			return;
+		}
+		var item = ePropBlueprint.cloneNode(true)
+		item.classList.remove('blueprint');
+		item.querySelector('.name').textContent = prop.name + ' (' + prop.unit + ')';
+		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion).round().toString();
+		item.querySelector('.value').textContent = value;
+		item.id = prop.name;
+
+		eProperties.appendChild(item);
+	});
+});
