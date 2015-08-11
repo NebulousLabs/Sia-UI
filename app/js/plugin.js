@@ -49,7 +49,7 @@ function Plugin(plugPath, name) {
 		*/
 		show: function() {
 			button.classList.add('current');
-			view.executeJavaScript('if (typeof init === "function") init();');
+			view.executeJavaScript('if (typeof show === "function") show();');
 			setTimeout(function() {
 				view.style.display = '';
 			}, 250);
@@ -61,7 +61,7 @@ function Plugin(plugPath, name) {
 		*/
 		hide: function() {
 			button.classList.remove('current');
-			view.executeJavaScript('if (typeof kill === "function") kill();');
+			view.executeJavaScript('if (typeof hide === "function") hide();');
 			setTimeout(function() {
 				view.style.display = 'none';
 			}, 250);
