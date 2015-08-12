@@ -27,11 +27,13 @@ function UIManager() {
 	var notificationsInQueue = 0;
 	var notificationIcons = {
 		alert: 'exclamation',
-		error: 'exclamation',
+		error: 'exclamation-circle',
 		update: 'arrow-circle-o-up',
 		upload: 'upload',
 		help: 'question',
 		sent: 'send',
+		start: 'play',
+		stop: 'stop',
 		received: 'sign-in',
 		fix: 'wrench',
 		download: 'arrow-circle-down',
@@ -152,7 +154,7 @@ function UIManager() {
 			top: 0,
 			left: 0,
 		};
-
+		// Show the tooltip at the proper location
 		eTooltip.show();
 		eTooltip.html(content);
 		var middleX = offset.left - (eTooltip.width()/2) + (offset.width/2);
@@ -161,7 +163,7 @@ function UIManager() {
             top: topY,
             left: middleX,
         });
-
+		// Fade the toolip from 0 to 1
 		if (!tooltipVisible) {
 			eTooltip.stop();
 			eTooltip.css({'opacity':0});
@@ -174,13 +176,13 @@ function UIManager() {
 			eTooltip.show();
 			eTooltip.css({'opacity':1});
 		}
-
+		// Hide the tooltip after 1.4 seconds
 		clearTimeout(tooltipTimeout);
 		tooltipTimeout = setTimeout(function() {
 			// eTooltip.hide();
 			eTooltip.animate({
 				'opacity':'0'
-			}, 400,function() {
+			}, 400, function() {
 				tooltipVisible = false;
 				eTooltip.hide();
 			});

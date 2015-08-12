@@ -35,8 +35,8 @@ function formatSiacoin(hastings) {
 	return display + ' SC';
 }
 
-// Called upon showing
-function show() {
+// Called by the UI upon showing
+function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	// IPC.sendToHost('devtools');
 	
@@ -44,8 +44,8 @@ function show() {
 	updating = setTimeout(update, 0);
 }
 
-// Called upon transitioning away from this view
-function hide() {
+// Called by the UI upon transitioning away from this view
+function stop() {
 	clearTimeout(updating);
 }
 

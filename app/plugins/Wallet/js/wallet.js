@@ -49,7 +49,7 @@ function update() {
 }
 
 // Called upon showing
-function show() {
+function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	// IPC.sendToHost('devtools');
 	
@@ -58,7 +58,7 @@ function show() {
 }
 
 // Called upon transitioning away from this view
-function hide() {
+function stop() {
 	clearTimeout(updating);
 }
 
