@@ -21,11 +21,6 @@ function DaemonManager() {
 	 */
 	var address;
 	/**
-	 * Empty function to use with ifSiad()
-	 * @member {function} DaemonManager~EMPTYFUNC
-	 */
-	var EMPTYFUNC = function() {};
-	/**
 	 * Boolean to track if siad is running
 	 * @member {function} DaemonManager.Running
 	 */
@@ -76,7 +71,7 @@ function DaemonManager() {
 				UI.notify('Update check failed!', 'error');
 				return;
 			} else if (update.Available) {
-				UI.notify("New Sia Client Available: Click to update to " + update.Version, "download", function() {
+				UI.notify("New Sia Client Available: Click to update to " + update.Version, "update", function() {
 					Shell.openExternal('https://www.github.com/NebulousLabs/Sia-UI/releases');
 				});
 			} else {

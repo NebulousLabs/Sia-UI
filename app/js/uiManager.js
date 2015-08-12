@@ -30,14 +30,10 @@ function UIManager() {
 		error: 'exclamation-circle',
 		update: 'arrow-circle-o-up',
 		upload: 'upload',
-		help: 'question',
 		sent: 'send',
 		start: 'play',
 		stop: 'stop',
-		received: 'sign-in',
-		fix: 'wrench',
 		download: 'arrow-circle-down',
-		peers: 'group',
 		success: 'check'
 	};
 

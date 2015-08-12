@@ -49,6 +49,25 @@ function stop() {
 	clearTimeout(updating);
 }
 
+// Ask UI to show tooltip bubble
+function tooltip(message, element) {
+	var rect = element.getBoundingClientRect();
+	IPC.sendToHost('tooltip', message, {
+		top: rect.top,
+		bottom: rect.bottom,
+		left: rect.left,
+		right: rect.right,
+		height: rect.height,
+		width: rect.width,
+		length: rect.length,
+	});
+}
+
+document.getElementById('stop-exit').onclick = function() {
+	IPC.sendToHost('api-call', '/daemon/stop');
+	tooltip('Bye!', this);
+}
+
 // Define IPC listeners and update DOM per call
 IPC.on('balance-update', function(err, result) {
 	updateField(err, 'Balance: ', formatSiacoin(result.Balance), 'balance');
