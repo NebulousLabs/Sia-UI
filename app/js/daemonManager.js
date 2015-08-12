@@ -27,7 +27,7 @@ function DaemonManager() {
 	var EMPTYFUNC = function() {};
 	/**
 	 * Boolean to track if siad is running
-	 * @member {function} DaemonManager.EMPTYFUNC
+	 * @member {function} DaemonManager.Running
 	 */
 	this.Running = false;
 	// To keep a reference to the DaemonManager inside its functions
@@ -93,12 +93,12 @@ function DaemonManager() {
 			console.error('attempted to start siad when it was already running');
 			return;
 		}, function() {
-			UI.notify('Starting siad', 'start');
+			UI.notify('Starting siad...', 'start');
 		});
 
 		// daemon as a background process logs output to files
-		var out = Fs.openSync(Path.join(siaPath, 'daemonOut.log'), 'a');
-		var err = Fs.openSync(Path.join(siaPath, 'daemonErr.log'), 'a');
+		var out = Fs.openSync(Path.join(siaPath, 'daemonOut.log'), 'w');
+		var err = Fs.openSync(Path.join(siaPath, 'daemonErr.log'), 'w');
 
 		// daemon process has to be detached without parent stdio pipes
 		var processOptions = {
@@ -112,7 +112,10 @@ function DaemonManager() {
 
 		// Give siad time to load or exit
 		// TODO: Imperfect way to go about this.
-		var updating = setTimeout(callback, 2000);
+		var updating = setTimeout(function() {
+			self.Running = true;
+			callback();
+		}, 2000);
 
 		// Listen for siad exiting
 		daemonProcess.on('exit', function (code) {
@@ -120,6 +123,8 @@ function DaemonManager() {
 				self.Running = false;
 				UI.notify('siad exited', 'stop');
 				clearTimeout(updating);
+			} else {
+				console.error(code);
 			}
 		});
 	}
@@ -128,7 +133,9 @@ function DaemonManager() {
 	 * Stops the daemon
 	 */
 	function stop() {
-		ifSiad(EMPTYFUNC, function() {
+		ifSiad(function() {
+			UI.notify('Stopping siad...', 'stop');
+		}, function() {
 			console.err('attempted to stop siad when it was not running');
 			return;
 		});

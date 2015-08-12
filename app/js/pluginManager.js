@@ -185,20 +185,4 @@ function PluginManager() {
 	this.init = function(config) {
 		setConfig(config, initPlugins);
 	};
-	
-	/**
-	 * Starts the functionality of the plugin, used only after it's been stopped
-	 * @function PluginManager.start
-	 */
-	this.start = function() {
-		current.start();
-	}
-
-	/**
-	 * Stops the functionality of the plugin, used when siad has stopped
-	 * @function PluginManager.stop
-	 */
-	this.stop = function() {
-		current.stop();
-	}
 }
