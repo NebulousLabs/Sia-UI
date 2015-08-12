@@ -11,9 +11,9 @@ var updating;
 
 // Make API calls, sending a channel name to listen for responses
 function update() {
-	IPC.sendToHost('api-call', '/wallet/status', 'balance');
-	IPC.sendToHost('api-call', '/gateway/status', 'peers');
-	IPC.sendToHost('api-call', '/consensus/status', 'height');
+	IPC.sendToHost('api-call', '/wallet/status', 'balance-update');
+	IPC.sendToHost('api-call', '/gateway/status', 'peers-update');
+	IPC.sendToHost('api-call', '/consensus/status', 'height-update');
 	updating = setTimeout(update, 1000);
 }
 
@@ -50,13 +50,13 @@ function hide() {
 }
 
 // Define IPC listeners and update DOM per call
-IPC.on('balance', function(err, result) {
+IPC.on('balance-update', function(err, result) {
 	updateField(err, 'Balance: ', formatSiacoin(result.Balance), 'balance');
 });
-IPC.on('peers', function(err, result) {
+IPC.on('peers-update', function(err, result) {
 	updateField(err, 'Peers: ', result.Peers.length, 'peers');
 });
-IPC.on('height', function(err, result) {
+IPC.on('height-update', function(err, result) {
 	updateField(err, 'Block Height: ', result.Height, 'height');
 });
 

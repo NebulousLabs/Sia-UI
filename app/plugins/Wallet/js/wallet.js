@@ -44,7 +44,7 @@ function tooltip(message, element) {
 
 // Make API calls, sending a channel name to listen for responses
 function update() {
-	IPC.sendToHost('api-call', '/wallet/status', 'balance');
+	IPC.sendToHost('api-call', '/wallet/status', 'balance-update');
 	updating = setTimeout(update, 15000);
 }
 
@@ -124,7 +124,7 @@ function appendAddress(address) {
 }
 
 // Define IPC listeners
-IPC.on('balance', function(err, result) {
+IPC.on('balance-update', function(err, result) {
 	if (err) {
 		console.error(err);
 		return;
