@@ -76,7 +76,7 @@ function DaemonManager() {
 				UI.notify('Update check failed!', 'error');
 				return;
 			} else if (update.Available) {
-				UI.notify("New Sia Client Available: Click to update to " + update.Version, "alert", function() {
+				UI.notify("New Sia Client Available: Click to update to " + update.Version, "download", function() {
 					Shell.openExternal('https://www.github.com/NebulousLabs/Sia-UI/releases');
 				});
 			} else {
@@ -88,7 +88,7 @@ function DaemonManager() {
 	/**
 	 * Starts the daemon as a long running background process
 	 */
-	function start(callback) {
+	function start() {
 		ifSiad(function() {
 			console.error('attempted to start siad when it was already running');
 			return;
@@ -114,18 +114,18 @@ function DaemonManager() {
 		// TODO: Imperfect way to go about this.
 		var updating = setTimeout(function() {
 			self.Running = true;
-			callback();
-		}, 2000);
+			updatePrompt();
+		}, 400);
 
+		// Listen for siad erroring
+		daemonProcess.on('error', function (error) {
+			UI.notify('siad errored: ' + error, 'error');
+		});
 		// Listen for siad exiting
 		daemonProcess.on('exit', function (code) {
-			if (code === 0) {
-				self.Running = false;
-				UI.notify('siad exited', 'stop');
-				clearTimeout(updating);
-			} else {
-				console.error(code);
-			}
+			self.Running = false;
+			UI.notify('siad exited with code: ' + code, 'stop');
+			clearTimeout(updating);
 		});
 	}
 
@@ -167,9 +167,7 @@ function DaemonManager() {
 	 */
 	this.init = function(config) {
 		setConfig(config, function() {
-			ifSiad(updatePrompt, function() {
-				start(updatePrompt);
-			});
+			ifSiad(updatePrompt, start);
 		});
 	};
 	/**
