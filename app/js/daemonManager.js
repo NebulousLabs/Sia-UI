@@ -79,7 +79,7 @@ function DaemonManager() {
 			}
 		});
 	}
-
+	
 	/**
 	 * Starts the daemon as a long running background process
 	 */
@@ -110,18 +110,14 @@ function DaemonManager() {
 		var updating = setTimeout(function() {
 			self.Running = true;
 			updatePrompt();
-		}, 400);
+		}, 1000);
 
 		// Listen for siad erroring
 		daemonProcess.on('error', function (error) {
 			UI.notify('siad errored: ' + error, 'error');
 		});
 		// Listen for siad exiting
-		daemonProcess.on('exit', function (code) {
-			self.Running = false;
-			UI.notify('siad exited with code: ' + code, 'stop');
-			clearTimeout(updating);
-		});
+		daemonProcess.on('exit', exit);
 	}
 
 	/**
@@ -136,13 +132,26 @@ function DaemonManager() {
 		});
 		apiCall('/daemon/stop', function(err, result) {
 			if (result.Success) {
-				self.Running = false;
-				UI.notify('stopped siad!', 'stop');
+				exit();
 			} else {
 				console.error(err);
 			}
 		});
 	}
+
+	function exit(code) {
+		self.Running = false;
+		if (code) {
+			UI.notify('siad exited with code: ' + code, 'stop');
+		} else {
+			UI.notify('siad exited', 'stop');
+		}
+		setTimeout(function() {
+			IPC.send('exit');
+		}, 400);
+		clearTimeout(updating);
+	}
+
 
 	/**
 	 * Sets the member variables based on the passed config

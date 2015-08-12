@@ -99,7 +99,8 @@ function PluginManager() {
 						Daemon.apiCall(call, function(err, result) {
 							if (err) {
 								console.error(err);
-							} else if (responseChannel) {
+							} 
+							if (responseChannel) {
 								plugin.sendToView(responseChannel, err, result);
 							}
 						});
