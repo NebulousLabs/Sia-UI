@@ -69,13 +69,13 @@ function UIManager() {
 		element.mouseover(function() {
 			// don't let the notification disappear if the user is debating
 			// clicking
-			clearTimeout(removeTimeout)
+			clearTimeout(removeTimeout);
 		});
 
 		element.mouseout(function() {
 			// the user isn't interested, restart deletion timer
 			removeTimeout = setTimeout(removeElement, 2500);
-		})
+		});
 
 		element.animate({
 			'opacity':1
@@ -144,7 +144,7 @@ function UIManager() {
 				eTooltip.hide();
 			});
 		}, 1400);
-	}
+	};
 
 	/**
 	 * @param {string} message What to display in notification
@@ -171,7 +171,7 @@ function UIManager() {
 		}
 
 		showNotification(message, type, clickAction);
-	}
+	};
 
 	/**
 	* Called at window.onready, initalizes the UI
@@ -187,7 +187,7 @@ function UIManager() {
 		$('#update-button').click(function() {
 			Daemon.update();
 		});
-	},
+	};
 
 	/**
 	* Called at window.beforeunload, closes the UI
