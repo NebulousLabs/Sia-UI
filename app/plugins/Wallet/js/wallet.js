@@ -53,8 +53,8 @@ function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	// IPC.sendToHost('devtools');
 	
-	// Call the API regularly to update page
-	updating = setTimeout(update, 0);
+	// Call the API
+	update();
 }
 
 // Called upon transitioning away from this view
@@ -143,9 +143,6 @@ IPC.on('coin-sent', function(err, result) {
 	if (err) {
 		console.error(err);
 		IPC.sendToHost('notify', 'Transaction errored!', 'error');
-		return;
-	} else if (!result.Success) {
-		IPC.sendToHost('notify', 'Transaction failed!', 'error');
 		return;
 	}
 	IPC.sendToHost('notify',  'Transaction sent!', 'sent');
