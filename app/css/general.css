@@ -212,20 +212,6 @@ html,body {
   font-size: 18px;
   color: #757575;
 }
-.notification.small .icon {
-  height: 40px;
-  width: 40px;
-  line-height: 40px;
-  font-size: 24px;
-}
-.notification.small .content {
-  padding: 0px;
-  padding-left: 14px;
-  line-height: 40px;
-  height: 40px;
-  width: 360px;
-  overflow-x: hidden;
-}
 .notification.hoverable:hover {
   cursor: pointer;
   box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.4);
