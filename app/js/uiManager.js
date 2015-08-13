@@ -39,7 +39,7 @@ function UIManager() {
 
     // Shows tooltip with content on given element
 	var eTooltip = $('#tooltip');
-    var tooltipTimeout,tooltipVisible;
+	var tooltipTimeout, tooltipVisible;
 
     function tooltip(element, content, offset) {
         offset = offset || {
@@ -104,18 +104,17 @@ function UIManager() {
 			});
 		}
 
+		// Control the disappearance of notifications
 		var removeTimeout;
 		element.mouseover(function() {
 			// don't let the notification disappear if the user is debating
 			// clicking
 			clearTimeout(removeTimeout);
 		});
-
 		element.mouseout(function() {
 			// the user isn't interested, restart deletion timer
 			removeTimeout = setTimeout(removeElement, 2500);
 		});
-
 		element.animate({
 			'opacity':1
 		});
@@ -141,7 +140,8 @@ function UIManager() {
 	}
 	
 	/**
-	 * Shows tooltip with content on given element
+	 * Shows tooltip with content at given offset location
+	 * @function UIManager#tooltip
 	 * @param {string} content The message to display in tooltip
 	 * @param {Object} offset The dimensions of the element to display over
 	 */
@@ -186,12 +186,14 @@ function UIManager() {
 	};
 
 	/**
+	 * Shows notification in lower right of UI window
+	 * @function UIManager#notify
 	 * @param {string} message What to display in notification
 	 * @param {string} type The form of notification
 	 * @param {function} clickAction The function to call upon the user
 	 * clicking the notification
 	 */
-	this.notify = function notify(message, type, clickAction) {
+	this.notify = function(message, type, clickAction) {
 		// CONTRIBUTE: This delay system is technically broken, but not
 		// noticably wait approximately 250ms between notifications
 		if (new Date().getTime() < lastNotificationTime + 250) {
@@ -211,6 +213,16 @@ function UIManager() {
 
 		showNotification(message, type, clickAction);
 	};
+
+	/**
+	 * Opens a blocking dialog box that the user must interact with
+	 * @function UIManager#message
+	 * @param {Object} options A set of options dictating the dialog box that
+	 * corresponds to electron's dialog.showMessageBox() api
+	 */
+	this.message = function(options) {
+		IPC.send('dialog', message, options);
+	}
 
 	/**
 	* Called at window.onready, initalizes the UI

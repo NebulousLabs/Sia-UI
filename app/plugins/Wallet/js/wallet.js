@@ -97,7 +97,6 @@ function sendCoin(amount, address) {
 	IPC.sendToHost('api-call', call, 'coin-sent');
 }
 
-/*
 // Adds an address to the address list
 function appendAddress(address) {
 	if (eID(address)) {
@@ -109,7 +108,6 @@ function appendAddress(address) {
 	entry.classList.remove('blueprint');
 	eID('address-list').appendChild(entry);
 }
-*/
 
 // Give the buttons interactivity
 eID('create-address').onclick = function() {
@@ -155,13 +153,6 @@ IPC.on('update', function(err, result) {
 		// TODO: Ask for password
 		//IPC.sendToHost('api-call', call, 'sent');
 	}
-/*
-	// Populate addresses
-	wallet = result;
-	for (var i = 0; i < wallet.VisibleAddresses.length; i++) {
-		appendAddress(wallet.VisibleAddresses[i]);
-	}
-*/
 	
 	// Update balance
 	eID('balance').innerHTML = 'Balance: ' + formatSiacoin(wallet.Balance);
