@@ -73,7 +73,7 @@ IPC.on('peers-update', function(err, result) {
 	updateField(err, 'Peers: ', value, 'peers');
 });
 IPC.on('height-update', function(err, result) {
-	var value = result !== null ? result.height : null;
+	var value = result !== null ? result.Height : null;
 	updateField(err, 'Block Height: ', value, 'height');
 });
 

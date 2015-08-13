@@ -8,6 +8,8 @@ BigNumber.config({ DECIMAL_PLACES: 24 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 // Variable to store api result values
 var wallet = {};
+// Encryption password, for now treated as the primary seed
+var password;
 // Keeps track of if the view is shown
 var updating;
 
@@ -44,7 +46,7 @@ function tooltip(message, element) {
 
 // Make API calls, sending a channel name to listen for responses
 function update() {
-	IPC.sendToHost('api-call', '/wallet/status', 'balance-update');
+	IPC.sendToHost('api-call', '/wallet', 'update');
 	updating = setTimeout(update, 15000);
 }
 
@@ -88,17 +90,35 @@ function sendCoin(amount, address) {
 		destination: address,
 	};
 	var call = {
-		url: '/wallet/send',
+		url: '/wallet/siacoins',
 		type: 'POST',
 		args: transaction,
 	};
 	IPC.sendToHost('api-call', call, 'coin-sent');
 }
 
+/*
+// Adds an address to the address list
+function appendAddress(address) {
+	if (eID(address)) {
+		return;
+	}
+	var entry = eID('abp').cloneNode(true);
+	entry.id = address;
+	entry.querySelector('.address').innerHTML = address;
+	entry.classList.remove('blueprint');
+	eID('address-list').appendChild(entry);
+}
+*/
+
 // Give the buttons interactivity
 eID('create-address').onclick = function() {
 	tooltip('Creating...', this);
-	IPC.sendToHost('api-call', '/wallet/address', 'new-address');
+	var call = {
+		url: '/wallet/seed',
+		type: 'PUT',
+	}
+	IPC.sendToHost('api-call', call, 'new-address');
 };
 eID('send-money').onclick = function() {
 	verifyTransaction(function() {
@@ -124,17 +144,24 @@ function appendAddress(address) {
 }
 
 // Define IPC listeners
-IPC.on('balance-update', function(err, result) {
+IPC.on('update', function(err, result) {
 	if (err) {
 		console.error(err);
 		return;
 	}
 
+	// Unlock if need be
+	if (!wallet.Unlocked) {
+		// TODO: Ask for password
+		//IPC.sendToHost('api-call', call, 'sent');
+	}
+/*
 	// Populate addresses
 	wallet = result;
 	for (var i = 0; i < wallet.VisibleAddresses.length; i++) {
 		appendAddress(wallet.VisibleAddresses[i]);
 	}
+*/
 	
 	// Update balance
 	eID('balance').innerHTML = 'Balance: ' + formatSiacoin(wallet.Balance);
