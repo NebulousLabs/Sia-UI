@@ -21,8 +21,8 @@ function DaemonManager() {
 	 */
 	var address;
 	/**
-	 * Boolean to track if siad is running
-	 * @member {function} DaemonManager.Running
+	 * Tracks if siad is running
+	 * @member {boolean} DaemonManager.Running
 	 */
 	this.Running = false;
 	// To keep a reference to the DaemonManager inside its functions

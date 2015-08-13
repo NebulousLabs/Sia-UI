@@ -374,7 +374,7 @@ function update() {
 * Note, a call object is required instead of a string url for any calls other
 than 'GET'. They are formatted like the following:
 
-```json
+```js
 { // A call object
 	url: '/consensus/status',  // String
 	type: 'GET',               // String
@@ -701,8 +701,7 @@ IPC.on('coin-sent', function(err, result) {
 ```
 
 In the wallet view, we can trigger this notification and another, making them
-appear as such: ![If only we sent to an actual addresses]
-(/doc/assets/wallet-notifications.png)
+appear as such: ![If only we sent to an actual addresses](/doc/assets/wallet-notifications.png)
 
 In a similar, but more unwieldy manner, one can send a tooltip IPC message to
 show atop an element as demonstrated again by wallet:
@@ -729,6 +728,6 @@ document.getElementById('create-address').onclick = function() {
 };
 ```
 
-Which will produce this tooltip on click appear as such:
+Which will make this tooltip appear on click as such:
 
-![It's the details that make the best UI] (/doc/assets/wallet-tooltip.png)
+![It's the details that make the best UI](/doc/assets/wallet-tooltip.png)
