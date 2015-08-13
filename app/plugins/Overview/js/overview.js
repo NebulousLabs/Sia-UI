@@ -65,15 +65,15 @@ function tooltip(message, element) {
 
 // Define IPC listeners and update DOM per call
 IPC.on('balance-update', function(err, result) {
-	var value = result ? formatSiacoin(result.ConfirmedSiacoinBalance) : null;
+	var value = result !== null ? formatSiacoin(result.ConfirmedSiacoinBalance) : null;
 	updateField(err, 'Balance: ', value, 'balance');
 });
 IPC.on('peers-update', function(err, result) {
-	var value = result ? result.Peers.length : null;
+	var value = result !== null ? result.Peers.length : null;
 	updateField(err, 'Peers: ', value, 'peers');
 });
 IPC.on('height-update', function(err, result) {
-	var value = result ? result.Height : null;
+	var value = result !== null ? result.height : null;
 	updateField(err, 'Block Height: ', value, 'height');
 });
 
