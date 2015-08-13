@@ -11,20 +11,20 @@ var updating;
 
 // Make API calls, sending a channel name to listen for responses
 function update() {
-	IPC.sendToHost('api-call', '/wallet/status', 'balance-update');
+	IPC.sendToHost('api-call', '/wallet', 'balance-update');
 	IPC.sendToHost('api-call', '/gateway/status', 'peers-update');
-	IPC.sendToHost('api-call', '/consensus/status', 'height-update');
+	IPC.sendToHost('api-call', '/consensus', 'height-update');
 	updating = setTimeout(update, 1000);
 }
 
 // Updates element text
-function updateField(err, caption, newValue, elementID) {
+function updateField(err, caption, value, elementID) {
 	if (err) {
 		console.error(err);
-	} else if (newValue === null) {
+	} else if (value === null) {
 		console.error('Unknown occurence: no error and no result from API call!');
 	} else {
-		document.getElementById(elementID).innerHTML = caption + newValue;
+		document.getElementById(elementID).innerHTML = caption + value;
 	}
 }
 
@@ -65,12 +65,15 @@ function tooltip(message, element) {
 
 // Define IPC listeners and update DOM per call
 IPC.on('balance-update', function(err, result) {
-	updateField(err, 'Balance: ', formatSiacoin(result.Balance), 'balance');
+	var value = result ? formatSiacoin(result.ConfirmedSiacoinBalance) : null;
+	updateField(err, 'Balance: ', value, 'balance');
 });
 IPC.on('peers-update', function(err, result) {
-	updateField(err, 'Peers: ', result.Peers.length, 'peers');
+	var value = result ? result.Peers.length : null;
+	updateField(err, 'Peers: ', value, 'peers');
 });
 IPC.on('height-update', function(err, result) {
-	updateField(err, 'Block Height: ', result.Height, 'height');
+	var value = result ? result.Height : null;
+	updateField(err, 'Block Height: ', value, 'height');
 });
 
