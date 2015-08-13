@@ -39,12 +39,53 @@ function UIManager() {
 		success: 'check'
 	};
 
-	// Involved in showing tooltips
+    // Shows tooltip with content on given element
 	var eTooltip = $('#tooltip');
-	var tooltipTimeout,tooltipVisible;
+    var tooltipTimeout,tooltipVisible;
 
-	// constructs the notification to show
-	function showNotification(message, type, clickAction) {
+    function tooltip(element, content, offset) {
+        offset = offset || {
+			top: 0,
+			left: 0,
+		};
+        element = $(element);
+
+        eTooltip.show();
+        eTooltip.html(content);
+        var middleX = element.offset().left + element.width()/2;
+        var topY = element.offset().top - element.height();
+
+        eTooltip.offset({
+            top: topY - eTooltip.height() + offset.top,
+            left: middleX - eTooltip.width()/2 + offset.left
+        });
+
+        if (!tooltipVisible){
+            eTooltip.stop();
+            eTooltip.css({'opacity':0});
+            tooltipVisible = true;
+            eTooltip.animate({
+                'opacity':1
+            },400);
+        }else{
+            eTooltip.stop();
+            eTooltip.show();
+            eTooltip.css({'opacity':1});
+        }
+
+        clearTimeout(tooltipTimeout);
+        tooltipTimeout = setTimeout(function(){
+            // eTooltip.hide();
+            eTooltip.animate({
+                'opacity':'0'
+            },400,function(){
+                tooltipVisible = false;
+                eTooltip.hide();
+            });
+        },1400);
+    }
+	
+	function showNotification(message, type, clickAction, small){
 		type = type || 'alert';
 
 		var element = $('.notification.blueprint').clone().removeClass('blueprint');
