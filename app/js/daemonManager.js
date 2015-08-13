@@ -50,7 +50,7 @@ function DaemonManager() {
 	 * @param {function} isNotRunning - function to run if Siad is not running
 	 */
 	function ifSiad(isRunning, isNotRunning) {
-		apiCall('/consensus/status', function(err) {
+		apiCall('/consensus', function(err) {
 			if (!err) {
 				self.Running = true;
 				isRunning();
@@ -117,41 +117,12 @@ function DaemonManager() {
 			UI.notify('siad errored: ' + error, 'error');
 		});
 		// Listen for siad exiting
-		daemonProcess.on('exit', exit);
-	}
-
-	/**
-	 * Stops the daemon
-	 */
-	function stop() {
-		ifSiad(function() {
-			UI.notify('Stopping siad...', 'stop');
-		}, function() {
-			console.err('attempted to stop siad when it was not running');
-			return;
-		});
-		apiCall('/daemon/stop', function(err, result) {
-			if (result.Success) {
-				exit();
-			} else {
-				console.error(err);
-			}
-		});
-	}
-
-	function exit(code) {
-		self.Running = false;
-		if (code) {
+		daemonProcess.on('exit', function(code) {
+			self.Running = false;
 			UI.notify('siad exited with code: ' + code, 'stop');
-		} else {
-			UI.notify('siad exited', 'stop');
-		}
-		setTimeout(function() {
-			IPC.send('exit');
-		}, 400);
-		clearTimeout(updating);
+			clearTimeout(updating);
+		});
 	}
-
 
 	/**
 	 * Sets the member variables based on the passed config

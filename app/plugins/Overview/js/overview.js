@@ -63,11 +63,6 @@ function tooltip(message, element) {
 	});
 }
 
-document.getElementById('stop-exit').onclick = function() {
-	IPC.sendToHost('api-call', '/daemon/stop');
-	tooltip('Bye!', this);
-}
-
 // Define IPC listeners and update DOM per call
 IPC.on('balance-update', function(err, result) {
 	updateField(err, 'Balance: ', formatSiacoin(result.Balance), 'balance');

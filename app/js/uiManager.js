@@ -154,11 +154,11 @@ function UIManager() {
 		eTooltip.show();
 		eTooltip.html(content);
 		var middleX = offset.left - (eTooltip.width()/2) + (offset.width/2);
-        var topY = offset.top - (eTooltip.height()) - (offset.height/2);
-        eTooltip.offset({
-            top: topY,
-            left: middleX,
-        });
+		var topY = offset.top - (eTooltip.height()) - (offset.height/2);
+		eTooltip.offset({
+			top: topY,
+			left: middleX,
+		});
 		// Fade the toolip from 0 to 1
 		if (!tooltipVisible) {
 			eTooltip.stop();
@@ -232,7 +232,11 @@ function UIManager() {
 	* Called at window.beforeunload, closes the UI
 	* @function UIManager#kill
 	*/
-   this.kill = function() {
-	   Config.save(memConfig, configPath);
-   };
+	this.kill = function() {
+		Config.save(memConfig, configPath);
+		// Ensure the UI's closing
+		setTimeout(function() {
+			IPC.send('exit');
+		}, 400);
+	};
 }
