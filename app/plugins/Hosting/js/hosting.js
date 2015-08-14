@@ -14,7 +14,7 @@ var updating;
 // DOM shortcut
 function eID() {
 	return document.getElementById.apply(document, [].slice.call(arguments));
-};
+}
 
 // Pointers to various DOM elements
 var ePropBlueprint, eProperties, eSave, eReset, eAnnounce;
@@ -60,7 +60,9 @@ function convertSiacoin(hastings) {
 
 // Controls data size representation
 function formatBytes(bytes) {
-	if (bytes == 0) return '0B';
+	if (bytes === 0) {
+		return '0B';
+	}
 	var k = 1000;
 	var sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 	var i = Math.floor((Math.log(bytes) + 1) / Math.log(k));
@@ -79,7 +81,7 @@ function tooltip(message, element) {
 		width: rect.width,
 		length: rect.length,
 	});
-};
+}
 
 // Define API calls and update DOM per call
 function update() {
@@ -147,7 +149,7 @@ IPC.on('status', function(err, result) {
 	// Calculate host finances
 	var total = formatBytes(hosting.TotalStorage);
 	var storage = formatBytes(hosting.TotalStorage - hosting.StorageRemaining);
-	var profit = (hosting.Profit).toFixed(2)
+	var profit = (hosting.Profit).toFixed(2);
 	var potentialProfit = convertSiacoin(hosting.PotentialProfit).toFixed(2);
 	// Update host finances
 	eID('contracts').innerHTML = hosting.NumContracts + ' Contracts';
@@ -160,7 +162,7 @@ IPC.on('status', function(err, result) {
 		if (eID(prop.name)) {
 			return;
 		}
-		var item = ePropBlueprint.cloneNode(true)
+		var item = ePropBlueprint.cloneNode(true);
 		item.classList.remove('blueprint');
 		item.querySelector('.name').textContent = prop.name + ' (' + prop.unit + ')';
 		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion).round().toString();

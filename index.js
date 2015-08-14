@@ -1,7 +1,7 @@
 'use strict';
 // Electron main process libraries
 const App = require('app');
-const IPC = require('ipc');
+const MainIPC = require('ipc');
 const Path = require('path');
 const BrowserWindow = require('browser-window');
 const Tray = require('tray');
@@ -59,7 +59,7 @@ App.on('ready', startMainWindow);
 
 // TODO: Was going to use for wallet but it's unused for now
 // Listen for if the renderer process wants to produce a dialog message
-IPC.on('dialog', function(event, type, options, callback) {
+MainIPC.on('dialog', function(event, type, options, callback) {
 	switch (type) {
 		case 'open':
 			Dialog.showOpenDialog(mainWindow, options, callback)

@@ -221,8 +221,8 @@ function UIManager() {
 	 * corresponds to electron's dialog.showMessageBox() api
 	 */
 	this.message = function(options) {
-		IPC.send('dialog', message, options);
-	}
+		RendererIPC.send('dialog', options);
+	};
 
 	/**
 	* Called at window.onready, initalizes the UI
@@ -248,7 +248,7 @@ function UIManager() {
 		Config.save(memConfig, configPath);
 		// Ensure the UI's closing
 		setTimeout(function() {
-			IPC.send('exit');
+			RendererIPC.send('exit');
 		}, 400);
 	};
 }

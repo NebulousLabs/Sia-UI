@@ -28,7 +28,7 @@ function formatSiacoin(hastings) {
 }
 
 // Amount has to be a number
-function isNumber(n) {;
+function isNumber(n) {
 	return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
@@ -155,7 +155,7 @@ eID('create-address').onclick = function() {
 	var call = {
 		url: '/wallet/seed',
 		type: 'PUT',
-	}
+	};
 	IPC.sendToHost('api-call', call, 'new-address');
 };
 eID('send-money').onclick = function() {
@@ -243,12 +243,12 @@ IPC.on('update-status', function(err, result) {
 });
 IPC.on('update-height', function(err, result) {
 	if (!assertSuccess('update-height', err)) {
-		return
+		return;
 	}
 	// Got the height, get the transactions ... if we're not on block 0
 	currentHeight = result.Height;
 	if (currentHeight === 0) {
-		return
+		return;
 	}
 	IPC.sendToHost('api-call', {
 		url: '/wallet/transactions',
