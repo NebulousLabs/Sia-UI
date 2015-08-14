@@ -193,7 +193,7 @@ function UIManager() {
 	 * @param {function} clickAction The function to call upon the user
 	 * clicking the notification
 	 */
-	this.notify = function(message, type, clickAction) {
+	this.notify = function notify(message, type, clickAction) {
 		// CONTRIBUTE: This delay system is technically broken, but not
 		// noticably wait approximately 250ms between notifications
 		if (new Date().getTime() < lastNotificationTime + 250) {
