@@ -6,7 +6,6 @@ const Path = require('path');
 const BrowserWindow = require('browser-window');
 const Tray = require('tray');
 const Dialog = require('dialog');
-const IPC = require('ipc');
 
 // visit localhost:9222 to see devtools remotely
 App.commandLine.appendSwitch('remote-debugging-port', '9222');

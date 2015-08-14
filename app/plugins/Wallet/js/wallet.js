@@ -28,7 +28,7 @@ function formatSiacoin(hastings) {
 }
 
 // Amount has to be a number
-function isNumber(n) {
+function isNumber(n) {;
 	return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
@@ -50,16 +50,21 @@ function tooltip(message, element) {
 function update() {
 	IPC.sendToHost('api-call', '/wallet', 'update-status');
 	IPC.sendToHost('api-call', '/consensus', 'update-height');
-	IPC.sendToHost('api-call', {
-		url: '/wallet/transactions',
-		type: 'GET',
-		args: {
-			startHeight: 0,
-			endHeight: currentHeight,
-		}
-	}, 'update-transactions');
 
+	console.log('updating...');
+	console.log('password is: ', password);
 	updating = setTimeout(update, 15000);
+}
+
+// Unlock the wallet
+function unlock() {
+	IPC.sendToHost('api-call', {
+		url: '/wallet/unlock',
+		type: 'PUT',
+		args: {
+			encryptionKey : password,
+		},
+	}, 'unlocked');
 }
 
 // Called upon showing
@@ -68,17 +73,12 @@ function start() {
 	// IPC.sendToHost('devtools');
 	
 	// Unlock the wallet if we're just switching back to it
-	if (password) {
-		IPC.sendToHost('api-call', {
-			url: '/wallet/unlock',
-			type: 'PUT',
-			args: {
-				encryptionKey : password,
-			},
-		});
+	if (password !== null) {
+		unlock();
 	} else {
 		// First time opening up the wallet plugin this session
-		// TODO: Ask for password
+		var popup = eID('password-popup');
+		popup.classList.remove('blueprint');
 	}
 	
 	// Call the API
@@ -87,6 +87,14 @@ function start() {
 
 // Called upon transitioning away from this view
 function stop() {
+	console.log('hiding...');
+	// Save password for the session before closing
+	IPC.sendToHost('api-call', {
+		url: '/wallet/seed',
+		type: 'GET',
+	}, 'save-password');
+
+	// Stop updating
 	clearTimeout(updating);
 }
 
@@ -133,6 +141,15 @@ function appendAddress(address) {
 }
 
 // Give the buttons interactivity
+eID('enter-password').onclick = function() {
+	// Record password
+	var field = eID('password-field');
+	password = field.value;
+
+	// Hide popup and start the plugin
+	field.classList.add('blueprint');
+	unlock();
+};
 eID('create-address').onclick = function() {
 	tooltip('Creating...', this);
 	var call = {
@@ -154,9 +171,9 @@ eID('confirm').onclick = function() {
 };
 
 // Error checking shortcut
-function assertSuccess(err) {
+function assertSuccess(ipcmsg, err) {
 	if (err) {
-		console.error(err);
+		console.error(ipcmsg, err);
 		IPC.sendToHost('notify', 'API Call errored!', 'error');
 		return false;
 	} else {
@@ -177,7 +194,7 @@ function appendAddress(address) {
 
 // Define IPC listeners
 IPC.on('coin-sent', function(err, result) {
-	if (!assertSuccess(err)) {
+	if (!assertSuccess('coin-sent', err)) {
 		return;
 	}
 	IPC.sendToHost('notify',  'Transaction sent!', 'sent');
@@ -185,53 +202,67 @@ IPC.on('coin-sent', function(err, result) {
 	eID('confirm').classList.add('hidden');
 });
 IPC.on('new-address', function(err, result) {
-	if (!assertSuccess(err)) {
+	if (!assertSuccess('new-address', err)) {
 		return;
 	}
 	IPC.sendToHost('notify', 'Address created!', 'success');
 	appendAddress(result.Address);
 });
 IPC.on('save-password', function(err, result) {
-	if (!assertSuccess(err)) {
+	console.log('saving password...');
+	if (!assertSuccess('save-password', err)) {
 		return;
 	}
 
 	password = result.PrimarySeed;
 	remainingAddresses = result.AddressesRemaining;
+	
+	// Lock the wallet
+	// TODO: close seems to not be working properly
+	console.log('closing wallet...');
+	IPC.sendToHost('api-call', {
+		url: '/wallet/close',
+		type: 'PUT',
+	});
+});
+IPC.on('unlocked', function(err, result) {
+	console.log('unlocking wallet...');
+	if (assertSuccess('unlocked', err)) {
+		update();
+	}
 });
 IPC.on('update-status', function(err, result) {
-	if (!assertSuccess(err)) {
+	if (!assertSuccess('update-status', err)) {
 		return;
 	}
-	console.log(result);
 
-	// Unlock if need be
-	if (!wallet.Unlocked && !password) {
-		// TODO: Ask for password
-		/*
-		IPC.sendToHost('dialog', 'message', {
-			type: 'info',
-			buttons: ['I\'ve written this down'],
-			title: 'Introducing your new Siacoin wallet!',
-			message: 'Hello, this is your first time opening this '
-		});
-	   */
-	}
+	wallet = result;
 	
 	// Update balance
 	eID('balance').innerHTML = 'Balance: ' + formatSiacoin(wallet.ConfirmedSiacoinBalance);
 });
 IPC.on('update-height', function(err, result) {
-	if (assertSuccess(err)) {
-		currentHeight = result.Height;
+	if (!assertSuccess('update-height', err)) {
+		return
 	}
+	// Got the height, get the transactions ... if we're not on block 0
+	currentHeight = result.Height;
+	if (currentHeight === 0) {
+		return
+	}
+	IPC.sendToHost('api-call', {
+		url: '/wallet/transactions',
+		type: 'GET',
+		args: {
+			startHeight: 0,
+			endHeight: currentHeight,
+		}
+	}, 'update-transactions');
 });
+// TODO: update transaction history and addresses
 IPC.on('update-transactions', function(err, result) {
-	if (!assertSuccess(err)) {
-		return;
-	}
-
-	if (eID(address)) {
+	console.log(currentHeight, wallet);
+	if (!assertSuccess('update-transactions', err)) {
 		return;
 	}
 });
