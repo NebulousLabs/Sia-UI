@@ -70,14 +70,19 @@ function PluginManager() {
 		 * @todo Add smoother transitions
 		 */
 		plugin.transition(function() {
+			// Don't do anything if already on this plugin
 			if (current === plugin) {
 				return;
 			}
+
+			// Fadein and fadeout mainbar
 			var main = document.getElementById('mainbar').classList;
 			main.add('transition');
 			setTimeout(function() {
 				main.remove('transition');
 			}, 250);
+
+			// Switch plugins
 			current.hide();
 			current = plugin;
 			current.show();
@@ -87,13 +92,19 @@ function PluginManager() {
 		plugin.on('ipc-message', function(event) {
 			switch(event.channel) {
 				case 'api-call':
+					// Redirect api calls to the daemonManager
 					var call = event.args[0];
 					var responseChannel = event.args[1];
-					Daemon.apiCall(call, function(err, result) {
-						if (responseChannel) {
-							plugin.sendToView(responseChannel, err, result);
-						}
-					});
+					if (Daemon.Running) {
+						Daemon.apiCall(call, function(err, result) {
+							if (err) {
+								console.error(err);
+							} 
+							if (responseChannel) {
+								plugin.sendToView(responseChannel, err, result);
+							}
+						});
+					}
 					break;
 				case 'notify':
 					// Use UI notification system
@@ -169,7 +180,7 @@ function PluginManager() {
 
 	/**
 	 * Initializes the plugins to the UI
-	 * @function PluginManager~init
+	 * @function PluginManager.init
 	 * @param {config} config - config in memory
 	 */
 	this.init = function(config) {

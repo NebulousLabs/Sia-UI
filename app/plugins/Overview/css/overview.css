@@ -26,3 +26,16 @@
 	margin-top: 20px;
 	font-size: 32px;
 }
+
+.button {
+	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+	margin-top: 20px;
+}
+.button.hidden {
+	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
+	opacity: 0;
+}
+.button:hover {
+	color: #4a4a4a;
+	cursor: pointer;
+}

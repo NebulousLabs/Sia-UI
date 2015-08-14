@@ -27,15 +27,13 @@ function UIManager() {
 	var notificationsInQueue = 0;
 	var notificationIcons = {
 		alert: 'exclamation',
-		error: 'exclamation',
+		error: 'exclamation-circle',
 		update: 'arrow-circle-o-up',
 		upload: 'upload',
-		help: 'question',
 		sent: 'send',
-		received: 'sign-in',
-		fix: 'wrench',
+		start: 'play',
+		stop: 'stop',
 		download: 'arrow-circle-down',
-		peers: 'group',
 		success: 'check'
 	};
 
@@ -152,16 +150,16 @@ function UIManager() {
 			top: 0,
 			left: 0,
 		};
-
+		// Show the tooltip at the proper location
 		eTooltip.show();
 		eTooltip.html(content);
 		var middleX = offset.left - (eTooltip.width()/2) + (offset.width/2);
-        var topY = offset.top - (eTooltip.height()) - (offset.height/2);
-        eTooltip.offset({
-            top: topY,
-            left: middleX,
-        });
-
+		var topY = offset.top - (eTooltip.height()) - (offset.height/2);
+		eTooltip.offset({
+			top: topY,
+			left: middleX,
+		});
+		// Fade the toolip from 0 to 1
 		if (!tooltipVisible) {
 			eTooltip.stop();
 			eTooltip.css({'opacity':0});
@@ -174,13 +172,13 @@ function UIManager() {
 			eTooltip.show();
 			eTooltip.css({'opacity':1});
 		}
-
+		// Hide the tooltip after 1.4 seconds
 		clearTimeout(tooltipTimeout);
 		tooltipTimeout = setTimeout(function() {
 			// eTooltip.hide();
 			eTooltip.animate({
 				'opacity':'0'
-			}, 400,function() {
+			}, 400, function() {
 				tooltipVisible = false;
 				eTooltip.hide();
 			});
@@ -234,7 +232,11 @@ function UIManager() {
 	* Called at window.beforeunload, closes the UI
 	* @function UIManager#kill
 	*/
-   this.kill = function() {
-	   Config.save(memConfig, configPath);
-   };
+	this.kill = function() {
+		Config.save(memConfig, configPath);
+		// Ensure the UI's closing
+		setTimeout(function() {
+			IPC.send('exit');
+		}, 400);
+	};
 }

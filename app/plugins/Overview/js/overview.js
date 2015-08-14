@@ -35,8 +35,8 @@ function formatSiacoin(hastings) {
 	return display + ' SC';
 }
 
-// Called upon showing
-function show() {
+// Called by the UI upon showing
+function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	// IPC.sendToHost('devtools');
 	
@@ -44,9 +44,23 @@ function show() {
 	updating = setTimeout(update, 0);
 }
 
-// Called upon transitioning away from this view
-function hide() {
+// Called by the UI upon transitioning away from this view
+function stop() {
 	clearTimeout(updating);
+}
+
+// Ask UI to show tooltip bubble
+function tooltip(message, element) {
+	var rect = element.getBoundingClientRect();
+	IPC.sendToHost('tooltip', message, {
+		top: rect.top,
+		bottom: rect.bottom,
+		left: rect.left,
+		right: rect.right,
+		height: rect.height,
+		width: rect.width,
+		length: rect.length,
+	});
 }
 
 // Define IPC listeners and update DOM per call

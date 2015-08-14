@@ -1,5 +1,6 @@
 'use strict';
 const App = require('app');
+const IPC = require('ipc');
 const Path = require('path');
 const BrowserWindow = require('browser-window');
 const Tray = require('tray');
@@ -53,6 +54,16 @@ App.on('window-all-closed', function() {
 		App.quit();
 	}
 });
+
+/**
+ * Quit when asked to by the renderer.
+ */
+IPC.on('exit', function() {
+	if (process.platform !== 'darwin') {
+		App.quit();
+	}
+});
+
 
 /**
  * When Electron loading has finished, start the daemon then the UI

@@ -20,6 +20,13 @@ function DaemonManager() {
 	 * @member {string} DaemonManager~address
 	 */
 	var address;
+	/**
+	 * Boolean to track if siad is running
+	 * @member {function} DaemonManager.Running
+	 */
+	this.Running = false;
+	// To keep a reference to the DaemonManager inside its functions
+	var self = this;
 
 	/**
 	 * Relays calls to daemonAPI with the localhost:port address appended
@@ -43,25 +50,28 @@ function DaemonManager() {
 	 * @param {function} isNotRunning - function to run if Siad is not running
 	 */
 	function ifSiad(isRunning, isNotRunning) {
-		if (!isRunning) {
-			isRunning = function() {};
-		}
-		if (!isNotRunning) {
-			isNotRunning = function() {};
-		}
-		apiCall('/consensus/status', function(err) {
+		apiCall('/consensus', function(err) {
 			if (!err) {
+				self.Running = true;
 				isRunning();
 			} else if (err) {
+				self.Running = false;
 				isNotRunning();
 			}
 		});
 	}
 
 	function updatePrompt() {
+		if (!self.Running) {
+			UI.notify('siad is not running!', 'stop');
+			return;
+		}
 		apiCall("/daemon/updates/check", function(err, update) {
-			if (update.Available) {
-				UI.notify("New Sia Client Available: Click to update to " + update.Version + "!", "alert", function() {
+			if (err) {
+				UI.notify('Update check failed!', 'error');
+				return;
+			} else if (update.Available) {
+				UI.notify("New Sia Client Available: Click to update to " + update.Version, "update", function() {
 					Shell.openExternal('https://www.github.com/NebulousLabs/Sia-UI/releases');
 				});
 			} else {
@@ -69,20 +79,22 @@ function DaemonManager() {
 			}
 		});
 	}
-
+	
 	/**
 	 * Starts the daemon as a long running background process
 	 */
-	function start(callback) {
+	function start() {
 		ifSiad(function() {
 			console.error('attempted to start siad when it was already running');
 			return;
 		}, function() {
-			console.log('starting siad');
+			UI.notify('Starting siad...', 'start');
 		});
+
 		// daemon as a background process logs output to files
-		var out = Fs.openSync(Path.join(siaPath, 'daemonOut.log'), 'a');
-		var err = Fs.openSync(Path.join(siaPath, 'daemonErr.log'), 'a');
+		var out = Fs.openSync(Path.join(siaPath, 'daemonOut.log'), 'w');
+		var err = Fs.openSync(Path.join(siaPath, 'daemonErr.log'), 'w');
+
 		// daemon process has to be detached without parent stdio pipes
 		var processOptions = {
 			detached: true,
@@ -93,24 +105,22 @@ function DaemonManager() {
 		var daemonProcess = new Process(command, processOptions);
 		daemonProcess.unref();
 
-		// Give siad time to load
+		// Give siad time to load or exit
 		// TODO: Imperfect way to go about this.
-		setTimeout(callback, 500);
-	}
+		var updating = setTimeout(function() {
+			self.Running = true;
+			updatePrompt();
+		}, 1000);
 
-	/**
-	 * Stops the daemon
-	 */
-	function stop() {
-		ifSiad(function() {
-			console.log('stopping siad');
-		}, function() {
-			console.err('attempted to stop siad when it was not running');
-			return;
+		// Listen for siad erroring
+		daemonProcess.on('error', function (error) {
+			UI.notify('siad errored: ' + error, 'error');
 		});
-		apiCall('/daemon/stop', function(err, data) {
-			console.assert(!err && data);
-			console.log(data);
+		// Listen for siad exiting
+		daemonProcess.on('exit', function(code) {
+			self.Running = false;
+			UI.notify('siad exited with code: ' + code, 'stop');
+			clearTimeout(updating);
 		});
 	}
 
@@ -132,9 +142,7 @@ function DaemonManager() {
 	 */
 	this.init = function(config) {
 		setConfig(config, function() {
-			ifSiad(updatePrompt, function() {
-				start(updatePrompt);
-			});
+			ifSiad(updatePrompt, start);
 		});
 	};
 	/**
