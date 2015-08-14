@@ -32,7 +32,7 @@ function updateField(err, caption, newValue, elementID) {
 function formatSiacoin(hastings) {
 	var ConversionFactor = new BigNumber(10).pow(24);
 	var display = new BigNumber(hastings).dividedBy(ConversionFactor);
-	return display + ' SC';
+	return display + ' S';
 }
 
 // Called by the UI upon showing
@@ -40,8 +40,8 @@ function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	// IPC.sendToHost('devtools');
 	
-	// Call the API regularly to update page
-	updating = setTimeout(update, 0);
+	// Call the API
+	update();
 }
 
 // Called by the UI upon transitioning away from this view

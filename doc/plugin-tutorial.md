@@ -129,7 +129,7 @@ unique id's to update each of them separately later in JS.
 			<div class='capsule'>
 				<div class='pod' id='balance'>Balance: 0</div>
 				<div class='pod' id='peers'>Peers: 0</div>
-				<div class='pod' id='block-height'>Block Height: 0</div>
+				<div class='pod' id='height'>Block Height: 0</div>
 			</div>
 		</div>
 ```
@@ -341,70 +341,101 @@ the UI reacts accordingly. For example, turn chromium devtools on using:
 IPC.sendToHost('devtools');
 ```
 
-It's like a mini API but the UI currently registers only 'devtools', and
-'api-call' channels. For more detail, see app/js/pluginManager.js
+It's like a mini API. For now, the IPC channels are:
+
+* api-call - Send a call string or object through this channel, with the second
+argument being the channel to receive the result over. See the next section
+* notify - Send a message to the user with the notification system of the UI.
+See uiManager.notify()
+* tooltip - Send a message to the user with the tooltip system of the
+uiManager.tooltip()
+* devtools - toggle devtools on and off for the plugin (one can also go to
+localhost:9222 when running the UI to view all chromium devtools)
+
+For more detail, see app/js/pluginManager.js's function addListeners()
+
+For example usage, view the js files of any currently implemented plugins.
 
 ### Making API calls
 
 To send api calls through the UI to a hosted siad, call ipc's sendToHost()
 function along the message channel 'api-call' and pass in the string of the
-call address (for GET calls only).
+call address.
 
 ```js
-// Send API calls to the UI
-function callAPI() {
-	IPC.sendToHost('api-call', '/wallet/status');
-	IPC.sendToHost('api-call', '/gateway/status');
-	IPC.sendToHost('api-call', '/consensus/status');
+// Make API calls, sending a channel name to listen for responses
+function update() {
+	IPC.sendToHost('api-call', '/wallet/status', 'balance-update');
+	IPC.sendToHost('api-call', '/gateway/status', 'peers-update');
+	IPC.sendToHost('api-call', '/consensus/status', 'height-update');
+}
+```
+
+* Note, a call object is required instead of a string url for any calls other
+than 'GET'. They are formatted like the following:
+
+```js
+{ // A call object
+	url: '/consensus/status',  // String
+	type: 'GET',               // String
+	args: null,                // null or an object containing arguments to send
 }
 ```
 
 To do something with the result of said calls, one has to listen on the IPC
-channel corresponding to the call string.
+channel they specified in the third argument of sendToHost().
 
 ```js
-// Update values per call
-IPC.on('/wallet/status', function(err, result) {
+// Define IPC listeners and update DOM per call
+IPC.on('balance-update', function(err, result) {
 	document.getElementById('balance').innerHTML = 'Balance: ' + result.Balance;
 });
-IPC.on('/gateway/status', function(err, result) {
+IPC.on('peers-update', function(err, result) {
 	document.getElementById('peers').innerHTML = 'Peers: ' + result.Peers.length;
 });
-IPC.on('/consensus/status', function(err, result) {
-	document.getElementById('block-height').innerHTML = 'Block Height: ' + result.Height;
+IPC.on('height-update', function(err, result) {
+	document.getElementById('height').innerHTML = 'Block Height: ' + result.Height;
 });
 ```
 
 ### Plugin Lifecycle
 
-Currently, the UI checks for and executes a function called init() upon loading
-and kill() upon transitioning away from said function. Thus a plugin needs to
+Currently, the UI checks for and executes a function called start() upon loading
+and stop() upon transitioning away from the plugin. Thus a plugin needs to
 initialize and update its fields based on these two functions, even though it
 continues to exist in the background when another view is shown.
 
 A good way to do this is to have a global variable that points to a function
-being executed periodically using native Javascript's setInterval().
+being executed periodically using native Javascript's setTimeout().
 
 ```js
 // Keeps track of if the view is shown
 var updating;
 
+// Make API calls regularly, sending a channel name to listen for responses
+function update() {
+	IPC.sendToHost('api-call', '/wallet/status', 'balance-update');
+	IPC.sendToHost('api-call', '/gateway/status', 'peers-update');
+	IPC.sendToHost('api-call', '/consensus/status', 'height-update');
+	updating = setTimeout(update, 1000);
+}
+
 // Called upon showing
-function init() {
+function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	// IPC.sendToHost('devtools');
 	
-	// Call the API regularly to update page
-	updating = setInterval(callAPI, 1000);
+	// Call the API
+	update();
 }
 
 // Called upon transitioning away from this view
-function kill() {
+function stop() {
 	clearInterval(updating);
 }
 ```
 
-### Usability
+## Usability
 
 This all functions well enough, but it's a bit of an amateur design when one
 actually uses the plugin. Numbers are jerky and we see a large amount of
@@ -429,27 +460,15 @@ incorporate the [bignumber.js library](https://github.com/MikeMcl/bignumber.js/)
 ```js
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
+// Ensure precision
+BigNumber.config({ DECIMAL_PLACES: 24 })
+BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
 
 // Convert to Siacoin
 function formatSiacoin(hastings) {
-	var ConversionFactor = Math.pow(10, 24);
-	var display = hastings / ConversionFactor);
 	var ConversionFactor = new BigNumber(10).pow(24);
 	var display = new BigNumber(hastings).dividedBy(ConversionFactor);
 	return display + ' SC';
-}
-
-// Called upon showing
-function init() {
-	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPC.sendToHost('devtools');
-
-	// Ensure precision
-	BigNumber.config({ DECIMAL_PLACES: 24 })
-	BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
-	
-	// Call the API regularly to update page
-	updating = setInterval(callAPI, 1000);
 }
 ```
 
@@ -458,29 +477,26 @@ the markup so as to maintain values and avoid displaying glitchy values like
 null or NaN.
 
 ```js
-// Update values per call
+// Define IPC listeners and update DOM per call
 IPC.on('/wallet/status', function(err, result) {
 	if (err) {
 		console.error(err);
-	}
-	if (result) {
+	} else if (result) {
 		document.getElementById('balance').innerHTML = 'Balance: ' + balance;
 	}
 });
 IPC.on('/gateway/status', function(err, result) {
 	if (err) {
 		console.error(err);
-	}
-	if (result) {
+	} else if (result) {
 		document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
 	}
 });
 IPC.on('/consensus/status', function(err, result) {
 	if (err) {
 		console.error(err);
-	}
-	if (result) {
-		document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
+	} else if (result) {
+		document.getElementById('height').innerHTML = 'Block Height: ' + blockHeight;
 	}
 });
 ```
@@ -493,14 +509,18 @@ Finally, the aggregated Javascript code should look like this:
 const IPC = require('ipc');
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
+// Ensure precision
+BigNumber.config({ DECIMAL_PLACES: 24 })
+BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
 // Keeps track of if the view is shown
 var updating;
 
 // Send API calls to the UI
-function callAPI() {
+function update() {
 	IPC.sendToHost('api-call', '/wallet/status');
 	IPC.sendToHost('api-call', '/gateway/status');
 	IPC.sendToHost('api-call', '/consensus');
+	updating = setTimeout(update, 1000);
 }
 
 // Convert to Siacoin
@@ -510,47 +530,40 @@ function formatSiacoin(hastings) {
 	return display + ' SC';
 }
 
-// Update values per call
+// Define IPC listeners and update DOM per call
 IPC.on('/wallet/status', function(err, result) {
 	if (err) {
 		console.error(err);
-	}
-	if (result) {
+	} else if (result) {
 		document.getElementById('balance').innerHTML = 'Balance: ' + balance;
 	}
 });
 IPC.on('/gateway/status', function(err, result) {
 	if (err) {
 		console.error(err);
-	}
-	if (result) {
+	} else if (result) {
 		document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
 	}
 });
 IPC.on('/consensus/status', function(err, result) {
 	if (err) {
 		console.error(err);
-	}
-	if (result) {
-		document.getElementById('block-height').innerHTML = 'Block Height: ' + blockHeight;
+	} else if (result) {
+		document.getElementById('height').innerHTML = 'Block Height: ' + blockHeight;
 	}
 });
 
 // Called upon showing
-function init() {
+function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	// IPC.sendToHost('devtools');
 	
-	// Ensure precision
-	BigNumber.config({ DECIMAL_PLACES: 24 })
-	BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
-	
-	// Call the API regularly to update page
-	updating = setInterval(callAPI, 1000);
+	// Call the API
+	update();
 }
 
 // Called upon transitioning away from this view
-function kill() {
+function stop() {
 	clearInterval(updating);
 }
 ```
@@ -572,73 +585,37 @@ should be pulled from the API and one's siad-state. In our case, the view shows
 the highly active dev network:
 ![Impressive plugin ain't it?](/doc/assets/dev-overview.png)
 
-### Bonus: Abstracting the Extra Mile
+### Abstracting the Extra Mile
 
-Since any plugin is probably going to make many more calls than just the three
-that Overview uses, we can abstract the functions we've already defined so as
-to reduce unnecessary use of IPC, one of the few non-webdev-native tools used.
-
-Instead of callAPI() sending three hardcoded calls and having IPC listen on the
-channel of each call, we could make a more abstract function that both sends
-the call and listens for the response, handling errors in one place:
+If you notice, the error-checking seems to be a bit repetitive, let's define a
+function to call from IPC.on() that handles that for us and updates the DOM so
+as to reduce that repetition:
 
 ```js
-// Keeps track of if listeners were already instantiated
-var listening = false;
-
-// Call API and listen for response to call
-function callAPI(call, callback) {
-	IPC.sendToHost('api-call', call);
-	// prevents adding duplicate listeners
-	if (!listening) {
-		IPC.on(call, function(err, result) {
-			if (err) {
-				console.error(err);
-			} else if (result) {
-				callback(result);
-			} else {
-				console.error('Unknown occurence: no error and no result from callAPI!');
-			}
-		});
+// Updates element text
+function updateField(err, caption, newValue, elementID) {
+	if (err) {
+		console.error(err);
+	} else if (newValue === null) {
+		console.error('Unknown occurence: no error and no result from API call!');
+	} else {
+		document.getElementById(elementID).innerHTML = caption + newValue;
 	}
 }
+
+// Define IPC listeners and update DOM per call
+IPC.on('balance-update', function(err, result) {
+	updateField(err, 'Balance: ', formatSiacoin(result.Balance), 'balance');
+});
+IPC.on('peers-update', function(err, result) {
+	updateField(err, 'Peers: ', result.Peers.length, 'peers');
+});
+IPC.on('height-update', function(err, result) {
+	updateField(err, 'Block Height: ', result.Height, 'height');
+});
 ```
 
-We can call it and use it like this:
-
-```diff
--// Update values per call
--IPC.on('/wallet/status', function(err, result) {
--	if (err) {
--		console.error(err);
--	}
--	if (result) {
--		document.getElementById('balance').innerHTML = 'Balance: ' + balance;
--	}
--});
-+// Define API calls and update values per call
-+function update() {
-+	callAPI('/wallet/status', function(result) {
-+		document.getElementById('balance').innerHTML = 'Balance: ' + balance;
-+	});
-+	/* The same approach for the other two calls */
-+	listening = true;
-+}
-```
-
-Keep in mind that any listener, `IPC.on(call, callback)` in this case,
-continues to listen after instantiation, so we keep a boolean, `listening`, to
-check if our plugin already has its listeners:
-
-Now we reflect the changed nature of our functions in our `init()`:
-
-```diff
-	// Call the API regularly to update page
--	updating = setInterval(callAPI, 1000);
-+	updating = setInterval(update, 1000);
-```
-
-The aggregated code again with these abstractions applied should look like:
+Now the aggregate javascript should be:
 
 ```js
 'use strict';
@@ -646,25 +623,28 @@ The aggregated code again with these abstractions applied should look like:
 const IPC = require('ipc');
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
+// Ensure precision
+BigNumber.config({ DECIMAL_PLACES: 24 });
+BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 // Keeps track of if the view is shown
 var updating;
-// Keeps track of if listeners were already instantiated
-var listening = false;
 
-// Call API and listen for response to call
-function callAPI(call, callback) {
-	IPC.sendToHost('api-call', call);
-	// prevents adding duplicate listeners
-	if (!listening) {
-		IPC.on(call, function(err, result) {
-			if (err) {
-				console.error(err);
-			} else if (result) {
-				callback(result);
-			} else {
-				console.error('Unknown occurence: no error and no result from callAPI!');
-			}
-		});
+// Make API calls, sending a channel name to listen for responses
+function update() {
+	IPC.sendToHost('api-call', '/wallet/status', 'balance-update');
+	IPC.sendToHost('api-call', '/gateway/status', 'peers-update');
+	IPC.sendToHost('api-call', '/consensus/status', 'height-update');
+	updating = setTimeout(update, 1000);
+}
+
+// Updates element text
+function updateField(err, caption, newValue, elementID) {
+	if (err) {
+		console.error(err);
+	} else if (newValue === null) {
+		console.error('Unknown occurence: no error and no result from API call!');
+	} else {
+		document.getElementById(elementID).innerHTML = caption + newValue;
 	}
 }
 
@@ -675,35 +655,79 @@ function formatSiacoin(hastings) {
 	return display + ' SC';
 }
 
-// Define API calls and update DOM per call
-function update() {
-	callAPI('/wallet/status', function(result) {
-		document.getElementById('balance').innerHTML = 'Balance: ' + formatSiacoin(result.Balance);
-	});
-	callAPI('/gateway/status', function(result) {
-		document.getElementById('peers').innerHTML = 'Peers: ' + result.Peers.length;
-	});
-	callAPI('/consensus/status', function(result) {
-		document.getElementById('block-height').innerHTML = 'Block Height: ' + result.Height;
-	});
-	listening = true;
-}
-
-// Called upon showing
-function init() {
+// Called by the UI upon showing
+function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	// IPC.sendToHost('devtools');
 	
-	// Ensure precision
-	BigNumber.config({ DECIMAL_PLACES: 24 });
-	BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
-	
-	// Call the API regularly to update page
-	updating = setInterval(update, 1000);
+	// Call the API
+	update();
 }
 
-// Called upon transitioning away from this view
-function kill() {
-	clearInterval(updating);
+// Called by the UI upon transitioning away from this view
+function stop() {
+	clearTimeout(updating);
 }
+
+// Define IPC listeners and update DOM per call
+IPC.on('balance-update', function(err, result) {
+	updateField(err, 'Balance: ', formatSiacoin(result.Balance), 'balance');
+});
+IPC.on('peers-update', function(err, result) {
+	updateField(err, 'Peers: ', result.Peers.length, 'peers');
+});
+IPC.on('height-update', function(err, result) {
+	updateField(err, 'Block Height: ', result.Height, 'height');
+});
 ```
+
+### Bonus: Tooltips and Notifications
+
+The UI has a notification and tooltip system that can also be utilized through
+IPC. Notifications are easy enough as demonstrated through this code snippet
+taken from Wallet's js file:
+
+```js
+IPC.on('coin-sent', function(err, result) {
+	if (err) {
+		console.error(err);
+		IPC.sendToHost('notify', 'Transaction errored!', 'error');
+		return;
+	}
+	IPC.sendToHost('notify',  'Transaction sent!', 'sent');
+	document.getElementById('transaction-amount').value = '';
+	document.getElementById('confirm').classList.add('hidden');
+});
+```
+
+In the wallet view, we can trigger this notification and another, making them
+appear as such: ![If only we sent to an actual addresses](/doc/assets/wallet-notifications.png)
+
+In a similar, but more unwieldy manner, one can send a tooltip IPC message to
+show atop an element as demonstrated again by wallet:
+
+```js
+// Ask UI to show tooltip bubble
+function tooltip(message, element) {
+	var rect = element.getBoundingClientRect();
+	IPC.sendToHost('tooltip', message, {
+		top: rect.top,
+		bottom: rect.bottom,
+		left: rect.left,
+		right: rect.right,
+		height: rect.height,
+		width: rect.width,
+		length: rect.length,
+	});
+}
+
+// Give the buttons interactivity
+document.getElementById('create-address').onclick = function() {
+	tooltip('Creating...', this);
+	IPC.sendToHost('api-call', '/wallet/address', 'new-address');
+};
+```
+
+Which will make this tooltip appear on click as such:
+
+![It's the details that make the best UI](/doc/assets/wallet-tooltip.png)
