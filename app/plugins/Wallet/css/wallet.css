@@ -12,9 +12,7 @@
 /* Password box */
 .popup {
 	position: absolute;
-	height: 30%;
-	min-height: 200px;
-	width: 30%;
+	min-height: 100px;
 	min-width: 200px;
 	top: 50%;
 	left: 50%;
@@ -30,12 +28,6 @@
 }
 .popup .title {
 	display: block;
-}
-.centered-input {
-	height: 60%;
-	display:flex;
-	justify-content:center;
-	align-items:center;
 }
 
 /* Information Box */
