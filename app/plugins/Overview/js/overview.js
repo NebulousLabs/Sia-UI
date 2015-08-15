@@ -11,10 +11,10 @@ var updating;
 
 // Make API calls, sending a channel name to listen for responses
 function update() {
-	IPC.sendToHost('api-call', '/wallet', 'balance-update');
+	IPC.sendToHost('api-call', '/wallet', 'wallet-update');
 	IPC.sendToHost('api-call', '/gateway/status', 'peers-update');
 	IPC.sendToHost('api-call', '/consensus', 'height-update');
-	updating = setTimeout(update, 1000);
+	updating = setTimeout(update, 5000);
 }
 
 // Updates element text
@@ -64,9 +64,16 @@ function tooltip(message, element) {
 }
 
 // Define IPC listeners and update DOM per call
-IPC.on('balance-update', function(err, result) {
-	var value = result !== null ? formatSiacoin(result.ConfirmedSiacoinBalance) : null;
-	updateField(err, 'Balance: ', value, 'balance');
+IPC.on('wallet-update', function(err, result) {
+	var bal = result !== null ? formatSiacoin(result.ConfirmedSiacoinBalance) : null;
+	updateField(err, 'Balance: ', bal, 'balance');
+
+	var locked = result !== null ? result.Unlocked : false;
+	if (locked) {
+		updateField(err, 'Locked', '', 'lock');
+	} else {
+		updateField(err, 'Unocked', '', 'lock');
+	}
 });
 IPC.on('peers-update', function(err, result) {
 	var value = result !== null ? result.Peers.length : null;
