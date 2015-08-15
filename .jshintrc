@@ -113,6 +113,7 @@
 	"globals"		: {		    // Extra globals.
 		"WebFrame": false,
 		"ElectronScreen": false,
+		"RendererIPC": false,
 		"Path": false,
 		"Fs": false,
 		"Shell": false,
