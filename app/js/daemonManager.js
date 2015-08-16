@@ -61,6 +61,9 @@ function DaemonManager() {
 		});
 	}
 
+	/**
+	 * Checks if there is an update available
+	 */
 	function updatePrompt() {
 		if (!self.Running) {
 			UI.notify('siad is not running!', 'stop');
@@ -157,5 +160,9 @@ function DaemonManager() {
 	 * @param {APIResponse} callback
 	 */
 	this.apiCall = apiCall;
+	/**
+	 * Makes an API call to to proper port using daemonAPI
+	 * @function DaemonManager#update
+	 */
 	this.update = updatePrompt;
 }

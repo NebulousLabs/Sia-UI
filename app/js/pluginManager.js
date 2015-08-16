@@ -60,8 +60,6 @@ function PluginManager() {
 		if (plugin.name === home) {
 			plugin.on('did-finish-load', plugin.show);
 			current = plugin;
-		} else {
-			plugin.on('did-finish-load', plugin.hide);
 		}
 
 		/** 

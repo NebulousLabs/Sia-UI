@@ -4,7 +4,7 @@
 function unlock() {
 	IPC.sendToHost('api-call', {
 		url: '/wallet/unlock',
-		type: 'PUT',
+		type: 'POST',
 		args: {
 			encryptionKey : password,
 		},
@@ -48,6 +48,8 @@ IPC.on('encrypted', function(err, result) {
 	}
 	eID('password-popup').classList.remove('blueprint');
 	eID('password-popup').innerText = result.PrimarySeed;
+
+	password = result.PrimarySeed;
 });
 
 // Called upon transitioning away from this view
