@@ -16,13 +16,12 @@
   "scripts": {
     "start": "electron .",
     "debug": "node-inspector & electron --debug=5858 . & xdg-open http://127.0.0.1:8080/debug?ws=127.0.0.1:8080&port=5858",
-    "postinstall": "npm run sia-repo && npm run sia-master && npm run sia-import",
+    "postinstall": "npm run sia-repo && npm run sia-import",
     "clean": "rm -rf build doc/Sia-UI node_modules app/dependencies app/config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
     "lint": "jshint . --verbose --exclude-path=.jshintignore",
     "doc": "jsdoc -c .jsdocrc",
-    "sia-repo": "test -d $GOPATH/src/github.com/NebulousLabs/Sia || go get -u github.com/NebulousLabs/Sia/...",
-    "sia-master": "(cd $GOPATH/src/github.com/NebulousLabs/Sia && git fetch && git pull && git checkout master && make dependencies && make)",
+    "sia-repo": "go get -u github.com/NebulousLabs/Sia/...",
     "sia-import": "test -d app/dependencies/Sia || mkdir -p app/dependencies/Sia && cp $GOPATH/bin/siad app/dependencies/Sia",
     "build": "npm run build-cmd -- --all",
     "build-lin64": "npm run build-cmd -- --platform=linux --arch=x64",
@@ -41,6 +40,6 @@
   },
   "dependencies": {
     "bignumber.js": "latest",
-    "jquery": "^2.1.4"
+    "jquery": "latest"
   }
 }

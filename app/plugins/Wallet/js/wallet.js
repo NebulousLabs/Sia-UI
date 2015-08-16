@@ -76,21 +76,20 @@ function start() {
 	if (password !== null) {
 		unlock();
 	} else {
+		// Need to check if wallet's unencrypted
+		IPC.sendToHost('api-call', '/wallet', 'on-opened');
 		// First time opening up the wallet plugin this session
 		var popup = eID('password-popup');
 		popup.classList.remove('blueprint');
 	}
-	
-	// Call the API
-	update();
 }
 
 // Called upon transitioning away from this view
 function stop() {
-	console.log('hiding...');
+	console.log('stopping...');
 	// Save password for the session before closing
 	IPC.sendToHost('api-call', {
-		url: '/wallet/seed',
+		url: '/wallet/seeds',
 		type: 'GET',
 	}, 'save-password');
 
@@ -153,8 +152,8 @@ eID('enter-password').onclick = function() {
 eID('create-address').onclick = function() {
 	tooltip('Creating...', this);
 	var call = {
-		url: '/wallet/seed',
-		type: 'PUT',
+		url: '/wallet/address',
+		type: 'GET',
 	};
 	IPC.sendToHost('api-call', call, 'new-address');
 };
@@ -218,18 +217,23 @@ IPC.on('save-password', function(err, result) {
 	remainingAddresses = result.AddressesRemaining;
 	
 	// Lock the wallet
-	// TODO: close seems to not be working properly
-	console.log('closing wallet...');
+	console.log('locking wallet...');
 	IPC.sendToHost('api-call', {
-		url: '/wallet/close',
-		type: 'PUT',
-	});
+		url: '/wallet/lock',
+		type: 'POST',
+	}, 'locked');
 });
 IPC.on('unlocked', function(err, result) {
 	console.log('unlocking wallet...');
 	if (assertSuccess('unlocked', err)) {
 		update();
 	}
+});
+IPC.on('locked', function(err, result) {
+	if (!assertSuccess('unlocked', err)) {
+		return;
+	}
+	console.log(wallet);
 });
 IPC.on('update-status', function(err, result) {
 	if (!assertSuccess('update-status', err)) {
