@@ -117,6 +117,11 @@ function DaemonManager() {
 			UI.notify('siad errored: ' + error, 'error');
 		});
 		// Listen for siad exiting
+		daemonProcess.on('close', function(code) {
+			self.Running = false;
+			UI.notify('siad closed with code: ' + code, 'stop');
+			clearTimeout(updating);
+		});
 		daemonProcess.on('exit', function(code) {
 			self.Running = false;
 			UI.notify('siad exited with code: ' + code, 'stop');
