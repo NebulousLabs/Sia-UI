@@ -1,13 +1,13 @@
-/*	Style Guide:
- *		Transparent: 70% Opacity
+/*  Style Guide:
+ *    Transparent: 70% Opacity
  *
- * 		White:      #FFFFFF
- * 		Grey-White: #F5F5F5
- *		Faint-Grey: #ECECEC
- *		Light-Grey: #DDDDDD
- *		Grey:       #C5C5C5
- * 		Grey-Black: #4A4A4A
- * 		Black:      #000000
+ *    White:      #FFFFFF
+ *    Grey-White: #F5F5F5
+ *    Faint-Grey: #ECECEC
+ *    Light-Grey: #DDDDDD
+ *    Grey:       #C5C5C5
+ *    Grey-Black: #4A4A4A
+ *    Black:      #000000
  */
 /* Overall rules */
 .blueprint {
@@ -120,11 +120,11 @@ html,body {
 }
 @keyframes fadeout {
 	from { opacity: default; }
-	to	 { opacity: 0; }
+	to   { opacity: 0; }
 }
 @keyframes fadein {
 	from { opacity: 0; }
-	to	 { opacity: default; }
+	to   { opacity: default; }
 }
 .button .icon {
 	max-height: 30%;
