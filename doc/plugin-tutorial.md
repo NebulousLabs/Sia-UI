@@ -605,13 +605,16 @@ function updateField(err, caption, newValue, elementID) {
 
 // Define IPC listeners and update DOM per call
 IPC.on('balance-update', function(err, result) {
-	updateField(err, 'Balance: ', formatSiacoin(result.Balance), 'balance');
+	var value = result !== null ? formatSiacoin(result.ConfirmedSiacoinBalance) : null;
+	updateField(err, 'Balance: ', value, 'balance');
 });
 IPC.on('peers-update', function(err, result) {
-	updateField(err, 'Peers: ', result.Peers.length, 'peers');
+	var value = result !== null ? result.Peers.length : null;
+	updateField(err, 'Peers: ', value, 'peers');
 });
 IPC.on('height-update', function(err, result) {
-	updateField(err, 'Block Height: ', result.Height, 'height');
+	var value = result !== null ? result.Height : null;
+	updateField(err, 'Block Height: ', value, 'height');
 });
 ```
 
@@ -671,13 +674,16 @@ function stop() {
 
 // Define IPC listeners and update DOM per call
 IPC.on('balance-update', function(err, result) {
-	updateField(err, 'Balance: ', formatSiacoin(result.Balance), 'balance');
+	var value = result !== null ? formatSiacoin(result.ConfirmedSiacoinBalance) : null;
+	updateField(err, 'Balance: ', value, 'balance');
 });
 IPC.on('peers-update', function(err, result) {
-	updateField(err, 'Peers: ', result.Peers.length, 'peers');
+	var value = result !== null ? result.Peers.length : null;
+	updateField(err, 'Peers: ', value, 'peers');
 });
 IPC.on('height-update', function(err, result) {
-	updateField(err, 'Block Height: ', result.Height, 'height');
+	var value = result !== null ? result.Height : null;
+	updateField(err, 'Block Height: ', value, 'height');
 });
 ```
 
