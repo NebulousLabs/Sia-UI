@@ -20,9 +20,9 @@ function update() {
 // Updates element text
 function updateField(err, caption, value, elementID) {
 	if (err) {
-		console.error(err);
+		IPC.sendToHost('notify', 'API call errored!', 'error');
 	} else if (value === null) {
-		console.error('Unknown occurence: no error and no result from API call!');
+		IPC.sendToHost('notify', 'API result seems to be null!', 'error');
 	} else {
 		document.getElementById(elementID).innerHTML = caption + value;
 	}
@@ -68,7 +68,7 @@ IPC.on('wallet-update', function(err, result) {
 	var bal = result !== null ? formatSiacoin(result.ConfirmedSiacoinBalance) : null;
 	updateField(err, 'Balance: ', bal, 'balance');
 
-	var locked = result !== null ? result.Unlocked : false;
+	var locked = result !== null ? result.Unlocked : null;
 	if (locked) {
 		updateField(err, 'Locked', '', 'lock');
 	} else {
