@@ -1,32 +1,5 @@
 'use strict';
 
-eID('lock-status').onclick = function() {
-	if (wallet.Unlocked && this.innerHTML == 'Unlocked') {
-		// Lock the wallet
-		IPC.sendToHost('api-call', {
-			url: '/wallet/lock',
-			type: 'POST',
-		}, 'locked');
-	} else if (!wallet.Unlocked && this.innerHTML == 'Locked'){
-		show('request-password');
-	} else {
-		notify('Locking the wallet is in progress', 'ongoing');
-	}
-}
-// On popup upon entering an encrypted, locked wallet, enter password
-eID('enter-password').onclick = function() {
-	// Record password
-	var field = eID('password-field');
-
-	// Hide popup and start the plugin
-	unlock(field.value);
-};
-// On popup upon entering an unencrypted, locked wallet, show password and
-// confirm reading
-eID('confirm-password').onclick = function() {
-	hide('show-password');
-	update();
-}
 // Address creation
 eID('create-address').onclick = function() {
 	tooltip('Creating...', this);

@@ -54,7 +54,7 @@ html, body {
 .capsule {
 	display: inline-block;
 	border: 1px solid #ffffff;
-	border-radius: 4px;
+	border-ra *dius: 4px;
 	overflow: hidden;
 }
 .capsule .pod {
@@ -64,6 +64,12 @@ html, body {
 	padding-right: 16px;
 	border-right: 1px solid #ffffff;
 	color: #f5f5f5;
+}
+.capsule .pod.button:hover {
+	color: #000000;
+}
+.capsule .pod * {
+	display: inline-block;
 }
 .capsule .pod:last-child {
 	border: none;
