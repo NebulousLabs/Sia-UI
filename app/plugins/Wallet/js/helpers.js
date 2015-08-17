@@ -20,6 +20,20 @@ var updating;
 function eID() {
 	return document.getElementById.apply(document, [].slice.call(arguments));
 }
+function show(el) {
+	if (typeof el === 'string') {
+		eID(el).classList.remove('blueprint');
+	} else {
+		el.classList.remove('blueprint');
+	}
+}
+function hide(el) {
+	if (typeof el === 'string') {
+		eID(el).classList.add('blueprint');
+	} else {
+		el.classList.add('blueprint');
+	}
+}
 
 // Convert to Siacoin
 function formatSiacoin(hastings) {

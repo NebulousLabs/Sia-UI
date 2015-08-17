@@ -5,8 +5,6 @@ function update() {
 	IPC.sendToHost('api-call', '/wallet', 'update-status');
 	IPC.sendToHost('api-call', '/consensus', 'update-height');
 
-	console.log('updating...');
-	console.log('password is: ', password);
 	setTimeout(update, 15000);
 }
 IPC.on('update-status', function(err, result) {
@@ -39,7 +37,6 @@ IPC.on('update-height', function(err, result) {
 });
 // TODO: update transaction history and addresses
 IPC.on('update-transactions', function(err, result) {
-	console.log(currentHeight, wallet);
 	if (!assertSuccess('update-transactions', err)) {
 		return;
 	}
@@ -52,7 +49,7 @@ function appendAddress(address) {
 	var entry = eID('abp').cloneNode(true);
 	entry.id = address;
 	entry.querySelector('.address').innerHTML = address;
-	entry.classList.remove('blueprint');
+	show(entry);
 	eID('address-list').appendChild(entry);
 }
 

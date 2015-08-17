@@ -29,6 +29,9 @@
 .popup .title {
 	display: block;
 }
+.password {
+	border-top: solid 1px #c5c5c5;
+}
 
 /* Information Box */
 .row {
@@ -56,7 +59,7 @@
 	display: inline-block;
 	float: right;
 }
-.button.hidden {
+.hidden {
 	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
 	opacity: 0;
 }

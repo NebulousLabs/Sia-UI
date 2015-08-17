@@ -6,15 +6,15 @@ function unlock() {
 		url: '/wallet/unlock',
 		type: 'POST',
 		args: {
-			encryptionKey : password,
+			EncryptionPassword : password,
 		},
 	}, 'unlocked');
 }
 IPC.on('unlocked', function(err, result) {
-	console.log('unlocking wallet...');
-	if (assertSuccess('unlocked', err)) {
-		update();
+	if (!assertSuccess('unlocked', err)) {
+		return;
 	}
+	update();
 });
 
 // Called upon showing
@@ -23,7 +23,7 @@ function start() {
 	// IPC.sendToHost('devtools');
 	
 	// Unlock the wallet if we're just switching back to it
-	if (password !== null) {
+	if (password) {
 		unlock();
 	} else {
 		// Need to check if wallet's unencrypted
@@ -36,25 +36,38 @@ IPC.on('on-opened', function(err, result) {
 	}
 	wallet = result;
 
-	if (!wallet.Encrypted && wallet.Unlocked) {
+	if (!wallet.Encrypted && !wallet.Unlocked) {
 		IPC.sendToHost('api-call', {
-			Dictionary: 'english',
+			url: '/wallet/encrypt',
+			type: 'POST',
+			args: {
+				EncryptionPassword: '',
+				Dictionary: 'english',
+			},
 		}, 'encrypted')
+	} else if (!wallet.Unlocked && !password) {
+		show('request-password');
+	} else if (!wallet.Unlocked && password) {
+		unlock();
+	} else if (wallet.Unlocked) {
+		update();
+	} else {
+		console.error('Unexpected situation!', wallet, result, password);
 	}
 });
 IPC.on('encrypted', function(err, result) {
 	if (!assertSuccess('encrypted', err)) {
 		return;
 	}
-	eID('password-popup').classList.remove('blueprint');
-	eID('password-popup').innerText = result.PrimarySeed;
-
+	var popup = eID('show-password');
+	show(popup);
+	
+	popup.querySelector('.password').innerText = result.PrimarySeed;
 	password = result.PrimarySeed;
 });
 
 // Called upon transitioning away from this view
 function stop() {
-	console.log('stopping...');
 	// Save password for the session before closing
 	IPC.sendToHost('api-call', {
 		url: '/wallet/seeds',
@@ -69,7 +82,6 @@ function stop() {
 }
 // Received password
 IPC.on('save-password', function(err, result) {
-	console.log('saving password...');
 	if (!assertSuccess('save-password', err)) {
 		return;
 	}
@@ -78,7 +90,6 @@ IPC.on('save-password', function(err, result) {
 	remainingAddresses = result.AddressesRemaining;
 	
 	// Lock the wallet
-	console.log('locking wallet...');
 	IPC.sendToHost('api-call', {
 		url: '/wallet/lock',
 		type: 'POST',
@@ -88,5 +99,4 @@ IPC.on('locked', function(err, result) {
 	if (!assertSuccess('locked', err)) {
 		return;
 	}
-	console.log(wallet);
 });

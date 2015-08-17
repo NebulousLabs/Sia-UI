@@ -1,16 +1,23 @@
 'use strict';
 
-// Give the buttons interactivity
+// On popup upon entering an encrypted, locked wallet, enter password
 eID('enter-password').onclick = function() {
 	// Record password
 	var field = eID('password-field');
 	password = field.value;
+	console.log('entering password of: ', password);
 
 	// Hide popup and start the plugin
-	field.classList.add('blueprint');
+	// TODO: verify password
+	hide('request-password');
 	unlock();
 };
-
+// On popup upon entering an unencrypted, locked wallet, show password and
+// confirm reading
+eID('confirm-password').onclick = function() {
+	hide('show-password');
+	update();
+}
 // Address creation
 eID('create-address').onclick = function() {
 	tooltip('Creating...', this);

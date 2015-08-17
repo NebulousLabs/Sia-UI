@@ -24,7 +24,7 @@
 
 		<!-- Frame -->
 		<div class="frame">
-			<div class="popup blueprint" id="enter-password">
+			<div class="popup blueprint" id="request-password">
 				<div class="row">
 					<div class="title">
 						Enter Your Password
@@ -35,11 +35,23 @@
 					<i class="fa fa-check-circle"></i>
 				</div>
 			</div>
-			<div class="popup blueprint" id="password-popup">
+			<div class="popup blueprint" id="show-password">
 				<div class="row">
 					<div class="title">
-						Your Password Is
+						Welcome to your Sia Wallet!
 					</div>
+				</div>
+				<p>
+					To protect balance and and wallet access rights, we give
+					our users a 15 word encryption key. Should you ever lose
+					your Sia state files containing your balance or wreck your
+					machine, you can enter this password to restore your state
+					on any other machine. Be sure to save or write your
+					password down somewhere:
+				</p>
+				<div class="password"></div>
+				<div class="button" id="confim-password">
+					<i class="fa fa-key" id="confirm-password">I've recorded this in a safe place</i>
 				</div>
 			</div>
 			<div class="box">
@@ -89,7 +101,7 @@
 		
 		<!-- JS -->
 		<script src='js/helpers.js'></script>
-		<script src='js/locking.js'></script>
+		<script src='js/security.js'></script>
 		<script src='js/update.js'></script>
 		<script src='js/buttons.js'></script>
 	</body>
