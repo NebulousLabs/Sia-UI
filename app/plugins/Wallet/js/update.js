@@ -2,7 +2,6 @@
 
 // Make API calls, sending a channel name to listen for responses
 function update() {
-	console.log('updating', wallet);
 	IPC.sendToHost('api-call', '/wallet', 'update-status');
 	IPC.sendToHost('api-call', '/consensus', 'update-height');
 
