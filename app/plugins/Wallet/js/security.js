@@ -90,6 +90,7 @@ eID('enter-password').onclick = function() {
 
 	// Hide popup and start the plugin
 	unlock(field.value);
+	field.value = '';
 };
 // Make sure the user read the password
 eID('confirm-password').onclick = function() {

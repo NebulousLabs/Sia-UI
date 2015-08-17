@@ -31,6 +31,7 @@
 }
 .password {
 	border-top: solid 1px #c5c5c5;
+	border-bottom: solid 1px #c5c5c5;
 }
 
 /* Information Box */

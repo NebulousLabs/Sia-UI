@@ -14,10 +14,12 @@ IPC.on('on-opened', function(err, result) {
 	}
 	wallet = result;
 
-	// Show correct lock status or show password
-	if (!wallet.Encrypted && !wallet.Unlocked) {
+	// If first time opening, show password
+	if (!wallet.Encrypted) {
 		encrypt();
-	} else if (!wallet.Unlocked) {
+	}
+	// Show correct lock status
+   	if (!wallet.Unlocked) {
 		locked();
 	} else if (wallet.Unlocked) {
 		unlocked();
