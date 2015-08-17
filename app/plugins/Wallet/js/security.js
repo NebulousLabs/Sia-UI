@@ -1,12 +1,6 @@
 'use strict';
 
-// Markup changes to reflect locked state
-function locked() {
-	eID('lock-status').innerHTML = 'Locked';
-	eID('lock-icon').classList.remove('fa-unlock');
-	eID('lock-icon').classList.add('fa-lock');
-	update();
-}
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Unlocking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Markup changes to reflect unlocked state
 function unlocked() {
 	eID('lock-status').innerHTML = 'Unlocked';
@@ -14,7 +8,6 @@ function unlocked() {
 	eID('lock-icon').classList.add('fa-unlock');
 	update();
 }
-
 // Unlock the wallet
 function unlock(password) {
 	IPC.sendToHost('api-call', {
@@ -25,6 +18,7 @@ function unlock(password) {
 		},
 	}, 'unlocked');
 }
+// React to the api call result
 IPC.on('unlocked', function(err, result) {
 	if (err) {
 		notify('Wrong password', 'error');
@@ -35,6 +29,14 @@ IPC.on('unlocked', function(err, result) {
 	hide('request-password');
 });
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Locking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Markup changes to reflect locked state
+function locked() {
+	eID('lock-status').innerHTML = 'Locked';
+	eID('lock-icon').classList.remove('fa-unlock');
+	eID('lock-icon').classList.add('fa-lock');
+	update();
+}
 // Lock the wallet
 function lock() {
 	IPC.sendToHost('api-call', {
@@ -42,6 +44,7 @@ function lock() {
 		type: 'POST',
 	}, 'locked');
 }
+// React to the api call result
 IPC.on('locked', function(err, result) {
 	if (!assertSuccess('locked', err)) {
 		return;
@@ -51,6 +54,7 @@ IPC.on('locked', function(err, result) {
 	locked();
 });
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Encrypting ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Encrypt the wallet (only applies to first time opening)
 function encrypt() {
 	IPC.sendToHost('api-call', {
@@ -60,7 +64,7 @@ function encrypt() {
 			EncryptionPassword: '',
 			Dictionary: 'english',
 		},
-	}, 'encrypted')
+	}, 'encrypted');
 }
 IPC.on('encrypted', function(err, result) {
 	if (!assertSuccess('encrypted', err)) {
@@ -71,30 +75,4 @@ IPC.on('encrypted', function(err, result) {
 	
 	popup.querySelector('.password').innerHTML = result.PrimarySeed;
 });
-
-// Lock or unlock the wallet
-eID('lock-pod').onclick = function() {
-	var state = eID('lock-status').innerHTML;
-	if (wallet.Unlocked && state == 'Unlocked') {
-		lock();
-	} else if (!wallet.Unlocked && state == 'Locked'){
-		show('request-password');
-	} else {
-		console.error('lock-pod disagrees with wallet variable!', wallet.Unlocked, state)
-	}
-}
-// On popup upon entering an encrypted, locked wallet, enter password
-eID('enter-password').onclick = function() {
-	// Record password
-	var field = eID('password-field');
-
-	// Hide popup and start the plugin
-	unlock(field.value);
-	field.value = '';
-};
-// Make sure the user read the password
-eID('confirm-password').onclick = function() {
-	hide('show-password');
-	update();
-}
 

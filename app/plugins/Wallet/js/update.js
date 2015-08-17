@@ -42,15 +42,4 @@ IPC.on('update-transactions', function(err, result) {
 		return;
 	}
 });
-// Adds an address to the address list
-function appendAddress(address) {
-	if (eID(address)) {
-		return;
-	}
-	var entry = eID('addressbp').cloneNode(true);
-	entry.id = address;
-	entry.querySelector('.address').innerHTML = address;
-	show(entry);
-	eID('address-list').appendChild(entry);
-}
 
