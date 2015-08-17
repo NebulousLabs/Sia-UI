@@ -34,3 +34,55 @@ function stop() {
 	// Stop updating
 	clearTimeout(updating);
 }
+
+// Make API calls, sending a channel name to listen for responses
+function update() {
+	console.log('updating...');
+	IPC.sendToHost('api-call', '/wallet', 'update-status');
+	IPC.sendToHost('api-call', '/consensus', 'update-height');
+
+	setTimeout(update, 15000);
+}
+IPC.on('update-status', function(err, result) {
+	if (!assertSuccess('update-status', err)) {
+		return;
+	}
+
+	wallet = result;
+	
+	// Update balance
+	eID('balance').innerHTML = 'Balance: ' + formatSiacoin(wallet.ConfirmedSiacoinBalance);
+});
+IPC.on('update-height', function(err, result) {
+	console.log('updating height...');
+	if (!assertSuccess('update-height', err)) {
+		return;
+	}
+	// Got the height, get the transactions ... if we're not on block 0
+	currentHeight = result.Height;
+	if (currentHeight === 0) {
+		return;
+	}
+	IPC.sendToHost('api-call', {
+		url: '/wallet/history',
+		type: 'GET',
+		args: {
+			startHeight: 1,
+			endHeight: currentHeight,
+		}
+	}, 'update-history');
+});
+// TODO: update transaction history and addresses
+IPC.on('update-history', function(err, result) {
+	console.log('updating history...');
+	if (!assertSuccess('update-history', err)) {
+		return;
+	}
+	result.ConfirmedHistory.forEach(function(wlttxn) {
+		console.log(wlttxn);
+	});
+	result.UnconfirmedHistory.forEach(function(wlttxn) {
+		console.log(wlttxn);
+	});
+});
+

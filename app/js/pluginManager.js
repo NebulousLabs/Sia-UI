@@ -96,7 +96,7 @@ function PluginManager() {
 					if (Daemon.Running) {
 						Daemon.apiCall(call, function(err, result) {
 							if (err) {
-								console.error(err);
+								console.error(err, call);
 							} 
 							if (responseChannel) {
 								plugin.sendToView(responseChannel, err, result);

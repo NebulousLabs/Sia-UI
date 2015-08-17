@@ -54,7 +54,7 @@ html, body {
 .capsule {
 	display: inline-block;
 	border: 1px solid #ffffff;
-	border-ra *dius: 4px;
+	border-radius: 4px;
 	overflow: hidden;
 }
 .capsule .pod {
