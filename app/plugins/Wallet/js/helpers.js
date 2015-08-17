@@ -9,14 +9,12 @@ BigNumber.config({ DECIMAL_PLACES: 24 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 // Variable to store api result values
 var wallet = {};
-// Encryption password, for now treated as the primary seed
-var password;
 var remainingAddresses;
 var currentHeight;
 // Keeps track of if the view is shown
 var updating;
 
-// DOM shortcut
+// DOM shortcuts
 function eID() {
 	return document.getElementById.apply(document, [].slice.call(arguments));
 }
@@ -47,6 +45,11 @@ function isNumber(n) {
 	return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
+// Notification shortcut 
+function notify(msg, type) {
+	IPC.sendToHost('notify', msg, type);
+}
+
 // Ask UI to show tooltip bubble
 function tooltip(message, element) {
 	var rect = element.getBoundingClientRect();
@@ -65,10 +68,9 @@ function tooltip(message, element) {
 function assertSuccess(ipcmsg, err) {
 	if (err) {
 		console.error(ipcmsg, err);
-		IPC.sendToHost('notify', 'API Call errored!', 'error');
+		notify('API Call errored!', 'error');
 		return false;
 	} else {
 		return true;
 	}
 }
-

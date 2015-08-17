@@ -2,6 +2,7 @@
 
 // Make API calls, sending a channel name to listen for responses
 function update() {
+	console.log('updating', wallet);
 	IPC.sendToHost('api-call', '/wallet', 'update-status');
 	IPC.sendToHost('api-call', '/consensus', 'update-height');
 
@@ -46,7 +47,7 @@ function appendAddress(address) {
 	if (eID(address)) {
 		return;
 	}
-	var entry = eID('abp').cloneNode(true);
+	var entry = eID('addressbp').cloneNode(true);
 	entry.id = address;
 	entry.querySelector('.address').innerHTML = address;
 	show(entry);

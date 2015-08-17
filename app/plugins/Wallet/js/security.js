@@ -1,7 +1,7 @@
 'use strict';
 
 // Unlock the wallet
-function unlock() {
+function unlock(password) {
 	IPC.sendToHost('api-call', {
 		url: '/wallet/unlock',
 		type: 'POST',
@@ -11,9 +11,13 @@ function unlock() {
 	}, 'unlocked');
 }
 IPC.on('unlocked', function(err, result) {
-	if (!assertSuccess('unlocked', err)) {
-		return;
+	if (err) {
+		notify('Wrong password', 'error');
+	} else {
+		eID('lock-status').innerHTML = 'Unlocked';
+		notify('Wallet unlocked', 'unlocked');
 	}
+	hide('request-password');
 	update();
 });
 
@@ -22,13 +26,8 @@ function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	// IPC.sendToHost('devtools');
 	
-	// Unlock the wallet if we're just switching back to it
-	if (password) {
-		unlock();
-	} else {
-		// Need to check if wallet's unencrypted
-		IPC.sendToHost('api-call', '/wallet', 'on-opened');
-	}
+	// Need to check if wallet's unencrypted
+	IPC.sendToHost('api-call', '/wallet', 'on-opened');
 }
 IPC.on('on-opened', function(err, result) {
 	if (!assertSuccess('on-opened', err)) {
@@ -36,6 +35,7 @@ IPC.on('on-opened', function(err, result) {
 	}
 	wallet = result;
 
+	// Show correct lock status or show password
 	if (!wallet.Encrypted && !wallet.Unlocked) {
 		IPC.sendToHost('api-call', {
 			url: '/wallet/encrypt',
@@ -45,15 +45,14 @@ IPC.on('on-opened', function(err, result) {
 				Dictionary: 'english',
 			},
 		}, 'encrypted')
-	} else if (!wallet.Unlocked && !password) {
-		show('request-password');
-	} else if (!wallet.Unlocked && password) {
-		unlock();
+	} else if (!wallet.Unlocked) {
+		eID('lock-status').innerHTML = 'Locked';
 	} else if (wallet.Unlocked) {
-		update();
-	} else {
-		console.error('Unexpected situation!', wallet, result, password);
+		eID('lock-status').innerHTML = 'Unlocked';
 	}
+
+	// Start updating
+	update();
 });
 IPC.on('encrypted', function(err, result) {
 	if (!assertSuccess('encrypted', err)) {
@@ -63,40 +62,18 @@ IPC.on('encrypted', function(err, result) {
 	show(popup);
 	
 	popup.querySelector('.password').innerText = result.PrimarySeed;
-	password = result.PrimarySeed;
 });
 
 // Called upon transitioning away from this view
 function stop() {
-	// Save password for the session before closing
-	IPC.sendToHost('api-call', {
-		url: '/wallet/seeds',
-		type: 'GET',
-		args: {
-			Dictionary: 'english',
-		}
-	}, 'save-password');
-
 	// Stop updating
 	clearTimeout(updating);
 }
-// Received password
-IPC.on('save-password', function(err, result) {
-	if (!assertSuccess('save-password', err)) {
-		return;
-	}
-
-	password = result.PrimarySeed;
-	remainingAddresses = result.AddressesRemaining;
-	
-	// Lock the wallet
-	IPC.sendToHost('api-call', {
-		url: '/wallet/lock',
-		type: 'POST',
-	}, 'locked');
-});
 IPC.on('locked', function(err, result) {
 	if (!assertSuccess('locked', err)) {
 		return;
 	}
+
+	notify('Wallet locked', 'locked');
+	eID('lock-status').innerHTML = 'Locked';
 });

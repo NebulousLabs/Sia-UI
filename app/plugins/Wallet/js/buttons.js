@@ -1,16 +1,25 @@
 'use strict';
 
+eID('lock-status').onclick = function() {
+	if (wallet.Unlocked && this.innerHTML == 'Unlocked') {
+		// Lock the wallet
+		IPC.sendToHost('api-call', {
+			url: '/wallet/lock',
+			type: 'POST',
+		}, 'locked');
+	} else if (!wallet.Unlocked && this.innerHTML == 'Locked'){
+		show('request-password');
+	} else {
+		notify('Locking the wallet is in progress', 'ongoing');
+	}
+}
 // On popup upon entering an encrypted, locked wallet, enter password
 eID('enter-password').onclick = function() {
 	// Record password
 	var field = eID('password-field');
-	password = field.value;
-	console.log('entering password of: ', password);
 
 	// Hide popup and start the plugin
-	// TODO: verify password
-	hide('request-password');
-	unlock();
+	unlock(field.value);
 };
 // On popup upon entering an unencrypted, locked wallet, show password and
 // confirm reading
@@ -31,7 +40,7 @@ IPC.on('new-address', function(err, result) {
 	if (!assertSuccess('new-address', err)) {
 		return;
 	}
-	IPC.sendToHost('notify', 'Address created!', 'success');
+	notify('Address created!', 'success');
 	appendAddress(result.Address);
 });
 
@@ -84,7 +93,7 @@ IPC.on('coin-sent', function(err, result) {
 	if (!assertSuccess('coin-sent', err)) {
 		return;
 	}
-	IPC.sendToHost('notify',  'Transaction sent!', 'sent');
+	notify('Transaction sent!', 'sent');
 	eID('transaction-amount').value = '';
 	eID('confirm').classList.add('hidden');
 });
