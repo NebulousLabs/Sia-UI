@@ -97,8 +97,12 @@ function PluginManager() {
 						Daemon.apiCall(call, function(err, result) {
 							if (err) {
 								console.error(err, call);
-							} 
-							if (responseChannel) {
+								Daemon.ifSiad(function() {
+									plugin.sendToView(responseChannel, err, result);
+								}, function() {
+									UI.notify('siad seems to have stopped working!', 'stop');
+								});
+							} else if (responseChannel) {
 								plugin.sendToView(responseChannel, err, result);
 							}
 						});
