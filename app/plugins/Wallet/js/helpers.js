@@ -34,6 +34,7 @@ function hide(el) {
 }
 
 // Convert to Siacoin
+// TODO: Enable commas for large numbers
 function convertSiacoin(hastings) {
 	var ConversionFactor = new BigNumber(10).pow(24);
 	var display = new BigNumber(hastings).dividedBy(ConversionFactor);
@@ -43,6 +44,10 @@ function convertSiacoin(hastings) {
 // Amount has to be a number
 function isNumber(n) {
 	return !isNaN(parseFloat(n)) && isFinite(n);
+}
+// Address has to be lowercase hex and 76 chars
+function isAddress(str) {
+    return str.match(/^[a-f0-9]{76}$/) !== null;
 }
 
 // Notification shortcut 

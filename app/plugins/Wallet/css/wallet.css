@@ -109,6 +109,9 @@ select:focus, input:focus {
 	height: 30px;
 	font-size: 18px;
 }
+.entry {
+	overflow: hidden;
+}
 .transaction {
 	color: #4a4a4a;
 	height: 30px;

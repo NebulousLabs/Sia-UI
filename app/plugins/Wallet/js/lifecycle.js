@@ -80,13 +80,18 @@ function appendTransaction(txn) {
 	entry.id = txn.transactionid;
 
 	// Determine how to disaply transaction
+	// Have to use !== logic to represent miner payouts
 	var sign, unit, amount, related;
 	var ft = txn.fundtype.split(' ');
-	unit = ft[0] === 'siacoin' ? ' Siacoin ' : ' Siafund ';
-	amount = ft[0] === 'siacoin' ? convertSiacoin(txn.value) : txn.value;
-	related = ft[1] === 'output' ? ' received from ' : ' sent to ';
-	sign = ft[1] === 'output' ? '+' : '-';
+	sign = ft[1] !== 'input' ? '+' : '-';
+	amount = ft[0] !== 'siafund' ? convertSiacoin(txn.value) : txn.value;
+	unit = ft[0] !== 'siafund' ? ' Siacoin ' : ' Siafund ';
+	related = ft[1] !== 'input' ? ' received into ' : ' sent from ';
 	related += txn.relatedaddress;
+	// Describe if from mining or from a transaction
+	related += ft[1] === 'payout' ? ' via mining' : ' via trading ';
+
+	// Sentence to display transaction
 	var txndisplay = sign + amount + unit + related;
 
 	// Display transaction
@@ -103,9 +108,7 @@ IPC.on('update-history', function(err, result) {
 		result.confirmedhistory.forEach(function(wlttxn) {
 			appendTransaction(wlttxn);
 			// Only add addresses that the wallet paid out from
-			if (wlttxn.fundtype === 'siacoin input' || wlttxn.fundtype === 'siafund input') {
-				appendAddress(wlttxn.relatedaddress);
-			}
+			appendAddress(wlttxn.relatedaddress);
 		});
 	}
 	if (result.unconfirmedhistory) {
