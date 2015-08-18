@@ -34,13 +34,22 @@ function PluginManager() {
 	/**
 	 * Detects the home Plugin or otherwise the alphabetically first
 	 * plugin and sets its button and view to be first in order
-	 * @function PluginManager~setHome
+	 * @function PluginManager~setOrder
+	 * @todo: this is hardcoded, perhaps can add priority system
 	 * @param {string[]} pluginNames - array of subdirectories of app/plugins/
 	 */
-	function setHome(pluginNames) {
+	function setOrder(pluginNames) {
+		// Detect if about plugin is installed
+		var aboutIndex = pluginNames.indexOf('About');
+		if (aboutIndex !== -1) {
+			// Swap it to be last
+			pluginNames[aboutIndex] = pluginNames[pluginNames.length - 1];
+			pluginNames[pluginNames.length - 1] = 'About';
+		}
+
 		// Detect if home plugin is installed
 		var homeIndex = pluginNames.indexOf(home);
-		if (homeIndex !== -1 && pluginNames[0] !== home) {
+		if (homeIndex !== -1) {
 			// Swap it to be first
 			pluginNames[homeIndex] = pluginNames[0];
 			pluginNames[0] = home;
@@ -160,7 +169,7 @@ function PluginManager() {
 			}
 
 			// Determine default plugin
-			setHome(pluginNames);
+			setOrder(pluginNames);
 			
 			// Initialize each plugin according to config
 			pluginNames.forEach(addPlugin);
