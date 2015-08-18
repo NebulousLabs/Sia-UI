@@ -14,7 +14,7 @@ function unlock(password) {
 		url: '/wallet/unlock',
 		type: 'POST',
 		args: {
-			EncryptionPassword : password,
+			encryptionpassword : password,
 		},
 	}, 'unlocked');
 }
@@ -62,7 +62,7 @@ function encrypt() {
 		url: '/wallet/encrypt',
 		type: 'POST',
 		args: {
-			Dictionary: 'english',
+			dictionary: 'english',
 		},
 	}, 'encrypted');
 }
@@ -73,6 +73,6 @@ IPC.on('encrypted', function(err, result) {
 	var popup = eID('show-password');
 	show(popup);
 	
-	popup.querySelector('.password').innerHTML = result.PrimarySeed;
+	popup.querySelector('.password').innerHTML = result.primaryseed;
 });
 
