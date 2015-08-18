@@ -61,6 +61,9 @@ function DaemonManager() {
 		});
 	}
 
+	/**
+	 * Checks if there is an update available
+	 */
 	function updatePrompt() {
 		if (!self.Running) {
 			UI.notify('siad is not running!', 'stop');
@@ -117,6 +120,11 @@ function DaemonManager() {
 			UI.notify('siad errored: ' + error, 'error');
 		});
 		// Listen for siad exiting
+		daemonProcess.on('close', function(code) {
+			self.Running = false;
+			UI.notify('siad closed with code: ' + code, 'stop');
+			clearTimeout(updating);
+		});
 		daemonProcess.on('exit', function(code) {
 			self.Running = false;
 			UI.notify('siad exited with code: ' + code, 'stop');
@@ -152,5 +160,9 @@ function DaemonManager() {
 	 * @param {APIResponse} callback
 	 */
 	this.apiCall = apiCall;
+	/**
+	 * Makes an API call to to proper port using daemonAPI
+	 * @function DaemonManager#update
+	 */
 	this.update = updatePrompt;
 }

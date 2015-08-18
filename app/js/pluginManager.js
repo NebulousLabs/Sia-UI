@@ -60,8 +60,6 @@ function PluginManager() {
 		if (plugin.name === home) {
 			plugin.on('did-finish-load', plugin.show);
 			current = plugin;
-		} else {
-			plugin.on('did-finish-load', plugin.hide);
 		}
 
 		/** 
@@ -98,7 +96,7 @@ function PluginManager() {
 					if (Daemon.Running) {
 						Daemon.apiCall(call, function(err, result) {
 							if (err) {
-								console.error(err);
+								console.error(err, call);
 							} 
 							if (responseChannel) {
 								plugin.sendToView(responseChannel, err, result);

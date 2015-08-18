@@ -48,9 +48,10 @@ module.exports = {
 		v.nodeintegration = 'on';
 
 		// Have all plugins displaying UI's zoom by default
-		v.addEventListener('did-finish-load', function() {
+		v.addEventListener('dom-ready', function() {
 			var zoomCode = 'require("web-frame").setZoomFactor(' + WebFrame.getZoomFactor() + ');';
 			v.executeJavaScript(zoomCode);
+			v.style.display = 'none';
 		});
 
 		// Start loading the view to the mainbar

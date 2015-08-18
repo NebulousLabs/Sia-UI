@@ -3,11 +3,12 @@
 	<head>
 		<!-- CSS -->
 		<link rel='stylesheet' href='../../css/roboto-condensed-min.css'>
-		<link rel='stylesheet' href='../../css/font-awesome-4.3.0/css/font-awesome.min.css'>
+		<link rel='stylesheet' href='../../css/font-awesome/css/font-awesome.min.css'>
 		<link rel='stylesheet' href='../../css/plugin-standard.css'>
 		<link rel='stylesheet' href='css/wallet.css'>
 		<div class='entry blueprint' id='transactionbp'>
-			<div class='transaction'></div>
+			<div class='transaction'>
+			</div>
 		</div>
 		<div class='entry blueprint' id='addressbp'>
 			<div class='address'></div>
@@ -19,20 +20,43 @@
 			<div class="title">Wallet</div>
 			<div class="capsule">
 				<div class="pod" id="balance">Balance: 0 S</div>
+				<div class="pod button" id="lock-pod">
+					<i class="fa" id="lock-icon"></i>
+					<div id="lock-status">LOCK_STATE</div>
+				</div>
 			</div>
 		</div>
 
 		<!-- Frame -->
 		<div class="frame">
-			<div class="popup blueprint" id="password-popup">
+			<div class="popup blueprint" id="request-password">
 				<div class="row">
 					<div class="title">
 						Enter Your Password
 					</div>
 				</div>
-				<input type="text" id="password-field" placeholder="Wallet password">
+				<input type="password" id="password-field" placeholder="Wallet password">
 				<div class="button" id="enter-password">
 					<i class="fa fa-check-circle"></i>
+				</div>
+			</div>
+			<div class="popup blueprint" id="show-password">
+				<div class="row">
+					<div class="title">
+						Welcome to your Sia Wallet!
+					</div>
+				</div>
+				<p>
+					To protect balance and and wallet access rights, we give
+					our users a 15 word encryption key. Should you ever lose
+					your Sia state files containing your balance or wreck your
+					machine, you can enter this password to restore your state
+					on any other machine. Be sure to record your password down
+					somewhere safe:
+				</p>
+				<p class="password"></p>
+				<div class="button" id="confim-password">
+					<i class="fa fa-key" id="confirm-password">I've recorded this in a safe place</i>
 				</div>
 			</div>
 			<div class="box">
@@ -81,6 +105,9 @@
 		</div>
 		
 		<!-- JS -->
-		<script type='text/javascript' src='js/wallet.js'></script>
+		<script src='js/helpers.js'></script>
+		<script src='js/security.js'></script>
+		<script src='js/buttons.js'></script>
+		<script src='js/lifecycle.js'></script>
 	</body>
 </html>

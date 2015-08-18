@@ -38,8 +38,11 @@ function sendCall(url, type, args, callback) {
 		success: function(responseData, textStatus, jqXHR) {
 			callback(null, JSON.parse(responseData), textStatus, jqXHR);
 		},
-		error: function(jqXHR, textStatus, exception) {
-			callback(textStatus);
+		error: function(jqXHR, textStatus, errorThrown) {
+			var errcode = textStatus + ' ' + jqXHR.status + ' ' + errorThrown;
+			// jqXHR is the XmlHttpRequest that jquery returns back on error
+			var errmsg = jqXHR.responseText;
+			callback(errcode + ' ' + errmsg);
 		},
 		data: args
 	});
