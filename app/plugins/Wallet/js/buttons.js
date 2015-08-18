@@ -27,7 +27,7 @@ IPC.on('new-address', function(err, result) {
 		return;
 	}
 	notify('Address created!', 'success');
-	appendAddress(result.Address);
+	appendAddress(result.address);
 });
 
 // Define send call
