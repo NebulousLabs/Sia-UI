@@ -49,7 +49,7 @@ function DaemonManager() {
 	 * @param {function} isRunning - function to run if Siad is running
 	 * @param {function} isNotRunning - function to run if Siad is not running
 	 */
-	function ifSiad(isRunning, isNotRunning) {
+	this.ifSiad = function ifSiad(isRunning, isNotRunning) {
 		apiCall('/consensus', function(err) {
 			if (!err) {
 				self.Running = true;
@@ -87,7 +87,7 @@ function DaemonManager() {
 	 * Starts the daemon as a long running background process
 	 */
 	function start() {
-		ifSiad(function() {
+		self.ifSiad(function() {
 			console.error('attempted to start siad when it was already running');
 			return;
 		}, function() {
@@ -113,7 +113,7 @@ function DaemonManager() {
 		var updating = setTimeout(function() {
 			self.Running = true;
 			updatePrompt();
-		}, 1000);
+		}, 1500);
 
 		// Listen for siad erroring
 		daemonProcess.on('error', function (error) {
@@ -150,7 +150,7 @@ function DaemonManager() {
 	 */
 	this.init = function(config) {
 		setConfig(config, function() {
-			ifSiad(updatePrompt, start);
+			self.ifSiad(updatePrompt, start);
 		});
 	};
 	/**
