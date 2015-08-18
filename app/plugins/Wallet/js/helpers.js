@@ -34,10 +34,10 @@ function hide(el) {
 }
 
 // Convert to Siacoin
-function formatSiacoin(hastings) {
+function convertSiacoin(hastings) {
 	var ConversionFactor = new BigNumber(10).pow(24);
 	var display = new BigNumber(hastings).dividedBy(ConversionFactor);
-	return display + ' S';
+	return display;
 }
 
 // Amount has to be a number

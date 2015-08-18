@@ -37,6 +37,7 @@
 /* Information Box */
 .row {
 	background:#f5f5f5;
+	min-width: 1000px;
 	display: block;
 	padding-top: 18px;
 	padding-bottom: 18px;
@@ -107,7 +108,10 @@ select:focus, input:focus {
 	color: #4a4a4a;
 	height: 30px;
 	font-size: 18px;
-	font-family: "Courier New";
 }
-
+.transaction {
+	color: #4a4a4a;
+	height: 30px;
+	font-size: 18px;
+}
 

@@ -119,7 +119,7 @@
 		"tooltip": true,
 		"show": true,
 		"hide": true,
-		"formatSiacoin": true,
+		"convertSiacoin": true,
 		"isNumber": true,
 		"notify": true,
 		"tooltip": true,

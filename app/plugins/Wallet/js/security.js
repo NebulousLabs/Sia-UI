@@ -56,12 +56,12 @@ IPC.on('locked', function(err, result) {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Encrypting ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Encrypt the wallet (only applies to first time opening)
+// TODO: Add copy to clipboard button
 function encrypt() {
 	IPC.sendToHost('api-call', {
 		url: '/wallet/encrypt',
 		type: 'POST',
 		args: {
-			EncryptionPassword: '',
 			Dictionary: 'english',
 		},
 	}, 'encrypted');
