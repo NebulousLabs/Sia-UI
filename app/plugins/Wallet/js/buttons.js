@@ -57,17 +57,17 @@ function verifyTransaction(callback) {
 	// Verify number
 	if (!isNumber(amount)) {
 		tooltip('Enter numeric amount of Siacoin to send!', eID('send-money'));
-		return
+		return;
 	} 
 	// Verify balance
 	if (wallet.Balance < amount) {
 		tooltip('Balance too low!', eID('send-money'));
-		return
+		return;
 	} 
 	// Verify address
 	if (!isAddress(address)) {
 		tooltip('Enter correct address to send to!', eID('send-money'));
-		return
+		return;
 	}
 
 	var total = new BigNumber(amount).times(unit).round();

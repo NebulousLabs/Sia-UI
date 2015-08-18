@@ -8,6 +8,23 @@ function start() {
 	// Need to check if wallet's unencrypted
 	IPC.sendToHost('api-call', '/wallet', 'on-opened');
 }
+
+// Make API calls, sending a channel name to listen for responses
+function update() {
+	IPC.sendToHost('api-call', '/wallet', 'update-status');
+	IPC.sendToHost('api-call', {
+		url: '/wallet/history',
+		type: 'GET',
+		args: {
+			startheight: 0,
+			// arbitrarily large endheight to get full history
+			endheight: Math.pow(2,62),
+		}
+	}, 'update-history');
+	
+	setTimeout(update, 15000);
+}
+// First status call to diagnose the state of the wallet
 IPC.on('on-opened', function(err, result) {
 	if (!assertSuccess('on-opened', err)) {
 		return;
@@ -35,21 +52,6 @@ function stop() {
 	clearTimeout(updating);
 }
 
-// Make API calls, sending a channel name to listen for responses
-function update() {
-	IPC.sendToHost('api-call', '/wallet', 'update-status');
-	IPC.sendToHost('api-call', {
-		url: '/wallet/history',
-		type: 'GET',
-		args: {
-			startheight: 0,
-			// arbitrarily large endheight to get full history
-			endheight: Math.pow(2,62),
-		}
-	}, 'update-history');
-	
-	setTimeout(update, 15000);
-}
 // Update transaction history and addresses
 IPC.on('update-status', function(err, result) {
 	if (!assertSuccess('update-status', err)) {
@@ -58,14 +60,10 @@ IPC.on('update-status', function(err, result) {
 
 	wallet = result;
 	
-	// Update balance
+	// Update balance confirmed and uncomfirmed
 	var bal = convertSiacoin(wallet.confirmedsiacoinbalance);
 	var pend = convertSiacoin(wallet.unconfirmedincomingsiacoins - wallet.unconfirmedoutgoingsiacoins);
-	console.log(wallet);
-	console.log(bal);
-	console.log(pend);
-	console.log(wallet.unconfirmedincomingsiacoins - wallet.unconfirmedoutgoingsiacoins);
-	eID('balance').innerHTML = 'Balance: ' + bal + ' S';
+	eID('confirmed').innerHTML = 'Balance: ' + bal + ' S';
 	eID('uncomfirmed').innerHTML = 'Pending: ' + pend + ' S';
 });
 // Adds an address to the address list
