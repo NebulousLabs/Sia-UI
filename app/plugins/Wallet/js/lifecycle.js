@@ -73,20 +73,20 @@ IPC.on('update-height', function(err, result) {
 });
 // Adds an address to the address list
 function appendTransaction(txn) {
-	if (eID(txn.TransactionID)) {
+	if (eID(txn.transactionid)) {
 		return;
 	}
 	var entry = eID('transactionbp').cloneNode(true);
-	entry.id = txn.TransactionID;
+	entry.id = txn.transactionid;
 
 	// Determine how to disaply transaction
 	var sign, unit, amount, related;
-	var ft = txn.FundType.split(' ');
+	var ft = txn.fundtype.split(' ');
 	unit = ft[0] === 'siacoin' ? ' Siacoin ' : ' Siafund ';
-	amount = ft[0] === 'siacoin' ? convertSiacoin(txn.Value) : txn.Value;
+	amount = ft[0] === 'siacoin' ? convertSiacoin(txn.value) : txn.value;
 	related = ft[1] === 'output' ? ' received from ' : ' sent to ';
 	sign = ft[1] === 'output' ? '+' : '-';
-	related += txn.RelatedAddress;
+	related += txn.relatedaddress;
 	var txndisplay = sign + amount + unit + related;
 
 	// Display transaction
@@ -94,7 +94,7 @@ function appendTransaction(txn) {
 	eID('transaction-list').appendChild(entry);
 	show(entry);
 }
-// TODO: update transaction history and addresses
+// Update transaction history and addresses
 IPC.on('update-history', function(err, result) {
 	if (!assertSuccess('update-history', err)) {
 		return;
@@ -103,8 +103,8 @@ IPC.on('update-history', function(err, result) {
 		result.confirmedhistory.forEach(function(wlttxn) {
 			appendTransaction(wlttxn);
 			// Only add addresses that the wallet paid out from
-			if (wlttxn.FundType === 'siacoin input' || wlttxn.FundType === 'siafund input') {
-				appendAddress(wlttxn.RelatedAddress);
+			if (wlttxn.fundtype === 'siacoin input' || wlttxn.fundtype === 'siafund input') {
+				appendAddress(wlttxn.relatedaddress);
 			}
 		});
 	}

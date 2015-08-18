@@ -88,12 +88,12 @@ IPC.on('coin-sent', function(err, result) {
 // Lock or unlock the wallet
 eID('lock-pod').onclick = function() {
 	var state = eID('lock-status').innerHTML;
-	if (wallet.Unlocked && state === 'Unlocked') {
+	if (wallet.unlocked && state === 'Unlocked') {
 		lock();
-	} else if (!wallet.Unlocked && state === 'Locked'){
+	} else if (!wallet.unlocked && state === 'Locked'){
 		show('request-password');
 	} else {
-		console.error('lock-pod disagrees with wallet variable!', wallet.Unlocked, state);
+		console.error('lock-pod disagrees with wallet variable!', wallet.unlocked, state);
 	}
 };
 
