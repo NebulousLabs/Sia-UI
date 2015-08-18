@@ -38,10 +38,19 @@ function stop() {
 // Make API calls, sending a channel name to listen for responses
 function update() {
 	IPC.sendToHost('api-call', '/wallet', 'update-status');
-	IPC.sendToHost('api-call', '/consensus', 'update-height');
-
+	IPC.sendToHost('api-call', {
+		url: '/wallet/history',
+		type: 'GET',
+		args: {
+			startheight: 0,
+			// arbitrarily large endheight to get full history
+			endheight: Math.pow(2,62),
+		}
+	}, 'update-history');
+	
 	setTimeout(update, 15000);
 }
+// Update transaction history and addresses
 IPC.on('update-status', function(err, result) {
 	if (!assertSuccess('update-status', err)) {
 		return;
@@ -50,26 +59,14 @@ IPC.on('update-status', function(err, result) {
 	wallet = result;
 	
 	// Update balance
-	eID('balance').innerHTML = 'Balance: ' + convertSiacoin(wallet.confirmedsiacoinbalance) + ' S';
-});
-IPC.on('update-height', function(err, result) {
-	if (!assertSuccess('update-height', err)) {
-		return;
-	}
-	// Got the height, get the transactions ... if we're not on block 0
-	currentHeight = result.height;
-	if (currentHeight === 0) {
-		console.error('Add peers, currentHeight is 0!')
-		return;
-	}
-	IPC.sendToHost('api-call', {
-		url: '/wallet/history',
-		type: 'GET',
-		args: {
-			startheight: 0,
-			endheight: currentHeight - 1,
-		}
-	}, 'update-history');
+	var bal = convertSiacoin(wallet.confirmedsiacoinbalance);
+	var pend = convertSiacoin(wallet.unconfirmedincomingsiacoins - wallet.unconfirmedoutgoingsiacoins);
+	console.log(wallet);
+	console.log(bal);
+	console.log(pend);
+	console.log(wallet.unconfirmedincomingsiacoins - wallet.unconfirmedoutgoingsiacoins);
+	eID('balance').innerHTML = 'Balance: ' + bal + ' S';
+	eID('uncomfirmed').innerHTML = 'Pending: ' + pend + ' S';
 });
 // Adds an address to the address list
 function appendTransaction(txn) {

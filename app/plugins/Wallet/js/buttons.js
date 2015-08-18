@@ -42,6 +42,9 @@ function sendCoin(amount, address) {
 		args: transaction,
 	};
 	IPC.sendToHost('api-call', call, 'coin-sent');
+
+	// Reflect it asap
+	setTimeout(update, 100);
 }
 // Transaction has to be legitimate
 // TODO: verify address
