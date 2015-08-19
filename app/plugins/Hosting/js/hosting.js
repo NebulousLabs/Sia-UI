@@ -60,7 +60,9 @@ eID('announce').onclick = function() {
 	tooltip('Anouncing...', this);
 	IPC.sendToHost('api-call', '/host/announce', 'announce');
 };
-addResultListener('announce');
+addResultListener('announce', function() {
+	notify('Host successfully announced!', 'announced');
+});
 eID('save').onclick = function() {
 	tooltip('Saving...', this);
 
@@ -80,7 +82,10 @@ eID('save').onclick = function() {
 	};
 	IPC.sendToHost('api-call', call, 'configure');
 };
-addResultListener('configure', update);
+addResultListener('configure', function() {
+	update();
+	notify('Hosting configuration saved!', 'saved');
+});
 eID('reset').onclick = function() {
 	tooltip('Reseting...', this);
 	hostProperties.forEach(function(prop) {
@@ -88,5 +93,6 @@ eID('reset').onclick = function() {
 		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion).round().toString();
 		item.querySelector('.value').textContent = value;
 	});
+	notify('Hosting configuration reset', 'success');
 };
 

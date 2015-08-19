@@ -39,6 +39,8 @@ function UIManager() {
 		start: 'play',
 		stop: 'stop',
 		download: 'arrow-circle-down',
+		announced: 'bullhorn',
+		saved: 'floppy-o',
 		success: 'check'
 	};
 
