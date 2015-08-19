@@ -102,6 +102,7 @@ addResultListener('update-history', function(result) {
 			appendAddress(processedtxn.relatedaddress);
 		});
 	}
+
 	if (result.unconfirmedhistory) {
 		result.unconfirmedhistory.forEach(function(processedtxn) {
 		});
