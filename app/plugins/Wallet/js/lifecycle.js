@@ -13,7 +13,7 @@ function start() {
 function update() {
 	IPC.sendToHost('api-call', '/wallet', 'update-status');
 	IPC.sendToHost('api-call', {
-		url: '/wallet/history',
+		url: '/wallet/transactions',
 		type: 'GET',
 		args: {
 			startheight: 0,
@@ -100,14 +100,14 @@ IPC.on('update-history', function(err, result) {
 		return;
 	}
 	if (result.confirmedhistory) {
-		result.confirmedhistory.forEach(function(wlttxn) {
-			appendTransaction(wlttxn);
+		result.confirmedhistory.forEach(function(processedtxn) {
+			appendTransaction(processedtxn);
 			// Only add addresses that the wallet paid out from
-			appendAddress(wlttxn.relatedaddress);
+			appendAddress(processedtxn.relatedaddress);
 		});
 	}
 	if (result.unconfirmedhistory) {
-		result.unconfirmedhistory.forEach(function(wlttxn) {
+		result.unconfirmedhistory.forEach(function(processedtxn) {
 		});
 	}
 });

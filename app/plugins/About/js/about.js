@@ -2,12 +2,14 @@
 
 // Library for communicating with Sia-UI
 const IPC = require('ipc');
+// Keeps track of if the view is shown
+var updating;
 
 // Update version every 50 seconds that this plugin is open
 function update() {
 	IPC.sendToHost('api-call', '/daemon/version', 'version');
 	
-	setTimeout(update, 50000);
+	updating = setTimeout(update, 50000);
 }
 
 // Receive version
