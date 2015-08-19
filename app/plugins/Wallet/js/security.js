@@ -8,6 +8,7 @@ function unlocked() {
 	eID('lock-icon').classList.add('fa-unlock');
 	update();
 }
+
 // Unlock the wallet
 function unlock(password) {
 	IPC.sendToHost('api-call', {
@@ -18,6 +19,7 @@ function unlock(password) {
 		},
 	}, 'unlocked');
 }
+
 // React to the api call result
 IPC.on('unlocked', function(err, result) {
 	if (err) {
@@ -37,6 +39,7 @@ function locked() {
 	eID('lock-icon').classList.add('fa-lock');
 	update();
 }
+
 // Lock the wallet
 function lock() {
 	IPC.sendToHost('api-call', {
@@ -44,12 +47,9 @@ function lock() {
 		type: 'POST',
 	}, 'locked');
 }
-// React to the api call result
-IPC.on('locked', function(err, result) {
-	if (!assertSuccess('locked', err)) {
-		return;
-	}
 
+// React to the api call result
+addResultListener('locked', function(result) {
 	notify('Wallet locked', 'locked');
 	locked();
 });
@@ -66,10 +66,7 @@ function encrypt() {
 		},
 	}, 'encrypted');
 }
-IPC.on('encrypted', function(err, result) {
-	if (!assertSuccess('encrypted', err)) {
-		return;
-	}
+addResultListener('encrypted', function(result) {
 	var popup = eID('show-password');
 	show(popup);
 	
