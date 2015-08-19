@@ -5,7 +5,7 @@ const IPC = require('ipc');
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
 // Ensure precision
-BigNumber.config({ DECIMAL_PLACES: 24 });
+BigNumber.config({ DECIMAL_PLACES: 30 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 // Variable to store api result values
 var wallet = {};
@@ -34,15 +34,23 @@ function hide(el) {
 }
 
 // Convert to Siacoin
+// TODO: Enable commas for large numbers
 function convertSiacoin(hastings) {
+	// TODO: JS automatically loses precision when taking numbers from the API.
+	// This deals with that imperfectly
+	var number = new BigNumber(Math.round(hastings).toString());
 	var ConversionFactor = new BigNumber(10).pow(24);
-	var display = new BigNumber(hastings).dividedBy(ConversionFactor);
-	return display;
+	return number.dividedBy(ConversionFactor).round();
 }
 
 // Amount has to be a number
 function isNumber(n) {
 	return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+// Address has to be lowercase hex and 76 chars
+function isAddress(str) {
+    return str.match(/^[a-f0-9]{76}$/) !== null;
 }
 
 // Notification shortcut 

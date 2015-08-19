@@ -104,14 +104,10 @@ select:focus, input:focus {
 	padding-left: 24px;
 	overflow:auto;
 }
-.address {
-	color: #4a4a4a;
-	height: 30px;
+.entry {
+	height: 24px;
 	font-size: 18px;
-}
-.transaction {
+	overflow: hidden;
 	color: #4a4a4a;
-	height: 30px;
-	font-size: 18px;
 }
 

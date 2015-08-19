@@ -42,6 +42,9 @@ function sendCoin(amount, address) {
 		args: transaction,
 	};
 	IPC.sendToHost('api-call', call, 'coin-sent');
+
+	// Reflect it asap
+	setTimeout(update, 100);
 }
 // Transaction has to be legitimate
 // TODO: verify address
@@ -49,17 +52,26 @@ function verifyTransaction(callback) {
 	var amount = eID('transaction-amount').value;
 	var e = eID('send-unit');
 	var unit = e.options[e.selectedIndex].value;
-
 	var address = eID('transaction-address').value;
 
+	// Verify number
 	if (!isNumber(amount)) {
-		tooltip('Enter numeric amount of Siacoin to send', eID('send-money'));
-	} else if (wallet.Balance < amount) {
+		tooltip('Enter numeric amount of Siacoin to send!', eID('send-money'));
+		return;
+	} 
+	// Verify balance
+	if (wallet.Balance < amount) {
 		tooltip('Balance too low!', eID('send-money'));
-	} else if (callback) {
-		var total = new BigNumber(amount).times(unit).round();
-		callback(total, address);
+		return;
+	} 
+	// Verify address
+	if (!isAddress(address)) {
+		tooltip('Enter correct address to send to!', eID('send-money'));
+		return;
 	}
+
+	var total = new BigNumber(amount).times(unit).round();
+	callback(total, address);
 }
 // Button to send coin
 eID('send-money').onclick = function() {
@@ -79,7 +91,7 @@ IPC.on('coin-sent', function(err, result) {
 	if (!assertSuccess('coin-sent', err)) {
 		return;
 	}
-	notify('Transaction sent!', 'sent');
+	notify('Transaction sent to network!', 'sent');
 	eID('transaction-amount').value = '';
 	eID('confirm').classList.add('hidden');
 });
