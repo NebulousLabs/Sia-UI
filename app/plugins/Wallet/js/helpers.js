@@ -74,13 +74,14 @@ function tooltip(message, element) {
 	});
 }
 
-// Error checking shortcut
-function assertSuccess(ipcmsg, err) {
-	if (err) {
-		console.error(ipcmsg, err);
-		notify('API Call errored!', 'error');
-		return false;
-	} else {
-		return true;
-	}
+// IPC API listening shortcut that checks for errors
+function listenForResult(channel, callback) {
+	IPC.on(channel, function(err, result) {
+		if (err) {
+			console.error(channel, err);
+			notify(err, 'error');
+		} else {
+			callback(result);
+		}
+	});
 }

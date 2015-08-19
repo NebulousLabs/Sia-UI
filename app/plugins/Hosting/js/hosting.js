@@ -7,19 +7,18 @@ function update() {
 	updating = setTimeout(update, 15000);
 }
 // Update host info
-IPC.on('status', function(err, result) {
-	if (!assertSuccess('status', err)) {
-		return;
-	}
+addResultListener('status', function(result) {
 	hosting = result;
 		
 	// Update competitive prices
 	eID('hmessage').innerHTML = 'Estimated Competitive Price: ' + convertSiacoin(hosting.Competition) + ' S / GB / Month';
+
 	// Calculate host finances
 	var total = formatBytes(hosting.TotalStorage);
 	var storage = formatBytes(hosting.TotalStorage - hosting.StorageRemaining);
 	var profit = (hosting.Profit).toFixed(2);
 	var potentialProfit = convertSiacoin(hosting.PotentialProfit).toFixed(2);
+
 	// Update host finances
 	eID('contracts').innerHTML = hosting.NumContracts + ' Contracts';
 	eID('storage').innerHTML = storage + '/' + total + ' in use';
@@ -61,19 +60,19 @@ eID('announce').onclick = function() {
 	tooltip('Anouncing...', this);
 	IPC.sendToHost('api-call', '/host/announce', 'announce');
 };
-IPC.on('announce', function(err, result) {
-	if (!assertSuccess('announce', err)) {
-		return;
-	}
-});
+addResultListener('announce');
 eID('save').onclick = function() {
 	tooltip('Saving...', this);
+
+	// Define configuration settings
 	var hostInfo = {};
 	hostProperties.forEach(function(prop) {
 		var item = eID(prop.name);
 		var value = new BigNumber(item.querySelector('.value').textContent).mul(prop.conversion).round().toString();
 		hostInfo[prop.name.toLowerCase()] = value;
 	});
+
+	// Define configuration call
 	var call = {
 		url: '/host/configure',
 		type: 'GET',
@@ -81,12 +80,7 @@ eID('save').onclick = function() {
 	};
 	IPC.sendToHost('api-call', call, 'configure');
 };
-IPC.on('configure', function(err, result) {
-	if (!assertSuccess('configure', err)) {
-		return;
-	}
-	update();
-});
+addResultListener('configure', update);
 eID('reset').onclick = function() {
 	tooltip('Reseting...', this);
 	hostProperties.forEach(function(prop) {
