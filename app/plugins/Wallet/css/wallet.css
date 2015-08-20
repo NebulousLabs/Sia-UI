@@ -69,9 +69,8 @@
 	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
 	opacity: 0;
 }
-.button:hover {
-	color: #4a4a4a;
-	cursor: pointer;
+.transparent:hover {
+	cursor: default;
 }
 select, input {
     position: relative;
@@ -97,6 +96,9 @@ select:focus, input:focus {
 	outline: none;
 	border: solid 1px #4a4a4a;
 	box-shadow: 0 0 5px 1px #c5c5c5;
+}
+select:hover {
+	cursor: pointer;
 }
 
 /* Box List */

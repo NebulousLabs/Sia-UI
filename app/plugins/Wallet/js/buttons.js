@@ -49,7 +49,7 @@ function sendCoin(amount, address) {
 
 // Transaction has to be legitimate
 // TODO: verify address
-function verifyTransaction(callback) {
+function verifyTransaction(caller, callback) {
 	var amount = eID('transaction-amount').value;
 	var e = eID('send-unit');
 	var unit = e.options[e.selectedIndex].value;
@@ -57,17 +57,17 @@ function verifyTransaction(callback) {
 
 	// Verify number
 	if (!isNumber(amount)) {
-		tooltip('Enter numeric amount of Siacoin to send!', eID('send-money'));
+		tooltip('Enter numeric amount of Siacoin to send!', caller);
 		return;
 	} 
 	// Verify balance
 	if (wallet.Balance < amount) {
-		tooltip('Balance too low!', eID('send-money'));
+		tooltip('Balance too low!', caller);
 		return;
 	} 
 	// Verify address
 	if (!isAddress(address)) {
-		tooltip('Enter correct address to send to!', eID('send-money'));
+		tooltip('Enter correct address to send to!', caller);
 		return;
 	}
 
@@ -86,20 +86,21 @@ eID('send-money').onclick = function() {
 // Button to confirm transaction
 eID('confirm').onclick = function() {
 	// If the button's transparent, don't do anything
-	if (eID('confirm').classList.indexOf('transparent') === -1) {
+	if (eID('confirm').classList.contains('transparent')) {
+		console.log('reached')
 		return;
 	}
 	verifyTransaction(this, function(amount, address) {
-		tooltip('Sending...', this);
+		tooltip('Sending...', eID('confirm'));
 		sendCoin(amount, address);
 	});
+	eID('confirm').classList.add('transparent');
 };
 
 // Transaction was sent
 addResultListener('coin-sent', function(result) {
 	notify('Transaction sent to network!', 'sent');
 	eID('transaction-amount').value = '';
-	eID('confirm').classList.add('transparent');
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Capsule ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
