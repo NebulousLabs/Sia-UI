@@ -5,42 +5,36 @@
 		<link rel='stylesheet' href='../../css/roboto-condensed-min.css'>
 		<link rel='stylesheet' href='../../css/font-awesome-4.3.0/css/font-awesome.min.css'>
 		<link rel='stylesheet' href='../../css/plugin-standard.css'>
-		<link rel='stylesheet' href='css/renting.css'>
+		<link rel='stylesheet' href='css/files.css'>
 	</head>
 	<body>
 		<!-- Header -->
 		<div class="header">
-			<div class="title">Renting</div>
+			<div class="title">Files</div>
 			<div class="capsule">
-				<div class='pod renter-host-count'></div>
-				<div class='pod renter-price'></div>
+				<div class='pod' id='host-count'></div>
+				<div class='pod' id='price'></div>
 			</div>
 		</div>
 
 		<!-- Frame -->
 		<div class="frame">
 			<div class='cloud-control'>
-					<div class='pure-g'>
-						<div class='pure-u-1-2'>
-							<div class='button upload-public'>
-								<i class='fa fa-upload'></i>
-								Upload File
-							</div>
-							<div class='add-ascii button'>
-								<i class='fa fa-ticket'></i>
-								Add Ascii File
-							</div>
-						</div>
-						<div class='pure-u-1-2'>
-							<div class='search'>
-								<div class='text' contentEditable='true'></div>
-								<i class='fa fa-search'></i>
-							</div>
-						</div>
-					</div>
+				<div class='button' id='upload-public'>
+					<i class='fa fa-upload'></i>
+					Upload File
 				</div>
+				<div class='button' id='add-ascii'>
+					<i class='fa fa-ticket'></i>
+					Add Ascii File
+				</div>
+				<div class='search'>
+					<div class='text' contentEditable='true'></div>
+					<i class='fa fa-search'></i>
+				</div>
+				<input class='search' type='text' id='search' placeholder='Search'>
 				<div class='file-browser'>
-					<div class='blueprint file'>
+					<div class='file blueprint' id='filebp'>
 						<div class='graphic'>
 							<i class='fa fa-file'></i>
 						</div>
@@ -64,6 +58,7 @@
 		</div>
 		
 		<!-- JS -->
-		<script type='text/javascript' src='js/renting.js'></script>
+		<script type='text/javascript' src='js/helpers.js'></script>
+		<script type='text/javascript' src='js/lifecycle.js'></script>
 	</body>
 </html>

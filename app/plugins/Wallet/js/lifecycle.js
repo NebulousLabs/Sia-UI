@@ -73,7 +73,7 @@ function appendTransaction(txn) {
 	var entry = eID('transactionbp').cloneNode(true);
 	entry.id = txn.transactionid;
 
-	// Determine how to disaply transaction
+	// Determine how to display transaction
 	// Have to use !== logic to represent miner payouts
 	var sign, unit, amount, related;
 	var ft = txn.fundtype.split(' ');
