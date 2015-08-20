@@ -87,7 +87,7 @@ function PluginManager() {
 			main.add('transition');
 			setTimeout(function() {
 				main.remove('transition');
-			}, 250);
+			}, 170);
 
 			// Switch plugins
 			current.hide();
