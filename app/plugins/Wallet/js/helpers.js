@@ -1,5 +1,6 @@
 'use strict';
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Global Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Library for communicating with Sia-UI
 const IPC = require('ipc');
 // Library for arbitrary precision in numbers
@@ -14,6 +15,7 @@ var currentHeight;
 // Keeps track of if the view is shown
 var updating;
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Helper Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // DOM shortcuts
 function eID() {
 	return document.getElementById.apply(document, [].slice.call(arguments));
@@ -72,13 +74,14 @@ function tooltip(message, element) {
 	});
 }
 
-// Error checking shortcut
-function assertSuccess(ipcmsg, err) {
-	if (err) {
-		console.error(ipcmsg, err);
-		notify('API Call errored!', 'error');
-		return false;
-	} else {
-		return true;
-	}
+// IPC API listening shortcut that checks for errors
+function addResultListener(channel, callback) {
+	IPC.on(channel, function(err, result) {
+		if (err) {
+			console.error(channel, err);
+			notify(err, 'error');
+		} else {
+			callback(result);
+		}
+	});
 }

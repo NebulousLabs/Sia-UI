@@ -123,7 +123,7 @@
 		"isNumber": true,
 		"notify": true,
 		"tooltip": true,
-		"assertSuccess": true
+		"addResultListener": true
 	},
 	"indent"        : 4         // Specify indentation spacing
 }

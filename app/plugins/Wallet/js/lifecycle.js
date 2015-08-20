@@ -1,5 +1,6 @@
 'use strict';
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Start/Stop ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Called upon showing
 function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
@@ -9,26 +10,8 @@ function start() {
 	IPC.sendToHost('api-call', '/wallet', 'on-opened');
 }
 
-// Make API calls, sending a channel name to listen for responses
-function update() {
-	IPC.sendToHost('api-call', '/wallet', 'update-status');
-	IPC.sendToHost('api-call', {
-		url: '/wallet/history',
-		type: 'GET',
-		args: {
-			startheight: 0,
-			// arbitrarily large endheight to get full history
-			endheight: Math.pow(2,62),
-		}
-	}, 'update-history');
-	
-	setTimeout(update, 15000);
-}
 // First status call to diagnose the state of the wallet
-IPC.on('on-opened', function(err, result) {
-	if (!assertSuccess('on-opened', err)) {
-		return;
-	}
+addResultListener('on-opened', function(result) {
 	wallet = result;
 
 	// If first time opening, show password
@@ -52,12 +35,25 @@ function stop() {
 	clearTimeout(updating);
 }
 
-// Update transaction history and addresses
-IPC.on('update-status', function(err, result) {
-	if (!assertSuccess('update-status', err)) {
-		return;
-	}
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Updating  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Make API calls, sending a channel name to listen for responses
+function update() {
+	IPC.sendToHost('api-call', '/wallet', 'update-status');
+	IPC.sendToHost('api-call', {
+		url: '/wallet/transactions',
+		type: 'GET',
+		args: {
+			startheight: 0,
+			// arbitrarily large endheight to get full history
+			endheight: Math.pow(2,62),
+		}
+	}, 'update-history');
+	
+	setTimeout(update, 15000);
+}
 
+// Update transaction history and addresses
+addResultListener('update-status', function(result) {
 	wallet = result;
 	
 	// Update balance confirmed and uncomfirmed
@@ -66,6 +62,7 @@ IPC.on('update-status', function(err, result) {
 	eID('confirmed').innerHTML = 'Balance: ' + bal + ' S';
 	eID('uncomfirmed').innerHTML = 'Pending: ' + pend + ' S';
 });
+
 // Adds an address to the address list
 function appendTransaction(txn) {
 	if (eID(txn.transactionid)) {
@@ -83,6 +80,7 @@ function appendTransaction(txn) {
 	unit = ft[0] !== 'siafund' ? ' Siacoin ' : ' Siafund ';
 	related = ft[1] !== 'input' ? ' received into ' : ' sent from ';
 	related += txn.relatedaddress;
+
 	// Describe if from mining or from a transaction
 	related += ft[1] === 'payout' ? ' via mining' : ' via trading ';
 
@@ -94,20 +92,19 @@ function appendTransaction(txn) {
 	eID('transaction-list').appendChild(entry);
 	show(entry);
 }
+
 // Update transaction history and addresses
-IPC.on('update-history', function(err, result) {
-	if (!assertSuccess('update-history', err)) {
-		return;
-	}
+addResultListener('update-history', function(result) {
 	if (result.confirmedhistory) {
-		result.confirmedhistory.forEach(function(wlttxn) {
-			appendTransaction(wlttxn);
+		result.confirmedhistory.forEach(function(processedtxn) {
+			appendTransaction(processedtxn);
 			// Only add addresses that the wallet paid out from
-			appendAddress(wlttxn.relatedaddress);
+			appendAddress(processedtxn.relatedaddress);
 		});
 	}
+
 	if (result.unconfirmedhistory) {
-		result.unconfirmedhistory.forEach(function(wlttxn) {
+		result.unconfirmedhistory.forEach(function(processedtxn) {
 		});
 	}
 });

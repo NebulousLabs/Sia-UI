@@ -113,7 +113,7 @@ function DaemonManager() {
 		var updating = setTimeout(function() {
 			self.Running = true;
 			updatePrompt();
-		}, 1500);
+		}, 2500);
 
 		// Listen for siad erroring
 		daemonProcess.on('error', function (error) {

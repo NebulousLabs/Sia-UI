@@ -1,6 +1,6 @@
 'use strict';
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Table Header  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Address Creation  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Address creation
 eID('create-address').onclick = function() {
 	tooltip('Creating...', this);
@@ -10,6 +10,7 @@ eID('create-address').onclick = function() {
 	};
 	IPC.sendToHost('api-call', call, 'new-address');
 };
+
 // Adds an address to the address list
 function appendAddress(address) {
 	if (eID(address)) {
@@ -21,15 +22,14 @@ function appendAddress(address) {
 	show(entry);
 	eID('address-list').appendChild(entry);
 }
+
 // Add the new address
-IPC.on('new-address', function(err, result) {
-	if (!assertSuccess('new-address', err)) {
-		return;
-	}
+addResultListener('new-address', function(result) {
 	notify('Address created!', 'success');
 	appendAddress(result.address);
 });
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Transactions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Define send call
 function sendCoin(amount, address) {
 	var transaction = {
@@ -46,6 +46,7 @@ function sendCoin(amount, address) {
 	// Reflect it asap
 	setTimeout(update, 100);
 }
+
 // Transaction has to be legitimate
 // TODO: verify address
 function verifyTransaction(callback) {
@@ -73,12 +74,14 @@ function verifyTransaction(callback) {
 	var total = new BigNumber(amount).times(unit).round();
 	callback(total, address);
 }
+
 // Button to send coin
 eID('send-money').onclick = function() {
 	verifyTransaction(function() {
 		eID('confirm').classList.remove('hidden');
 	});
 };
+
 // Button to confirm transaction
 eID('confirm').onclick = function() {
 	tooltip('Sending...', this);
@@ -86,17 +89,15 @@ eID('confirm').onclick = function() {
 		sendCoin(amount, address);
 	});
 };
-// Make the call
-IPC.on('coin-sent', function(err, result) {
-	if (!assertSuccess('coin-sent', err)) {
-		return;
-	}
+
+// Transaction was sent
+addResultListener('coin-sent', function(result) {
 	notify('Transaction sent to network!', 'sent');
 	eID('transaction-amount').value = '';
 	eID('confirm').classList.add('hidden');
 });
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Capsule  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Capsule ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Lock or unlock the wallet
 eID('lock-pod').onclick = function() {
 	var state = eID('lock-status').innerHTML;
@@ -109,7 +110,7 @@ eID('lock-pod').onclick = function() {
 	}
 };
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Popups  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Popups ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // On popup upon entering an encrypted, locked wallet, enter password
 eID('enter-password').onclick = function() {
 	// Record password
@@ -119,6 +120,7 @@ eID('enter-password').onclick = function() {
 	unlock(field.value);
 	field.value = '';
 };
+
 // Make sure the user read the password
 eID('confirm-password').onclick = function() {
 	hide('show-password');
