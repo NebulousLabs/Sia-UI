@@ -33,13 +33,14 @@ var testfiles = [
 ];
 
 // Make file from blueprint
-function addFile(file) {
+function updateFile(file) {
+	var nick = file.Nickname;
 	// Add or update in files object
-	files[file.Nickname] = file;
+	files[nick] = file;
 
 	// Create only new ones
-	var fileElement = eID(file.Nickname) ? eID(file.Nickname) : eID('filebp').cloneNode(true);
-	fileElement.id = file.Nickname;
+	var fileElement = eID(nick) ? eID(nick) : eID('filebp').cloneNode(true);
+	fileElement.id = nick;
 
 	// DOM shortcut
 	// TODO: Don't know if bad practice because memleak or if it GCs well
@@ -48,7 +49,7 @@ function addFile(file) {
 	};
 
 	// Set field display values
-	field('.name').innerHTML = file.Nickname.length < 30 ? file.Nickname : file.Nickname.substr(0, 27) + '...';
+	field('.name').innerHTML = nick.length < 30 ? nick : nick.substr(0, 27) + '...';
 	field('.size').innerHTML = formatBytes(file.Filesize);
 	if (file.UploadProgress === 0) {
 		field('.time').innerHTML = 'Processing...';
@@ -71,31 +72,38 @@ function addFile(file) {
 	// TODO: Does this and the Repairing graphic have to be separate? 
 	// Would a file ever be available while it is being repaired?
 	if (file.Available) {
-		field('.yes').classList.remove('fa-file');
-		field('.yes').classList.add('fa-wrench');
+		show(field('.yes'));
+		hide(field('.no'));
 	} else {
-		field('.available').classList.remove('fa-wrench');
-		field('.available').classList.add('fa-file');
+		hide(field('.yes'));
+		show(field('.no'));
 	}
-
 
 	// Display file
 	eID('file-browser').appendChild(f);
 	show(fileElement);
+
+	// Give the file buttons clickability
+	field('.download').onclick = function() {
+		download(nick);
+	};
+	field('.share').onclick = function() {
+		share(nick);
+	};
+	field('.delete').onclick = function() {
+		delete(nick);
+	};
 }
 
 // Make API calls, sending a channel name to listen for responses
 function update() {
-	IPC.sendToHost('api-call', '/renter/files/list', 'list');
+	updateFileList();
 
 	// TODO: Hardcoded testing now
 	files.forEach(addFile);
 	
 	updating = setTimeout(update, 15000);
 }
-addResultListener('list', function(result) {
-	result.forEach(addFile);
-});
 
 // Called upon showing
 function start() {

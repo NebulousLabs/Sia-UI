@@ -14,6 +14,8 @@ function download(nickname) {
 		},
 	}, 'downloaded');
 });
+addResultListener('downloaded', function(response) {
+});
 
 function upload(filePath, nickname) {
 	notify('Uploading ' + nickname + ' to Sia Network', 'upload');
@@ -64,38 +66,12 @@ function delete(nickname) {
 addResultListener('deleted', function(response) {
 });
 
-function updateFile(callback) {
-	IPC.sendToHost('api-call', {
-		url: '/renter/files/delete',
-		args: {
-			nickname: nickname
-		}
-	}, 'deleted');
-	$.getJSON('/renter/files/list', function(response) {
-		data.file = {
-			Files: response || []
-		};
-		updateUI();
-		if (callback) {
-			callback();
-		}
-		triggerListener('file');
-	}).error(function() {
-		console.log(arguments);
-	});
-}
+function updateFileList(callback) {
+	IPC.sendToHost('api-call', '/renter/files/list', 'updated');
 
-function updateRenter(callback) {
-	$.getJSON(uiConfig.siad_addr + '/renter/status', function(response) {
-		data.filePrice = response.Price;
-		data.hostCount = response.KnownHosts;
-		updateUI();
-		if (callback) {
-			callback();
-		}
-		triggerListener('file');
-	}).error(function() {
-		console.log(arguments);
-	});
 }
-
+addResultListener('updated', function(response) {
+	response.forEach(function(file) {
+		updateFile(file);
+	});
+});
