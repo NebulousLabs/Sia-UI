@@ -133,6 +133,9 @@ function PluginManager() {
 					event.args[1].left += $('#sidebar').width();
 					UI.tooltip.apply(null, event.args);
 					break;
+				case 'dialog':
+					IPC.sendToHost('dialog', event.args)
+					break;
 				case 'devtools':
 					// Plugin called for its own devtools, toggle it
 					plugin.toggleDevTools();

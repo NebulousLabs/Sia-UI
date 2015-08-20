@@ -222,16 +222,6 @@ function UIManager() {
 	};
 
 	/**
-	 * Opens a blocking dialog box that the user must interact with
-	 * @function UIManager#message
-	 * @param {Object} options A set of options dictating the dialog box that
-	 * corresponds to electron's dialog.showMessageBox() api
-	 */
-	this.message = function(options) {
-		RendererIPC.send('dialog', options);
-	};
-
-	/**
 	* Called at window.onready, initalizes the UI
 	* @function UIManager#init
 	*/

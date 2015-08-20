@@ -11,13 +11,9 @@ var renting = {};
 // Keeps track of if the view is shown
 var updating;
 
-
 // DOM shortcuts
 function eID() {
 	return document.getElementById.apply(document, [].slice.call(arguments));
-}
-function qS(query, element) {
-	return element.querySelector(query);
 }
 function show(el) {
 	if (typeof el === 'string') {
@@ -34,6 +30,25 @@ function hide(el) {
 	}
 }
 
+// Notification shortcut 
+function notify(msg, type) {
+	IPC.sendToHost('notify', msg, type);
+}
+
+// Ask UI to show tooltip bubble
+function tooltip(message, element) {
+	var rect = element.getBoundingClientRect();
+	IPC.sendToHost('tooltip', message, {
+		top: rect.top,
+		bottom: rect.bottom,
+		left: rect.left,
+		right: rect.right,
+		height: rect.height,
+		width: rect.width,
+		length: rect.length,
+	});
+}
+
 // IPC API listening shortcut that checks for errors
 function addResultListener(channel, callback) {
 	IPC.on(channel, function(err, result) {
@@ -46,29 +61,14 @@ function addResultListener(channel, callback) {
 	});
 }
 
-// Make file from blueprint
-function addFile(file) {
-	// Add to memory
-	files[file.Nickname] = file;
-
-	// Represent in markup
-	if (eID(file.Nickname)) {
-		return;
+// Controls data size representation
+function formatBytes(bytes) {
+	if (bytes === 0) {
+		return '0B';
 	}
-	var f = eID('filebp').cloneNode(true);
-	f.id = file.Nickname;
-	qs('.name', f).innerHTML = file.Nickname;
-	qs('.size', f).innerHTML = file.Filesize;
-	if (f.UploadProgress === 0) {
-		qs('.time', f).innerHTML = 'Processing...';
-	} else if (fileObject.UploadProgress < 100) {
-		qs('.time', f).innerHTML = fileObject.UploadProgress.toFixed(2) + '%');
-	} else {
-		qs('.time', f).innerHTML = file.TimeRemaining + ' Blocks Remaining';
-	}
-
-
-	// Display file
-	eID('file-browser').appendChild(f);
-	show(f);
+	var k = 1000;
+	var sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+	var i = Math.floor((Math.log(bytes) + 1) / Math.log(k));
+	return (new BigNumber(bytes).div(Math.pow(k, i))) + " " + sizes[i];
 }
+
