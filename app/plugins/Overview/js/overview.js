@@ -69,7 +69,9 @@ IPC.on('wallet-update', function(err, result) {
 	updateField(err, 'Balance: ', bal, 'balance');
 
 	var unlocked = result !== null ? result.unlocked : null;
-	if (unlocked) {
+	if (!encrypted) {
+		updateField(err, 'New Wallet', '', 'lock');
+	} else if (unlocked) {
 		updateField(err, 'Unlocked', '', 'lock');
 	} else {
 		updateField(err, 'Locked', '', 'lock');
