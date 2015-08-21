@@ -2,9 +2,10 @@
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Unlocking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Markup changes to reflect unlocked state
-function unlocked() {
+function setUnlocked() {
 	eID('lock-status').innerHTML = 'Unlocked';
 	eID('lock-icon').classList.remove('fa-lock');
+	eID('lock-icon').classList.remove('fa-times');
 	eID('lock-icon').classList.add('fa-unlock');
 	update();
 }
@@ -25,7 +26,7 @@ IPC.on('unlocked', function(err, result) {
 	if (err) {
 		notify('Wrong password', 'error');
 	} else {
-		unlocked();
+		setUnlocked();
 		notify('Wallet unlocked', 'unlocked');
 	}
 	hide('request-password');
@@ -33,9 +34,10 @@ IPC.on('unlocked', function(err, result) {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Locking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Markup changes to reflect locked state
-function locked() {
+function setLocked() {
 	eID('lock-status').innerHTML = 'Locked';
 	eID('lock-icon').classList.remove('fa-unlock');
+	eID('lock-icon').classList.remove('fa-times');
 	eID('lock-icon').classList.add('fa-lock');
 	update();
 }
@@ -50,13 +52,21 @@ function lock() {
 
 // React to the api call result
 addResultListener('locked', function(result) {
+	setLocked();
 	notify('Wallet locked', 'locked');
-	locked();
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Encrypting ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// setUnencrypted sets the wallet lock status to encrypted.
+function setUnencrypted() {
+	eID('lock-status').innerHTML = 'Unencrypted';
+	eID('lock-icon').classList.remove('fa-lock');
+	eID('lock-icon').classList.remove('fa-unlock');
+	eID('lock-icon').classList.add('fa-times');
+	update();
+}
+
 // Encrypt the wallet (only applies to first time opening)
-// TODO: Add copy to clipboard button
 function encrypt() {
 	IPC.sendToHost('api-call', {
 		url: '/wallet/encrypt',
@@ -65,6 +75,7 @@ function encrypt() {
 			dictionary: 'english',
 		},
 	}, 'encrypted');
+	setLocked();
 }
 addResultListener('encrypted', function(result) {
 	var popup = eID('show-password');
