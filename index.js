@@ -6,6 +6,7 @@ const Path = require('path');
 const BrowserWindow = require('browser-window');
 const Tray = require('tray');
 const Dialog = require('dialog');
+const Menu = require('menu');
 
 // visit localhost:9222 to see devtools remotely
 App.commandLine.appendSwitch('remote-debugging-port', '9222');
@@ -44,6 +45,27 @@ function startMainWindow() {
 		// Dereference the window object so that the GC cleans up.
 		mainWindow = null;
 	});
+
+	// Create the Application's main menu - enables copy-paste on Mac.
+    var template = [{
+        label: "Application",
+        submenu: [
+            { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
+            { type: "separator" },
+            { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
+        ]}, {
+        label: "Edit",
+        submenu: [
+            { label: "Undo", accelerator: "Command+Z", selector: "undo:" },
+            { label: "Redo", accelerator: "Shift+Command+Z", selector: "redo:" },
+            { type: "separator" },
+            { label: "Cut", accelerator: "Command+X", selector: "cut:" },
+            { label: "Copy", accelerator: "Command+C", selector: "copy:" },
+            { label: "Paste", accelerator: "Command+V", selector: "paste:" },
+            { label: "Select All", accelerator: "Command+A", selector: "selectAll:" }
+        ]}
+    ];
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 
 

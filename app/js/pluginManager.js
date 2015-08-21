@@ -138,7 +138,7 @@ function PluginManager() {
 
 		// Display any console logs from the plugin
 		plugin.on('console-message', function(event) {
-			console.log(plugin.name + ' plugin logged> ', event.message);
+			console.log(plugin.name + ' plugin logged> ' + event.message);
 		});	
 	}
 
