@@ -34,6 +34,7 @@ var testfiles = [
 
 // Make file from blueprint
 function updateFile(file) {
+	console.log(file);
 	var nick = file.Nickname;
 	// Add or update in files object
 	files[nick] = file;
@@ -80,7 +81,7 @@ function updateFile(file) {
 	}
 
 	// Display file
-	eID('file-browser').appendChild(f);
+	eID('file-browser').appendChild(fileElement);
 	show(fileElement);
 
 	// Give the file buttons clickability

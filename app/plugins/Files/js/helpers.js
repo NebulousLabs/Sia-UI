@@ -63,7 +63,7 @@ function addResultListener(channel, callback) {
 
 // Controls data size representation
 function formatBytes(bytes) {
-	if (bytes === 0) {
+	if (!bytes) {
 		return '0B';
 	}
 	var k = 1000;

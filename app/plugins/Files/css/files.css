@@ -131,19 +131,19 @@
 .info-pane .button.delete {
   margin-right: 10px;
 }
-.file-browser {
+#file-browser {
   background-color: #fafafa;
   height: 580px;
   overflow-y: auto;
 }
-.file-browser .file {
+#file-browser .file {
   padding: 10px;
   color: #757575;
   font-size: 14px;
   background-color: #fff;
   border-bottom: 1px solid #eeeeee;
 }
-.file-browser .file:hover {
+#file-browser .file:hover {
   cursor: pointer;
   background-color: #fafafa;
 }
