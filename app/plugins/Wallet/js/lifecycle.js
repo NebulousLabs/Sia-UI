@@ -14,15 +14,15 @@ function start() {
 addResultListener('on-opened', function(result) {
 	wallet = result;
 
-	// If first time opening, show password
+	// Show correct lock status. TODO: If the wallet is encrypted, prompt with
+	// a pw.
 	if (!wallet.encrypted) {
+		setUnencrypted();
 		encrypt();
-	}
-	// Show correct lock status
-   	if (!wallet.unlocked) {
-		locked();
+   	} else if (!wallet.unlocked) {
+		setLocked();
 	} else if (wallet.unlocked) {
-		unlocked();
+		setUnlocked();
 	}
 
 	// Start updating
@@ -39,17 +39,19 @@ function stop() {
 // Make API calls, sending a channel name to listen for responses
 function update() {
 	IPC.sendToHost('api-call', '/wallet', 'update-status');
+	/*
 	IPC.sendToHost('api-call', {
 		url: '/wallet/transactions',
 		type: 'GET',
 		args: {
 			startheight: 0,
 			// arbitrarily large endheight to get full history
-			endheight: Math.pow(2,62),
+			endheight: 1000000
 		}
 	}, 'update-history');
+	*/
 	
-	setTimeout(update, 15000);
+	setTimeout(update, 2500);
 }
 
 // Update transaction history and addresses
@@ -63,6 +65,7 @@ addResultListener('update-status', function(result) {
 	eID('uncomfirmed').innerHTML = 'Pending: ' + pend + ' S';
 });
 
+/*
 // Adds an address to the address list
 function appendTransaction(txn) {
 	if (eID(txn.transactionid)) {
@@ -92,14 +95,14 @@ function appendTransaction(txn) {
 	eID('transaction-list').appendChild(entry);
 	show(entry);
 }
+*/
 
+/*
 // Update transaction history and addresses
 addResultListener('update-history', function(result) {
 	if (result.confirmedhistory) {
 		result.confirmedhistory.forEach(function(processedtxn) {
 			appendTransaction(processedtxn);
-			// Only add addresses that the wallet paid out from
-			appendAddress(processedtxn.relatedaddress);
 		});
 	}
 
@@ -108,4 +111,4 @@ addResultListener('update-history', function(result) {
 		});
 	}
 });
-
+*/

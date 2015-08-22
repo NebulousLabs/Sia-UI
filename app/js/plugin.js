@@ -52,7 +52,7 @@ function Plugin(plugPath, name) {
 			view.executeJavaScript('if (typeof start === "function") start();');
 			setTimeout(function() {
 				view.style.display = '';
-			}, 250);
+			}, 170);
 		},
 
 		/** 
@@ -64,7 +64,7 @@ function Plugin(plugPath, name) {
 			view.executeJavaScript('if (typeof stop === "function") stop();');
 			setTimeout(function() {
 				view.style.display = 'none';
-			}, 250);
+			}, 170);
 		},
 
 		/**

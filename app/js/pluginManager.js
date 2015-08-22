@@ -87,7 +87,7 @@ function PluginManager() {
 			main.add('transition');
 			setTimeout(function() {
 				main.remove('transition');
-			}, 250);
+			}, 170);
 
 			// Switch plugins
 			current.hide();
@@ -138,7 +138,7 @@ function PluginManager() {
 
 		// Display any console logs from the plugin
 		plugin.on('console-message', function(event) {
-			console.log(plugin.name + ' plugin logged> ', event.message);
+			console.log(plugin.name + ' plugin logged> ' + event.message);
 		});	
 	}
 
