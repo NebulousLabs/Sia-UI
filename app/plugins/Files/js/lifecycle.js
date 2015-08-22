@@ -91,7 +91,7 @@ function updateFile(file) {
 		share(nick);
 	};
 	field('.delete').onclick = function() {
-		delete(nick);
+		deleteFile(nick);
 	};
 }
 
@@ -100,7 +100,7 @@ function update() {
 	updateFileList();
 
 	// TODO: Hardcoded testing now
-	files.forEach(addFile);
+	testfiles.forEach(updateFile);
 	
 	updating = setTimeout(update, 15000);
 }

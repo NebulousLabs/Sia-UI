@@ -1,6 +1,6 @@
 function download(nickname) {
 	// TODO: setup dialog system
-	var savePath = IPC.sendToHost('dialog', 'save' nickname);
+	var savePath = IPC.sendToHost('dialog', 'save', nickname);
 	if (!savePath) {
 		return
 	}
@@ -13,7 +13,7 @@ function download(nickname) {
 			destination: savePath
 		},
 	}, 'downloaded');
-});
+};
 addResultListener('downloaded', function(response) {
 });
 
@@ -27,7 +27,7 @@ function upload(filePath, nickname) {
 			nickname: nickname,
 		},
 	}, 'uploaded');
-});
+};
 addResultListener('uploaded', function(response) {
 });
 
@@ -39,22 +39,22 @@ function share(nickname) {
 			nickname: nickname,
 		}
 	}, 'shared');
-});
+};
 addResultListener('shared', function(response) {
 });
 
-function add-ascii(asciiText) {
+function addascii(asciiText) {
 	IPC.sendToHost('api-call', {
 		url: '/renter/files/loadascii',
 		args: {
 			file: asciiText
 		}
 	}, 'ascii-added');
-});
+};
 addResultListener('ascii-added', function(response) {
 });
 
-function delete(nickname) {
+function deleteFile(nickname) {
 	// Make the request to delete the file.
 	IPC.sendToHost('api-call', {
 		url: '/renter/files/delete',
@@ -62,7 +62,7 @@ function delete(nickname) {
 			nickname: nickname
 		}
 	}, 'deleted');
-});
+};
 addResultListener('deleted', function(response) {
 });
 
