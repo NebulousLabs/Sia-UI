@@ -46,26 +46,28 @@ function startMainWindow() {
 		mainWindow = null;
 	});
 
-	// Create the Application's main menu - enables copy-paste on Mac.
-    var template = [{
-        label: "Application",
-        submenu: [
-            { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
-            { type: "separator" },
-            { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
-        ]}, {
-        label: "Edit",
-        submenu: [
-            { label: "Undo", accelerator: "Command+Z", selector: "undo:" },
-            { label: "Redo", accelerator: "Shift+Command+Z", selector: "redo:" },
-            { type: "separator" },
-            { label: "Cut", accelerator: "Command+X", selector: "cut:" },
-            { label: "Copy", accelerator: "Command+C", selector: "copy:" },
-            { label: "Paste", accelerator: "Command+V", selector: "paste:" },
-            { label: "Select All", accelerator: "Command+A", selector: "selectAll:" }
-        ]}
-    ];
-    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+	if (process.platform === 'darwin') {
+		// Create the Application's main menu - enables copy-paste on Mac.
+		var template = [{
+			label: "Application",
+			submenu: [
+				{ label: "About Application", selector: "orderFrontStandardAboutPanel:" },
+				{ type: "separator" },
+				{ label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
+			]}, {
+			label: "Edit",
+			submenu: [
+				{ label: "Undo", accelerator: "Command+Z", selector: "undo:" },
+				{ label: "Redo", accelerator: "Shift+Command+Z", selector: "redo:" },
+				{ type: "separator" },
+				{ label: "Cut", accelerator: "Command+X", selector: "cut:" },
+				{ label: "Copy", accelerator: "Command+C", selector: "copy:" },
+				{ label: "Paste", accelerator: "Command+V", selector: "paste:" },
+				{ label: "Select All", accelerator: "Command+A", selector: "selectAll:" }
+			]}
+		];
+		Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+	}
 }
 
 
