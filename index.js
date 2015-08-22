@@ -73,9 +73,7 @@ function startMainWindow() {
 
 // Quit when all windows are closed.
 App.on('window-all-closed', function() {
-	if (process.platform !== 'darwin') {
-		App.quit();
-	}
+	App.quit();
 });
 
 // When Electron loading has finished, start the daemon then the UI
