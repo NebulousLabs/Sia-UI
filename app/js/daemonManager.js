@@ -30,6 +30,7 @@ function DaemonManager() {
 
 	/**
 	 * Relays calls to daemonAPI with the localhost:port address appended
+	 * @function DaemonManager#call
 	 * @param {apiCall} call - function to run if Siad is running
 	 * @param {apiResponse} callback
 	 */
@@ -63,6 +64,7 @@ function DaemonManager() {
 
 	/**
 	 * Checks if there is an update available
+	 * @function DaemonManager#update
 	 */
 	function updatePrompt() {
 		apiCall("/daemon/updates/check", function(err, update) {
@@ -114,12 +116,6 @@ function DaemonManager() {
 		daemonProcess.on('error', function (error) {
 			UI.notify('siad errored: ' + error, 'error');
 		});
-		// Listen for siad exiting
-		daemonProcess.on('close', function(code) {
-			self.Running = false;
-			UI.notify('siad closed with code: ' + code, 'stop');
-			clearTimeout(updating);
-		});
 		daemonProcess.on('exit', function(code) {
 			self.Running = false;
 			UI.notify('siad exited with code: ' + code, 'stop');
@@ -143,22 +139,15 @@ function DaemonManager() {
 	 * @function DaemonManager#init
 	 * @param {config} config - config in memory
 	 */
-	this.init = function(config) {
+	function init(config) {
 		setConfig(config, function() {
 			ifSiad(updatePrompt, start);
 		});
-	};
-	/**
-	 * Makes an API call to to proper port using daemonAPI
-	 * @function DaemonManager#call
-	 * @param {APICall} call - the config object derived from config.json
-	 * @param {APIResponse} callback
-	 */
+	}
+
+	// Make certain functions public
+	this.init = init;
 	this.apiCall = apiCall;
-	/**
-	 * Makes an API call to to proper port using daemonAPI
-	 * @function DaemonManager#update
-	 */
 	this.update = updatePrompt;
 	this.ifSiad = ifSiad;
 }
