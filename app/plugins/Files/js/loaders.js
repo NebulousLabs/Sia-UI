@@ -66,12 +66,3 @@ function deleteFile(nickname) {
 addResultListener('deleted', function(response) {
 });
 
-function updateFileList(callback) {
-	IPC.sendToHost('api-call', '/renter/files/list', 'updated');
-
-}
-addResultListener('updated', function(response) {
-	response.forEach(function(file) {
-		updateFile(file);
-	});
-});

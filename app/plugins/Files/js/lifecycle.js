@@ -32,15 +32,17 @@ var testfiles = [
 	}
 ];
 
-// Make file from blueprint
+// Make or update file with blueprint
 function updateFile(file) {
 	console.log(file);
 	var nick = file.Nickname;
-	// Add or update in files object
 	files[nick] = file;
 
+	// if updating or adding
+	var adding = eID(nick) ? false : true;
+
 	// Create only new ones
-	var fileElement = eID(nick) ? eID(nick) : eID('filebp').cloneNode(true);
+	var fileElement = adding ? eID('filebp').cloneNode(true) : eID(nick);
 	fileElement.id = nick;
 
 	// DOM shortcut
@@ -80,23 +82,34 @@ function updateFile(file) {
 		show(field('.no'));
 	}
 
-	// Display file
-	eID('file-browser').appendChild(fileElement);
-	show(fileElement);
-
-	// Give the file buttons clickability
-	field('.download').onclick = function() {
-		download(nick);
-	};
-	field('.share').onclick = function() {
-		share(nick);
-	};
-	field('.delete').onclick = function() {
-		deleteFile(nick);
-	};
+	// Display file and add listeners if this was new
+	if (adding) {
+		eID('file-browser').appendChild(fileElement);
+		show(fileElement);
+	
+		// Give the file buttons clickability
+		field('.download').onclick = function() {
+			download(nick);
+		};
+		field('.share').onclick = function() {
+			share(nick);
+		};
+		field('.delete').onclick = function() {
+			deleteFile(nick);
+		};
+	}
 }
 
 // Make API calls, sending a channel name to listen for responses
+function updateFileList(callback) {
+	IPC.sendToHost('api-call', '/renter/files/list', 'updated');
+
+}
+addResultListener('updated', function(response) {
+	response.forEach(updateFile);
+});
+
+// Regularly update the file library
 function update() {
 	updateFileList();
 

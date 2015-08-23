@@ -4,6 +4,7 @@
 		<!-- CSS -->
 		<link rel='stylesheet' href='../../css/roboto-condensed-min.css'>
 		<link rel='stylesheet' href='../../css/font-awesome/css/font-awesome.min.css'>
+		<link rel='stylesheet' href='../../css/pure-min.css'>
 		<link rel='stylesheet' href='../../css/plugin-standard.css'>
 		<link rel='stylesheet' href='css/files.css'>
 	</head>
@@ -20,39 +21,44 @@
 		<!-- Frame -->
 		<div class="frame">
 			<div class='cloud-control'>
-				<div class='button' id='upload-public'>
-					<i class='fa fa-upload'></i>
-					Upload File
-				</div>
-				<div class='button' id='add-ascii'>
-					<i class='fa fa-ticket'></i>
-					Add Ascii File
-				</div>
-				<div class='search'>
-					<div class='text' contentEditable='true'></div>
-					<i class='fa fa-search'></i>
-				</div>
-				<input class='search' type='text' id='search' placeholder='Search'>
-				<div id='file-browser'>
-					<div class='file blueprint' id='filebp'>
-						<div class='graphic'>
-							<i class='fa fa-file'></i>
+				<div class='pure-g'>
+					<div class='pure-u-1-2'>
+						<div class='button' id='upload-file'>
+							<i class='fa fa-upload'></i>
+							Upload File
 						</div>
-						<div class='available'>
-							<div class='yes'>
-								<i class='fa fa-check'></i>
-							</div>
-							<div class='no'>
-								<i class='fa fa-refresh fa-spin'></i>
-							</div>
+						<div class='button' id='add-ascii'>
+							<i class='fa fa-ticket'></i>
+							Add Ascii File
 						</div>
-						<div class='name'></div>
-						<div class='size'></div>
-						<div class='time'></div>
-						<div class='download'>Download</div>
-						<div class='share'>Share</div>
-						<div class='delete'>Delete</div>
 					</div>
+					<div class='pure-u-1-2'>
+						<div class='search'>
+							<input type='text' id='search-bar' placeholder='Search'></input>
+							<i class='fa fa-search'></i>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id='file-browser'>
+				<div class='file blueprint' id='filebp'>
+					<div class='graphic'>
+						<i class='fa fa-file'></i>
+					</div>
+					<div class='available'>
+						<div class='yes'>
+							<i class='fa fa-check'></i>
+						</div>
+						<div class='no'>
+							<i class='fa fa-refresh fa-spin'></i>
+						</div>
+					</div>
+					<div class='name'></div>
+					<div class='size'></div>
+					<div class='time'></div>
+					<div class='download'>Download</div>
+					<div class='share'>Share</div>
+					<div class='delete'>Delete</div>
 				</div>
 			</div>
 		</div>
