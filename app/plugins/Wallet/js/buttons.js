@@ -124,6 +124,5 @@ eID('enter-password').onclick = function() {
 // Make sure the user read the password
 eID('confirm-password').onclick = function() {
 	hide('show-password');
-	update();
 };
 
