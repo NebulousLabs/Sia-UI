@@ -52,12 +52,17 @@ html, body {
 	font-size: 26px;
 }
 .capsule {
+	position: absolute;
+	right: 20px;
+	max-height: 50px;
+	max-width: calc(100% - 200px);
 	display: inline-block;
 	border: 1px solid #ffffff;
 	border-radius: 4px;
 	overflow: hidden;
 }
 .capsule .pod {
+	overflow: hidden;
 	display: inline-block;
 	padding: 8px;
 	padding-left: 16px;
@@ -73,7 +78,6 @@ html, body {
 }
 .capsule .pod:last-child {
 	border: none;
-	padding-right: 20px;
 }
 
 /* Main Display */
