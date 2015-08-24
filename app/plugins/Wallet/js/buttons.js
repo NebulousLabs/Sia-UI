@@ -87,7 +87,6 @@ eID('send-money').onclick = function() {
 eID('confirm').onclick = function() {
 	// If the button's transparent, don't do anything
 	if (eID('confirm').classList.contains('transparent')) {
-		console.log('reached')
 		return;
 	}
 	verifyTransaction(this, function(amount, address) {
