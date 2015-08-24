@@ -2,39 +2,9 @@
 
 // Keeps track of currently existing files
 var files = {};
-// TODO: for now, hardcoding a file list
-var testfiles = [
-	{
-		Available: true,
-		Nickname: 'Test1',
-		Repairing: false,
-		TimeRemaining: 10000,
-	}, {
-		Available: true,
-		Nickname: 'Test2',
-		Repairing: false,
-		TimeRemaining: 10000,
-	}, {
-		Available: true,
-		Nickname: 'Test3',
-		Repairing: false,
-		TimeRemaining: 10000,
-	}, {
-		Available: true,
-		Nickname: 'Test4',
-		Repairing: false,
-		TimeRemaining: 10000,
-	}, {
-		Available: true,
-		Nickname: 'Test5',
-		Repairing: false,
-		TimeRemaining: 10000,
-	}
-];
 
 // Make or update file with blueprint
 function updateFile(file) {
-	console.log(file);
 	var nick = file.Nickname;
 	files[nick] = file;
 
@@ -100,24 +70,23 @@ function updateFile(file) {
 	}
 }
 
-// Make API calls, sending a channel name to listen for responses
-function updateFileList(callback) {
-	IPC.sendToHost('api-call', '/renter/files/list', 'updated');
-
-}
-addResultListener('updated', function(response) {
-	response.forEach(updateFile);
-});
-
-// Regularly update the file library
+// Regularly update the file library and status
 function update() {
-	updateFileList();
-
-	// TODO: Hardcoded testing now
-	testfiles.forEach(updateFile);
+	IPC.sendToHost('api-call', '/renter/files/list', 'update-list');
+	IPC.sendToHost('api-call', '/renter/status', 'update-status');
 	
 	updating = setTimeout(update, 15000);
 }
+addResultListener('update-list', function(result) {
+	result.forEach(updateFile);
+});
+addResultListener('update-status', function(result) {
+	var priceDisplay = convertSiacoin(result.Price).toFixed(3) + ' S Per GB (Estimated)';
+	eID('price').innerHTML = priceDisplay;
+
+	var hostsDisplay = result.KnownHosts + ' Known Hosts';
+	eID('host-count').innerHTML = hostsDisplay;
+});
 
 // Called upon showing
 function start() {

@@ -14,7 +14,7 @@ function download(nickname) {
 		},
 	}, 'downloaded');
 };
-addResultListener('downloaded', function(response) {
+addResultListener('downloaded', function(result) {
 });
 
 function upload(filePath, nickname) {
@@ -28,7 +28,7 @@ function upload(filePath, nickname) {
 		},
 	}, 'uploaded');
 };
-addResultListener('uploaded', function(response) {
+addResultListener('uploaded', function(result) {
 });
 
 function share(nickname) {
@@ -40,7 +40,7 @@ function share(nickname) {
 		}
 	}, 'shared');
 };
-addResultListener('shared', function(response) {
+addResultListener('shared', function(result) {
 });
 
 function addascii(asciiText) {
@@ -51,7 +51,7 @@ function addascii(asciiText) {
 		}
 	}, 'ascii-added');
 };
-addResultListener('ascii-added', function(response) {
+addResultListener('ascii-added', function(result) {
 });
 
 function deleteFile(nickname) {
@@ -63,6 +63,6 @@ function deleteFile(nickname) {
 		}
 	}, 'deleted');
 };
-addResultListener('deleted', function(response) {
+addResultListener('deleted', function(result) {
 });
 

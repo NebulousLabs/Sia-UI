@@ -82,7 +82,7 @@ App.on('window-all-closed', function() {
 // When Electron loading has finished, start the daemon then the UI
 App.on('ready', startMainWindow);
 
-// TODO: Was going to use for wallet but it's unused for now
+// TODO: Set up to work with files plugin
 // Listen for if the renderer process wants to produce a dialog message
 MainIPC.on('dialog', function(event, type, options, callback) {
 	switch (type) {
