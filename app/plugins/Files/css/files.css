@@ -1,0 +1,287 @@
+/*	Style Guide: 
+ *		Transparent: 70% Opacity
+ *
+ * 		White:      #FFFFFF
+ * 		Grey-White: #F5F5F5
+ *		Faint-Grey: #ECECEC
+ *		Light-Grey: #DDDDDD
+ *		Grey:       #C5C5C5
+ * 		Grey-Black: #4A4A4A
+ * 		Black:      #000000
+ */
+
+/* Information Box */
+.row {
+	background:#f5f5f5;
+	min-width: 1000px;
+	display: block;
+	padding-top: 18px;
+	padding-bottom: 18px;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+.box .title {
+	display: inline-block;
+	font-size: 36px;
+	margin-bottom: 4px;
+}
+.button {
+	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+	display: inline-block;
+	font-size: 24px;
+	padding: 12px;
+}
+
+/* Controls */
+.controls {
+	display: inline-block;
+	float: right;
+}
+.button:hover {
+	color: #4a4a4a;
+	cursor: pointer;
+}
+.transparent {
+	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
+	opacity: 0;
+	cursor: none;
+}
+.search {
+	display: block;
+	font-size: 24px;
+	margin: 4px;
+	margin-right: 20px;
+}
+.search i {
+	position: absolute;
+	float: right;
+	top: 12px;
+	right: 20px;
+}
+input {
+	width: 100%;
+	display: inline-block;
+	margin: 0;
+	font-family: sans-serif;
+	appearance: none;
+	box-shadow: none;
+	border-radius: 4px;
+	color:#4a4a4a;
+
+	transition: box-shadow 0.3s, border 0.3s;
+}
+input:focus {
+	outline: none;
+	border: solid 1px #4a4a4a;
+	box-shadow: 0 0 5px 1px #c5c5c5;
+}
+
+/* Box List */
+.box {
+	height: 50%;
+	padding-bottom: 32px;
+}
+.list {
+	height: calc(100% - 108px);
+	padding: 16px;
+	padding-left: 24px;
+	overflow:auto;
+}
+.entry {
+	height: 24px;
+	font-size: 18px;
+	overflow: hidden;
+	color: #4a4a4a;
+}
+
+
+/* Old UI Css */
+.capsule .income-rate {
+	width: 120px;
+	text-align: right;
+	padding-left: 0px;
+}
+.header {
+	font-size: 32px;
+	color: #9e9e9e;
+}
+.header .title {
+	display: inline-block;
+	margin-right: 40px;
+}
+.header .capsule {
+	font-size: 18px;
+}
+.cloud-control {
+	color: #9e9e9e;
+	padding-left: 4px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	border-bottom: 1px solid #e0e0e0;
+}
+.upload-pane {
+	font-size: 18px;
+	color: #757575;
+	border-bottom: 1px solid #e0e0e0;
+}
+.upload-pane .button {
+	margin-top: 10px;
+}
+.upload-pane .path {
+	display: inline-block;
+	margin: 10px;
+	border-radius: 4px;
+	border: 1px solid #e0e0e0;
+}
+.upload-pane .path .text {
+	display: inline-block;
+	margin-left: -4px;
+	margin-right: -4px;
+	padding: 10px;
+	padding-right: 16px;
+}
+.upload-pane .path .text i {
+	padding-left: 4px;
+	padding-right: 4px;
+}
+.upload-pane .path .text:hover {
+	background-color: #fafafa;
+	cursor: pointer;
+}
+.upload-pane .path .meta {
+	display: inline-block;
+	border-left: 1px solid #e0e0e0;
+	padding: 10px;
+	padding-right: 16px;
+}
+.upload-pane .path .stop {
+	display: inline-block;
+	padding: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
+	border-right: 1px solid #e0e0e0;
+}
+.upload-pane .path .stop:hover {
+	background-color: #fafafa;
+	cursor: pointer;
+}
+.upload-pane .account {
+	display: inline-block;
+	float: right;
+}
+.upload-pane .public {
+	display: inline-block;
+	float: right;
+}
+.upload-pane .size {
+	display: inline-block;
+	float: right;
+	padding: 20px;
+}
+.upload-pane .cost {
+	display: inline-block;
+	float: right;
+	padding: 20px;
+}
+.upload-pane .upload.button {
+	float: right;
+	margin-right: 10px;
+}
+.info-pane {
+	font-size: 18px;
+	color: #757575;
+	border-bottom: 1px solid #e0e0e0;
+}
+.info-pane .name {
+	display: inline-block;
+	padding: 20px;
+	border-right: 1px solid #e0e0e0;
+}
+.info-pane .size {
+	display: inline-block;
+	padding-right: 16px;
+}
+.info-pane .cost {
+	display: inline-block;
+	padding-right: 16px;
+}
+.info-pane .visibility {
+	display: inline-block;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+.info-pane .button {
+	float: right;
+	margin-top: 10px;
+}
+.info-pane .button.delete {
+	margin-right: 10px;
+}
+#file-browser {
+	background-color: #fafafa;
+	height: 580px;
+	overflow-y: auto;
+}
+#file-browser .file {
+	padding: 10px;
+	color: #757575;
+	font-size: 14px;
+	background-color: #fff;
+	border-bottom: 1px solid #eeeeee;
+}
+#file-browser .file:hover {
+	cursor: pointer;
+	background-color: #fafafa;
+}
+.file .graphic {
+	display: inline-block;
+	width: 20px;
+	font-size: 12px;
+	text-align: center;
+}
+.file .available {
+	display: inline-block;
+	width: 20px;
+}
+.file .name {
+	display: inline-block;
+	width: 30%;
+	text-align: left;
+	font-size: 14px;
+}
+.file .size {
+	display: inline-block;
+	width: 10%;
+}
+.file .time {
+	display: inline-block;
+	width: 20%;
+}
+.file .download {
+	display: inline-block;
+	padding-left: 12px;
+	padding-right: 12px;
+	float: right;
+}
+.file .download:hover {
+	opacity: .5;
+}
+.file .share {
+	display: inline-block;
+	padding-left: 12px;
+	padding-right: 12px;
+	float: right;
+}
+.file .share:hover {
+	opacity: .5;
+}
+.file .delete {
+	display: inline-block;
+	padding-left: 12px;
+	padding-right: 12px;
+	float: right;
+}
+.file .delete:hover {
+	opacity: .5;
+}
+

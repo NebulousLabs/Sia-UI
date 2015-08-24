@@ -52,6 +52,7 @@ function Plugin(plugPath, name) {
 			view.executeJavaScript('if (typeof start === "function") start();');
 			setTimeout(function() {
 				view.style.opacity = '1';
+				view.style.zIndex= '0';
 			}, 170);
 		},
 
@@ -64,6 +65,7 @@ function Plugin(plugPath, name) {
 			view.executeJavaScript('if (typeof stop === "function") stop();');
 			setTimeout(function() {
 				view.style.opacity = '0';
+				view.style.zIndex= '-5';
 			}, 170);
 		},
 

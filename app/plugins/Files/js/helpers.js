@@ -1,21 +1,16 @@
 'use strict';
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Global Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Library for communicating with Sia-UI
 const IPC = require('ipc');
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
 // Ensure precision
-BigNumber.config({ DECIMAL_PLACES: 30 });
+BigNumber.config({ DECIMAL_PLACES: 24 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 // Variable to store api result values
-var wallet = {};
-var remainingAddresses;
-var currentHeight;
+var renting = {};
 // Keeps track of if the view is shown
 var updating;
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Helper Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // DOM shortcuts
 function eID() {
 	return document.getElementById.apply(document, [].slice.call(arguments));
@@ -45,16 +40,6 @@ function convertSiacoin(hastings) {
 	return number.dividedBy(ConversionFactor).round();
 }
 
-// Amount has to be a number
-function isNumber(n) {
-	return !isNaN(parseFloat(n)) && isFinite(n);
-}
-
-// Address has to be lowercase hex and 76 chars
-function isAddress(str) {
-    return str.match(/^[a-f0-9]{76}$/) !== null;
-}
-
 // Notification shortcut 
 function notify(msg, type) {
 	IPC.sendToHost('notify', msg, type);
@@ -80,8 +65,20 @@ function addResultListener(channel, callback) {
 		if (err) {
 			console.error(channel, err);
 			notify(err, 'error');
-		} else {
+		} else if (callback) {
 			callback(result);
 		}
 	});
 }
+
+// Controls data size representation
+function formatBytes(bytes) {
+	if (!bytes) {
+		return '0B';
+	}
+	var k = 1000;
+	var sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+	var i = Math.floor((Math.log(bytes) + 1) / Math.log(k));
+	return (new BigNumber(bytes).div(Math.pow(k, i))) + " " + sizes[i];
+}
+
