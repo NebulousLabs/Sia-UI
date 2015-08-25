@@ -1,6 +1,9 @@
+// TODO: Can a webview use IPC.sendSync?
 function download(nickname) {
 	// TODO: setup dialog system
-	var savePath = IPC.sendToHost('dialog', 'save', nickname);
+	var savePath = IPC.sendSync('dialog', 'save', {
+		defaultPath: nickname,
+	});
 	if (!savePath) {
 		return
 	}

@@ -29,7 +29,7 @@ function PluginManager() {
 	 * Array to store all plugins
 	 * @member {Plugin[]} PluginManager~plugins
 	 */
-	var plugins = [];
+	var plugins = {};
 
 	/**
 	 * Detects the home Plugin or otherwise the alphabetically first
@@ -134,7 +134,8 @@ function PluginManager() {
 					UI.tooltip.apply(null, event.args);
 					break;
 				case 'dialog':
-					IPC.sendToHost('dialog', event.args)
+					// Send dialog's response back to the plugin
+					plugin.sendToView('dialog', IPC.sendSync('dialog', event.args));
 					break;
 				case 'devtools':
 					// Plugin called for its own devtools, toggle it
@@ -148,7 +149,7 @@ function PluginManager() {
 		// Display any console logs from the plugin
 		plugin.on('console-message', function(event) {
 			console.log(plugin.name + ' plugin logged> ' + event.message);
-		});	
+		});
 	}
 
 	/**
@@ -164,7 +165,7 @@ function PluginManager() {
 		addListeners(plugin);
 
 		// Store the plugin
-		plugins.push(plugin);
+		plugins[name] = plugin;
 	}
 
 	/**
