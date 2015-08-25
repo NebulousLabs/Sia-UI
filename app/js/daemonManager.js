@@ -67,6 +67,8 @@ function DaemonManager() {
 	 * @function DaemonManager#update
 	 */
 	function updatePrompt() {
+		// Update check will delay API calls until successful. Will wait the
+		// duration that it takes to load up the blockchain.
 		apiCall("/daemon/updates/check", function(err, update) {
 			if (err) {
 				self.Running = false;

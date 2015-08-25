@@ -22,7 +22,7 @@
     "doc": "jsdoc -c .jsdocrc",
     "postinstall": "npm run sia-repo && npm run sia-import",
     "sia-repo": "go get -u github.com/NebulousLabs/Sia/...",
-    "sia-import": "test -d app/dependencies/Sia || mkdir -p app/dependencies/Sia && cp $GOPATH/bin/siad app/dependencies/Sia",
+    "sia-import": "(test -d app/dependencies/Sia || mkdir -p app/dependencies/Sia) && cp $GOPATH/bin/siad app/dependencies/Sia",
     "sia-kill": "killall siad; while pgrep siad; do sleep .5; done;",
     "sia-reimport": "npm run sia-repo && npm run sia-kill && npm run sia-import",
     "build": "npm run build-cmd -- --all",
