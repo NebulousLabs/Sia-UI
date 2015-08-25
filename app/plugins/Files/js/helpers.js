@@ -1,4 +1,5 @@
 'use strict';
+
 // Library for communicating with Sia-UI
 const IPC = require('ipc');
 // Library for arbitrary precision in numbers

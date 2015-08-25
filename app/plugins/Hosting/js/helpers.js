@@ -12,10 +12,6 @@ BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 var hosting;
 // Keeps track of if the view is shown
 var updating;
-// Hidden div with the structure of a host property
-var ePropBlueprint = eID('propertybp');
-// Section that holds properties
-var eProperties = eID('properties');
 // Host properties array
 var hostProperties = [
 	{

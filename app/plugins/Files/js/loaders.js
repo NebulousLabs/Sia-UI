@@ -1,3 +1,5 @@
+'use strict';
+
 // TODO: Can a webview use IPC.sendSync?
 function download(nickname) {
 	// TODO: setup dialog system
@@ -5,7 +7,7 @@ function download(nickname) {
 		defaultPath: nickname,
 	});
 	if (!savePath) {
-		return
+		return;
 	}
 	notify('Downloading ' + nickname + ' to '+ savePath +' folder', 'download');
 	IPC.sendToHost('api-call', {
@@ -16,7 +18,7 @@ function download(nickname) {
 			destination: savePath
 		},
 	}, 'downloaded');
-};
+}
 addResultListener('downloaded', function(result) {
 });
 
@@ -30,7 +32,7 @@ function upload(filePath, nickname) {
 			nickname: nickname,
 		},
 	}, 'uploaded');
-};
+}
 addResultListener('uploaded', function(result) {
 });
 
@@ -42,7 +44,7 @@ function share(nickname) {
 			nickname: nickname,
 		}
 	}, 'shared');
-};
+}
 addResultListener('shared', function(result) {
 });
 
@@ -53,7 +55,7 @@ function addascii(asciiText) {
 			file: asciiText
 		}
 	}, 'ascii-added');
-};
+}
 addResultListener('ascii-added', function(result) {
 });
 
@@ -65,7 +67,7 @@ function deleteFile(nickname) {
 			nickname: nickname
 		}
 	}, 'deleted');
-};
+}
 addResultListener('deleted', function(result) {
 });
 

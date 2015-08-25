@@ -30,14 +30,14 @@ addResultListener('status', function(result) {
 		if (eID(prop.name)) {
 			return;
 		}
-		var item = ePropBlueprint.cloneNode(true);
+		var item = eID('propertybp').cloneNode(true);
 		item.classList.remove('hidden');
 		item.querySelector('.name').textContent = prop.name + ' (' + prop.unit + ')';
 		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion).round().toString();
 		item.querySelector('.value').textContent = value;
 		item.id = prop.name;
 
-		eProperties.appendChild(item);
+		eID('properties').appendChild(item);
 	});
 });
 
