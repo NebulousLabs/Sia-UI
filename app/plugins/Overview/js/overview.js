@@ -30,9 +30,13 @@ function updateField(err, caption, value, elementID) {
 
 // Convert to Siacoin
 function formatSiacoin(hastings) {
+	// TODO: JS automatically loses precision when taking numbers from the API.
+	// This deals with that imperfectly, rounding to nearest hasting
+	var number = new BigNumber(Math.round(hastings).toString());
 	var ConversionFactor = new BigNumber(10).pow(24);
-	var display = new BigNumber(hastings).dividedBy(ConversionFactor);
-	return display + ' S';
+	// Display two digits of Siacoin
+	var display = number.dividedBy(ConversionFactor).round(2) + ' S';
+	return display;
 }
 
 // Called by the UI upon showing
