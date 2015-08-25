@@ -102,13 +102,19 @@ function PluginManager() {
 					// Redirect api calls to the daemonManager
 					var call = event.args[0];
 					var responseChannel = event.args[1];
+					// Send the call only if the Daemon appears to be running
 					if (Daemon.Running) {
 						Daemon.apiCall(call, function(err, result) {
 							if (err) {
+								// If a call didn't work, test that the
+								// `/consensus` call still works
 								console.error(err, call);
 								Daemon.ifSiad(function() {
+									// Send error response back to the plugin
 									plugin.sendToView(responseChannel, err, result);
 								}, function() {
+									// `/consensus` call failed too, assume
+									// siad has stopped
 									UI.notify('siad seems to have stopped working!', 'stop');
 								});
 							} else if (responseChannel) {
