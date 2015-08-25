@@ -22,16 +22,16 @@ function eID() {
 }
 function show(el) {
 	if (typeof el === 'string') {
-		eID(el).classList.remove('blueprint');
+		eID(el).classList.remove('hidden');
 	} else {
-		el.classList.remove('blueprint');
+		el.classList.remove('hidden');
 	}
 }
 function hide(el) {
 	if (typeof el === 'string') {
-		eID(el).classList.add('blueprint');
+		eID(el).classList.add('hidden');
 	} else {
-		el.classList.add('blueprint');
+		el.classList.add('hidden');
 	}
 }
 

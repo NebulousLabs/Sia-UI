@@ -25,13 +25,13 @@ addResultListener('status', function(result) {
 	eID('profit').innerHTML = profit + ' S earned';
 	eID('potentialprofit').innerHTML = potentialProfit + ' S to be earned';
 
-	// From hostProperties and blueprint, make properties
+	// From hostProperties and hidden, make properties
 	hostProperties.forEach(function(prop) {
 		if (eID(prop.name)) {
 			return;
 		}
 		var item = ePropBlueprint.cloneNode(true);
-		item.classList.remove('blueprint');
+		item.classList.remove('hidden');
 		item.querySelector('.name').textContent = prop.name + ' (' + prop.unit + ')';
 		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion).round().toString();
 		item.querySelector('.value').textContent = value;

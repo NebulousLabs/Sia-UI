@@ -14,7 +14,7 @@
 	display: inline-block;
 	float: right;
 }
-.controls .button.hidden {
+.controls .button.transparent {
 	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
 	opacity: 0;
 }

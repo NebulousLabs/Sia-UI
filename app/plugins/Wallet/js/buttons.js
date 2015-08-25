@@ -77,15 +77,20 @@ function verifyTransaction(callback) {
 
 // Button to send coin
 eID('send-money').onclick = function() {
-	verifyTransaction(function() {
-		eID('confirm').classList.remove('hidden');
+	verifyTransaction(this, function() {
+		tooltip('Are you sure?', eID('confirm'));
+		eID('confirm').classList.remove('transparent');
 	});
 };
 
 // Button to confirm transaction
 eID('confirm').onclick = function() {
-	tooltip('Sending...', this);
-	verifyTransaction(function(amount, address) {
+	// If the button's transparent, don't do anything
+	if (eID('confirm').classList.indexOf('transparent') === -1) {
+		return;
+	}
+	verifyTransaction(this, function(amount, address) {
+		tooltip('Sending...', this);
 		sendCoin(amount, address);
 	});
 };
@@ -94,14 +99,16 @@ eID('confirm').onclick = function() {
 addResultListener('coin-sent', function(result) {
 	notify('Transaction sent to network!', 'sent');
 	eID('transaction-amount').value = '';
-	eID('confirm').classList.add('hidden');
+	eID('confirm').classList.add('transparent');
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Capsule ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Lock or unlock the wallet
 eID('lock-pod').onclick = function() {
 	var state = eID('lock-status').innerHTML;
-	if (wallet.unlocked && state === 'Unlocked') {
+	if (!wallet.unlocked && state === 'Unencrypted') {
+		encrypt();
+	} else if (wallet.unlocked && state === 'Unlocked') {
 		lock();
 	} else if (!wallet.unlocked && state === 'Locked'){
 		show('request-password');
@@ -124,6 +131,5 @@ eID('enter-password').onclick = function() {
 // Make sure the user read the password
 eID('confirm-password').onclick = function() {
 	hide('show-password');
-	update();
 };
 

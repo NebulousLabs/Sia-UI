@@ -51,7 +51,8 @@ function Plugin(plugPath, name) {
 			button.classList.add('current');
 			view.executeJavaScript('if (typeof start === "function") start();');
 			setTimeout(function() {
-				view.style.display = '';
+				view.style.opacity = '1';
+				view.style.zIndex= '0';
 			}, 170);
 		},
 
@@ -63,7 +64,8 @@ function Plugin(plugPath, name) {
 			button.classList.remove('current');
 			view.executeJavaScript('if (typeof stop === "function") stop();');
 			setTimeout(function() {
-				view.style.display = 'none';
+				view.style.opacity = '0';
+				view.style.zIndex= '-5';
 			}, 170);
 		},
 

@@ -23,8 +23,14 @@ function startMainWindow() {
 	var size = ElectronScreen.getPrimaryDisplay().workAreaSize;
 
 	// Give tray/taskbar icon path
-	var iconPath = Path.join(__dirname, 'app', 'assets', 'logo', 'sia.png');
+	var iconPath = Path.join(__dirname, 'app', 'assets', 'logo', 'logo.png');
 	var appIcon = new Tray(iconPath);
+	var contextMenu = Menu.buildFromTemplate([
+		{ label: 'Minimize', accelerator: 'CmdOrCtrl+M', selector: 'performMiniaturize:' },
+		{ label: "Quit", accelerator: "CmdOrCtrl+Q", selector:'terminate:', click: function() { app.quit();}},
+		{ type: 'separator' },
+		{ label: 'Bring All to Front', selector: 'arrangeInFront:' }
+	]);
 	appIcon.setToolTip('A highly efficient decentralized storage network.');
 
 	// Create the browser
@@ -34,9 +40,7 @@ function startMainWindow() {
 		'icon': iconPath,
 		'title': 'Sia-UI'
 	});
-	// Choose not to show the menubar
-	mainWindow.setMenuBarVisibility(false);
-	
+
 	// Load the index.html of the app.
 	mainWindow.loadUrl('file://' + __dirname + '/app/index.html');
 
@@ -46,34 +50,33 @@ function startMainWindow() {
 		mainWindow = null;
 	});
 
-	// Create the Application's main menu - enables copy-paste on Mac.
-    var template = [{
-        label: "Application",
-        submenu: [
-            { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
-            { type: "separator" },
-            { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
-        ]}, {
-        label: "Edit",
-        submenu: [
-            { label: "Undo", accelerator: "Command+Z", selector: "undo:" },
-            { label: "Redo", accelerator: "Shift+Command+Z", selector: "redo:" },
-            { type: "separator" },
-            { label: "Cut", accelerator: "Command+X", selector: "cut:" },
-            { label: "Copy", accelerator: "Command+C", selector: "copy:" },
-            { label: "Paste", accelerator: "Command+V", selector: "paste:" },
-            { label: "Select All", accelerator: "Command+A", selector: "selectAll:" }
-        ]}
-    ];
-    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+	// Choose not to show the menubar
+	if (process.platform !== 'darwin') {
+		mainWindow.setMenuBarVisibility(false);
+	} else {
+		// Create the Application's main menu - enables copy-paste on Mac.
+		var appMenu = Menu.buildFromTemplate([
+			{
+				label: "Edit",
+				submenu: [
+					{ label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+					{ label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+					{ type: "separator" },
+					{ label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+					{ label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+					{ label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+					{ label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+				]
+			}
+		]);
+		Menu.setApplicationMenu(appMenu);
+	}
 }
 
 
 // Quit when all windows are closed.
 App.on('window-all-closed', function() {
-	if (process.platform !== 'darwin') {
-		App.quit();
-	}
+	App.quit();
 });
 
 // When Electron loading has finished, start the daemon then the UI

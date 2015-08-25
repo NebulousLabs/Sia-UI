@@ -78,8 +78,7 @@ html,body {
 	position: relative;
 
 	background-color: #FFFFFF;
-	max-width: 240px;
-	min-width: 160px;
+	width: 160px;
 	z-index: 1000;
 	height: 100%;
 
@@ -143,10 +142,15 @@ html,body {
 	height: 100%;
 	background-color: #ffffff;
 }
-
 #mainbar.transition {
 	transition: all .25s;
 	opacity: 0;
+}
+#mainbar .webview {
+	position: absolute;
+	height: 100%;
+	min-width: calc(100% - 160px);
+	right: 0px;
 }
 
 /* Tooltip Bubble */
