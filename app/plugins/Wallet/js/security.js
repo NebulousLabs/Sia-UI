@@ -1,19 +1,22 @@
 'use strict';
 
+// Helper function for the lock-icon to make sure its classes are cleared
+function clearLockIcon() {
+	eID('lock-icon').className = 'fa';
+}
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Unlocking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Markup changes to reflect unlocked state
 function setUnlocked() {
+	clearLockIcon();
 	eID('lock-status').innerHTML = 'Unlocked';
-	eID('lock-icon').classList.remove('fa-cog');
-	eID('lock-icon').classList.remove('fa-spin');
 	eID('lock-icon').classList.add('fa-unlock');
 }
 
 // Markup changes to reflect unlocked state
 function setUnlocking() {
+	clearLockIcon();
 	eID('lock-status').innerHTML = 'Unlocking';
-	eID('lock-icon').classList.remove('fa-lock');
-	eID('lock-icon').classList.remove('fa-times');
 	eID('lock-icon').classList.add('fa-cog');
 	eID('lock-icon').classList.add('fa-spin');
 }
@@ -49,9 +52,8 @@ IPC.on('unlocked', function(err, result) {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Locking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Markup changes to reflect locked state
 function setLocked() {
+	clearLockIcon();
 	eID('lock-status').innerHTML = 'Locked';
-	eID('lock-icon').classList.remove('fa-unlock');
-	eID('lock-icon').classList.remove('fa-times');
 	eID('lock-icon').classList.add('fa-lock');
 }
 
@@ -74,9 +76,8 @@ addResultListener('locked', function(result) {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Encrypting ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // setUnencrypted sets the wallet lock status to encrypted.
 function setUnencrypted() {
+	clearLockIcon();
 	eID('lock-status').innerHTML = 'Unencrypted';
-	eID('lock-icon').classList.remove('fa-lock');
-	eID('lock-icon').classList.remove('fa-unlock');
 	eID('lock-icon').classList.add('fa-times');
 }
 

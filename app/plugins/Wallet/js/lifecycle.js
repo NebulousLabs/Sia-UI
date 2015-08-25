@@ -18,7 +18,6 @@ addResultListener('on-opened', function(result) {
 	// a pw.
 	if (!wallet.encrypted) {
 		setUnencrypted();
-		encrypt();
    	} else if (!wallet.unlocked) {
 		setLocked();
 	} else if (wallet.unlocked) {
