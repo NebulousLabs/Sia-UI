@@ -76,7 +76,7 @@ input:focus {
 	box-shadow: 0 0 5px 1px #c5c5c5;
 }
 
-/* Old UI Css */
+/* Old UI CSS */
 .capsule .income-rate {
 	width: 120px;
 	text-align: right;
@@ -159,32 +159,46 @@ input:focus {
 	opacity: .5;
 }
 
-/* Add file window */
+/* Sliding animation for add-file fram */
+.slider {
+	position: absolute;
+	top: 92px;
+	overflow-y: hidden;
+	max-height: 100%; /* approximate max height */
 
-#upload-file .capsule .pod {
+	transition-property: all;
+	transition-duration: .5s;
+	transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+.slider.closed {
+	max-height: 0;
+}
+
+/* Add file window */
+#add-file .capsule .pod {
   vertical-align: top;
   padding: 0;
 }
-#upload-file .file-upload-container {
+#add-file .file-upload-container {
   display: inline-block;
   position: relative;
   width: 150px;
   height: 40px;
   overflow: hidden;
 }
-#upload-file .pod:hover .file-upload-container,
-#upload-file ::-webkit-file-upload-button {
+#add-file .pod:hover .file-upload-container,
+#add-file ::-webkit-file-upload-button {
   cursor: pointer;
 }
-#upload-file .file-upload-label {
+#add-file .file-upload-label {
   width: 150px;
   height: 40px;
   text-align: center;
 }
-#upload-file .file-upload-label i {
+#add-file .file-upload-label i {
   margin-right: 8px;
 }
-#upload-file #fileupload {
+#add-file #fileupload {
   position: absolute;
   top: 0;
   left: 0;
@@ -195,7 +209,7 @@ input:focus {
   opacity: 0;
   filter: alpha(opacity=0);
 }
-#upload-file .file-upload-filename {
+#add-file .file-add-filename {
   display: inline-block;
   vertical-align: top;
   margin-top: 2px;
@@ -205,31 +219,31 @@ input:focus {
   margin-left: 16px;
   margin-right: 24px;
 }
-#upload-file .description-field {
+#add-file .description-field {
   padding: 10px;
   border-radius: 4px;
 }
-#upload-file .step {
+#add-file .step {
   background-color: #757575;
   text-align: right;
   height: 33.333%;
   border-bottom: 4px solid #fff;
 }
-#upload-file .step .step-text {
+#add-file .step .step-text {
   float: left;
   font-size: 32px;
   color: #fff;
 }
-#upload-file .step .capsule {
+#add-file .step .capsule {
   background-color: #fff;
 }
-#upload-file .button.upload {
+#add-file .button.upload {
   font-size: 24px;
   padding: 20px;
   color: #eeeeee;
   margin-top: -10px;
 }
-#upload-file .button.upload:hover {
+#add-file .button.upload:hover {
   background-color: rgba(0, 0, 0, 0.25);
 }
 
