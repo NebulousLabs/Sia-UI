@@ -7,6 +7,27 @@
 		<link rel='stylesheet' href='../../css/pure-min.css'>
 		<link rel='stylesheet' href='../../css/plugin-standard.css'>
 		<link rel='stylesheet' href='css/files.css'>
+
+		<!-- Blueprint -->
+		<div class='file hidden' id='filebp'>
+			<div class='graphic'>
+				<i class='fa fa-file'></i>
+			</div>
+			<div class='available'>
+				<div class='yes'>
+					<i class='fa fa-check'></i>
+				</div>
+				<div class='no'>
+					<i class='fa fa-refresh fa-spin'></i>
+				</div>
+			</div>
+			<div class='name'></div>
+			<div class='size'></div>
+			<div class='time'></div>
+			<div class='download'>Download</div>
+			<div class='share'>Share</div>
+			<div class='delete'>Delete</div>
+		</div>
 	</head>
 	<body>
 		<!-- Header -->
@@ -23,9 +44,9 @@
 			<div class='cloud-control'>
 				<div class='pure-g'>
 					<div class='pure-u-1-2'>
-						<div class='button' id='add-file'>
-							<i class='fa fa-upload'></i>
-							Add File
+						<div class='button' id='new-file'>
+							<i class='fa fa-plus'></i>
+							New File
 						</div>
 					</div>
 					<div class='pure-u-1-2'>
@@ -37,28 +58,9 @@
 				</div>
 			</div>
 			<div id='file-browser'>
-				<div class='file hidden' id='filebp'>
-					<div class='graphic'>
-						<i class='fa fa-file'></i>
-					</div>
-					<div class='available'>
-						<div class='yes'>
-							<i class='fa fa-check'></i>
-						</div>
-						<div class='no'>
-							<i class='fa fa-refresh fa-spin'></i>
-						</div>
-					</div>
-					<div class='name'></div>
-					<div class='size'></div>
-					<div class='time'></div>
-					<div class='download'>Download</div>
-					<div class='share'>Share</div>
-					<div class='delete'>Delete</div>
-				</div>
 			</div>
 		</div>
-		<div class='frame hidden' id='upload-file'>
+		<div class='frame hidden' id='add-file'>
 			<div class='step' id='step1'>
 				<div class='step-text'>Select a file</div>
 				<div class='capsule'>

@@ -1,20 +1,15 @@
 'use strict';
 
 // TODO: Oust jquery, import in index.html, make it work
-eID('upload-file').onclick = function(e) {
-	ui.switchView("upload-file");
+eID('new-file').onclick = function(e) {
+	// TODO: Slide in add-file frame
 });
 eID('search-bar').keydown(function(e) {
-	if (e.keyCode == 13) {
-		e.preventDefault();
-	}
+	// TODO: figure out search bar to work on enter key
 	updateFileList(lastLoadedFiles);
 });
 eID('search').onclick = function(e) {
-	eSearch.focus();
+	// TODO: figure out search bar to work on enter key
 	updateFileList(lastLoadedFiles);
 });
-eID('add-ascii').onclick = function(e) {
-	ui.switchView("add-ascii");
-});
-
+// TODO: Add button responses for add-file frame
