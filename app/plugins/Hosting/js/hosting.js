@@ -93,6 +93,6 @@ eID('reset').onclick = function() {
 		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion).round().toString();
 		item.querySelector('.value').textContent = value;
 	});
-	notify('Hosting configuration reset', 'success');
+	notify('Hosting configuration reset', 'reset');
 };
 

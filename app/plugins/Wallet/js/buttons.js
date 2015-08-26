@@ -25,7 +25,7 @@ function appendAddress(address) {
 
 // Add the new address
 addResultListener('new-address', function(result) {
-	notify('Address created!', 'success');
+	notify('Address created!', 'created');
 	appendAddress(result.address);
 });
 

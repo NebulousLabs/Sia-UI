@@ -36,11 +36,13 @@ function UIManager() {
 		started: 'hourglass-start',
 		finished: 'hourglass-end',
 		sent: 'send',
+		created: 'plus',
 		start: 'play',
 		stop: 'stop',
 		download: 'arrow-circle-down',
 		announced: 'bullhorn',
 		saved: 'floppy-o',
+		reset: 'refresh',
 		success: 'check'
 	};
 
