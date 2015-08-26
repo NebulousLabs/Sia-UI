@@ -1,9 +1,11 @@
 'use strict';
 
 // TODO: Oust jquery, import in index.html, make it work
-eID('new-file').onclick = function(e) {
-	// TODO: Slide in add-file frame
+eID('new-file').onclick = function() {
 	eID('add-file').classList.remove('closed');
+};
+eID('back').onclick = function() {
+	eID('add-file').classList.add('closed');
 };
 /*
 eID('search-bar').keydown(function(e) {

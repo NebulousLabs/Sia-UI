@@ -161,10 +161,10 @@ input:focus {
 
 /* Sliding animation for add-file fram */
 .slider {
-	position: absolute;
-	top: 0px;
+	position: relative;
+	top: -100%;
 	overflow-y: hidden;
-	height: 100%; /* approximate max height */
+	height: 100%;
 
 	transition-property: all;
 	transition-duration: .5s;
