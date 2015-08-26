@@ -78,9 +78,13 @@ function update() {
 	
 	updating = setTimeout(update, 15000);
 }
+
+// On receiving api call result for file list
 addResultListener('update-list', function(result) {
 	result.forEach(updateFile);
 });
+
+// Update capsule values with renter status
 addResultListener('update-status', function(result) {
 	var priceDisplay = convertSiacoin(result.Price).toFixed(3) + ' S Per GB (Estimated)';
 	eID('price').innerHTML = priceDisplay;

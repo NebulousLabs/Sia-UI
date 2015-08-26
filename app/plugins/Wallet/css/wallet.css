@@ -104,12 +104,10 @@ select:hover {
 /* Box List */
 .box {
 	height: 50%;
-	padding-bottom: 32px;
 }
 .list {
 	height: calc(100% - 108px);
 	padding: 16px;
-	padding-left: 24px;
 	overflow:auto;
 }
 .entry {

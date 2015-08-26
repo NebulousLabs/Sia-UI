@@ -212,10 +212,7 @@ input:focus {
 #upload-file .step {
   background-color: #757575;
   text-align: right;
-  height: 120px;
-  padding-top: 32px;
-  padding-left: 32px;
-  padding-right: 32px;
+  height: 33.333%;
   border-bottom: 4px solid #fff;
 }
 #upload-file .step .step-text {
