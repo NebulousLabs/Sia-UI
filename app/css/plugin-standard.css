@@ -81,7 +81,7 @@ html, body {
 
 /* Main Display */
 .frame {
-	height: calc(100% - 92px);
+	height: 100%;
 	overflow: hidden;
 	color: #c5c5c5;
 	font-size: 32px;

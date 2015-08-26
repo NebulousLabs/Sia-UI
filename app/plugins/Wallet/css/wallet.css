@@ -103,7 +103,7 @@ select:hover {
 
 /* Box List */
 .box {
-	height: 50%;
+	height: calc(50% - 46px);
 }
 .list {
 	height: calc(100% - 108px);
