@@ -162,9 +162,9 @@ input:focus {
 /* Sliding animation for add-file fram */
 .slider {
 	position: absolute;
-	top: 92px;
+	top: 0px;
 	overflow-y: hidden;
-	max-height: 100%; /* approximate max height */
+	height: 100%; /* approximate max height */
 
 	transition-property: all;
 	transition-duration: .5s;
@@ -175,75 +175,72 @@ input:focus {
 }
 
 /* Add file window */
-#add-file .capsule .pod {
-  vertical-align: top;
-  padding: 0;
+.file-upload-container {
+	display: inline-block;
+	position: relative;
+	width: 150px;
+	height: 40px;
+	overflow: hidden;
 }
-#add-file .file-upload-container {
-  display: inline-block;
-  position: relative;
-  width: 150px;
-  height: 40px;
-  overflow: hidden;
+.pod:hover .file-upload-container,
+::-webkit-file-upload-button {
+	cursor: pointer;
 }
-#add-file .pod:hover .file-upload-container,
-#add-file ::-webkit-file-upload-button {
-  cursor: pointer;
+.file-upload-label {
+	width: 150px;
+	height: 40px;
+	text-align: center;
 }
-#add-file .file-upload-label {
-  width: 150px;
-  height: 40px;
-  text-align: center;
+.file-upload-label i {
+	margin-right: 8px;
 }
-#add-file .file-upload-label i {
-  margin-right: 8px;
+#fileupload {
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	font-size: 60px;
+	cursor: pointer;
+	opacity: 0;
+	filter: alpha(opacity=0);
 }
-#add-file #fileupload {
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin: 0;
-  padding: 0;
-  font-size: 60px;
-  cursor: pointer;
-  opacity: 0;
-  filter: alpha(opacity=0);
+.file-add-filename {
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 2px;
+	height: 40px;
+	color: #333;
+	line-height: 40px;
+	margin-left: 16px;
+	margin-right: 24px;
 }
-#add-file .file-add-filename {
-  display: inline-block;
-  vertical-align: top;
-  margin-top: 2px;
-  height: 40px;
-  color: #333;
-  line-height: 40px;
-  margin-left: 16px;
-  margin-right: 24px;
+.description-field {
+	padding: 10px;
+	border-radius: 4px;
 }
-#add-file .description-field {
-  padding: 10px;
-  border-radius: 4px;
+.step {
+	background-color: #f5f5f5;
+	text-align: center;
+	height: 33.333%;
+	border-bottom: solid 4px #fff;
 }
-#add-file .step {
-  background-color: #757575;
-  text-align: right;
-  height: 33.333%;
-  border-bottom: 4px solid #fff;
+.step .button {
+	font-size: 32px;
+    -webkit-box-sizing: border-box;
+	border: solid 4px #ffffff;
+	color: #c5c5c5;
 }
-#add-file .step .step-text {
-  float: left;
-  font-size: 32px;
-  color: #fff;
+.step .capsule {
+	background-color: #fff;
 }
-#add-file .step .capsule {
-  background-color: #fff;
+.button.upload {
+	font-size: 24px;
+	padding: 20px;
+	color: #eeeeee;
+	margin-top: -10px;
 }
-#add-file .button.upload {
-  font-size: 24px;
-  padding: 20px;
-  color: #eeeeee;
-  margin-top: -10px;
-}
-#add-file .button.upload:hover {
-  background-color: rgba(0, 0, 0, 0.25);
+.button.upload:hover {
+	background-color: rgba(0, 0, 0, 0.25);
 }
 
