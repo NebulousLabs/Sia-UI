@@ -88,13 +88,13 @@ MainIPC.on('dialog', function(event, type, options) {
 	var response;
 	switch (type) {
 		case 'open':
-			response = Dialog.showOpenDialog(mainWindow, options, callback)
+			response = Dialog.showOpenDialog(mainWindow, options)
 			break;
 		case 'save':
-			response = Dialog.showSaveDialog(mainWindow, options, callback)
+			response = Dialog.showSaveDialog(mainWindow, options)
 			break;
 		case 'message':
-			response = Dialog.showMessageBox(mainWindow, options, callback)
+			response = Dialog.showMessageBox(mainWindow, options)
 			break;
 		case 'error':
 			Dialog.showErrorBox(options.title, options.content)
