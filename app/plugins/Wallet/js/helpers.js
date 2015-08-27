@@ -40,9 +40,9 @@ function hide(el) {
 function convertSiacoin(hastings) {
 	// TODO: JS automatically loses precision when taking numbers from the API.
 	// This deals with that imperfectly
-	var number = new BigNumber(Math.round(hastings).toString());
+	var number = new BigNumber(hastings);
 	var ConversionFactor = new BigNumber(10).pow(24);
-	return number.dividedBy(ConversionFactor).round();
+	return number.dividedBy(ConversionFactor);
 }
 
 // Amount has to be a number
