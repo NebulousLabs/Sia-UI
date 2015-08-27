@@ -37,10 +37,6 @@
 	display: inline-block;
 	float: right;
 }
-.button:hover {
-	color: #4a4a4a;
-	cursor: pointer;
-}
 .transparent {
 	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
 	opacity: 0;
@@ -165,13 +161,6 @@ input:focus {
 	top: -100%;
 	overflow-y: hidden;
 	height: 100%;
-
-	transition-property: all;
-	transition-duration: .5s;
-	transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-}
-.slider.closed {
-	max-height: 0;
 }
 
 /* Add file window */
@@ -240,9 +229,11 @@ input:focus {
 	color: #eeeeee;
 	margin-top: -10px;
 }
-.button:hover {
-	color:#4a4a4a
-}
 .button.upload:hover {
 	background-color: rgba(0, 0, 0, 0.25);
+}
+.button:hover {
+	top 50%;
+	color: #4a4a4a;
+	cursor: pointer;
 }

@@ -48,15 +48,27 @@ function share(nickname) {
 addResultListener('shared', function(result) {
 });
 
-function addascii(asciiText) {
+function loadDotSia(filePath) {
+	IPC.sendToHost('api-call', {
+		url: '/renter/files/load',
+		args: {
+			filename: filePath
+		}
+	}, 'file-loaded');
+}
+addResultListener('file-loaded', function(result) {
+	show('add-sia-file');
+});
+
+function loadAscii(asciiText) {
 	IPC.sendToHost('api-call', {
 		url: '/renter/files/loadascii',
 		args: {
 			file: asciiText
 		}
-	}, 'ascii-added');
+	}, 'ascii-loaded');
 }
-addResultListener('ascii-added', function(result) {
+addResultListener('ascii-loaded', function(result) {
 });
 
 function deleteFile(nickname) {

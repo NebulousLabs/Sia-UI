@@ -16,19 +16,20 @@ var updating;
 function eID() {
 	return document.getElementById.apply(document, [].slice.call(arguments));
 }
-function show(el) {
+function toElement(el) {
 	if (typeof el === 'string') {
-		eID(el).classList.remove('hidden');
-	} else {
-		el.classList.remove('hidden');
+		return eID(el);
 	}
+	return el;
+}
+function show(el) {
+	toElement(el).classList.remove('hidden');
 }
 function hide(el) {
-	if (typeof el === 'string') {
-		eID(el).classList.add('hidden');
-	} else {
-		el.classList.add('hidden');
-	}
+	toElement(el).classList.add('hidden');
+}
+function hidden(el) {
+	return toElement(el).classList.contains('hidden');
 }
 
 // Convert to Siacoin
