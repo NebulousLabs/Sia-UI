@@ -1,20 +1,25 @@
 'use strict';
 
 // TODO: Get sliding frame in to work
+function hideFileAdder() {
+	hide('add-file');
+	show('file-library');
+};
+
 eID('new-file').onclick = function() {
 	show('add-file');
+	hide('file-library');
 };
-eID('back').onclick = function() {
-	hide('add-file');
-};
+eID('back').onclick = hideFileAdder;
 
 // Used to hide subsequent steps when selecting and earlier one
 function hideSteps(number) {
-	eID('step' + number).children.forEach(function(next) {
-		if(!hidden(next) {
-			hide(next);
+	var c = eID('step' + number).children;
+	for (var i = 0; i < c.length; i++) {
+		if(!hidden(c[i])) {
+			hide(c[i]);
 		}
-	});
+	};
 }
 
 // Upload file option chosen
@@ -28,6 +33,7 @@ eID('upload-choice').onclick = function() {
 	});
 	if (loadPath) {
 		show('nickname-file');
+		show('upload-file');
 	}
 };
 // Sia file option chosen
@@ -43,7 +49,8 @@ eID('sia-choice').onclick = function() {
 		properties: ['openFile'],
 	});
 	if (loadPath) {
-		loadDotSia(loadPath);
+		show('sia-file');
+		show('add-sia-file');
 	}
 };
 // Ascii file option chosen
@@ -52,6 +59,7 @@ eID('ascii-choice').onclick = function() {
 	hideSteps(3);
 
 	show('paste-ascii');
+	show('add-ascii-file');
 };
 /*
 eID('search-bar').keydown(function(e) {
@@ -63,4 +71,3 @@ eID('search').onclick = function(e) {
 	updateFileList(lastLoadedFiles);
 };
 */
-// TODO: Add button responses for add-file frame

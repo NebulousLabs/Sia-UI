@@ -31,7 +31,7 @@
 	</head>
 	<body>
 		<!-- Frame -->
-		<div class='frame'>
+		<div class='frame' id='file-library'>
 			<!-- Header -->
 			<div class='header'>
 				<div class='title'>Files</div>
@@ -62,7 +62,7 @@
 			</div>
 		</div>
 		<!-- Sliding New File Frame -->
-		<div class='slider hidden' id='add-file'>
+		<div class='frame hidden' id='add-file'>
 			<div class='header'>
 				<div class='button' id='back'>
 					<i class='fa fa-chevron-left'></i>
@@ -73,41 +73,45 @@
 			</div>
 
 			<div class='pure-g step' id='step1'>
-				<div class='pure-u-1-3 button step1' id='upload-choice'>
+				<div class='pure-u-1-3 button' id='upload-choice'>
 					<i class='fa fa-upload'></i>
 					<p>Upload file</p>
 				</div>
-				<div class='pure-u-1-3 button step1' id='sia-choice'>
+				<div class='pure-u-1-3 button' id='sia-choice'>
 					<i class='fa fa-file-o'></i>
 					<p>.Sia file</p>
 				</div>
-				<div class='pure-u-1-3 button step1' id='ascii-choice'>
+				<div class='pure-u-1-3 button' id='ascii-choice'>
 					<i class='fa fa-clipboard'></i>
 					<p>Ascii file</p>
 				</div>
 			</div>
 
 			<div class='pure-g step' id='step2'>
-				<div class='hidden step2' id='nickname-file'>
+				<div class='pure-u-1-1 hidden' id='nickname-file'>
 					<p>Give It A Name</p>
 					<input class='description-field' placeholder='File Nickname'>
 				</div>
-				<div class='hidden button step2' id='add-sia-file'>
-					<i class='fa fa-check'></i>
-					<p>Add .Sia to Sia</p>
+				<div class='pure-u-1-1 hidden' id='sia-file'>
+					<p>.Sia file</p>
+					<div class='description-field' id='sia-file'></div>
 				</div>
-				<div class='hidden step2' id='paste-ascii'>
+				<div class='pure-u-1-1 hidden' id='paste-ascii'>
 					<p>Paste Your Ascii</p>
-					<input class='description-field' placeholder='Ascii Nickname'>
+					<input class='description-field' placeholder='Ascii File'>
 				</div>
 			</div>
 
 			<div class='pure-g step' id='step3'>
-				<div class='hidden button step3' id='upload-file'>
+				<div class='pure-u-1-1 hidden button' id='upload-file'>
 					<p>Upload to Sia</p>
 					<div class='upload'>Upload</div>
 				</div>
-				<div class='hidden button step3' id='add-ascii-file'>
+				<div class='pure-u-1-1 hidden button' id='add-sia-file'>
+					<i class='fa fa-check'></i>
+					<p>Add .Sia to Sia</p>
+				</div>
+				<div class='pure-u-1-1 hidden button' id='add-ascii-file'>
 					<i class='fa fa-plus'></i>
 					<p>Add File To Library</p>
 				</div>

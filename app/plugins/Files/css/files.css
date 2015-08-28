@@ -155,14 +155,6 @@ input:focus {
 	opacity: .5;
 }
 
-/* Sliding animation for add-file fram */
-.slider {
-	position: relative;
-	top: -100%;
-	overflow-y: hidden;
-	height: 100%;
-}
-
 /* Add file window */
 .file-upload-container {
 	display: inline-block;
@@ -219,6 +211,9 @@ input:focus {
     -webkit-box-sizing: border-box;
 	border: solid 4px #ffffff;
 	color: #c5c5c5;
+}
+#add-sia-file {
+	height: 66.667%;
 }
 .step .capsule {
 	background-color: #fff;

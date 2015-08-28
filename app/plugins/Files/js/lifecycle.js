@@ -33,18 +33,10 @@ function updateFile(file) {
 		field('.time').innerHTML = file.TimeRemaining + ' Blocks Remaining';
 	}
 
-	// Set repairing graphic
-	if (file.Repairing) {
-		field('.graphic i').classList.remove('fa-file');
-		field('.graphic i').classList.add('fa-wrench');
-	} else {
-		field('.graphic i').classList.remove('fa-wrench');
-		field('.graphic i').classList.add('fa-file');
-	}
+	// Set graphic
+	field('.graphic i').classList.add('fa-file');
 
 	// Set availability graphic
-	// TODO: Does this and the Repairing graphic have to be separate? 
-	// Would a file ever be available while it is being repaired?
 	if (file.Available) {
 		show(field('.yes'));
 		hide(field('.no'));
