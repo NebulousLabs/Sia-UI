@@ -15,7 +15,7 @@ function download(nickname) {
 		type: 'GET',
 		args: {
 			nickname: nickname,
-			destination: savePath
+			destination: savePath,
 		},
 	}, 'downloaded');
 }
@@ -53,7 +53,7 @@ function loadDotSia(filePath) {
 	IPC.sendToHost('api-call', {
 		url: '/renter/files/load',
 		args: {
-			filename: filePath
+			filename: filePath,
 		}
 	}, 'file-loaded');
 	notify('Adding ' + nameFromPath(filePath) + ' to file library', 'siafile');
@@ -66,7 +66,7 @@ function loadAscii(ascii) {
 	IPC.sendToHost('api-call', {
 		url: '/renter/files/loadascii',
 		args: {
-			file: ascii
+			file: ascii,
 		}
 	}, 'ascii-loaded');
 	notify('Adding file to library', 'asciifile');
@@ -80,7 +80,7 @@ function deleteFile(nickname) {
 	IPC.sendToHost('api-call', {
 		url: '/renter/files/delete',
 		args: {
-			nickname: nickname
+			nickname: nickname,
 		}
 	}, 'deleted');
 }
