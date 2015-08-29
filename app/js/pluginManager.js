@@ -29,7 +29,7 @@ function PluginManager() {
 	 * Array to store all plugins
 	 * @member {Plugin[]} PluginManager~plugins
 	 */
-	var plugins = [];
+	var plugins = {};
 
 	/**
 	 * Detects the home Plugin or otherwise the alphabetically first
@@ -67,14 +67,15 @@ function PluginManager() {
 	function addListeners(plugin) {
 		// Only show the default plugin view
 		if (plugin.name === home) {
-			plugin.on('did-finish-load', plugin.show);
+			plugin.on('dom-ready', plugin.show);
 			current = plugin;
 		}
 
 		/** 
 		 * Standard transition upon button click.
 		 * @typedef transition
-		 * @todo Add smoother transitions
+		 * TODO: Can sometime have two 'current' buttons when selecting a
+		 * sidebar button too quickly
 		 */
 		plugin.transition(function() {
 			// Don't do anything if already on this plugin
@@ -103,25 +104,26 @@ function PluginManager() {
 					var call = event.args[0];
 					var responseChannel = event.args[1];
 					// Send the call only if the Daemon appears to be running
-					if (Daemon.Running) {
-						Daemon.apiCall(call, function(err, result) {
-							if (err) {
-								// If a call didn't work, test that the
-								// `/consensus` call still works
-								console.error(err, call);
-								Daemon.ifSiad(function() {
-									// Send error response back to the plugin
-									plugin.sendToView(responseChannel, err, result);
-								}, function() {
-									// `/consensus` call failed too, assume
-									// siad has stopped
-									UI.notify('siad seems to have stopped working!', 'stop');
-								});
-							} else if (responseChannel) {
-								plugin.sendToView(responseChannel, err, result);
-							}
-						});
+					if (!Daemon.Running) {
+						return;
 					}
+					Daemon.apiCall(call, function(err, result) {
+						if (err) {
+							// If a call didn't work, test that the
+							// `/consensus` call still works
+							console.error(err, call);
+							Daemon.ifSiad(function() {
+								// Send error response back to the plugin
+								plugin.sendToView(responseChannel, err, result);
+							}, function() {
+								// `/consensus` call failed too, assume siad
+								// has stopped
+								UI.notify('siad seems to have stopped working!', 'stop');
+							});
+						} else if (responseChannel) {
+							plugin.sendToView(responseChannel, err, result);
+						}
+					});
 					break;
 				case 'notify':
 					// Use UI notification system
@@ -132,6 +134,10 @@ function PluginManager() {
 					event.args[1].top += $('.header').height();
 					event.args[1].left += $('#sidebar').width();
 					UI.tooltip.apply(null, event.args);
+					break;
+				case 'dialog':
+					// Send dialog's response back to the plugin
+					plugin.sendToView('dialog', IPC.sendSync('dialog', event.args));
 					break;
 				case 'devtools':
 					// Plugin called for its own devtools, toggle it
@@ -144,8 +150,9 @@ function PluginManager() {
 
 		// Display any console logs from the plugin
 		plugin.on('console-message', function(event) {
-			console.log(plugin.name + ' plugin logged> ' + event.message);
-		});	
+			var srcFile = event.sourceId.replace(/^.*[\\\/]/, '');
+			console.log(plugin.name + ' plugin logged from ' + srcFile +'(' + event.line + '): ' + event.message);
+		});
 	}
 
 	/**
@@ -161,7 +168,7 @@ function PluginManager() {
 		addListeners(plugin);
 
 		// Store the plugin
-		plugins.push(plugin);
+		plugins[name] = plugin;
 	}
 
 	/**

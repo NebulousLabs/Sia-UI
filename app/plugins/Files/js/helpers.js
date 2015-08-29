@@ -1,6 +1,5 @@
 'use strict';
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Global Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Library for communicating with Sia-UI
 const IPC = require('ipc');
 // Library for arbitrary precision in numbers
@@ -9,39 +8,42 @@ const BigNumber = require('bignumber.js');
 BigNumber.config({ DECIMAL_PLACES: 24 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 // Variable to store api result values
-var hosting;
+var renting = {};
 // Keeps track of if the view is shown
 var updating;
-// Host properties array
-var hostProperties = [
-	{
-		'name': 'TotalStorage',
-		'unit': 'GB',
-		// GB is 1e9 Bytes
-		'conversion': new BigNumber('1e+9'),
-	},{
-		'name': 'MaxFilesize',
-		'unit': 'MB',
-		// MB is 1e6 Bytes
-		'conversion': new BigNumber('1e+6'),
-	},{
-		'name': 'MaxDuration',
-		'unit': 'Days',
-		// 144 is the number of blocks in a day
-		'conversion': new BigNumber(144),
-	},{
-		'name': 'Price',
-		'unit': 'S Per GB Per Month',
-		// Siacoin (1e24) / GB (1e9) / blocks in a 30-day month (4320)
-		//'conversion': new BigNumber('1e+12').div('4'),
-		'conversion': new BigNumber('1e+24').div('1e+9').div(4320),
-	},
-];
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Helper Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// DOM shortcut
+// DOM shortcuts
 function eID() {
 	return document.getElementById.apply(document, [].slice.call(arguments));
+}
+function toElement(el) {
+	if (typeof el === 'string') {
+		return eID(el);
+	}
+	return el;
+}
+function show(el) {
+	toElement(el).classList.remove('hidden');
+}
+function hide(el) {
+	toElement(el).classList.add('hidden');
+}
+function hidden(el) {
+	return toElement(el).classList.contains('hidden');
+}
+function nameFromPath(path) {
+	console.log(path);
+	return path.replace(/^.*[\\\/]/, '');
+}
+
+// Convert to Siacoin
+// TODO: Enable commas for large numbers
+function convertSiacoin(hastings) {
+	// TODO: JS automatically loses precision when taking numbers from the API.
+	// This deals with that imperfectly
+	var number = new BigNumber(Math.round(hastings).toString());
+	var ConversionFactor = new BigNumber(10).pow(24);
+	return number.dividedBy(ConversionFactor).round();
 }
 
 // Notification shortcut 
@@ -75,19 +77,9 @@ function addResultListener(channel, callback) {
 	});
 }
 
-// Convert to Siacoin
-// TODO: Enable commas for large numbers
-function convertSiacoin(hastings) {
-	// TODO: JS automatically loses precision when taking numbers from the API.
-	// This deals with that imperfectly
-	var number = new BigNumber(Math.round(hastings).toString());
-	var ConversionFactor = new BigNumber(10).pow(24);
-	return number.dividedBy(ConversionFactor).round();
-}
-
 // Controls data size representation
 function formatBytes(bytes) {
-	if (bytes === 0) {
+	if (!bytes) {
 		return '0B';
 	}
 	var k = 1000;

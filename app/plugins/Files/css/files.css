@@ -1,0 +1,234 @@
+/*	Style Guide: 
+ *		Transparent: 70% Opacity
+ *
+ * 		White:      #FFFFFF
+ * 		Grey-White: #F5F5F5
+ *		Faint-Grey: #ECECEC
+ *		Light-Grey: #DDDDDD
+ *		Grey:       #C5C5C5
+ * 		Grey-Black: #4A4A4A
+ * 		Black:      #000000
+ */
+
+/* Information Box */
+.row {
+	background:#f5f5f5;
+	min-width: 1000px;
+	display: block;
+	padding-top: 18px;
+	padding-bottom: 18px;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+.box .title {
+	display: inline-block;
+	font-size: 36px;
+	margin-bottom: 4px;
+}
+.button {
+	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+	display: inline-block;
+	font-size: 24px;
+	padding: 12px;
+}
+
+/* Controls */
+.controls {
+	display: inline-block;
+	float: right;
+}
+.transparent {
+	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
+	opacity: 0;
+	cursor: none;
+}
+.search {
+	display: block;
+	font-size: 24px;
+	margin: 4px;
+	margin-right: 20px;
+}
+.search i {
+	position: absolute;
+	float: right;
+	top: 104px;
+	right: 20px;
+}
+input {
+	width: 100%;
+	display: inline-block;
+	margin: 0;
+	font-family: sans-serif;
+	appearance: none;
+	box-shadow: none;
+	border-radius: 4px;
+	color:#4a4a4a;
+
+	transition: box-shadow 0.3s, border 0.3s;
+}
+input:focus {
+	outline: none;
+	border: solid 1px #4a4a4a;
+	box-shadow: 0 0 5px 1px #c5c5c5;
+}
+
+/* Old UI CSS */
+.capsule .income-rate {
+	width: 120px;
+	text-align: right;
+	padding-left: 0px;
+}
+.cloud-control {
+	color: #9e9e9e;
+	padding-left: 4px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+/* File browser and list */
+#file-browser {
+	background-color: #fafafa;
+	height: 100%;
+	overflow-y: auto;
+}
+#file-browser .file {
+	padding: 10px;
+	color: #757575;
+	font-size: 14px;
+	background-color: #fff;
+	border-bottom: 1px solid #eeeeee;
+}
+#file-browser .file:hover {
+	cursor: pointer;
+	background-color: #fafafa;
+}
+.file .graphic {
+	display: inline-block;
+	width: 20px;
+	font-size: 12px;
+	text-align: center;
+}
+.file .available {
+	display: inline-block;
+	width: 20px;
+}
+.file .name {
+	display: inline-block;
+	width: 30%;
+	text-align: left;
+	font-size: 14px;
+}
+.file .size {
+	display: inline-block;
+	width: 10%;
+}
+.file .time {
+	display: inline-block;
+	width: 20%;
+}
+.file .download {
+	display: inline-block;
+	padding-left: 12px;
+	padding-right: 12px;
+	float: right;
+}
+.file .download:hover {
+	opacity: .5;
+}
+.file .share {
+	display: inline-block;
+	padding-left: 12px;
+	padding-right: 12px;
+	float: right;
+}
+.file .share:hover {
+	opacity: .5;
+}
+.file .delete {
+	display: inline-block;
+	padding-left: 12px;
+	padding-right: 12px;
+	float: right;
+}
+.file .delete:hover {
+	opacity: .5;
+}
+
+/* Add file window */
+.file-upload-container {
+	display: inline-block;
+	position: relative;
+	width: 150px;
+	height: 40px;
+	overflow: hidden;
+}
+.pod:hover .file-upload-container,
+::-webkit-file-upload-button {
+	cursor: pointer;
+}
+.file-upload-label {
+	width: 150px;
+	height: 40px;
+	text-align: center;
+}
+.file-upload-label i {
+	margin-right: 8px;
+}
+#fileupload {
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	font-size: 60px;
+	cursor: pointer;
+	opacity: 0;
+	filter: alpha(opacity=0);
+}
+.file-add-filename {
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 2px;
+	height: 40px;
+	color: #333;
+	line-height: 40px;
+	margin-left: 16px;
+	margin-right: 24px;
+}
+.description-field {
+	padding: 10px;
+	border-radius: 4px;
+}
+.step {
+	background-color: #f5f5f5;
+	text-align: center;
+	height: 33.333%;
+	border-bottom: solid 4px #fff;
+}
+.step .button {
+	font-size: 32px;
+    -webkit-box-sizing: border-box;
+	border: solid 4px #ffffff;
+	color: #c5c5c5;
+}
+#add-sia-file {
+	height: 66.667%;
+}
+.step .capsule {
+	background-color: #fff;
+}
+.button.upload {
+	font-size: 24px;
+	padding: 20px;
+	color: #eeeeee;
+	margin-top: -10px;
+}
+.button.upload:hover {
+	background-color: rgba(0, 0, 0, 0.25);
+}
+.button:hover {
+	top 50%;
+	color: #4a4a4a;
+	cursor: pointer;
+}

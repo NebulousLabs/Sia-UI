@@ -16,7 +16,7 @@ addResultListener('status', function(result) {
 	// Calculate host finances
 	var total = formatBytes(hosting.TotalStorage);
 	var storage = formatBytes(hosting.TotalStorage - hosting.StorageRemaining);
-	var profit = (hosting.Profit).toFixed(2);
+	var profit = convertSiacoin(hosting.Profit).toFixed(2);
 	var potentialProfit = convertSiacoin(hosting.PotentialProfit).toFixed(2);
 
 	// Update host finances
@@ -30,14 +30,14 @@ addResultListener('status', function(result) {
 		if (eID(prop.name)) {
 			return;
 		}
-		var item = ePropBlueprint.cloneNode(true);
+		var item = eID('propertybp').cloneNode(true);
 		item.classList.remove('hidden');
 		item.querySelector('.name').textContent = prop.name + ' (' + prop.unit + ')';
 		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion).round().toString();
 		item.querySelector('.value').textContent = value;
 		item.id = prop.name;
 
-		eProperties.appendChild(item);
+		eID('properties').appendChild(item);
 	});
 });
 
@@ -93,6 +93,6 @@ eID('reset').onclick = function() {
 		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion).round().toString();
 		item.querySelector('.value').textContent = value;
 	});
-	notify('Hosting configuration reset', 'success');
+	notify('Hosting configuration reset', 'reset');
 };
 

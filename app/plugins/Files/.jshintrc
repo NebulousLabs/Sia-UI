@@ -111,19 +111,28 @@
 
 	"maxerr"        : 100,      // Maximum errors before stopping.
 	"globals"       : {         // Extra globals.
-		"WebFrame": false,
 		"IPC": false,
-		"ElectronScreen": false,
-		"RendererIPC": false,
-		"Path": false,
-		"Fs": false,
-		"Shell": false,
-		"Process": false,
-		"UI": true,
-		"Daemon": true,
-		"Plugins": true
-		//"exampleVar",
-		//"anotherCoolGlobal",
+		"BigNumber": false,
+		"eID": true,
+		"tooltip": true,
+		"show": true,
+		"hide": true,
+		"convertSiacoin": true,
+		"formatBytes": true,
+		"update": true,
+		"updating": true,
+		"notify": true,
+		"tooltip": true,
+		"nameFromPath": true,
+		"addResultListener": true,
+		"download": true,
+		"share": true,
+		"deleteFile": true,
+		"hidden": true,
+		"upload": true,
+		"loadDotSia": true,
+		"loadAscii": true,
+		"exitFileAdder": true
 	},
 	"indent"        : 4         // Specify indentation spacing
 }

@@ -5,6 +5,30 @@ function clearLockIcon() {
 	eID('lock-icon').className = 'fa';
 }
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Locking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Markup changes to reflect locked state
+function setLocked() {
+	clearLockIcon();
+	eID('lock-status').innerHTML = 'Locked';
+	eID('lock-icon').classList.add('fa-lock');
+}
+
+// Lock the wallet
+function lock() {
+	IPC.sendToHost('api-call', {
+		url: '/wallet/lock',
+		type: 'POST',
+	}, 'locked');
+}
+
+// React to the api call result
+addResultListener('locked', function(result) {
+	setLocked();
+	notify('Wallet locked', 'locked');
+	
+	update();
+});
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Unlocking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Markup changes to reflect unlocked state
 function setUnlocked() {
@@ -46,30 +70,6 @@ IPC.on('unlocked', function(err, result) {
 		notify('Wallet unlocked', 'unlocked');
 	}
 
-	update();
-});
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Locking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Markup changes to reflect locked state
-function setLocked() {
-	clearLockIcon();
-	eID('lock-status').innerHTML = 'Locked';
-	eID('lock-icon').classList.add('fa-lock');
-}
-
-// Lock the wallet
-function lock() {
-	IPC.sendToHost('api-call', {
-		url: '/wallet/lock',
-		type: 'POST',
-	}, 'locked');
-}
-
-// React to the api call result
-addResultListener('locked', function(result) {
-	setLocked();
-	notify('Wallet locked', 'locked');
-	
 	update();
 });
 

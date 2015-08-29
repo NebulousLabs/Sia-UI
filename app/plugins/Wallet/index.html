@@ -15,21 +15,22 @@
 		</div>
 	</head>
 	<body>
-		<!-- Header -->
-		<div class='header'>
-			<div class='title'>Wallet</div>
-			<div class='capsule'>
-				<div class='pod' id='confirmed'>Balance: 0 S</div>
-				<div class='pod' id='uncomfirmed'>Pending: 0 S</div>
-				<div class='pod button' id='lock-pod'>
-					<i class='fa' id='lock-icon'></i>
-					<div id='lock-status'>LOCK_STATE</div>
-				</div>
-			</div>
-		</div>
-
 		<!-- Frame -->
 		<div class='frame'>
+			<!-- Header -->
+			<div class='header'>
+				<div class='title'>Wallet</div>
+				<div class='capsule'>
+					<div class='pod' id='confirmed'>Balance: 0 S</div>
+					<div class='pod' id='uncomfirmed'>Pending: 0 S</div>
+					<div class='pod button' id='lock-pod'>
+						<i class='fa' id='lock-icon'></i>
+						<div id='lock-status'>LOCK_STATE</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Popups -->
 			<div class='popup hidden' id='request-password'>
 				<div class='row'>
 					<div class='title'>
@@ -60,21 +61,8 @@
 					<i class='fa fa-key' id='confirm-password'>I've recorded this in a safe place</i>
 				</div>
 			</div>
-			<div class='box'>
-				<div class='row'>
-					<div class='title'>
-						Addresses
-					</div>
-					<div class='controls'>
-						<div class='button' id='create-address'>
-							<i class='fa fa-plus'></i>
-							Create Address
-						</div>
-					</div>
-				</div>
-				<div class='list' id='address-list'>
-				</div>
-			</div>
+
+			<!-- Transactions Box -->
 			<div class='box'>
 				<div class='row'>
 					<div class='title'>
@@ -101,6 +89,23 @@
 					</div>
 				</div>
 				<div class='list' id='transaction-list'>
+				</div>
+			</div>
+
+			<!-- Addresses Box -->
+			<div class='box'>
+				<div class='row'>
+					<div class='title'>
+						Addresses
+					</div>
+					<div class='controls'>
+						<div class='button' id='create-address'>
+							<i class='fa fa-plus'></i>
+							Create Address
+						</div>
+					</div>
+				</div>
+				<div class='list' id='address-list'>
 				</div>
 			</div>
 		</div>
