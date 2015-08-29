@@ -16,7 +16,7 @@ addResultListener('status', function(result) {
 	// Calculate host finances
 	var total = formatBytes(hosting.TotalStorage);
 	var storage = formatBytes(hosting.TotalStorage - hosting.StorageRemaining);
-	var profit = (hosting.Profit).toFixed(2);
+	var profit = convertSiacoin(hosting.Profit).toFixed(2);
 	var potentialProfit = convertSiacoin(hosting.PotentialProfit).toFixed(2);
 
 	// Update host finances
