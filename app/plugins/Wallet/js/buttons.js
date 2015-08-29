@@ -71,7 +71,7 @@ function verifyTransaction(caller, callback) {
 		return;
 	}
 
-	var total = new BigNumber(amount).times(unit).round();
+	var total = new BigNumber(amount).times(unit);
 	callback(total, address);
 }
 

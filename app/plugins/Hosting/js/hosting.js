@@ -33,7 +33,7 @@ addResultListener('status', function(result) {
 		var item = eID('propertybp').cloneNode(true);
 		item.classList.remove('hidden');
 		item.querySelector('.name').textContent = prop.name + ' (' + prop.unit + ')';
-		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion).round().toString();
+		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion);
 		item.querySelector('.value').textContent = value;
 		item.id = prop.name;
 
@@ -70,9 +70,10 @@ eID('save').onclick = function() {
 	var hostInfo = {};
 	hostProperties.forEach(function(prop) {
 		var item = eID(prop.name);
-		var value = new BigNumber(item.querySelector('.value').textContent).mul(prop.conversion).round().toString();
-		hostInfo[prop.name.toLowerCase()] = value;
+		var value = new BigNumber(item.querySelector('.value').textContent).mul(prop.conversion);
+		hostInfo[prop.name.toLowerCase()] = value.round().toString();
 	});
+	console.log(hostInfo);
 
 	// Define configuration call
 	var call = {
@@ -90,7 +91,7 @@ eID('reset').onclick = function() {
 	tooltip('Reseting...', this);
 	hostProperties.forEach(function(prop) {
 		var item = eID(prop.name);
-		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion).round().toString();
+		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion);
 		item.querySelector('.value').textContent = value;
 	});
 	notify('Hosting configuration reset', 'reset');

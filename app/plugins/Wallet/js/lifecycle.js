@@ -16,7 +16,7 @@ function update() {
 	}, 'update-history');
 	*/
 	
-	setTimeout(update, 2500);
+	updating = setTimeout(update, 2500);
 }
 
 // Update transaction history and addresses
