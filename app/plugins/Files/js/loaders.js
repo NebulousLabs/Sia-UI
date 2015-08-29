@@ -43,9 +43,9 @@ function upload(filePath, nickname) {
 			nickname: nickname,
 		},
 	}, 'uploaded');
+	notify('Uploading ' + nickname + ' to Sia Network', 'upload');
 }
 addResultListener('uploaded', function(result) {
-	notify('Uploading ' + nickname + ' to Sia Network', 'upload');
 	exitFileAdder();
 });
 
@@ -56,9 +56,9 @@ function loadDotSia(filePath) {
 			filename: filePath
 		}
 	}, 'file-loaded');
+	notify('Adding ' + nameFromPath(filePath) + ' to file library', 'siafile');
 }
 addResultListener('file-loaded', function(result) {
-	notify('Adding ' + nameFromPath(filePath) + ' to file library', 'siafile');
 	exitFileAdder();
 });
 
@@ -69,9 +69,9 @@ function loadAscii(ascii) {
 			file: ascii
 		}
 	}, 'ascii-loaded');
+	notify('Adding file to library', 'asciifile');
 }
 addResultListener('ascii-loaded', function(result) {
-	notify('Adding file to library', 'asciifile');
 	exitFileAdder();
 });
 

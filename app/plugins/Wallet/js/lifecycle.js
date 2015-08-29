@@ -1,39 +1,5 @@
 'use strict';
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Start/Stop ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Called upon showing
-function start() {
-	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPC.sendToHost('devtools');
-	
-	// Need to check if wallet's unencrypted
-	IPC.sendToHost('api-call', '/wallet', 'on-opened');
-}
-
-// First status call to diagnose the state of the wallet
-addResultListener('on-opened', function(result) {
-	wallet = result;
-
-	// Show correct lock status. TODO: If the wallet is encrypted, prompt with
-	// a pw.
-	if (!wallet.encrypted) {
-		setUnencrypted();
-   	} else if (!wallet.unlocked) {
-		setLocked();
-	} else if (wallet.unlocked) {
-		setUnlocked();
-	}
-
-	// Start updating
-	update();
-});
-
-// Called upon transitioning away from this view
-function stop() {
-	// Stop updating
-	clearTimeout(updating);
-}
-
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Updating  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Make API calls, sending a channel name to listen for responses
 function update() {
@@ -111,3 +77,38 @@ addResultListener('update-history', function(result) {
 	}
 });
 */
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Start/Stop ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Called upon showing
+function start() {
+	// DEVTOOL: uncomment to bring up devtools on plugin view
+	// IPC.sendToHost('devtools');
+	
+	// Need to check if wallet's unencrypted
+	IPC.sendToHost('api-call', '/wallet', 'on-opened');
+}
+
+// First status call to diagnose the state of the wallet
+addResultListener('on-opened', function(result) {
+	wallet = result;
+
+	// Show correct lock status. TODO: If the wallet is encrypted, prompt with
+	// a pw.
+	if (!wallet.encrypted) {
+		setUnencrypted();
+   	} else if (!wallet.unlocked) {
+		setLocked();
+	} else if (wallet.unlocked) {
+		setUnlocked();
+	}
+
+	// Start updating
+	update();
+});
+
+// Called upon transitioning away from this view
+function stop() {
+	// Stop updating
+	clearTimeout(updating);
+}
+

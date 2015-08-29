@@ -1,28 +1,5 @@
 'use strict';
 
-// TODO: Get sliding frame in to work
-eID('new-file').onclick = function() {
-	show('add-file');
-	hide('file-library');
-};
-eID('back').onclick = exitFileAdder;
-
-// Exit function to return to general filelist view
-function exitFileAdder() {
-	hide('add-file');
-	show('file-library');
-
-	// Clear fields
-	var fields = document.querySelectorAll('.description-field');
-	for (var i = 0; i < fields.length; i++) {
-		fields[i].value = '';
-	}
-	var paths = document.querySelectorAll('.file-path');
-	for (var i = 0; i < paths.length; i++) {
-		paths[i].innerHTML = '';
-	}
-}
-
 // Used to hide subsequent steps when selecting and earlier one
 function hideSteps(number) {
 	var c = eID('step' + number).children;
@@ -30,8 +7,34 @@ function hideSteps(number) {
 		if(!hidden(c[i])) {
 			hide(c[i]);
 		}
-	};
+	}
 }
+
+// Exit function to return to general filelist view
+function exitFileAdder() {
+	hide('add-file');
+	show('file-library');
+
+	hideSteps(2);
+	hideSteps(3);
+
+	// Clear fields
+	var fields = document.querySelectorAll('.description-field');
+	for (var i = 0; i < fields.length; i++) {
+		fields[i].value = '';
+	}
+	var paths = document.querySelectorAll('.file-path');
+	for (var j = 0; j < paths.length; j++) {
+		paths[j].innerHTML = '';
+	}
+}
+
+// TODO: Get sliding frame in to work
+eID('new-file').onclick = function() {
+	show('add-file');
+	hide('file-library');
+};
+eID('back').onclick = exitFileAdder;
 
 // Upload file option chosen
 eID('upload-choice').onclick = function() {
