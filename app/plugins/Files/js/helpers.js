@@ -31,6 +31,10 @@ function hide(el) {
 function hidden(el) {
 	return toElement(el).classList.contains('hidden');
 }
+function nameFromPath(path) {
+	console.log(path);
+	return path.replace(/^.*[\\\/]/, '');
+}
 
 // Convert to Siacoin
 // TODO: Enable commas for large numbers

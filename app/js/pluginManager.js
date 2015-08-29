@@ -107,7 +107,6 @@ function PluginManager() {
 					if (!Daemon.Running) {
 						return;
 					}
-
 					Daemon.apiCall(call, function(err, result) {
 						if (err) {
 							// If a call didn't work, test that the
@@ -151,7 +150,8 @@ function PluginManager() {
 
 		// Display any console logs from the plugin
 		plugin.on('console-message', function(event) {
-			console.log(plugin.name + ' plugin logged> ' + event.message);
+			var srcFile = event.sourceId.replace(/^.*[\\\/]/, '');
+			console.log(plugin.name + ' plugin logged from ' + srcFile +'(' + event.line + '): ' + event.message);
 		});
 	}
 

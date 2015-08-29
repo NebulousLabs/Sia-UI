@@ -22,20 +22,6 @@ function download(nickname) {
 addResultListener('downloaded', function(result) {
 });
 
-function upload(filePath, nickname) {
-	notify('Uploading ' + nickname + ' to Sia Network', 'upload');
-	IPC.sendToHost('api-call', {
-		url: '/renter/files/upload',
-		type: 'GET',
-		args: {
-			source: filePath,
-			nickname: nickname,
-		},
-	}, 'uploaded');
-}
-addResultListener('uploaded', function(result) {
-});
-
 function share(nickname) {
 	// Make a request to get the ascii share string
 	IPC.sendToHost('api-call', {
@@ -48,6 +34,21 @@ function share(nickname) {
 addResultListener('shared', function(result) {
 });
 
+function upload(filePath, nickname) {
+	IPC.sendToHost('api-call', {
+		url: '/renter/files/upload',
+		type: 'GET',
+		args: {
+			source: filePath,
+			nickname: nickname,
+		},
+	}, 'uploaded');
+}
+addResultListener('uploaded', function(result) {
+	notify('Uploading ' + nickname + ' to Sia Network', 'upload');
+	exitFileAdder();
+});
+
 function loadDotSia(filePath) {
 	IPC.sendToHost('api-call', {
 		url: '/renter/files/load',
@@ -57,18 +58,21 @@ function loadDotSia(filePath) {
 	}, 'file-loaded');
 }
 addResultListener('file-loaded', function(result) {
-	show('add-sia-file');
+	notify('Adding ' + nameFromPath(filePath) + ' to file library', 'siafile');
+	exitFileAdder();
 });
 
-function loadAscii(asciiText) {
+function loadAscii(ascii) {
 	IPC.sendToHost('api-call', {
 		url: '/renter/files/loadascii',
 		args: {
-			file: asciiText
+			file: ascii
 		}
 	}, 'ascii-loaded');
 }
 addResultListener('ascii-loaded', function(result) {
+	notify('Adding file to library', 'asciifile');
+	exitFileAdder();
 });
 
 function deleteFile(nickname) {

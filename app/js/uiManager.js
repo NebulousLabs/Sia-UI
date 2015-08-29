@@ -26,24 +26,33 @@ function UIManager() {
 	var lastNotificationTime = 0;
 	var notificationsInQueue = 0;
 	var notificationIcons = {
+		// General
 		alert: 'exclamation',
 		error: 'exclamation-circle',
 		update: 'arrow-circle-o-up',
-		upload: 'upload',
+		success: 'check',
+		// siad
+		start: 'play',
+		stop: 'stop',
+		// Wallet
 		locked: 'lock',
 		unlocked: 'unlock',
+		sent: 'send',
+		created: 'plus',
+		// Progress
+		// TODO: use these in Files
 		ongoing: 'hourglass-half',
 		started: 'hourglass-start',
 		finished: 'hourglass-end',
-		sent: 'send',
-		created: 'plus',
-		start: 'play',
-		stop: 'stop',
-		download: 'arrow-circle-down',
+		// Hosting
 		announced: 'bullhorn',
 		saved: 'floppy-o',
 		reset: 'refresh',
-		success: 'check'
+		// Files
+		download: 'arrow-circle-down',
+		upload: 'upload',
+		siafile: 'file-o',
+		asciifile: 'clipboard',
 	};
 
     // Shows tooltip with content on given element
@@ -73,7 +82,7 @@ function UIManager() {
             tooltipVisible = true;
             eTooltip.animate({
                 'opacity':1
-            },400);
+            }, 400);
         }else{
             eTooltip.stop();
             eTooltip.show();
@@ -89,7 +98,7 @@ function UIManager() {
                 tooltipVisible = false;
                 eTooltip.hide();
             });
-        },1400);
+        }, 1400);
     }
 	
 	function showNotification(message, type, clickAction, small){
