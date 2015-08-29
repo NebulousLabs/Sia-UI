@@ -33,7 +33,7 @@ addResultListener('status', function(result) {
 		var item = eID('propertybp').cloneNode(true);
 		item.classList.remove('hidden');
 		item.querySelector('.name').textContent = prop.name + ' (' + prop.unit + ')';
-		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion);
+		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion).round(2);
 		item.querySelector('.value').textContent = value;
 		item.id = prop.name;
 
