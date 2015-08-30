@@ -5,7 +5,6 @@ var files = {};
 
 // Make or update file
 function updateFile(file) {
-	console.log(file);
 	var nick = file.Nickname;
 	files[nick] = file;
 
