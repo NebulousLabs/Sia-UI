@@ -67,11 +67,14 @@ function update() {
 	IPC.sendToHost('api-call', '/renter/files/list', 'update-list');
 	IPC.sendToHost('api-call', '/renter/status', 'update-status');
 	
-	updating = setTimeout(update, 15000);
+	updating = setTimeout(update, 1000);
 }
 
 // On receiving api call result for file list
 addResultListener('update-list', function(result) {
+	while (eID('file-browser').firstChild) {
+		eID('file-browser').removeChild(eID('file-browser').firstChild);
+	}
 	result.forEach(updateFile);
 });
 
