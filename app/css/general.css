@@ -46,7 +46,6 @@ html,body {
 
 /* UI Header */
 .header {
-	opacity: .7;
 	height: 80px;
 	width: 100%;
 
@@ -55,7 +54,6 @@ html,body {
 .logo {
 	padding-left: 20px;
 	padding-top: 14px;
-	opacity: 0.7;
 
 	pointer-events: none;
 }
@@ -87,7 +85,6 @@ html,body {
 	border-right: 4px solid #F5F5F5;
 }
 .button {
-	opacity: .7;
 	display:flex;
 	font-size: 16px;
 	align-items:center;

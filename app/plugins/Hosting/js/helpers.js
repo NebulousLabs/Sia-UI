@@ -12,10 +12,6 @@ BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 var hosting;
 // Keeps track of if the view is shown
 var updating;
-// Hidden div with the structure of a host property
-var ePropBlueprint = eID('propertybp');
-// Section that holds properties
-var eProperties = eID('properties');
 // Host properties array
 var hostProperties = [
 	{
@@ -37,7 +33,6 @@ var hostProperties = [
 		'name': 'Price',
 		'unit': 'S Per GB Per Month',
 		// Siacoin (1e24) / GB (1e9) / blocks in a 30-day month (4320)
-		//'conversion': new BigNumber('1e+12').div('4'),
 		'conversion': new BigNumber('1e+24').div('1e+9').div(4320),
 	},
 ];
@@ -84,7 +79,7 @@ function addResultListener(channel, callback) {
 function convertSiacoin(hastings) {
 	var number = new BigNumber(hastings);
 	var ConversionFactor = new BigNumber(10).pow(24);
-	return number.dividedBy(ConversionFactor);
+	return number.dividedBy(ConversionFactor).round(2);
 }
 
 // Controls data size representation
@@ -95,6 +90,6 @@ function formatBytes(bytes) {
 	var k = 1000;
 	var sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 	var i = Math.floor((Math.log(bytes) + 1) / Math.log(k));
-	return (new BigNumber(bytes).div(Math.pow(k, i))) + " " + sizes[i];
+	return (new BigNumber(bytes).div(Math.pow(k, i)).round(2)) + " " + sizes[i];
 }
 

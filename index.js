@@ -82,18 +82,19 @@ App.on('window-all-closed', function() {
 // When Electron loading has finished, start the daemon then the UI
 App.on('ready', startMainWindow);
 
-// TODO: Was going to use for wallet but it's unused for now
+// TODO: Set up to work with files plugin
 // Listen for if the renderer process wants to produce a dialog message
-MainIPC.on('dialog', function(event, type, options, callback) {
+MainIPC.on('dialog', function(event, type, options) {
+	var response;
 	switch (type) {
 		case 'open':
-			Dialog.showOpenDialog(mainWindow, options, callback)
+			response = Dialog.showOpenDialog(mainWindow, options)
 			break;
 		case 'save':
-			Dialog.showSaveDialog(mainWindow, options, callback)
+			response = Dialog.showSaveDialog(mainWindow, options)
 			break;
 		case 'message':
-			Dialog.showMessageBox(mainWindow, options, callback)
+			response = Dialog.showMessageBox(mainWindow, options)
 			break;
 		case 'error':
 			Dialog.showErrorBox(options.title, options.content)
@@ -101,4 +102,5 @@ MainIPC.on('dialog', function(event, type, options, callback) {
 		default:
 			console.error('Unknown dialog ipc')
 	}
+	event.returnValue = response ? response : null;
 });

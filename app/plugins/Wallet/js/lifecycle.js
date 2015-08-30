@@ -1,39 +1,5 @@
 'use strict';
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Start/Stop ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Called upon showing
-function start() {
-	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPC.sendToHost('devtools');
-	
-	// Need to check if wallet's unencrypted
-	IPC.sendToHost('api-call', '/wallet', 'on-opened');
-}
-
-// First status call to diagnose the state of the wallet
-addResultListener('on-opened', function(result) {
-	wallet = result;
-
-	// Show correct lock status. TODO: If the wallet is encrypted, prompt with
-	// a pw.
-	if (!wallet.encrypted) {
-		setUnencrypted();
-   	} else if (!wallet.unlocked) {
-		setLocked();
-	} else if (wallet.unlocked) {
-		setUnlocked();
-	}
-
-	// Start updating
-	update();
-});
-
-// Called upon transitioning away from this view
-function stop() {
-	// Stop updating
-	clearTimeout(updating);
-}
-
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Updating  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Make API calls, sending a channel name to listen for responses
 function update() {
@@ -59,7 +25,7 @@ addResultListener('update-status', function(result) {
 	
 	// Update balance confirmed and uncomfirmed
 	var bal = convertSiacoin(wallet.confirmedsiacoinbalance);
-	var pend = convertSiacoin(wallet.unconfirmedincomingsiacoins - wallet.unconfirmedoutgoingsiacoins);
+	var pend = convertSiacoin(wallet.unconfirmedincomingsiacoins).sub(convertSiacoin(wallet.unconfirmedoutgoingsiacoins));
 	eID('confirmed').innerHTML = 'Balance: ' + bal + ' S';
 	eID('uncomfirmed').innerHTML = 'Pending: ' + pend + ' S';
 });
@@ -73,7 +39,7 @@ function appendTransaction(txn) {
 	var entry = eID('transactionbp').cloneNode(true);
 	entry.id = txn.transactionid;
 
-	// Determine how to disaply transaction
+	// Determine how to display transaction
 	// Have to use !== logic to represent miner payouts
 	var sign, unit, amount, related;
 	var ft = txn.fundtype.split(' ');
@@ -111,3 +77,38 @@ addResultListener('update-history', function(result) {
 	}
 });
 */
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Start/Stop ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Called upon showing
+function start() {
+	// DEVTOOL: uncomment to bring up devtools on plugin view
+	// IPC.sendToHost('devtools');
+	
+	// Need to check if wallet's unencrypted
+	IPC.sendToHost('api-call', '/wallet', 'on-opened');
+}
+
+// First status call to diagnose the state of the wallet
+addResultListener('on-opened', function(result) {
+	wallet = result;
+
+	// Show correct lock status. TODO: If the wallet is encrypted, prompt with
+	// a pw.
+	if (!wallet.encrypted) {
+		setUnencrypted();
+   	} else if (!wallet.unlocked) {
+		setLocked();
+	} else if (wallet.unlocked) {
+		setUnlocked();
+	}
+
+	// Start updating
+	update();
+});
+
+// Called upon transitioning away from this view
+function stop() {
+	// Stop updating
+	clearTimeout(updating);
+}
+

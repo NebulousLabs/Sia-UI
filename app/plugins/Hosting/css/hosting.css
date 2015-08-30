@@ -72,6 +72,11 @@
 	padding: 10px;
 }
 .host-message {
+	/* TODO: Imperfect bottom positioning */
+	position: relative;
+    top: calc(100% - 62px);
+    transform: translateY(-150%);
+
 	text-align: center;
 	padding: 10px;
 	font-size: 36px;

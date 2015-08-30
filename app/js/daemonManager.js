@@ -30,6 +30,7 @@ function DaemonManager() {
 
 	/**
 	 * Relays calls to daemonAPI with the localhost:port address appended
+	 * @function DaemonManager#call
 	 * @param {apiCall} call - function to run if Siad is running
 	 * @param {apiResponse} callback
 	 */
@@ -49,7 +50,7 @@ function DaemonManager() {
 	 * @param {function} isRunning - function to run if Siad is running
 	 * @param {function} isNotRunning - function to run if Siad is not running
 	 */
-	this.ifSiad = function ifSiad(isRunning, isNotRunning) {
+	function ifSiad(isRunning, isNotRunning) {
 		apiCall('/consensus', function(err) {
 			if (!err) {
 				self.Running = true;
@@ -63,21 +64,23 @@ function DaemonManager() {
 
 	/**
 	 * Checks if there is an update available
+	 * @function DaemonManager#update
 	 */
 	function updatePrompt() {
-		if (!self.Running) {
-			UI.notify('siad is not running!', 'stop');
-			return;
-		}
+		// Update check will delay API calls until successful. Will wait the
+		// duration that it takes to load up the blockchain.
 		apiCall("/daemon/updates/check", function(err, update) {
 			if (err) {
-				UI.notify('Update check failed!', 'error');
-				return;
+				self.Running = false;
+				// Check again later
+				setTimeout(updatePrompt, 1000);
 			} else if (update.Available) {
+				self.Running = true;
 				UI.notify("New Sia Client Available: Click to update to " + update.Version, "update", function() {
 					Shell.openExternal('https://www.github.com/NebulousLabs/Sia-UI/releases');
 				});
 			} else {
+				self.Running = true;
 				UI.notify("Sia client up to date!", "success");
 			}
 		});
@@ -87,7 +90,7 @@ function DaemonManager() {
 	 * Starts the daemon as a long running background process
 	 */
 	function start() {
-		self.ifSiad(function() {
+		ifSiad(function() {
 			console.error('attempted to start siad when it was already running');
 			return;
 		}, function() {
@@ -109,21 +112,11 @@ function DaemonManager() {
 		daemonProcess.unref();
 
 		// Give siad time to load or exit
-		// TODO: Imperfect way to go about this.
-		var updating = setTimeout(function() {
-			self.Running = true;
-			updatePrompt();
-		}, 2500);
+		var updating = setTimeout(updatePrompt, 1000);
 
 		// Listen for siad erroring
 		daemonProcess.on('error', function (error) {
 			UI.notify('siad errored: ' + error, 'error');
-		});
-		// Listen for siad exiting
-		daemonProcess.on('close', function(code) {
-			self.Running = false;
-			UI.notify('siad closed with code: ' + code, 'stop');
-			clearTimeout(updating);
 		});
 		daemonProcess.on('exit', function(code) {
 			self.Running = false;
@@ -148,21 +141,15 @@ function DaemonManager() {
 	 * @function DaemonManager#init
 	 * @param {config} config - config in memory
 	 */
-	this.init = function(config) {
+	function init(config) {
 		setConfig(config, function() {
-			self.ifSiad(updatePrompt, start);
+			ifSiad(updatePrompt, start);
 		});
-	};
-	/**
-	 * Makes an API call to to proper port using daemonAPI
-	 * @function DaemonManager#call
-	 * @param {APICall} call - the config object derived from config.json
-	 * @param {APIResponse} callback
-	 */
+	}
+
+	// Make certain functions public
+	this.init = init;
 	this.apiCall = apiCall;
-	/**
-	 * Makes an API call to to proper port using daemonAPI
-	 * @function DaemonManager#update
-	 */
 	this.update = updatePrompt;
+	this.ifSiad = ifSiad;
 }

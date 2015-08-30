@@ -36,7 +36,13 @@ function sendCall(url, type, args, callback) {
 		url: url,
 		type: type,
 		success: function(responseData, textStatus, jqXHR) {
-			callback(null, JSON.parse(responseData), textStatus, jqXHR);
+			// Catches improperly constructed JSONs that JSON.parse would
+			// normally return a weird error on
+			try {
+				callback(null, JSON.parse(responseData), textStatus, jqXHR);
+			} catch(e) {
+				console.error(e, 'Ajax response was: ' + responseData);
+			}
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			var errcode = textStatus + ' ' + jqXHR.status + ' ' + errorThrown;
