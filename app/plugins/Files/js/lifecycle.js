@@ -67,7 +67,7 @@ function update() {
 	IPC.sendToHost('api-call', '/renter/files/list', 'update-list');
 	IPC.sendToHost('api-call', '/renter/status', 'update-status');
 	
-	updating = setTimeout(update, 1000);
+	updating = setTimeout(update, 15000);
 }
 
 // On receiving api call result for file list

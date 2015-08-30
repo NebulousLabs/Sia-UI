@@ -20,6 +20,7 @@ function download(nickname) {
 	}, 'downloaded');
 }
 addResultListener('downloaded', function(result) {
+	update();
 });
 
 function share(nickname) {
@@ -32,6 +33,7 @@ function share(nickname) {
 	}, 'shared');
 }
 addResultListener('shared', function(result) {
+	update();
 });
 
 function upload(filePath, nickname) {
@@ -47,6 +49,7 @@ function upload(filePath, nickname) {
 }
 addResultListener('uploaded', function(result) {
 	exitFileAdder();
+	update();
 });
 
 function loadDotSia(filePath) {
@@ -60,6 +63,7 @@ function loadDotSia(filePath) {
 }
 addResultListener('file-loaded', function(result) {
 	exitFileAdder();
+	update();
 });
 
 function loadAscii(ascii) {
@@ -73,6 +77,7 @@ function loadAscii(ascii) {
 }
 addResultListener('ascii-loaded', function(result) {
 	exitFileAdder();
+	update();
 });
 
 function deleteFile(nickname) {
@@ -85,5 +90,6 @@ function deleteFile(nickname) {
 	}, 'deleted');
 }
 addResultListener('deleted', function(result) {
+	update();
 });
 
