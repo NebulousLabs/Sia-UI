@@ -31,7 +31,6 @@
 	overflow: hidden;
 }
 .popup .title {
-	/* TODO: title is not centered properly */
 	font-size: 24px;
 	display: block;
 }
@@ -52,7 +51,6 @@
 /* Information Box */
 .row {
 	background:#f5f5f5;
-	min-width: 1000px;
 	display: block;
 	padding-top: 18px;
 	padding-bottom: 18px;
