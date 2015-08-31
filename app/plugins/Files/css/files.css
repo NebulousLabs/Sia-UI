@@ -57,6 +57,7 @@
 input {
 	width: 100%;
 	display: inline-block;
+	text-align: center;
 	margin: 0;
 	font-family: sans-serif;
 	appearance: none;
@@ -70,20 +71,6 @@ input:focus {
 	outline: none;
 	border: solid 1px #4a4a4a;
 	box-shadow: 0 0 5px 1px #c5c5c5;
-}
-
-/* Old UI CSS */
-.capsule .income-rate {
-	width: 120px;
-	text-align: right;
-	padding-left: 0px;
-}
-.cloud-control {
-	color: #9e9e9e;
-	padding-left: 4px;
-	padding-top: 4px;
-	padding-bottom: 4px;
-	border-bottom: 1px solid #e0e0e0;
 }
 
 /* File browser and list */
@@ -209,7 +196,6 @@ input:focus {
 .step .button {
 	font-size: 32px;
     -webkit-box-sizing: border-box;
-	border: solid 4px #ffffff;
 	color: #c5c5c5;
 }
 #add-sia-file {

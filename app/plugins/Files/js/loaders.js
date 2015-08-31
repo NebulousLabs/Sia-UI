@@ -59,7 +59,7 @@ function loadDotSia(filePath) {
 			filename: filePath,
 		}
 	}, 'file-loaded');
-	notify('Adding ' + nameFromPath(filePath) + ' to file library', 'siafile');
+	notify('Adding ' + nameFromPath(filePath) + ' to library', 'siafile');
 }
 addResultListener('file-loaded', function(result) {
 	exitFileAdder();
@@ -73,7 +73,7 @@ function loadAscii(ascii) {
 			file: ascii,
 		}
 	}, 'ascii-loaded');
-	notify('Adding file to library', 'asciifile');
+	notify('Adding file(s) to library', 'asciifile');
 }
 addResultListener('ascii-loaded', function(result) {
 	exitFileAdder();
