@@ -43,12 +43,12 @@ html, body {
 }
 .header .title {
 	display: inline-block;
-	font-size: 40px;
+	font-size: 30px;
 	color: #fff;
 }
 .header .capsule {
 	float: right;
-	font-size: 26px;
+	font-size: 20px;
 }
 .capsule {
 	position: absolute;
@@ -84,7 +84,7 @@ html, body {
 	height: 100%;
 	overflow: hidden;
 	color: #999999;
-	font-size: 32px;
+	font-size: 26px;
 	position: relative;
 	width: 100%;
 }
