@@ -47,16 +47,25 @@ eID('upload-choice').onclick = function() {
 	});
 	if (loadPath) {
 		eID('nickname-file').querySelector('.file-path').innerHTML = loadPath;
-		eID('nickname-file').querySelector('.description-field').value = nameFromPath(loadPath[0]);
+		eID('nickname-file-input').value = nameFromPath(loadPath[0]);
 		show('nickname-file');
 		show('upload-file');
+		// TODO: this does not work for some reason. Perhaps the view needs to
+		// be refocused after the dialog box is closed.
+		eID('nickname-file-input').focus();
 	}
 };
+eID('nickname-file-input').addEventListener("keydown", function(e) {
+    e = e || window.event;
+    if (e.keyCode == 13) {
+        eID('upload-file').click();
+    }
+}, false);
 eID('upload-file').onclick = function() {
 	var loadPath = eID('nickname-file').querySelector('.file-path').innerHTML;
-	var nickname = eID('nickname-file').querySelector('.description-field').value;
-	console.log(loadPath);
+	var nickname = eID('nickname-file-input').value;
 	upload(loadPath, nickname);
+	eID('nickname-file-input').focus();
 };
 
 // Sia file option chosen
@@ -89,10 +98,16 @@ eID('ascii-choice').onclick = function() {
 
 	show('paste-ascii');
 	show('add-ascii-file');
+	eID('paste-ascii-input').focus();
 };
+eID('paste-ascii-input').addEventListener("keydown", function(e) {
+    e = e || window.event;
+    if (e.keyCode == 13) {
+        eID('add-ascii-file').click();
+    }
+}, false);
 eID('add-ascii-file').onclick = function() {
-	var ascii = eID('paste-ascii').querySelector('.description-field').value;
-	loadAscii(ascii);
+	loadAscii(eID('paste-ascii-input').value);
 };
 
 /*
