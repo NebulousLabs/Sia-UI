@@ -64,10 +64,10 @@ html,body {
 	display: inline-block;
 	padding: 30px;
 	font-size: 16px;
-	color: #DDDDDD;
+	color: #AAAAAA;
 }
 .header-button:hover {
-	color: #C5C5C5;
+	color: #888888;
 	cursor: pointer;
 }
 

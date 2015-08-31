@@ -83,7 +83,7 @@ html, body {
 .frame {
 	height: 100%;
 	overflow: hidden;
-	color: #c5c5c5;
+	color: #999999;
 	font-size: 32px;
 	position: relative;
 	width: 100%;
