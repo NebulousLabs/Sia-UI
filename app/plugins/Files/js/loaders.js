@@ -31,8 +31,15 @@ function share(nickname) {
 			nickname: nickname,
 		}
 	}, 'shared');
+	// Set popup title
+	eID('show-ascii').querySelector('.title').innerHTML = nickname;
 }
 addResultListener('shared', function(result) {
+	var popup = eID('show-ascii');
+	show(popup);
+
+	popup.querySelector('.ascii').innerHTML = result.File;
+
 	update();
 });
 

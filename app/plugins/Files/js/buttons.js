@@ -1,5 +1,8 @@
 'use strict';
 
+// Library for working with clipboard
+const Clipboard = require('clipboard');
+
 // Used to hide subsequent steps when selecting and earlier one
 function hideSteps(number) {
 	var c = eID('step' + number).children;
@@ -91,7 +94,7 @@ eID('add-sia-file').onclick = function() {
 	loadDotSia(loadPath);
 };
 
-// Ascii file option chosen
+// ASCII file option chosen
 eID('ascii-choice').onclick = function() {
 	hideSteps(2);
 	hideSteps(3);
@@ -108,6 +111,18 @@ eID('paste-ascii-input').addEventListener("keydown", function(e) {
 }, false);
 eID('add-ascii-file').onclick = function() {
 	loadAscii(eID('paste-ascii-input').value);
+};
+
+// Share ASCII popup
+eID('copy-ascii').onclick = function() {
+	var file = eID('show-ascii').querySelector('.ascii').innerHTML;
+	var nickname = eID('show-ascii').querySelector('.title').innerHTML;
+	Clipboard.writeText(file);
+	notify('Copied ' + nickname + '.sia to clipboard!', 'asciifile');
+	hide('show-ascii');
+};
+eID('cancel-ascii').onclick = function() {
+	hide('show-ascii');
 };
 
 /*

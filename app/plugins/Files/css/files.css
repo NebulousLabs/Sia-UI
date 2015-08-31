@@ -10,6 +10,45 @@
  * 		Black:      #000000
  */
 
+/* Share Popup */
+.popup {
+	position: absolute;
+	min-height: 100px;
+	max-height: 50%;
+	min-width: 100px;
+	max-width: 75%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	-webkit-animation: fadein 0.5s;
+
+	background-color: #ffffff;
+	z-index: 2;
+
+	border: solid 1px #c5c5c5;
+	border-radius: 8px;
+	text-align: center;
+	overflow: hidden;
+}
+.popup .title {
+	/* TODO: title is not centered properly */
+	font-size: 24px;
+	display: block;
+}
+.popup .ascii {
+	font-family: monospace;
+	font-size: 12px;
+	text-align: justify;
+	word-break: break-all;
+
+	max-height: 150px;
+	overflow: auto;
+	padding: 10px;
+}
+.popup .button {
+	padding: 8px;
+}
+
 /* Information Box */
 .row {
 	background:#f5f5f5;

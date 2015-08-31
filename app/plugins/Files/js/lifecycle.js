@@ -53,9 +53,9 @@ function updateFile(file) {
 		field('.download').onclick = function() {
 			download(nick);
 		};
-		// field('.share').onclick = function() {
-			// share(nick);
-		// };
+		field('.share').onclick = function() {
+			share(nick);
+		};
 		field('.delete').onclick = function() {
 			deleteFile(nick);
 		};

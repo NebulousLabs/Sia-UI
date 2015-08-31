@@ -25,7 +25,7 @@
 			<div class='size'></div>
 			<div class='time'></div>
 			<div class='download'>Download</div>
-			<!-- <div class='share'>Share</div> -->
+			<div class='share'>Share</div>
 			<div class='delete'>Delete</div>
 		</div>
 	</head>
@@ -60,6 +60,19 @@
 				</div>
 			</div>
 			<div id='file-browser'>
+			</div>
+			<!-- Share Popup -->
+			<div class='popup hidden' id='show-ascii'>
+				<div class='row'>
+					<div class='title'></div>
+				</div>
+				<p class='ascii'></p>
+				<span class='button' id='copy-ascii'>
+					<i class='fa fa-chain'>Copy to Clipboard</i>
+				</span>
+				<span class='button' id='cancel-ascii'>
+					<i class='fa fa-close'>Cancel</i>
+				</span>
 			</div>
 		</div>
 		<!-- Sliding New File Frame -->
