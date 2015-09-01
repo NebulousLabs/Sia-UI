@@ -53,9 +53,9 @@ function updateFile(file) {
 		field('.download').onclick = function() {
 			download(nick);
 		};
-		// field('.share').onclick = function() {
-			// share(nick);
-		// };
+		field('.share').onclick = function() {
+			share(nick);
+		};
 		field('.delete').onclick = function() {
 			deleteFile(nick);
 		};
@@ -72,9 +72,13 @@ function update() {
 
 // On receiving api call result for file list
 addResultListener('update-list', function(result) {
-	while (eID('file-browser').firstChild) {
-		eID('file-browser').removeChild(eID('file-browser').firstChild);
-	}
+	// sort alphabetically by nickname
+	result.sort(function(a, b) {
+		return a.Nickname.localeCompare(b.Nickname);
+	});
+	// clear existing file list
+	eID('file-browser').innerHTML = '';
+	// insert each file
 	result.forEach(updateFile);
 });
 

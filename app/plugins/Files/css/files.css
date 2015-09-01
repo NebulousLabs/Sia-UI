@@ -10,10 +10,47 @@
  * 		Black:      #000000
  */
 
+/* Share Popup */
+.popup {
+	position: absolute;
+	min-height: 100px;
+	max-height: 50%;
+	min-width: 100px;
+	max-width: 75%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	-webkit-animation: fadein 0.5s;
+
+	background-color: #ffffff;
+	z-index: 2;
+
+	border: solid 1px #c5c5c5;
+	border-radius: 8px;
+	text-align: center;
+	overflow: hidden;
+}
+.popup .title {
+	font-size: 24px;
+	display: block;
+}
+.popup .ascii {
+	font-family: monospace;
+	font-size: 12px;
+	text-align: justify;
+	word-break: break-all;
+
+	max-height: 150px;
+	overflow: auto;
+	padding: 10px;
+}
+.popup .button {
+	padding: 8px;
+}
+
 /* Information Box */
 .row {
 	background:#f5f5f5;
-	min-width: 1000px;
 	display: block;
 	padding-top: 18px;
 	padding-bottom: 18px;
@@ -57,6 +94,7 @@
 input {
 	width: 100%;
 	display: inline-block;
+	text-align: center;
 	margin: 0;
 	font-family: sans-serif;
 	appearance: none;
@@ -70,20 +108,6 @@ input:focus {
 	outline: none;
 	border: solid 1px #4a4a4a;
 	box-shadow: 0 0 5px 1px #c5c5c5;
-}
-
-/* Old UI CSS */
-.capsule .income-rate {
-	width: 120px;
-	text-align: right;
-	padding-left: 0px;
-}
-.cloud-control {
-	color: #9e9e9e;
-	padding-left: 4px;
-	padding-top: 4px;
-	padding-bottom: 4px;
-	border-bottom: 1px solid #e0e0e0;
 }
 
 /* File browser and list */
@@ -209,7 +233,6 @@ input:focus {
 .step .button {
 	font-size: 32px;
     -webkit-box-sizing: border-box;
-	border: solid 4px #ffffff;
 	color: #c5c5c5;
 }
 #add-sia-file {
@@ -229,6 +252,6 @@ input:focus {
 }
 .button:hover {
 	top 50%;
-	color: #4a4a4a;
+	color: #777777;
 	cursor: pointer;
 }

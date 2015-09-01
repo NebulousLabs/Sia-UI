@@ -31,8 +31,15 @@ function share(nickname) {
 			nickname: nickname,
 		}
 	}, 'shared');
+	// Set popup title
+	eID('show-ascii').querySelector('.title').innerHTML = nickname;
 }
 addResultListener('shared', function(result) {
+	var popup = eID('show-ascii');
+	show(popup);
+
+	popup.querySelector('.ascii').innerHTML = result.File;
+
 	update();
 });
 
@@ -59,7 +66,7 @@ function loadDotSia(filePath) {
 			filename: filePath,
 		}
 	}, 'file-loaded');
-	notify('Adding ' + nameFromPath(filePath) + ' to file library', 'siafile');
+	notify('Adding ' + nameFromPath(filePath) + ' to library', 'siafile');
 }
 addResultListener('file-loaded', function(result) {
 	exitFileAdder();
@@ -73,7 +80,7 @@ function loadAscii(ascii) {
 			file: ascii,
 		}
 	}, 'ascii-loaded');
-	notify('Adding file to library', 'asciifile');
+	notify('Adding file(s) to library', 'asciifile');
 }
 addResultListener('ascii-loaded', function(result) {
 	exitFileAdder();

@@ -1,5 +1,8 @@
 'use strict';
 
+// Library for working with clipboard
+const Clipboard = require('clipboard');
+
 // Used to hide subsequent steps when selecting and earlier one
 function hideSteps(number) {
 	var c = eID('step' + number).children;
@@ -47,16 +50,26 @@ eID('upload-choice').onclick = function() {
 	});
 	if (loadPath) {
 		eID('nickname-file').querySelector('.file-path').innerHTML = loadPath;
-		eID('nickname-file').querySelector('.description-field').value = nameFromPath(loadPath[0]);
+		eID('nickname-file-input').value = nameFromPath(loadPath[0]);
 		show('nickname-file');
 		show('upload-file');
+		// TODO: this does not work for some reason. Perhaps the view needs to
+		// be refocused after the dialog box is closed.
+		eID('nickname-file-input').focus();
 	}
 };
+// An 'Enter' keypress in the input field will submit it.
+eID('nickname-file-input').addEventListener("keydown", function(e) {
+    e = e || window.event;
+    if (e.keyCode == 13) {
+        eID('upload-file').click();
+    }
+}, false);
 eID('upload-file').onclick = function() {
 	var loadPath = eID('nickname-file').querySelector('.file-path').innerHTML;
-	var nickname = eID('nickname-file').querySelector('.description-field').value;
-	console.log(loadPath);
+	var nickname = eID('nickname-file-input').value;
 	upload(loadPath, nickname);
+	eID('nickname-file-input').focus();
 };
 
 // Sia file option chosen
@@ -82,17 +95,36 @@ eID('add-sia-file').onclick = function() {
 	loadDotSia(loadPath);
 };
 
-// Ascii file option chosen
+// ASCII file option chosen
 eID('ascii-choice').onclick = function() {
 	hideSteps(2);
 	hideSteps(3);
 
 	show('paste-ascii');
 	show('add-ascii-file');
+	eID('paste-ascii-input').focus();
 };
+// An 'Enter' keypress in the input field will submit it.
+eID('paste-ascii-input').addEventListener("keydown", function(e) {
+    e = e || window.event;
+    if (e.keyCode == 13) {
+        eID('add-ascii-file').click();
+    }
+}, false);
 eID('add-ascii-file').onclick = function() {
-	var ascii = eID('paste-ascii').querySelector('.description-field').value;
-	loadAscii(ascii);
+	loadAscii(eID('paste-ascii-input').value);
+};
+
+// Share ASCII popup
+eID('copy-ascii').onclick = function() {
+	var file = eID('show-ascii').querySelector('.ascii').innerHTML;
+	var nickname = eID('show-ascii').querySelector('.title').innerHTML;
+	Clipboard.writeText(file);
+	notify('Copied ' + nickname + '.sia to clipboard!', 'asciifile');
+	hide('show-ascii');
+};
+eID('cancel-ascii').onclick = function() {
+	hide('show-ascii');
 };
 
 /*
