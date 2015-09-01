@@ -58,6 +58,7 @@ eID('upload-choice').onclick = function() {
 		eID('nickname-file-input').focus();
 	}
 };
+// An 'Enter' keypress in the input field will submit it.
 eID('nickname-file-input').addEventListener("keydown", function(e) {
     e = e || window.event;
     if (e.keyCode == 13) {
@@ -103,6 +104,7 @@ eID('ascii-choice').onclick = function() {
 	show('add-ascii-file');
 	eID('paste-ascii-input').focus();
 };
+// An 'Enter' keypress in the input field will submit it.
 eID('paste-ascii-input').addEventListener("keydown", function(e) {
     e = e || window.event;
     if (e.keyCode == 13) {
