@@ -133,3 +133,10 @@ eID('confirm-password').onclick = function() {
 	hide('show-password');
 };
 
+
+eID('show-address-list').onclick = function() {
+	listAddresses();
+};
+eID('close-address-list').onclick = function() {
+	hide('display-addresses');
+};
