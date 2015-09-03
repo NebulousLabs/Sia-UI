@@ -101,3 +101,36 @@ addResultListener('encrypted', function(result) {
 	update();
 });
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Address List ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+function listAddresses() {
+	IPC.sendToHost('api-call', {
+		url: '/wallet/addresses',
+		type: 'GET',
+	}, 'address-list');
+}
+addResultListener('address-list', function(result) {
+	// format address list
+	var list = '';
+	result.addresses.forEach(function(elem){
+		list += elem.address + '\n'
+	});
+	var popup = eID('display-addresses');
+	show(popup);
+	popup.querySelector('.address-list').innerHTML = list;
+	update();
+});
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+function loadLegacyWallet(filename, password) {
+	IPC.sendToHost('api-call', {
+		url: '/wallet/load/033x',
+		type: 'POST',
+		args: {
+			filepath: filename,
+			encryptionpassword: password,
+		},
+	}, 'load-wallet');
+}
+addResultListener('load-wallet', function(result) {
+	notify('Loaded Wallet', 'success');
+});

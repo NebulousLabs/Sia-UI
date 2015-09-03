@@ -61,6 +61,17 @@
 					<i class='fa fa-key' id='confirm-password'>I've recorded this in a safe place</i>
 				</div>
 			</div>
+			<div class='popup hidden' id='display-addresses'>
+				<div class='row'>
+					<div class='title'>
+						Address List
+					</div>
+				</div>
+				<p class='address-list'></p>
+				<div class='button' id='close-address-list'>
+					<i class='fa fa-close'>Close</i>
+				</div>
+			</div>
 
 			<!-- Transactions Box -->
 			<div class='box'>
@@ -103,6 +114,14 @@
 							<i class='fa fa-plus'></i>
 							Create Address
 						</div>
+						<div class='button' id='show-address-list'>
+							<i class='fa fa-list-ul'></i>
+							Address List
+						</div>
+						<div class='button' id='load-legacy-wallet'>
+							<i class='fa fa-folder-open-o'></i>
+							Load Legacy Wallet
+						</div>
 					</div>
 				</div>
 				<div class='list' id='address-list'>
@@ -112,7 +131,7 @@
 		
 		<!-- JS -->
 		<script src='js/helpers.js'></script>
-		<script src='js/security.js'></script>
+		<script src='js/loaders.js'></script>
 		<script src='js/buttons.js'></script>
 		<script src='js/lifecycle.js'></script>
 	</body>

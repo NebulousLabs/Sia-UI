@@ -61,7 +61,6 @@ html, body {
 	overflow: hidden;
 }
 .capsule .pod {
-	overflow: hidden;
 	display: inline-block;
 	padding: 8px;
 	padding-left: 16px;

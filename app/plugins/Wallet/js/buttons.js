@@ -112,6 +112,7 @@ eID('lock-pod').onclick = function() {
 		lock();
 	} else if (!wallet.unlocked && state === 'Locked'){
 		show('request-password');
+		eID('password-field').focus();
 	} else {
 		console.error('lock-pod disagrees with wallet variable!', wallet.unlocked, state);
 	}
@@ -127,9 +128,47 @@ eID('enter-password').onclick = function() {
 	unlock(field.value);
 	field.value = '';
 };
+// An 'Enter' keypress in the input field will submit it.
+eID('password-field').addEventListener("keydown", function(e) {
+    e = e || window.event;
+    if (e.keyCode == 13) {
+        eID('enter-password').click();
+    }
+}, false);
 
 // Make sure the user read the password
 eID('confirm-password').onclick = function() {
 	hide('show-password');
 };
 
+
+eID('show-address-list').onclick = function() {
+	listAddresses();
+};
+eID('close-address-list').onclick = function() {
+	hide('display-addresses');
+};
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+eID('load-legacy-wallet').onclick = function() {
+	var loadPath = IPC.sendSync('dialog', 'open', {
+		title: 'Legacy Wallet File Path',
+		filters: [
+			{ name: 'Legacy wallet', extensions: ['dat'] }
+		],
+		properties: ['openFile'],
+	});
+	if (loadPath) {
+		// kind of a hack; we want to reuse the enter-password dialog, but in
+		// order to do so we must temporarily overwrite its onclick method.
+		var oldOnclick = eID('enter-password').onclick;
+		eID('enter-password').onclick = function() {
+			var field = eID('password-field');
+			loadLegacyWallet(loadPath[0], field.value);
+			field.value = '';
+			eID('enter-password').onclick = oldOnclick;
+			hide('request-password');
+		}
+		show('request-password');
+	}
+};
