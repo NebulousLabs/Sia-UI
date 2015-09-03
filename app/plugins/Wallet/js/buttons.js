@@ -112,6 +112,7 @@ eID('lock-pod').onclick = function() {
 		lock();
 	} else if (!wallet.unlocked && state === 'Locked'){
 		show('request-password');
+		eID('password-field').focus();
 	} else {
 		console.error('lock-pod disagrees with wallet variable!', wallet.unlocked, state);
 	}
@@ -127,6 +128,13 @@ eID('enter-password').onclick = function() {
 	unlock(field.value);
 	field.value = '';
 };
+// An 'Enter' keypress in the input field will submit it.
+eID('password-field').addEventListener("keydown", function(e) {
+    e = e || window.event;
+    if (e.keyCode == 13) {
+        eID('enter-password').click();
+    }
+}, false);
 
 // Make sure the user read the password
 eID('confirm-password').onclick = function() {
