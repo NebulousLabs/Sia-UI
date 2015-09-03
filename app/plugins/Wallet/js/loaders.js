@@ -119,3 +119,18 @@ addResultListener('address-list', function(result) {
 	popup.querySelector('.address-list').innerHTML = list;
 	update();
 });
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+function loadLegacyWallet(filename, password) {
+	IPC.sendToHost('api-call', {
+		url: '/wallet/load/033x',
+		type: 'POST',
+		args: {
+			filepath: filename,
+			encryptionpassword: password,
+		},
+	}, 'load-wallet');
+}
+addResultListener('load-wallet', function(result) {
+	notify('Loaded Wallet', 'success');
+});

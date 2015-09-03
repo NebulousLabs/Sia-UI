@@ -148,3 +148,27 @@ eID('show-address-list').onclick = function() {
 eID('close-address-list').onclick = function() {
 	hide('display-addresses');
 };
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+eID('load-legacy-wallet').onclick = function() {
+	var loadPath = IPC.sendSync('dialog', 'open', {
+		title: 'Legacy Wallet File Path',
+		filters: [
+			{ name: 'Legacy wallet', extensions: ['dat'] }
+		],
+		properties: ['openFile'],
+	});
+	if (loadPath) {
+		// kind of a hack; we want to reuse the enter-password dialog, but in
+		// order to do so we must temporarily overwrite its onclick method.
+		var oldOnclick = eID('enter-password').onclick;
+		eID('enter-password').onclick = function() {
+			var field = eID('password-field');
+			loadLegacyWallet(loadPath[0], field.value);
+			field.value = '';
+			eID('enter-password').onclick = oldOnclick;
+			hide('request-password');
+		}
+		show('request-password');
+	}
+};
