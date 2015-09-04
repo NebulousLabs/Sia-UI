@@ -18,12 +18,12 @@ var mainWindow;
 // Creates the window and loads index.html
 function startMainWindow() {
 	// Open the UI with full screen size. 'screen' can only be required after
-	// app.on('ready') 
+	// app.on('ready')
 	const ElectronScreen = require('screen');
 	var size = ElectronScreen.getPrimaryDisplay().workAreaSize;
 
 	// Give tray/taskbar icon path
-	var iconPath = Path.join(__dirname, 'app', 'assets', 'icon.png');
+	var iconPath = Path.join(__dirname, 'assets', 'icon.png');
 	var appIcon = new Tray(iconPath);
 	var contextMenu = Menu.buildFromTemplate([
 		{ label: 'Minimize', accelerator: 'CmdOrCtrl+M', selector: 'performMiniaturize:' },
@@ -42,7 +42,7 @@ function startMainWindow() {
 	});
 
 	// Load the index.html of the app.
-	mainWindow.loadUrl('file://' + __dirname + '/app/index.html');
+	mainWindow.loadUrl('file://' + __dirname + '/index.html');
 
 	// Emitted when the window is closed.
 	mainWindow.on('closed', function() {

@@ -1,7 +1,7 @@
 {
   "name": "Sia-UI-beta",
   "version": "0.4.1",
-  "main": "index.js",
+  "main": "app/index.js",
   "author": "NebulousLabs",
   "description": "A UI application for interfacing with Sia",
   "license": "MIT",
@@ -23,7 +23,7 @@
     "package-linux32": "make package-linux32",
     "package-win64": "make package-win64",
     "package-win32": "make package-win32",
-    "package-mac": "make package-mac"
+    "package-osx": "make package-osx"
   },
   "repository": {
     "type": "git",
