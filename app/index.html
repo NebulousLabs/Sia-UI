@@ -45,18 +45,18 @@
 		</div>
 		<!-- Javascript -->
 		<script> 
-			const WebFrame = require("web-frame");
-			const RendererIPC = require("ipc");
-			const ElectronScreen = require("screen");
+			const WebFrame = require('web-frame');
+			const RendererIPC = require('ipc');
+			const ElectronScreen = require('screen');
 			const Process = require('child_process').spawn;
-			const Path = require("path");
-			const Fs = require("fs");
-			const Shell = require("shell");
-			const $ = require("jquery");
+			const Path = require('path');
+			const Fs = require('fs');
+			const Shell = require('shell');
+			const $ = require('./js/jquery.min.js');
 		</script>
-		<script src="js/daemonManager.js"></script>
-		<script src="js/pluginManager.js"></script>
-		<script src="js/uiManager.js"></script>
+		<script src='js/daemonManager.js'></script>
+		<script src='js/pluginManager.js'></script>
+		<script src='js/uiManager.js'></script>
 		<script>
 			var UI = new UIManager();
 			var Daemon = new DaemonManager();
