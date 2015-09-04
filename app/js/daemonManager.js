@@ -131,7 +131,7 @@ function DaemonManager() {
 	 * @param {callback} callback
 	 */
 	function setConfig(config, callback) {
-		siaPath = Path.join(config.depsPath, 'Sia');
+		siaPath = 'Sia';
 		address = config.siadAddress;
 		callback();
 	}
