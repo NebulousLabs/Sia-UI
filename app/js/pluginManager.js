@@ -198,7 +198,7 @@ function PluginManager() {
 	 */
 	function setConfig(config, callback) {
 		home = config.homePlugin;
-		plugPath = config.pluginsPath;
+		plugPath = Path.join(__dirname, 'plugins');
 		callback();
 	}
 

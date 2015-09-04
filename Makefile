@@ -16,7 +16,7 @@ electron-linux64 = electron-$(electron-version)-linux-x64.zip
 sia-linux64 = $(sia-ui-name)-$(sia-version)-linux64
 package-linux64:
 	mkdir -p $(release-dir)
-	wget -nc $(electron-url)/$(electron-version)/$(electron-linux64) -O $(release-dir)/$(electron-linux64)
+	wget -nc $(electron-url)/$(electron-version)/$(electron-linux64) -O $(release-dir)/$(electron-linux64) || true
 	unzip -o $(release-dir)/$(electron-linux64) -d $(release-dir)/$(sia-linux64)
 	rm -r $(release-dir)/$(sia-linux64)/resources/default_app
 	mv $(release-dir)/$(sia-linux64)/electron $(release-dir)/$(sia-linux64)/Sia
