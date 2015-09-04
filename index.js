@@ -23,7 +23,7 @@ function startMainWindow() {
 	var size = ElectronScreen.getPrimaryDisplay().workAreaSize;
 
 	// Give tray/taskbar icon path
-	var iconPath = Path.join(__dirname, 'app', 'assets', 'logo', 'logo.png');
+	var iconPath = Path.join(__dirname, 'app', 'assets', 'icon.png');
 	var appIcon = new Tray(iconPath);
 	var contextMenu = Menu.buildFromTemplate([
 		{ label: 'Minimize', accelerator: 'CmdOrCtrl+M', selector: 'performMiniaturize:' },
@@ -31,14 +31,14 @@ function startMainWindow() {
 		{ type: 'separator' },
 		{ label: 'Bring All to Front', selector: 'arrangeInFront:' }
 	]);
-	appIcon.setToolTip('A highly efficient decentralized storage network.');
+	appIcon.setToolTip('Sia - The Collaborative Cloud.');
 
 	// Create the browser
 	mainWindow = new BrowserWindow({
-		'width': size.width,
+		'width':  size.width,
 		'height': size.height,
-		'icon': iconPath,
-		'title': 'Sia-UI'
+		'icon':   iconPath,
+		'title':  'Sia-UI-beta',
 	});
 
 	// Load the index.html of the app.
@@ -61,11 +61,11 @@ function startMainWindow() {
 				submenu: [
 					{ label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
 					{ label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-					{ type: "separator" },
+					{ type:  "separator" },
 					{ label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
 					{ label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
 					{ label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-					{ label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+					{ label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" },
 				]
 			}
 		]);
@@ -82,7 +82,6 @@ App.on('window-all-closed', function() {
 // When Electron loading has finished, start the daemon then the UI
 App.on('ready', startMainWindow);
 
-// TODO: Set up to work with files plugin
 // Listen for if the renderer process wants to produce a dialog message
 MainIPC.on('dialog', function(event, type, options) {
 	var response;
