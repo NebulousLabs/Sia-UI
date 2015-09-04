@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "electron .",
-    "clean": "rm -rf build doc/Sia-UI node_modules app/dependencies app/config.json **/*.swp npm-debug.log",
+    "clean": "rm -rf release doc/Sia-UI node_modules app/dependencies app/config.json **/*.swp npm-debug.log",
     "debug": "node-inspector & electron --debug=5858 . & xdg-open http://127.0.0.1:8080/debug?ws=127.0.0.1:8080&port=5858",
     "doc": "jsdoc -c .jsdocrc",
     "lint": "jshint . --verbose --exclude-path=.jshintignore",
