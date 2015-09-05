@@ -64,4 +64,10 @@ this UI project (e.g. image logos, third-party css, etc.)
 Lastly, the 'dependencies' folder contains anything that are not a part of the
 project, but that it needs to use. Currently this is only siad.
 
+## Packaging Sia-UI
 
+There is a Makefile that contains some packaging scripts. Run `make package` to
+package Sia. You will need to have the primary Sia project in your GOPATH, and
+you will need to have run `make xc` from that project. Running `make package`
+will grab the packaged binaries from the 'Sia' repo and use them to package the
+Sia-UI.
