@@ -10,7 +10,7 @@ sia-ui-name = Sia-UI
 sia-version = v0.4.1-beta
 sia-release-path = $(GOPATH)/src/github.com/NebulousLabs/Sia/release/$(sia-version)
 
-package: rmpackages package-linux64 package-linux32 package-windows64 package-windows32
+package: rmpackages package-linux64 package-linux32 package-windows64 package-windows32 package-osx
 
 rmpackages:
 	rm -r $(release-dir)/$(sia-ui-name)*
@@ -79,4 +79,32 @@ package-windows32:
 	# using flags alone.
 	cd $(release-dir) zip -r $(release-dir)/$(sia-windows32).zip $(release-dir)/$(sia-windows32) && cd ..
 
-.PHONY: package rmpackages package-linux64 package-linux32 package-windows64 package-windows32
+electron-osx = electron-$(electron-version)-darwin-x64.zip
+sia-osx = $(sia-ui-name)-$(sia-version)-mac
+contents = $(release-dir)/$(sia-osx)/Sia.app/Contents
+package-osx:
+	mkdir -p $(release-dir)
+	wget -nc $(electron-url)/$(electron-version)/$(electron-osx) -O $(release-dir)/$(electron-osx) || true
+	unzip -o $(release-dir)/$(electron-osx) -d $(release-dir)/$(sia-osx)
+	### Rebranding ###
+	mv $(release-dir)/$(sia-osx)/Electron.app $(release-dir)/$(sia-osx)/Sia.app
+	mv $(contents)/MacOS/Electron $(contents)/MacOS/Sia
+	mv $(contents)/Frameworks/Electron\ Helper\ EH.app/ $(contents)/Frameworks/Sia\ Helper\ EH.app
+	mv $(contents)/Frameworks/Sia\ Helper\ EH.app/Contents/MacOS/Electron\ Helper\ EH $(contents)/Frameworks/Sia\ Helper\ EH.app/Contents/MacOS/Sia\ Helper\ EH
+	mv $(contents)/Frameworks/Electron\ Helper\ NP.app/ $(contents)/Frameworks/Sia\ Helper\ NP.app
+	mv $(contents)/Frameworks/Sia\ Helper\ NP.app/Contents/MacOS/Electron\ Helper\ NP $(contents)/Frameworks/Sia\ Helper\ NP.app/Contents/MacOS/Sia\ Helper\ NP
+	mv $(contents)/Frameworks/Electron\ Helper.app/ $(contents)/Frameworks/Sia\ Helper.app
+	mv $(contents)/Frameworks/Sia\ Helper.app/Contents/MacOS/Electron\ Helper $(contents)/Frameworks/Sia\ Helper.app/Contents/MacOS/Sia\ Helper
+	sed -i.bak s/Electron/Sia/g $(contents)/Info.plist
+	sed -i.bak s/Electron/Sia/g $(contents)/Frameworks/Sia\ Helper.app/Contents/Info.plist
+	### End Rebranding ###
+	rm -r $(release-dir)/$(sia-osx)/Sia.app/Contents/Resources/default_app
+	cp -R app/ $(release-dir)/$(sia-osx)/Sia.app/Contents/Resources/app/
+	mkdir -p $(release-dir)/$(sia-osx)/Sia.app/Contents/Resources/app/Sia
+	unzip $(sia-release-path)/Sia_$(sia-version)_darwin_amd64.zip -d $(release-dir)/$(sia-osx)/Sia.app/Contents/Resources/app/Sia
+	# With out the 'cd' command, the 'release' folder gets included in the
+	# archive, which is undesirable. I couldn't figure out how to prevent that
+	# using flags alone.
+	cd $(release-dir) zip -r $(release-dir)/$(sia-osx).zip $(release-dir)/$(sia-osx) && cd ..
+
+.PHONY: package rmpackages package-linux64 package-linux32 package-windows64 package-windows32 package-osx
