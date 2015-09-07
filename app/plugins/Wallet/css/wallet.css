@@ -27,7 +27,7 @@
 	border: solid 1px #c5c5c5;
 	border-radius: 8px;
 	text-align: center;
-	overflow: hidden;
+	overflow: auto;
 }
 .popup .title {
 	font-size: 24px;
