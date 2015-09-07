@@ -1,6 +1,6 @@
 {
   "name": "Sia-UI",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "main": "index.js",
   "author": "NebulousLabs",
   "description": "A UI application for interfacing with Sia",
