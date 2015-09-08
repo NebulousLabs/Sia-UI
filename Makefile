@@ -13,7 +13,7 @@ sia-release-path = $(GOPATH)/src/github.com/NebulousLabs/Sia/release/$(sia-versi
 package: rmpackages package-linux64 package-linux32 package-windows64 package-windows32 package-osx
 
 rmpackages:
-	rm -r $(release-dir)/$(sia-ui-name)*
+	rm -r $(release-dir)/$(sia-ui-name)* || true
 
 electron-linux64 = electron-$(electron-version)-linux-x64.zip
 sia-linux64 = $(sia-ui-name)-$(sia-version)-linux64
@@ -61,7 +61,7 @@ package-windows64:
 	# With out the 'cd' command, the 'release' folder gets included in the
 	# archive, which is undesirable. I couldn't figure out how to prevent that
 	# using flags alone.
-	cd $(release-dir) zip -r $(release-dir)/$(sia-windows64).zip $(release-dir)/$(sia-windows64) && cd ..
+	cd $(release-dir) && zip -r $(sia-windows64).zip $(sia-windows64) && cd ..
 
 electron-windows32 = electron-$(electron-version)-win32-ia32.zip
 sia-windows32 = $(sia-ui-name)-$(sia-version)-windows32
@@ -77,7 +77,7 @@ package-windows32:
 	# With out the 'cd' command, the 'release' folder gets included in the
 	# archive, which is undesirable. I couldn't figure out how to prevent that
 	# using flags alone.
-	cd $(release-dir) zip -r $(release-dir)/$(sia-windows32).zip $(release-dir)/$(sia-windows32) && cd ..
+	cd $(release-dir) && zip -r $(sia-windows32).zip $(sia-windows32) && cd ..
 
 electron-osx = electron-$(electron-version)-darwin-x64.zip
 sia-osx = $(sia-ui-name)-$(sia-version)-mac
@@ -101,10 +101,15 @@ package-osx:
 	rm -r $(release-dir)/$(sia-osx)/Sia.app/Contents/Resources/default_app
 	cp -R app/ $(release-dir)/$(sia-osx)/Sia.app/Contents/Resources/app/
 	mkdir -p $(release-dir)/$(sia-osx)/Sia.app/Contents/Resources/app/Sia
+	# For some reason, the unzip command on the mac binaries operates
+	# differently, leaving a top level folder that isn't there in the other
+	# scripts. Perhaps it's because there's a typo somewhere.
 	unzip $(sia-release-path)/Sia_$(sia-version)_darwin_amd64.zip -d $(release-dir)/$(sia-osx)/Sia.app/Contents/Resources/app/Sia
+	mv $(release-dir)/$(sia-osx)/Sia.app/Contents/Resources/app/Sia/Sia_$(sia-version)_darwin_amd64/* $(release-dir)/$(sia-osx)/Sia.app/Contents/Resources/app/Sia/
+	rm -r $(release-dir)/$(sia-osx)/Sia.app/Contents/Resources/app/Sia/Sia_$(sia-version)_darwin_amd64
 	# With out the 'cd' command, the 'release' folder gets included in the
 	# archive, which is undesirable. I couldn't figure out how to prevent that
 	# using flags alone.
-	cd $(release-dir) zip -r $(release-dir)/$(sia-osx).zip $(release-dir)/$(sia-osx) && cd ..
+	cd $(release-dir) && zip -r $(sia-osx).zip $(sia-osx) && cd ..
 
 .PHONY: package rmpackages package-linux64 package-linux32 package-windows64 package-windows32 package-osx
