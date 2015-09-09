@@ -73,7 +73,7 @@ function DaemonManager() {
 			if (err) {
 				self.Running = false;
 				// Check again later
-				setTimeout(updatePrompt, 100000); // Not great - we'll have to fix that.
+				setTimeout(updatePrompt, 1000);
 			} else if (update.Available) {
 				self.Running = true;
 				UI.notify("New Sia Client Available: Click to update to " + update.Version, "update", function() {
