@@ -26,8 +26,13 @@ addResultListener('update-status', function(result) {
 	// Update balance confirmed and uncomfirmed
 	var bal = convertSiacoin(wallet.confirmedsiacoinbalance);
 	var pend = convertSiacoin(wallet.unconfirmedincomingsiacoins).sub(convertSiacoin(wallet.unconfirmedoutgoingsiacoins));
-	eID('confirmed').innerHTML = 'Balance: ' + bal + ' S';
-	eID('uncomfirmed').innerHTML = 'Pending: ' + pend + ' S';
+	if (wallet.Unlocked && wallet.Encrypted) {
+		eID('confirmed').innerHTML = 'Balance: ' + bal + ' S';
+		eID('uncomfirmed').innerHTML = 'Pending: ' + pend + ' S';
+	} else {
+		eID('confirmed').innerHTML = 'Balance: Locked';
+		eID('uncomfirmed').innerHTML = 'Pending: Locked';
+	}
 });
 
 /*
