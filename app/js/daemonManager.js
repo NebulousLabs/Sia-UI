@@ -87,7 +87,7 @@ function DaemonManager() {
 	}
 	
 	/**
-	 * Starts the daemon as a long running background process
+	 * Starts the daemon
 	 */
 	function start() {
 		ifSiad(function() {
@@ -126,6 +126,20 @@ function DaemonManager() {
 	}
 
 	/**
+	 * Stops the daemon
+	 */
+	function stop(callback) {
+		ifSiad(function() {
+			UI.notify('Stopping siad...', 'stop');
+		}, function() {
+			console.error('attempted to stop siad when it was not running');
+			return;
+		});
+		apiCall('/daemon/stop', function() {});
+	}
+
+
+	/**
 	 * Sets the member variables based on the passed config
 	 * @param {config} config - the config object derived from config.json
 	 * @param {callback} callback
@@ -149,6 +163,7 @@ function DaemonManager() {
 
 	// Make certain functions public
 	this.init = init;
+	this.stop = stop;
 	this.apiCall = apiCall;
 	this.update = updatePrompt;
 	this.ifSiad = ifSiad;

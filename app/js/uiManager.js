@@ -253,6 +253,7 @@ function UIManager() {
 	*/
 	this.kill = function() {
 		Config.save(memConfig, configPath);
+		Daemon.stop();
 		// Ensure the UI's closing
 		setTimeout(function() {
 			RendererIPC.send('exit');

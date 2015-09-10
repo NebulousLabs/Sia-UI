@@ -73,14 +73,11 @@ function startMainWindow() {
 	}
 }
 
-
-// Quit when all windows are closed.
-App.on('window-all-closed', function() {
-	App.quit();
-});
-
 // When Electron loading has finished, start the daemon then the UI
 App.on('ready', startMainWindow);
+
+// Quit when all windows are closed.
+App.on('window-all-closed', App.quit);
 
 // Listen for if the renderer process wants to produce a dialog message
 MainIPC.on('dialog', function(event, type, options) {
@@ -103,3 +100,7 @@ MainIPC.on('dialog', function(event, type, options) {
 	}
 	event.returnValue = response ? response : null;
 });
+
+// Quit when all windows are closed.
+MainIPC.on('exit', App.quit);
+
