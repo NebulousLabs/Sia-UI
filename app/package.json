@@ -1,6 +1,6 @@
 {
   "name": "Sia-UI",
-  "version": "v0.4.1-beta",
+  "version": "v0.4.2-beta",
   "main": "index.js",
   "author": "NebulousLabs",
   "description": "A UI for Sia, The Collaborative Cloud",

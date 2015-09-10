@@ -5,9 +5,9 @@ all: package
 
 release-dir = release
 electron-url = https://github.com/atom/electron/releases/download
-electron-version = v0.31.2
+electron-version = v0.32.1
 sia-ui-name = Sia-UI
-sia-version = v0.4.1-beta
+sia-version = v0.4.2-beta
 sia-release-path = $(GOPATH)/src/github.com/NebulousLabs/Sia/release/$(sia-version)
 
 package: rmpackages package-linux64 package-linux32 package-windows64 package-windows32 package-osx
