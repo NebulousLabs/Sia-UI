@@ -40,7 +40,6 @@ function UIManager() {
 		sent: 'send',
 		created: 'plus',
 		// Progress
-		// TODO: use these in Files
 		ongoing: 'hourglass-half',
 		started: 'hourglass-start',
 		finished: 'hourglass-end',
@@ -254,6 +253,7 @@ function UIManager() {
 	*/
 	this.kill = function() {
 		Config.save(memConfig, configPath);
+		Daemon.stop();
 		// Ensure the UI's closing
 		setTimeout(function() {
 			RendererIPC.send('exit');

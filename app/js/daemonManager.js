@@ -87,7 +87,7 @@ function DaemonManager() {
 	}
 	
 	/**
-	 * Starts the daemon as a long running background process
+	 * Starts the daemon
 	 */
 	function start() {
 		ifSiad(function() {
@@ -98,14 +98,14 @@ function DaemonManager() {
 		});
 
 		// daemon as a background process logs output to files
-		var out = Fs.openSync(Path.join(siaPath, 'daemonOut.log'), 'w');
-		var err = Fs.openSync(Path.join(siaPath, 'daemonErr.log'), 'w');
+		var out = Fs.openSync(Path.join(__dirname, siaPath, 'daemonOut.log'), 'w');
+		var err = Fs.openSync(Path.join(__dirname, siaPath, 'daemonErr.log'), 'w');
 
 		// daemon process has to be detached without parent stdio pipes
 		var processOptions = {
-			detached: true,
+			detached: false,
 			stdio: [ 'ignore', out, err ],
-			cwd: siaPath 
+			cwd: Path.join(__dirname, siaPath),
 		};
 		var command = process.platform === 'win32' ? './siad.exe' : './siad';
 		var daemonProcess = new Process(command, processOptions);
@@ -126,12 +126,26 @@ function DaemonManager() {
 	}
 
 	/**
+	 * Stops the daemon
+	 */
+	function stop(callback) {
+		ifSiad(function() {
+			UI.notify('Stopping siad...', 'stop');
+		}, function() {
+			console.error('attempted to stop siad when it was not running');
+			return;
+		});
+		apiCall('/daemon/stop', function() {});
+	}
+
+
+	/**
 	 * Sets the member variables based on the passed config
 	 * @param {config} config - the config object derived from config.json
 	 * @param {callback} callback
 	 */
 	function setConfig(config, callback) {
-		siaPath = Path.join(config.depsPath, 'Sia');
+		siaPath = 'Sia';
 		address = config.siadAddress;
 		callback();
 	}
@@ -149,6 +163,7 @@ function DaemonManager() {
 
 	// Make certain functions public
 	this.init = init;
+	this.stop = stop;
 	this.apiCall = apiCall;
 	this.update = updatePrompt;
 	this.ifSiad = ifSiad;

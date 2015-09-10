@@ -18,12 +18,12 @@ var mainWindow;
 // Creates the window and loads index.html
 function startMainWindow() {
 	// Open the UI with full screen size. 'screen' can only be required after
-	// app.on('ready') 
+	// app.on('ready')
 	const ElectronScreen = require('screen');
 	var size = ElectronScreen.getPrimaryDisplay().workAreaSize;
 
 	// Give tray/taskbar icon path
-	var iconPath = Path.join(__dirname, 'app', 'assets', 'logo', 'logo.png');
+	var iconPath = Path.join(__dirname, 'assets', 'icon.png');
 	var appIcon = new Tray(iconPath);
 	var contextMenu = Menu.buildFromTemplate([
 		{ label: 'Minimize', accelerator: 'CmdOrCtrl+M', selector: 'performMiniaturize:' },
@@ -31,18 +31,18 @@ function startMainWindow() {
 		{ type: 'separator' },
 		{ label: 'Bring All to Front', selector: 'arrangeInFront:' }
 	]);
-	appIcon.setToolTip('A highly efficient decentralized storage network.');
+	appIcon.setToolTip('Sia - The Collaborative Cloud.');
 
 	// Create the browser
 	mainWindow = new BrowserWindow({
-		'width': size.width,
+		'width':  size.width,
 		'height': size.height,
-		'icon': iconPath,
-		'title': 'Sia-UI'
+		'icon':   iconPath,
+		'title':  'Sia-UI-beta',
 	});
 
 	// Load the index.html of the app.
-	mainWindow.loadUrl('file://' + __dirname + '/app/index.html');
+	mainWindow.loadUrl('file://' + __dirname + '/index.html');
 
 	// Emitted when the window is closed.
 	mainWindow.on('closed', function() {
@@ -61,11 +61,11 @@ function startMainWindow() {
 				submenu: [
 					{ label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
 					{ label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-					{ type: "separator" },
+					{ type:  "separator" },
 					{ label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
 					{ label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
 					{ label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-					{ label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+					{ label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" },
 				]
 			}
 		]);
@@ -73,16 +73,12 @@ function startMainWindow() {
 	}
 }
 
-
-// Quit when all windows are closed.
-App.on('window-all-closed', function() {
-	App.quit();
-});
-
 // When Electron loading has finished, start the daemon then the UI
 App.on('ready', startMainWindow);
 
-// TODO: Set up to work with files plugin
+// Quit when all windows are closed.
+App.on('window-all-closed', App.quit);
+
 // Listen for if the renderer process wants to produce a dialog message
 MainIPC.on('dialog', function(event, type, options) {
 	var response;
@@ -104,3 +100,7 @@ MainIPC.on('dialog', function(event, type, options) {
 	}
 	event.returnValue = response ? response : null;
 });
+
+// Quit when all windows are closed.
+MainIPC.on('exit', App.quit);
+
