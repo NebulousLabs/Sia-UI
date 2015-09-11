@@ -66,8 +66,8 @@ project, but that it needs to use. Currently this is only siad.
 
 ## Packaging Sia-UI
 
-There is a Makefile that contains some packaging scripts. Run `make package` to
-package Sia. You will need to have the primary Sia project in your GOPATH, and
-you will need to have run `make xc` from that project. Running `make package`
-will grab the packaged binaries from the 'Sia' repo and use them to package the
-Sia-UI.
+There are some packaging scripts in the config.json. For them to work, you will
+need to have release archives of the correct version in the `release` folder of
+the Sia package in your GOPATH. Assuming that both repositories are on the same
+version, it is sufficient to run `make xc` from the Sia repository followed by
+`npm run package` from the Sia-UI repository.
