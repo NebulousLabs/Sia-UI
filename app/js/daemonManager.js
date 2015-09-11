@@ -103,7 +103,7 @@ function DaemonManager() {
 
 		// daemon process has to be detached without parent stdio pipes
 		var processOptions = {
-			detached: false,
+			detached: true,
 			stdio: [ 'ignore', out, err ],
 			cwd: Path.join(__dirname, siaPath),
 		};
