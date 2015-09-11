@@ -63,6 +63,8 @@ package() {
 		sed -i.bak s/Electron/Sia/g "$contents"/Frameworks/Sia\ Helper.app/Contents/Info.plist
 		# Create archive
 		unzip -quo "$SIA_RELEASE_DIR/"*"$SIA_VERSION"*"$sia_arch.zip" -d "$ui/Sia.app/Contents/Resources/app/Sia"
+		mv "$ui/Sia.app/Contents/Resources/app/Sia/"*"$SIA_VERSION"*"$sia_arch"/* "$ui/Sia.app/Contents/Resources/app/Sia/"
+		rm -r "$ui/Sia.app/Contents/Resources/app/Sia/"*"$SIA_VERSION"*"$sia_arch"
 		zip -FSqr "$ui.zip" "$ui"
 	elif [[ $1 == "win64" || $1 == "win32" ]]; then
 		mv "$ui/electron.exe" "$ui/Sia.exe"
