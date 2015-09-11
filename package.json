@@ -18,12 +18,7 @@
     "debug": "node-inspector & electron --debug=5858 . & xdg-open http://127.0.0.1:8080/debug?ws=127.0.0.1:8080&port=5858",
     "doc": "jsdoc -c .jsdocrc",
     "lint": "jshint . --verbose --exclude-path=.jshintignore",
-    "package": "make package",
-    "package-linux64": "make package-linux64",
-    "package-linux32": "make package-linux32",
-    "package-win64": "make package-win64",
-    "package-win32": "make package-win32",
-    "package-osx": "make package-osx"
+    "release": "./release.sh"
   },
   "repository": {
     "type": "git",
