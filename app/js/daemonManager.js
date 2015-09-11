@@ -98,14 +98,14 @@ function DaemonManager() {
 		});
 
 		// daemon as a background process logs output to files
-		var out = Fs.openSync(Path.join(siaPath, 'daemonOut.log'), 'w');
-		var err = Fs.openSync(Path.join(siaPath, 'daemonErr.log'), 'w');
+		var out = Fs.openSync(Path.join(__dirname, siaPath, 'daemonOut.log'), 'w');
+		var err = Fs.openSync(Path.join(__dirname, siaPath, 'daemonErr.log'), 'w');
 
 		// daemon process has to be detached without parent stdio pipes
 		var processOptions = {
 			detached: true,
 			stdio: [ 'ignore', out, err ],
-			cwd: siaPath 
+			cwd: Path.join(__dirname, siaPath),
 		};
 		var command = process.platform === 'win32' ? './siad.exe' : './siad';
 		var daemonProcess = new Process(command, processOptions);
@@ -131,7 +131,7 @@ function DaemonManager() {
 	 * @param {callback} callback
 	 */
 	function setConfig(config, callback) {
-		siaPath = Path.join(config.depsPath, 'Sia');
+		siaPath = 'Sia';
 		address = config.siadAddress;
 		callback();
 	}

@@ -1,0 +1,15 @@
+{
+  "name": "Sia-UI",
+  "version": "v0.4.2-beta",
+  "main": "index.js",
+  "author": "NebulousLabs",
+  "description": "A UI for Sia, The Collaborative Cloud",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/NebulousLabs/Sia-UI.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NebulousLabs/Sia-UI/issues"
+  }
+}

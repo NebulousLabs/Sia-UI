@@ -40,7 +40,6 @@ function UIManager() {
 		sent: 'send',
 		created: 'plus',
 		// Progress
-		// TODO: use these in Files
 		ongoing: 'hourglass-half',
 		started: 'hourglass-start',
 		finished: 'hourglass-end',

@@ -1,12 +1,11 @@
 {
-  "name": "Sia-UI",
-  "version": "0.4.1",
-  "main": "index.js",
+  "name": "Sia-UI-beta",
+  "version": "0.4.2",
+  "main": "app/index.js",
   "author": "NebulousLabs",
   "description": "A UI application for interfacing with Sia",
   "license": "MIT",
   "devDependencies": {
-    "electron-packager": "latest",
     "electron-prebuilt": "latest",
     "ink-docstrap": "latest",
     "jsdoc": "latest",
@@ -15,33 +14,17 @@
   },
   "scripts": {
     "start": "electron .",
+    "clean": "rm -rf release doc/Sia-UI node_modules app/dependencies app/config.json **/*.swp npm-debug.log",
     "debug": "node-inspector & electron --debug=5858 . & xdg-open http://127.0.0.1:8080/debug?ws=127.0.0.1:8080&port=5858",
-    "clean": "rm -rf build doc/Sia-UI node_modules app/dependencies app/config.json **/*.swp npm-debug.log",
-    "fresh": "npm run clean && npm install && npm start",
-    "lint": "jshint . --verbose --exclude-path=.jshintignore",
     "doc": "jsdoc -c .jsdocrc",
-    "postinstall": "npm run sia-repo && npm run sia-import",
-    "sia-repo": "go get -u github.com/NebulousLabs/Sia/...",
-    "sia-import": "(test -d app/dependencies/Sia || mkdir -p app/dependencies/Sia) && cp $GOPATH/bin/siad app/dependencies/Sia",
-    "sia-kill": "killall siad; while pgrep siad; do sleep .5; done;",
-    "sia-reimport": "npm run sia-repo && npm run sia-kill && npm run sia-import",
-    "build": "npm run build-cmd -- --all",
-    "build-lin64": "npm run build-cmd -- --platform=linux --arch=x64",
-    "build-lin32": "npm run build-cmd -- --platform=linux --arch=ia32",
-    "build-win64": "npm run build-cmd -- --platform=win32 --arch=x64",
-    "build-win32": "npm run build-cmd -- --platform=win32 --arch=ia32",
-    "build-mac": "npm run build-cmd -- --platform=darwin --arch=x64",
-    "build-cmd": "electron-packager . Sia-UI --version=0.30.0 --prune --ignore='doc|build' --out=build --icon=app/assets/logo/sia.svg"
+    "lint": "jshint . --verbose --exclude-path=.jshintignore",
+    "release": "./release.sh"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/NebulousLabs/test-ui.git"
+    "url": "git://github.com/NebulousLabs/Sia-UI.git"
   },
   "bugs": {
-    "url": "https://github.com/NebulousLabs/test-ui/issues"
-  },
-  "dependencies": {
-    "bignumber.js": "latest",
-    "jquery": "latest"
+    "url": "https://github.com/NebulousLabs/Sia-UI/issues"
   }
 }

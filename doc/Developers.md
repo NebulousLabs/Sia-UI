@@ -64,4 +64,10 @@ this UI project (e.g. image logos, third-party css, etc.)
 Lastly, the 'dependencies' folder contains anything that are not a part of the
 project, but that it needs to use. Currently this is only siad.
 
+## Packaging Sia-UI
 
+There are some packaging scripts in the config.json. For them to work, you will
+need to have release archives of the correct version in the `release` folder of
+the Sia package in your GOPATH. Assuming that both repositories are on the same
+version, it is sufficient to run `make xc` from the Sia repository followed by
+`npm run package` from the Sia-UI repository.
