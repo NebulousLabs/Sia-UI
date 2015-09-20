@@ -30,7 +30,7 @@ package() {
 			;;
 		win32)
 			electron_arch="win32-ia32"
-			sia_arch="windows_amd64"
+			sia_arch="windows_386"
 			;;
 		darwin)
 			electron_arch="darwin-x64"
