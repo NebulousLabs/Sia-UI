@@ -106,7 +106,7 @@ addResultListener('coin-sent', function(result) {
 // Lock or unlock the wallet
 eID('lock-pod').onclick = function() {
 	var state = eID('lock-status').innerHTML;
-	if (!wallet.encrypted && state === 'Unencrypted') {
+	if (!wallet.encrypted && state === 'Create Wallet') {
 		encrypt();
 	} else if (wallet.unlocked && state === 'Unlocked') {
 		lock();

@@ -29,9 +29,11 @@ addResultListener('update-status', function(result) {
 	if (wallet.unlocked && wallet.encrypted) {
 		eID('confirmed').innerHTML = 'Balance: ' + bal + ' S';
 		eID('uncomfirmed').innerHTML = 'Pending: ' + pend + ' S';
+		eID('confirmed').style.removeProperty('display');
+		eID('uncomfirmed').style.removeProperty('display');
 	} else {
-		eID('confirmed').innerHTML = 'Balance: Locked';
-		eID('uncomfirmed').innerHTML = 'Pending: Locked';
+		eID('confirmed').style.setProperty('display', 'none');
+		eID('uncomfirmed').style.display = 'none';
 	}
 });
 
