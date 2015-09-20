@@ -105,16 +105,13 @@ addResultListener('coin-sent', function(result) {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Capsule ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Lock or unlock the wallet
 eID('lock-pod').onclick = function() {
-	var state = eID('lock-status').innerHTML;
-	if (!wallet.encrypted && state === 'Create Wallet') {
+	if (!wallet.encrypted) {
 		encrypt();
-	} else if (wallet.unlocked && state === 'Unlocked') {
+	} else if (wallet.unlocked) {
 		lock();
-	} else if (!wallet.unlocked && state === 'Locked'){
+	} else if (!wallet.unlocked) {
 		show('request-password');
 		eID('password-field').focus();
-	} else {
-		console.error('lock-pod disagrees with wallet variable!', wallet.unlocked, state);
 	}
 };
 
