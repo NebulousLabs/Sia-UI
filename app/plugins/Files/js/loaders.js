@@ -59,6 +59,37 @@ addResultListener('uploaded', function(result) {
 	update();
 });
 
+// Non-recursively upload all files in a directory
+function uploadDir(dirPath, nickname) {
+	var fs = require("fs");
+	var path = require("path");
+
+	// Upload files one at a time
+	fs.readdir(dirPath, function(err, files) {
+		if (err) {
+			notify('Failed retrieving directory contents', 'error');
+			return;
+		}
+		files.forEach(function(file) {
+			try {
+				var filePath = path.join(dirPath, file);
+
+				// Check that file exists
+				var stats = fs.statSync(filePath);
+
+				// Skip hidden files and directories
+				if (~isUnixHiddenPath(filePath) & stats.isFile()) {
+					upload(filePath, nickname + file);
+				}
+			}
+			catch (e) {
+				notify(file + ' disappeared', 'error');
+			}
+		});
+	});
+}
+
+
 function loadDotSia(filePath) {
 	IPC.sendToHost('api-call', {
 		url: '/renter/files/load',

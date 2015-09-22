@@ -15,6 +15,7 @@ function hideSteps(number) {
 
 // Exit function to return to general filelist view
 function exitFileAdder() {
+	hide('add-dir');
 	hide('add-file');
 	show('file-library');
 
@@ -26,7 +27,7 @@ function exitFileAdder() {
 	for (var i = 0; i < fields.length; i++) {
 		fields[i].value = '';
 	}
-	var paths = document.querySelectorAll('.file-path');
+	var paths = document.querySelectorAll('.file-path, .dir-path');
 	for (var j = 0; j < paths.length; j++) {
 		paths[j].innerHTML = '';
 	}
@@ -58,6 +59,7 @@ eID('upload-choice').onclick = function() {
 		eID('nickname-file-input').focus();
 	}
 };
+
 // An 'Enter' keypress in the input field will submit it.
 eID('nickname-file-input').addEventListener("keydown", function(e) {
     e = e || window.event;
@@ -95,6 +97,8 @@ eID('add-sia-file').onclick = function() {
 	loadDotSia(loadPath);
 };
 
+
+
 // ASCII file option chosen
 eID('ascii-choice').onclick = function() {
 	hideSteps(2);
@@ -125,6 +129,44 @@ eID('copy-ascii').onclick = function() {
 };
 eID('cancel-ascii').onclick = function() {
 	hide('show-ascii');
+};
+
+// Select directory sliding frame
+eID('new-dir').onclick = function() {
+	show('add-dir');
+	hide('file-library');
+};
+eID('back-dir').onclick = exitFileAdder;
+
+// Upload directory option chosen
+eID('upload-dir-choice').onclick = function() {
+	var path = require("path");
+	hideSteps(2);
+	hideSteps(3);
+
+	var loadPath = IPC.sendSync('dialog', 'open', {
+		title: 'Select Directory',
+		properties: ['openDirectory'],
+	});
+	if (loadPath) {
+		eID('nickname-dir').querySelector('.dir-path').innerHTML = loadPath;
+		loadPath = loadPath[0].split(path.sep);
+		eID('nickname-dir-input').value = loadPath[loadPath.length - 1] + '_';
+		show('nickname-dir');
+		show('upload-dir');
+		eID('nickname-dir-input').focus();
+	}
+};
+
+eID('upload-dir').onclick = function() {
+	var loadPath = eID('nickname-dir').querySelector('.dir-path').innerHTML;
+	var nickname = eID('nickname-dir-input').value;
+	// Illegal filename characters in nickname seems to throw errors
+	// So, substitute \ and / with underscore (_)
+	nickname.replace(/[/\\\\]/g, "_");
+	exitFileAdder();
+	update();
+	uploadDir(loadPath, nickname);
 };
 
 /*
