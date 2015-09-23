@@ -47,13 +47,13 @@
 					<div class='pure-u-1-2'>
 						<div class='button' id='new-file'>
 							<i class='fa fa-plus'></i>
-							Add file
+							Add File
 						</div>
 					</div>
 					<div class='pure-u-1-2'>
 						<div class='button' id='new-dir'>
-							<i class='fa fa-plus'></i>
-							Add files in directory
+							<i class='fa fa-folder-open'></i>
+							Add Folder
 						</div>
 					</div>
 					<!-- TODO: Search Bar -->
@@ -138,33 +138,33 @@
 				</div>
 			</div>
 		</div>
-		<!-- Sliding New Directory Frame -->
+		<!-- Sliding New Folder Frame -->
 		<div class='frame hidden' id='add-dir'>
 			<div class='header'>
 				<div class='button' id='back-dir'>
 					<i class='fa fa-chevron-left'></i>
 				</div>
 				<div class='title'>
-					Upload Directory
+					Add Folder
 				</div>
 			</div>
 
-			<div class='pure-g step' id='step1'>
-				<div class='pure-u-1-3 button' id='upload-dir-choice'>
+			<div class='pure-g step' id='step11'>
+				<div class='pure-u-1-1 button' id='upload-dir-choice'>
 					<i class='fa fa-upload'></i>
-					<p>Select Directory</p>
+					<p>Select Folder</p>
 				</div>
 			</div>
 
-			<div class='pure-g step' id='step2'>
+			<div class='pure-g step' id='step21'>
 				<div class='pure-u-1-1 hidden' id='nickname-dir'>
-					<p>Set prefix of uploaded files</p>
+					<p>Set optional file prefix</p>
 					<input class='description-field' id='nickname-dir-input'></input>
 					<div class='dir-path hidden'></div>
 				</div>
 			</div>
 
-			<div class='pure-g step' id='step3'>
+			<div class='pure-g step' id='step31'>
 				<div class='pure-u-1-1 hidden button' id='upload-dir'>
 					<i class='fa fa-plus'></i>
 					<p>Upload</p>

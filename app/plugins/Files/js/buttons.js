@@ -3,14 +3,16 @@
 // Library for working with clipboard
 const Clipboard = require('clipboard');
 
-// Used to hide subsequent steps when selecting and earlier one
-function hideSteps(number) {
-	var c = eID('step' + number).children;
-	for (var i = 0; i < c.length; i++) {
-		if(!hidden(c[i])) {
-			hide(c[i]);
+// Used to hide subsequent steps when selecting an earlier one
+function hideSteps(steps) {
+	steps.forEach( function(step) {
+		var c = eID('step' + step).children;
+		for (var i = 0; i < c.length; i++) {
+			if(!hidden(c[i])) {
+				hide(c[i]);
+			}
 		}
-	}
+	});
 }
 
 // Exit function to return to general filelist view
@@ -19,8 +21,7 @@ function exitFileAdder() {
 	hide('add-file');
 	show('file-library');
 
-	hideSteps(2);
-	hideSteps(3);
+	hideSteps([2,3,21,31]);
 
 	// Clear fields
 	var fields = document.querySelectorAll('.description-field');
@@ -42,8 +43,7 @@ eID('back').onclick = exitFileAdder;
 
 // Upload file option chosen
 eID('upload-choice').onclick = function() {
-	hideSteps(2);
-	hideSteps(3);
+	hideSteps([2,3]);
 
 	var loadPath = IPC.sendSync('dialog', 'open', {
 		title: 'Upload Path',
@@ -71,13 +71,14 @@ eID('upload-file').onclick = function() {
 	var loadPath = eID('nickname-file').querySelector('.file-path').innerHTML;
 	var nickname = eID('nickname-file-input').value;
 	upload(loadPath, nickname);
+	exitFileAdder();
+	update();
 	eID('nickname-file-input').focus();
 };
 
 // Sia file option chosen
 eID('sia-choice').onclick = function() {
-	hideSteps(2);
-	hideSteps(3);
+	hideSteps([2,3]);
 
 	var loadPath = IPC.sendSync('dialog', 'open', {
 		title: 'Sia File Path',
@@ -97,12 +98,9 @@ eID('add-sia-file').onclick = function() {
 	loadDotSia(loadPath);
 };
 
-
-
 // ASCII file option chosen
 eID('ascii-choice').onclick = function() {
-	hideSteps(2);
-	hideSteps(3);
+	hideSteps([2,3]);
 
 	show('paste-ascii');
 	show('add-ascii-file');
@@ -141,8 +139,7 @@ eID('back-dir').onclick = exitFileAdder;
 // Upload directory option chosen
 eID('upload-dir-choice').onclick = function() {
 	var path = require("path");
-	hideSteps(2);
-	hideSteps(3);
+	hideSteps([21,31]);
 
 	var loadPath = IPC.sendSync('dialog', 'open', {
 		title: 'Select Directory',
