@@ -7,6 +7,10 @@ const BigNumber = require('../../js/bignumber.min.js');
 // Ensure precision
 BigNumber.config({ DECIMAL_PLACES: 24 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
+// File system module
+var fs = require("fs");
+// Module for handling and transforming file paths
+var path = require("path");
 // Variable to store api result values
 var renting = {};
 // Keeps track of if the view is shown

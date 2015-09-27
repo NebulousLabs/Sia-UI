@@ -5,7 +5,7 @@ const Clipboard = require('clipboard');
 
 // Used to hide subsequent steps when selecting an earlier one
 function hideSteps(steps) {
-	steps.forEach( function(step) {
+	steps.forEach(function(step) {
 		var c = eID('step' + step).children;
 		for (var i = 0; i < c.length; i++) {
 			if(!hidden(c[i])) {
@@ -21,7 +21,7 @@ function exitFileAdder() {
 	hide('add-file');
 	show('file-library');
 
-	hideSteps([2,3,21,31]);
+	hideSteps([2,3,'f2','f3']);
 
 	// Clear fields
 	var fields = document.querySelectorAll('.description-field');
@@ -138,13 +138,14 @@ eID('back-dir').onclick = exitFileAdder;
 
 // Upload directory option chosen
 eID('upload-dir-choice').onclick = function() {
-	var path = require("path");
-	hideSteps([21,31]);
+	hideSteps(['f2','f3']);
 
 	var loadPath = IPC.sendSync('dialog', 'open', {
 		title: 'Select Directory',
 		properties: ['openDirectory'],
 	});
+
+	// Check that loadPath is a valid path
 	if (loadPath) {
 		eID('nickname-dir').querySelector('.dir-path').innerHTML = loadPath;
 		loadPath = loadPath[0].split(path.sep);
