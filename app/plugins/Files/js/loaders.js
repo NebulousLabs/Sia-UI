@@ -72,9 +72,15 @@ function uploadDir(dirPath, nickname) {
 			var filePath = path.join(dirPath, file);
 
 			// Skip hidden files and directories
-			if (~isUnixHiddenPath(filePath) & stats.isFile()) {
-				upload(filePath, nickname + file);
-			}
+			fs.stat(filePath, function(err, stats) {
+				if (err) {
+					notify('Cannot read ' + file, 'error');
+					return;
+				}
+				if (~isUnixHiddenPath(filePath) & stats.isFile()) {
+					upload(filePath, nickname + file);
+				}
+			});
 		}
 	});
 }
