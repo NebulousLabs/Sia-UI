@@ -81,15 +81,16 @@ function addResultListener(channel, callback) {
 	});
 }
 
-// Controls data size representation
-function formatBytes(bytes) {
+// Control data size representation
+function formatBytes(bytes, decimals) {
 	if (!bytes) {
 		return '0B';
 	}
 	var k = 1000;
-	var sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-	var i = Math.floor((Math.log(bytes) + 1) / Math.log(k));
-	return (new BigNumber(bytes).div(Math.pow(k, i))) + " " + sizes[i];
+	var dm = decimals + 1 || 3;
+	var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+	var i = Math.floor(Math.log(bytes) / Math.log(k));
+	return (bytes / Math.pow(k, i)).toPrecision(dm) + ' ' + sizes[i];
 }
 
 /**

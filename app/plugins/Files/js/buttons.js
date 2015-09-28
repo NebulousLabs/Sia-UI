@@ -129,6 +129,16 @@ eID('cancel-ascii').onclick = function() {
 	hide('show-ascii');
 };
 
+// Confirm file deletion
+eID('delete-file').onclick = function() {
+	var nickname = eID('confirm-delete').querySelector('.nickname').innerHTML;
+	deleteFile(nickname);
+	hide('confirm-delete');
+};
+eID('cancel-delete').onclick = function() {
+	hide('confirm-delete');
+};
+
 // Select directory sliding frame
 eID('new-dir').onclick = function() {
 	show('add-dir');

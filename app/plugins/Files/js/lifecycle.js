@@ -23,11 +23,11 @@ function updateFile(file) {
 
 	// Set field display values
 	field('.name').innerHTML = nick.length < 30 ? nick : nick.substr(0, 27) + '...';
-	field('.size').innerHTML = formatBytes(file.Filesize);
+	field('.size').innerHTML = formatBytes(file.Filesize, 2);
 	if (file.UploadProgress === 0) {
 		field('.time').innerHTML = 'Processing...';
 	} else if (file.UploadProgress < 100) {
-		field('.time').innerHTML = file.UploadProgress.toFixed(2) + '%';
+		field('.time').innerHTML = file.UploadProgress.toFixed(0) + '%';
 	} else {
 		field('.time').innerHTML = file.TimeRemaining + ' Blocks Remaining';
 	}
@@ -57,7 +57,7 @@ function updateFile(file) {
 			share(nick);
 		};
 		field('.delete').onclick = function() {
-			deleteFile(nick);
+			confirmDelete(nick);
 		};
 	}
 }
@@ -84,7 +84,7 @@ addResultListener('update-list', function(result) {
 
 // Update capsule values with renter status
 addResultListener('update-status', function(result) {
-	var priceDisplay = convertSiacoin(result.Price).toFixed(3) + ' S Per GB (Estimated)';
+	var priceDisplay = convertSiacoin(result.Price).toFixed(2) + ' S / GB (Estimated)';
 	eID('price').innerHTML = priceDisplay;
 
 	var hostsDisplay = result.KnownHosts + ' Known Hosts';
