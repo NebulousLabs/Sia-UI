@@ -5,9 +5,9 @@
 # constants
 readonly RELEASE_DIR="release"
 readonly ELECTRON_URL="https://github.com/atom/electron/releases/download"
-readonly ELECTRON_VERSION="v0.32.1"
+readonly ELECTRON_VERSION="v0.33.4"
 readonly SIA_UI_NAME="Sia-UI"
-readonly SIA_VERSION="v0.4.2-beta"
+readonly SIA_VERSION="v0.4.3-beta"
 readonly SIA_RELEASE_DIR="$GOPATH/src/github.com/NebulousLabs/Sia/release/$SIA_VERSION"
 
 # generic packaging function
