@@ -89,7 +89,7 @@ function formatBytes(bytes, decimals) {
 	var k = 1000;
 	var dm = decimals + 1 || 3;
 	var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-	var i = Math.floor(Math.log(bytes) / Math.log(k));
+	var i = Math.floor(Math.log(bytes + 1) / Math.log(k)); // new
 	return (bytes / Math.pow(k, i)).toPrecision(dm) + ' ' + sizes[i];
 }
 
