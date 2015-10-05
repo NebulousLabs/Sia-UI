@@ -67,8 +67,7 @@ function uploadDir(dirPath, nickname) {
 			notify('Failed retrieving directory contents', 'error');
 			return;
 		}
-		for (var i = 0; i < files.length; i++) {
-			var file = files[i];
+		files.forEach( function(file) {
 			var filePath = path.join(dirPath, file);
 
 			// Skip hidden files and directories
@@ -81,7 +80,7 @@ function uploadDir(dirPath, nickname) {
 					upload(filePath, nickname + file);
 				}
 			});
-		}
+		});
 	});
 }
 
