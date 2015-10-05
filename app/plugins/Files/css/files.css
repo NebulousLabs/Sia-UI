@@ -16,7 +16,7 @@
 	min-height: 100px;
 	max-height: 50%;
 	min-width: 100px;
-	max-width: 95%;
+	max-width: 75%;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
@@ -31,8 +31,9 @@
 	overflow: hidden;
 }
 .popup .title {
-	font-size: 24px;
+	font-size: 22px;
 	display: block;
+	overflow-wrap: break-word;
 }
 .popup .ascii {
 	font-family: monospace;
