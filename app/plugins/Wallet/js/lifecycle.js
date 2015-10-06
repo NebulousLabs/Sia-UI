@@ -130,7 +130,7 @@ function appendTransaction(txn) {
 
 	// Insert transaction values in UI
 	field('.amount').innerHTML = amount + ' S';
-	field('.tnxid').innerHTML = txn.transactionid;
+	field('.txnid').innerHTML = txn.transactionid;
 	field('.time').innerHTML = time;
 
 	// Set transaction type

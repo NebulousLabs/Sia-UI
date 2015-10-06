@@ -165,7 +165,7 @@
 	white-space: nowrap;
 	overflow: hidden;
 }
-.transaction .tnxid {
+.transaction .txnid {
 	display: inline-block;
 	width: 60%;
 	text-align: left;
