@@ -19,7 +19,7 @@ eID('search-address').onclick = function() {
 	NodeList.prototype.forEach = Array.prototype.forEach
 	var entries = eID('address-list').childNodes;
 	entries.forEach( function(entry) {
-		if (entry.getElementsByClassName('address')[0].innerHTML.indexOf(searchstr)) {
+		if (entry.querySelector('.address').innerHTML.indexOf(searchstr)) {
 			hide(entry);
 		} else {
 			show(entry);
