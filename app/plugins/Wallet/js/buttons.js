@@ -11,6 +11,22 @@ eID('create-address').onclick = function() {
 	IPC.sendToHost('api-call', call, 'new-address');
 };
 
+// Filt address list by search string
+eID('search-address').onclick = function() {
+	tooltip('Searching...', this);
+	var searchstr = eID('search-bar').value;
+
+	NodeList.prototype.forEach = Array.prototype.forEach
+	var entries = eID('address-list').childNodes;
+	entries.forEach( function(entry) {
+		if (entry.getElementsByClassName('address')[0].innerHTML.indexOf(searchstr)) {
+			hide(entry);
+		} else {
+			show(entry);
+		}
+	});
+};
+
 // Adds an address to the address list
 function appendAddress(address) {
 	if (eID(address)) {
@@ -25,8 +41,8 @@ function appendAddress(address) {
 
 // Add the new address
 addResultListener('new-address', function(result) {
-	notify('Address created!', 'created');
-	appendAddress(result.address);
+	notify('New address created', 'created');
+	appendAddress(result);
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Transactions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -105,13 +121,16 @@ addResultListener('coin-sent', function(result) {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Capsule ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Lock or unlock the wallet
 eID('lock-pod').onclick = function() {
-	if (!wallet.encrypted) {
+	var state = eID('lock-status').innerHTML;
+	if (!wallet.unlocked && state === 'Unencrypted') {
 		encrypt();
-	} else if (wallet.unlocked) {
+	} else if (wallet.unlocked && state === 'Lock Wallet') {
 		lock();
-	} else if (!wallet.unlocked) {
+	} else if (!wallet.unlocked && state === 'Unlock Wallet'){
 		show('request-password');
 		eID('password-field').focus();
+	} else {
+		console.error('lock-pod disagrees with wallet variable!', wallet.unlocked, state);
 	}
 };
 
@@ -138,13 +157,6 @@ eID('confirm-password').onclick = function() {
 	hide('show-password');
 };
 
-
-eID('show-address-list').onclick = function() {
-	listAddresses();
-};
-eID('close-address-list').onclick = function() {
-	hide('display-addresses');
-};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 eID('load-legacy-wallet').onclick = function() {

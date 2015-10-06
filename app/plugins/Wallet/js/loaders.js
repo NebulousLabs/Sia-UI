@@ -9,7 +9,7 @@ function clearLockIcon() {
 // Markup changes to reflect locked state
 function setLocked() {
 	clearLockIcon();
-	eID('lock-status').innerHTML = 'Locked';
+	eID('lock-status').innerHTML = 'Unlock Wallet';
 	eID('lock-icon').classList.add('fa-lock');
 }
 
@@ -24,8 +24,7 @@ function lock() {
 // React to the api call result
 addResultListener('locked', function(result) {
 	setLocked();
-	notify('Wallet locked', 'locked');
-	
+	notify('Wallet locked', 'locked');	
 	update();
 });
 
@@ -33,7 +32,7 @@ addResultListener('locked', function(result) {
 // Markup changes to reflect unlocked state
 function setUnlocked() {
 	clearLockIcon();
-	eID('lock-status').innerHTML = 'Unlocked';
+	eID('lock-status').innerHTML = 'Lock Wallet';
 	eID('lock-icon').classList.add('fa-unlock');
 }
 
@@ -74,11 +73,11 @@ IPC.on('unlocked', function(err, result) {
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Encrypting ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// setUnencrypted sets the wallet lock status to unencrypted.
+// setUnencrypted sets the wallet lock status to encrypted.
 function setUnencrypted() {
 	clearLockIcon();
-	eID('lock-status').innerHTML = 'Create Wallet';
-	eID('lock-icon').classList.add('fa-plus');
+	eID('lock-status').innerHTML = 'Unencrypted';
+	eID('lock-icon').classList.add('fa-times');
 }
 
 // Encrypt the wallet (only applies to first time opening)
@@ -98,25 +97,6 @@ addResultListener('encrypted', function(result) {
 
 	popup.querySelector('.password').innerHTML = result.primaryseed;
 
-	update();
-});
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Address List ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-function listAddresses() {
-	IPC.sendToHost('api-call', {
-		url: '/wallet/addresses',
-		type: 'GET',
-	}, 'address-list');
-}
-addResultListener('address-list', function(result) {
-	// format address list
-	var list = '';
-	result.addresses.forEach(function(elem){
-		list += elem.address + '\n'
-	});
-	var popup = eID('display-addresses');
-	show(popup);
-	popup.querySelector('.address-list').innerHTML = list;
 	update();
 });
 
