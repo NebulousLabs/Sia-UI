@@ -34,8 +34,8 @@ html, body {
 
 /* Plugin header */
 .header {
-	padding: 20px;
-	border-bottom: 2px solid #f5f5f5;
+	padding-top: 10px;
+	padding-left: 20px;
 	background-color: #4a4a4a;
 	color: #fff;
 	height: 50px;
@@ -48,7 +48,7 @@ html, body {
 }
 .header .capsule {
 	float: right;
-	font-size: 20px;
+	font-size: 16px;
 }
 .capsule {
 	position: absolute;
@@ -56,8 +56,9 @@ html, body {
 	max-height: 50px;
 	max-width: calc(100% - 200px);
 	display: inline-block;
-	border: 1px solid #ffffff;
-	border-radius: 4px;
+	border: 1px solid #00CBA0;
+
+	border-radius: 0px;
 	overflow: hidden;
 }
 .capsule .pod {
@@ -65,17 +66,49 @@ html, body {
 	padding: 8px;
 	padding-left: 16px;
 	padding-right: 16px;
-	border-right: 1px solid #ffffff;
+	border-right: 1px solid #00CBA0;
 	color: #f5f5f5;
 }
 .capsule .pod.button:hover {
-	color: #000000;
+	color: #00CBA0;
 }
 .capsule .pod * {
 	display: inline-block;
 }
 .capsule .pod:last-child {
 	border: none;
+}
+
+/** Form elements */
+select, input {
+	position: relative;
+	top: 10%;
+	transform: translateY(-10%);
+
+	margin: 0;
+	font-family: sans-serif;
+	font-size: 16px;
+	height: 30px;
+	padding-right: 4px;
+	padding-left: 6px;
+	box-shadow: none;
+	color:#4a4a4a;
+
+	border: solid 1px #dddddd;
+	transition: box-shadow 0.3s, border 0.3s;
+}
+select {
+	height: 34px;
+	font-size: 16px;
+	background:#ffffff;
+}
+select:focus, input:focus {
+	outline: none;
+	border: solid 1px #4a4a4a;
+	box-shadow: 0 0 5px 1px #c5c5c5;
+}
+select:hover {
+	cursor: pointer;
 }
 
 /* Main Display */
