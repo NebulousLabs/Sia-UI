@@ -29,7 +29,7 @@ function updateFile(file) {
 	} else if (file.UploadProgress < 100) {
 		field('.time').innerHTML = file.UploadProgress.toFixed(0) + '%';
 	} else {
-		field('.time').innerHTML = file.TimeRemaining + ' Blocks Remaining';
+		field('.time').innerHTML = file.TimeRemaining + ' blocks left';
 	}
 
 	// Set graphic
@@ -83,11 +83,12 @@ addResultListener('update-list', function(result) {
 });
 
 // Update capsule values with renter status
+// TODO /renter/status is deprecated: get price estimate from hostdb instead
 addResultListener('update-status', function(result) {
-	var priceDisplay = convertSiacoin(result.Price).toFixed(2) + ' S / GB (Estimated)';
+	var priceDisplay = convertSiacoin(result.Price).toFixed(2) + ' S / GB (estimated)';
 	eID('price').innerHTML = priceDisplay;
 
-	var hostsDisplay = result.KnownHosts + ' Known Hosts';
+	var hostsDisplay = result.KnownHosts + ' known hosts';
 	eID('host-count').innerHTML = hostsDisplay;
 });
 
