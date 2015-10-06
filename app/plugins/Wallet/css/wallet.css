@@ -134,7 +134,7 @@
 	height: calc(100% - 65px);
 	width: 100%;
 	padding: 0px;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 #transaction-list .transaction {
 	padding: 10px;
@@ -187,7 +187,7 @@
 	height: calc(100% - 35px);
 	width: 100%;
 	padding: 0px;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 #address-list .entry {
 	padding: 10px;
