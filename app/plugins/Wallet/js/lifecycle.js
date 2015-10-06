@@ -120,8 +120,9 @@ function appendTransaction(txn) {
 			}
 		});
 	}
-	var ConversionFactor = new BigNumber(10).pow(24);
-	amount = amount.dividedBy(ConversionFactor).round(2);
+
+	// Convert hastings to siacoin and round to 2 decimals
+	amount = convertSiacoin(amount);
 
 	// Format transaction timestamp
 	var timestamp = new Date(txn.confirmationtimestamp * 1000);
