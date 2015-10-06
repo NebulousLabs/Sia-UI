@@ -11,7 +11,7 @@ addResultListener('status', function(result) {
 	hosting = result;
 		
 	// Update competitive prices
-	eID('hmessage').innerHTML = 'Estimated Competitive Price: ' + convertSiacoin(hosting.Competition) + ' S / GB / Month';
+	eID('hmessage').innerHTML = 'Estimated competitive price: ' + convertSiacoin(hosting.Competition) + ' S per GB/month';
 
 	// Calculate host finances
 	var total = formatBytes(hosting.TotalStorage);
@@ -32,7 +32,7 @@ addResultListener('status', function(result) {
 		}
 		var item = eID('propertybp').cloneNode(true);
 		item.classList.remove('hidden');
-		item.querySelector('.name').textContent = prop.name + ' (' + prop.unit + ')';
+		item.querySelector('.name').textContent = prop.descr + ' (' + prop.unit + ')';
 		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion).round(2);
 		item.querySelector('.value').textContent = value;
 		item.id = prop.name;

@@ -16,22 +16,26 @@ var updating;
 var hostProperties = [
 	{
 		'name': 'TotalStorage',
+		'descr': 'Total storage',
 		'unit': 'GB',
 		// GB is 1e9 Bytes
 		'conversion': new BigNumber('1e+9'),
 	},{
 		'name': 'MaxFilesize',
+		'descr': 'Maximum filesize',
 		'unit': 'MB',
 		// MB is 1e6 Bytes
 		'conversion': new BigNumber('1e+6'),
 	},{
 		'name': 'MaxDuration',
-		'unit': 'Days',
+		'descr': 'Maximum lease duration',
+		'unit': '~days',
 		// 144 is the number of blocks in a day
 		'conversion': new BigNumber(144),
 	},{
 		'name': 'Price',
-		'unit': 'S Per GB Per Month',
+		'descr': 'Price',
+		'unit': 'S per GB/month',
 		// Siacoin (1e24) / GB (1e9) / blocks in a 30-day month (4320)
 		'conversion': new BigNumber('1e+24').div('1e+9').div(4320),
 	},
