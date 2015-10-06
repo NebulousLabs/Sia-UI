@@ -61,7 +61,7 @@
 
 /* Information Box */
 .row {
-	background:#f5f5f5;
+	background: #f5f5f5;
 	display: block;
 	height: 30px;
 	padding-top: 15px;
@@ -123,7 +123,7 @@ input {
 	appearance: none;
 	box-shadow: none;
 	border-radius: 4px;
-	color:#4a4a4a;
+	color: #4a4a4a;
 
 	transition: box-shadow 0.3s, border 0.3s;
 }
