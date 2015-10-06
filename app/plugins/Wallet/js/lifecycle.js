@@ -69,6 +69,7 @@ function appendAddress(addr) {
 	var addrElement = eID('addressbp').cloneNode(true);
 
 	// DOM shortcut
+	// TODO: Don't know if bad practice because memleak or if it GCs well
 	var field = function(selector) {
 		return addrElement.querySelector(selector);
 	};
@@ -98,6 +99,7 @@ function appendTransaction(txn) {
 	txnElement.timestamp = txn.confirmationtimestamp * 1000;
 
 	// DOM shortcut
+	// TODO: Don't know if bad practice because memleak or if it GCs well
 	var field = function(selector) {
 		return txnElement.querySelector(selector);
 	};
