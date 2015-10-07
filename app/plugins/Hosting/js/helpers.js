@@ -40,7 +40,12 @@ var hostProperties = [
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Helper Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // DOM shortcut
 function eID() {
-	return document.getElementById.apply(document, [].slice.call(arguments));
+	// https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#32-leaking-arguments
+	var args = new Array(arguments.length);
+	for(var i = 0; i < args.length; ++i) {
+		args[i] = arguments[i];
+	}
+	return document.getElementById.apply(document, args);
 }
 
 // Notification shortcut 

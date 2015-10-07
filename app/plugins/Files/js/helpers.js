@@ -14,7 +14,12 @@ var updating;
 
 // DOM shortcuts
 function eID() {
-	return document.getElementById.apply(document, [].slice.call(arguments));
+	// https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#32-leaking-arguments
+	var args = new Array(arguments.length);
+	for(var i = 0; i < args.length; ++i) {
+		args[i] = arguments[i];
+	}
+	return document.getElementById.apply(document, args);
 }
 function toElement(el) {
 	if (typeof el === 'string') {
