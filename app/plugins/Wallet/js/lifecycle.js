@@ -9,6 +9,16 @@ function update(address) {
 
 	// Get list of wallet addresses
 	IPC.sendToHost('api-call', {
+		url: '/wallet/transactions',
+		args: {
+			startheight: 0,
+			endheight: 1000000,
+		},		
+		type: 'GET',
+	}, 'update-history');
+
+	// Get list of wallet addresses
+	IPC.sendToHost('api-call', {
 		url: '/wallet/addresses',
 		type: 'GET',
 	}, 'update-address');
@@ -123,6 +133,8 @@ function appendTransaction(txn) {
 
 	// Convert hastings to siacoin and round to 2 decimals
 	amount = convertSiacoin(amount);
+
+	if (amount == 0) { return; }
 
 	// Format transaction timestamp
 	var timestamp = new Date(txn.confirmationtimestamp * 1000);
