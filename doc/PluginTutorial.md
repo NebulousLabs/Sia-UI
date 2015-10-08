@@ -295,8 +295,7 @@ The plugin directory should reflect our css files:
  Sia-UI/app/plugins/Overview/
  ├── index.html
  ├── assets/
- │   ├── button.png
-+│   └── roboto-condensed-min.css
+ │   └── button.png
 +└── css/
 +    └── overview.css
 ```
@@ -572,8 +571,7 @@ function stop() {
  Sia-UI/app/plugins/Overview/
  ├── index.html
  ├── assets/
- │   ├── button.png
- │   └── roboto-condensed-min.css
+ │   └── button.png
  ├── css/
  │   └── overview.css
 +└── js/
