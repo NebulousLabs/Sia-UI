@@ -59,6 +59,31 @@ addResultListener('uploaded', function(result) {
 	update();
 });
 
+// Non-recursively upload all files in a directory
+function uploadDir(dirPath, nickname) {
+	// Upload files one at a time
+	fs.readdir(dirPath, function(err, files) {
+		if (err) {
+			notify('Failed retrieving directory contents', 'error');
+			return;
+		}
+		files.forEach( function(file) {
+			var filePath = path.join(dirPath, file);
+
+			// Skip hidden files and directories
+			fs.stat(filePath, function(err, stats) {
+				if (err) {
+					notify('Cannot read ' + file, 'error');
+					return;
+				}
+				if (~isUnixHiddenPath(filePath) & stats.isFile()) {
+					upload(filePath, nickname + file);
+				}
+			});
+		});
+	});
+}
+
 function loadDotSia(filePath) {
 	IPC.sendToHost('api-call', {
 		url: '/renter/files/load',
@@ -86,6 +111,13 @@ addResultListener('ascii-loaded', function(result) {
 	exitFileAdder();
 	update();
 });
+
+//Confirm deletion popup
+function confirmDelete(nickname) {
+	eID('confirm-delete').querySelector('.nickname').innerHTML = nickname;
+	var popup = eID('confirm-delete');
+	show(popup);
+}
 
 function deleteFile(nickname) {
 	// Make the request to delete the file.

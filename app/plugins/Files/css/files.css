@@ -31,8 +31,9 @@
 	overflow: hidden;
 }
 .popup .title {
-	font-size: 24px;
+	font-size: 22px;
 	display: block;
+	overflow-wrap: break-word;
 }
 .popup .ascii {
 	font-family: monospace;
@@ -45,6 +46,9 @@
 	padding: 10px;
 }
 .popup .button {
+	padding: 8px;
+}
+.popup p {
 	padding: 8px;
 }
 
@@ -221,7 +225,8 @@ input:focus {
 	margin-right: 24px;
 }
 .description-field {
-	padding: 10px;
+	padding: 1%;
+	width: 94%;
 	border-radius: 4px;
 }
 .step {
@@ -232,7 +237,7 @@ input:focus {
 }
 .step .button {
 	font-size: 32px;
-    -webkit-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 	color: #c5c5c5;
 }
 #add-sia-file {
