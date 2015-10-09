@@ -114,7 +114,6 @@ addResultListener('ascii-loaded', function(result) {
 
 //Confirm deletion popup
 function confirmDelete(nickname) {
-	eID('confirm-delete').querySelector('.title').innerHTML = 'Confirm to delete';
 	eID('confirm-delete').querySelector('.nickname').innerHTML = nickname;
 	var popup = eID('confirm-delete');
 	show(popup);
