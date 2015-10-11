@@ -12,7 +12,8 @@ function DaemonManager() {
 	 */
 	var API = require('./js/daemonAPI');
 	/**
-	 * The file system location of Sia and siad * @member {string} DaemonManager~siaPath
+	 * The file system location of Sia and siad
+	 * @member {string} DaemonManager~siaPath
 	 */
 	var siaPath;
 	/**
@@ -92,36 +93,35 @@ function DaemonManager() {
 	function start() {
 		ifSiad(function() {
 			console.error('attempted to start siad when it was already running');
-			return;
 		}, function() {
 			UI.notify('Starting siad...', 'start');
-		});
 
-		// daemon as a background process logs output to files
-		var out = Fs.openSync(Path.join(__dirname, siaPath, 'daemonOut.log'), 'w');
-		var err = Fs.openSync(Path.join(__dirname, siaPath, 'daemonErr.log'), 'w');
+			// daemon as a background process logs output to files
+			var out = Fs.openSync(Path.join(__dirname, siaPath, 'daemonOut.log'), 'w');
+			var err = Fs.openSync(Path.join(__dirname, siaPath, 'daemonErr.log'), 'w');
 
-		// daemon process has to be detached without parent stdio pipes
-		var processOptions = {
-			detached: false,
-			stdio: [ 'ignore', out, err ],
-			cwd: Path.join(__dirname, siaPath),
-		};
-		var command = process.platform === 'win32' ? './siad.exe' : './siad';
-		var daemonProcess = new Process(command, processOptions);
-		daemonProcess.unref();
+			// daemon process has to be detached without parent stdio pipes
+			var processOptions = {
+				detached: false,
+				stdio: [ 'ignore', out, err ],
+				cwd: Path.join(__dirname, siaPath),
+			};
+			var command = process.platform === 'win32' ? './siad.exe' : './siad';
+			var daemonProcess = new Process(command, processOptions);
+			daemonProcess.unref();
 
-		// Give siad time to load or exit
-		var updating = setTimeout(updatePrompt, 1000);
+			// Give siad time to load or exit
+			var updating = setTimeout(updatePrompt, 1000);
 
-		// Listen for siad erroring
-		daemonProcess.on('error', function (error) {
-			UI.notify('siad errored: ' + error, 'error');
-		});
-		daemonProcess.on('exit', function(code) {
-			self.Running = false;
-			UI.notify('siad exited with code: ' + code, 'stop');
-			clearTimeout(updating);
+			// Listen for siad erroring
+			daemonProcess.on('error', function (error) {
+				UI.notify('siad errored: ' + error, 'error');
+			});
+			daemonProcess.on('exit', function(code) {
+				self.Running = false;
+				UI.notify('siad exited with code: ' + code, 'stop');
+				clearTimeout(updating);
+			});
 		});
 	}
 
