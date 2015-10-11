@@ -41,6 +41,9 @@ function startMainWindow() {
 		'title':  'Sia-UI-beta',
 	});
 
+	// Set User Agent
+	mainWindow.webContents.setUserAgent('Sia-Agent');
+
 	// Load the index.html of the app.
 	mainWindow.loadUrl('file://' + __dirname + '/index.html');
 
