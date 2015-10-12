@@ -2,6 +2,10 @@
 
 var blockheight = 0;
 
+// How often /wallet updates
+var refreshRate = 500; // half-second
+var finalRefreshRate = 1000 * 60 * 5; // five-minutes
+
 // Library for working with clipboard
 const Clipboard = require('clipboard');
 
@@ -16,8 +20,7 @@ function update(address) {
 		type: 'GET',
 	}, 'update-address');
 
-	updating = setTimeout(update, 60000 * 5); // update every 5 min
-	return;
+	updating = setTimeout(update, refreshRate);
 }
 
 // Add transactions to view list per address
@@ -51,6 +54,18 @@ function updateAddrTxn(addr) {
 
 // Update wallet summary in header
 addResultListener('update-status', function(wallet) {
+	refreshRate = finalRefreshRate; // slow down after first successful call
+
+	// Show correct lock status.
+	// TODO: If the wallet is encrypted, prompt with a pw.
+	if (!wallet.encrypted) {
+		setUnencrypted();
+	} else if (!wallet.unlocked) {
+		setLocked();
+	} else if (wallet.unlocked) {
+		setUnlocked();
+	}
+
 	// Update balance confirmed and uncomfirmed
 	var bal = convertSiacoin(wallet.confirmedsiacoinbalance);
 	var pend = convertSiacoin(wallet.unconfirmedincomingsiacoins).sub(convertSiacoin(wallet.unconfirmedoutgoingsiacoins));
@@ -203,7 +218,7 @@ addResultListener('on-opened', function(result) {
 
 	// Start updating
 	update();
-});
+}
 
 // Called upon transitioning away from this view
 function stop() {
