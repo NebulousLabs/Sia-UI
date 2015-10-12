@@ -11,8 +11,8 @@ eID('create-address').onclick = function() {
 	IPC.sendToHost('api-call', call, 'new-address');
 };
 
-// Filt address list by search string
-eID('search-address').onclick = function() {
+// Filter address list by search string
+eID('search-bar').onkeydown = function() {
 	tooltip('Searching...', this);
 	var searchstr = eID('search-bar').value;
 
@@ -117,6 +117,19 @@ addResultListener('coin-sent', function(result) {
 	notify('Transaction sent to network!', 'sent');
 	eID('transaction-amount').value = '';
 });
+
+// Button to load all wallet transactions
+eID('view-all-transactions').onclick = function() {
+	tooltip('Loading all transactions', this);
+	IPC.sendToHost('api-call', {
+		url: '/wallet/transactions',
+		args: {
+			startheight: 0,
+			endheight: 1000000,
+		},		
+		type: 'GET',
+	}, 'update-history');
+}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Capsule ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Lock or unlock the wallet

@@ -163,14 +163,14 @@ input:focus {
 .file .name {
 	display: inline-block;
 	text-align: left;
-	width: calc(98% - 325px);
+	width: calc(98% - 350px);
 	overflow: hidden;
 	white-space: nowrap;
 }
 .file .size {
 	display: inline-block;
 	text-align: right;
-	width: 50px;
+	width: 75px;
 }
 .file .time {
 	display: inline-block;

@@ -9,16 +9,6 @@ function update(address) {
 
 	// Get list of wallet addresses
 	IPC.sendToHost('api-call', {
-		url: '/wallet/transactions',
-		args: {
-			startheight: 0,
-			endheight: 1000000,
-		},		
-		type: 'GET',
-	}, 'update-history');
-
-	// Get list of wallet addresses
-	IPC.sendToHost('api-call', {
 		url: '/wallet/addresses',
 		type: 'GET',
 	}, 'update-address');
@@ -163,6 +153,8 @@ function appendTransaction(txn) {
 // Update transaction history
 addResultListener('update-history', function(result) {
 	if (result.confirmedtransactions) {
+		// Reverse direction of transactions list (most recent first)
+		result.confirmedtransactions.reverse();
 		result.confirmedtransactions.forEach( function (txn) {
 			appendTransaction(txn);
 		});
