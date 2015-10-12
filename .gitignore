@@ -8,3 +8,7 @@ doc/Sia-UI
 
 # Vim
 *.swp
+
+# IntelliJ
+.idea
+*.iml
