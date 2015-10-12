@@ -73,11 +73,11 @@ IPC.on('unlocked', function(err, result) {
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Encrypting ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// setUnencrypted sets the wallet lock status to encrypted.
+// setUnencrypted sets the wallet lock status to unencrypted.
 function setUnencrypted() {
 	clearLockIcon();
-	eID('lock-status').innerHTML = 'Unencrypted';
-	eID('lock-icon').classList.add('fa-times');
+	eID('lock-status').innerHTML = 'Create Wallet';
+	eID('lock-icon').classList.add('fa-plus');
 }
 
 // Encrypt the wallet (only applies to first time opening)
