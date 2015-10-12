@@ -12,7 +12,7 @@ eID('create-address').onclick = function() {
 };
 
 // Filter address list by search string
-eID('search-bar').onkeydown = function() {
+eID('search-bar').onkeyup = function() {
 	tooltip('Searching...', this);
 	var searchstr = eID('search-bar').value;
 
