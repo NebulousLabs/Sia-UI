@@ -6,11 +6,24 @@
 		<link rel='stylesheet' href='../../css/font-awesome/css/font-awesome.min.css'>
 		<link rel='stylesheet' href='../../css/plugin-standard.css'>
 		<link rel='stylesheet' href='css/wallet.css'>
-		<div class='entry hidden' id='transactionbp'>
-			<div class='transaction'>
+		<!-- Transaction blueprint -->
+		<div class='transaction hidden' id='transactionbp'>
+			<div class='type'>
+				<div class='send'>
+					<i class='fa fa-sign-out'></i>
+				</div>
+				<div class='receive'>
+					<i class='fa fa-sign-in'></i>
+				</div>
 			</div>
+			<div class='amount'></div>
+			<div class='txnid'></div>
+			<div class='time'></div>
 		</div>
+		<!-- Address blueprint -->
 		<div class='entry hidden' id='addressbp'>
+			<div class='listnum'></div>
+			<div class='txns'></div>
 			<div class='address'></div>
 		</div>
 	</head>
@@ -21,11 +34,11 @@
 			<div class='header'>
 				<div class='title'>Wallet</div>
 				<div class='capsule'>
-					<div class='pod' id='confirmed'>Balance: 0 S</div>
-					<div class='pod' id='uncomfirmed'>Pending: 0 S</div>
+					<div class='pod' id='confirmed'></div>
+					<div class='pod' id='unconfirmed'></div>
 					<div class='pod button' id='lock-pod'>
 						<i class='fa' id='lock-icon'></i>
-						<div id='lock-status'>LOCK_STATE</div>
+						<div id='lock-status'>Status unknown</div>
 					</div>
 				</div>
 			</div>
@@ -34,7 +47,7 @@
 			<div class='popup hidden' id='request-password'>
 				<div class='row'>
 					<div class='title'>
-						Enter Your Password
+						Enter your password
 					</div>
 				</div>
 				<input type='password' id='password-field' placeholder='Wallet password'>
@@ -60,33 +73,17 @@
 					<i class='fa fa-key' id='confirm-password'>I've recorded this in a safe place</i>
 				</div>
 			</div>
-			<div class='popup hidden' id='display-addresses'>
-				<div class='row'>
-					<div class='title'>
-						Address List
-					</div>
-				</div>
-				<p class='address-list'></p>
-				<div class='button' id='close-address-list'>
-					<i class='fa fa-close'>Close</i>
-				</div>
-			</div>
 
 			<!-- Transactions Box -->
 			<div class='box'>
 				<div class='row'>
 					<div class='title'>
-						Transmitter
+						Transactions
+						<div class='button' id='view-all-transactions'>
+							<i class='fa fa-refresh'></i>
+						</div>
 					</div>
 					<div class='controls'>
-						<div class='button transparent' id='confirm'>
-							<i class='fa fa-check-circle'></i>
-							Confirm?
-						</div>
-						<div class='button' id='send-money'>
-							<i class='fa fa-send'></i>
-							Send Money
-						</div>
 						<input type='number' id='transaction-amount' placeholder='Amount'>
 						<select id='send-unit'>
 							<option value='1e30'>MS</option>
@@ -95,7 +92,14 @@
 							<option value='1e21'>mS</option>
 							<option value='1e18'>&#956S</option>
 						</select>	
-						<input type='text' id='transaction-address' placeholder='Address'>
+						<input type='text' id='transaction-address' placeholder='Send to address'>
+						<div class='button' id='send-money'>
+							<i class='fa fa-sign-out'></i>
+						</div>
+						<div class='button transparent' id='confirm'>
+							<i class='fa fa-check-circle'></i>
+							Confirm?
+						</div>
 					</div>
 				</div>
 				<div class='list' id='transaction-list'>
@@ -109,13 +113,10 @@
 						Addresses
 					</div>
 					<div class='controls'>
+						<input type='search' id='search-bar' placeholder='Search'></input>
 						<div class='button' id='create-address'>
 							<i class='fa fa-plus'></i>
 							Create Address
-						</div>
-						<div class='button' id='show-address-list'>
-							<i class='fa fa-list-ul'></i>
-							Address List
 						</div>
 						<div class='button' id='load-legacy-wallet'>
 							<i class='fa fa-folder-open-o'></i>
