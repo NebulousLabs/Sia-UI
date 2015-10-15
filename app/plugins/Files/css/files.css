@@ -279,3 +279,24 @@ input:focus {
 	color: #777777;
 	cursor: pointer;
 }
+
+.simpleTooltip {
+	display: inline;
+	position: relative;
+}
+
+.simpleTooltip:hover:after {
+	background: #111;
+	background: rgba(0,0,0,.8);
+	border-radius: .5em;
+	top: 1.35em;
+	color: #fff;
+	content: attr(data-tooltip);
+	display: block;
+	right: 1em;
+	padding: .3em 1em;
+	position: absolute;
+	text-shadow: 0 1px 0 #000;
+	white-space: nowrap;
+	z-index: 9999998;
+}
