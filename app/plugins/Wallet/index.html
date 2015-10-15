@@ -25,6 +25,7 @@
 			<div class='listnum'></div>
 			<div class='txns'></div>
 			<div class='address'></div>
+			<div class='copy-address'><i class='fa fa-clipboard'></i></div>
 		</div>
 	</head>
 	<body>
@@ -111,9 +112,12 @@
 				<div class='row'>
 					<div class='title'>
 						Addresses
+						<div class='button' id='view-all-addresses'>
+							<i class='fa fa-refresh'></i>
+						</div>
 					</div>
 					<div class='controls'>
-						<input type='search' id='search-bar' placeholder='Search'></input>
+						<input type='search' id='search-bar' placeholder='Search addresses'></input>
 						<div class='button' id='create-address'>
 							<i class='fa fa-plus'></i>
 							Create Address
