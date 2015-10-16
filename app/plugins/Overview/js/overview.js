@@ -69,11 +69,12 @@ function tooltip(message, element) {
 
 // Define IPC listeners and update DOM per call
 IPC.on('wallet-update', function(err, result) {
-	var bal = result !== null ? formatSiacoin(result.confirmedsiacoinbalance) : null;
-	updateField(err, 'Balance: ', bal, 'balance');
+	if(!result){
+		return;
+	}
 
-	var unlocked = result !== null ? result.unlocked : null;
-	var encrypted = result !== null ? result.encrypted : null;
+	var unlocked = result.unlocked;
+	var encrypted = result.encrypted;
 	if (!encrypted) {
 		updateField(err, 'New Wallet', '', 'lock');
 	} else if (unlocked) {
@@ -81,6 +82,9 @@ IPC.on('wallet-update', function(err, result) {
 	} else {
 		updateField(err, 'Locked', '', 'lock');
 	}
+
+	var bal = formatSiacoin(result.confirmedsiacoinbalance);
+	updateField(err, 'Balance: ', unlocked ? bal : '---', 'balance');
 });
 IPC.on('peers-update', function(err, result) {
 	var value = result !== null ? result.Peers.length : null;
