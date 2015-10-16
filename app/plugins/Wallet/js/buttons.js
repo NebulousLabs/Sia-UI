@@ -146,7 +146,7 @@ eID('view-all-transactions').onclick = function() {
 // Lock or unlock the wallet
 eID('lock-pod').onclick = function() {
 	var state = eID('lock-status').innerHTML;
-	if (!wallet.unlocked && state === 'Unencrypted') {
+	if (!wallet.unlocked && state === 'Create Wallet') {
 		encrypt();
 	} else if (wallet.unlocked && state === 'Lock Wallet') {
 		lock();
