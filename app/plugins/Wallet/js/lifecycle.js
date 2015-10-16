@@ -218,7 +218,7 @@ addResultListener('on-opened', function(result) {
 
 	// Start updating
 	update();
-}
+});
 
 // Called upon transitioning away from this view
 function stop() {
