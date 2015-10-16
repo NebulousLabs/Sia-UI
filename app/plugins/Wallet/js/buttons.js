@@ -1,6 +1,6 @@
 'use strict';
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Address Creation  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Address Handling  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Address creation
 eID('create-address').onclick = function() {
 	tooltip('Creating...', this);
@@ -11,21 +11,25 @@ eID('create-address').onclick = function() {
 	IPC.sendToHost('api-call', call, 'new-address');
 };
 
-// Filter address list by search string
+// Start search when typing in Search field
 eID('search-bar').onkeyup = function() {
 	tooltip('Searching...', this);
 	var searchstr = eID('search-bar').value;
+	filterAddressList(searchstr);
+};
 
+// Filter address list by search string
+function filterAddressList(searchstr) {
 	NodeList.prototype.forEach = Array.prototype.forEach
 	var entries = eID('address-list').childNodes;
 	entries.forEach( function(entry) {
-		if (entry.querySelector('.address').innerHTML.indexOf(searchstr)) {
+		if (entry.querySelector('.address').innerHTML.indexOf(searchstr) || searchstr.length == 0) {
 			hide(entry);
 		} else {
 			show(entry);
 		}
 	});
-};
+}
 
 // Adds an address to the address list
 function appendAddress(address) {
@@ -43,7 +47,14 @@ function appendAddress(address) {
 addResultListener('new-address', function(result) {
 	notify('New address created', 'created');
 	appendAddress(result);
+	filterAddressList(result.address);
 });
+
+// Button to display all wallet addresses
+eID('view-all-addresses').onclick = function() {
+	NodeList.prototype.forEach = Array.prototype.forEach
+	eID('address-list').childNodes.forEach( function(entry) { show(entry); } );
+}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Transactions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Define send call
@@ -169,7 +180,6 @@ eID('password-field').addEventListener("keydown", function(e) {
 eID('confirm-password').onclick = function() {
 	hide('show-password');
 };
-
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 eID('load-legacy-wallet').onclick = function() {

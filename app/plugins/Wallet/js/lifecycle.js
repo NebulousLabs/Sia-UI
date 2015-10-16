@@ -2,6 +2,9 @@
 
 var blockheight = 0;
 
+// Library for working with clipboard
+const Clipboard = require('clipboard');
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Updating  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Make API calls, sending a channel name to listen for responses
 function update(address) {
@@ -62,7 +65,7 @@ addResultListener('update-status', function(wallet) {
 	}
 });
 
-// Append wallet address to address list
+// Append wallet address to Addresses list
 function appendAddress(addr) {
 	// Create only new addresses
 	if (typeof(addr) == 'undefined') { return; }
@@ -80,15 +83,23 @@ function appendAddress(addr) {
 	field('.address').id = addr.address;
 	field('.address').addEventListener("click", getAddress);
 
-	// Display address
+	// Make copy-to-clipboard buttin clickable
+	field('.copy-address').onclick = function() {
+		Clipboard.writeText(addr.address);
+		notify('Copied address to clipboard');
+	};
+
+	// Append, but not do display, address
 	eID('address-list').appendChild(addrElement);
-	show(addrElement);
 	return;
 }
+
+// Display transactions of clicked address
 function getAddress(event) {
 	updateAddrTxn(event.target.id);
 }
 
+// Append a transaction to Transactions list
 function appendTransaction(txn) {
 	if (typeof(txn) == 'undefined') { return; }
 

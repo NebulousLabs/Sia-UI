@@ -218,9 +218,15 @@
 }
 .entry .address {
 	display: inline-block;
-	width: 80%;
+	width: calc(80% - 25px);
 	text-align: left;
 	padding-right: 1%;
 	white-space: nowrap;
 	overflow: hidden;
 }
+.entry .copy-address {
+	float: right;
+	display: inline-block;
+	width: 25px;
+}
+
