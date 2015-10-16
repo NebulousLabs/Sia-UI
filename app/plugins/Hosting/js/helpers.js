@@ -27,12 +27,6 @@ var hostProperties = [
 		// MB is 1e6 Bytes
 		'conversion': new BigNumber('1e+6'),
 	},{
-		'name': 'MaxDuration',
-		'descr': 'Maximum lease duration',
-		'unit': '~days',
-		// 144 is the number of blocks in a day
-		'conversion': new BigNumber(144),
-	},{
 		'name': 'Price',
 		'descr': 'Price',
 		'unit': 'S per GB/month',
