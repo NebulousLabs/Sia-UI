@@ -53,7 +53,9 @@ function updateAddrTxn(addr) {
 }
 
 // Update wallet summary in header
-addResultListener('update-status', function(wallet) {
+addResultListener('update-status', function(result) {
+	wallet = result;
+
 	refreshRate = finalRefreshRate; // slow down after first successful call
 
 	// Show correct lock status.
