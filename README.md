@@ -1,4 +1,4 @@
-# New Sia UI - 0.4.3
+# New Sia UI - 0.4.4
 
 This is the user interface for [Sia](https://github.com/NebulousLabs/Sia), it
 is a desktop application based off the
