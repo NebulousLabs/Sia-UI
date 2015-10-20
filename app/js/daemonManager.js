@@ -52,7 +52,7 @@ function DaemonManager() {
 	 * @param {function} isNotRunning - function to run if Siad is not running
 	 */
 	function ifSiad(isRunning, isNotRunning) {
-		apiCall('/consensus', function(err) {
+		apiCall('/daemon/version', function(err) {
 			if (!err) {
 				self.Running = true;
 				isRunning();
@@ -71,19 +71,8 @@ function DaemonManager() {
 		// Update check will delay API calls until successful. Will wait the
 		// duration that it takes to load up the blockchain.
 		apiCall("/daemon/updates/check", function(err, update) {
-			if (err) {
-				self.Running = false;
-				// Check again later
-				setTimeout(updatePrompt, 1000);
-			} else if (update.Available) {
-				self.Running = true;
-				UI.notify("New Sia Client Available: Click to update to " + update.Version, "update", function() {
-					Shell.openExternal('https://www.github.com/NebulousLabs/Sia-UI/releases');
-				});
-			} else {
-				self.Running = true;
-				UI.notify("Sia client up to date!", "success");
-			}
+			// TODO: proper update checking; maybe use GitHub API?
+			UI.notify("Sia client up to date!", "success");
 		});
 	}
 	
