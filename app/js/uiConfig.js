@@ -34,7 +34,7 @@ module.exports = {
 		Fs.writeFile(path, JSON.stringify(config, null, '\t'), function(err) {
 			if (err) {
 				console.log(err);
-			} 
+			}
 		});
 	},
 
@@ -45,7 +45,7 @@ module.exports = {
 	 */
 	load: function(path, callback) {
 		Fs.readFile(path, function(err, data) {
-			if (err) {
+			if (err || data == 'undefined') {
 				// no file found, use default config
 				callback(defaultConfig);
 			} else {
