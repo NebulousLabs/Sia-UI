@@ -72,17 +72,21 @@ function DaemonManager() {
 		// duration that it takes to load up the blockchain.
 		apiCall("/daemon/updates/check", function(err, update) {
 			if (err) {
+				console.log(err, update)
 				self.Running = false;
 				// Check again later
-				setTimeout(updatePrompt, 1000);
+				setTimeout(updatePrompt, 5000);
 			} else if (update.Available) {
 				self.Running = true;
 				UI.notify("New Sia Client Available: Click to update to " + update.Version, "update", function() {
 					Shell.openExternal('https://www.github.com/NebulousLabs/Sia-UI/releases');
 				});
-			} else {
+			} else if (!update.Available){
 				self.Running = true;
 				UI.notify("Sia client up to date!", "success");
+			} else {
+				console.log("Unknown result from update check!");
+				console.error(err, update);
 			}
 		});
 	}
@@ -96,19 +100,13 @@ function DaemonManager() {
 		}, function() {
 			UI.notify('Starting siad...', 'start');
 
-			// daemon as a background process logs output to files
-			var out = Fs.openSync(Path.join(__dirname, siaPath, 'daemonOut.log'), 'w');
-			var err = Fs.openSync(Path.join(__dirname, siaPath, 'daemonErr.log'), 'w');
-
 			// daemon process has to be detached without parent stdio pipes
 			var processOptions = {
 				detached: false,
-				stdio: [ 'ignore', out, err ],
 				cwd: Path.join(__dirname, siaPath),
 			};
 			var command = process.platform === 'win32' ? './siad.exe' : './siad';
 			var daemonProcess = new Process(command, processOptions);
-			daemonProcess.unref();
 
 			// Give siad time to load or exit
 			var updating = setTimeout(updatePrompt, 1000);
