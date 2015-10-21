@@ -177,13 +177,24 @@ eID('upload-dir').onclick = function() {
 	uploadDir(loadPath, nickname);
 };
 
-/*
-eID('search-bar').keydown(function(e) {
-	// TODO: figure out search bar
-	updateFileList(lastLoadedFiles);
+// Start search when typing in Search field
+eID('search-bar').onkeyup = function() {
+	tooltip('Searching...', this);
+	var searchstr = eID('search-bar').value;
+	filterFileList(searchstr);
 };
-eID('search').onclick = function(e) {
-	// TODO: figure out search bar
-	updateFileList(lastLoadedFiles);
-};
-*/
+
+// Filter file list by search string
+function filterFileList(searchstr) {
+	NodeList.prototype.forEach = Array.prototype.forEach
+	var entries = eID('file-browser').childNodes;
+	entries.forEach( function(entry) {
+		if (entry.querySelector('.name').innerHTML.indexOf(searchstr) > -1) {
+			show(entry);
+		} else {
+			hide(entry);
+		}
+	});
+}
+
+

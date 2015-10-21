@@ -69,6 +69,7 @@
 	padding-left: 15px;
 	padding-right: 15px;
 	width: calc(100% - 30px);
+	overflow: hidden;
 }
 .row .title {
 	display: inline-block;
@@ -103,16 +104,14 @@
 	cursor: none;
 }
 .search {
-	display: block;
 	font-size: 24px;
 	margin: 4px;
 	margin-right: 20px;
-}
-.search i {
-	position: absolute;
 	float: right;
-	top: 104px;
-	right: 20px;
+}
+.search input {
+	text-align: left;
+	width: 200px;
 }
 input {
 	width: 100%;
@@ -137,7 +136,7 @@ input:focus {
 #file-browser {
 	background-color: #fafafa;
 	height: calc(100% - 116px);
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 #file-browser .file {
 	padding: 10px;
