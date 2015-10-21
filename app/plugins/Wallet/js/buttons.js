@@ -23,10 +23,10 @@ function filterAddressList(searchstr) {
 	NodeList.prototype.forEach = Array.prototype.forEach
 	var entries = eID('address-list').childNodes;
 	entries.forEach( function(entry) {
-		if (entry.querySelector('.address').innerHTML.indexOf(searchstr)) {
-			hide(entry);
-		} else {
+		if (entry.querySelector('.address').innerHTML.indexOf(searchstr) > -1) {
 			show(entry);
+		} else {
+			hide(entry);
 		}
 	});
 }
