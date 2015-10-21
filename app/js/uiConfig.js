@@ -31,11 +31,13 @@ module.exports = {
 	 * @param {string} path - UI's defaultConfigPath
 	 */
 	save: function(config, path) {
-		Fs.writeFile(path, JSON.stringify(config, null, '\t'), function(err) {
-			if (err) {
-				console.log(err);
-			}
-		});
+		if (config !== undefined) {
+			Fs.writeFile(path, JSON.stringify(config, null, '\t'), function(err) {
+				if (err) {
+					console.log(err);
+				}
+			});
+		}
 	},
 
 	/**
