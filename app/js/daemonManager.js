@@ -75,6 +75,21 @@ function DaemonManager() {
 			UI.notify("Sia client up to date!", "success");
 		});
 	}
+
+	/**
+	 * Polls the siad API until it comes online
+	 */
+	function waitForSiad() {
+		apiCall("/daemon/version", function(err) {
+			self.Running = !err;
+		});
+		if (self.Running) {
+			UI.notify("siad started!", "success");
+			return;
+		}
+		// check once per second until successful
+		setTimeout(waitForSiad, 1000);
+	}
 	
 	/**
 	 * Starts the daemon as a long running background process
@@ -97,10 +112,6 @@ function DaemonManager() {
 			};
 			var command = process.platform === 'win32' ? './siad.exe' : './siad';
 			var daemonProcess = new Process(command, processOptions);
-			daemonProcess.unref();
-
-			// Give siad time to load or exit
-			var updating = setTimeout(updatePrompt, 1000);
 
 			// Listen for siad erroring
 			daemonProcess.on('error', function (error) {
@@ -109,8 +120,10 @@ function DaemonManager() {
 			daemonProcess.on('exit', function(code) {
 				self.Running = false;
 				UI.notify('siad exited with code: ' + code, 'stop');
-				clearTimeout(updating);
 			});
+
+			// Wait for siad to start
+			waitForSiad();
 		});
 	}
 
