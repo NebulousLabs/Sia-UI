@@ -80,7 +80,7 @@ function DaemonManager() {
 	 * Polls the siad API until it comes online
 	 */
 	function waitForSiad() {
-		apiCall("/consensus", function(err) {
+		apiCall("/daemon/version", function(err) {
 			self.Running = !err;
 		});
 		if (self.Running) {
