@@ -81,7 +81,7 @@ package() {
 		cp -R ../app/ "$ui/resources/app/"
 		mkdir -p "$ui/resources/app/Sia"
 		# Create archive
-		tar -xzf "$SIA_RELEASE_DIR/"*"$SIA_ERSION"*"$sia_arch.tar.gz" -C "$ui/resources/app/Sia" --strip-components=1
+		tar -xzf "$SIA_RELEASE_DIR/"*"$SIA_VERSION"*"$sia_arch.tar.gz" -C "$ui/resources/app/Sia" --strip-components=1
 		tar -czf "$ui.tar.gz" "$ui"
 	fi
 }
