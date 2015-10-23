@@ -2,8 +2,8 @@
 release
 node_modules
 npm-debug.log
-app/config.json
-app/dependencies
+config.json
+Sia
 doc/Sia-UI
 
 # Vim
