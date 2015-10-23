@@ -14,10 +14,14 @@
   },
   "scripts": {
     "start": "electron .",
-    "clean": "rm -rf release doc/Sia-UI node_modules app/dependencies app/config.json **/*.swp npm-debug.log",
+    "clean": "rm -rf release doc/Sia-UI node_modules app/config.json **/*.swp npm-debug.log",
     "debug": "node-inspector & electron --debug=5858 . & xdg-open http://127.0.0.1:8080/debug?ws=127.0.0.1:8080&port=5858",
     "doc": "jsdoc -c .jsdocrc",
     "lint": "jshint . --verbose --exclude-path=.jshintignore",
+    "sia-repo": "go get -u github.com/NebulousLabs/Sia/...",
+    "sia-import": "(test -d app/Sia || mkdir -p app/Sia) && cp $GOPATH/bin/siad app/Sia",
+    "sia-kill": "killall siad; while pgrep siad; do sleep .5; done;",
+    "sia-reimport": "npm run sia-repo && npm run sia-kill && npm run sia-import",
     "release": "./release.sh"
   },
   "repository": {
