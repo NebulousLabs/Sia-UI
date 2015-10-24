@@ -186,7 +186,7 @@ eID('search-bar').onkeyup = function() {
 
 // Filter file list by search string
 function filterFileList(searchstr) {
-	NodeList.prototype.forEach = Array.prototype.forEach
+	NodeList.prototype.forEach = Array.prototype.forEach;
 	var entries = eID('file-browser').childNodes;
 	entries.forEach( function(entry) {
 		if (entry.querySelector('.name').innerHTML.indexOf(searchstr) > -1) {
