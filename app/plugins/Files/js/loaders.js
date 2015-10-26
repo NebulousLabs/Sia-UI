@@ -59,6 +59,20 @@ addResultListener('uploaded', function(result) {
 	update();
 });
 
+function loadDotSia(filePath) {
+	IPC.sendToHost('api-call', {
+		url: '/renter/files/load',
+		args: {
+			filename: filePath,
+		}
+	}, 'file-loaded');
+	notify('Adding ' + nameFromPath(filePath) + ' to library', 'siafile');
+}
+addResultListener('file-loaded', function(result) {
+	exitFileAdder();
+	update();
+});
+
 // Non-recursively upload all files in a directory
 function uploadDir(dirPath, nickname) {
 	// Upload files one at a time
@@ -76,27 +90,15 @@ function uploadDir(dirPath, nickname) {
 					notify('Cannot read ' + file, 'error');
 					return;
 				}
-				if (!isUnixHiddenPath(filePath) && stats.isFile()) {
+				if (file.slice(-4) === '.sia') {
+					loadDotSia(filePath);
+				} else if (!isUnixHiddenPath(filePath) && stats.isFile()) {
 					upload(filePath, nickname + file);
 				}
 			});
 		});
 	});
 }
-
-function loadDotSia(filePath) {
-	IPC.sendToHost('api-call', {
-		url: '/renter/files/load',
-		args: {
-			filename: filePath,
-		}
-	}, 'file-loaded');
-	notify('Adding ' + nameFromPath(filePath) + ' to library', 'siafile');
-}
-addResultListener('file-loaded', function(result) {
-	exitFileAdder();
-	update();
-});
 
 function loadAscii(ascii) {
 	IPC.sendToHost('api-call', {
