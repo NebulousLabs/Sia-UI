@@ -112,13 +112,6 @@ addResultListener('ascii-loaded', function(result) {
 	update();
 });
 
-//Confirm deletion popup
-function confirmDelete(nickname) {
-	eID('confirm-delete').querySelector('.nickname').innerHTML = nickname;
-	var popup = eID('confirm-delete');
-	show(popup);
-}
-
 function deleteFile(nickname) {
 	// Make the request to delete the file.
 	IPC.sendToHost('api-call', {
