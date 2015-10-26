@@ -68,9 +68,6 @@ eID('upload-file').onclick = function() {
 	var loadPath = eID('nickname-file').querySelector('.file-path').innerHTML;
 	var nickname = eID('nickname-file-input').value;
 	upload(loadPath, nickname);
-	exitFileAdder();
-	update();
-	eID('nickname-file-input').focus();
 };
 
 // Sia file option chosen
@@ -169,8 +166,6 @@ eID('upload-dir').onclick = function() {
 	// Illegal filename characters in nickname seems to throw errors
 	// So, substitute \ and / with underscore (_)
 	nickname.replace(/[/\\\\]/g, '_');
-	exitFileAdder();
-	update();
 	uploadDir(loadPath, nickname);
 };
 
