@@ -18,21 +18,17 @@ the Sia network.
 
 ## Building Distributables
 
-Places packaged versions into build/ folder, see the package.json for details.
+Places packaged versions into release/ folder, see the package.json for details.
 
-* `npm run build`
-
-## Cleaning up
-
-**[CAUTION]** Removes node_modules, your Sia state kept in app/dependencies,
-and the configuration settings from config.json.
-
-* `npm run clean`
+* `npm run release`
 
 ## Other
 For other command scripts, look into the package.json file. However here are
 some useful ones.
 
+* `npm run clean`
+will remove node_modules, your Sia state kept in app/Sia, and the
+configuration settings from config.json.
 * `npm run fresh`
 will run clean, install, then start to simulate a fresh install run of the UI.
 * `npm run debug`
