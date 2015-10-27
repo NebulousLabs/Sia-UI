@@ -6,13 +6,15 @@
 	"description": "A UI application for interfacing with Sia",
 	"license": "MIT",
 	"devDependencies": {
+		"electron-prebuilt": "^0.34.1",
+		"ink-docstrap": "^0.5.2",
+		"jsdoc": "^3.3.3",
+		"jshint": "^2.8.0",
+		"node-inspector": "^0.12.3"
+	},
+	"dependencies": {
 		"bignumber.js": "^2.1.0",
-		"electron-prebuilt": "latest",
-		"ink-docstrap": "latest",
-		"jquery": "^2.1.4",
-		"jsdoc": "latest",
-		"jshint": "latest",
-		"node-inspector": "latest"
+		"jquery": "^2.1.4"
 	},
 	"scripts": {
 		"start": "electron .",
