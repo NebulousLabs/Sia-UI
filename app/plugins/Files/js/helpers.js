@@ -3,7 +3,9 @@
 // Library for communicating with Sia-UI
 const IPC = require('ipc');
 // Library for arbitrary precision in numbers
-const BigNumber = require('../../js/bignumber.min.js');
+const BigNumber = require('bignumber.js');
+// Library for working with clipboard
+const Clipboard = require('clipboard');
 // Ensure precision
 BigNumber.config({ DECIMAL_PLACES: 24 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });

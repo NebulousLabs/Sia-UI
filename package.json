@@ -6,8 +6,10 @@
   "description": "A UI application for interfacing with Sia",
   "license": "MIT",
   "devDependencies": {
+    "bignumber.js": "^2.1.0",
     "electron-prebuilt": "latest",
     "ink-docstrap": "latest",
+    "jquery": "^2.1.4",
     "jsdoc": "latest",
     "jshint": "latest",
     "node-inspector": "latest"
