@@ -135,10 +135,6 @@ function PluginManager() {
 					event.args[1].left += $('#sidebar').width();
 					UI.tooltip.apply(null, event.args);
 					break;
-				case 'dialog':
-					// Send dialog's response back to the plugin
-					plugin.sendToView('dialog', IPC.sendSync('dialog', event.args));
-					break;
 				case 'devtools':
 					// Plugin called for its own devtools, toggle it
 					plugin.toggleDevTools();

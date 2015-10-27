@@ -76,8 +76,9 @@ function startMainWindow() {
 	}
 }
 
-
-// Quit when all windows are closed.
+// Quit when no renderer windows detected
+// NOTE: This should never be called and shouldn't be needed. Just remaining to
+// not break functionality for this commit
 App.on('window-all-closed', function() {
 	App.quit();
 });

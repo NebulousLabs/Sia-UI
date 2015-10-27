@@ -8,7 +8,6 @@
 const defaultConfig = {
 	homePlugin: 'Overview',
 	siadAddress: 'http://localhost:9980',
-	zoom: 1,
 };
 
 /**
@@ -31,10 +30,13 @@ module.exports = {
 	 * @param {string} path - UI's defaultConfigPath
 	 */
 	save: function(config, path) {
+		console.log('33 reached')
 		if (config !== undefined) {
+			console.log('35 reached')
 			Fs.writeFile(path, JSON.stringify(config, null, '\t'), function(err) {
+				console.log('37 reached')
 				if (err) {
-					console.log(err);
+					alert(err);
 				}
 			});
 		}
