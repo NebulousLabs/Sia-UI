@@ -11,16 +11,9 @@ eID('create-address').onclick = function() {
 	IPC.sendToHost('api-call', call, 'new-address');
 };
 
-// Start search when typing in Search field
-eID('search-bar').onkeyup = function() {
-	tooltip('Searching...', this);
-	var searchstr = eID('search-bar').value;
-	filterAddressList(searchstr);
-};
-
 // Filter address list by search string
 function filterAddressList(searchstr) {
-	NodeList.prototype.forEach = Array.prototype.forEach
+	NodeList.prototype.forEach = Array.prototype.forEach;
 	var entries = eID('address-list').childNodes;
 	entries.forEach( function(entry) {
 		if (entry.querySelector('.address').innerHTML.indexOf(searchstr) > -1) {
@@ -30,6 +23,13 @@ function filterAddressList(searchstr) {
 		}
 	});
 }
+
+// Start search when typing in Search field
+eID('search-bar').onkeyup = function() {
+	tooltip('Searching...', this);
+	var searchstr = eID('search-bar').value;
+	filterAddressList(searchstr);
+};
 
 // Adds an address to the address list
 function appendAddress(address) {
@@ -52,9 +52,9 @@ addResultListener('new-address', function(result) {
 
 // Button to display all wallet addresses
 eID('view-all-addresses').onclick = function() {
-	NodeList.prototype.forEach = Array.prototype.forEach
+	NodeList.prototype.forEach = Array.prototype.forEach;
 	eID('address-list').childNodes.forEach( function(entry) { show(entry); } );
-}
+};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Transactions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Define send call
@@ -140,7 +140,7 @@ eID('view-all-transactions').onclick = function() {
 		},		
 		type: 'GET',
 	}, 'update-history');
-}
+};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Capsule ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Lock or unlock the wallet
@@ -171,7 +171,7 @@ eID('enter-password').onclick = function() {
 // An 'Enter' keypress in the input field will submit it.
 eID('password-field').addEventListener("keydown", function(e) {
     e = e || window.event;
-    if (e.keyCode == 13) {
+    if (e.keyCode === 13) {
         eID('enter-password').click();
     }
 }, false);
@@ -200,7 +200,7 @@ eID('load-legacy-wallet').onclick = function() {
 			field.value = '';
 			eID('enter-password').onclick = oldOnclick;
 			hide('request-password');
-		}
+		};
 		show('request-password');
 	}
 };

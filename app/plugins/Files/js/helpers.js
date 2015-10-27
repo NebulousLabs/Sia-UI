@@ -6,13 +6,13 @@ const IPC = require('ipc');
 const BigNumber = require('bignumber.js');
 // Library for working with clipboard
 const Clipboard = require('clipboard');
+// File system module
+const Fs = require('fs');
+// Module for handling and transforming file paths
+const Path = require('path');
 // Ensure precision
 BigNumber.config({ DECIMAL_PLACES: 24 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
-// File system module
-var fs = require("fs");
-// Module for handling and transforming file paths
-var path = require("path");
 // Variable to store api result values
 var renting = {};
 // Keeps track of if the view is shown
@@ -42,9 +42,9 @@ function hide(el) {
 function hidden(el) {
 	return toElement(el).classList.contains('hidden');
 }
-function nameFromPath(path) {
-	console.log(path);
-	return path.replace(/^.*[\\\/]/, '');
+function nameFromPath(Path) {
+	console.log(Path);
+	return Path.replace(/^.*[\\\/]/, '');
 }
 
 // Convert to Siacoin
@@ -107,5 +107,5 @@ function formatBytes(bytes, decimals) {
  */
 function isUnixHiddenPath(path) {
 	return (/(^|\/)\.[^\/\.]/g).test(path);
-};
+}
 

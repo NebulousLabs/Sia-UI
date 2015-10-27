@@ -61,9 +61,9 @@ eID('upload-choice').onclick = function() {
 };
 
 // An 'Enter' keypress in the input field will submit it.
-eID('nickname-file-input').addEventListener("keydown", function(e) {
+eID('nickname-file-input').addEventListener('keydown', function(e) {
     e = e || window.event;
-    if (e.keyCode == 13) {
+    if (e.keyCode === 13) {
         eID('upload-file').click();
     }
 }, false);
@@ -107,9 +107,9 @@ eID('ascii-choice').onclick = function() {
 	eID('paste-ascii-input').focus();
 };
 // An 'Enter' keypress in the input field will submit it.
-eID('paste-ascii-input').addEventListener("keydown", function(e) {
+eID('paste-ascii-input').addEventListener('keydown', function(e) {
     e = e || window.event;
-    if (e.keyCode == 13) {
+    if (e.keyCode === 13) {
         eID('add-ascii-file').click();
     }
 }, false);
@@ -158,7 +158,7 @@ eID('upload-dir-choice').onclick = function() {
 	// Check that loadPath is a valid path
 	if (loadPath) {
 		eID('nickname-dir').querySelector('.dir-path').innerHTML = loadPath;
-		loadPath = loadPath[0].split(path.sep);
+		loadPath = loadPath[0].split(Path.sep);
 		eID('nickname-dir-input').value = loadPath[loadPath.length - 1] + '_';
 		show('nickname-dir');
 		show('upload-dir');
@@ -171,17 +171,10 @@ eID('upload-dir').onclick = function() {
 	var nickname = eID('nickname-dir-input').value;
 	// Illegal filename characters in nickname seems to throw errors
 	// So, substitute \ and / with underscore (_)
-	nickname.replace(/[/\\\\]/g, "_");
+	nickname.replace(/[/\\\\]/g, '_');
 	exitFileAdder();
 	update();
 	uploadDir(loadPath, nickname);
-};
-
-// Start search when typing in Search field
-eID('search-bar').onkeyup = function() {
-	tooltip('Searching...', this);
-	var searchstr = eID('search-bar').value;
-	filterFileList(searchstr);
 };
 
 // Filter file list by search string
@@ -197,4 +190,10 @@ function filterFileList(searchstr) {
 	});
 }
 
+// Start search when typing in Search field
+eID('search-bar').onkeyup = function() {
+	tooltip('Searching...', this);
+	var searchstr = eID('search-bar').value;
+	filterFileList(searchstr);
+};
 

@@ -45,6 +45,10 @@ distribution so it makes sense to dynamically load them with the UI.
 
 # How to write a plugin
 
+Note: the screenshots here were taken from before a skin revamp of the UI, but
+the general principles, javascript, and most of the css are still valid and in
+use.
+
 ## It's a webpage... it's that simple.
 
 Plugins are loaded into Sia-UI on run-time through an electron utility called
