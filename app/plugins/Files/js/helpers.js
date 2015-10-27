@@ -42,9 +42,8 @@ function hide(el) {
 function hidden(el) {
 	return toElement(el).classList.contains('hidden');
 }
-function nameFromPath(Path) {
-	console.log(Path);
-	return Path.replace(/^.*[\\\/]/, '');
+function nameFromPath(path) {
+	return path.replace(/^.*[\\\/]/, '');
 }
 
 // Convert to Siacoin
