@@ -47,7 +47,7 @@ module.exports = {
 	 */
 	load: function(path, callback) {
 		Fs.readFile(path, function(err, data) {
-			if (err || data == 'undefined') {
+			if (err || data === 'undefined') {
 				// no file found, use default config
 				callback(defaultConfig);
 			} else {

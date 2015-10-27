@@ -112,6 +112,8 @@
 	"maxerr"        : 100,      // Maximum errors before stopping.
 	"globals"       : {         // Extra globals.
 		"IPC": false,
+		"Fs": false,
+		"Path": false,
 		"BigNumber": false,
 		"eID": true,
 		"tooltip": true,
@@ -128,8 +130,11 @@
 		"download": true,
 		"share": true,
 		"deleteFile": true,
+		"confirmDelete": true,
 		"hidden": true,
 		"upload": true,
+		"uploadDir": true,
+		"isUnixHiddenPath": true,
 		"loadDotSia": true,
 		"loadAscii": true,
 		"exitFileAdder": true

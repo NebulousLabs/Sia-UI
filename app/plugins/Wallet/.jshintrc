@@ -126,6 +126,7 @@
 		"encrypt": true,
 		"lock": true,
 		"unlock": true,
+		"loadLegacyWallet": true,
 		"update": true,
 		"updating": true,
 		"isNumber": true,

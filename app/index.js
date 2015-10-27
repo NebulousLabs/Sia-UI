@@ -27,7 +27,7 @@ function startMainWindow() {
 	var appIcon = new Tray(iconPath);
 	var contextMenu = Menu.buildFromTemplate([
 		{ label: 'Minimize', accelerator: 'CmdOrCtrl+M', selector: 'performMiniaturize:' },
-		{ label: "Quit", accelerator: "CmdOrCtrl+Q", selector:'terminate:', click: function() { app.quit();}},
+		{ label: "Quit", accelerator: "CmdOrCtrl+Q", selector:'terminate:', click: function() { App.quit();}},
 		{ type: 'separator' },
 		{ label: 'Bring All to Front', selector: 'arrangeInFront:' }
 	]);
@@ -90,19 +90,19 @@ MainIPC.on('dialog', function(event, type, options) {
 	var response;
 	switch (type) {
 		case 'open':
-			response = Dialog.showOpenDialog(mainWindow, options)
+			response = Dialog.showOpenDialog(mainWindow, options);
 			break;
 		case 'save':
-			response = Dialog.showSaveDialog(mainWindow, options)
+			response = Dialog.showSaveDialog(mainWindow, options);
 			break;
 		case 'message':
-			response = Dialog.showMessageBox(mainWindow, options)
+			response = Dialog.showMessageBox(mainWindow, options);
 			break;
 		case 'error':
-			Dialog.showErrorBox(options.title, options.content)
+			Dialog.showErrorBox(options.title, options.content);
 			break;
 		default:
-			console.error('Unknown dialog ipc')
+			console.error('Unknown dialog ipc');
 	}
 	event.returnValue = response ? response : null;
 });

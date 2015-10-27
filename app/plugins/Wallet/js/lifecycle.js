@@ -1,7 +1,5 @@
 'use strict';
 
-var blockheight = 0;
-
 // How often /wallet updates
 var refreshRate = 500; // half-second
 var finalRefreshRate = 1000 * 60 * 5; // five-minutes
@@ -23,6 +21,48 @@ function update(address) {
 	updating = setTimeout(update, refreshRate);
 }
 
+// Get transactions for a specific wallet address
+function updateAddrTxn(addr) {
+	eID('transaction-list').innerHTML = '';
+	IPC.sendToHost('api-call', {
+		url: '/wallet/transactions/' + addr,
+		type: 'GET',
+	}, 'update-history');
+}
+
+// Display transactions of clicked address
+function getAddress(event) {
+	updateAddrTxn(event.target.id);
+}
+
+// Append wallet address to Addresses list
+function appendAddress(addr) {
+	// Create only new addresses
+	if (typeof(addr) === 'undefined') { return; }
+	var addrElement = eID('addressbp').cloneNode(true);
+
+	// DOM shortcut
+	// TODO: Don't know if bad practice because memleak or if it GCs well
+	var field = function(selector) {
+		return addrElement.querySelector(selector);
+	};
+
+	// Insert values
+	field('.listnum').innerHTML = eID('address-list').childNodes.length + 1;
+	field('.address').innerHTML = addr.address;
+	field('.address').id = addr.address;
+	field('.address').addEventListener("click", getAddress);
+
+	// Make copy-to-clipboard buttin clickable
+	field('.copy-address').onclick = function() {
+		Clipboard.writeText(addr.address);
+		notify('Copied address to clipboard');
+	};
+
+	// Append, but not do display, address
+	eID('address-list').appendChild(addrElement);
+}
+
 // Add transactions to view list per address
 addResultListener('update-address', function(result) {
 	// Update address list
@@ -30,7 +70,6 @@ addResultListener('update-address', function(result) {
 	result.addresses.forEach( function (address) {
 		appendAddress(address);
 	});
-	return;
 
 	/* Fetch all wallet transactions by iterate over wallet addresses
 	var loopmax = result.addresses.length;
@@ -42,15 +81,6 @@ addResultListener('update-address', function(result) {
 		}, 50); // force 50 ms delay between each GET request
 	})();*/
 });
-
-// Get transactions for a specific wallet address
-function updateAddrTxn(addr) {
-	eID('transaction-list').innerHTML = '';
-	IPC.sendToHost('api-call', {
-		url: '/wallet/transactions/' + addr,
-		type: 'GET',
-	}, 'update-history');
-}
 
 // Update wallet summary in header
 addResultListener('update-status', function(result) {
@@ -82,43 +112,9 @@ addResultListener('update-status', function(result) {
 	}
 });
 
-// Append wallet address to Addresses list
-function appendAddress(addr) {
-	// Create only new addresses
-	if (typeof(addr) == 'undefined') { return; }
-	var addrElement = eID('addressbp').cloneNode(true);
-
-	// DOM shortcut
-	// TODO: Don't know if bad practice because memleak or if it GCs well
-	var field = function(selector) {
-		return addrElement.querySelector(selector);
-	};
-
-	// Insert values
-	field('.listnum').innerHTML = eID('address-list').childNodes.length + 1;
-	field('.address').innerHTML = addr.address;
-	field('.address').id = addr.address;
-	field('.address').addEventListener("click", getAddress);
-
-	// Make copy-to-clipboard buttin clickable
-	field('.copy-address').onclick = function() {
-		Clipboard.writeText(addr.address);
-		notify('Copied address to clipboard');
-	};
-
-	// Append, but not do display, address
-	eID('address-list').appendChild(addrElement);
-	return;
-}
-
-// Display transactions of clicked address
-function getAddress(event) {
-	updateAddrTxn(event.target.id);
-}
-
 // Append a transaction to Transactions list
 function appendTransaction(txn) {
-	if (typeof(txn) == 'undefined') { return; }
+	if (typeof(txn) === 'undefined') { return; }
 
 	// Add only new transactions
 	if (eID(txn.transactionid)) { return; }
@@ -152,7 +148,9 @@ function appendTransaction(txn) {
 	// Convert hastings to siacoin and round to 2 decimals
 	amount = convertSiacoin(amount);
 
-	if (amount == 0) { return; }
+	if (amount === 0) {
+		return;
+	}
 
 	// Format transaction timestamp
 	var timestamp = new Date(txn.confirmationtimestamp * 1000);
@@ -175,7 +173,6 @@ function appendTransaction(txn) {
 	// Display transaction
 	eID('transaction-list').appendChild(txnElement);
 	show(txnElement);
-	return;
 }
 
 // Update transaction history

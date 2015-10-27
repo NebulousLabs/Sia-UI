@@ -62,21 +62,21 @@ addResultListener('uploaded', function(result) {
 // Non-recursively upload all files in a directory
 function uploadDir(dirPath, nickname) {
 	// Upload files one at a time
-	fs.readdir(dirPath, function(err, files) {
+	Fs.readdir(dirPath, function(err, files) {
 		if (err) {
 			notify('Failed retrieving directory contents', 'error');
 			return;
 		}
 		files.forEach( function(file) {
-			var filePath = path.join(dirPath, file);
+			var filePath = Path.join(dirPath, file);
 
 			// Skip hidden files and directories
-			fs.stat(filePath, function(err, stats) {
+			Fs.stat(filePath, function(err, stats) {
 				if (err) {
 					notify('Cannot read ' + file, 'error');
 					return;
 				}
-				if (~isUnixHiddenPath(filePath) & stats.isFile()) {
+				if (!isUnixHiddenPath(filePath) && stats.isFile()) {
 					upload(filePath, nickname + file);
 				}
 			});
