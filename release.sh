@@ -7,7 +7,8 @@ readonly RELEASE_DIR="release"
 readonly ELECTRON_URL="https://github.com/atom/electron/releases/download"
 readonly ELECTRON_VERSION="v0.33.9"
 readonly SIA_UI_NAME="Sia-UI"
-readonly SIA_VERSION="v0.4.4-beta"
+readonly SIA_VERSION="v0.4.7-beta"
+readonly SIA_UI_VERSION="v0.4.8-beta"
 readonly SIA_RELEASE_DIR="$GOPATH/src/github.com/NebulousLabs/Sia/release/$SIA_VERSION"
 
 # generic packaging function
@@ -37,7 +38,7 @@ package() {
 			sia_arch="darwin_amd64"
 	esac
 	local zip_path="electron-$ELECTRON_VERSION-$electron_arch.zip"
-	local ui="$SIA_UI_NAME-$SIA_VERSION-$1"
+	local ui="$SIA_UI_NAME-$SIA_UI_VERSION-$1"
 	echo "Creating $ui..."
 
 	# Download an electron binary (if it hasn't already been downloaded),
