@@ -584,8 +584,8 @@ function stop() {
 
 Loading up Sia-UI again, we'll all see something different because the numbers
 should be pulled from the API and one's siad-state. In our case, the view shows
-the highly active dev network:
-![Impressive plugin ain't it?](/doc/assets/dev-overview.png)
+the yet-encrypted release network:
+![Impressive plugin ain't it?](/doc/assets/working-overview.png)
 
 ### Abstracting the Extra Mile
 
