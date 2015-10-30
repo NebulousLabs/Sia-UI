@@ -48,9 +48,9 @@ package() {
 	
 	if [[ $1 == "darwin" ]]; then
 		mv "$ui/Electron.app" "$ui/Sia.app"
-		rm -r "$ui/Sia.app/Contents/Resources/default_app"
-		cp -R ../app/ "$ui/Sia.app/Contents/Resources/app/"
-		mkdir -p "$ui/Sia.app/Contents/Resources/app/Sia"
+		rm -rf "$ui/Sia.app/Contents/Resources/default_app"
+		rsync -av --progress ../ "$ui/Sia.app/Contents/Resources/app/" --exclude "release/" --exclude ".git/"
+		mkdir -p "$ui/Sia.app/Contents/Resources/app/app/Sia"
 		# Rebranding
 		local contents="$ui/Sia.app/Contents"
 		mv "$contents"/MacOS/Electron "$contents"/MacOS/Sia
@@ -63,31 +63,35 @@ package() {
 		sed -i.bak s/Electron/Sia/g "$contents"/Info.plist
 		sed -i.bak s/Electron/Sia/g "$contents"/Frameworks/Sia\ Helper.app/Contents/Info.plist
 		# Create archive
-		unzip -quo "$SIA_RELEASE_DIR/"*"$SIA_VERSION"*"$sia_arch.zip" -d "$ui/Sia.app/Contents/Resources/app/Sia"
-		mv "$ui/Sia.app/Contents/Resources/app/Sia/"*"$SIA_VERSION"*"$sia_arch"/* "$ui/Sia.app/Contents/Resources/app/Sia/"
-		rm -r "$ui/Sia.app/Contents/Resources/app/Sia/"*"$SIA_VERSION"*"$sia_arch"
+		unzip -quo "$SIA_RELEASE_DIR/"*"$SIA_VERSION"*"$sia_arch.zip" -d "$ui/Sia.app/Contents/Resources/app/app/Sia"
+		mv "$ui/Sia.app/Contents/Resources/app/app/Sia/"*"$SIA_VERSION"*"$sia_arch"/* "$ui/Sia.app/Contents/Resources/app/app/Sia/"
+		rm -r "$ui/Sia.app/Contents/Resources/app/app/Sia/"*"$SIA_VERSION"*"$sia_arch"
 		zip -FSqr "$ui.zip" "$ui"
 	elif [[ $1 == "win64" || $1 == "win32" ]]; then
 		mv "$ui/electron.exe" "$ui/Sia.exe"
 		rm -rf "$ui/resources/default_app"
-		cp -R ../app/ "$ui/resources/app/"
-		mkdir -p "$ui/resources/app/Sia"
+		rsync -av --progress ../ "$ui/resources/app/" --exclude "release/" --exclude ".git/"
+		mkdir -p "$ui/resources/app/app/Sia"
 		# Create archive
-		unzip -quo "$SIA_RELEASE_DIR/"*"$SIA_VERSION"*"$sia_arch.zip" -d "$ui/resources/app/Sia"
+		unzip -quo "$SIA_RELEASE_DIR/"*"$SIA_VERSION"*"$sia_arch.zip" -d "$ui/resources/app/app/Sia"
 		zip -FSqr "$ui.zip" "$ui"
 	else # linux
 		mv "$ui/electron" "$ui/Sia"
 		rm -rf "$ui/resources/default_app"
-		cp -R ../app/ "$ui/resources/app/"
-		mkdir -p "$ui/resources/app/Sia"
+		rsync -av --progress ../ "$ui/resources/app/" --exclude "release/" --exclude ".git/"
+		mkdir -p "$ui/resources/app/app/Sia"
 		# Create archive
-		tar -xzf "$SIA_RELEASE_DIR/"*"$SIA_VERSION"*"$sia_arch.tar.gz" -C "$ui/resources/app/Sia" --strip-components=1
+		tar -xzf "$SIA_RELEASE_DIR/"*"$SIA_VERSION"*"$sia_arch.tar.gz" -C "$ui/resources/app/app/Sia" --strip-components=1
 		tar -czf "$ui.tar.gz" "$ui"
 	fi
 }
 
 # entry point
 main() {
+	# Ensure only necessary node dependencies are installed
+	rm -rf node_modules
+	npm install --production
+
 	# create the release directory
 	mkdir -p "$RELEASE_DIR"
 	cd "$RELEASE_DIR"
@@ -104,7 +108,7 @@ main() {
 			;;
 		*)
 			echo "Usage: $0 {all|linux64|linux32|win64|win32|darwin}"
-	    	exit 1
+			exit 1
 	esac
 }
 
