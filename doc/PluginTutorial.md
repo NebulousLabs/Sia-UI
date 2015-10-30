@@ -198,8 +198,8 @@ The plugin-standard.css:
 	to   { opacity: 1; }
 }
 html, body {
-	height: calc(100% - 80px);
-	min-width: calc(100% - 240px);
+	height: 100%;
+	min-width: 100%;
 	margin: 0px;
 	padding: 0px;
 	border-spacing: 0px;
@@ -207,15 +207,14 @@ html, body {
 	font-weight: 300;
 	font-size: 18px;
 }
-.blueprint {
+.hidden {
 	display: none;
 }
 
 /* Plugin header */
 .header {
-	opacity: .7;
-	padding: 20px;
-	border-bottom: 2px solid #f5f5f5;
+	padding-top: 10px;
+	padding-left: 20px;
 	background-color: #4a4a4a;
 	color: #fff;
 	height: 50px;
@@ -223,16 +222,22 @@ html, body {
 }
 .header .title {
 	display: inline-block;
-	font-size: 32px;
+	font-size: 30px;
 	color: #fff;
 }
 .header .capsule {
 	float: right;
+	font-size: 16px;
 }
 .capsule {
+	position: absolute;
+	right: 20px;
+	max-height: 50px;
+	max-width: calc(100% - 200px);
 	display: inline-block;
-	border: 1px solid #ffffff;
-	border-radius: 4px;
+	border: 1px solid #00CBA0;
+
+	border-radius: 0px;
 	overflow: hidden;
 }
 .capsule .pod {
@@ -240,20 +245,57 @@ html, body {
 	padding: 8px;
 	padding-left: 16px;
 	padding-right: 16px;
-	border-right: 1px solid #ffffff;
+	border-right: 1px solid #00CBA0;
 	color: #f5f5f5;
+}
+.capsule .pod.button:hover {
+	color: #00CBA0;
+}
+.capsule .pod * {
+	display: inline-block;
 }
 .capsule .pod:last-child {
 	border: none;
-	padding-right: 20px;
+}
+
+/** Form elements */
+select, input {
+	position: relative;
+	top: 10%;
+	transform: translateY(-10%);
+
+	margin: 0;
+	font-family: sans-serif;
+	font-size: 16px;
+	height: 30px;
+	padding-right: 4px;
+	padding-left: 6px;
+	box-shadow: none;
+	color:#4a4a4a;
+
+	border: solid 1px #dddddd;
+	transition: box-shadow 0.3s, border 0.3s;
+}
+select {
+	height: 34px;
+	font-size: 16px;
+	background:#ffffff;
+}
+select:focus, input:focus {
+	outline: none;
+	border: solid 1px #4a4a4a;
+	box-shadow: 0 0 5px 1px #c5c5c5;
+}
+select:hover {
+	cursor: pointer;
 }
 
 /* Main Display */
 .frame {
 	height: 100%;
-	color: #c5c5c5;
-	font-size: 32px;
 	overflow: hidden;
+	color: #999999;
+	font-size: 26px;
 	position: relative;
 	width: 100%;
 }
@@ -584,8 +626,8 @@ function stop() {
 
 Loading up Sia-UI again, we'll all see something different because the numbers
 should be pulled from the API and one's siad-state. In our case, the view shows
-the highly active dev network:
-![Impressive plugin ain't it?](/doc/assets/dev-overview.png)
+the yet-encrypted release network:
+![Impressive plugin ain't it?](/doc/assets/working-overview.png)
 
 ### Abstracting the Extra Mile
 
