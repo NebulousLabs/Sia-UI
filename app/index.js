@@ -17,11 +17,6 @@ var mainWindow;
 
 // Creates the window and loads index.html
 function startMainWindow() {
-	// Open the UI with full screen size. 'screen' can only be required after
-	// app.on('ready')
-	const ElectronScreen = require('screen');
-	var size = ElectronScreen.getPrimaryDisplay().workAreaSize;
-
 	// Give tray/taskbar icon path
 	var iconPath = Path.join(__dirname, 'assets', 'icon.png');
 	var appIcon = new Tray(iconPath);
@@ -35,8 +30,6 @@ function startMainWindow() {
 
 	// Create the browser
 	mainWindow = new BrowserWindow({
-		'width':  size.width,
-		'height': size.height,
 		'icon':   iconPath,
 		'title':  'Sia-UI-beta',
 	});
@@ -77,11 +70,7 @@ function startMainWindow() {
 }
 
 // Quit when no renderer windows detected
-// NOTE: This should never be called and shouldn't be needed. Just remaining to
-// not break functionality for this commit
-App.on('window-all-closed', function() {
-	App.quit();
-});
+App.on('window-all-closed', App.quit);
 
 // When Electron loading has finished, start the daemon then the UI
 App.on('ready', startMainWindow);

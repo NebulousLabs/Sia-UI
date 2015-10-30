@@ -220,6 +220,8 @@ function UIManager() {
 	this.init = function() {
 		Config.load(configPath, function(config) {
 			memConfig = config;
+			BrowserWindow.setSize(memConfig.width, memConfig.height);
+			BrowserWindow.setPosition(memConfig.xPosition, memConfig.yPosition);
 			Daemon.init(config);
 			Plugins.init(config);
 		});
@@ -233,11 +235,15 @@ function UIManager() {
 	* @function UIManager#kill
 	*/
 	this.kill = function(ev) {
-		// Save the config and the window's size
-		console.log(BrowserWindow);
+		// Save the window's size
 		var size = BrowserWindow.getSize();
 		memConfig.width = size[0];
 		memConfig.height = size[1];
+		// Save the window's position
+		var pos = BrowserWindow.getPosition();
+		memConfig.xPosition = pos[0];
+		memConfig.yPosition = pos[1];
+		// Save the config
 		Config.save(memConfig, configPath);
 	};
 }
