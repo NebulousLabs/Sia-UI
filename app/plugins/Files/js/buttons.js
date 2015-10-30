@@ -1,8 +1,5 @@
 'use strict';
 
-// Library for working with clipboard
-const Clipboard = require('clipboard');
-
 // Used to hide subsequent steps when selecting an earlier one
 function hideSteps(steps) {
 	steps.forEach(function(step) {
