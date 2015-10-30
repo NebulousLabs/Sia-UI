@@ -42,18 +42,18 @@ The root level structure is for all dev tool type things. You'll find
 node_modules install to here, documentation, and most anything whose file name
 starts with a '.'
 
-The app folder contains Sia-UI's functional files.
+The lib folder contains Sia-UI's functional files.
 
 'index.js' is the entry point which initializes a browser window using
 'index.html'. This is the only non-plugin html file since Sia-UI is intended to
 be a one-page desktop app.
 
-The 'css' folder contains the app's natively designed css.
+The 'css' folder contains the ui's natively designed css.
 
-The 'js' folder contains the app's js logic.
+The 'js' folder contains the ui's js logic.
 
 The 'plugins' folder contains all plugin folders, natively designed or
-third-party. Most everything important in the app is a plugin. This design
+third-party. Most everything important in the ui is a plugin. This design
 allows for community involvemenet and customization to the maximum extent.
 Plugins are designed as webpages and are automatically initialized in the UI's
 startup by looking for a ./plugins/[PLUGIN_NAME]/index.html file.

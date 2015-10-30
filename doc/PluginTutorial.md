@@ -58,7 +58,7 @@ that displays the rest of the plugin, importing CSS, Javascript as is usually
 done in a webpage.
 
 One could make a plugin that views Github.com by making a folder
-`app/plugins/Github` and placing a one-line index.html file:
+`lib/plugins/Github` and placing a one-line index.html file:
 `<meta http-equiv="refresh" content="0; url=http://Github.com/" />`
 Suddenly, there's a button labeled 'Github' and upon click, shows ![Note:
 Though this is currently a bit buggy due to sites using global variables that
@@ -70,14 +70,14 @@ However, we don't want developers to launch a webpage on a server just to make
 a plugin. We're trying to make a basic plugin that serves an actual function.
 For this, we'll go through implementing the Overview plugin.
 
-Plugins are loaded dynamically based on the folders in the /app/plugins
+Plugins are loaded dynamically based on the folders in the /lib/plugins
 directory. The sidebar is handled on our part so plugins only need a properly
 placed png file and folder name for a button. 
 
 The plugin directory should now be:
 
 ```diff
- Sia-UI/app/plugins/Overview/
+ Sia-UI/lib/plugins/Overview/
  └── assets/
      └── button.png
 ```
@@ -141,7 +141,7 @@ unique id's to update each of them separately later in JS.
 The plugin directory should now be:
 
 ```diff
- Sia-UI/app/plugins/Overview/
+ Sia-UI/lib/plugins/Overview/
 +├── index.html
  └── assets/
      └── button.png
@@ -156,7 +156,7 @@ taking shape, form, and last-but-not-least, style!
 The UI has a font that we use for the text called roboto condensed, so let's
 include that for consistency's sake.  With a cool font, we need a cool layout.
 We use a general css file among plugins we're making:
-app/css/plugin-standard.css. It was adapted from the old Sia-UI and applies to
+lib/css/plugin-standard.css. It was adapted from the old Sia-UI and applies to
 general header and frame styling.  We're skimming over this because it's not
 too important to review in this particular guide, though any css besides the
 standard can be used.
@@ -338,7 +338,7 @@ Quite a lot to take in without review, but that's how styling webpages goes.
 The plugin directory should reflect our css files:
 
 ```diff
- Sia-UI/app/plugins/Overview/
+ Sia-UI/lib/plugins/Overview/
  ├── index.html
  ├── assets/
  │   └── button.png
@@ -397,7 +397,7 @@ uiManager.tooltip()
 * devtools - toggle devtools on and off for the plugin (one can also go to
 localhost:9222 when running the UI to view all chromium devtools)
 
-For more detail, see app/js/pluginManager.js's function addListeners()
+For more detail, see lib/js/pluginManager.js's function addListeners()
 
 For example usage, view the js files of any currently implemented plugins.
 
@@ -614,7 +614,7 @@ function stop() {
 ```
 
 ```diff
- Sia-UI/app/plugins/Overview/
+ Sia-UI/lib/plugins/Overview/
  ├── index.html
  ├── assets/
  │   └── button.png

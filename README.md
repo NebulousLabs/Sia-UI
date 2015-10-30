@@ -36,7 +36,7 @@ Places packaged versions into release/ folder, see the package.json for details.
 Useful commands for development.
 
 * `npm run clean`
-will remove node_modules, your Sia state kept in app/Sia, and the
+will remove node_modules, your Sia state kept in lib/Sia, and the
 configuration settings from config.json.
 * `npm run fresh`
 will run clean, install, then start to simulate a fresh install run of the UI.
