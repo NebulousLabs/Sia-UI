@@ -89,9 +89,7 @@ function uploadDir(dirPath, nickname) {
 					notify('Cannot read ' + file, 'error');
 					return;
 				}
-				if (file.slice(-4) === '.sia') {
-					loadDotSia(filePath);
-				} else if (!isUnixHiddenPath(filePath) && stats.isFile()) {
+				if (!isUnixHiddenPath(filePath) && stats.isFile()) {
 					upload(filePath, nickname + file);
 				}
 			});
