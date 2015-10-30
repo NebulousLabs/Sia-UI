@@ -2,7 +2,6 @@
 
 // TODO: Can a webview use IPC.sendSync?
 function download(nickname) {
-	// TODO: setup dialog system
 	var savePath = IPC.sendSync('dialog', 'save', {
 		defaultPath: nickname,
 	});
@@ -59,6 +58,20 @@ addResultListener('uploaded', function(result) {
 	update();
 });
 
+function loadDotSia(filePath) {
+	IPC.sendToHost('api-call', {
+		url: '/renter/files/load',
+		args: {
+			filename: filePath,
+		}
+	}, 'file-loaded');
+	notify('Adding ' + nameFromPath(filePath) + ' to library', 'siafile');
+}
+addResultListener('file-loaded', function(result) {
+	exitFileAdder();
+	update();
+});
+
 // Non-recursively upload all files in a directory
 function uploadDir(dirPath, nickname) {
 	// Upload files one at a time
@@ -84,20 +97,6 @@ function uploadDir(dirPath, nickname) {
 	});
 }
 
-function loadDotSia(filePath) {
-	IPC.sendToHost('api-call', {
-		url: '/renter/files/load',
-		args: {
-			filename: filePath,
-		}
-	}, 'file-loaded');
-	notify('Adding ' + nameFromPath(filePath) + ' to library', 'siafile');
-}
-addResultListener('file-loaded', function(result) {
-	exitFileAdder();
-	update();
-});
-
 function loadAscii(ascii) {
 	IPC.sendToHost('api-call', {
 		url: '/renter/files/loadascii',
@@ -111,13 +110,6 @@ addResultListener('ascii-loaded', function(result) {
 	exitFileAdder();
 	update();
 });
-
-//Confirm deletion popup
-function confirmDelete(nickname) {
-	eID('confirm-delete').querySelector('.nickname').innerHTML = nickname;
-	var popup = eID('confirm-delete');
-	show(popup);
-}
 
 function deleteFile(nickname) {
 	// Make the request to delete the file.

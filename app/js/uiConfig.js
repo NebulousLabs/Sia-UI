@@ -8,7 +8,6 @@
 const defaultConfig = {
 	homePlugin: 'Overview',
 	siadAddress: 'http://localhost:9980',
-	zoom: 1,
 };
 
 /**
@@ -34,7 +33,7 @@ module.exports = {
 		if (config !== undefined) {
 			Fs.writeFile(path, JSON.stringify(config, null, '\t'), function(err) {
 				if (err) {
-					console.log(err);
+					alert(err);
 				}
 			});
 		}

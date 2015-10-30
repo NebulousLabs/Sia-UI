@@ -54,53 +54,53 @@ function UIManager() {
 		asciifile: 'clipboard',
 	};
 
-    // Shows tooltip with content on given element
+	// Shows tooltip with content on given element
 	var eTooltip = $('#tooltip');
 	var tooltipTimeout, tooltipVisible;
 
-    function tooltip(element, content, offset) {
-        offset = offset || {
+	function tooltip(element, content, offset) {
+		offset = offset || {
 			top: 0,
 			left: 0,
 		};
-        element = $(element);
+		element = $(element);
 
-        eTooltip.show();
-        eTooltip.html(content);
-        var middleX = element.offset().left + element.width()/2;
-        var topY = element.offset().top - element.height();
+		eTooltip.show();
+		eTooltip.html(content);
+		var middleX = element.offset().left + element.width()/2;
+		var topY = element.offset().top - element.height();
 
-        eTooltip.offset({
-            top: topY - eTooltip.height() + offset.top,
-            left: middleX - eTooltip.width()/2 + offset.left
-        });
+		eTooltip.offset({
+			top: topY - eTooltip.height() + offset.top,
+			left: middleX - eTooltip.width()/2 + offset.left
+		});
 
-        if (!tooltipVisible){
-            eTooltip.stop();
-            eTooltip.css({'opacity':0});
-            tooltipVisible = true;
-            eTooltip.animate({
-                'opacity':1
-            }, 400);
-        }else{
-            eTooltip.stop();
-            eTooltip.show();
-            eTooltip.css({'opacity':1});
-        }
+		if (!tooltipVisible) {
+			eTooltip.stop();
+			eTooltip.css({'opacity':0});
+			tooltipVisible = true;
+			eTooltip.animate({
+				'opacity':1
+			}, 400);
+		} else{
+			eTooltip.stop();
+			eTooltip.show();
+			eTooltip.css({'opacity':1});
+		}
 
-        clearTimeout(tooltipTimeout);
-        tooltipTimeout = setTimeout(function(){
-            // eTooltip.hide();
-            eTooltip.animate({
-                'opacity':'0'
-            },400,function(){
-                tooltipVisible = false;
-                eTooltip.hide();
-            });
-        }, 1400);
-    }
+		clearTimeout(tooltipTimeout);
+		tooltipTimeout = setTimeout(function() {
+			// eTooltip.hide();
+			eTooltip.animate({
+				'opacity':'0'
+			},400,function() {
+				tooltipVisible = false;
+				eTooltip.hide();
+			});
+		}, 1400);
+	}
 	
-	function showNotification(message, type, clickAction, small){
+	function showNotification(message, type, clickAction, small) {
 		type = type || 'alert';
 
 		var element = $('.notification.blueprint').clone().removeClass('blueprint');
@@ -139,24 +139,6 @@ function UIManager() {
 	}
 
 	/**
-	 * Makes the app more readable on high dpi screens. 
-	 * @function UIManager~adjustHighResZoom
-	 * @param {config} config - config in memory
-	 * @todo Take better approach, resolution doesn't mean high dpi. Though
-	 * supposedly there's not a sure-fire way to find dpi on all platforms.
-	 */
-	function adjustHighResZoom(config) {
-		// Calculated upon function call to get appropriate zoom (even if the
-		// primary display were to change).
-		var screenSize = ElectronScreen.getPrimaryDisplay().workAreaSize;
-		var screenArea = screenSize.width * screenSize.height;
-		if (screenArea >= 2048*1152) {
-			config.zoom = 2;
-			WebFrame.setZoomFactor(config.zoom);
-		}
-	}
-	
-	/**
 	 * Shows tooltip with content at given offset location
 	 * @function UIManager#tooltip
 	 * @param {string} content The message to display in tooltip
@@ -184,7 +166,7 @@ function UIManager() {
 			eTooltip.animate({
 				'opacity':1
 			}, 400);
-		}else{
+		} else{
 			eTooltip.stop();
 			eTooltip.show();
 			eTooltip.css({'opacity':1});
@@ -211,8 +193,8 @@ function UIManager() {
 	 * clicking the notification
 	 */
 	this.notify = function notify(message, type, clickAction) {
-		// CONTRIBUTE: This delay system is technically broken, but not
-		// noticably wait approximately 250ms between notifications
+		// TODO: This delay system is technically broken, but not noticably
+		// wait approximately 250ms between notifications
 		if (new Date().getTime() < lastNotificationTime + 250) {
 			notificationsInQueue ++;
 
@@ -238,8 +220,9 @@ function UIManager() {
 	this.init = function() {
 		Config.load(configPath, function(config) {
 			memConfig = config;
+			BrowserWindow.setSize(memConfig.width, memConfig.height);
+			BrowserWindow.setPosition(memConfig.xPosition, memConfig.yPosition);
 			Daemon.init(config);
-			//adjustHighResZoom(config);
 			Plugins.init(config);
 		});
 		$('#update-button').click(function() {
@@ -251,11 +234,16 @@ function UIManager() {
 	* Called at window.beforeunload, closes the UI
 	* @function UIManager#kill
 	*/
-	this.kill = function() {
+	this.kill = function(ev) {
+		// Save the window's size
+		var size = BrowserWindow.getSize();
+		memConfig.width = size[0];
+		memConfig.height = size[1];
+		// Save the window's position
+		var pos = BrowserWindow.getPosition();
+		memConfig.xPosition = pos[0];
+		memConfig.yPosition = pos[1];
+		// Save the config
 		Config.save(memConfig, configPath);
-		// Ensure the UI's closing
-		setTimeout(function() {
-			RendererIPC.send('exit');
-		}, 400);
 	};
 }

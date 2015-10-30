@@ -1,5 +1,6 @@
 'use strict';
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ General ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Used to hide subsequent steps when selecting an earlier one
 function hideSteps(steps) {
 	steps.forEach(function(step) {
@@ -30,14 +31,17 @@ function exitFileAdder() {
 		paths[j].innerHTML = '';
 	}
 }
+eID('back').onclick = exitFileAdder;
+eID('back-dir').onclick = exitFileAdder;
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Add File ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // TODO: Get sliding frame in to work
 eID('new-file').onclick = function() {
 	show('add-file');
 	hide('file-library');
 };
-eID('back').onclick = exitFileAdder;
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Upload ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Upload file option chosen
 eID('upload-choice').onclick = function() {
 	hideSteps([2,3]);
@@ -64,15 +68,15 @@ eID('nickname-file-input').addEventListener('keydown', function(e) {
         eID('upload-file').click();
     }
 }, false);
+
+// Upload file confirmed
 eID('upload-file').onclick = function() {
 	var loadPath = eID('nickname-file').querySelector('.file-path').innerHTML;
 	var nickname = eID('nickname-file-input').value;
 	upload(loadPath, nickname);
-	exitFileAdder();
-	update();
-	eID('nickname-file-input').focus();
 };
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ .Sia file ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Sia file option chosen
 eID('sia-choice').onclick = function() {
 	hideSteps([2,3]);
@@ -90,11 +94,14 @@ eID('sia-choice').onclick = function() {
 		show('add-sia-file');
 	}
 };
+
+// Add .sia file confirmed
 eID('add-sia-file').onclick = function() {
 	var loadPath = eID('sia-file').querySelector('.file-path').innerHTML;
 	loadDotSia(loadPath);
 };
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ASCII code ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ASCII file option chosen
 eID('ascii-choice').onclick = function() {
 	hideSteps([2,3]);
@@ -103,6 +110,7 @@ eID('ascii-choice').onclick = function() {
 	show('add-ascii-file');
 	eID('paste-ascii-input').focus();
 };
+
 // An 'Enter' keypress in the input field will submit it.
 eID('paste-ascii-input').addEventListener('keydown', function(e) {
     e = e || window.event;
@@ -110,6 +118,8 @@ eID('paste-ascii-input').addEventListener('keydown', function(e) {
         eID('add-ascii-file').click();
     }
 }, false);
+
+// Add file from ascii
 eID('add-ascii-file').onclick = function() {
 	loadAscii(eID('paste-ascii-input').value);
 };
@@ -126,22 +136,12 @@ eID('cancel-ascii').onclick = function() {
 	hide('show-ascii');
 };
 
-// Confirm file deletion
-eID('delete-file').onclick = function() {
-	var nickname = eID('confirm-delete').querySelector('.nickname').innerHTML;
-	deleteFile(nickname);
-	hide('confirm-delete');
-};
-eID('cancel-delete').onclick = function() {
-	hide('confirm-delete');
-};
-
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Add directory ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Select directory sliding frame
 eID('new-dir').onclick = function() {
 	show('add-dir');
 	hide('file-library');
 };
-eID('back-dir').onclick = exitFileAdder;
 
 // Upload directory option chosen
 eID('upload-dir-choice').onclick = function() {
@@ -163,34 +163,12 @@ eID('upload-dir-choice').onclick = function() {
 	}
 };
 
+// Upload directory confirmed
 eID('upload-dir').onclick = function() {
 	var loadPath = eID('nickname-dir').querySelector('.dir-path').innerHTML;
 	var nickname = eID('nickname-dir-input').value;
 	// Illegal filename characters in nickname seems to throw errors
 	// So, substitute \ and / with underscore (_)
 	nickname.replace(/[/\\\\]/g, '_');
-	exitFileAdder();
-	update();
 	uploadDir(loadPath, nickname);
 };
-
-// Filter file list by search string
-function filterFileList(searchstr) {
-	NodeList.prototype.forEach = Array.prototype.forEach;
-	var entries = eID('file-browser').childNodes;
-	entries.forEach( function(entry) {
-		if (entry.querySelector('.name').innerHTML.indexOf(searchstr) > -1) {
-			show(entry);
-		} else {
-			hide(entry);
-		}
-	});
-}
-
-// Start search when typing in Search field
-eID('search-bar').onkeyup = function() {
-	tooltip('Searching...', this);
-	var searchstr = eID('search-bar').value;
-	filterFileList(searchstr);
-};
-
