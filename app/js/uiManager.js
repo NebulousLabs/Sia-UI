@@ -220,8 +220,12 @@ function UIManager() {
 	this.init = function() {
 		Config.load(configPath, function(config) {
 			memConfig = config;
-			BrowserWindow.setSize(memConfig.width, memConfig.height);
-			BrowserWindow.setPosition(memConfig.xPosition, memConfig.yPosition);
+			if (memConfig.width && memConfig.height) {
+				BrowserWindow.setSize(memConfig.width, memConfig.height);
+			}
+			if (memConfig.xPosition && memConfig.yPosition) {
+				BrowserWindow.setPosition(memConfig.xPosition, memConfig.yPosition);
+			}
 			Daemon.init(config);
 			Plugins.init(config);
 		});
