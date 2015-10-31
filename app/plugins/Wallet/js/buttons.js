@@ -168,6 +168,7 @@ eID('enter-password').onclick = function() {
 	unlock(field.value);
 	field.value = '';
 };
+
 // An 'Enter' keypress in the input field will submit it.
 eID('password-field').addEventListener("keydown", function(e) {
     e = e || window.event;
@@ -176,8 +177,21 @@ eID('password-field').addEventListener("keydown", function(e) {
     }
 }, false);
 
+// User wants to save the password
+eID('save-password').onclick = function() {
+	if (eID('save-password').checked) {
+		show('warning');
+	} else {
+		hide('warning');
+	}
+};
+
 // Make sure the user read the password
 eID('confirm-password').onclick = function() {
+	var pw = eID('generated-password').innerText;
+	if (eID('save-password').checked) {
+		savePassword(pw);
+	}
 	hide('show-password');
 };
 

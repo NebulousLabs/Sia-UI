@@ -56,6 +56,7 @@
 					<i class='fa fa-check-circle'></i>
 				</div>
 			</div>
+
 			<div class='popup hidden' id='show-password'>
 				<div class='row'>
 					<div class='title'>
@@ -69,10 +70,16 @@
 					you can also use this phrase to regenerate it. Be sure to
 					store this phrase somewhere safe!
 				</p>
-				<p class='password'></p>
-				<div class='button' id='confim-password'>
-					<i class='fa fa-key' id='confirm-password'>I've recorded this in a safe place</i>
-				</div>
+				<p id='generated-password'></p>
+				<input type='checkbox' id='save-password'>Save my password and
+				unlock it for me on returning to this plugin.<br>
+				<div class='hidden' id='warning'>Warning: This is equivalent to having an
+					unencrypted wallet and poses a security risk!</div>
+				<div class='button' id='confirm-password'>
+					<i class='fa fa-key'>
+						I've recorded this in a safe place!
+					</i>
+				</div><br/>
 			</div>
 
 			<!-- Transactions Box -->
