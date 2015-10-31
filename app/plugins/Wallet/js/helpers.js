@@ -5,15 +5,11 @@
 const IPC = require('ipc');
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
+// Library for working with clipboard
+const Clipboard = require('clipboard');
 // Ensure precision
 BigNumber.config({ DECIMAL_PLACES: 30 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
-// Variable to store api result values
-var wallet = {};
-var remainingAddresses;
-var currentHeight;
-// Keeps track of if the view is shown
-var updating;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Helper Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // DOM shortcuts

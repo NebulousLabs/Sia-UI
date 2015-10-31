@@ -250,4 +250,13 @@ function UIManager() {
 		// Save the config
 		Config.save(memConfig, configPath);
 	};
+
+	this.config = function(args) {
+		if (args.value === undefined) {
+			return memConfig[args.key];
+		} else {
+			memConfig[args.key] = args.value;
+			return args.value;
+		}
+	};
 }

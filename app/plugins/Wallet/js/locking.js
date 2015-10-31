@@ -28,6 +28,20 @@ addResultListener('locked', function(result) {
 	update();
 });
 
+function checkForPassword() {
+	IPC.sendToHost('api-call', '/wallet', 'lock-check');
+}
+addResultListener('lock-check', function(result) {
+	if (!result.unlocked) {
+		IPC.sendToHost('config', {key: 'wallet-password'}, 'password');
+	}
+});
+IPC.on('password', function(pw) {
+	if (pw) {
+		unlock(pw);
+	}
+});
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Unlocking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Markup changes to reflect unlocked state
 function setUnlocked() {

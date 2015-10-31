@@ -26,11 +26,6 @@ function PluginManager() {
 	 */
 	var current;
 	/**
-	 * Stored password if option is set
-	 * @member {password} PluginManager~password
-	 */
-	var password;
-	/**
 	 * Array to store all plugins
 	 * @member {Plugin[]} PluginManager~plugins
 	 */
@@ -133,6 +128,13 @@ function PluginManager() {
 					event.args[1].top += $('.header').height();
 					event.args[1].left += $('#sidebar').width();
 					UI.tooltip.apply(null, event.args);
+					break;
+				case 'config':
+					// get or set something in the config.json
+					// TODO: Document in PluginTutorial.md
+					var args = event.args[0];
+					var responseChannel = event.args[1];
+					plugin.sendToView(responseChannel, UI.config(args))
 					break;
 				case 'devtools':
 					// Plugin called for its own devtools, toggle it

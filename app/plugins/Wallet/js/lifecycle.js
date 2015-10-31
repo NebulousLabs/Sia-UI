@@ -3,13 +3,14 @@
 // How often /wallet updates
 var refreshRate = 500; // half-second
 var finalRefreshRate = 1000 * 60 * 5; // five-minutes
-
-// Library for working with clipboard
-const Clipboard = require('clipboard');
+// Keeps track of if the view is shown
+var updating;
+// Variable to store api result values
+var wallet = {};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Updating  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Make API calls, sending a channel name to listen for responses
-function update(address) {
+function update() {
 	IPC.sendToHost('api-call', '/wallet', 'update-status');
 
 	// Get list of wallet addresses
@@ -197,6 +198,7 @@ function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	// IPC.sendToHost('devtools');
 
+	checkForPassword();
 	update();
 }
 
