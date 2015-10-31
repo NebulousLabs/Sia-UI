@@ -97,6 +97,14 @@ function Plugin(plugPath, name) {
 			}
 			return;
 		},
+		/**
+		* If the webview is loading
+		* @function Plugin#isLoading
+		*/
+		isLoading: function() {
+			return view.isLoading();
+		},
+
 	};
 }
 module.exports = Plugin;

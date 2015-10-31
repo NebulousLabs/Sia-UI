@@ -26,6 +26,11 @@ function PluginManager() {
 	 */
 	var current;
 	/**
+	 * Stored password if option is set
+	 * @member {password} PluginManager~password
+	 */
+	var password;
+	/**
 	 * Array to store all plugins
 	 * @member {Plugin[]} PluginManager~plugins
 	 */
@@ -65,12 +70,6 @@ function PluginManager() {
 	 * @param {Plugin} plugin - a newly made plugin object
 	 */
 	function addListeners(plugin) {
-		// Only show the default plugin view
-		if (plugin.name === home) {
-			plugin.on('dom-ready', plugin.show);
-			current = plugin;
-		}
-
 		/** 
 		 * Standard transition upon button click.
 		 * @typedef transition
@@ -79,7 +78,7 @@ function PluginManager() {
 		 */
 		plugin.transition(function() {
 			// Don't do anything if already on this plugin
-			if (current === plugin) {
+			if (current === plugin || current.isLoading()) {
 				return;
 			}
 
@@ -159,6 +158,12 @@ function PluginManager() {
 	function addPlugin(name) {
 		// Make the plugin, giving its button a standard transition
 		var plugin = new Plugin(plugPath, name);
+
+		// Start with the home plugin as current
+		if (name === home) {
+			current = plugin;
+			plugin.on('dom-ready', current.show);
+		}
 
 		// addListeners deals with any webview related async tasks
 		addListeners(plugin);
