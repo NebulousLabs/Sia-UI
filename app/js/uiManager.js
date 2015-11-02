@@ -100,7 +100,7 @@ function UIManager() {
 		}, 1400);
 	}
 	
-	function showNotification(message, type, clickAction, small) {
+	function showNotification(message, type, clickAction) {
 		type = type || 'alert';
 
 		var element = $('.notification.blueprint').clone().removeClass('blueprint');
@@ -119,8 +119,7 @@ function UIManager() {
 			element.slideUp(function() {
 				element.remove();
 			});
-		}
-
+		} 
 		// Control the disappearance of notifications
 		var removeTimeout;
 		element.mouseover(function() {
@@ -196,7 +195,7 @@ function UIManager() {
 		// TODO: This delay system is technically broken, but not noticably
 		// wait approximately 250ms between notifications
 		if (new Date().getTime() < lastNotificationTime + 250) {
-			notificationsInQueue ++;
+			notificationsInQueue++;
 
 			setTimeout(function() {
 				notify(message, type, clickAction);
