@@ -36,7 +36,7 @@ function PluginManager() {
 	 * plugin and sets its button and view to be first in order
 	 * @function PluginManager~setOrder
 	 * @todo: this is hardcoded, perhaps can add priority system
-	 * @param {string[]} pluginNames - array of subdirectories of lib/plugins/
+	 * @param {string[]} pluginNames - array of subdirectories of plugins/
 	 */
 	function setOrder(pluginNames) {
 		// Detect if about plugin is installed
