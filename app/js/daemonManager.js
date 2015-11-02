@@ -70,10 +70,11 @@ function DaemonManager() {
 	 */
 	function waitForSiad() {
 		ifSiad(function() {
-			UI.notify('siad started!', 'success');
+			UI.notify('Started siad!', 'success');
 		}, function() {
 			// check once per second until successful
 			setTimeout(waitForSiad, 1000);
+			UI.renotify('loading');
 		});
 	}
 	
@@ -84,7 +85,7 @@ function DaemonManager() {
 		ifSiad(function() {
 			console.error('attempted to start siad when it was already running');
 		}, function() {
-			UI.notify('Starting siad...', 'start');
+			UI.notify('Loading siad...', 'loading');
 
 			// daemon as a background process logs output to files
 			var out, err;
