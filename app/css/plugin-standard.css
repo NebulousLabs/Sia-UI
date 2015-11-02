@@ -47,6 +47,7 @@ html, body {
 	color: #fff;
 }
 .header .capsule {
+	white-space: nowrap;
 	float: right;
 	font-size: 16px;
 }
