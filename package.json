@@ -29,7 +29,7 @@
     "sia-kill": "killall siad; while pgrep siad; do sleep .5; done;",
     "sia-reimport": "npm run sia-repo && npm run sia-kill && npm run sia-import",
     "release-args": "electron-packager . Sia-UI --app-version=0.4.8-beta --version=0.34.1 --overwrite --prune --ignore=release --out=release --icon=app/assets/icon",
-    "release": "npm run sia-import ; npm run release-args -- --all",
+    "release": "npm run sia-import ; npm run release-args -- --all && ./.cleanRelease.sh",
     "release-lin64": "npm run release-args -- --platform=linux --arch=x64",
     "release-lin32": "npm run release-args -- --platform=linux --arch=ia32",
     "release-win64": "npm run release-args -- --platform=win32 --arch=x64",
