@@ -145,10 +145,8 @@ function DaemonManager() {
 	}
 
 	// Make certain functions public
-	return {
-		init: init,
-		apiCall: apiCall,
-		update: updatePrompt,
-		ifSiad: ifSiad,
-	};
+	this.init = init;
+	this.apiCall = apiCall;
+	this.update = updatePrompt;
+	this.ifSiad = ifSiad;
 }

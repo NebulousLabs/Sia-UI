@@ -228,7 +228,7 @@ function UIManager() {
 		clearTimeout(notificationTimeout);
 		notificationTimeout = setTimeout(function() {
 			removeNotification(notif);
-		}, 1100);
+		}, 2500);
 	}
 
 	/**
