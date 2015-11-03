@@ -24,6 +24,7 @@ function UIManager() {
 	// Involved in the notification queue
 	var notifications = [];
 	var lastNotificationTime = 0;
+	var notificationTimeout;
 	var notificationsInQueue = 0;
 	var notificationIcons = {
 		// General
@@ -32,7 +33,7 @@ function UIManager() {
 		update: 'arrow-circle-o-up',
 		success: 'check',
 		// siad
-		start: 'play',
+		loading: 'spinner fa-pulse',
 		stop: 'stop',
 		// Wallet
 		locked: 'lock',
@@ -40,7 +41,6 @@ function UIManager() {
 		sent: 'send',
 		created: 'plus',
 		// Progress
-		ongoing: 'hourglass-half',
 		started: 'hourglass-start',
 		finished: 'hourglass-end',
 		// Hosting
@@ -100,7 +100,15 @@ function UIManager() {
 		}, 1400);
 	}
 	
-	function showNotification(message, type, clickAction, small) {
+	// Removes a notification element
+	function removeNotification(el) {
+		el.slideUp(function() {
+			el.remove();
+		});
+	} 
+
+	// Produces a notification element
+	function showNotification(message, type, clickAction) {
 		type = type || 'alert';
 
 		var element = $('.notification.blueprint').clone().removeClass('blueprint');
@@ -114,28 +122,24 @@ function UIManager() {
 			element.click(clickAction);
 		}
 
-		// Removes the notification element
-		function removeElement() {
-			element.slideUp(function() {
-				element.remove();
-			});
-		}
-
 		// Control the disappearance of notifications
-		var removeTimeout;
 		element.mouseover(function() {
 			// don't let the notification disappear if the user is debating
 			// clicking
-			clearTimeout(removeTimeout);
+			clearTimeout(notificationTimeout);
 		});
 		element.mouseout(function() {
 			// the user isn't interested, restart deletion timer
-			removeTimeout = setTimeout(removeElement, 2500);
+			notificationTimeout = setTimeout(function() {
+				removeNotification(element);
+			}, 2500);
 		});
 		element.animate({
-			'opacity':1
+			'opacity':1,
 		});
-		removeTimeout = setTimeout(removeElement, 4000);
+		notificationTimeout = setTimeout(function() {
+			removeNotification(element);
+		}, 4000);
 	}
 
 	/**
@@ -196,7 +200,7 @@ function UIManager() {
 		// TODO: This delay system is technically broken, but not noticably
 		// wait approximately 250ms between notifications
 		if (new Date().getTime() < lastNotificationTime + 250) {
-			notificationsInQueue ++;
+			notificationsInQueue++;
 
 			setTimeout(function() {
 				notify(message, type, clickAction);
@@ -214,14 +218,32 @@ function UIManager() {
 	};
 
 	/**
+	 * Refreshes notification of a certain type
+	 * @function UIManager#renotify
+	 * @param {string} type The form of notification
+	 * TODO: Imperfect way to find notification
+	 */
+	this.renotify = function(type) {
+		var notif = $('.type-' + type).first();
+		clearTimeout(notificationTimeout);
+		notificationTimeout = setTimeout(function() {
+			removeNotification(notif);
+		}, 2500);
+	}
+
+	/**
 	* Called at window.onready, initalizes the UI
 	* @function UIManager#init
 	*/
 	this.init = function() {
 		Config.load(configPath, function(config) {
 			memConfig = config;
-			BrowserWindow.setSize(memConfig.width, memConfig.height);
-			BrowserWindow.setPosition(memConfig.xPosition, memConfig.yPosition);
+			if (memConfig.width && memConfig.height) {
+				BrowserWindow.setSize(memConfig.width, memConfig.height);
+			}
+			if (memConfig.xPosition && memConfig.yPosition) {
+				BrowserWindow.setPosition(memConfig.xPosition, memConfig.yPosition);
+			}
 			Daemon.init(config);
 			Plugins.init(config);
 		});
@@ -245,5 +267,14 @@ function UIManager() {
 		memConfig.yPosition = pos[1];
 		// Save the config
 		Config.save(memConfig, configPath);
+	};
+
+	this.config = function(args) {
+		if (args.value === undefined) {
+			return memConfig[args.key];
+		} else {
+			memConfig[args.key] = args.value;
+			return args.value;
+		}
 	};
 }

@@ -6,25 +6,15 @@
  * @class DaemonManager
  */
 function DaemonManager() {
-	/**
-	 * API namespace for API access logic
-	 * @member {daemonAPI} DaemonManager~API
-	 */
+	// API namespace for API access logic
 	var API = require('./js/daemonAPI');
-	/**
-	 * The file system location of Sia and siad
-	 * @member {string} DaemonManager~siaPath
-	 */
+	// The location of the folder containing siad
 	var siaPath;
-	/**
-	 * The localhost:port (default is 9980)
-	 * @member {string} DaemonManager~address
-	 */
+	// The command to start siad
+	var siaCommand;
+	// The localhost:port (default is 9980)
 	var address;
-	/**
-	 * Tracks if siad is running
-	 * @member {boolean} DaemonManager.Running
-	 */
+	// Tracks if siad is running
 	this.Running = false;
 	// To keep a reference to the DaemonManager inside its functions
 	var self = this;
@@ -53,11 +43,10 @@ function DaemonManager() {
 	 */
 	function ifSiad(isRunning, isNotRunning) {
 		apiCall('/daemon/version', function(err) {
-			if (!err) {
-				self.Running = true;
+			self.Running = !err;
+			if (self.Running) {
 				isRunning();
-			} else if (err) {
-				self.Running = false;
+			} else if (!self.Running) {
 				isNotRunning();
 			}
 		});
@@ -70,9 +59,9 @@ function DaemonManager() {
 	function updatePrompt() {
 		// Update check will delay API calls until successful. Will wait the
 		// duration that it takes to load up the blockchain.
-		apiCall("/daemon/updates/check", function(err, update) {
+		apiCall('/daemon/updates/check', function(err, update) {
 			// TODO: proper update checking; maybe use GitHub API?
-			UI.notify("Sia client up to date!", "success");
+			UI.notify('Sia client up to date!', 'success');
 		});
 	}
 
@@ -80,15 +69,13 @@ function DaemonManager() {
 	 * Polls the siad API until it comes online
 	 */
 	function waitForSiad() {
-		apiCall("/daemon/version", function(err) {
-			self.Running = !err;
+		ifSiad(function() {
+			UI.notify('Started siad!', 'success');
+		}, function() {
+			// check once per second until successful
+			setTimeout(waitForSiad, 1000);
+			UI.renotify('loading');
 		});
-		if (self.Running) {
-			UI.notify("siad started!", "success");
-			return;
-		}
-		// check once per second until successful
-		setTimeout(waitForSiad, 1000);
 	}
 	
 	/**
@@ -98,24 +85,31 @@ function DaemonManager() {
 		ifSiad(function() {
 			console.error('attempted to start siad when it was already running');
 		}, function() {
-			UI.notify('Starting siad...', 'start');
+			UI.notify('Loading siad...', 'loading');
 
 			// daemon as a background process logs output to files
-			var out = Fs.openSync(Path.join(__dirname, siaPath, 'daemonOut.log'), 'w');
-			var err = Fs.openSync(Path.join(__dirname, siaPath, 'daemonErr.log'), 'w');
+			var out, err;
+			Fs.open(Path.join(__dirname, siaPath, 'daemonOut.log'), 'w', function(e, filedescriptor) {
+				out = filedescriptor;
+			});
+			Fs.open(Path.join(__dirname, siaPath, 'daemonErr.log'), 'w', function(e, filedescriptor) {
+				err = filedescriptor;
+			});
 
 			// daemon process has to be detached without parent stdio pipes
 			var processOptions = {
-				detached: false,
-				stdio: [ 'ignore', out, err ],
+				stdio: ['ignore', out, err],
 				cwd: Path.join(__dirname, siaPath),
 			};
-			var command = process.platform === 'win32' ? './siad.exe' : './siad';
-			var daemonProcess = new Process(command, processOptions);
+			var daemonProcess = new Process(siaCommand, processOptions);
 
 			// Listen for siad erroring
 			daemonProcess.on('error', function (error) {
-				UI.notify('siad errored: ' + error, 'error');
+				if (error = 'ENOENT') {
+					UI.notify('Missing siad!', 'error');
+				} else {
+					UI.notify('siad errored: ' + error, 'error');
+				}
 			});
 			daemonProcess.on('exit', function(code) {
 				self.Running = false;
@@ -134,6 +128,7 @@ function DaemonManager() {
 	 */
 	function setConfig(config, callback) {
 		siaPath = 'Sia';
+		siaCommand = process.platform === 'win32' ? './siad.exe' : './siad';
 		address = config.siadAddress;
 		callback();
 	}

@@ -8,6 +8,10 @@
 const defaultConfig = {
 	homePlugin: 'Overview',
 	siadAddress: 'http://localhost:9980',
+	width: 800,
+	height: 600,
+	xPosition: 0,
+	yPosition: 0
 };
 
 /**

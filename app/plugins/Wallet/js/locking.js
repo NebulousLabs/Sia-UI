@@ -72,6 +72,35 @@ IPC.on('unlocked', function(err, result) {
 	update();
 });
 
+// Check if wallet is unlocked at start
+function autoUnlock() {
+	IPC.sendToHost('api-call', '/wallet', 'lock-check');
+}
+addResultListener('lock-check', function(result) {
+	if (!result.unlocked) {
+		getPassword();
+	}
+});
+
+// Get and use password from the UI's config.json
+function getPassword() {
+	IPC.sendToHost('config', {key: 'wallet-password'}, 'get-password');
+}
+IPC.on('get-password', function(pw) {
+	if (pw) {
+		unlock(pw);
+	}
+});
+
+// Save password to the UI's config.json
+function savePassword(pw) {
+	IPC.sendToHost('config', {
+		key: 'wallet-password',
+		value: pw,
+	});
+	unlock(pw);
+}
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Encrypting ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // setUnencrypted sets the wallet lock status to unencrypted.
 function setUnencrypted() {
@@ -95,7 +124,7 @@ addResultListener('encrypted', function(result) {
 	var popup = eID('show-password');
 	show(popup);
 
-	popup.querySelector('.password').innerHTML = result.primaryseed;
+	popup.querySelector('#generated-password').innerText = result.primaryseed;
 
 	update();
 });

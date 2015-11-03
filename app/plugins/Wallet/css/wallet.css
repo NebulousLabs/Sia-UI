@@ -27,7 +27,7 @@
 	border: solid 1px #c5c5c5;
 	border-radius: 8px;
 	text-align: center;
-	font-size: 20px;
+	font-size: 16px;
 	overflow: auto;
 }
 .popup .title {
@@ -42,9 +42,27 @@
 	overflow: auto;
 	padding: 20px;
 }
-.password {
+#generated-password {
+	margin: 0;
+	padding: 5px 0;
 	border-top: solid 1px #c5c5c5;
 	border-bottom: solid 1px #c5c5c5;
+}
+.popup p {
+	margin: 0;
+}
+#save-password {
+	height: 16px;
+	vertical-align: middle;
+}
+#save-password:focus {
+	outline: inherit;
+	border: none;
+	box-shadow: none;
+}
+#warning {
+	color: red;
+	font-size: 12px;
 }
 
 /* Information Box */
@@ -76,8 +94,8 @@
 .controls {
 	display: inline-block;
 	float: right;
-	padding-left: 0px;
-	margin-left: 0px;
+	padding-left: 0;
+	margin-left: 0;
 	width: 80%;
 	text-align: right;
 }
@@ -133,7 +151,7 @@
 	background-color: #fafafa;
 	height: calc(100% - 65px);
 	width: 100%;
-	padding: 0px;
+	padding: 0;
 	overflow-y: auto;
 }
 #transaction-list .transaction {
@@ -186,7 +204,7 @@
 	background-color: #fafafa;
 	height: calc(100% - 35px);
 	width: 100%;
-	padding: 0px;
+	padding: 0;
 	overflow-y: auto;
 }
 #address-list .entry {

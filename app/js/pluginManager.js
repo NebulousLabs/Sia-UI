@@ -65,12 +65,6 @@ function PluginManager() {
 	 * @param {Plugin} plugin - a newly made plugin object
 	 */
 	function addListeners(plugin) {
-		// Only show the default plugin view
-		if (plugin.name === home) {
-			plugin.on('dom-ready', plugin.show);
-			current = plugin;
-		}
-
 		/** 
 		 * Standard transition upon button click.
 		 * @typedef transition
@@ -79,7 +73,7 @@ function PluginManager() {
 		 */
 		plugin.transition(function() {
 			// Don't do anything if already on this plugin
-			if (current === plugin) {
+			if (current === plugin || current.isLoading()) {
 				return;
 			}
 
@@ -135,6 +129,15 @@ function PluginManager() {
 					event.args[1].left += $('#sidebar').width();
 					UI.tooltip.apply(null, event.args);
 					break;
+				case 'config':
+					// get or set something in the config.json
+					var args = event.args[0];
+					var responseChannel = event.args[1];
+					var result = UI.config(args);
+					if (responseChannel) {
+						plugin.sendToView(responseChannel, result);
+					}
+					break;
 				case 'devtools':
 					// Plugin called for its own devtools, toggle it
 					plugin.toggleDevTools();
@@ -159,6 +162,12 @@ function PluginManager() {
 	function addPlugin(name) {
 		// Make the plugin, giving its button a standard transition
 		var plugin = new Plugin(plugPath, name);
+
+		// Start with the home plugin as current
+		if (name === home) {
+			current = plugin;
+			plugin.on('dom-ready', current.show);
+		}
 
 		// addListeners deals with any webview related async tasks
 		addListeners(plugin);
