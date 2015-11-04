@@ -198,7 +198,6 @@ function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	// IPC.sendToHost('devtools');
 
-	autoUnlock();
 	update();
 }
 

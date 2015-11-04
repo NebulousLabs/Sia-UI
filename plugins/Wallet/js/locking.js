@@ -72,23 +72,16 @@ IPC.on('unlocked', function(err, result) {
 	update();
 });
 
-// Check if wallet is unlocked at start
-function autoUnlock() {
-	IPC.sendToHost('api-call', '/wallet', 'lock-check');
-}
-addResultListener('lock-check', function(result) {
-	if (!result.unlocked) {
-		getPassword();
-	}
-});
-
 // Get and use password from the UI's config.json
 function getPassword() {
-	IPC.sendToHost('config', {key: 'wallet-password'}, 'get-password');
+	IPC.sendToHost('config', {key: 'wallet-password'}, 'use-password');
 }
-IPC.on('get-password', function(pw) {
+IPC.on('use-password', function(pw) {
 	if (pw) {
 		unlock(pw);
+	} else {
+		show('request-password');
+		eID('password-field').focus();
 	}
 });
 

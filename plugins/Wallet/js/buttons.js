@@ -151,8 +151,7 @@ eID('lock-pod').onclick = function() {
 	} else if (wallet.unlocked && state === 'Lock Wallet') {
 		lock();
 	} else if (!wallet.unlocked && state === 'Unlock Wallet'){
-		show('request-password');
-		eID('password-field').focus();
+		getPassword();
 	} else {
 		console.error('lock-pod disagrees with wallet variable!', wallet.unlocked, state);
 	}
@@ -192,6 +191,7 @@ eID('confirm-password').onclick = function() {
 	if (eID('save-password').checked) {
 		savePassword(pw);
 	}
+	eID('generated-password').innerText = '';
 	hide('show-password');
 };
 
