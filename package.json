@@ -1,40 +1,46 @@
 {
-	"name": "Sia-UI-beta",
-	"version": "0.4.8-beta",
-	"main": "app/index.js",
-	"author": "NebulousLabs",
-	"description": "A UI application for interfacing with Sia",
-	"license": "MIT",
-	"devDependencies": {
-		"electron-prebuilt": "^0.34.1",
-		"ink-docstrap": "^0.5.2",
-		"jsdoc": "^3.3.3",
-		"jshint": "^2.8.0",
-		"node-inspector": "^0.12.3"
-	},
-	"dependencies": {
-		"bignumber.js": "^2.1.0",
-		"jquery": "^2.1.4"
-	},
-	"scripts": {
-		"start": "electron .",
-		"clean": "rm -rf release doc/Sia-UI node_modules app/Sia app/config.json **/*.swp npm-debug.log",
-		"fresh": "npm run clean && npm install && npm start",
-		"debug": "node-inspector & electron --debug=5858 . & xdg-open http://127.0.0.1:8080/debug?ws=127.0.0.1:8080&port=5858",
-		"doc": "jsdoc -c .jsdocrc",
-		"lint": "jshint . --verbose --exclude-path=.jshintignore",
-		"sia-repo": "go get -u github.com/NebulousLabs/Sia/...",
-		"sia-import": "(test -d app/Sia || mkdir -p app/Sia) && cp $GOPATH/bin/siad app/Sia",
-		"sia-kill": "killall siad; while pgrep siad; do sleep .5; done;",
-		"sia-reimport": "npm run sia-repo && npm run sia-kill && npm run sia-import",
-		"postinstall": "npm run sia-import",
-		"release": "./release.sh"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/NebulousLabs/Sia-UI.git"
-	},
-	"bugs": {
-		"url": "https://github.com/NebulousLabs/Sia-UI/issues"
-	}
+  "name": "Sia-UI-beta",
+  "version": "0.4.8-beta",
+  "main": "index.js",
+  "author": "NebulousLabs",
+  "description": "A UI application for interfacing with Sia",
+  "license": "MIT",
+  "devDependencies": {
+    "electron-packager": "^5.1.1",
+    "electron-prebuilt": "^0.34.1",
+    "ink-docstrap": "^0.5.2",
+    "jsdoc": "^3.3.3",
+    "jshint": "^2.8.0",
+    "node-inspector": "^0.12.3"
+  },
+  "dependencies": {
+    "bignumber.js": "^2.1.0",
+    "jquery": "^2.1.4"
+  },
+  "scripts": {
+    "start": "electron .",
+    "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
+    "fresh": "npm run clean && npm install && npm start",
+    "debug": "node-inspector & electron --debug=5858 . & xdg-open http://127.0.0.1:8080/debug?ws=127.0.0.1:8080&port=5858",
+    "doc": "jsdoc -c .jsdocrc",
+    "lint": "jshint . --verbose --exclude-path=.jshintignore",
+    "sia-repo": "go get -u github.com/NebulousLabs/Sia/...",
+    "sia-import": "(test -d Sia || mkdir -p Sia) && (cp $GOPATH/bin/siad Sia & cp $GOPATH/bin/siac Sia)",
+    "sia-kill": "killall siad; while pgrep siad; do sleep .5; done;",
+    "sia-reimport": "npm run sia-repo && npm run sia-kill && npm run sia-import",
+    "release-args": "electron-packager . Sia-UI --app-version=0.4.8-beta --version=0.34.1 --overwrite --prune --ignore=release --out=release/v0.4.8-beta --icon=app/assets/icon",
+    "release": "npm run sia-import ; npm run release-args -- --all && ./.finalizeRelease.sh",
+    "release-lin64": "npm run release-args -- --platform=linux --arch=x64",
+    "release-lin32": "npm run release-args -- --platform=linux --arch=ia32",
+    "release-win64": "npm run release-args -- --platform=win32 --arch=x64",
+    "release-win32": "npm run release-args -- --platform=win32 --arch=ia32",
+    "release-mac": "npm run release-args -- --platform=darwin --arch=x64"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/NebulousLabs/Sia-UI.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NebulousLabs/Sia-UI/issues"
+  }
 }

@@ -16,10 +16,12 @@ Otherwise one can always [install go from source](https://golang.org/doc/install
 our [Slack channel](http://siatalk-slackin.herokuapp.com/) and have probably ran into your issue before!
 
 ### Javascript
+
 This should be familiar to most devs. We mostly adhere to [certain style
 conventions](http://javascript.crockford.com/code.html)
 
 ### [NPM](https://www.npmjs.com/)
+
 Node Package Manager gives easy package management.  We use NPM to manage our
 dependencies (such as Electron) and our development dependencies (such as
 JSHint or JSDoc). NPM also handles our command scripting.  To understand this
@@ -29,6 +31,7 @@ documentation](https://docs.npmjs.com/misc/scripts)
 OPTIONAL: [A useful guide about using NPM as a build tool](http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/)
 
 ### [Electron](http://electron.atom.io/)
+
 It's the core set of libararies that power the Atom text editor and is
 useful for creating cross-platform desktop applications. 
 
@@ -38,36 +41,55 @@ would be limited from.
 
 ## Structure
 
-The root level structure is for all dev tool type things. You'll find
-node_modules install to here, documentation, and most anything whose file name
-starts with a '.'
+We try to keep the root level structure as simple as possible while still
+adhereing to electron app standards.
 
-The app folder contains Sia-UI's functional files.
+The basic root level structure is as follows: 
+```diff
+ Sia-UI/
++├── .git/            // Git 
++├── Sia/             // Contains siad and wallet files
+ ├── assets/          // Font & image files
+ ├── css/             // General CSS
+ ├── doc/             // Documentation like this file
+ ├── js/              // General Javascript
++├── node_modules/    // Node packages get installed to here
+ ├── plugins/         // Plugins give the UI its functionality
++├── release/         // Release archives are placed here
+ ├── LICENSE          // MIT Open Source License
+ ├── README.md        // Readme doc
++├── config.json      // Used to store data between sessions
+ ├── index.html       // The first markup page that loads
+ ├── index.js         // Entry point of the UI
+ └── package.json     // Used with electron and npm
+```
+Note: '+' marked lines are generated and aren't inherent to the repository
 
-'index.js' is the entry point which initializes a browser window using
-'index.html'. This is the only non-plugin html file since Sia-UI is intended to
-be a one-page desktop app.
-
-The 'css' folder contains the app's natively designed css.
-
-The 'js' folder contains the app's js logic.
+The 'assets' folder contains all required content not created for specifically
+this UI project (e.g. image logos, fonts, etc.)
 
 The 'plugins' folder contains all plugin folders, natively designed or
-third-party. Most everything important in the app is a plugin. This design
+third-party. Most everything important in the ui is a plugin. This design
 allows for community involvemenet and customization to the maximum extent.
 Plugins are designed as webpages and are automatically initialized in the UI's
 startup by looking for a ./plugins/[PLUGIN_NAME]/index.html file.
 
-The 'assets' folder contains all required content not created for specifically
-this UI project (e.g. image logos, third-party css, etc.)
+'config.json' is a json created upon a user first opening the UI and tracks
+things like window position, siad's hosted address, etc.
 
-Lastly, the 'dependencies' folder contains anything that are not a part of the
-project, but that it needs to use. Currently this is only siad.
+'index.js' initializes a browser window using 'index.html'. This is the only
+non-plugin html file since Sia-UI is intended to be a one-page desktop app.
 
-## Packaging Sia-UI
+'package.json' contains most of the CLI commands we use to interact with the UI
+and is an overall core tool to how npm and electron function. This should be
+carefully examined.
 
-There are some packaging scripts in the config.json. For them to work, you will
-need to have release archives of the correct version in the `release` folder of
-the Sia package in your GOPATH. Assuming that both repositories are on the same
-version, it is sufficient to run `make xc` from the Sia repository followed by
-`npm run package` from the Sia-UI repository.
+## Packaging & Releasing Sia-UI
+
+There are some packaging scripts (using electron-packager) in the package.json.
+
+For them to work, you will need to have release archives of the correct version
+in the `release` folder of the Sia package in your GOPATH. To do so, run `make
+xc` from the Sia repository followed by `npm run release` from the Sia-UI
+repository.
+
