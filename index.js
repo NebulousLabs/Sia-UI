@@ -20,12 +20,6 @@ function startMainWindow() {
 	// Give tray/taskbar icon path
 	var iconPath = Path.join(__dirname, 'assets', 'icon.png');
 	var appIcon = new Tray(iconPath);
-	var contextMenu = Menu.buildFromTemplate([
-		{ label: 'Minimize', accelerator: 'CmdOrCtrl+M', selector: 'performMiniaturize:' },
-		{ label: "Quit", accelerator: "CmdOrCtrl+Q", selector:'terminate:', click: function() { App.quit();}},
-		{ type: 'separator' },
-		{ label: 'Bring All to Front', selector: 'arrangeInFront:' }
-	]);
 	appIcon.setToolTip('Sia - The Collaborative Cloud.');
 
 	// Create the browser

@@ -54,8 +54,10 @@
 			const Shell = require('shell');
 			const $ = require('jquery');
 			const Remote = require('remote');
-			var BrowserWindow = Remote.getCurrentWindow();
+			const BrowserWindow = Remote.getCurrentWindow();
+			const Menu = Remote.require('menu');
 		</script>
+		<script src='js/contextMenu.js'></script>
 		<script src='js/daemonManager.js'></script>
 		<script src='js/pluginManager.js'></script>
 		<script src='js/uiManager.js'></script>
