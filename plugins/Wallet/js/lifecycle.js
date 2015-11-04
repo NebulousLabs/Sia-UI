@@ -90,7 +90,6 @@ addResultListener('update-status', function(result) {
 	refreshRate = finalRefreshRate; // slow down after first successful call
 
 	// Show correct lock status.
-	// TODO: If the wallet is locked, prompt with a pw.
 	if (!wallet.encrypted) {
 		setUnencrypted();
 	} else if (!wallet.unlocked) {

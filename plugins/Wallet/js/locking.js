@@ -52,8 +52,8 @@ function unlock(password) {
 			encryptionpassword : password,
 		},
 	}, 'unlocked');
+
 	// Password attempted, show responsive processing icon
-	hide('request-password');
 	setUnlocking();
 }
 IPC.on('unlocked', function(err, result) {
@@ -61,6 +61,7 @@ IPC.on('unlocked', function(err, result) {
 	if (err) {
 		setLocked();
 		notify('Wrong password', 'error');
+		show('request-password');
 	} else {
 		setUnlocked();
 		notify('Wallet unlocked', 'unlocked');
@@ -106,6 +107,12 @@ function encrypt() {
 addResultListener('encrypted', function(result) {
 	var popup = eID('show-password');
 	show(popup);
+
+	// Clear old password in config if there is one
+	IPC.sendToHost('config', {
+		key: 'wallet-password',
+		value: '',
+	});
 
 	// Show password in the popup
 	eID('generated-password').innerText = result.primaryseed;

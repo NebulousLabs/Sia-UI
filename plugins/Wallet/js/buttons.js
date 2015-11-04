@@ -166,6 +166,7 @@ eID('enter-password').onclick = function() {
 	// Hide popup and start the plugin
 	unlock(field.value);
 	field.value = '';
+	hide('request-password');
 };
 
 // An 'Enter' keypress in the input field will submit it.
