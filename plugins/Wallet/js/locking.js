@@ -89,7 +89,6 @@ function savePassword(pw) {
 		key: 'wallet-password',
 		value: pw,
 	});
-	unlock(pw);
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Encrypting ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

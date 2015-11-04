@@ -13,13 +13,8 @@ BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Helper Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // DOM shortcuts
-function eID() {
-	// https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#32-leaking-arguments
-	var args = new Array(arguments.length);
-	for(var i = 0; i < args.length; ++i) {
-		args[i] = arguments[i];
-	}
-	return document.getElementById.apply(document, args);
+function eID(id) {
+	return document.getElementById(id);
 }
 function show(el) {
 	if (typeof el === 'string') {
@@ -33,6 +28,15 @@ function hide(el) {
 		eID(el).classList.add('hidden');
 	} else {
 		el.classList.add('hidden');
+	}
+}
+function eClass(name) {
+	return document.getElementsByClassName(name);
+}
+function classOnClick(name, reaction) {
+	var elements = eClass(name);
+	for (var i = 0; i < elements.length; i++) {
+		elements[i].onclick = reaction;
 	}
 }
 
@@ -53,7 +57,7 @@ function isNumber(n) {
 
 // Address has to be lowercase hex and 76 chars
 function isAddress(str) {
-    return str.match(/^[a-f0-9]{76}$/) !== null;
+	return str.match(/^[a-f0-9]{76}$/) !== null;
 }
 
 // Notification shortcut 
