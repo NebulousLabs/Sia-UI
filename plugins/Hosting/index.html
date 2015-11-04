@@ -8,6 +8,8 @@
 		<link rel='stylesheet' href='../../css/grids-responsive-min.css'>
 		<link rel="stylesheet" href="../../css/plugin-standard.css">
 		<link rel='stylesheet' href='css/hosting.css'>
+
+		<!-- Hosting Configuration Property blueprint -->
 		<div class='hidden property pure-g' id='propertybp'>
 			<div class='pure-u-2-3'>
 				<div class='name'>PROPERTY NAME</div>
@@ -30,10 +32,24 @@
 					<div class='pod' id='profit'></div>
 				</div>
 			</div>
+
+			<!-- Popups -->
+			<div class='popup hidden' id='request-password'>
+				<div class='row'>
+					<div class='title'>
+						Enter your password
+					</div>
+				</div>
+				<input type='password' id='password-field' placeholder='Wallet password'>
+				<div class='button' id='enter-password'>
+					<i class='fa fa-check-circle'></i>
+				</div>
+			</div>
+
 			<!-- Hosting Properties -->
 			<div class='box'>
 				<div class='row'>
-					<input id='address' type='text' placeholder='IP Address'></input>
+					<div class='title'>Configurations</div>
 					<div class='controls'>
 						<div class='button' id='announce'>
 							<i class='fa fa-bullhorn'></i>
@@ -54,6 +70,7 @@
 			</div>
 			<div class='host-message' id='hmessage'></div>
 		</div>
+
 		<!-- JS -->
 		<script type='text/javascript' src='js/helpers.js'></script>
 		<script type='text/javascript' src='js/hosting.js'></script>

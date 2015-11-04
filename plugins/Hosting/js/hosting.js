@@ -25,29 +25,12 @@ addResultListener('update', function(result) {
 	eID('storage').innerHTML = storage + '/' + total + ' in use';
 	eID('profit').innerHTML = profit + ' S earned';
 	eID('potentialprofit').innerHTML = potentialProfit + ' S to be earned';
-});
 
-// Called upon showing
-function start() {
-	// DEVTOOL: uncomment to bring up devtools on plugin view
-	//IPC.sendToHost('devtools');
-
-	// Do initial stuff
-	IPC.sendToHost('api-call', '/host/status', 'start');
-
-	// Start updating
-	update();
-}
-
-// Update host info
-addResultListener('start', function(result) {
-	hosting = result;
-
+	if (propsMade) {
+		return;
+	}
 	// From hostProperties, make properties
 	hostProperties.forEach(function(prop) {
-		if (eID(prop.name)) {
-			return;
-		}
 
 		var item = eID('propertybp').cloneNode(true);
 		item.classList.remove('hidden');
@@ -59,10 +42,17 @@ addResultListener('start', function(result) {
 
 		eID('properties').appendChild(item);
 	});
-
-	// Show the IPAddress that the host is already using as a placeholder
-	eID('address').placeholder = hosting.IPAddress;
+	propsMade = true;
 });
+
+// Called upon showing
+function start() {
+	// DEVTOOL: uncomment to bring up devtools on plugin view
+	//IPC.sendToHost('devtools');
+
+	// Start updating
+	update();
+}
 
 // Called upon transitioning away from this view
 function stop() {
