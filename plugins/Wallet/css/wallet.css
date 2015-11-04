@@ -64,6 +64,12 @@
 	color: red;
 	font-size: 12px;
 }
+.popup .close {
+	padding: 0;
+	position: absolute;
+	right: 4px;
+	top: 0px;
+}
 
 /* Information Box */
 .row {

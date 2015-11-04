@@ -204,6 +204,10 @@ classOnClick('save-password', function() {
 	}
 });
 
+classOnClick('close', function() {
+	hide(this.parentNode.parentNode);
+});
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 eID('load-legacy-wallet').onclick = function() {
 	var loadPath = IPC.sendSync('dialog', 'open', {
