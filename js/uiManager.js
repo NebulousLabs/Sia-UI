@@ -238,10 +238,10 @@ function UIManager() {
 	this.init = function() {
 		Config.load(configPath, function(config) {
 			memConfig = config;
-			if (memConfig.width && memConfig.height) {
+			if (memConfig.width  !== null && memConfig.height !== null ) {
 				BrowserWindow.setSize(memConfig.width, memConfig.height);
 			}
-			if (memConfig.xPosition && memConfig.yPosition) {
+			if (memConfig.xPosition !== null  && memConfig.yPosition !== null ) {
 				BrowserWindow.setPosition(memConfig.xPosition, memConfig.yPosition);
 			}
 			Daemon.init(config);
