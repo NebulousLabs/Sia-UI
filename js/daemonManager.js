@@ -87,7 +87,7 @@ function DaemonManager() {
 		}, function() {
 			UI.notify('Loading siad...', 'loading');
 
-			// daemon as a background process logs output to files
+			// daemon logs output to files
 			var out, err;
 			Fs.open(Path.join(__dirname, siaPath, 'daemonOut.log'), 'w', function(e, filedescriptor) {
 				out = filedescriptor;
@@ -111,6 +111,8 @@ function DaemonManager() {
 					UI.notify('siad errored: ' + error, 'error');
 				}
 			});
+
+			// Listen for siad exiting
 			daemonProcess.on('exit', function(code) {
 				self.Running = false;
 				UI.notify('siad exited with code: ' + code, 'stop');

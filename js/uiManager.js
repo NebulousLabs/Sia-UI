@@ -5,21 +5,14 @@
  * @class UIManager
  */
 function UIManager() {
-	/**
-	 * Config namespace for config management logic
-	 * @member {UIConfig} UIManager~Config
-	 */
+	// Config namespace for config management logic
 	var Config = require('./js/uiConfig.js');
-	/**
-	 * Config.json variables
-	 * @member {string} UIManager~configPath
-	 */
+	// Config.json variables
 	var configPath = Path.join(__dirname, 'config.json');
-	/**
-	 * Config variable held in working memory
-	 * @member {config} UIManager~memConfig
-	 */
+	// Config variable held in working memory
 	var memConfig;
+	// Variable to track error log
+	var errorLog;
 
 	// Involved in the notification queue
 	var notifications = [];
@@ -93,7 +86,7 @@ function UIManager() {
 			// eTooltip.hide();
 			eTooltip.animate({
 				'opacity':'0'
-			},400,function() {
+			}, 400, function() {
 				tooltipVisible = false;
 				eTooltip.hide();
 			});
@@ -197,6 +190,14 @@ function UIManager() {
 	 * clicking the notification
 	 */
 	this.notify = function notify(message, type, clickAction) {
+		// Record errors for reference
+		if (type === 'error') {
+			if (!errorLog) {
+				errorLog = Fs.createWriteStream(Path.join(__dirname, 'errors.log'));
+			}
+			errorLog.write(message);
+		}
+
 		// TODO: This delay system is technically broken, but not noticably
 		// wait approximately 250ms between notifications
 		if (new Date().getTime() < lastNotificationTime + 250) {
@@ -238,12 +239,18 @@ function UIManager() {
 	this.init = function() {
 		Config.load(configPath, function(config) {
 			memConfig = config;
+
+			// Load the window's size
 			if (memConfig.width  !== null && memConfig.height !== null ) {
 				BrowserWindow.setSize(memConfig.width, memConfig.height);
 			}
+
+			// Load the window's position
 			if (memConfig.xPosition !== null  && memConfig.yPosition !== null ) {
 				BrowserWindow.setPosition(memConfig.xPosition, memConfig.yPosition);
 			}
+
+			// Init other manager classes
 			Daemon.init(config);
 			Plugins.init(config);
 		});
@@ -257,14 +264,21 @@ function UIManager() {
 	* @function UIManager#kill
 	*/
 	this.kill = function(ev) {
+		// Close the error write stream
+		if (errorLog) {
+			errorLog.end();
+		}
+
 		// Save the window's size
 		var size = BrowserWindow.getSize();
 		memConfig.width = size[0];
 		memConfig.height = size[1];
+
 		// Save the window's position
 		var pos = BrowserWindow.getPosition();
 		memConfig.xPosition = pos[0];
 		memConfig.yPosition = pos[1];
+
 		// Save the config
 		Config.save(memConfig, configPath);
 	};
