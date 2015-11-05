@@ -90,3 +90,8 @@ MainIPC.on('dialog', function(event, type, options) {
 	}
 	event.returnValue = response ? response : null;
 });
+
+MainIPC.on('context-menu', function(event, template) {
+	var contextMenu = Menu.buildFromTemplate(template);
+	contextMenu.popup(mainWindow);
+});

@@ -30,8 +30,7 @@ var template = [
 				role: 'selectall'
 			},
 		]
-	},
-	{
+	}, {
 		label: 'View',
 		submenu: [
 			{
@@ -141,8 +140,7 @@ if (process.platform == 'darwin') {
 	);
 }
 
-contextMenu = Menu.buildFromTemplate(template);
 window.addEventListener('contextmenu', function (e) {
 	e.preventDefault();
-	contextMenu.popup(BrowserWindow);
+	RendererIPC.send('context-menu', template);
 }, false);

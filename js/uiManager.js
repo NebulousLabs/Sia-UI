@@ -239,10 +239,10 @@ function UIManager() {
 		Config.load(configPath, function(config) {
 			memConfig = config;
 			if (memConfig.width  !== null && memConfig.height !== null ) {
-				BrowserWindow.setSize(memConfig.width, memConfig.height);
+				mainWindow.setSize(memConfig.width, memConfig.height);
 			}
 			if (memConfig.xPosition !== null  && memConfig.yPosition !== null ) {
-				BrowserWindow.setPosition(memConfig.xPosition, memConfig.yPosition);
+				mainWindow.setPosition(memConfig.xPosition, memConfig.yPosition);
 			}
 			Daemon.init(config);
 			Plugins.init(config);
@@ -258,11 +258,11 @@ function UIManager() {
 	*/
 	this.kill = function(ev) {
 		// Save the window's size
-		var size = BrowserWindow.getSize();
+		var size = mainWindow.getSize();
 		memConfig.width = size[0];
 		memConfig.height = size[1];
 		// Save the window's position
-		var pos = BrowserWindow.getPosition();
+		var pos = mainWindow.getPosition();
 		memConfig.xPosition = pos[0];
 		memConfig.yPosition = pos[1];
 		// Save the config
