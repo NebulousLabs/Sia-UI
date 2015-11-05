@@ -112,7 +112,7 @@ html,body {
 	background-color: #00CBA0;
 	color: #F5F5F5;
 }
-.button.current .icon{
+.button.current .icon, .button:hover .icon {
 	-webkit-filter: invert(100%);
 }
 @keyframes fadeout {
