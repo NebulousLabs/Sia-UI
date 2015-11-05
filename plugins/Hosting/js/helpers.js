@@ -40,7 +40,6 @@ var hostProperties = [
 ];
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Helper Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 // Notification shortcut 
 function notify(msg, type) {
 	IPC.sendToHost('notify', msg, type);
