@@ -59,21 +59,33 @@ function stop() {
 }
 
 // Announce button
-$('#announce').click(function() {
-	tooltip('Anouncing...', this);
+$('#announce.button').click(function() {
+	$('#address.popup').removeClass('hidden');
+});
+function announce(args) {
+	$('#address.popup').addClass('hidden');
+	tooltip('Anouncing...', $('#announce').get(0));
 	var call = {
 		url: '/host/announce',
 		type: 'GET',
-		args: {},
+		args: args,
 	};
-	IPC.sendToHost('api-call', call, 'announce');
+	IPC.sendToHost('api-call', call, 'announced');
+}
+$('#custom.button').click(function() {
+	announce({
+		address: $('#address-field').text(),
+	});
 });
-addResultListener('announce', function() {
+$('#default.button').click(function() {
+	announce({});
+});
+addResultListener('announced', function() {
 	notify('Host successfully announced!', 'announced');
 });
 
 // Save button
-$('#save').click(function() {
+$('#save.button').click(function() {
 	tooltip('Saving...', this);
 
 	// Define configuration settings
@@ -99,7 +111,7 @@ addResultListener('configure', function() {
 });
 
 // Reset button
-$('#reset').click(function() {
+$('#reset.button').click(function() {
 	tooltip('Reseting...', this);
 	hostProperties.forEach(function(prop) {
 		var item = $('#' + prop.name);

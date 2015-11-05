@@ -5,7 +5,7 @@
 const IPC = require('ipc');
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
-// Library for arbitrary precision in numbers
+// jQuery
 const $ = require('jquery');
 // Ensure precision
 BigNumber.config({ DECIMAL_PLACES: 24 });
