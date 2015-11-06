@@ -5,12 +5,16 @@
 const IPC = require('ipc');
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
+// jQuery
+const $ = require('jquery');
 // Ensure precision
 BigNumber.config({ DECIMAL_PLACES: 24 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
-// Variable to store api result values
+// Stores api result values
 var hosting;
-// Keeps track of if the view is shown
+// Tracks if host properties have been made
+var propsMade = false;
+// Tracks of if the view is shown
 var updating;
 // Host properties array
 var hostProperties = [
@@ -36,15 +40,6 @@ var hostProperties = [
 ];
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Helper Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// DOM shortcut
-function eID() {
-	// https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#32-leaking-arguments
-	var args = new Array(arguments.length);
-	for(var i = 0; i < args.length; ++i) {
-		args[i] = arguments[i];
-	}
-	return document.getElementById.apply(document, args);
-}
 
 // Notification shortcut 
 function notify(msg, type) {

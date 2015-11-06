@@ -18,13 +18,13 @@
 	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
 	opacity: 0;
 }
-.controls .button:hover {
+.button:hover {
 	color: #4a4a4a;
 	cursor: pointer;
 }
 
 /* Box */
-.box .row {
+.row {
 	background: #f5f5f5;
 	display: block;
 	border: 1px;
@@ -43,6 +43,43 @@
 	display: inline-block;
 	font-size: 22px;
 	padding-left: 12px;
+}
+
+/* Controls */
+.popup {
+	position: absolute;
+	min-height: 100px;
+	max-height: 50%;
+	min-width: 200px;
+	max-width: 75%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	-webkit-animation: fadein 0.5s;
+
+	background-color: #ffffff;
+	z-index: 2;
+
+	border: solid 1px #c5c5c5;
+	border-radius: 8px;
+	text-align: center;
+	font-size: 16px;
+	overflow: auto;
+}
+.popup .title {
+	font-size: 24px;
+	display: block;
+}
+.popup .address-list {
+	font-family: monospace;
+	font-size: 11px;
+	max-height: 200px;
+	max-width: 600px;
+	overflow: auto;
+	padding: 20px;
+}
+.popup p {
+	margin: 0;
 }
 
 /* Controls */

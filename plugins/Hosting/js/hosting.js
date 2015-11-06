@@ -12,7 +12,7 @@ addResultListener('update', function(result) {
 	hosting = result;
 
 	// Update competitive prices
-	eID('hmessage').innerHTML = 'Estimated competitive price: ' + convertSiacoin(hosting.Competition) + ' S per GB/month';
+	$('#hmessage').text('Estimated competitive price: ' + convertSiacoin(hosting.Competition) + ' S per GB/month');
 
 	// Calculate host finances
 	var total = formatBytes(hosting.TotalStorage);
@@ -21,10 +21,27 @@ addResultListener('update', function(result) {
 	var potentialProfit = convertSiacoin(hosting.PotentialProfit).toFixed(2);
 
 	// Update host finances
-	eID('contracts').innerHTML = hosting.NumContracts + ' Contracts';
-	eID('storage').innerHTML = storage + '/' + total + ' in use';
-	eID('profit').innerHTML = profit + ' S earned';
-	eID('potentialprofit').innerHTML = potentialProfit + ' S to be earned';
+	$('#contracts').text(hosting.NumContracts + ' Contracts');
+	$('#storage').text(storage + '/' + total + ' in use');
+	$('#profit').text(profit + ' S earned');
+	$('#potentialprofit').text(potentialProfit + ' S to be earned');
+
+	if (propsMade) {
+		return;
+	}
+	// From hostProperties, make properties
+	hostProperties.forEach(function(prop) {
+		var item = $('#propertybp').clone();
+		item.removeClass('hidden');
+		item.find('.name').text(prop.descr + ' (' + prop.unit + ')');
+		var rawVal = new BigNumber(hosting[prop.name].toString());
+		var value = rawVal.div(prop.conversion).round(2);
+		item.find('.value').text(value);
+		item.attr('id', prop.name);
+
+		$('#properties').append(item);
+	});
+	propsMade = true;
 });
 
 // Called upon showing
@@ -32,37 +49,9 @@ function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
 	//IPC.sendToHost('devtools');
 
-	// Do initial stuff
-	IPC.sendToHost('api-call', '/host/status', 'start');
-
 	// Start updating
 	update();
 }
-
-// Update host info
-addResultListener('start', function(result) {
-	hosting = result;
-
-	// From hostProperties, make properties
-	hostProperties.forEach(function(prop) {
-		if (eID(prop.name)) {
-			return;
-		}
-
-		var item = eID('propertybp').cloneNode(true);
-		item.classList.remove('hidden');
-		item.querySelector('.name').textContent = prop.descr + ' (' + prop.unit + ')';
-		var rawVal = new BigNumber(hosting[prop.name].toString());
-		var value = rawVal.div(prop.conversion).round(2);
-		item.querySelector('.value').textContent = value;
-		item.id = prop.name;
-
-		eID('properties').appendChild(item);
-	});
-
-	// Show the IPAddress that the host is already using as a placeholder
-	eID('address').placeholder = hosting.IPAddress;
-});
 
 // Called upon transitioning away from this view
 function stop() {
@@ -70,31 +59,40 @@ function stop() {
 }
 
 // Announce button
-eID('announce').onclick = function() {
-	tooltip('Anouncing...', this);
+$('#announce.button').click(function() {
+	$('#address.popup').removeClass('hidden');
+});
+function announce(args) {
+	$('#address.popup').addClass('hidden');
+	tooltip('Anouncing...', $('#announce').get(0));
 	var call = {
 		url: '/host/announce',
 		type: 'GET',
-		args: {},
+		args: args,
 	};
-	if (eID('address').value) {
-		call.args.address = eID('address').value;
-	}
-	IPC.sendToHost('api-call', call, 'announce');
-};
-addResultListener('announce', function() {
+	IPC.sendToHost('api-call', call, 'announced');
+}
+$('#custom.button').click(function() {
+	announce({
+		address: $('#address-field').text(),
+	});
+});
+$('#default.button').click(function() {
+	announce({});
+});
+addResultListener('announced', function() {
 	notify('Host successfully announced!', 'announced');
 });
 
 // Save button
-eID('save').onclick = function() {
+$('#save.button').click(function() {
 	tooltip('Saving...', this);
 
 	// Define configuration settings
 	var hostInfo = {};
 	hostProperties.forEach(function(prop) {
-		var item = eID(prop.name);
-		var value = new BigNumber(item.querySelector('.value').textContent).mul(prop.conversion);
+		var item = $('#' + prop.name);
+		var value = new BigNumber(item.find('.value').text()).mul(prop.conversion);
 		hostInfo[prop.name.toLowerCase()] = value.round().toString();
 	});
 	console.log(hostInfo);
@@ -106,20 +104,20 @@ eID('save').onclick = function() {
 		args: hostInfo,
 	};
 	IPC.sendToHost('api-call', call, 'configure');
-};
+});
 addResultListener('configure', function() {
 	update();
 	notify('Hosting configuration saved!', 'saved');
 });
 
 // Reset button
-eID('reset').onclick = function() {
+$('#reset.button').click(function() {
 	tooltip('Reseting...', this);
 	hostProperties.forEach(function(prop) {
-		var item = eID(prop.name);
+		var item = $('#' + prop.name);
 		var value = new BigNumber(hosting[prop.name].toString()).div(prop.conversion);
-		item.querySelector('.value').textContent = value;
+		item.find('.value').text(value.round(2));
 	});
 	notify('Hosting configuration reset', 'reset');
-};
+});
 
