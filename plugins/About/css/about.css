@@ -11,7 +11,9 @@
  */
 .about {
 	color: #c5c5c5;
-	padding: 15px 15px 14px 15px;
+	margin-top: 5%;
+	margin-left: 5%;
+	padding-bottom: 10px;
 	border-bottom: 1px solid #e0e0e0;
 }
 .about .version {
