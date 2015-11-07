@@ -19,13 +19,8 @@ var renting = {};
 var updating;
 
 // DOM shortcuts
-function eID() {
-	// https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#32-leaking-arguments
-	var args = new Array(arguments.length);
-	for(var i = 0; i < args.length; ++i) {
-		args[i] = arguments[i];
-	}
-	return document.getElementById.apply(document, args);
+function eID(id) {
+	return document.getElementById(id);
 }
 function toElement(el) {
 	if (typeof el === 'string') {

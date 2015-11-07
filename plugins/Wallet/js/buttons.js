@@ -151,8 +151,7 @@ eID('lock-pod').onclick = function() {
 	} else if (wallet.unlocked && state === 'Lock Wallet') {
 		lock();
 	} else if (!wallet.unlocked && state === 'Unlock Wallet'){
-		show('request-password');
-		eID('password-field').focus();
+		getPassword();
 	} else {
 		console.error('lock-pod disagrees with wallet variable!', wallet.unlocked, state);
 	}
@@ -161,39 +160,53 @@ eID('lock-pod').onclick = function() {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Popups ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // On popup upon entering an encrypted, locked wallet, enter password
 eID('enter-password').onclick = function() {
-	// Record password
-	var field = eID('password-field');
+	// Save password if checked
+	var pw = eID('password-field').value;
+	if (this.parentNode.querySelector('.save-password').checked) {
+		savePassword(pw);
+	}
 
 	// Hide popup and start the plugin
-	unlock(field.value);
-	field.value = '';
-};
-
-// An 'Enter' keypress in the input field will submit it.
-eID('password-field').addEventListener("keydown", function(e) {
-    e = e || window.event;
-    if (e.keyCode === 13) {
-        eID('enter-password').click();
-    }
-}, false);
-
-// User wants to save the password
-eID('save-password').onclick = function() {
-	if (eID('save-password').checked) {
-		show('warning');
-	} else {
-		hide('warning');
-	}
+	unlock(pw);
+	eID('password-field').value = '';
+	hide('request-password');
 };
 
 // Make sure the user read the password
 eID('confirm-password').onclick = function() {
+	// Save password if checked
 	var pw = eID('generated-password').innerText;
-	if (eID('save-password').checked) {
+	if (this.parentNode.querySelector('.save-password').checked) {
 		savePassword(pw);
 	}
+
+	// Hide popup and start the plugin
+	unlock(pw);
+	eID('generated-password').innerText = '';
 	hide('show-password');
 };
+
+// An 'Enter' keypress in the input field will submit it.
+eID('password-field').addEventListener("keydown", function(e) {
+	e = e || window.event;
+	if (e.keyCode === 13) {
+		eID('enter-password').click();
+	}
+}, false);
+
+// If the user wants to save the password in either popup, they
+// should be warned of the security risks
+classOnClick('save-password', function() {
+	if (this.checked) {
+		show(this.parentNode.querySelector('.warning'));
+	} else {
+		hide(this.parentNode.querySelector('.warning'));
+	}
+});
+
+classOnClick('close', function() {
+	hide(this.parentNode.parentNode);
+});
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 eID('load-legacy-wallet').onclick = function() {

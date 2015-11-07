@@ -1,18 +1,33 @@
 'use strict';
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Lock Icon  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Helper function for the lock-icon to make sure its classes are cleared
-function clearLockIcon() {
-	eID('lock-icon').className = 'fa';
+function setLockIcon(lockStatus, iconClass) {
+	eID('lock-status').innerHTML = lockStatus;
+	eID('lock-icon').className = 'fa ' + iconClass;
+}
+
+// Markup changes to reflect locked state
+function setLocked() {
+	setLockIcon('Unlock Wallet', 'fa-lock');
+}
+
+// Markup changes to reflect unlocked state
+function setUnlocked() {
+	setLockIcon('Lock Wallet', 'fa-unlock');
+}
+
+// Markup changes to reflect unlocked state
+function setUnlocking() {
+	setLockIcon('Unlocking', 'fa-cog fa-spin');
+}
+
+// setUnencrypted sets the wallet lock status to unencrypted.
+function setUnencrypted() {
+	setLockIcon('Create Wallet', 'fa-plus');
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Locking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Markup changes to reflect locked state
-function setLocked() {
-	clearLockIcon();
-	eID('lock-status').innerHTML = 'Unlock Wallet';
-	eID('lock-icon').classList.add('fa-lock');
-}
-
 // Lock the wallet
 function lock() {
 	IPC.sendToHost('api-call', {
@@ -20,30 +35,14 @@ function lock() {
 		type: 'POST',
 	}, 'locked');
 }
-
-// React to the api call result
 addResultListener('locked', function(result) {
 	setLocked();
 	notify('Wallet locked', 'locked');	
+
 	update();
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Unlocking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Markup changes to reflect unlocked state
-function setUnlocked() {
-	clearLockIcon();
-	eID('lock-status').innerHTML = 'Lock Wallet';
-	eID('lock-icon').classList.add('fa-unlock');
-}
-
-// Markup changes to reflect unlocked state
-function setUnlocking() {
-	clearLockIcon();
-	eID('lock-status').innerHTML = 'Unlocking';
-	eID('lock-icon').classList.add('fa-cog');
-	eID('lock-icon').classList.add('fa-spin');
-}
-
 // Unlock the wallet
 function unlock(password) {
 	IPC.sendToHost('api-call', {
@@ -53,17 +52,16 @@ function unlock(password) {
 			encryptionpassword : password,
 		},
 	}, 'unlocked');
+
 	// Password attempted, show responsive processing icon
-	hide('request-password');
 	setUnlocking();
 }
-
-// React to the api call result
 IPC.on('unlocked', function(err, result) {
-	// Remove processing icon
+	// Remove unlocking icon
 	if (err) {
 		setLocked();
 		notify('Wrong password', 'error');
+		show('request-password');
 	} else {
 		setUnlocked();
 		notify('Wallet unlocked', 'unlocked');
@@ -72,23 +70,16 @@ IPC.on('unlocked', function(err, result) {
 	update();
 });
 
-// Check if wallet is unlocked at start
-function autoUnlock() {
-	IPC.sendToHost('api-call', '/wallet', 'lock-check');
-}
-addResultListener('lock-check', function(result) {
-	if (!result.unlocked) {
-		getPassword();
-	}
-});
-
 // Get and use password from the UI's config.json
 function getPassword() {
-	IPC.sendToHost('config', {key: 'wallet-password'}, 'get-password');
+	IPC.sendToHost('config', {key: 'wallet-password'}, 'use-password');
 }
-IPC.on('get-password', function(pw) {
+IPC.on('use-password', function(pw) {
 	if (pw) {
 		unlock(pw);
+	} else {
+		show('request-password');
+		eID('password-field').focus();
 	}
 });
 
@@ -98,17 +89,9 @@ function savePassword(pw) {
 		key: 'wallet-password',
 		value: pw,
 	});
-	unlock(pw);
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Encrypting ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// setUnencrypted sets the wallet lock status to unencrypted.
-function setUnencrypted() {
-	clearLockIcon();
-	eID('lock-status').innerHTML = 'Create Wallet';
-	eID('lock-icon').classList.add('fa-plus');
-}
-
 // Encrypt the wallet (only applies to first time opening)
 function encrypt() {
 	IPC.sendToHost('api-call', {
@@ -124,7 +107,14 @@ addResultListener('encrypted', function(result) {
 	var popup = eID('show-password');
 	show(popup);
 
-	popup.querySelector('#generated-password').innerText = result.primaryseed;
+	// Clear old password in config if there is one
+	IPC.sendToHost('config', {
+		key: 'wallet-password',
+		value: '',
+	});
+
+	// Show password in the popup
+	eID('generated-password').innerText = result.primaryseed;
 
 	update();
 });

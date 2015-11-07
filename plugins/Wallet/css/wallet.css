@@ -51,18 +51,24 @@
 .popup p {
 	margin: 0;
 }
-#save-password {
+.save-password {
 	height: 16px;
 	vertical-align: middle;
 }
-#save-password:focus {
+.save-password:focus {
 	outline: inherit;
 	border: none;
 	box-shadow: none;
 }
-#warning {
+.warning {
 	color: red;
 	font-size: 12px;
+}
+.popup .close {
+	padding: 0;
+	position: absolute;
+	right: 4px;
+	top: 0px;
 }
 
 /* Information Box */

@@ -52,7 +52,13 @@
 					<div class='title'>
 						Enter your password
 					</div>
+					<div class='button close'>
+						<i class='fa fa-times'></i>
+					</div>
 				</div>
+				<input type='checkbox' class='save-password'>Save password <br/>
+				<div class='hidden warning'>Warning: This is equivalent to having an
+					unencrypted wallet and poses a security risk!</div>
 				<input type='password' id='password-field' placeholder='Wallet password'>
 				<div class='button' id='enter-password'>
 					<i class='fa fa-check-circle'></i>
@@ -64,6 +70,9 @@
 					<div class='title'>
 						Welcome to your Sia Wallet!
 					</div>
+					<div class='button close'>
+						<i class='fa fa-times'></i>
+					</div>
 				</div>
 				<p>
 					Your wallet has been generated and encrypted using the key
@@ -73,9 +82,8 @@
 					store this phrase somewhere safe!
 				</p>
 				<p id='generated-password'></p>
-				<input type='checkbox' id='save-password'>Save my password and
-				unlock it for me on returning to this plugin.<br>
-				<div class='hidden' id='warning'>Warning: This is equivalent to having an
+				<input type='checkbox' class='save-password'>Save password <br/>
+				<div class='hidden warning'>Warning: This is equivalent to having an
 					unencrypted wallet and poses a security risk!</div>
 				<div class='button' id='confirm-password'>
 					<i class='fa fa-key'>
