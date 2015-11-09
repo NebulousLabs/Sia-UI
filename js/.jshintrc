@@ -80,7 +80,9 @@
 
 	"maxerr"        : 100,      // Maximum errors before stopping.
 	"globals"       : {         // Extra globals.
+		"Path": false,
 		"WebFrame": false,
+		"IPC": false,
 		"ElectronScreen": false,
 		"RendererIPC": false,
 		"Fs": false,

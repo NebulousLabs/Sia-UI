@@ -1,3 +1,5 @@
+'use strict';
+
 // Template for context menu commands
 var template = [
 	{
@@ -25,7 +27,7 @@ var template = [
 			}, {
 				label: 'Toggle Full Screen',
 				accelerator: (function() {
-					if (process.platform == 'darwin') {
+					if (process.platform ==='darwin') {
 						return 'Ctrl+Command+F';
 					} else {
 						return 'F11';
@@ -39,7 +41,7 @@ var template = [
 			}, {
 				label: 'Toggle Developer Tools',
 				accelerator: (function() {
-					if (process.platform == 'darwin') {
+					if (process.platform ==='darwin') {
 						return 'Alt+Command+I';
 					} else {
 						return 'Ctrl+Shift+I';
@@ -63,25 +65,25 @@ var template = [
 		label: 'Help',
 		role: 'help',
 		submenu: [
-			{ label: 'Learn More', click: function() { require('shell').openExternal('http://sia.tech/') } },
+			{ label: 'Learn More', click: function() { require('shell').openExternal('http://sia.tech/'); } },
 		]
 	},
 ];
 
-if (process.platform == 'darwin') {
-	var name = 'Sia-UI'
+if (process.platform ==='darwin') {
+	var appName = 'Sia-UI';
 	template.unshift({
-		label: name,
+		label: appName,
 		submenu: [
-			{ label: 'About ' + name, role: 'about' },
+			{ label: 'About ' + appName, role: 'about' },
 			{ type:  'separator' },
 			{ label: 'Services', role: 'services', submenu: [] },
 			{ type:  'separator' },
-			{ label: 'Hide ' + name, accelerator: 'Command+H', role: 'hide' },
+			{ label: 'Hide ' + appName, accelerator: 'Command+H', role: 'hide' },
 			{ label: 'Hide Others', accelerator: 'Command+Shift+H', role: 'hideothers' },
 			{ label: 'Show All', role: 'unhide' },
 			{ type:  'separator' },
-			{ label: 'Quit', accelerator: 'Command+Q', click: function() { app.quit(); } },
+			{ label: 'Quit', accelerator: 'Command+Q', click: function() { require('app').quit(); } },
 		]
 	});
 

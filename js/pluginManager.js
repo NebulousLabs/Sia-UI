@@ -92,11 +92,12 @@ function PluginManager() {
 		
 		// Handle any ipc messages from the plugin
 		plugin.on('ipc-message', function(event) {
+			var responseChannel;
 			switch(event.channel) {
 				case 'api-call':
 					// Redirect api calls to the daemonManager
 					var call = event.args[0];
-					var responseChannel = event.args[1];
+					responseChannel = event.args[1];
 					// Send the call only if the Daemon appears to be running
 					if (!Daemon.Running) {
 						return;
@@ -132,8 +133,8 @@ function PluginManager() {
 				case 'config':
 					// get or set something in the config.json
 					var args = event.args[0];
-					var responseChannel = event.args[1];
 					var result = UI.config(args);
+					responseChannel = event.args[1];
 					if (responseChannel) {
 						plugin.sendToView(responseChannel, result);
 					}
