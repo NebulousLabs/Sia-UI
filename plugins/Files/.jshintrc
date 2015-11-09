@@ -130,6 +130,7 @@
 		"download": true,
 		"share": true,
 		"deleteFile": true,
+		"updateFile": true,
 		"confirmDelete": true,
 		"hidden": true,
 		"upload": true,

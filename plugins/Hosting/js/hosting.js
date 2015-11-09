@@ -1,5 +1,8 @@
 'use strict';
 
+// Tracks if host properties have been made
+var propsMade = false;
+
 // Define API calls and update DOM per call
 function update() {
 	// Get HostInfo regularly
