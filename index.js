@@ -7,6 +7,8 @@ const BrowserWindow = require('browser-window');
 const Tray = require('tray');
 const Dialog = require('dialog');
 const Menu = require('menu');
+const contextMenu = require('./js/contextMenu.js');
+const appMenu = require('./js/appMenu.js');
 
 // visit localhost:9222 to see devtools remotely
 App.commandLine.appendSwitch('remote-debugging-port', '9222');
@@ -44,21 +46,7 @@ function startMainWindow() {
 	if (process.platform !== 'darwin') {
 		mainWindow.setMenuBarVisibility(false);
 	} else {
-		// Create the Application's main menu - enables copy-paste on Mac.
-		var appMenu = Menu.buildFromTemplate([
-			{
-				label: "Edit",
-				submenu: [
-					{ label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-					{ label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-					{ type:  "separator" },
-					{ label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-					{ label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-					{ label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-					{ label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" },
-				]
-			}
-		]);
+		// Create the Application's main menu - OSX version might feel weird without a menubar
 		Menu.setApplicationMenu(appMenu);
 	}
 }
@@ -91,7 +79,7 @@ MainIPC.on('dialog', function(event, type, options) {
 	event.returnValue = response ? response : null;
 });
 
+// Enable right-click context menu from renderer process event
 MainIPC.on('context-menu', function(event, template) {
-	var contextMenu = Menu.buildFromTemplate(template);
 	contextMenu.popup(mainWindow);
 });

@@ -1,4 +1,5 @@
 'use strict';
+// Plugin Factory namespace to hold plugin creation logic
 var Factory = require('./pluginFactory');
 
 /**
