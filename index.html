@@ -56,7 +56,6 @@
 			const Remote = require('remote');
 			const mainWindow = Remote.getCurrentWindow();
 		</script>
-		<script src='js/contextMenu.js'></script>
 		<script src='js/daemonManager.js'></script>
 		<script src='js/pluginManager.js'></script>
 		<script src='js/uiManager.js'></script>
@@ -66,6 +65,10 @@
 			var Plugins = new PluginManager();
 			window.onload = UI.init;
 			window.onbeforeunload = UI.kill;
+			window.addEventListener('contextmenu', function (e) {
+				e.preventDefault();
+				RendererIPC.send('context-menu');
+			}, false);
 		</script>
 	</body>
 </html>
