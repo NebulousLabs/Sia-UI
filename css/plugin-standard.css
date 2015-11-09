@@ -121,3 +121,7 @@ select:hover {
 	position: relative;
 	width: 100%;
 }
+.button:hover {
+	color: #4a4a4a;
+	cursor: pointer;
+}

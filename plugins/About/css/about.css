@@ -10,11 +10,13 @@
  * 		Black:      #000000
  */
 .about {
-	color: #9e9e9e;
-	padding: 20px;
+	color: #c5c5c5;
+	margin: 5% 5% 0 5%;
+	padding-left: 10px;
+	padding-bottom: 10px;
 	border-bottom: 1px solid #e0e0e0;
 }
 .about .version {
 	display: inline-block;
-	color: #757575;
+	color: #4a4a4a;
 }
