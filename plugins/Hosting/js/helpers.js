@@ -1,19 +1,11 @@
 'use strict';
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Global Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Library for communicating with Sia-UI
-const IPC = require('ipc');
-// Library for arbitrary precision in numbers
-const BigNumber = require('bignumber.js');
-// jQuery
-const $ = require('jquery');
 // Ensure precision
 BigNumber.config({ DECIMAL_PLACES: 24 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 // Stores api result values
 var hosting;
-// Tracks if host properties have been made
-var propsMade = false;
 // Tracks of if the view is shown
 var updating;
 // Host properties array

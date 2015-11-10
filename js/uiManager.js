@@ -230,7 +230,7 @@ function UIManager() {
 		notificationTimeout = setTimeout(function() {
 			removeNotification(notif);
 		}, 2500);
-	}
+	};
 
 	/**
 	* Called at window.onready, initalizes the UI

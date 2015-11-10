@@ -1,3 +1,5 @@
+'use strict';
+
 // Template for OSX app menu commands
 var template = [
 	{

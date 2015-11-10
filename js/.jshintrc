@@ -2,29 +2,14 @@
 	// --------------------------------------------------------------------
 	// JSHint Configuration, Strict Edition
 	// --------------------------------------------------------------------
-	//
-	// This is a options template for [JSHint][1], using [JSHint example][2]
-	// and [Ory Band's example][3] as basis and setting config values to
-	// be most strict:
-	//
 	// * set all enforcing options to true
 	// * set all relaxing options to false
 	// * set all environment options to false, except the browser value
 	// * set all JSLint legacy options to false
-	//
-	// [1]: http://www.jshint.com/
-	// [2]: https://github.com/jshint/node-jshint/blob/master/example/config.json
-	// [3]: https://github.com/oryband/dotfiles/blob/master/jshintrc
-	//
 	// @author http://michael.haschke.biz/
 	// @license http://unlicense.org/
 
 	// == Enforcing Options ===============================================
-	//
-	// These options tell JSHint to be more strict towards your code. Use
-	// them if you want to allow only a safe subset of JavaScript, very
-	// useful when your codebase is shared with a big number of developers
-	// with different skill levels.
 
 	"bitwise"       : true,     // Prohibit bitwise operators (&, |, ^, etc.).
 	"curly"         : true,     // Require {} for every new block or scope.
@@ -43,10 +28,6 @@
 	"trailing"      : true,     // Prohibit trailing whitespaces.
 
 	// == Relaxing Options ================================================
-	//
-	// These options allow you to suppress certain types of warnings. Use
-	// them only if you are absolutely positive that you know what you are
-	// doing.
 
 	"asi"           : false,    // Tolerate Automatic Semicolon Insertion (no semicolons).
 	"boss"          : false,    // Tolerate assignments inside if, for & while. Usually conditions & loops are for comparison, not assignments.
@@ -75,10 +56,6 @@
 	"validthis"     : false,    // Tolerate strict violations when the code is running in strict mode and you use this in a non-constructor function.
 
 	// == Environments ====================================================
-	//
-	// These options pre-define global variables that are exposed by
-	// popular JavaScript libraries and runtime environmentsâ€”such as
-	// browser or node.js.
 
 	"browser"       : true,     // Standard browser globals e.g. `window`, `document`.
 	"couch"         : false,    // Enable globals exposed by CouchDB.
@@ -93,9 +70,6 @@
 	"wsh"           : false,    // Enable globals available when your code is running as a script for the Windows Script Host.
 
 	// == JSLint Legacy ===================================================
-	//
-	// These options are legacy from JSLint. Aside from bug fixes they will
-	// not be improved in any way and might be removed at any point.
 
 	"nomen"         : false,    // Prohibit use of initial or trailing underbars in names.
 	"onevar"        : false,    // Allow only one `var` statement per function.
@@ -103,42 +77,22 @@
 	"white"         : false,    // Check against strict whitespace and indentation rules.
 
 	// == Undocumented Options ============================================
-	//
-	// While I've found these options in [example1][2] and [example2][3]
-	// they are not described in the [JSHint Options documentation][4].
-	//
-	// [4]: http://www.jshint.com/options/
 
 	"maxerr"        : 100,      // Maximum errors before stopping.
 	"globals"       : {         // Extra globals.
-		"IPC": false,
-		"Fs": false,
 		"Path": false,
-		"BigNumber": false,
-		"eID": true,
-		"tooltip": true,
-		"show": true,
-		"hide": true,
-		"convertSiacoin": true,
-		"formatBytes": true,
-		"update": true,
-		"updating": true,
-		"notify": true,
-		"tooltip": true,
-		"nameFromPath": true,
-		"addResultListener": true,
-		"download": true,
-		"share": true,
-		"deleteFile": true,
-		"updateFile": true,
-		"confirmDelete": true,
-		"hidden": true,
-		"upload": true,
-		"uploadDir": true,
-		"isUnixHiddenPath": true,
-		"loadDotSia": true,
-		"loadAscii": true,
-		"exitFileAdder": true
+		"WebFrame": false,
+		"IPC": false,
+		"ElectronScreen": false,
+		"RendererIPC": false,
+		"Fs": false,
+		"Shell": false,
+		"Process": false,
+		"Remote": false,
+		"mainWindow": true,
+		"UI": true,
+		"Daemon": true,
+		"Plugins": true
 	},
 	"indent"        : 4         // Specify indentation spacing
 }

@@ -184,11 +184,21 @@
 		</div>
 		
 		<!-- JS -->
-		<script type='text/javascript' src='js/helpers.js'></script>
-		<script type='text/javascript' src='js/loaders.js'></script>
-		<script type='text/javascript' src='js/adder.js'></script>
-		<script type='text/javascript' src='js/popups.js'></script>
-		<script type='text/javascript' src='js/fileList.js'></script>
-		<script type='text/javascript' src='js/lifecycle.js'></script>
+		<script>
+			// Library for communicating with Sia-UI
+			const IPC = require('ipc');
+			// Library for arbitrary precision in numbers
+			const BigNumber = require('bignumber.js');
+			// File system module
+			const Fs = require('fs');
+			// Module for handling and transforming file paths
+			const Path = require('path');
+		</script>
+		<script src='js/helpers.js'></script>
+		<script src='js/loaders.js'></script>
+		<script src='js/adder.js'></script>
+		<script src='js/popups.js'></script>
+		<script src='js/fileList.js'></script>
+		<script src='js/lifecycle.js'></script>
 	</body>
 </html>

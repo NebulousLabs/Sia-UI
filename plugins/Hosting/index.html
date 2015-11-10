@@ -77,8 +77,16 @@
 		</div>
 
 		<!-- JS -->
-		<script type='text/javascript' src='js/helpers.js'></script>
-		<script type='text/javascript' src='js/hosting.js'></script>
+		<script>
+			// Library for communicating with Sia-UI
+			const IPC = require('ipc');
+			// Library for arbitrary precision in numbers
+			const BigNumber = require('bignumber.js');
+			// Jquery
+			const $ = require('jquery');
+		</script>
+		<script src='js/helpers.js'></script>
+		<script src='js/hosting.js'></script>
 	</body>
 </html>
 

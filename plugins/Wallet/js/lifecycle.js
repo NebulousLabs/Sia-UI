@@ -1,5 +1,7 @@
 'use strict';
 
+// Library for working with clipboard
+const Clipboard = require('clipboard');
 // How often /wallet updates
 var refreshRate = 500; // half-second
 var finalRefreshRate = 1000 * 60 * 5; // five-minutes

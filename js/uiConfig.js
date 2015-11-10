@@ -37,7 +37,7 @@ module.exports = {
 		if (config !== undefined) {
 			Fs.writeFile(path, JSON.stringify(config, null, '\t'), function(err) {
 				if (err) {
-					alert(err);
+					window.alert(err);
 				}
 			});
 		}
