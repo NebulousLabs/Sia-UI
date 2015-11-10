@@ -20,7 +20,7 @@ describe('Sia-UI', function () {
 	// variable, app, available to all tests
 	beforeEach(function () {
 		app = new Application({
-			Path: Path.join(__dirname, '../node_modules/.bin/electron'),
+			path: Path.join(__dirname, '../node_modules/.bin/electron'),
 			args: ['--app=' + Path.join(__dirname, '..')],
 		});
 		return app.start();
@@ -53,8 +53,8 @@ describe('Sia-UI', function () {
 				.getWindowWidth().should.eventually.be.above(0)
 				.getWindowHeight().should.eventually.be.above(0)
 				.getArgv().then(function(argv) {
-					argv[0].should.contain('electron')
-					argv[1].should.contain('Sia-UI')
+					argv[0].should.contain('electron');
+					argv[1].should.contain('Sia-UI');
 				});
 		});
 	});
