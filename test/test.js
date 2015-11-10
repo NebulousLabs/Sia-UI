@@ -6,33 +6,42 @@ var path = require('path');
 chai.should();
 chai.use(chaiAsPromised);
 
-describe('application launch', function () {
+describe('Sia-UI', function () {
+	var app;
+	var client;
 	beforeEach(function () {
-		this.app = new Application({
+		app = new Application({
 			path: path.join(__dirname, '../node_modules/.bin/electron'),
-			args: [path.join(__dirname, '..')],
+			args: ['--app=' + path.join(__dirname, '..')],
 		});
-		return this.app.start();
+		return app.start();
 	});
 
 	beforeEach(function () {
-		chaiAsPromised.transferPromiseness = this.app.client.transferPromiseness;
+		client = app.client;
+		chaiAsPromised.transferPromiseness = client.transferPromiseness;
 	});
 
 	afterEach(function () {
-		if (this.app && this.app.isRunning()) {
-			return this.app.stop();
+		if (app && app.isRunning()) {
+			return app.stop();
 		}
 	});
 
-	it('opens a window', function () {
-		return this.app.client.waitUntilWindowLoaded()
-			.getWindowCount().should.eventually.equal(1)
-			.isWindowMinimized().should.eventually.be.false
-			.isWindowDevToolsOpened().should.eventually.be.false
-			.isWindowVisible().should.eventually.be.true
-			.isWindowFocused().should.eventually.be.true
-			.getWindowWidth().should.eventually.be.above(0)
-			.getWindowHeight().should.eventually.be.above(0);
+	describe('on startup', function () {
+		it('opens Sia-UI properly', function () {
+			return client.waitUntilWindowLoaded()
+				.getWindowCount().should.eventually.equal(1)
+				.isWindowMinimized().should.eventually.be.false
+				.isWindowDevToolsOpened().should.eventually.be.false
+				.isWindowVisible().should.eventually.be.true
+				.isWindowFocused().should.eventually.be.true
+				.getWindowWidth().should.eventually.be.above(0)
+				.getWindowHeight().should.eventually.be.above(0)
+				.getArgv().then(function(argv) {
+					argv[0].should.contain('electron')
+					argv[1].should.contain('Sia-UI')
+				});
+		});
 	});
 });

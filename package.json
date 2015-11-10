@@ -8,6 +8,7 @@
   "devDependencies": {
     "chai": "^3.4.1",
     "chai-as-promised": "^5.1.0",
+    "electron-mocha": "^0.6.1",
     "electron-packager": "^5.1.1",
     "electron-prebuilt": "^0.34.1",
     "ink-docstrap": "^0.5.2",
@@ -24,7 +25,7 @@
     "start": "electron .",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
-    "test": "mocha",
+    "test": "electron-mocha",
     "debug": "node-inspector & electron --debug=5858 . & xdg-open http://127.0.0.1:8080/debug?ws=127.0.0.1:8080&port=5858",
     "doc": "jsdoc -c .jsdocrc",
     "lint": "jshint . --verbose --exclude-path=.jshintignore",
