@@ -1,4 +1,5 @@
 'use strict';
+
 // Electron main process libraries
 const App = require('app');
 const MainIPC = require('ipc');
@@ -9,9 +10,6 @@ const Dialog = require('dialog');
 const Menu = require('menu');
 const contextMenu = require('./js/contextMenu.js');
 const appMenu = require('./js/appMenu.js');
-
-// visit localhost:9222 to see devtools remotely
-App.commandLine.appendSwitch('remote-debugging-port', '9222');
 
 // Global reference to the window object, so the window won't be closed
 // automatically upon execution and garbage collection
