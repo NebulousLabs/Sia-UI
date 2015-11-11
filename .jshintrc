@@ -80,13 +80,13 @@
 
 	"maxerr"        : 100,      // Maximum errors before stopping.
 	"globals"       : {         // Extra globals.
-    	/* MOCHA */
-    	"describe"   : false,
-    	"it"         : false,
-    	"before"     : false,
-    	"beforeEach" : false,
-    	"after"      : false,
-    	"afterEach"  : false
+		/* MOCHA */
+		"describe"   : false,
+		"it"         : false,
+		"before"     : false,
+		"beforeEach" : false,
+		"after"      : false,
+		"afterEach"  : false
 	},
 	"indent"        : 4         // Specify indentation spacing
 }

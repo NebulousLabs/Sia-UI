@@ -14,7 +14,6 @@
     "ink-docstrap": "^0.5.2",
     "jsdoc": "^3.3.3",
     "jshint": "^2.8.0",
-    "node-inspector": "^0.12.3",
     "spectron": "^0.34.0"
   },
   "dependencies": {
@@ -25,8 +24,7 @@
     "start": "electron .",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
-    "test": "electron-mocha test/*",
-    "debug": "node-inspector & electron --debug=5858 . & xdg-open http://127.0.0.1:8080/debug?ws=127.0.0.1:8080&port=5858",
+    "test": "electron-mocha",
     "doc": "jsdoc -c .jsdocrc",
     "lint": "jshint . --verbose --exclude-path=.jshintignore",
     "sia-repo": "go get -u github.com/NebulousLabs/Sia/...",
