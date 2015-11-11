@@ -9,6 +9,8 @@ install:
   - npm install
   - test -z "$(npm run lint --silent)"
 
+before_script: chmod 0777 ./node_modules/.bin/electron-mocha
+
 script: 
 
 sudo: false

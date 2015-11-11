@@ -144,7 +144,7 @@ function PluginManager() {
 					plugin.toggleDevTools();
 					break;
 				default:
-					console.log('Unknown ipc message: ' + event.channel);
+					console.error('Unknown ipc message: ' + event.channel);
 			}
 		});
 
@@ -182,9 +182,9 @@ function PluginManager() {
 	 * @function PluginManager~initPlugins
 	 */
 	function initPlugins() {
-		Fs.readdir(plugPath, function (err, pluginNames) {
+		Fs.readdir(plugPath, function(err, pluginNames) {
 			if (err) {
-				console.log(err);
+				console.error(err);
 			}
 
 			// Determine default plugin

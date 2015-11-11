@@ -80,14 +80,6 @@
 
 	"maxerr"        : 100,      // Maximum errors before stopping.
 	"globals"       : {         // Extra globals.
-		"WebFrame": false,
-		"ElectronScreen": false,
-		"RendererIPC": false,
-		"Fs": false,
-		"Shell": false,
-		"Process": false,
-		"Remote": false,
-		"mainWindow": true,
     	/* MOCHA */
     	"describe"   : false,
     	"it"         : false,

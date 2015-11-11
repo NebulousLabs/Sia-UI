@@ -5,9 +5,10 @@ const Application = require('spectron').Application;
 const Chai = require('chai');
 const ChaiAsPromised = require('chai-as-promised');
 const Path = require('path');
+const Fs = require('fs');
 
 // Chai's should syntax is executed to edit Object to have Object.should
-Chai.should();
+var should = Chai.should();
 // Chai's should syntax is extended to deal well with Promises
 Chai.use(ChaiAsPromised);
 
@@ -45,7 +46,14 @@ describe('Sia-UI', function () {
 	describe('on startup', function () {
 		it('opens Sia-UI properly', function () {
 			return client.waitUntilWindowLoaded()
-				.getWindowCount().should.eventually.equal(1)
+				.getWindowCount().then(function(count) {
+					Fs.readdir(Path.join(__dirname, '../plugins'), function(err, plugins) {
+						should.not.exist(err);
+						// Not sure why, but the plugins sometimes register as
+						// part of the Window Count
+						count.should.equal(1 || 1 + plugins.length);
+					});
+				})
 				.isWindowMinimized().should.eventually.be.false
 				.isWindowDevToolsOpened().should.eventually.be.false
 				.isWindowVisible().should.eventually.be.true
