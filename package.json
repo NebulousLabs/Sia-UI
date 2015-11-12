@@ -6,12 +6,15 @@
   "description": "A UI application for interfacing with Sia",
   "license": "MIT",
   "devDependencies": {
+    "chai": "^3.4.1",
+    "chai-as-promised": "^5.1.0",
+    "electron-mocha": "^0.6.1",
     "electron-packager": "^5.1.1",
     "electron-prebuilt": "^0.34.1",
     "ink-docstrap": "^0.5.2",
     "jsdoc": "^3.3.3",
     "jshint": "^2.8.0",
-    "node-inspector": "^0.12.3"
+    "spectron": "^0.34.0"
   },
   "dependencies": {
     "bignumber.js": "^2.1.0",
@@ -21,7 +24,7 @@
     "start": "electron .",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
-    "debug": "node-inspector & electron --debug=5858 . & xdg-open http://127.0.0.1:8080/debug?ws=127.0.0.1:8080&port=5858",
+    "test": "electron-mocha",
     "doc": "jsdoc -c .jsdocrc",
     "lint": "jshint . --verbose --exclude-path=.jshintignore",
     "sia-repo": "go get -u github.com/NebulousLabs/Sia/...",

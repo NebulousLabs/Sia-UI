@@ -80,17 +80,13 @@
 
 	"maxerr"        : 100,      // Maximum errors before stopping.
 	"globals"       : {         // Extra globals.
-		"WebFrame": false,
-		"ElectronScreen": false,
-		"RendererIPC": false,
-		"Fs": false,
-		"Shell": false,
-		"Process": false,
-		"Remote": false,
-		"mainWindow": true,
-		"UI": true,
-		"Daemon": true,
-		"Plugins": true
+		/* MOCHA */
+		"describe"   : false,
+		"it"         : false,
+		"before"     : false,
+		"beforeEach" : false,
+		"after"      : false,
+		"afterEach"  : false
 	},
 	"indent"        : 4         // Specify indentation spacing
 }
