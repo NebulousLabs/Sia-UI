@@ -1,4 +1,11 @@
-# Sia UI - A Highly Efficient Decentralized Storage Network
+# [![Sia Logo](http://sia.tech/resources/img/svg/sia-green-logo.svg)](http://sia.tech/) User Interface
+
+[![Build Status](https://travis-ci.org/NebulousLabs/Sia-UI.svg?branch=master)](https://travis-ci.org/NebulousLabs/Sia-UI)
+[![devDependency Status](https://david-dm.org/NebulousLabs/Sia-UI/dev-status.svg)](https://david-dm.org/NebulousLabs/Sia-UI#info=devDependencies)
+[![dependencies Status](https://david-dm.org/NebulousLabs/Sia-UI.svg)](https://www.npmjs.com/packages/spectron)
+[![license:mit](https://img.shields.io/badge/license-mit-blue.svg)](https://opensource.org/licenses/MIT)
+
+# A Highly Efficient Decentralized Storage Network
 
 ![Visit sia.tech for the bird's eye view of what Sia is](/doc/assets/files.png)
 This is the user interface for [Sia](https://github.com/NebulousLabs/Sia), it
