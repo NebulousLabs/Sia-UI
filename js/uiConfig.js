@@ -49,15 +49,11 @@ module.exports = {
 	 * @param {callback} callback
 	 */
 	load: function(path, callback) {
-		Fs.readFile(path, function(err, data) {
-			if (err || data === 'undefined') {
-				// no file found, use default config
-				callback(defaultConfig);
-			} else {
-				// found config, use it
-				callback(JSON.parse(data));
-			}
-		});
+		try {
+			callback(require(path));
+		} catch (err) {
+			callback(defaultConfig);
+		}
 	},
 
 	/**
