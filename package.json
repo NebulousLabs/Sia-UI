@@ -10,7 +10,7 @@
     "chai-as-promised": "^5.1.0",
     "electron-mocha": "^0.6.1",
     "electron-packager": "^5.1.1",
-    "electron-prebuilt": "^0.34.1",
+    "electron-prebuilt": "^0.35.0",
     "ink-docstrap": "^0.5.2",
     "jsdoc": "^3.3.3",
     "jshint": "^2.8.0",
