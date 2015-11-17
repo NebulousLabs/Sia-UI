@@ -11,32 +11,6 @@ $('#create-address').click(function() {
 	IPC.sendToHost('api-call', call, 'new-address');
 });
 
-// Filter address list by search string
-function filterAddressList(searchstr) {
-	var entries = $('#address-list').children();
-	entries.each(function(index, entry) {
-		if ($(entry).find('.address').html().indexOf(searchstr) > -1) {
-			$(entry).show();
-		} else {
-			$(entry).hide();
-		}
-	});
-}
-
-// Start search when typing in Search field
-$('#search-bar').keyup(function() {
-	tooltip('Searching...', this);
-	var searchstr = $('#search-bar').val();
-	filterAddressList(searchstr);
-});
-
-// Add the new address
-addResultListener('new-address', function(result) {
-	notify('New address created', 'created');
-	appendAddress(result.address);
-	filterAddressList(result.address);
-});
-
 // Button to display all wallet addresses
 $('#view-all-addresses').click(function() {
 	$('#address-list').children().show();

@@ -24,6 +24,37 @@ function update() {
 	updating = setTimeout(update, refreshRate);
 }
 
+// Update wallet summary in header
+addResultListener('update-status', function(result) {
+	wallet = result;
+
+	// slow down after first successful call
+	refreshRate = finalRefreshRate;
+
+	// Show correct lock status.
+	if (!wallet.encrypted) {
+		setUnencrypted();
+	} else if (!wallet.unlocked) {
+		setLocked();
+	} else if (wallet.unlocked) {
+		setUnlocked();
+	}
+
+	// Update balance confirmed and uncomfirmed
+	var bal = convertSiacoin(wallet.confirmedsiacoinbalance);
+	var pend = convertSiacoin(wallet.unconfirmedincomingsiacoins).sub(convertSiacoin(wallet.unconfirmedoutgoingsiacoins));
+	if (wallet.unlocked && wallet.encrypted) {
+		$('#confirmed').show();
+		$('#unconfirmed').show();
+		$('#confirmed').html('Balance: ' + bal + ' S');
+		$('#unconfirmed').html('Pending: ' + pend + ' S');
+	} else {
+		$('#confirmed').hide();
+		$('#unconfirmed').hide();
+	}
+});
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Addresses ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Get transactions for a specific wallet address
 function updateAddrTxn(event) {
 	$('#transaction-list').empty();
@@ -55,7 +86,7 @@ function appendAddress(address) {
 	$('#address-list').append(addr);
 }
 
-// Add transactions to view list per address
+// Add addresses to page
 addResultListener('update-address', function(result) {
 	// Update address list
 	$('#address-list').empty();
@@ -74,36 +105,33 @@ addResultListener('update-address', function(result) {
 	})();*/
 });
 
-// Update wallet summary in header
-addResultListener('update-status', function(result) {
-	wallet = result;
+// Filter address list by search string
+function filterAddressList(searchstr) {
+	var entries = $('#address-list').children();
+	entries.each(function(index, entry) {
+		if ($(entry).find('.address').html().indexOf(searchstr) > -1) {
+			$(entry).show();
+		} else {
+			$(entry).hide();
+		}
+	});
+}
 
-	// slow down after first successful call
-	refreshRate = finalRefreshRate;
-
-	// Show correct lock status.
-	if (!wallet.encrypted) {
-		setUnencrypted();
-	} else if (!wallet.unlocked) {
-		setLocked();
-	} else if (wallet.unlocked) {
-		setUnlocked();
-	}
-
-	// Update balance confirmed and uncomfirmed
-	var bal = convertSiacoin(wallet.confirmedsiacoinbalance);
-	var pend = convertSiacoin(wallet.unconfirmedincomingsiacoins).sub(convertSiacoin(wallet.unconfirmedoutgoingsiacoins));
-	if (wallet.unlocked && wallet.encrypted) {
-		$('#confirmed').show();
-		$('#unconfirmed').show();
-		$('#confirmed').html('Balance: ' + bal + ' S');
-		$('#unconfirmed').html('Pending: ' + pend + ' S');
-	} else {
-		$('#confirmed').hide();
-		$('#unconfirmed').hide();
-	}
+// Start search when typing in Search field
+$('#search-bar').keyup(function() {
+	tooltip('Searching...', this);
+	var searchstr = $('#search-bar').val();
+	filterAddressList(searchstr);
 });
 
+// Add the new address
+addResultListener('new-address', function(result) {
+	notify('New address created', 'created');
+	appendAddress(result.address);
+	filterAddressList(result.address);
+});
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Transactions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Append a transaction to Transactions list
 function appendTransaction(txn) {
 	// Add only new transactions
