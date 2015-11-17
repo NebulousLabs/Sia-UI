@@ -1,6 +1,7 @@
 'use strict';
+
 // Library for communicating with Sia-UI
-const IPC = require('ipc');
+const IPC = require('electron').ipcRenderer;
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
 // Ensure precision
