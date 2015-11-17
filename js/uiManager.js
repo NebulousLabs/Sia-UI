@@ -247,8 +247,8 @@ function UIManager() {
 			}
 
 			// Load the window's position
-			if (memConfig.xPosition !== null  && memConfig.yPosition !== null ) {
-				mainWindow.setPosition(memConfig.xPosition, memConfig.yPosition);
+			if (memConfig.x !== null  && memConfig.y !== null ) {
+				mainWindow.setPosition(memConfig.x, memConfig.y);
 			}
 
 			// Init other manager classes
@@ -277,8 +277,8 @@ function UIManager() {
 
 		// Save the window's position
 		var pos = mainWindow.getPosition();
-		memConfig.xPosition = pos[0];
-		memConfig.yPosition = pos[1];
+		memConfig.x = pos[0];
+		memConfig.y = pos[1];
 
 		// Save the config
 		Config.save(memConfig, configPath);
