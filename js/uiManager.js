@@ -33,6 +33,7 @@ function UIManager() {
 		unlocked: 'unlock',
 		sent: 'send',
 		created: 'plus',
+		copied: 'clipboard',
 		// Progress
 		started: 'hourglass-start',
 		finished: 'hourglass-end',
