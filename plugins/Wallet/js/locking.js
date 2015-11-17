@@ -3,8 +3,8 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Lock Icon  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Helper function for the lock-icon to make sure its classes are cleared
 function setLockIcon(lockStatus, iconClass) {
-	eID('lock-status').innerHTML = lockStatus;
-	eID('lock-icon').className = 'fa ' + iconClass;
+	$('#lock-status').html(lockStatus);
+	$('#lock-icon').className = 'fa ' + iconClass;
 }
 
 // Markup changes to reflect locked state
@@ -61,7 +61,7 @@ IPC.on('unlocked', function(err, result) {
 	if (err) {
 		setLocked();
 		notify('Wrong password', 'error');
-		show('request-password');
+		$('#request-password').show();
 	} else {
 		setUnlocked();
 		notify('Wallet unlocked', 'unlocked');
@@ -78,8 +78,8 @@ IPC.on('use-password', function(pw) {
 	if (pw) {
 		unlock(pw);
 	} else {
-		show('request-password');
-		eID('password-field').focus();
+		$('#request-password').show();
+		$('#password-field').focus();
 	}
 });
 
@@ -104,8 +104,8 @@ function encrypt() {
 	setLocked();
 }
 addResultListener('encrypted', function(result) {
-	var popup = eID('show-password');
-	show(popup);
+	var popup = $('#show-password');
+	popup.show();
 
 	// Clear old password in config if there is one
 	IPC.sendToHost('config', {
@@ -114,7 +114,7 @@ addResultListener('encrypted', function(result) {
 	});
 
 	// Show password in the popup
-	eID('generated-password').innerText = result.primaryseed;
+	$('#generated-password').text(result.primaryseed);
 
 	update();
 });

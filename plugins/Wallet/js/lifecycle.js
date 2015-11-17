@@ -24,72 +24,12 @@ function update() {
 	updating = setTimeout(update, refreshRate);
 }
 
-// Get transactions for a specific wallet address
-function updateAddrTxn(addr) {
-	eID('transaction-list').innerHTML = '';
-	IPC.sendToHost('api-call', {
-		url: '/wallet/transactions/' + addr,
-		type: 'GET',
-	}, 'update-history');
-}
-
-// Display transactions of clicked address
-function getAddress(event) {
-	updateAddrTxn(event.target.id);
-}
-
-// Append wallet address to Addresses list
-function appendAddress(addr) {
-	// Create only new addresses
-	if (typeof(addr) === 'undefined') { return; }
-	var addrElement = eID('addressbp').cloneNode(true);
-
-	// DOM shortcut
-	// TODO: Don't know if bad practice because memleak or if it GCs well
-	var field = function(selector) {
-		return addrElement.querySelector(selector);
-	};
-
-	// Insert values
-	field('.listnum').innerHTML = eID('address-list').childNodes.length + 1;
-	field('.address').innerHTML = addr.address;
-	field('.address').id = addr.address;
-	field('.address').addEventListener("click", getAddress);
-
-	// Make copy-to-clipboard buttin clickable
-	field('.copy-address').onclick = function() {
-		Clipboard.writeText(addr.address);
-		notify('Copied address to clipboard');
-	};
-
-	// Append, but not do display, address
-	eID('address-list').appendChild(addrElement);
-}
-
-// Add transactions to view list per address
-addResultListener('update-address', function(result) {
-	// Update address list
-	eID('address-list').innerHTML = '';
-	result.addresses.forEach( function (address) {
-		appendAddress(address);
-	});
-
-	/* Fetch all wallet transactions by iterate over wallet addresses
-	var loopmax = result.addresses.length;
-	var counter = 0;
-	(function next() {
-		setTimeout(function() {
-			updateAddrTxn(result.addresses[counter].address);
-			next();
-		}, 50); // force 50 ms delay between each GET request
-	})();*/
-});
-
 // Update wallet summary in header
 addResultListener('update-status', function(result) {
 	wallet = result;
 
-	refreshRate = finalRefreshRate; // slow down after first successful call
+	// slow down after first successful call
+	refreshRate = finalRefreshRate;
 
 	// Show correct lock status.
 	if (!wallet.encrypted) {
@@ -104,31 +44,102 @@ addResultListener('update-status', function(result) {
 	var bal = convertSiacoin(wallet.confirmedsiacoinbalance);
 	var pend = convertSiacoin(wallet.unconfirmedincomingsiacoins).sub(convertSiacoin(wallet.unconfirmedoutgoingsiacoins));
 	if (wallet.unlocked && wallet.encrypted) {
-		eID('confirmed').style.display = 'inline';
-		eID('unconfirmed').style.display = 'inline';
-		eID('confirmed').innerHTML = 'Balance: ' + bal + ' S';
-		eID('unconfirmed').innerHTML = 'Pending: ' + pend + ' S';
+		$('#confirmed').show();
+		$('#unconfirmed').show();
+		$('#confirmed').html('Balance: ' + bal + ' S');
+		$('#unconfirmed').html('Pending: ' + pend + ' S');
 	} else {
-		eID('confirmed').style.display = 'none';
-		eID('unconfirmed').style.display = 'none';
+		$('#confirmed').hide();
+		$('#unconfirmed').hide();
 	}
 });
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Addresses ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Get transactions for a specific wallet address
+function updateAddrTxn(event) {
+	$('#transaction-list').empty();
+	IPC.sendToHost('api-call', {
+		url: '/wallet/transactions/' + event.target.id,
+		type: 'GET',
+	}, 'update-history');
+}
+
+// Append wallet address to Addresses list
+function appendAddress(address) {
+	// Create only new addresses
+	if (typeof(address) === 'undefined') { return; }
+	var addr = $('#addressbp').clone();
+
+	// Insert values
+	addr.find('.listnum').html($('#address-list').children().length);
+	addr.find('.address').html(address);
+	addr.find('.address').attr('id', address);
+	addr.find('.address').click(updateAddrTxn);
+
+	// Make copy-to-clipboard buttin clickable
+	addr.find('.copy-address').click(function() {
+		Clipboard.writeText(address);
+		notify('Copied address to clipboard', 'copied');
+	});
+
+	// Append, but not display, address
+	$('#address-list').append(addr);
+}
+
+// Add addresses to page
+addResultListener('update-address', function(result) {
+	// Update address list
+	$('#address-list').empty();
+	result.addresses.forEach(function (address) {
+		appendAddress(address.address);
+	});
+
+	/* Fetch all wallet transactions by iterate over wallet addresses
+	var loopmax = result.addresses.length;
+	var counter = 0;
+	(function next() {
+		setTimeout(function() {
+			updateAddrTxn(result.addresses[counter].address);
+			next();
+		}, 50); // force 50 ms delay between each GET request
+	})();*/
+});
+
+// Filter address list by search string
+function filterAddressList(searchstr) {
+	var entries = $('#address-list').children();
+	entries.each(function(index, entry) {
+		if ($(entry).find('.address').html().indexOf(searchstr) > -1) {
+			$(entry).show();
+		} else {
+			$(entry).hide();
+		}
+	});
+}
+
+// Start search when typing in Search field
+$('#search-bar').keyup(function() {
+	tooltip('Searching...', this);
+	var searchstr = $('#search-bar').val();
+	filterAddressList(searchstr);
+});
+
+// Add the new address
+addResultListener('new-address', function(result) {
+	notify('New address created', 'created');
+	appendAddress(result.address);
+	filterAddressList(result.address);
+});
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Transactions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Append a transaction to Transactions list
 function appendTransaction(txn) {
-	if (typeof(txn) === 'undefined') { return; }
-
 	// Add only new transactions
-	if (eID(txn.transactionid)) { return; }
-	var txnElement = eID('transactionbp').cloneNode(true);
+	if (typeof(txn) === 'undefined') { return; }
+	if ($('#' + txn.transactionid)) { return; }
+	var txnElement = $('#transactionbp').clone();
 	txnElement.id = txn.transactionid;
 	txnElement.timestamp = txn.confirmationtimestamp * 1000;
-
-	// DOM shortcut
-	// TODO: Don't know if bad practice because memleak or if it GCs well
-	var field = function(selector) {
-		return txnElement.querySelector(selector);
-	};
 
 	// Compute transaction net amount
 	var amount = new BigNumber(0);
@@ -149,7 +160,6 @@ function appendTransaction(txn) {
 
 	// Convert hastings to siacoin and round to 2 decimals
 	amount = convertSiacoin(amount);
-
 	if (amount === 0) {
 		return;
 	}
@@ -159,22 +169,22 @@ function appendTransaction(txn) {
 	var time = timestamp.toLocaleString();
 
 	// Insert transaction values in UI
-	field('.amount').innerHTML = amount + ' S';
-	field('.txnid').innerHTML = txn.transactionid;
-	field('.time').innerHTML = time;
+	txnElement.find('.amount').html(amount + ' S');
+	txnElement.find('.txnid').html(txn.transactionid);
+	txnElement.find('.time').html(time);
 
 	// Set transaction type
 	if (amount < 0) {
-		show(field('.send'));
-		hide(field('.receive'));
+		txnElement.find('.send').show();
+		txnElement.find('.receive').hide();
 	} else {
-		hide(field('.send'));
-		show(field('.receive'));
+		txnElement.find('.send').hide();
+		txnElement.find('.receive').show();
 	}
 
 	// Display transaction
-	eID('transaction-list').appendChild(txnElement);
-	show(txnElement);
+	$('#transaction-list').append(txnElement);
+	txnElement.show();
 }
 
 // Update transaction history
@@ -182,7 +192,7 @@ addResultListener('update-history', function(result) {
 	if (result.confirmedtransactions) {
 		// Reverse direction of transactions list (most recent first)
 		result.confirmedtransactions.reverse();
-		result.confirmedtransactions.forEach( function (txn) {
+		result.confirmedtransactions.forEach(function (txn) {
 			appendTransaction(txn);
 		});
 	}

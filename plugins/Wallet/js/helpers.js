@@ -6,42 +6,6 @@ BigNumber.config({ DECIMAL_PLACES: 30 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Helper Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// DOM shortcut to use document.getElementById();
-function eID(id) {
-	return document.getElementById(id);
-}
-
-// Removes the 'hidden' class of an element in order to show it
-function show(el) {
-	if (typeof el === 'string') {
-		eID(el).classList.remove('hidden');
-	} else {
-		el.classList.remove('hidden');
-	}
-}
-
-// Hides the 'hidden' class of an object in order to show it
-function hide(el) {
-	if (typeof el === 'string') {
-		eID(el).classList.add('hidden');
-	} else {
-		el.classList.add('hidden');
-	}
-}
-
-// DOM shortcut to use document.getElementByClassName();
-function eClass(name) {
-	return document.getElementsByClassName(name);
-}
-
-// Applies an onclick handler to each element with a given class name
-function classOnClick(name, reaction) {
-	var elements = eClass(name);
-	for (var i = 0; i < elements.length; i++) {
-		elements[i].onclick = reaction;
-	}
-}
-
 // Convert to Siacoin
 // TODO: Enable commas for large numbers
 function convertSiacoin(hastings) {

@@ -35,7 +35,7 @@ addResultListener('update', function(result) {
 	// From hostProperties, make properties
 	hostProperties.forEach(function(prop) {
 		var item = $('#propertybp').clone();
-		item.removeClass('hidden');
+		item.show();
 		item.find('.name').text(prop.descr + ' (' + prop.unit + ')');
 		var rawVal = new BigNumber(hosting[prop.name].toString());
 		var value = rawVal.div(prop.conversion).round(2);
@@ -63,10 +63,10 @@ function stop() {
 
 // Announce button
 $('#announce.button').click(function() {
-	$('#address.popup').removeClass('hidden');
+	$('#address.popup').show();
 });
 function announce(args) {
-	$('#address.popup').addClass('hidden');
+	$('#address.popup').hide();
 	tooltip('Anouncing...', $('#announce').get(0));
 	var call = {
 		url: '/host/announce',

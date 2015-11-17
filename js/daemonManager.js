@@ -105,7 +105,7 @@ function DaemonManager() {
 
 			// Listen for siad erroring
 			daemonProcess.on('error', function (error) {
-				if (error === 'ENOENT') {
+				if (error === 'Error: spawn ' + siaCommand + ' ENOENT') {
 					UI.notify('Missing siad!', 'error');
 				} else {
 					UI.notify('siad errored: ' + error, 'error');

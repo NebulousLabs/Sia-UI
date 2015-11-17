@@ -2,59 +2,19 @@
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Address Handling  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Address creation
-eID('create-address').onclick = function() {
+$('#create-address').click(function() {
 	tooltip('Creating...', this);
 	var call = {
 		url: '/wallet/address',
 		type: 'GET',
 	};
 	IPC.sendToHost('api-call', call, 'new-address');
-};
-
-// Filter address list by search string
-function filterAddressList(searchstr) {
-	NodeList.prototype.forEach = Array.prototype.forEach;
-	var entries = eID('address-list').childNodes;
-	entries.forEach( function(entry) {
-		if (entry.querySelector('.address').innerHTML.indexOf(searchstr) > -1) {
-			show(entry);
-		} else {
-			hide(entry);
-		}
-	});
-}
-
-// Start search when typing in Search field
-eID('search-bar').onkeyup = function() {
-	tooltip('Searching...', this);
-	var searchstr = eID('search-bar').value;
-	filterAddressList(searchstr);
-};
-
-// Adds an address to the address list
-function appendAddress(address) {
-	if (eID(address)) {
-		return;
-	}
-	var entry = eID('addressbp').cloneNode(true);
-	entry.id = address;
-	entry.querySelector('.address').innerHTML = address;
-	show(entry);
-	eID('address-list').appendChild(entry);
-}
-
-// Add the new address
-addResultListener('new-address', function(result) {
-	notify('New address created', 'created');
-	appendAddress(result);
-	filterAddressList(result.address);
 });
 
 // Button to display all wallet addresses
-eID('view-all-addresses').onclick = function() {
-	NodeList.prototype.forEach = Array.prototype.forEach;
-	eID('address-list').childNodes.forEach( function(entry) { show(entry); } );
-};
+$('#view-all-addresses').click(function() {
+	$('#address-list').children().show();
+});
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Transactions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Define send call
@@ -63,24 +23,22 @@ function sendCoin(amount, address) {
 		amount: amount.toString(),
 		destination: address,
 	};
-	var call = {
+	IPC.sendToHost('api-call', {
 		url: '/wallet/siacoins',
 		type: 'POST',
 		args: transaction,
-	};
-	IPC.sendToHost('api-call', call, 'coin-sent');
+	}, 'coin-sent');
 
 	// Reflect it asap
 	setTimeout(update, 100);
 }
 
 // Transaction has to be legitimate
-// TODO: verify address
 function verifyTransaction(caller, callback) {
-	var amount = eID('transaction-amount').value;
-	var e = eID('send-unit');
-	var unit = e.options[e.selectedIndex].value;
-	var address = eID('transaction-address').value;
+	var amount = $('#transaction-amount').val();
+	var unit = $('#send-unit').val();
+	var total = new BigNumber(amount).times(unit);
+	var address = $('#transaction-address').val();
 
 	// Verify number
 	if (!isNumber(amount)) {
@@ -88,7 +46,7 @@ function verifyTransaction(caller, callback) {
 		return;
 	} 
 	// Verify balance
-	if (wallet.Balance < amount) {
+	if (wallet.confirmedsiacoinbalance < total) {
 		tooltip('Balance too low!', caller);
 		return;
 	} 
@@ -98,39 +56,38 @@ function verifyTransaction(caller, callback) {
 		return;
 	}
 
-	var total = new BigNumber(amount).times(unit);
 	callback(total, address);
 }
 
 // Button to send coin
-eID('send-money').onclick = function() {
+$('#send-money').click(function() {
 	verifyTransaction(this, function() {
-		tooltip('Are you sure?', eID('confirm'));
-		eID('confirm').classList.remove('transparent');
+		tooltip('Are you sure?', $('#confirm').get(0));
+		$('#confirm').removeClass('transparent');
 	});
-};
+});
 
 // Button to confirm transaction
-eID('confirm').onclick = function() {
+$('#confirm').click(function() {
 	// If the button's transparent, don't do anything
-	if (eID('confirm').classList.contains('transparent')) {
+	if ($('#confirm').hasClass('transparent')) {
 		return;
 	}
 	verifyTransaction(this, function(amount, address) {
-		tooltip('Sending...', eID('confirm'));
+		tooltip('Sending...', $('#confirm').get(0));
 		sendCoin(amount, address);
 	});
-	eID('confirm').classList.add('transparent');
-};
+	$('#confirm').addClass('transparent');
+});
 
 // Transaction was sent
 addResultListener('coin-sent', function(result) {
 	notify('Transaction sent to network!', 'sent');
-	eID('transaction-amount').value = '';
+	$('#transaction-amount').val('');
 });
 
 // Button to load all wallet transactions
-eID('view-all-transactions').onclick = function() {
+$('#view-all-transactions').click(function() {
 	tooltip('Loading all transactions', this);
 	IPC.sendToHost('api-call', {
 		url: '/wallet/transactions',
@@ -140,12 +97,12 @@ eID('view-all-transactions').onclick = function() {
 		},		
 		type: 'GET',
 	}, 'update-history');
-};
+});
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Capsule ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Lock or unlock the wallet
-eID('lock-pod').onclick = function() {
-	var state = eID('lock-status').innerHTML;
+$('#lock-pod').click(function() {
+	var state = $('#lock-status').html();
 	if (!wallet.unlocked && state === 'Create Wallet') {
 		encrypt();
 	} else if (wallet.unlocked && state === 'Lock Wallet') {
@@ -155,61 +112,61 @@ eID('lock-pod').onclick = function() {
 	} else {
 		console.error('lock-pod disagrees with wallet variable!', wallet.unlocked, state);
 	}
-};
+});
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Popups ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // On popup upon entering an encrypted, locked wallet, enter password
-eID('enter-password').onclick = function() {
+$('#enter-password').click(function() {
 	// Save password if checked
-	var pw = eID('password-field').value;
-	if (this.parentNode.querySelector('.save-password').checked) {
+	var pw = $('#password-field').val();
+	if ($(this).siblings('.save-password').get(0).checked) {
 		savePassword(pw);
 	}
 
 	// Hide popup and start the plugin
 	unlock(pw);
-	eID('password-field').value = '';
-	hide('request-password');
-};
+	$('#password-field').val('');
+	$('#request-password').hide();
+});
 
 // Make sure the user read the password
-eID('confirm-password').onclick = function() {
+$('#confirm-password').click(function() {
 	// Save password if checked
-	var pw = eID('generated-password').innerText;
-	if (this.parentNode.querySelector('.save-password').checked) {
+	var pw = $('#generated-password').text();
+	if ($(this).siblings('.save-password').get(0).checked) {
 		savePassword(pw);
 	}
 
 	// Hide popup and start the plugin
 	unlock(pw);
-	eID('generated-password').innerText = '';
-	hide('show-password');
-};
+	$('#generated-password').text('');
+	$('#show-password').hide();
+});
 
 // An 'Enter' keypress in the input field will submit it.
-eID('password-field').addEventListener("keydown", function(e) {
+$('#password-field').keydown(function(e) {
 	e = e || window.event;
 	if (e.keyCode === 13) {
-		eID('enter-password').click();
+		$('#enter-password').click();
 	}
-}, false);
+});
 
 // If the user wants to save the password in either popup, they
 // should be warned of the security risks
-classOnClick('save-password', function() {
+$('.save-password').click(function() {
 	if (this.checked) {
-		show(this.parentNode.querySelector('.warning'));
+		$(this).siblings('.warning').show();
 	} else {
-		hide(this.parentNode.querySelector('.warning'));
+		$(this).siblings('.warning').hide();
 	}
 });
 
-classOnClick('close', function() {
-	hide(this.parentNode.parentNode);
+$('.close').click(function() {
+	$(this).closest('.popup').hide();
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-eID('load-legacy-wallet').onclick = function() {
+$('#load-legacy-wallet').click(function() {
 	var loadPath = IPC.sendSync('dialog', 'open', {
 		title: 'Legacy Wallet File Path',
 		filters: [
@@ -220,14 +177,14 @@ eID('load-legacy-wallet').onclick = function() {
 	if (loadPath) {
 		// kind of a hack; we want to reuse the enter-password dialog, but in
 		// order to do so we must temporarily overwrite its onclick method.
-		var oldOnclick = eID('enter-password').onclick;
-		eID('enter-password').onclick = function() {
-			var field = eID('password-field');
-			loadLegacyWallet(loadPath[0], field.value);
-			field.value = '';
-			eID('enter-password').onclick = oldOnclick;
-			hide('request-password');
-		};
-		show('request-password');
+		var oldOnclick = $('#enter-password').onclick;
+		$('#enter-password').click(function() {
+			var field = $('#password-field');
+			loadLegacyWallet(loadPath[0], field.val());
+			field.val('');
+			$('#enter-password').click(oldOnclick);
+			$('#request-password').hide();
+		});
+		$('#request-password').show();
 	}
-};
+});

@@ -89,7 +89,7 @@
 .button {
 	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
 	display: inline-block;
-	font-size: 18px;
+	font-size: 16px;
 	padding: 12px;
 }
 
@@ -118,20 +118,12 @@
 	width: 60px;
 }
 #transaction-address {
-	width: 300px;
-}
-
-/* Box List */
-#confirmed {
-	display: none;
-}
-#unconfirmed {
-	display: none;
+	width: 200px;
 }
 
 /* Box List */
 .box {
-	height: calc(50% - 41.5px);
+	height: calc(50% - 30px);
 }
 .list {
 	height: calc(50%);
@@ -201,7 +193,7 @@
 /* Transactions list */
 #address-list {
 	background-color: #fafafa;
-	height: calc(100% - 35px);
+	height: calc(100% - 60px);
 	width: 100%;
 	padding: 0;
 	overflow-y: auto;
