@@ -138,9 +138,6 @@ function appendTransaction(txn) {
 	// Add only new transactions
 	if (typeof(txn) === 'undefined') { return; }
 	if ($('#' + txn.transactionid) !== 0) { return; }
-	var txnElement = $('#transactionbp').clone();
-	txnElement.id = txn.transactionid;
-	txnElement.timestamp = txn.confirmationtimestamp * 1000;
 
 	// Compute transaction net amount
 	var amount = new BigNumber(0);
@@ -159,13 +156,17 @@ function appendTransaction(txn) {
 		});
 	}
 
-	// Convert hastings to siacoin and round to 2 decimals
+	// Add only non-zero transactions
 	amount = convertSiacoin(amount);
-	if (amount === 0) {
+	if (amount.equals(0)) {
 		return;
 	}
 
-	// Format transaction timestamp
+	// Make transaction
+	var txnElement = $('#transactionbp').clone();
+	txnElement.id = txn.transactionid;
+
+	txnElement.timestamp = txn.confirmationtimestamp * 1000;
 	var timestamp = new Date(txn.confirmationtimestamp * 1000);
 	var time = timestamp.toLocaleString();
 
