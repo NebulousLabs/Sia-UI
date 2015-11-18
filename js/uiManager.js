@@ -196,7 +196,11 @@ function UIManager() {
 			if (!errorLog) {
 				errorLog = Fs.createWriteStream(Path.join(__dirname, 'errors.log'));
 			}
-			errorLog.write(message);
+			try {
+				errorLog.write(message);
+			} catch (e) {
+				errorLog.write(e.toString() + '\n');
+			}
 		}
 
 		// TODO: This delay system is technically broken, but not noticably
@@ -241,15 +245,8 @@ function UIManager() {
 		Config.load(configPath, function(config) {
 			memConfig = config;
 
-			// Load the window's size
-			if (memConfig.width  !== null && memConfig.height !== null ) {
-				mainWindow.setSize(memConfig.width, memConfig.height);
-			}
-
-			// Load the window's position
-			if (memConfig.x !== null  && memConfig.y !== null ) {
-				mainWindow.setPosition(memConfig.x, memConfig.y);
-			}
+			// Load the window's size and position
+			mainWindow.setBounds(memConfig);
 
 			// Init other manager classes
 			Daemon.init(config);
@@ -270,15 +267,13 @@ function UIManager() {
 			errorLog.end();
 		}
 
-		// Save the window's size
-		var size = mainWindow.getSize();
-		memConfig.width = size[0];
-		memConfig.height = size[1];
-
-		// Save the window's position
-		var pos = mainWindow.getPosition();
-		memConfig.x = pos[0];
-		memConfig.y = pos[1];
+		// Save the window's size and position
+		var bounds = mainWindow.getBounds();
+		for (var k in bounds) {
+			if (bounds.hasOwnProperty(k)) {
+				memConfig[k] = bounds[k];
+			}
+		}
 
 		// Save the config
 		Config.save(memConfig, configPath);
