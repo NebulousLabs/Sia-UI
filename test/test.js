@@ -28,8 +28,16 @@ describe('main process', function() {
 	});
 	
 	// Close session to save a config.json 
-	before('record config.json', function() {
-		config = require('./../config.json');
+	before('record config.json', function(done) {
+		app.stop().then(function() {
+			config = require('./../config.json');
+			done();
+		});
+	});
+
+	// Start again to prep for tests
+	before('start electron again', function() {
+		return app.start();
 	});
 
 	// Extends ChaiAsPromised's syntax with spectron's electron-specific
@@ -66,7 +74,6 @@ describe('main process', function() {
 		});
 		it('has configured bounds', function(done) {
 			client.getWindowBounds().then(function(bounds) {
-				console.log(arguments, config);
 				bounds.width.should.equal(config.width);
 				bounds.height.should.equal(config.height);
 				bounds.x.should.equal(config.x);
