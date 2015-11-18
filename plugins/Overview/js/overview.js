@@ -1,6 +1,7 @@
 'use strict';
+
 // Library for communicating with Sia-UI
-const IPC = require('ipc');
+const IPC = require('electron').ipcRenderer;
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
 // Ensure precision
@@ -20,7 +21,7 @@ function update() {
 // Updates element text
 function updateField(err, caption, value, elementID) {
 	if (err) {
-		IPC.sendToHost('notify', 'API call errored!', 'error');
+		IPC.sendToHost('notify', err.toString(), 'error');
 	} else if (value === null) {
 		IPC.sendToHost('notify', 'API result seems to be null!', 'error');
 	} else {
@@ -68,8 +69,8 @@ function tooltip(message, element) {
 }
 
 // Define IPC listeners and update DOM per call
-IPC.on('wallet-update', function(err, result) {
-	if(!result){
+IPC.on('wallet-update', function(event, err, result) {
+	if (!result) {
 		return;
 	}
 
@@ -86,11 +87,11 @@ IPC.on('wallet-update', function(err, result) {
 	var bal = formatSiacoin(result.confirmedsiacoinbalance);
 	updateField(err, 'Balance: ', unlocked ? bal : '---', 'balance');
 });
-IPC.on('peers-update', function(err, result) {
+IPC.on('peers-update', function(event, err, result) {
 	var value = result !== null ? result.Peers.length : null;
 	updateField(err, 'Peers: ', value, 'peers');
 });
-IPC.on('height-update', function(err, result) {
+IPC.on('height-update', function(event, err, result) {
 	var value = result !== null ? result.height : null;
 	updateField(err, 'Block Height: ', value, 'height');
 });

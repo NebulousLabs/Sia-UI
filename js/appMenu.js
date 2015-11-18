@@ -16,5 +16,5 @@ var template = [
 	},
 ];
 
-// Exports the created menu
-module.exports = require('menu').buildFromTemplate(template);
+// Exports the menu template
+module.exports = template;

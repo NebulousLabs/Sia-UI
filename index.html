@@ -45,16 +45,17 @@
 		</div>
 		<!-- Javascript -->
 		<script> 
-			const WebFrame = require('web-frame');
-			const RendererIPC = require('ipc');
-			const ElectronScreen = require('screen');
+			const Electron = require('electron');
+			const WebFrame = Electron.webFrame;
+			const IPCRenderer = Electron.ipcRenderer;
+			const ElectronScreen = Electron.screen;
+			const Shell = Electron.shell;
+			const Remote = Electron.remote;
+			const mainWindow = Remote.getCurrentWindow();
 			const Process = require('child_process').spawn;
 			const Path = require('path');
 			const Fs = require('fs');
-			const Shell = require('shell');
 			const $ = require('jquery');
-			const Remote = require('remote');
-			const mainWindow = Remote.getCurrentWindow();
 		</script>
 		<script src='js/daemonManager.js'></script>
 		<script src='js/pluginManager.js'></script>
@@ -67,7 +68,7 @@
 			window.onbeforeunload = UI.kill;
 			window.addEventListener('contextmenu', function (e) {
 				e.preventDefault();
-				RendererIPC.send('context-menu');
+				IPCRenderer.send('context-menu');
 			}, false);
 		</script>
 	</body>

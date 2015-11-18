@@ -1,15 +1,16 @@
 'use strict';
 
 // Electron main process libraries
-const App = require('app');
-const MainIPC = require('ipc');
+const Electron = require('electron');
+const App = Electron.app;
+const IPCMain = Electron.ipcMain;
+const BrowserWindow = Electron.BrowserWindow;
+const Tray = Electron.Tray;
+const Dialog = Electron.Dialog;
+const Menu = Electron.Menu;
 const Path = require('path');
-const BrowserWindow = require('browser-window');
-const Tray = require('tray');
-const Dialog = require('dialog');
-const Menu = require('menu');
-const contextMenu = require('./js/contextMenu.js');
-const appMenu = require('./js/appMenu.js');
+const contextMenu = Menu.buildFromTemplate(require('./js/contextMenu.js'));
+const appMenu = Menu.buildFromTemplate(require('./js/appMenu.js'));
 
 // Uncomment to visit localhost:9222 to see devtools remotely
 // App.commandLine.appendSwitch('remote-debugging-port', '9222');
@@ -37,7 +38,7 @@ function startMainWindow() {
 	mainWindow.webContents.setUserAgent('Sia-Agent');
 
 	// Load the index.html of the app.
-	mainWindow.loadUrl('file://' + __dirname + '/index.html');
+	mainWindow.loadURL('file://' + __dirname + '/index.html');
 
 	// Emitted when the window is closed.
 	mainWindow.on('closed', function() {
@@ -61,7 +62,7 @@ App.on('window-all-closed', App.quit);
 App.on('ready', startMainWindow);
 
 // Listen for if the renderer process wants to produce a dialog message
-MainIPC.on('dialog', function(event, type, options) {
+IPCMain.on('dialog', function(event, type, options) {
 	var response;
 	switch (type) {
 		case 'open':
@@ -83,6 +84,6 @@ MainIPC.on('dialog', function(event, type, options) {
 });
 
 // Enable right-click context menu from renderer process event
-MainIPC.on('context-menu', function(event, template) {
+IPCMain.on('context-menu', function(event, template) {
 	contextMenu.popup(mainWindow);
 });

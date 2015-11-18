@@ -5,6 +5,7 @@ npm-debug.log
 config.json
 Sia
 doc/Sia-UI
+errors.log
 
 # Vim
 *.swp

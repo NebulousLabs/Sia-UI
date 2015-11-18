@@ -1,7 +1,7 @@
 'use strict';
 
 // Library for communicating with Sia-UI
-const IPC = require('ipc');
+const IPC = require('electron').ipcRenderer;
 // Keeps track of if the view is shown
 var updating;
 
@@ -13,7 +13,7 @@ function update() {
 }
 
 // Receive version
-IPC.on('version', function(err, result) {
+IPC.on('version', function(event, err, result) {
 	if (err) {
 		IPC.sendToHost('notify', '/daemon/version call failed!', 'error');
 	}

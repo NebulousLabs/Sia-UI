@@ -65,7 +65,7 @@ var template = [
 		label: 'Help',
 		role: 'help',
 		submenu: [
-			{ label: 'Learn More', click: function() { require('shell').openExternal('http://sia.tech/'); } },
+			{ label: 'Learn More', click: function() { require('electron').shell.openExternal('http://sia.tech/'); } },
 		]
 	},
 ];
@@ -83,7 +83,7 @@ if (process.platform ==='darwin') {
 			{ label: 'Hide Others', accelerator: 'Command+Shift+H', role: 'hideothers' },
 			{ label: 'Show All', role: 'unhide' },
 			{ type:  'separator' },
-			{ label: 'Quit', accelerator: 'Command+Q', click: function() { require('app').quit(); } },
+			{ label: 'Quit', accelerator: 'Command+Q', click: function() { require('electron').app.quit(); } },
 		]
 	});
 
@@ -95,4 +95,4 @@ if (process.platform ==='darwin') {
 }
 
 // Exports the created menu
-module.exports = require('menu').buildFromTemplate(template);
+module.exports = template;

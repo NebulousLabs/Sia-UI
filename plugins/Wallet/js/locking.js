@@ -72,7 +72,7 @@ IPC.on('unlocked', function(err, result) {
 
 // Get and use password from the UI's config.json
 function getPassword() {
-	IPC.sendToHost('config', {key: 'wallet-password'}, 'use-password');
+	IPC.sendToHost('config', {key: 'walletPassword'}, 'use-password');
 }
 IPC.on('use-password', function(pw) {
 	if (pw) {
@@ -86,7 +86,7 @@ IPC.on('use-password', function(pw) {
 // Save password to the UI's config.json
 function savePassword(pw) {
 	IPC.sendToHost('config', {
-		key: 'wallet-password',
+		key: 'walletPassword',
 		value: pw,
 	});
 }
@@ -109,7 +109,7 @@ addResultListener('encrypted', function(result) {
 
 	// Clear old password in config if there is one
 	IPC.sendToHost('config', {
-		key: 'wallet-password',
+		key: 'walletPassword',
 		value: '',
 	});
 
