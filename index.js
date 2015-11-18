@@ -9,8 +9,8 @@ const Tray = Electron.Tray;
 const Dialog = Electron.Dialog;
 const Menu = Electron.Menu;
 const Path = require('path');
-const contextMenu = require('./js/contextMenu.js');
-const appMenu = require('./js/appMenu.js');
+const contextMenu = Menu.buildFromTemplate(require('./js/contextMenu.js'));
+const appMenu = Menu.buildFromTemplate(require('./js/appMenu.js'));
 
 // Uncomment to visit localhost:9222 to see devtools remotely
 // App.commandLine.appendSwitch('remote-debugging-port', '9222');

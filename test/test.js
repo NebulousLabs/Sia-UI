@@ -1,10 +1,10 @@
 'use strict';
 
 // Libraries required for testing
-var Application = require('spectron').Application;
-var Chai = require('chai');
-var ChaiAsPromised = require('chai-as-promised');
-var Path = require('path');
+const Application = require('spectron').Application;
+const Chai = require('chai');
+const ChaiAsPromised = require('chai-as-promised');
+const Path = require('path');
 
 // Chai's should syntax is executed to edit Object to have Object.should
 var should = Chai.should();
@@ -13,6 +13,7 @@ Chai.use(ChaiAsPromised);
 
 // The one app that this suite is testing is Sia-UI
 describe('main process', function() {
+	var config;
 	var app;
 	var client;
 
@@ -25,6 +26,11 @@ describe('main process', function() {
 		});
 		return app.start();
 	});
+	
+	// Close session to save a config.json 
+	before('record config.json', function() {
+		config = require('./../config.json');
+	});
 
 	// Extends ChaiAsPromised's syntax with spectron's electron-specific
 	// functions and assigns spectron's WebDriverIO properties to a variable,
@@ -34,7 +40,7 @@ describe('main process', function() {
 		ChaiAsPromised.transferPromiseness = client.transferPromiseness;
 	});
 
-	// Close session after each test-suite
+	// Close session after test-suite
 	after('stop electron', function() {
 		if (app && app.isRunning()) {
 			return app.stop();
@@ -58,9 +64,15 @@ describe('main process', function() {
 		it('is in focus', function() {
 			return client.isWindowFocused().should.eventually.be.true;
 		});
-		it('has non-zero width and height', function() {
-			return client.getWindowWidth().should.eventually.be.above(0)
-				.getWindowHeight().should.eventually.be.above(0);
+		it('has configured bounds', function(done) {
+			client.getWindowBounds().then(function(bounds) {
+				console.log(arguments, config);
+				bounds.width.should.equal(config.width);
+				bounds.height.should.equal(config.height);
+				bounds.x.should.equal(config.x);
+				bounds.y.should.equal(config.y);
+				done();
+			});
 		});
 	});
 });

@@ -47,7 +47,7 @@ function tooltip(message, element) {
 
 // IPC API listening shortcut that checks for errors
 function addResultListener(channel, callback) {
-	IPC.on(channel, function(err, result) {
+	IPC.on(channel, function(event, err, result) {
 		if (err) {
 			console.error(channel, err);
 			notify(err, 'error');

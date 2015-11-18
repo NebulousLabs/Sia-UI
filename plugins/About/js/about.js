@@ -13,7 +13,7 @@ function update() {
 }
 
 // Receive version
-IPC.on('version', function(err, result) {
+IPC.on('version', function(event, err, result) {
 	if (err) {
 		IPC.sendToHost('notify', '/daemon/version call failed!', 'error');
 	}

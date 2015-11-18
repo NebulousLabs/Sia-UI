@@ -68,7 +68,7 @@
 			window.onbeforeunload = UI.kill;
 			window.addEventListener('contextmenu', function (e) {
 				e.preventDefault();
-				RendererIPC.send('context-menu');
+				IPCRenderer.send('context-menu');
 			}, false);
 		</script>
 	</body>
