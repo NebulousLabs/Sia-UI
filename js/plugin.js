@@ -102,15 +102,12 @@ function Plugin(plugPath, name) {
 		},
 
 		/**
-		 * Execute javascript asynchronously in webview page (mostly for testing purposes)
+		 * Execute javascript in webview page (mostly for testing purposes)
+		 * Can only send string javascript
 		 * @param {function} fun - function to be executed in view context
 		 */
 		execute: function(fun) {
 			process.nextTick(function() {
-				if (view === undefined) {
-					console.log(this);
-					console.log(view);
-				}
 				view.executeJavaScript(fun);
 			});
 		},

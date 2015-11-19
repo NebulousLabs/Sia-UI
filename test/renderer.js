@@ -36,32 +36,33 @@ describe('renderer process', function() {
 	});
 
 	// Close session after each test-suite
-	after('stop electron', function() {
-		if (app && app.isRunning()) {
-			return app.stop();
-		}
-	});
+	//after('stop electron', function() {
+	//	if (app && app.isRunning()) {
+	//		return app.stop();
+	//	}
+	//});
 
 	// Test basic startup properties
 	describe('wallet plugin', function() {
 		function appendNAddresses(n, callback) {
-			var appended = 0;
-			function appendScript(hex) {
-				Plugins.Wallet.execute('appendAddress(\'' + hex + '\');');
+			var addressList = [];
+			function appendScript(addresses) {
+				Plugins.Wallet.on("did-finish-load", function() {
+					Plugins.Wallet.sendToView('update-address', null, {
+						addresses: addresses,
+					});
+				});
 			}
-			function incrementCounter(ret) {
-				if (++appended === n) {
-					callback();
+			function pushAddress(ex, buf) {
+				addressList.push(buf.toString('hex'));
+				if (addressList.length === n) {
+					client.execute(appendScript, addressList).then(function() {
+						callback();
+					});
 				}
 			}
-			function injectAppendScript(ex, buf) {
-				client.execute(appendScript, buf.toString('hex')).then(incrementCounter);
-			}
-			function appendRandAddress() {
-				Crypto.randomBytes(38, injectAppendScript);       //async
-			}
 			for (var i = 0; i < n; i++) {
-				appendRandAddress();
+				Crypto.randomBytes(38, pushAddress);
 			}
 		}
 		it('wait until loaded', function() {
@@ -73,8 +74,8 @@ describe('renderer process', function() {
 		it('appends 100 transactions', function(done) {
 			appendNAddresses(100, done);
 		});
-		// it('appends 10000 transactions', function(done) {
-		// 	appendNAddresses(10000, done);
-		// });
+		it('appends 10000 transactions', function(done) {
+			appendNAddresses(10000, done);
+		});
 	});
 });

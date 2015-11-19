@@ -62,18 +62,21 @@ function updateAddrTxn(address) {
 	}, 'update-history');
 }
 
-// Append wallet address to Addresses list
-function appendAddress(address) {
+// Make wallet address html element
+function makeAddress(address, callback) {
 	// Create only new addresses
-	if (typeof(address) === 'undefined') { return; }
-	if (addresses[address]) { return; }
+	if (typeof(address) === 'undefined') { callback(undefined); }
+	if (addresses[address]) { callback(undefined); }
 	var addr = $('#addressbp').clone();
 	addresses[address] = addr;
 
 	// Insert values
-	addr.find('.listnum').html($('#address-list').children().length);
+	addr.removeClass('hidden');
+	addr.find('.listnum').html(Object.keys(addresses).length);
 	addr.find('.address').html(address);
 	addr.attr('id', address);
+
+	// Make clicking the address show relevant transactions
 	addr.find('.address').click(function() {
 		updateAddrTxn(address);
 	});
@@ -84,18 +87,41 @@ function appendAddress(address) {
 		notify('Copied address to clipboard', 'copied');
 	});
 
-	// Append, but not display, address
-	$('#address-list').append(addr);
+	// Pass the element to the callback
+	callback(addr);
+}
+
+function appendAddress(address) {
+	makeAddress(address, $('#address-list').append);
+}
+
+// Efficiently add an array of addresses by making an array of html elements
+// then inserting the array into the page
+function appendAddresses(addresses) {
+	var processed = 0;
+	var elementArray = [];
+	var len = addresses.length;
+	function pushElement(element) {
+		processed++;
+		if (!element) {
+			return;
+		}
+
+		elementArray.push(element);
+
+		if (processed === len) {
+			$('#address-list').append(elementArray);
+		}
+	}
+	for (var i = 0; i < len; i++) {
+		makeAddress(addresses[i], pushElement);
+	}
 }
 
 // Add addresses to page
 addResultListener('update-address', function(result) {
 	// Update address list
-	result.addresses.forEach(function (address) {
-		process.nextTick(function(){
-			appendAddress(address.address);
-		});
-	});
+	appendAddresses(result.addresses);
 
 	/* Fetch all wallet transactions by iterate over wallet addresses
 	var loopmax = result.addresses.length;
