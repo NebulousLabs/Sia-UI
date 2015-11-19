@@ -62,31 +62,11 @@ function updateAddrTxn(event) {
 	}, 'update-history');
 }
 
-// Append elements to the address list and add clickability
-function finalizeAddresses(elements) {
-	if (!Array.isArray(elements)) {
-		elements = [elements];
-	}
-	$('#address-list').append(elements);
-
-	// Add clickability
-	$.map(elements, function(e, i) {
-		// Make clicking any address show relevant transactions
-		e.find('.address').click(updateAddrTxn);
-		// Make all copy-to-clipboard buttons clickable
-		e.find('.copy-address').click(function() {
-			Clipboard.writeText(this.parentNode.id);
-			notify('Copied address to clipboard', 'copied');
-		});
-	});
-
-}
-
 // Make wallet address html element
-function makeAddressElement(address, callback) {
+function makeAddressElement(address) {
 	// Create only new addresses
-	if (typeof(address) === 'undefined') { callback(undefined); }
-	if ($('#' + address).length !== 0) { callback(undefined); }
+	if (typeof(address) === 'undefined') { return; }
+	if ($('#' + address).length !== 0) { return; }
 	addressCount++;
 
 	// Make and store a jquery element for the address
@@ -98,49 +78,33 @@ function makeAddressElement(address, callback) {
 		</div>
 	`);
 
-	// Pass the element to the callback
-	callback(addr);
+	// Make clicking this address show relevant transactions
+	addr.find('.address').click(updateAddrTxn);
+	// Make copy-to-clipboard button clickable
+	addr.find('.copy-address').click(function() {
+		Clipboard.writeText(this.parentNode.id);
+		notify('Copied address to clipboard', 'copied');
+	});
+
+	// Show the address element
+	$('#address-list').append(addr);
 }
 
 // Just adds one address
 function appendAddress(address) {
-	makeAddressElement(address, finalizeAddresses);
+	process.nextTick(function() {
+		makeAddressElement(address);
+	});
 }
 
 // Efficiently add an array of addresses by making an array of html elements
 // then inserting the array into the page
 function appendAddresses(addresses) {
-	var processed = 0;
-	var elementArray = [];
-	var len = addresses.length;
-	var duration;
-
-	function untilLast(element) {
-		processed++;
-		if (!element) {
-			return;
-		}
-
-		elementArray.push(element);
-
-		if (processed === len) {
-			// duration = Date.now() - duration;
-			// console.log('duration ' + duration);
-			// duration = Date.now();
-			// console.log('after loop ' + duration);
-
-			finalizeAddresses(elementArray);
-
-			// duration = Date.now() - duration;
-			// console.log('duration ' + duration);
-			// console.log('after append ' + Date.now());
-		}
-	}
-	// duration = Date.now();
-	// console.log('before loop ' + duration);
-	for (var i = 0; i < len; i++) {
-		makeAddressElement(addresses[i], untilLast);
-	}
+	addresses.forEach(function(address) {
+		process.nextTick(function() {
+			appendAddress(address);
+		});
+	});
 }
 
 // Add addresses to page
