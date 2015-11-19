@@ -80,6 +80,10 @@
 
 	"maxerr"        : 100,      // Maximum errors before stopping.
 	"globals"       : {         // Extra globals.
+		/* UI globals */
+		"UI": true,
+		"Daemon": true,
+		"Plugins": true,
 		/* MOCHA */
 		"describe"   : false,
 		"it"         : false,

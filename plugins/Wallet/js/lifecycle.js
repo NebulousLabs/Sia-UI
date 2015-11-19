@@ -7,8 +7,8 @@ var refreshRate = 500; // half-second
 var finalRefreshRate = 1000 * 60 * 5; // five-minutes
 // Keeps track of if the view is shown
 var updating;
-// Variable to store api result values
-var wallet = {};
+// Variable to store addresses
+var addresses = {};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Updating  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Make API calls, sending a channel name to listen for responses
@@ -25,9 +25,7 @@ function update() {
 }
 
 // Update wallet summary in header
-addResultListener('update-status', function(result) {
-	wallet = result;
-
+addResultListener('update-status', function(wallet) {
 	// slow down after first successful call
 	refreshRate = finalRefreshRate;
 
@@ -56,10 +54,10 @@ addResultListener('update-status', function(result) {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Addresses ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Get transactions for a specific wallet address
-function updateAddrTxn(event) {
+function updateAddrTxn(address) {
 	$('#transaction-list').empty();
 	IPC.sendToHost('api-call', {
-		url: '/wallet/transactions/' + event.target.id,
+		url: '/wallet/transactions/' + address,
 		type: 'GET',
 	}, 'update-history');
 }
@@ -68,14 +66,17 @@ function updateAddrTxn(event) {
 function appendAddress(address) {
 	// Create only new addresses
 	if (typeof(address) === 'undefined') { return; }
-	if ($('#' + address) !== 0) { return; }
+	if (addresses[address]) { return; }
 	var addr = $('#addressbp').clone();
+	addresses[address] = addr;
 
 	// Insert values
 	addr.find('.listnum').html($('#address-list').children().length);
 	addr.find('.address').html(address);
-	addr.find('.address').attr('id', address);
-	addr.find('.address').click(updateAddrTxn);
+	addr.attr('id', address);
+	addr.find('.address').click(function() {
+		updateAddrTxn(address);
+	});
 
 	// Make copy-to-clipboard buttin clickable
 	addr.find('.copy-address').click(function() {
@@ -90,9 +91,10 @@ function appendAddress(address) {
 // Add addresses to page
 addResultListener('update-address', function(result) {
 	// Update address list
-	$('#address-list').empty();
 	result.addresses.forEach(function (address) {
-		appendAddress(address.address);
+		process.nextTick(function(){
+			appendAddress(address.address);
+		});
 	});
 
 	/* Fetch all wallet transactions by iterate over wallet addresses
@@ -137,7 +139,7 @@ addResultListener('new-address', function(result) {
 function appendTransaction(txn) {
 	// Add only new transactions
 	if (typeof(txn) === 'undefined') { return; }
-	if ($('#' + txn.transactionid) !== 0) { return; }
+	if ($('#' + txn.transactionid).length !== 0) { return; }
 
 	// Compute transaction net amount
 	var amount = new BigNumber(0);

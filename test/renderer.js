@@ -38,7 +38,7 @@ describe('renderer process', function() {
 	// Close session after each test-suite
 	after('stop electron', function() {
 		if (app && app.isRunning()) {
-			//return app.stop();
+			return app.stop();
 		}
 	});
 
@@ -46,21 +46,26 @@ describe('renderer process', function() {
 	describe('wallet plugin', function() {
 		function appendNAddresses(n, callback) {
 			var appended = 0;
+			function appendScript(hex) {
+				Plugins.Wallet.execute('appendAddress(\'' + hex + '\');');
+			}
+			function incrementCounter(ret) {
+				if (++appended === n) {
+					callback();
+				}
+			}
+			function injectAppendScript(ex, buf) {
+				client.execute(appendScript, buf.toString('hex')).then(incrementCounter);
+			}
+			function appendRandAddress() {
+				Crypto.randomBytes(38, injectAppendScript);       //async
+			}
 			for (var i = 0; i < n; i++) {
-				Crypto.randomBytes(38, function(ex, buf) {
-					if (ex) throw ex;
-					client.execute(function(hex) {
-						Plugins.Wallet.execute('appendAddress(\'' + hex + '\');');
-					}, buf.toString('hex')).then(function(ret) {
-						if (++appended === n) {
-							callback();
-						}
-					});
-				});
+				appendRandAddress();
 			}
 		}
-		it('wait until loaded', function () {
-			return client.waitUntilWindowLoaded()
+		it('wait until loaded', function() {
+			return client.waitUntilWindowLoaded();
 		});
 		it('appends 1 transactions', function(done) {
 			appendNAddresses(1, done);
