@@ -7,8 +7,8 @@ var refreshRate = 500; // half-second
 var finalRefreshRate = 1000 * 60 * 5; // five-minutes
 // Keeps track of if the view is shown
 var updating;
-// Variable to store addresses
-var addresses = {};
+// Keeps track of number of addresses
+var addressCount = 0;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Updating  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Make API calls, sending a channel name to listen for responses
@@ -83,17 +83,16 @@ function finalizeAddresses(elements) {
 }
 
 // Make wallet address html element
-// TODO: Each additional address takes more time to make, unsure why
 function makeAddressElement(address, callback) {
 	// Create only new addresses
 	if (typeof(address) === 'undefined') { callback(undefined); }
-	if (addresses[address]) { callback(undefined); }
-	addresses[address] = true;
+	if ($('#' + address).length !== 0) { callback(undefined); }
+	addressCount++;
 
 	// Make and store a jquery element for the address
 	var addr = $(`
 		<div class='entry' id='` + address + `'>
-			<div class='listnum'>` + Object.keys(addresses).length + `</div>
+			<div class='listnum'>` + addressCount + `</div>
 			<div class='address'>` + address + `</div>
 			<div class='copy-address'><i class='fa fa-clipboard'></i></div>
 		</div>
