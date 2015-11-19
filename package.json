@@ -24,7 +24,7 @@
     "start": "electron .",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
-    "test": "electron-mocha",
+    "test": "npm run lint --silent && electron-mocha",
     "lint": "jshint . --verbose --exclude-path=.jshintignore",
     "doc": "jsdoc -c .jsdocrc",
     "sia-repo": "go get -u github.com/NebulousLabs/Sia/...",

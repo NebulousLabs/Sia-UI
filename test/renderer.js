@@ -36,27 +36,32 @@ describe('renderer process', function() {
 	});
 
 	// Close session after each test-suite
-	//after('stop electron', function() {
-	//	if (app && app.isRunning()) {
-	//		return app.stop();
-	//	}
-	//});
+	after('stop electron', function() {
+		if (app && app.isRunning()) {
+			return app.stop();
+		}
+	});
 
 	// Test basic startup properties
 	describe('wallet plugin', function() {
 		function appendNAddresses(n, callback) {
 			var addressList = [];
-			function appendScript(addresses) {
-				Plugins.Wallet.on("did-finish-load", function() {
+			function script(addresses) {
+				function sendAddresses() {
 					Plugins.Wallet.sendToView('update-address', null, {
 						addresses: addresses,
 					});
-				});
+				}
+				if (Plugins.Wallet.isLoading()) {
+					Plugins.Wallet.on("did-finish-load", sendAddresses);
+				} else {
+					sendAddresses();
+				}
 			}
 			function pushAddress(ex, buf) {
 				addressList.push(buf.toString('hex'));
 				if (addressList.length === n) {
-					client.execute(appendScript, addressList).then(function() {
+					client.execute(script, addressList).then(function() {
 						callback();
 					});
 				}
@@ -76,6 +81,19 @@ describe('renderer process', function() {
 		});
 		it('appends 10000 transactions', function(done) {
 			appendNAddresses(10000, done);
+		});
+		it('appends 10000 transactions as chunks', function(done) {
+			this.timeout(4000);
+			var processed = 0;
+			var n = 100;
+			function doneYet() {
+				if (++processed === n) {
+					done();
+				}
+			}
+			for (var i = 0; i < n; i++) {
+				appendNAddresses(100, doneYet);
+			}
 		});
 	});
 });

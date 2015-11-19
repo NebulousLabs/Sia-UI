@@ -54,45 +54,58 @@ addResultListener('update-status', function(wallet) {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Addresses ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Get transactions for a specific wallet address
-function updateAddrTxn(address) {
+function updateAddrTxn(event) {
 	$('#transaction-list').empty();
 	IPC.sendToHost('api-call', {
-		url: '/wallet/transactions/' + address,
+		url: '/wallet/transactions/' + event.target.innerText,
 		type: 'GET',
 	}, 'update-history');
 }
 
+// Append elements to the address list and add clickability
+function finalizeAddresses(elements) {
+	if (!Array.isArray(elements)) {
+		elements = [elements];
+	}
+	$('#address-list').append(elements);
+
+	// Add clickability
+	$.map(elements, function(e, i) {
+		// Make clicking any address show relevant transactions
+		e.find('.address').click(updateAddrTxn);
+		// Make all copy-to-clipboard buttons clickable
+		e.find('.copy-address').click(function() {
+			Clipboard.writeText(this.parentNode.id);
+			notify('Copied address to clipboard', 'copied');
+		});
+	});
+
+}
+
 // Make wallet address html element
-function makeAddress(address, callback) {
+// TODO: Each additional address takes more time to make, unsure why
+function makeAddressElement(address, callback) {
 	// Create only new addresses
 	if (typeof(address) === 'undefined') { callback(undefined); }
 	if (addresses[address]) { callback(undefined); }
-	var addr = $('#addressbp').clone();
-	addresses[address] = addr;
+	addresses[address] = true;
 
-	// Insert values
-	addr.removeClass('hidden');
-	addr.find('.listnum').html(Object.keys(addresses).length);
-	addr.find('.address').html(address);
-	addr.attr('id', address);
-
-	// Make clicking the address show relevant transactions
-	addr.find('.address').click(function() {
-		updateAddrTxn(address);
-	});
-
-	// Make copy-to-clipboard buttin clickable
-	addr.find('.copy-address').click(function() {
-		Clipboard.writeText(address);
-		notify('Copied address to clipboard', 'copied');
-	});
+	// Make and store a jquery element for the address
+	var addr = $(`
+		<div class='entry' id='` + address + `'>
+			<div class='listnum'>` + Object.keys(addresses).length + `</div>
+			<div class='address'>` + address + `</div>
+			<div class='copy-address'><i class='fa fa-clipboard'></i></div>
+		</div>
+	`);
 
 	// Pass the element to the callback
 	callback(addr);
 }
 
+// Just adds one address
 function appendAddress(address) {
-	makeAddress(address, $('#address-list').append);
+	makeAddressElement(address, finalizeAddresses);
 }
 
 // Efficiently add an array of addresses by making an array of html elements
@@ -101,7 +114,9 @@ function appendAddresses(addresses) {
 	var processed = 0;
 	var elementArray = [];
 	var len = addresses.length;
-	function pushElement(element) {
+	var duration;
+
+	function untilLast(element) {
 		processed++;
 		if (!element) {
 			return;
@@ -110,11 +125,22 @@ function appendAddresses(addresses) {
 		elementArray.push(element);
 
 		if (processed === len) {
-			$('#address-list').append(elementArray);
+			// duration = Date.now() - duration;
+			// console.log('duration ' + duration);
+			// duration = Date.now();
+			// console.log('after loop ' + duration);
+
+			finalizeAddresses(elementArray);
+
+			// duration = Date.now() - duration;
+			// console.log('duration ' + duration);
+			// console.log('after append ' + Date.now());
 		}
 	}
+	// duration = Date.now();
+	// console.log('before loop ' + duration);
 	for (var i = 0; i < len; i++) {
-		makeAddress(addresses[i], pushElement);
+		makeAddressElement(addresses[i], untilLast);
 	}
 }
 
