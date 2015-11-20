@@ -98,7 +98,6 @@ $('#save.button').click(function() {
 		var value = new BigNumber(item.find('.value').text()).mul(prop.conversion);
 		hostInfo[prop.name.toLowerCase()] = value.round().toString();
 	});
-	console.log(hostInfo);
 
 	// Define configuration call
 	var call = {

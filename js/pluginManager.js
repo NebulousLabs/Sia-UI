@@ -106,7 +106,6 @@ function PluginManager() {
 						if (err) {
 							// If a call didn't work, test that the
 							// `/consensus` call still works
-							console.error(err, call);
 							Daemon.ifSiad(function() {
 								// Send error response back to the plugin
 								plugin.sendToView(responseChannel, err, result);
@@ -144,7 +143,7 @@ function PluginManager() {
 					plugin.toggleDevTools();
 					break;
 				default:
-					console.error('Unknown ipc message: ' + event.channel);
+					UI.notify('Unknown ipc message: ' + event.channel, 'error');
 			}
 		});
 
@@ -184,7 +183,7 @@ function PluginManager() {
 	function initPlugins() {
 		Fs.readdir(plugPath, function(err, pluginNames) {
 			if (err) {
-				console.error(err);
+				UI.notify('Couldn\'t read plugins folder: ' + err, 'error');
 			}
 
 			// Determine default plugin
