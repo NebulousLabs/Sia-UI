@@ -44,7 +44,8 @@ describe('renderer process', function() {
 
 	// Test basic startup properties
 	describe('wallet plugin', function() {
-		function appendNAddresses(n, callback) {
+		// Used to fake out addresses being sent and rendered by the wallet Plugin
+		function addNAddresses(n, callback) {
 			var addressList = [];
 			function script(addresses) {
 				function sendAddresses() {
@@ -73,17 +74,17 @@ describe('renderer process', function() {
 		it('wait until loaded', function() {
 			return client.waitUntilWindowLoaded();
 		});
-		it('appends 1 transactions', function(done) {
-			appendNAddresses(1, done);
+		it('appends 1 addresses', function(done) {
+			addNAddresses(1, done);
 		});
-		it('appends 100 transactions', function(done) {
-			appendNAddresses(100, done);
+		it('appends 100 addresses', function(done) {
+			addNAddresses(100, done);
 		});
-		it('appends 10000 transactions', function(done) {
-			appendNAddresses(10000, done);
+		it('appends 10000 addresses', function(done) {
+			addNAddresses(10000, done);
 		});
-		it('appends 10000 transactions as chunks', function(done) {
-			this.timeout(4000);
+		it('appends 10000 addresses as chunks', function(done) {
+			this.timeout(5000);
 			var processed = 0;
 			var n = 100;
 			function doneYet() {
@@ -92,7 +93,7 @@ describe('renderer process', function() {
 				}
 			}
 			for (var i = 0; i < n; i++) {
-				appendNAddresses(100, doneYet);
+				addNAddresses(100, doneYet);
 			}
 		});
 	});

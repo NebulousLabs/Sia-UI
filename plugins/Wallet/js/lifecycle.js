@@ -65,7 +65,7 @@ function updateAddrTxn(event) {
 }
 
 // Make wallet address html element
-function appendAddress(address, callback) {
+function makeAddress(address, callback) {
 	// Create only new addresses
 	if (typeof(address) === 'undefined') { return; }
 	if ($('#' + address).length !== 0) { return; }
@@ -85,7 +85,8 @@ function appendAddress(address, callback) {
 	});
 }
 
-function finalizeAddress(element) {
+// Append the wallet address
+function appendAddress(element) {
 	// Make clicking this address show relevant transactions
 	element.find('.address').click(updateAddrTxn);
 	// Make copy-to-clipboard button clickable
@@ -98,20 +99,30 @@ function finalizeAddress(element) {
 	$('#address-list').append(element);
 }
 
-// Efficiently add an array of addresses by making an array of html elements
-// then inserting the array into the page
-function appendAddresses(addresses) {
+// Make and append a single address
+function addAddress(address) {
+	makeAddress(address, appendAddress);
+}
+
+// From an array of addresses, make elements then insert into the page in a
+// semi-non-blocking manner
+// TODO: Could this be done better?
+function addAddresses(addresses) {
+	var count = 0;
+	// With setTimeout being async, this for loop queues up the address
+	// creation almost instantly, letting them get made and appended one by one
 	addresses.forEach(function(address) {
-		process.nextTick(function() {
-			appendAddress(address, finalizeAddress);
-		});
+		count++;
+		setTimeout(function() {
+			addAddress(address);
+		}, count);
 	});
 }
 
 // Add addresses to page
 addResultListener('update-address', function(result) {
 	// Update address list
-	appendAddresses(result.addresses);
+	addAddresses(result.addresses);
 
 	/* Fetch all wallet transactions by iterate over wallet addresses
 	var loopmax = result.addresses.length;
@@ -149,7 +160,7 @@ $('#search-bar').keyup(function(event) {
 // Add the new address
 addResultListener('new-address', function(result) {
 	notify('New address created', 'created');
-	appendAddress(result.address);
+	addAddress(result.address);
 	filterAddressList(result.address);
 });
 

@@ -177,7 +177,7 @@ $('#load-legacy-wallet').click(function() {
 	if (loadPath) {
 		// kind of a hack; we want to reuse the enter-password dialog, but in
 		// order to do so we must temporarily overwrite its onclick method.
-		var oldOnclick = $('#enter-password').onclick;
+		var oldOnclick = $('#enter-password').get(0).onclick;
 		$('#enter-password').click(function() {
 			var field = $('#password-field');
 			loadLegacyWallet(loadPath[0], field.val());
