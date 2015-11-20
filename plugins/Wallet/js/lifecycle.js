@@ -5,6 +5,8 @@ const Clipboard = require('clipboard');
 // How often /wallet updates
 var refreshRate = 500; // half-second
 var finalRefreshRate = 1000 * 60 * 5; // five-minutes
+// Keeps track of if the user is typing into the search bar
+var typing;
 // Keeps track of if the view is shown
 var updating;
 // Keeps track of number of addresses
@@ -63,7 +65,7 @@ function updateAddrTxn(event) {
 }
 
 // Make wallet address html element
-function makeAddressElement(address) {
+function appendAddress(address, callback) {
 	// Create only new addresses
 	if (typeof(address) === 'undefined') { return; }
 	if ($('#' + address).length !== 0) { return; }
@@ -78,23 +80,22 @@ function makeAddressElement(address) {
 		</div>
 	`);
 
+	process.nextTick(function() {
+		callback(addr);
+	});
+}
+
+function finalizeAddress(element) {
 	// Make clicking this address show relevant transactions
-	addr.find('.address').click(updateAddrTxn);
+	element.find('.address').click(updateAddrTxn);
 	// Make copy-to-clipboard button clickable
-	addr.find('.copy-address').click(function() {
+	element.find('.copy-address').click(function() {
 		Clipboard.writeText(this.parentNode.id);
 		notify('Copied address to clipboard', 'copied');
 	});
 
-	// Show the address element
-	$('#address-list').append(addr);
-}
-
-// Just adds one address
-function appendAddress(address) {
-	process.nextTick(function() {
-		makeAddressElement(address);
-	});
+	// Append and show the address element
+	$('#address-list').append(element);
 }
 
 // Efficiently add an array of addresses by making an array of html elements
@@ -102,7 +103,7 @@ function appendAddress(address) {
 function appendAddresses(addresses) {
 	addresses.forEach(function(address) {
 		process.nextTick(function() {
-			appendAddress(address);
+			appendAddress(address, finalizeAddress);
 		});
 	});
 }
@@ -136,10 +137,13 @@ function filterAddressList(searchstr) {
 }
 
 // Start search when typing in Search field
-$('#search-bar').keyup(function() {
-	tooltip('Searching...', this);
-	var searchstr = $('#search-bar').val();
-	filterAddressList(searchstr);
+$('#search-bar').keyup(function(event) {
+	clearTimeout(typing);
+	typing = setTimeout(function() {
+		tooltip('Searching...', event.target);
+		var searchstr = $('#search-bar').val();
+		filterAddressList(searchstr);
+	}, 200);
 });
 
 // Add the new address
