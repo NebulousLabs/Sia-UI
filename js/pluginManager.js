@@ -5,31 +5,14 @@
  * @class PluginManager
  */
 function PluginManager() {
-	/**
-	 * Plugin constructor
-	 * @member {Plugin} PluginManager~Plugin
-	 */
+	// Plugin constructor
 	var Plugin = require('./js/plugin');
-	/**
-	 * The home view to be opened first
-	 * @member {string} PluginManager~home
-	 */
+	// The home view to be opened first
 	var home;
-	/**
-	 * The plugins folder
-	 * @member {string} PluginManager~plugPath
-	 */
+	// The plugins folder
 	var plugPath;
-	/**
-	 * The current plugin
-	 * @member {Plugin} PluginManager~current
-	 */
-	var current;
-	/**
-	 * Array to store all plugins
-	 * @member {Plugin[]} PluginManager~plugins
-	 */
-	var plugins = {};
+	// reference to `this` to use in functions
+	var self = this;
 
 	/**
 	 * Detects the home Plugin or otherwise the alphabetically first
@@ -73,7 +56,7 @@ function PluginManager() {
 		 */
 		plugin.transition(function() {
 			// Don't do anything if already on this plugin
-			if (current === plugin || current.isLoading()) {
+			if (self.Current === plugin || self.Current.isLoading()) {
 				return;
 			}
 
@@ -85,9 +68,9 @@ function PluginManager() {
 			}, 170);
 
 			// Switch plugins
-			current.hide();
-			current = plugin;
-			current.show();
+			self.Current.hide();
+			self.Current = plugin;
+			self.Current.show();
 		});
 		
 		// Handle any ipc messages from the plugin
@@ -105,13 +88,13 @@ function PluginManager() {
 					Daemon.apiCall(call, function(err, result) {
 						if (err) {
 							// If a call didn't work, test that the
-							// `/consensus` call still works
+							// `/daemon/version` call still works
 							Daemon.ifSiad(function() {
 								// Send error response back to the plugin
 								plugin.sendToView(responseChannel, err, result);
 							}, function() {
-								// `/consensus` call failed too, assume siad
-								// has stopped
+								// that call failed too, assume siad has
+								// stopped
 								UI.notify('siad seems to have stopped working!', 'stop');
 							});
 						} else if (responseChannel) {
@@ -165,15 +148,15 @@ function PluginManager() {
 
 		// Start with the home plugin as current
 		if (name === home) {
-			current = plugin;
-			plugin.on('dom-ready', current.show);
+			self.Current = plugin;
+			plugin.on('dom-ready', self.Current.show);
 		}
 
 		// addListeners deals with any webview related async tasks
 		addListeners(plugin);
 
 		// Store the plugin
-		plugins[name] = plugin;
+		self[name] = plugin;
 	}
 
 	/**
@@ -203,7 +186,6 @@ function PluginManager() {
 	 */
 	function setConfig(config, callback) {
 		home = config.homePlugin;
-		plugPath = Path.join(__dirname, 'plugins');
 		callback();
 	}
 
@@ -213,6 +195,7 @@ function PluginManager() {
 	 * @param {config} config - config in memory
 	 */
 	this.init = function(config) {
+		plugPath = Path.join(__dirname, 'plugins');
 		setConfig(config, initPlugins);
 	};
 }

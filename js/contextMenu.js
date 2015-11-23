@@ -52,6 +52,20 @@ var template = [
 						focusedWindow.toggleDevTools();
 					}
 				}
+			}, {
+				label: 'Toggle Plugin Developer Tools',
+				accelerator: (function() {
+					if (process.platform ==='darwin') {
+						return 'Alt+Command+P';
+					} else {
+						return 'Ctrl+Shift+P';
+					}
+				})(),
+				click: function(item, focusedWindow) {
+					if (focusedWindow) {
+						focusedWindow.webContents.executeJavaScript('Plugins.Current.toggleDevTools();');
+					}
+				}
 			},
 		]
 	}, {

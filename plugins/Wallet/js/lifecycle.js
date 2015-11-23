@@ -1,13 +1,11 @@
 'use strict';
 
-// Library for working with clipboard
-const Clipboard = require('clipboard');
 // How often /wallet updates
 var refreshRate = 500; // half-second
 var finalRefreshRate = 1000 * 60 * 5; // five-minutes
 // Keeps track of if the view is shown
 var updating;
-// Variable to store api result values
+// Keeps track of wallet status results
 var wallet = {};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Updating  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,93 +52,12 @@ addResultListener('update-status', function(result) {
 	}
 });
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Addresses ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Get transactions for a specific wallet address
-function updateAddrTxn(event) {
-	$('#transaction-list').empty();
-	IPC.sendToHost('api-call', {
-		url: '/wallet/transactions/' + event.target.id,
-		type: 'GET',
-	}, 'update-history');
-}
-
-// Append wallet address to Addresses list
-function appendAddress(address) {
-	// Create only new addresses
-	if (typeof(address) === 'undefined') { return; }
-	if ($('#' + address) !== 0) { return; }
-	var addr = $('#addressbp').clone();
-
-	// Insert values
-	addr.find('.listnum').html($('#address-list').children().length);
-	addr.find('.address').html(address);
-	addr.find('.address').attr('id', address);
-	addr.find('.address').click(updateAddrTxn);
-
-	// Make copy-to-clipboard buttin clickable
-	addr.find('.copy-address').click(function() {
-		Clipboard.writeText(address);
-		notify('Copied address to clipboard', 'copied');
-	});
-
-	// Append, but not display, address
-	$('#address-list').append(addr);
-}
-
-// Add addresses to page
-addResultListener('update-address', function(result) {
-	// Update address list
-	$('#address-list').empty();
-	result.addresses.forEach(function (address) {
-		appendAddress(address.address);
-	});
-
-	/* Fetch all wallet transactions by iterate over wallet addresses
-	var loopmax = result.addresses.length;
-	var counter = 0;
-	(function next() {
-		setTimeout(function() {
-			updateAddrTxn(result.addresses[counter].address);
-			next();
-		}, 50); // force 50 ms delay between each GET request
-	})();*/
-});
-
-// Filter address list by search string
-function filterAddressList(searchstr) {
-	var entries = $('#address-list').children();
-	entries.each(function(index, entry) {
-		if ($(entry).find('.address').html().indexOf(searchstr) > -1) {
-			$(entry).show();
-		} else {
-			$(entry).hide();
-		}
-	});
-}
-
-// Start search when typing in Search field
-$('#search-bar').keyup(function() {
-	tooltip('Searching...', this);
-	var searchstr = $('#search-bar').val();
-	filterAddressList(searchstr);
-});
-
-// Add the new address
-addResultListener('new-address', function(result) {
-	notify('New address created', 'created');
-	appendAddress(result.address);
-	filterAddressList(result.address);
-});
-
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Transactions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Append a transaction to Transactions list
 function appendTransaction(txn) {
 	// Add only new transactions
 	if (typeof(txn) === 'undefined') { return; }
-	if ($('#' + txn.transactionid) !== 0) { return; }
-	var txnElement = $('#transactionbp').clone();
-	txnElement.id = txn.transactionid;
-	txnElement.timestamp = txn.confirmationtimestamp * 1000;
+	if ($('#' + txn.transactionid).length !== 0) { return; }
 
 	// Compute transaction net amount
 	var amount = new BigNumber(0);
@@ -159,13 +76,17 @@ function appendTransaction(txn) {
 		});
 	}
 
-	// Convert hastings to siacoin and round to 2 decimals
+	// Add only non-zero transactions
 	amount = convertSiacoin(amount);
-	if (amount === 0) {
+	if (amount.equals(0)) {
 		return;
 	}
 
-	// Format transaction timestamp
+	// Make transaction
+	var txnElement = $('#transactionbp').clone();
+	txnElement.id = txn.transactionid;
+
+	txnElement.timestamp = txn.confirmationtimestamp * 1000;
 	var timestamp = new Date(txn.confirmationtimestamp * 1000);
 	var time = timestamp.toLocaleString();
 

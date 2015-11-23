@@ -80,6 +80,7 @@
 
 	"maxerr"        : 100,      // Maximum errors before stopping.
 	"globals"       : {         // Extra globals.
+		/* Global Libraries */
 		"Path": false,
 		"WebFrame": false,
 		"IPC": false,
@@ -90,6 +91,7 @@
 		"Process": false,
 		"Remote": false,
 		"mainWindow": true,
+		/* UI globals */
 		"UI": true,
 		"Daemon": true,
 		"Plugins": true

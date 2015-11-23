@@ -34,7 +34,7 @@ function sendCoin(amount, address) {
 }
 
 // Transaction has to be legitimate
-function verifyTransaction(caller, callback) {
+function validateTransaction(caller, callback) {
 	var amount = $('#transaction-amount').val();
 	var unit = $('#send-unit').val();
 	var total = new BigNumber(amount).times(unit);
@@ -61,7 +61,7 @@ function verifyTransaction(caller, callback) {
 
 // Button to send coin
 $('#send-money').click(function() {
-	verifyTransaction(this, function() {
+	validateTransaction(this, function() {
 		tooltip('Are you sure?', $('#confirm').get(0));
 		$('#confirm').removeClass('transparent');
 	});
@@ -73,7 +73,7 @@ $('#confirm').click(function() {
 	if ($('#confirm').hasClass('transparent')) {
 		return;
 	}
-	verifyTransaction(this, function(amount, address) {
+	validateTransaction(this, function(amount, address) {
 		tooltip('Sending...', $('#confirm').get(0));
 		sendCoin(amount, address);
 	});
@@ -177,7 +177,7 @@ $('#load-legacy-wallet').click(function() {
 	if (loadPath) {
 		// kind of a hack; we want to reuse the enter-password dialog, but in
 		// order to do so we must temporarily overwrite its onclick method.
-		var oldOnclick = $('#enter-password').onclick;
+		var oldOnclick = $('#enter-password').get(0).onclick;
 		$('#enter-password').click(function() {
 			var field = $('#password-field');
 			loadLegacyWallet(loadPath[0], field.val());
