@@ -2,8 +2,8 @@
 
 // Library for working with clipboard
 const Clipboard = require('clipboard');
-// Keeps track of number of addresses
-var addressCount = 0;
+// Tracks addresses
+var addresses = [];
 // Keeps track of if the user is typing into the search bar
 var typing;
 
@@ -16,31 +16,21 @@ function updateAddrTxn(event) {
 	}, 'update-history');
 }
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Address Page ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Make wallet address html element
-function makeAddress(address, callback) {
-	// Create only new addresses
-	if (typeof(address) === 'undefined') { return; }
-	if ($('#' + address).length !== 0) { return; }
-	addressCount++;
-
+function makeAddress(address, number) {
 	// Make and store a jquery element for the address
-	var addr = $(`
+	var element = $(`
 		<div class='entry' id='` + address + `'>
-			<div class='listnum'>` + addressCount + `</div>
+			<div class='listnum'>` + number + `</div>
 			<div class='address'>` + address + `</div>
 			<div class='copy-address'><i class='fa fa-clipboard'></i></div>
 		</div>
 	`);
 
-	process.nextTick(function() {
-		callback(addr);
-	});
-}
-
-// Append the wallet address
-function appendAddress(element) {
 	// Make clicking this address show relevant transactions
 	element.find('.address').click(updateAddrTxn);
+
 	// Make copy-to-clipboard button clickable
 	element.find('.copy-address').click(function() {
 		Clipboard.writeText(this.parentNode.id);
@@ -51,50 +41,35 @@ function appendAddress(element) {
 	$('#address-list').append(element);
 }
 
-// Make and append a single address
-function addAddress(address) {
-	makeAddress(address, appendAddress);
-}
-
-// From an array of addresses, make elements then insert into the page in a
-// semi-non-blocking manner
-// TODO: Could this be done better?
-function addAddresses(addresses) {
-	var count = 0;
-	// With setTimeout being async, this for loop queues up the address
-	// creation almost instantly, letting them get made and appended one by one
-	addresses.forEach(function(address) {
-		count++;
-		setTimeout(function() {
-			addAddress(address.address);
-		}, count);
+function updateAddressPage() {
+	$('#address-list').empty();
+	var n = (($('#address-page').val() - 1) * 25);
+	addresses.slice(n, n + 25).forEach(function(addressObject, index) {
+		makeAddress(addressObject.address, n + index + 1);
 	});
 }
 
-// Add addresses to page
+// Update addresses array and page
 addResultListener('update-address', function(result) {
-	// Update address list
-	addAddresses(result.addresses);
-
-	/* Fetch all wallet transactions by iterate over wallet addresses
-	var loopmax = result.addresses.length;
-	var counter = 0;
-	(function next() {
-		setTimeout(function() {
-			updateAddrTxn(result.addresses[counter].address);
-			next();
-		}, 50); // force 50 ms delay between each GET request
-	})();*/
+	addresses = result.addresses;
+	$('#address-page').attr({
+		min: 1,
+		max: Math.ceil(addresses.length / 25),
+	});
+	updateAddressPage();
 });
 
+$('#address-page').on('input', function() {
+	updateAddressPage();
+});
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Search ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Filter address list by search string
 function filterAddressList(searchstr) {
-	var entries = $('#address-list').children();
-	entries.each(function(index, entry) {
-		if ($(entry).find('.address').html().indexOf(searchstr) > -1) {
-			$(entry).show();
-		} else {
-			$(entry).hide();
+	$('#address-list').empty();
+	addresses.forEach(function(addressObject) {
+		if (addressObject.address.indexOf(searchstr) > -1) {
+			makeAddress(addressObject.address);
 		}
 	});
 }
@@ -109,11 +84,32 @@ $('#search-bar').keyup(function(event) {
 	}, 200);
 });
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ New Address ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Find location of address in addresses array
+function locationOf(element, array, start, end) {
+	start = start || 0;
+	end = end || array.length;
+	var pivot = parseInt(start + (end - start) / 2, 10);
+	if (array[pivot].address === element) {
+		return pivot;
+	} else if (end - start <= 1) {
+		return array[pivot].address > element ? pivot - 1 : pivot;
+	} else if (array[pivot].address < element) {
+		return locationOf(element, array, pivot, end);
+	} else {
+		return locationOf(element, array, start, pivot);
+	}
+}
+
+// Insert address into the sorted array
+function addAddress(address) {
+	addresses.splice(locationOf(address, addresses) + 1, 0, address);
+}
+
 // Add the new address
 addResultListener('new-address', function(result) {
 	notify('New address created', 'created');
 	addAddress(result.address);
 	filterAddressList(result.address);
 });
-
 
