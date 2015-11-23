@@ -35,7 +35,7 @@ addResultListener('update', function(result) {
 	// From hostProperties, make properties
 	hostProperties.forEach(function(prop) {
 		var item = $('#propertybp').clone();
-		item.show();
+		item.removeClass('hidden');
 		item.find('.name').text(prop.descr + ' (' + prop.unit + ')');
 		var rawVal = new BigNumber(hosting[prop.name].toString());
 		var value = rawVal.div(prop.conversion).round(2);
@@ -98,7 +98,6 @@ $('#save.button').click(function() {
 		var value = new BigNumber(item.find('.value').text()).mul(prop.conversion);
 		hostInfo[prop.name.toLowerCase()] = value.round().toString();
 	});
-	console.log(hostInfo);
 
 	// Define configuration call
 	var call = {

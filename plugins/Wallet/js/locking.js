@@ -95,7 +95,7 @@ function savePassword(pw) {
 // Encrypt the wallet (only applies to first time opening)
 function encrypt() {
 	IPC.sendToHost('api-call', {
-		url: '/wallet/encrypt',
+		url: '/wallet/init',
 		type: 'POST',
 		args: {
 			dictionary: 'english',

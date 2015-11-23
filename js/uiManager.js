@@ -197,7 +197,7 @@ function UIManager() {
 				errorLog = Fs.createWriteStream(Path.join(__dirname, 'errors.log'));
 			}
 			try {
-				errorLog.write(message);
+				errorLog.write(message + '\n');
 			} catch (e) {
 				errorLog.write(e.toString() + '\n');
 			}

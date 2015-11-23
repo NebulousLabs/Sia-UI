@@ -68,6 +68,7 @@ function updateAddrTxn(event) {
 function appendAddress(address) {
 	// Create only new addresses
 	if (typeof(address) === 'undefined') { return; }
+	if ($('#' + address) !== 0) { return; }
 	var addr = $('#addressbp').clone();
 
 	// Insert values
@@ -136,7 +137,7 @@ addResultListener('new-address', function(result) {
 function appendTransaction(txn) {
 	// Add only new transactions
 	if (typeof(txn) === 'undefined') { return; }
-	if ($('#' + txn.transactionid)) { return; }
+	if ($('#' + txn.transactionid) !== 0) { return; }
 	var txnElement = $('#transactionbp').clone();
 	txnElement.id = txn.transactionid;
 	txnElement.timestamp = txn.confirmationtimestamp * 1000;

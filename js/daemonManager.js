@@ -83,7 +83,7 @@ function DaemonManager() {
 	 */
 	function start() {
 		ifSiad(function() {
-			console.error('attempted to start siad when it was already running');
+			UI.notify('attempted to start siad when it was already running', 'error');
 		}, function() {
 			UI.notify('Loading siad...', 'loading');
 
@@ -106,7 +106,7 @@ function DaemonManager() {
 			// Listen for siad erroring
 			daemonProcess.on('error', function (error) {
 				if (error === 'Error: spawn ' + siaCommand + ' ENOENT') {
-					UI.notify('Missing siad!\n', 'error');
+					UI.notify('Missing siad!', 'error');
 				} else {
 					UI.notify('siad errored: ' + error, 'error');
 				}

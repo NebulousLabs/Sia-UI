@@ -41,7 +41,7 @@ function sendCall(url, type, args, callback) {
 			try {
 				callback(null, JSON.parse(responseData), textStatus, jqXHR);
 			} catch(e) {
-				console.error(e, 'Ajax response was: ' + responseData);
+				callback('Malformed JSON result! Response was: ' + responseData);
 			}
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
