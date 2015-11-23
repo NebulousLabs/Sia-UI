@@ -83,28 +83,8 @@ describe('renderer process', function() {
 		it('wait until loaded', function() {
 			return client.waitUntilWindowLoaded();
 		});
-		it('appends 1 addresses', function(done) {
-			addNAddresses(1, done);
-		});
-		it('appends 100 addresses', function(done) {
-			addNAddresses(100, done);
-		});
 		it('appends 10000 addresses', function(done) {
 			addNAddresses(10000, done);
-		});
-		it('appends 10000 addresses as chunks', function(done) {
-			// TODO: This often fails/timesout, not sure why
-			this.timeout(5000);
-			var processed = 0;
-			var n = 100;
-			function doneYet() {
-				if (++processed === n) {
-					done();
-				}
-			}
-			for (var i = 0; i < n; i++) {
-				addNAddresses(100, doneYet);
-			}
 		});
 	});
 });
