@@ -46,7 +46,9 @@ describe('renderer process', function() {
 	describe('wallet plugin', function() {
 		// Used to fake out addresses being sent and rendered by the wallet Plugin
 		function addNAddresses(n, callback) {
-			var addressList = [];
+			var randomAddresses = [];
+
+			// script to execute in the UI
 			function script(addresses) {
 				function sendAddresses() {
 					Plugins.Wallet.sendToView('update-address', null, {
@@ -59,14 +61,21 @@ describe('renderer process', function() {
 					sendAddresses();
 				}
 			}
+
+			// push this random address onto the array
 			function pushAddress(ex, buf) {
-				addressList.push(buf.toString('hex'));
-				if (addressList.length === n) {
-					client.execute(script, addressList).then(function() {
+				randomAddresses.push({
+					address: buf.toString('hex'),
+				});
+				if (randomAddresses.length === n) {
+					client.execute(script, randomAddresses).then(function() {
 						callback();
 					});
 				}
 			}
+
+			// Generate the random addresses and send them to the Wallet plugin
+			// in an array
 			for (var i = 0; i < n; i++) {
 				Crypto.randomBytes(38, pushAddress);
 			}
@@ -84,6 +93,7 @@ describe('renderer process', function() {
 			addNAddresses(10000, done);
 		});
 		it('appends 10000 addresses as chunks', function(done) {
+			// TODO: This often fails/timesout, not sure why
 			this.timeout(5000);
 			var processed = 0;
 			var n = 100;
