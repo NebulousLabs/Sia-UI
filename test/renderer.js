@@ -42,6 +42,46 @@ describe('renderer process', function() {
 		}
 	});
 
+	// Helper used to ensure a specific plugin is loaded
+	function pluginLoaded(pluginName) {
+		return client.execute(function(name) {
+			return Plugins[name].isLoading();
+		}, pluginName).then(function(isLoading) {
+			return isLoading;
+		});
+	}
+
+	// Clicks all sidebar icons and ensures navigation
+	it('navigates correctly', function() {
+		return client
+			.waitForExist('.current')
+			.waitUntil(function() {
+				return pluginLoaded('About');
+			})
+			.click('#About-button')
+			.waitForExist('#About-button.current')
+			.waitUntil(function() {
+				return pluginLoaded('Wallet');
+			})
+			.click('#Wallet-button')
+			.waitForExist('#Wallet-button.current')
+			.waitUntil(function() {
+				return pluginLoaded('Hosting');
+			})
+			.click('#Hosting-button')
+			.waitForExist('#Hosting-button.current')
+			.waitUntil(function() {
+				return pluginLoaded('Files');
+			})
+			.click('#Files-button')
+			.waitForExist('#Files-button.current')
+			.waitUntil(function() {
+				return pluginLoaded('Overview');
+			})
+			.click('#Overview-button')
+			.waitForExist('#Overview-button.current');
+	});
+
 	// Test basic startup properties
 	describe('wallet plugin', function() {
 		// Used to fake out addresses being sent and rendered by the wallet Plugin
@@ -80,9 +120,6 @@ describe('renderer process', function() {
 				Crypto.randomBytes(38, pushAddress);
 			}
 		}
-		it('wait until loaded', function() {
-			return client.waitUntilWindowLoaded();
-		});
 		it('appends 10000 addresses', function(done) {
 			addNAddresses(10000, done);
 		});
