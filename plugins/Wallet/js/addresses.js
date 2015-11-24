@@ -4,8 +4,8 @@
 const Clipboard = require('clipboard');
 // Tracks addresses
 var addresses = [];
-// Keeps track of if the user is typing into the search bar
-var typing;
+// Tracks addresses fitting a search string
+var matchingAddresses = [];
 
 // Get transactions for a specific wallet address
 function updateAddrTxn(event) {
@@ -41,48 +41,71 @@ function makeAddress(address, number) {
 	$('#address-list').append(element);
 }
 
+// Fill address page with search results or addresses
 function updateAddressPage() {
+	if (!$('#address-page').val()) {
+		return;
+	}
 	$('#address-list').empty();
+
+	// Determine if search or normal page 
+	var array = $('#search-bar').val() ? matchingAddresses : addresses;
+	$('#address-page').attr({
+		min: 1,
+		max: array.length === 0 ? 1 : Math.ceil(array.length / 25),
+	});
+
+	// Make elements for this page
 	var n = (($('#address-page').val() - 1) * 25);
-	addresses.slice(n, n + 25).forEach(function(addressObject, index) {
-		makeAddress(addressObject.address, n + index + 1);
+	array.slice(n, n + 25).forEach(function(addressObject, index) {
+		var number = addressObject.number || n + index + 1;
+		makeAddress(addressObject.address, number);
 	});
 }
 
 // Update addresses array and page
-addResultListener('update-address', function(result) {
+addResultListener('update-addresses', function(result) {
 	addresses = result.addresses;
-	$('#address-page').attr({
-		min: 1,
-		max: Math.ceil(addresses.length / 25),
-	});
 	updateAddressPage();
 });
 
-$('#address-page').on('input', function() {
-	updateAddressPage();
-});
+// Update addresses on page navigation
+$('#address-page').on('input', updateAddressPage);
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Search ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Filter address list by search string
 function filterAddressList(searchstr) {
-	$('#address-list').empty();
-	addresses.forEach(function(addressObject) {
+	// Clear last search
+	matchingAddresses = [];
+
+	// Find matching addresses and record their original index in search array
+	addresses.forEach(function(addressObject, index) {
 		if (addressObject.address.indexOf(searchstr) > -1) {
-			makeAddress(addressObject.address);
+			matchingAddresses.push({
+				address: addressObject.address,
+				number: index + 1,
+			});
 		}
 	});
 }
 
+// Show addresses based on search bar string
+function performSearch() {
+	var bar = $('#search-bar');
+
+	// Don't search an empty string
+	if (bar.val().length !== 0) {
+		tooltip('Searching...', bar.get(0));
+		filterAddressList(bar.val());
+	}
+	
+	// Reset page number and update
+	$('#address-page').val(1);
+	updateAddressPage();
+}
+
 // Start search when typing in Search field
-$('#search-bar').keyup(function(event) {
-	clearTimeout(typing);
-	typing = setTimeout(function() {
-		tooltip('Searching...', event.target);
-		var searchstr = $('#search-bar').val();
-		filterAddressList(searchstr);
-	}, 200);
-});
+$('#search-bar').on('input', performSearch);
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ New Address ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Find location of address in addresses array

@@ -226,12 +226,6 @@
 .entry {
 	height: 12px;
 }
-.entry .txns {
-	display: inline-block;
-	text-align: center;
-	padding-right: 1%;
-	width: 10%;
-}
 .entry .address {
 	display: inline-block;
 	width: calc(94% - 45px);

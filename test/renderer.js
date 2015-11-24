@@ -51,7 +51,7 @@ describe('renderer process', function() {
 			// script to execute in the UI
 			function script(addresses) {
 				function sendAddresses() {
-					Plugins.Wallet.sendToView('update-address', null, {
+					Plugins.Wallet.sendToView('update-addresses', null, {
 						addresses: addresses,
 					});
 				}
