@@ -43,7 +43,7 @@ describe('renderer process', function() {
 	});
 
 	// Helper used to ensure a specific plugin is loaded
-	function pluginLoaded(pluginName) {
+	function isPluginLoaded(pluginName) {
 		return client.execute(function(name) {
 			return Plugins[name].isLoading();
 		}, pluginName).then(function(isLoading) {
@@ -51,35 +51,25 @@ describe('renderer process', function() {
 		});
 	}
 
-	// Clicks all sidebar icons and ensures navigation
+	// Clicks all sidebar icons and ensures plugins are visible
 	it('navigates correctly', function() {
+		this.timeout(5000);
+		client.addCommand('showPlugin', function(name) {
+			return client.waitUntil(function() {
+					return isPluginLoaded(name);
+				})
+				.click('#' + name + '-button')
+				.waitForExist('#' + name + '-view.current')
+				.isVisible('#' + name + '-view').should.eventually.be.true;
+		});
+
 		return client
 			.waitForExist('.current')
-			.waitUntil(function() {
-				return pluginLoaded('About');
-			})
-			.click('#About-button')
-			.waitForExist('#About-button.current')
-			.waitUntil(function() {
-				return pluginLoaded('Wallet');
-			})
-			.click('#Wallet-button')
-			.waitForExist('#Wallet-button.current')
-			.waitUntil(function() {
-				return pluginLoaded('Hosting');
-			})
-			.click('#Hosting-button')
-			.waitForExist('#Hosting-button.current')
-			.waitUntil(function() {
-				return pluginLoaded('Files');
-			})
-			.click('#Files-button')
-			.waitForExist('#Files-button.current')
-			.waitUntil(function() {
-				return pluginLoaded('Overview');
-			})
-			.click('#Overview-button')
-			.waitForExist('#Overview-button.current');
+			.showPlugin('About')
+			.showPlugin('Wallet')
+			.showPlugin('Hosting')
+			.showPlugin('Files')
+			.showPlugin('Overview');
 	});
 
 	// Test basic startup properties

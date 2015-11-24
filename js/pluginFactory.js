@@ -51,8 +51,6 @@ module.exports = {
 		v.addEventListener('dom-ready', function() {
 			var zoomCode = 'require("web-frame").setZoomFactor(' + WebFrame.getZoomFactor() + ');';
 			v.executeJavaScript(zoomCode);
-			v.style.opacity = '0';
-			v.style.zIndex = '-5';
 		});
 
 		// Start loading the view to the mainbar
