@@ -90,7 +90,14 @@
 	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
 	display: inline-block;
 	font-size: 16px;
-	padding: 12px;
+	padding: 4px;
+}
+.title .button:first-child {
+	padding-right: 0;
+}
+.title input {
+	width: 42px;
+	height: 26px;
 }
 
 /* Controls */
@@ -219,15 +226,9 @@
 .entry {
 	height: 12px;
 }
-.entry .txns {
-	display: inline-block;
-	text-align: center;
-	padding-right: 1%;
-	width: 10%;
-}
 .entry .address {
 	display: inline-block;
-	width: calc(80% - 25px);
+	width: calc(94% - 45px);
 	text-align: left;
 	padding-right: 1%;
 	white-space: nowrap;

@@ -88,7 +88,7 @@ select, input {
 
 	margin: 0;
 	font-family: sans-serif;
-	font-size: 16px;
+	font-size: 12px;
 	height: 30px;
 	padding-right: 4px;
 	padding-left: 6px;
@@ -120,6 +120,9 @@ select:hover {
 	font-size: 26px;
 	position: relative;
 	width: 100%;
+}
+.button {
+	-webkit-user-select: none;
 }
 .button:hover {
 	color: #4a4a4a;

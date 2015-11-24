@@ -2,10 +2,10 @@
 
 // Library for working with clipboard
 const Clipboard = require('clipboard');
-// Keeps track of number of addresses
-var addressCount = 0;
-// Keeps track of if the user is typing into the search bar
-var typing;
+// Tracks addresses
+var addresses = [];
+// Tracks addresses fitting a search string
+var matchingAddresses = [];
 
 // Get transactions for a specific wallet address
 function updateAddrTxn(event) {
@@ -16,31 +16,21 @@ function updateAddrTxn(event) {
 	}, 'update-history');
 }
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Address Page ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Make wallet address html element
-function makeAddress(address, callback) {
-	// Create only new addresses
-	if (typeof(address) === 'undefined') { return; }
-	if ($('#' + address).length !== 0) { return; }
-	addressCount++;
-
+function makeAddress(address, number) {
 	// Make and store a jquery element for the address
-	var addr = $(`
+	var element = $(`
 		<div class='entry' id='` + address + `'>
-			<div class='listnum'>` + addressCount + `</div>
+			<div class='listnum'>` + number + `</div>
 			<div class='address'>` + address + `</div>
 			<div class='copy-address'><i class='fa fa-clipboard'></i></div>
 		</div>
 	`);
 
-	process.nextTick(function() {
-		callback(addr);
-	});
-}
-
-// Append the wallet address
-function appendAddress(element) {
 	// Make clicking this address show relevant transactions
 	element.find('.address').click(updateAddrTxn);
+
 	// Make copy-to-clipboard button clickable
 	element.find('.copy-address').click(function() {
 		Clipboard.writeText(this.parentNode.id);
@@ -51,63 +41,93 @@ function appendAddress(element) {
 	$('#address-list').append(element);
 }
 
-// Make and append a single address
-function addAddress(address) {
-	makeAddress(address, appendAddress);
-}
+// Fill address page with search results or addresses
+function updateAddressPage() {
+	if (!$('#address-page').val()) {
+		return;
+	}
+	$('#address-list').empty();
 
-// From an array of addresses, make elements then insert into the page in a
-// semi-non-blocking manner
-// TODO: Could this be done better?
-function addAddresses(addresses) {
-	var count = 0;
-	// With setTimeout being async, this for loop queues up the address
-	// creation almost instantly, letting them get made and appended one by one
-	addresses.forEach(function(address) {
-		count++;
-		setTimeout(function() {
-			addAddress(address.address);
-		}, count);
+	// Determine if search or normal page 
+	var array = $('#search-bar').val() ? matchingAddresses : addresses;
+	$('#address-page').attr({
+		min: 1,
+		max: array.length === 0 ? 1 : Math.ceil(array.length / 25),
+	});
+
+	// Make elements for this page
+	var n = (($('#address-page').val() - 1) * 25);
+	array.slice(n, n + 25).forEach(function(addressObject, index) {
+		var number = addressObject.number || n + index + 1;
+		makeAddress(addressObject.address, number);
 	});
 }
 
-// Add addresses to page
-addResultListener('update-address', function(result) {
-	// Update address list
-	addAddresses(result.addresses);
-
-	/* Fetch all wallet transactions by iterate over wallet addresses
-	var loopmax = result.addresses.length;
-	var counter = 0;
-	(function next() {
-		setTimeout(function() {
-			updateAddrTxn(result.addresses[counter].address);
-			next();
-		}, 50); // force 50 ms delay between each GET request
-	})();*/
+// Update addresses array and page
+addResultListener('update-addresses', function(result) {
+	addresses = result.addresses;
+	updateAddressPage();
 });
 
+// Update addresses on page navigation
+$('#address-page').on('input', updateAddressPage);
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Search ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Filter address list by search string
 function filterAddressList(searchstr) {
-	var entries = $('#address-list').children();
-	entries.each(function(index, entry) {
-		if ($(entry).find('.address').html().indexOf(searchstr) > -1) {
-			$(entry).show();
-		} else {
-			$(entry).hide();
+	// Clear last search
+	matchingAddresses = [];
+
+	// Find matching addresses and record their original index in search array
+	addresses.forEach(function(addressObject, index) {
+		if (addressObject.address.indexOf(searchstr) > -1) {
+			matchingAddresses.push({
+				address: addressObject.address,
+				number: index + 1,
+			});
 		}
 	});
 }
 
+// Show addresses based on search bar string
+function performSearch() {
+	var bar = $('#search-bar');
+
+	// Don't search an empty string
+	if (bar.val().length !== 0) {
+		tooltip('Searching...', bar.get(0));
+		filterAddressList(bar.val());
+	}
+	
+	// Reset page number and update
+	$('#address-page').val(1);
+	updateAddressPage();
+}
+
 // Start search when typing in Search field
-$('#search-bar').keyup(function(event) {
-	clearTimeout(typing);
-	typing = setTimeout(function() {
-		tooltip('Searching...', event.target);
-		var searchstr = $('#search-bar').val();
-		filterAddressList(searchstr);
-	}, 200);
-});
+$('#search-bar').on('input', performSearch);
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ New Address ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Find location of address in addresses array
+function locationOf(element, array, start, end) {
+	start = start || 0;
+	end = end || array.length;
+	var pivot = parseInt(start + (end - start) / 2, 10);
+	if (array[pivot].address === element) {
+		return pivot;
+	} else if (end - start <= 1) {
+		return array[pivot].address > element ? pivot - 1 : pivot;
+	} else if (array[pivot].address < element) {
+		return locationOf(element, array, pivot, end);
+	} else {
+		return locationOf(element, array, start, pivot);
+	}
+}
+
+// Insert address into the sorted array
+function addAddress(address) {
+	addresses.splice(locationOf(address, addresses) + 1, 0, address);
+}
 
 // Add the new address
 addResultListener('new-address', function(result) {
@@ -115,5 +135,4 @@ addResultListener('new-address', function(result) {
 	addAddress(result.address);
 	filterAddressList(result.address);
 });
-
 

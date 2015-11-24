@@ -17,7 +17,7 @@ function update() {
 	IPC.sendToHost('api-call', {
 		url: '/wallet/addresses',
 		type: 'GET',
-	}, 'update-address');
+	}, 'update-addresses');
 
 	updating = setTimeout(update, refreshRate);
 }
