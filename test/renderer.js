@@ -54,6 +54,7 @@ describe('renderer process', function() {
 
 	// Clicks all sidebar icons and ensures plugins are visible
 	it('navigates correctly', function() {
+		this.timeout(5000);
 		client.addCommand('showPlugin', function(name) {
 			return client.waitUntil(function() {
 					return isPluginLoaded(name);
