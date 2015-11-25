@@ -45,6 +45,7 @@ addResultListener('locked', function(result) {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Unlocking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Unlock the wallet
 function unlock(password) {
+	console.log(password);
 	IPC.sendToHost('api-call', {
 		url: '/wallet/unlock',
 		type: 'POST',
@@ -56,7 +57,7 @@ function unlock(password) {
 	// Password attempted, show responsive processing icon
 	setUnlocking();
 }
-IPC.on('unlocked', function(err, result) {
+IPC.on('unlocked', function(event, err, result) {
 	// Remove unlocking icon
 	if (err) {
 		setLocked();
@@ -74,7 +75,7 @@ IPC.on('unlocked', function(err, result) {
 function getPassword() {
 	IPC.sendToHost('config', {key: 'walletPassword'}, 'use-password');
 }
-IPC.on('use-password', function(pw) {
+IPC.on('use-password', function(event, pw) {
 	if (pw) {
 		unlock(pw);
 	} else {

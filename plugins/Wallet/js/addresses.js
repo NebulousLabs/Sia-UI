@@ -125,14 +125,15 @@ function locationOf(element, array, start, end) {
 }
 
 // Insert address into the sorted array
-function addAddress(address) {
-	addresses.splice(locationOf(address, addresses) + 1, 0, address);
+function addAddress(addressObject) {
+	addresses.splice(locationOf(addressObject, addresses) + 1, 0, addressObject);
 }
 
-// Add the new address
+// Add the new address and show it
 addResultListener('new-address', function(result) {
 	notify('New address created', 'created');
-	addAddress(result.address);
-	filterAddressList(result.address);
+	addAddress(result);
+	$('#search-bar').val(result.address);
+	performSearch();
 });
 
