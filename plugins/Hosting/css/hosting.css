@@ -39,6 +39,7 @@
 
 /* Controls */
 .popup {
+	display: none;
 	position: absolute;
 	min-height: 100px;
 	max-height: 50%;
