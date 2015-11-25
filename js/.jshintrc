@@ -83,9 +83,7 @@
 		/* Global Libraries */
 		"Path": false,
 		"WebFrame": false,
-		"IPC": false,
 		"ElectronScreen": false,
-		"RendererIPC": false,
 		"Fs": false,
 		"Shell": false,
 		"Process": false,

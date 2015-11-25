@@ -6,7 +6,7 @@ var propsMade = false;
 // Define API calls and update DOM per call
 function update() {
 	// Get HostInfo regularly
-	IPC.sendToHost('api-call', '/host/status', 'update');
+	IPCRenderer.sendToHost('api-call', '/host/status', 'update');
 	updating = setTimeout(update, 15000);
 }
 
@@ -50,7 +50,7 @@ addResultListener('update', function(result) {
 // Called upon showing
 function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
-	//IPC.sendToHost('devtools');
+	//IPCRenderer.sendToHost('devtools');
 
 	// Start updating
 	update();
@@ -73,7 +73,7 @@ function announce(args) {
 		type: 'GET',
 		args: args,
 	};
-	IPC.sendToHost('api-call', call, 'announced');
+	IPCRenderer.sendToHost('api-call', call, 'announced');
 }
 $('#custom.button').click(function() {
 	announce({
@@ -105,7 +105,7 @@ $('#save.button').click(function() {
 		type: 'GET',
 		args: hostInfo,
 	};
-	IPC.sendToHost('api-call', call, 'configure');
+	IPCRenderer.sendToHost('api-call', call, 'configure');
 });
 addResultListener('configure', function() {
 	update();

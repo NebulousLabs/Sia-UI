@@ -28,13 +28,13 @@ function isAddress(str) {
 
 // Notification shortcut 
 function notify(msg, type) {
-	IPC.sendToHost('notify', msg, type);
+	IPCRenderer.sendToHost('notify', msg, type);
 }
 
 // Ask UI to show tooltip bubble
 function tooltip(message, element) {
 	var rect = element.getBoundingClientRect();
-	IPC.sendToHost('tooltip', message, {
+	IPCRenderer.sendToHost('tooltip', message, {
 		top: rect.top,
 		bottom: rect.bottom,
 		left: rect.left,
@@ -47,7 +47,7 @@ function tooltip(message, element) {
 
 // IPC API listening shortcut that checks for errors
 function addResultListener(channel, callback) {
-	IPC.on(channel, function(event, err, result) {
+	IPCRenderer.on(channel, function(event, err, result) {
 		if (err) {
 			console.error(channel, err);
 			notify(err, 'error');

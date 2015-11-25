@@ -10,7 +10,7 @@ var matchingAddresses = [];
 // Get transactions for a specific wallet address
 function updateAddrTxn(event) {
 	$('#transaction-list').empty();
-	IPC.sendToHost('api-call', {
+	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/transactions/' + event.target.innerText,
 		type: 'GET',
 	}, 'update-history');

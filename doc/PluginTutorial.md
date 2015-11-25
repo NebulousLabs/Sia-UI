@@ -375,7 +375,7 @@ and the UI will be through an asynchronous electron library tool called 'ipc' or
 ```js
 'use strict';
 // Library for communicating with Sia-UI
-const IPC = require('ipc');
+const IPCRenderer = require('ipc');
 ```
 
 Asynchronous messages sent through ipc are picked up based on their channels.
@@ -383,7 +383,7 @@ On can send primitives, objects, or nothing at all through these channels and
 the UI reacts accordingly. For example, turn chromium devtools on using:
 
 ```js
-IPC.sendToHost('devtools');
+IPCRenderer.sendToHost('devtools');
 ```
 
 It's like a mini API. For now, the IPC channels are:
@@ -410,9 +410,9 @@ call address.
 ```js
 // Make API calls, sending a channel name to listen for responses
 function update() {
-	IPC.sendToHost('api-call', '/wallet/status', 'balance-update');
-	IPC.sendToHost('api-call', '/gateway/status', 'peers-update');
-	IPC.sendToHost('api-call', '/consensus/status', 'height-update');
+	IPCRenderer.sendToHost('api-call', '/wallet/status', 'balance-update');
+	IPCRenderer.sendToHost('api-call', '/gateway/status', 'peers-update');
+	IPCRenderer.sendToHost('api-call', '/consensus/status', 'height-update');
 }
 ```
 
@@ -432,13 +432,13 @@ channel they specified in the third argument of sendToHost().
 
 ```js
 // Define IPC listeners and update DOM per call
-IPC.on('balance-update', function(err, result) {
+IPCRenderer.on('balance-update', function(event, err, result) {
 	document.getElementById('balance').innerHTML = 'Balance: ' + result.Balance;
 });
-IPC.on('peers-update', function(err, result) {
+IPCRenderer.on('peers-update', function(event, err, result) {
 	document.getElementById('peers').innerHTML = 'Peers: ' + result.Peers.length;
 });
-IPC.on('height-update', function(err, result) {
+IPCRenderer.on('height-update', function(event, err, result) {
 	document.getElementById('height').innerHTML = 'Block Height: ' + result.Height;
 });
 ```
@@ -459,16 +459,16 @@ var updating;
 
 // Make API calls regularly, sending a channel name to listen for responses
 function update() {
-	IPC.sendToHost('api-call', '/wallet/status', 'balance-update');
-	IPC.sendToHost('api-call', '/gateway/status', 'peers-update');
-	IPC.sendToHost('api-call', '/consensus/status', 'height-update');
+	IPCRenderer.sendToHost('api-call', '/wallet/status', 'balance-update');
+	IPCRenderer.sendToHost('api-call', '/gateway/status', 'peers-update');
+	IPCRenderer.sendToHost('api-call', '/consensus/status', 'height-update');
 	updating = setTimeout(update, 1000);
 }
 
 // Called upon showing
 function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPC.sendToHost('devtools');
+	// IPCRenderer.sendToHost('devtools');
 	
 	// Call the API
 	update();
@@ -523,21 +523,21 @@ null or NaN.
 
 ```js
 // Define IPC listeners and update DOM per call
-IPC.on('/wallet/status', function(err, result) {
+IPCRenderer.on('/wallet/status', function(event, err, result) {
 	if (err) {
 		console.error(err);
 	} else if (result) {
 		document.getElementById('balance').innerHTML = 'Balance: ' + balance;
 	}
 });
-IPC.on('/gateway/status', function(err, result) {
+IPCRenderer.on('/gateway/status', function(event, err, result) {
 	if (err) {
 		console.error(err);
 	} else if (result) {
 		document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
 	}
 });
-IPC.on('/consensus/status', function(err, result) {
+IPCRenderer.on('/consensus/status', function(event, err, result) {
 	if (err) {
 		console.error(err);
 	} else if (result) {
@@ -551,7 +551,7 @@ Finally, the aggregated Javascript code should look like this:
 ```js
 'use strict';
 // Library for communicating with Sia-UI
-const IPC = require('ipc');
+const IPCRenderer = require('ipc');
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
 // Ensure precision
@@ -562,9 +562,9 @@ var updating;
 
 // Send API calls to the UI
 function update() {
-	IPC.sendToHost('api-call', '/wallet/status');
-	IPC.sendToHost('api-call', '/gateway/status');
-	IPC.sendToHost('api-call', '/consensus');
+	IPCRenderer.sendToHost('api-call', '/wallet/status');
+	IPCRenderer.sendToHost('api-call', '/gateway/status');
+	IPCRenderer.sendToHost('api-call', '/consensus');
 	updating = setTimeout(update, 1000);
 }
 
@@ -576,21 +576,21 @@ function formatSiacoin(hastings) {
 }
 
 // Define IPC listeners and update DOM per call
-IPC.on('/wallet/status', function(err, result) {
+IPCRenderer.on('/wallet/status', function(event, err, result) {
 	if (err) {
 		console.error(err);
 	} else if (result) {
 		document.getElementById('balance').innerHTML = 'Balance: ' + balance;
 	}
 });
-IPC.on('/gateway/status', function(err, result) {
+IPCRenderer.on('/gateway/status', function(event, err, result) {
 	if (err) {
 		console.error(err);
 	} else if (result) {
 		document.getElementById('peers').innerHTML = 'Peers: ' + peerCount;
 	}
 });
-IPC.on('/consensus/status', function(err, result) {
+IPCRenderer.on('/consensus/status', function(event, err, result) {
 	if (err) {
 		console.error(err);
 	} else if (result) {
@@ -601,7 +601,7 @@ IPC.on('/consensus/status', function(err, result) {
 // Called upon showing
 function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPC.sendToHost('devtools');
+	// IPCRenderer.sendToHost('devtools');
 	
 	// Call the API
 	update();
@@ -632,7 +632,7 @@ the yet-encrypted release network:
 ### Abstracting the Extra Mile
 
 If you notice, the error-checking seems to be a bit repetitive, let's define a
-function to call from IPC.on() that handles that for us and updates the DOM so
+function to call from IPCRenderer.on() that handles that for us and updates the DOM so
 as to reduce that repetition:
 
 ```js
@@ -648,15 +648,15 @@ function updateField(err, caption, newValue, elementID) {
 }
 
 // Define IPC listeners and update DOM per call
-IPC.on('balance-update', function(err, result) {
+IPCRenderer.on('balance-update', function(event, err, result) {
 	var value = result !== null ? formatSiacoin(result.ConfirmedSiacoinBalance) : null;
 	updateField(err, 'Balance: ', value, 'balance');
 });
-IPC.on('peers-update', function(err, result) {
+IPCRenderer.on('peers-update', function(event, err, result) {
 	var value = result !== null ? result.Peers.length : null;
 	updateField(err, 'Peers: ', value, 'peers');
 });
-IPC.on('height-update', function(err, result) {
+IPCRenderer.on('height-update', function(event, err, result) {
 	var value = result !== null ? result.Height : null;
 	updateField(err, 'Block Height: ', value, 'height');
 });
@@ -667,7 +667,7 @@ Now the aggregate javascript should be:
 ```js
 'use strict';
 // Library for communicating with Sia-UI
-const IPC = require('ipc');
+const IPCRenderer = require('ipc');
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
 // Ensure precision
@@ -678,9 +678,9 @@ var updating;
 
 // Make API calls, sending a channel name to listen for responses
 function update() {
-	IPC.sendToHost('api-call', '/wallet/status', 'balance-update');
-	IPC.sendToHost('api-call', '/gateway/status', 'peers-update');
-	IPC.sendToHost('api-call', '/consensus/status', 'height-update');
+	IPCRenderer.sendToHost('api-call', '/wallet/status', 'balance-update');
+	IPCRenderer.sendToHost('api-call', '/gateway/status', 'peers-update');
+	IPCRenderer.sendToHost('api-call', '/consensus/status', 'height-update');
 	updating = setTimeout(update, 1000);
 }
 
@@ -705,7 +705,7 @@ function formatSiacoin(hastings) {
 // Called by the UI upon showing
 function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPC.sendToHost('devtools');
+	// IPCRenderer.sendToHost('devtools');
 	
 	// Call the API
 	update();
@@ -717,15 +717,15 @@ function stop() {
 }
 
 // Define IPC listeners and update DOM per call
-IPC.on('balance-update', function(err, result) {
+IPCRenderer.on('balance-update', function(event, err, result) {
 	var value = result !== null ? formatSiacoin(result.ConfirmedSiacoinBalance) : null;
 	updateField(err, 'Balance: ', value, 'balance');
 });
-IPC.on('peers-update', function(err, result) {
+IPCRenderer.on('peers-update', function(event, err, result) {
 	var value = result !== null ? result.Peers.length : null;
 	updateField(err, 'Peers: ', value, 'peers');
 });
-IPC.on('height-update', function(err, result) {
+IPCRenderer.on('height-update', function(event, err, result) {
 	var value = result !== null ? result.Height : null;
 	updateField(err, 'Block Height: ', value, 'height');
 });
@@ -738,13 +738,13 @@ IPC. Notifications are easy enough as demonstrated through this code snippet
 taken from Wallet's js file:
 
 ```js
-IPC.on('coin-sent', function(err, result) {
+IPCRenderer.on('coin-sent', function(event, err, result) {
 	if (err) {
 		console.error(err);
-		IPC.sendToHost('notify', 'Transaction errored!', 'error');
+		IPCRenderer.sendToHost('notify', 'Transaction errored!', 'error');
 		return;
 	}
-	IPC.sendToHost('notify',  'Transaction sent!', 'sent');
+	IPCRenderer.sendToHost('notify',  'Transaction sent!', 'sent');
 	document.getElementById('transaction-amount').value = '';
 	document.getElementById('confirm').classList.add('hidden');
 });
@@ -760,7 +760,7 @@ show atop an element as demonstrated again by wallet:
 // Ask UI to show tooltip bubble
 function tooltip(message, element) {
 	var rect = element.getBoundingClientRect();
-	IPC.sendToHost('tooltip', message, {
+	IPCRenderer.sendToHost('tooltip', message, {
 		top: rect.top,
 		bottom: rect.bottom,
 		left: rect.left,
@@ -774,7 +774,7 @@ function tooltip(message, element) {
 // Give the buttons interactivity
 document.getElementById('create-address').onclick = function() {
 	tooltip('Creating...', this);
-	IPC.sendToHost('api-call', '/wallet/address', 'new-address');
+	IPCRenderer.sendToHost('api-call', '/wallet/address', 'new-address');
 };
 ```
 

@@ -1,15 +1,15 @@
 'use strict';
 
-// TODO: Can a webview use IPC.sendSync?
+// TODO: Can a webview use IPCRenderer.sendSync?
 function download(nickname) {
-	var savePath = IPC.sendSync('dialog', 'save', {
+	var savePath = IPCRenderer.sendSync('dialog', 'save', {
 		defaultPath: nickname,
 	});
 	if (!savePath) {
 		return;
 	}
 	notify('Downloading ' + nickname + ' to '+ savePath +' folder', 'download');
-	IPC.sendToHost('api-call', {
+	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/download',
 		type: 'GET',
 		args: {
@@ -24,7 +24,7 @@ addResultListener('downloaded', function(result) {
 
 function share(nickname) {
 	// Make a request to get the ascii share string
-	IPC.sendToHost('api-call', {
+	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/shareascii',
 		args: {
 			nickname: nickname,
@@ -43,7 +43,7 @@ addResultListener('shared', function(result) {
 });
 
 function upload(filePath, nickname) {
-	IPC.sendToHost('api-call', {
+	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/upload',
 		type: 'GET',
 		args: {
@@ -59,7 +59,7 @@ addResultListener('uploaded', function(result) {
 });
 
 function loadDotSia(filePath) {
-	IPC.sendToHost('api-call', {
+	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/load',
 		args: {
 			filename: filePath,
@@ -72,6 +72,10 @@ addResultListener('file-loaded', function(result) {
 	update();
 });
 
+// Checks whether a path starts with or contains a hidden file or a folder.
+function isUnixHiddenPath(path) {
+	return (/(^|\/)\.[^\/\.]/g).test(path);
+}
 // Non-recursively upload all files in a directory
 function uploadDir(dirPath, nickname) {
 	// Upload files one at a time
@@ -98,7 +102,7 @@ function uploadDir(dirPath, nickname) {
 }
 
 function loadAscii(ascii) {
-	IPC.sendToHost('api-call', {
+	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/loadascii',
 		args: {
 			file: ascii,
@@ -113,7 +117,7 @@ addResultListener('ascii-loaded', function(result) {
 
 function deleteFile(nickname) {
 	// Make the request to delete the file.
-	IPC.sendToHost('api-call', {
+	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/delete',
 		args: {
 			nickname: nickname,

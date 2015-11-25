@@ -11,10 +11,10 @@ var wallet = {};
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Updating  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Make API calls, sending a channel name to listen for responses
 function update() {
-	IPC.sendToHost('api-call', '/wallet', 'update-status');
+	IPCRenderer.sendToHost('api-call', '/wallet', 'update-status');
 
 	// Get list of wallet addresses
-	IPC.sendToHost('api-call', {
+	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/addresses',
 		type: 'GET',
 	}, 'update-addresses');
@@ -129,7 +129,7 @@ addResultListener('update-history', function(result) {
 // Called upon showing
 function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPC.sendToHost('devtools');
+	// IPCRenderer.sendToHost('devtools');
 
 	update();
 }

@@ -1,7 +1,7 @@
 'use strict';
 
 // Library for communicating with Sia-UI
-const IPC = require('electron').ipcRenderer;
+const IPCRenderer = require('electron').ipcRenderer;
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
 // Ensure precision
@@ -12,18 +12,18 @@ var updating;
 
 // Make API calls, sending a channel name to listen for responses
 function update() {
-	IPC.sendToHost('api-call', '/wallet', 'wallet-update');
-	IPC.sendToHost('api-call', '/gateway/status', 'peers-update');
-	IPC.sendToHost('api-call', '/consensus', 'height-update');
+	IPCRenderer.sendToHost('api-call', '/wallet', 'wallet-update');
+	IPCRenderer.sendToHost('api-call', '/gateway/status', 'peers-update');
+	IPCRenderer.sendToHost('api-call', '/consensus', 'height-update');
 	updating = setTimeout(update, 5000);
 }
 
 // Updates element text
 function updateField(err, caption, value, elementID) {
 	if (err) {
-		IPC.sendToHost('notify', err.toString(), 'error');
+		IPCRenderer.sendToHost('notify', err.toString(), 'error');
 	} else if (value === null) {
-		IPC.sendToHost('notify', 'API result seems to be null!', 'error');
+		IPCRenderer.sendToHost('notify', 'API result seems to be null!', 'error');
 	} else {
 		document.getElementById(elementID).innerHTML = caption + value;
 	}
@@ -43,7 +43,7 @@ function formatSiacoin(hastings) {
 // Called by the UI upon showing
 function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPC.sendToHost('devtools');
+	// IPCRenderer.sendToHost('devtools');
 	
 	// Call the API
 	update();
@@ -57,7 +57,7 @@ function stop() {
 // Ask UI to show tooltip bubble
 function tooltip(message, element) {
 	var rect = element.getBoundingClientRect();
-	IPC.sendToHost('tooltip', message, {
+	IPCRenderer.sendToHost('tooltip', message, {
 		top: rect.top,
 		bottom: rect.bottom,
 		left: rect.left,
@@ -69,7 +69,7 @@ function tooltip(message, element) {
 }
 
 // Define IPC listeners and update DOM per call
-IPC.on('wallet-update', function(event, err, result) {
+IPCRenderer.on('wallet-update', function(event, err, result) {
 	if (!result) {
 		return;
 	}
@@ -87,11 +87,11 @@ IPC.on('wallet-update', function(event, err, result) {
 	var bal = formatSiacoin(result.confirmedsiacoinbalance);
 	updateField(err, 'Balance: ', unlocked ? bal : '---', 'balance');
 });
-IPC.on('peers-update', function(event, err, result) {
+IPCRenderer.on('peers-update', function(event, err, result) {
 	var value = result !== null ? result.Peers.length : null;
 	updateField(err, 'Peers: ', value, 'peers');
 });
-IPC.on('height-update', function(event, err, result) {
+IPCRenderer.on('height-update', function(event, err, result) {
 	var value = result !== null ? result.height : null;
 	updateField(err, 'Block Height: ', value, 'height');
 });
