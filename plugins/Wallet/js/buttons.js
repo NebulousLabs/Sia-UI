@@ -1,83 +1,17 @@
 'use strict';
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Address Handling  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Address creation
-$('#create-address').click(function() {
-	tooltip('Creating...', this);
-	var call = {
-		url: '/wallet/address',
-		type: 'GET',
-	};
-	IPCRenderer.sendToHost('api-call', call, 'new-address');
-});
-
-// Button to display all wallet addresses
-$('#view-all-addresses').click(function() {
-	$('#address-list').children().show();
-});
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Transactions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Define send call
-function sendCoin(amount, address) {
-	var transaction = {
-		amount: amount.toString(),
-		destination: address,
-	};
-	IPCRenderer.sendToHost('api-call', {
-		url: '/wallet/siacoins',
-		type: 'POST',
-		args: transaction,
-	}, 'coin-sent');
-
-	// Reflect it asap
-	setTimeout(update, 100);
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Capsule ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Get and use password from the UI's config.json
+function getPassword() {
+	IPCRenderer.sendToHost('config', {key: 'walletPassword'}, 'use-password');
 }
-
-// Transaction has to be legitimate
-function validateTransaction(caller, callback) {
-	var amount = $('#transaction-amount').val();
-	var unit = $('#send-unit').val();
-	var total = new BigNumber(amount).times(unit);
-	var address = $('#transaction-address').val();
-
-	// Verify number
-	if (!isNumber(amount)) {
-		tooltip('Enter numeric amount of Siacoin to send!', caller);
-		return;
-	} 
-	// Verify balance
-	if (wallet.confirmedsiacoinbalance < total) {
-		tooltip('Balance too low!', caller);
-		return;
-	} 
-	// Verify address
-	if (!isAddress(address)) {
-		tooltip('Enter correct address to send to!', caller);
-		return;
+IPCRenderer.on('use-password', function(event, pw) {
+	if (pw) {
+		unlock(pw);
+	} else {
+		$('#request-password').show();
+		$('#password-field').focus();
 	}
-
-	callback(total, address);
-}
-
-// Button to send coin
-$('#send-money').click(function() {
-	validateTransaction(this, function() {
-		tooltip('Are you sure?', $('#confirm').get(0));
-		$('#confirm').removeClass('transparent');
-	});
-});
-
-// Button to confirm transaction
-$('#confirm').click(function() {
-	// If the button's transparent, don't do anything
-	if ($('#confirm').hasClass('transparent')) {
-		return;
-	}
-	validateTransaction(this, function(amount, address) {
-		tooltip('Sending...', $('#confirm').get(0));
-		sendCoin(amount, address);
-	});
-	$('#confirm').addClass('transparent');
 });
 
 // Transaction was sent
@@ -99,7 +33,6 @@ $('#view-all-transactions').click(function() {
 	}, 'update-history');
 });
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Capsule ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Lock or unlock the wallet
 $('#lock-pod').click(function() {
 	var state = $('#lock-status').html();
@@ -115,6 +48,14 @@ $('#lock-pod').click(function() {
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Popups ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Save password to the UI's config.json
+function savePassword(pw) {
+	IPCRenderer.sendToHost('config', {
+		key: 'walletPassword',
+		value: pw,
+	});
+}
+
 // On popup upon entering an encrypted, locked wallet, enter password
 $('#enter-password').click(function() {
 	// Save password if checked
@@ -161,11 +102,28 @@ $('.save-password').click(function() {
 	}
 });
 
+// Exit popup
 $('.close').click(function() {
 	$(this).closest('.popup').hide();
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Load legacy wallet from 0.33 fork
+function loadLegacyWallet(filename, password) {
+	IPCRenderer.sendToHost('api-call', {
+		url: '/wallet/load/033x',
+		type: 'POST',
+		args: {
+			filepath: filename,
+			encryptionpassword: password,
+		},
+	}, 'load-wallet');
+}
+addResultListener('load-wallet', function(result) {
+	notify('Loaded Wallet', 'success');
+});
+
+// Load legacy wallet from 0.33 fork
 $('#load-legacy-wallet').click(function() {
 	var loadPath = IPCRenderer.sendSync('dialog', 'open', {
 		title: 'Legacy Wallet File Path',
