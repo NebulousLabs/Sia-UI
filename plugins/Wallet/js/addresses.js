@@ -21,12 +21,15 @@ function updateAddrTxn(event) {
 function makeAddress(address, number) {
 	// Make and store a jquery element for the address
 	var element = $(`
-		<div class='entry' id='` + address + `'>
-			<div class='listnum'>` + number + `</div>
-			<div class='address'>` + address + `</div>
+		<div class='entry' id=''>
+			<div class='listnum'></div>
+			<div class='address'></div>
 			<div class='copy-address'><i class='fa fa-clipboard'></i></div>
 		</div>
 	`);
+	element.attr('id', address);
+	element.find('.listnum').text(number);
+	element.find('.address').text(address);
 
 	// Make clicking this address show relevant transactions
 	element.find('.address').click(updateAddrTxn);
