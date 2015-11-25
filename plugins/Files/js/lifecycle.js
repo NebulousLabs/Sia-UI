@@ -2,8 +2,8 @@
 
 // Regularly update the file library and status
 function update() {
-	IPC.sendToHost('api-call', '/renter/files/list', 'update-list');
-	IPC.sendToHost('api-call', '/renter/status', 'update-status');
+	IPCRenderer.sendToHost('api-call', '/renter/files/list', 'update-list');
+	IPCRenderer.sendToHost('api-call', '/renter/status', 'update-status');
 	
 	updating = setTimeout(update, 15000);
 }
@@ -20,6 +20,16 @@ addResultListener('update-list', function(result) {
 	result.forEach(updateFile);
 });
 
+// Convert to Siacoin
+// TODO: Enable commas for large numbers
+function convertSiacoin(hastings) {
+	// TODO: JS automatically loses precision when taking numbers from the API.
+	// This deals with that imperfectly
+	var number = new BigNumber(Math.round(hastings).toString());
+	var ConversionFactor = new BigNumber(10).pow(24);
+	return number.dividedBy(ConversionFactor).round();
+}
+
 // Update capsule values with renter status
 // TODO /renter/status is deprecated: get price estimate from hostdb instead
 addResultListener('update-status', function(result) {
@@ -33,7 +43,7 @@ addResultListener('update-status', function(result) {
 // Called upon showing
 function start() {
 	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPC.sendToHost('devtools');
+	// IPCRenderer.sendToHost('devtools');
 	
 	// Call the API
 	update();

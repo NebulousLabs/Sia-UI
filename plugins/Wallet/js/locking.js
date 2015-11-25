@@ -30,7 +30,7 @@ function setUnencrypted() {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Locking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Lock the wallet
 function lock() {
-	IPC.sendToHost('api-call', {
+	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/lock',
 		type: 'POST',
 	}, 'locked');
@@ -45,7 +45,7 @@ addResultListener('locked', function(result) {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Unlocking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Unlock the wallet
 function unlock(password) {
-	IPC.sendToHost('api-call', {
+	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/unlock',
 		type: 'POST',
 		args: {
@@ -56,7 +56,7 @@ function unlock(password) {
 	// Password attempted, show responsive processing icon
 	setUnlocking();
 }
-IPC.on('unlocked', function(err, result) {
+IPCRenderer.on('unlocked', function(event, err, result) {
 	// Remove unlocking icon
 	if (err) {
 		setLocked();
@@ -72,9 +72,9 @@ IPC.on('unlocked', function(err, result) {
 
 // Get and use password from the UI's config.json
 function getPassword() {
-	IPC.sendToHost('config', {key: 'walletPassword'}, 'use-password');
+	IPCRenderer.sendToHost('config', {key: 'walletPassword'}, 'use-password');
 }
-IPC.on('use-password', function(pw) {
+IPCRenderer.on('use-password', function(event, pw) {
 	if (pw) {
 		unlock(pw);
 	} else {
@@ -85,7 +85,7 @@ IPC.on('use-password', function(pw) {
 
 // Save password to the UI's config.json
 function savePassword(pw) {
-	IPC.sendToHost('config', {
+	IPCRenderer.sendToHost('config', {
 		key: 'walletPassword',
 		value: pw,
 	});
@@ -94,7 +94,7 @@ function savePassword(pw) {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Encrypting ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Encrypt the wallet (only applies to first time opening)
 function encrypt() {
-	IPC.sendToHost('api-call', {
+	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/init',
 		type: 'POST',
 		args: {
@@ -108,7 +108,7 @@ addResultListener('encrypted', function(result) {
 	popup.show();
 
 	// Clear old password in config if there is one
-	IPC.sendToHost('config', {
+	IPCRenderer.sendToHost('config', {
 		key: 'walletPassword',
 		value: '',
 	});
@@ -121,7 +121,7 @@ addResultListener('encrypted', function(result) {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 function loadLegacyWallet(filename, password) {
-	IPC.sendToHost('api-call', {
+	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/load/033x',
 		type: 'POST',
 		args: {

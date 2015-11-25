@@ -2,6 +2,7 @@
 
 // Library for working with clipboard
 const Clipboard = require('clipboard');
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ General ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Used to hide subsequent steps when selecting an earlier one
 function hideSteps(steps) {
@@ -48,7 +49,7 @@ eID('new-file').onclick = function() {
 eID('upload-choice').onclick = function() {
 	hideSteps([2,3]);
 
-	var loadPath = IPC.sendSync('dialog', 'open', {
+	var loadPath = IPCRenderer.sendSync('dialog', 'open', {
 		title: 'Upload Path',
 		properties: ['openFile'],
 	});
@@ -83,7 +84,7 @@ eID('upload-file').onclick = function() {
 eID('sia-choice').onclick = function() {
 	hideSteps([2,3]);
 
-	var loadPath = IPC.sendSync('dialog', 'open', {
+	var loadPath = IPCRenderer.sendSync('dialog', 'open', {
 		title: 'Sia File Path',
 		filters: [
 			{ name: 'Sia file', extensions: ['sia'] }
@@ -149,7 +150,7 @@ eID('new-dir').onclick = function() {
 eID('upload-dir-choice').onclick = function() {
 	hideSteps(['f2','f3']);
 
-	var loadPath = IPC.sendSync('dialog', 'open', {
+	var loadPath = IPCRenderer.sendSync('dialog', 'open', {
 		title: 'Select Directory',
 		properties: ['openDirectory'],
 	});

@@ -8,7 +8,7 @@ $('#create-address').click(function() {
 		url: '/wallet/address',
 		type: 'GET',
 	};
-	IPC.sendToHost('api-call', call, 'new-address');
+	IPCRenderer.sendToHost('api-call', call, 'new-address');
 });
 
 // Button to display all wallet addresses
@@ -23,7 +23,7 @@ function sendCoin(amount, address) {
 		amount: amount.toString(),
 		destination: address,
 	};
-	IPC.sendToHost('api-call', {
+	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/siacoins',
 		type: 'POST',
 		args: transaction,
@@ -89,7 +89,7 @@ addResultListener('coin-sent', function(result) {
 // Button to load all wallet transactions
 $('#view-all-transactions').click(function() {
 	tooltip('Loading all transactions', this);
-	IPC.sendToHost('api-call', {
+	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/transactions',
 		args: {
 			startheight: 0,
@@ -167,7 +167,7 @@ $('.close').click(function() {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 $('#load-legacy-wallet').click(function() {
-	var loadPath = IPC.sendSync('dialog', 'open', {
+	var loadPath = IPCRenderer.sendSync('dialog', 'open', {
 		title: 'Legacy Wallet File Path',
 		filters: [
 			{ name: 'Legacy wallet', extensions: ['dat'] }

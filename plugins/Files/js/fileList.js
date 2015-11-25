@@ -1,5 +1,24 @@
 'use strict';
 
+// Control data size representation
+function formatBytes(bytes, decimals) {
+	if (!bytes) {
+		return '0B';
+	}
+	var k = 1000;
+	var dm = decimals + 1 || 3;
+	var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+	var i = Math.floor(Math.log(bytes + 1) / Math.log(k)); // new
+	return (bytes / Math.pow(k, i)).toPrecision(dm) + ' ' + sizes[i];
+}
+
+// Confirm deletion popup
+function confirmDelete(nickname) {
+	eID('confirm-delete').querySelector('.nickname').innerHTML = nickname;
+	var popup = eID('confirm-delete');
+	show(popup);
+}
+
 // Make or update file
 function updateFile(file) {
 	var nick = file.Nickname;

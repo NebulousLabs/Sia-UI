@@ -111,7 +111,7 @@
 
 	"maxerr"        : 100,      // Maximum errors before stopping.
 	"globals"       : {         // Extra globals.
-		"IPC": false,
+		"IPCRenderer": false,
 		"BigNumber": false,
 		"hostProperties": true,
 		"hosting": true,
