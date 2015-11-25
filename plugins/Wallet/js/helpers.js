@@ -1,6 +1,5 @@
 'use strict';
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Global Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Ensure precision
 BigNumber.config({ DECIMAL_PLACES: 30 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
@@ -14,16 +13,6 @@ function convertSiacoin(hastings) {
 	var number = new BigNumber(hastings);
 	var ConversionFactor = new BigNumber(10).pow(24);
 	return number.dividedBy(ConversionFactor).round(2);
-}
-
-// Amount has to be a number
-function isNumber(n) {
-	return !isNaN(parseFloat(n)) && isFinite(n);
-}
-
-// Address has to be lowercase hex and 76 chars
-function isAddress(str) {
-	return str.match(/^[a-f0-9]{76}$/) !== null;
 }
 
 // Notification shortcut 

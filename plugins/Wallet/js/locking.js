@@ -1,5 +1,8 @@
 'use strict';
 
+// Keeps track of wallet status results
+var wallet = {};
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Lock Icon  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Helper function for the lock-icon to make sure its classes are cleared
 function setLockIcon(lockStatus, iconClass) {
@@ -26,6 +29,33 @@ function setUnlocking() {
 function setUnencrypted() {
 	setLockIcon('Create Wallet', 'fa-plus');
 }
+
+// Update wallet summary in header
+addResultListener('update-status', function(result) {
+	wallet = result;
+
+	// Show correct lock status.
+	if (!wallet.encrypted) {
+		setUnencrypted();
+	} else if (!wallet.unlocked) {
+		setLocked();
+	} else if (wallet.unlocked) {
+		setUnlocked();
+	}
+
+	// Update balance confirmed and uncomfirmed
+	var bal = convertSiacoin(wallet.confirmedsiacoinbalance);
+	var pend = convertSiacoin(wallet.unconfirmedincomingsiacoins).sub(convertSiacoin(wallet.unconfirmedoutgoingsiacoins));
+	if (wallet.unlocked && wallet.encrypted) {
+		$('#confirmed').show();
+		$('#unconfirmed').show();
+		$('#confirmed').html('Balance: ' + bal + ' S');
+		$('#unconfirmed').html('Pending: ' + pend + ' S');
+	} else {
+		$('#confirmed').hide();
+		$('#unconfirmed').hide();
+	}
+});
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Locking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Lock the wallet
@@ -71,27 +101,6 @@ IPC.on('unlocked', function(event, err, result) {
 	update();
 });
 
-// Get and use password from the UI's config.json
-function getPassword() {
-	IPC.sendToHost('config', {key: 'walletPassword'}, 'use-password');
-}
-IPC.on('use-password', function(event, pw) {
-	if (pw) {
-		unlock(pw);
-	} else {
-		$('#request-password').show();
-		$('#password-field').focus();
-	}
-});
-
-// Save password to the UI's config.json
-function savePassword(pw) {
-	IPC.sendToHost('config', {
-		key: 'walletPassword',
-		value: pw,
-	});
-}
-
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Encrypting ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Encrypt the wallet (only applies to first time opening)
 function encrypt() {
@@ -120,17 +129,3 @@ addResultListener('encrypted', function(result) {
 	update();
 });
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-function loadLegacyWallet(filename, password) {
-	IPC.sendToHost('api-call', {
-		url: '/wallet/load/033x',
-		type: 'POST',
-		args: {
-			filepath: filename,
-			encryptionpassword: password,
-		},
-	}, 'load-wallet');
-}
-addResultListener('load-wallet', function(result) {
-	notify('Loaded Wallet', 'success');
-});

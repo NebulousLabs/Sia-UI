@@ -13,7 +13,7 @@ function updateAddrTxn(event) {
 	IPC.sendToHost('api-call', {
 		url: '/wallet/transactions/' + event.target.innerText,
 		type: 'GET',
-	}, 'update-history');
+	}, 'update-transactions');
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Address Page ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -128,6 +128,16 @@ function locationOf(element, array, start, end) {
 function addAddress(addressObject) {
 	addresses.splice(locationOf(addressObject, addresses) + 1, 0, addressObject);
 }
+
+// Address creation
+$('#create-address').click(function() {
+	tooltip('Creating...', this);
+	var call = {
+		url: '/wallet/address',
+		type: 'GET',
+	};
+	IPC.sendToHost('api-call', call, 'new-address');
+});
 
 // Add the new address and show it
 addResultListener('new-address', function(result) {
