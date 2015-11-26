@@ -14,6 +14,7 @@ Chai.use(ChaiAsPromised);
 
 // The one app that this suite is testing is Sia-UI
 describe('renderer process', function() {
+	this.timeout(5000);
 	var app;
 	var client;
 
@@ -40,6 +41,35 @@ describe('renderer process', function() {
 		if (app && app.isRunning()) {
 			return app.stop();
 		}
+	});
+
+	// Helper used to ensure a specific plugin is loaded
+	function isPluginLoaded(pluginName) {
+		return client.execute(function(name) {
+			return Plugins[name].isLoading();
+		}, pluginName).then(function(isLoading) {
+			return isLoading;
+		});
+	}
+
+	// Clicks all sidebar icons and ensures plugins are visible
+	it('navigates correctly', function() {
+		client.addCommand('showPlugin', function(name) {
+			return client.waitUntil(function() {
+					return isPluginLoaded(name);
+				})
+				.click('#' + name + '-button')
+				.waitForExist('#' + name + '-view.current')
+				.isVisible('#' + name + '-view').should.eventually.be.true;
+		});
+
+		return client
+			.waitForExist('.current')
+			.showPlugin('About')
+			.showPlugin('Wallet')
+			.showPlugin('Hosting')
+			.showPlugin('Files')
+			.showPlugin('Overview');
 	});
 
 	// Test basic startup properties
@@ -80,9 +110,6 @@ describe('renderer process', function() {
 				Crypto.randomBytes(38, pushAddress);
 			}
 		}
-		it('wait until loaded', function() {
-			return client.waitUntilWindowLoaded();
-		});
 		it('appends 10000 addresses', function(done) {
 			addNAddresses(10000, done);
 		});
