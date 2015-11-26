@@ -6,21 +6,6 @@
 		<link rel='stylesheet' href='../../css/font-awesome.min.css'>
 		<link rel='stylesheet' href='../../css/plugin-standard.css'>
 		<link rel='stylesheet' href='css/wallet.css'>
-
-		<!-- Transaction blueprint -->
-		<div class='transaction hidden' id='transactionbp'>
-			<div class='type'>
-				<div class='send'>
-					<i class='fa fa-sign-out'></i>
-				</div>
-				<div class='receive'>
-					<i class='fa fa-sign-in'></i>
-				</div>
-			</div>
-			<div class='amount'></div>
-			<div class='txnid'></div>
-			<div class='time'></div>
-		</div>
 	</head>
 	<body>
 		<!-- Frame -->
@@ -89,12 +74,10 @@
 				<div class='row'>
 					<div class='title'>
 						Transactions
-						<div class='button' id='view-all-transactions'>
-							<i class='fa fa-refresh'></i>
-						</div>
+						<input type='number' id='transaction-page' value='1'></input>
 					</div>
 					<div class='controls'>
-						<input type='number' id='transaction-amount' placeholder='Amount'>
+						<input type='number' id='transaction-value' placeholder='Amount'>
 						<select id='send-unit'>
 							<option value='1e30'>MS</option>
 							<option value='1e27'>kS</option>
@@ -152,8 +135,8 @@
 		<script src='js/helpers.js'></script>
 		<script src='js/locking.js'></script>
 		<script src='js/buttons.js'></script>
-		<script src='js/addresses.js'></script>
 		<script src='js/transactions.js'></script>
+		<script src='js/addresses.js'></script>
 		<script src='js/lifecycle.js'></script>
 	</body>
 </html>

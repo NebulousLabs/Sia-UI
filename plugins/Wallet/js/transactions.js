@@ -1,77 +1,180 @@
 'use strict';
 
+// Tracks addresses
+var transactions = [];
+// Criteria by which to view transactions
+var criteria = {
+	startHeight: 0,
+	endHeight: 1000000,
+	startTime: undefined,
+	endTime: undefined,
+	minValue: undefined,
+	maxValue: undefined,
+	fundTypes: [
+		'SiacoinInput',
+		'SiacoinOutput',
+		'SiafundInput',
+		'SiafundOutput',
+		'ClaimOutput',
+		'MinerFee',
+	],
+	confirmedHistory: true,
+	uncomfirmedHistory: true,
+	txnId: undefined,
+	address: undefined,
+};
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Updating  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Append a transaction to Transactions list
-function appendTransaction(txn) {
-	// Add only new transactions
-	if (typeof(txn) === 'undefined') { return; }
-	if ($('#' + txn.transactionid).length !== 0) { return; }
-
-	// Compute transaction net amount
-	var amount = new BigNumber(0);
-	if (txn.inputs) {
-		txn.inputs.forEach( function(input) {
-			if (input.walletaddress) {
-				amount = amount.sub(input.value);
-			}
-		});
-	}
-	if (txn.outputs) {
-		txn.outputs.forEach( function(output) {
-			if (output.walletaddress) {
-				amount = amount.add(output.value);
-			}
-		});
-	}
-
-	// Add only non-zero transactions
-	amount = convertSiacoin(amount);
-	if (amount.equals(0)) {
-		return;
-	}
-
-	// Make transaction
-	var txnElement = $('#transactionbp').clone();
-	txnElement.id = txn.transactionid;
-
-	txnElement.timestamp = txn.confirmationtimestamp * 1000;
-	var timestamp = new Date(txn.confirmationtimestamp * 1000);
-	var time = timestamp.toLocaleString();
+function makeTransaction(txn) {
+	var element = $(`
+		<div class='transaction' id='` + txn.transactionid + `'>
+			<div class='type'>
+				<div class='send'>
+					<i class='fa fa-sign-out'></i>
+				</div>
+				<div class='receive'>
+					<i class='fa fa-sign-in'></i>
+				</div>
+			</div>
+			<div class='value'></div>
+			<div class='txnid'></div>
+			<div class='time'></div>
+		</div>
+	`);
 
 	// Insert transaction values in UI
-	txnElement.find('.amount').html(amount + ' S');
-	txnElement.find('.txnid').html(txn.transactionid);
-	txnElement.find('.time').html(time);
+	element.attr('id', txn.transactionid);
+	element.find('.value').html(txn.value + ' S');
+	element.find('.txnid').html(txn.transactionid);
+	var timestamp = new Date(txn.confirmationtimestamp * 1000);
+	var time = timestamp.toLocaleString();
+	element.find('.time').html(time);
 
 	// Set transaction type
-	if (amount < 0) {
-		txnElement.find('.send').show();
-		txnElement.find('.receive').hide();
+	if (txn.value < 0) {
+		element.find('.send').show();
+		element.find('.receive').hide();
 	} else {
-		txnElement.find('.send').hide();
-		txnElement.find('.receive').show();
+		element.find('.send').hide();
+		element.find('.receive').show();
 	}
 
-	// Display transaction
-	$('#transaction-list').append(txnElement);
-	txnElement.show();
+	// Add and display transaction
+	$('#transaction-list').append(element);
 }
 
-// Update transaction history
-addResultListener('update-transactions', function(result) {
-	if (result.confirmedtransactions) {
-		// Reverse direction of transactions list (most recent first)
-		result.confirmedtransactions.reverse();
-		result.confirmedtransactions.forEach(function (txn) {
-			appendTransaction(txn);
-		});
+// Fill address page with search results or addresses
+function updateTransactionPage() {
+	$('#transaction-list').empty();
+
+	// Set page limits
+	$('#transaction-page').attr({
+		min: 1,
+		max: transactions.length === 0 ? 1 : Math.ceil(transactions.length / 25),
+	});
+
+	// Make elements for this page
+	var n = (($('#transaction-page').val() - 1) * 25);
+	transactions.slice(n, n + 25).forEach(function(processedTransaction) {
+		makeTransaction(processedTransaction);
+	});
+}
+
+// Update transactions on page navigation
+$('#transaction-page').on('input', updateTransactionPage);
+
+// Filters the transactions array down to what fits the criteria
+function filterTransactions() {
+	// Compute aggregate value of the transaction
+	transactions.forEach(function(txn) {
+		// Compute transaction net value
+		var value = new BigNumber(0);
+		if (txn.processedinputs) {
+			txn.processedinputs.forEach( function(input) {
+				if (input.walletaddress) {
+					value = value.sub(input.value);
+				}
+			});
+		}
+		if (txn.processedoutputs) {
+			txn.processedoutputs.forEach( function(output) {
+				if (output.walletaddress) {
+					value = value.add(output.value);
+				}
+			});
+		}
+		txn.value = convertSiacoin(value);
+	});
+
+	// Filter against criteria
+	transactions = transactions.filter(function(txn) {
+		// TODO
+		return true;
+	});
+}
+
+// Fill transactions array
+function getTransactions() {
+	// Decide what call to make based on criteria
+	var url, args;
+	if (criteria.txnId) {
+		args = {};
+		url = '/wallet/transaction/' + criteria.txnId;
+	} else if (criteria.address) {
+		args = {};
+		url = '/wallet/transactions/' + criteria.address;
+	} else {
+		// Default call to /wallet/tranasctions
+		url = '/wallet/transactions';
+		args = {
+			startheight: criteria.startHeight,
+			endheight: criteria.endHeight,
+		};
 	}
-	// TODO Register unconfirmed transactions
-	/*if (result.unconfirmed) {
-		result.unconfirmedtransactions.forEach(function(processedtxn) {
-		});
-	}*/
+
+	// Make call
+	IPCRenderer.sendToHost('api-call', {
+		url: url,
+		type: 'GET',
+		args: args,
+	}, 'update-transactions');
+}
+
+// Update transaction in memory with result from api call
+addResultListener('update-transactions', function(result) {
+	transactions = [];
+	// Transaction by id
+	if (result.transaction) {
+		transactions.push(result.transaction);
+	} else if (result.transactions) {
+		// Transactions by Address
+		transactions = result.transactions;
+	} else {
+		// All transactions
+		if (criteria.confirmedHistory) {
+			transactions = result.confirmedtransactions;
+		}
+		if (criteria.unconfirmedHistory) {
+			transactions = transactions.concat(result.unconfirmedtransactions);
+		}
+	}
+
+	// Reverse direction of transactions list (most recent first)
+	transactions.reverse();
+	filterTransactions();
+	updateTransactionPage();
 });
+
+// Apply new criteria and update
+function updateTransactionCriteria(newCriteria) {
+	for (var prop in newCriteria) {
+		if (newCriteria.hasOwnProperty(prop)) {
+			criteria[prop] = newCriteria[prop];
+		}
+	}
+	getTransactions();
+}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Sending  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Define send call
@@ -93,7 +196,7 @@ function sendCoin(amount, address) {
 // Transaction was sent
 addResultListener('coin-sent', function(result) {
 	notify('Transaction sent to network!', 'sent');
-	$('#transaction-amount').val('');
+	$('#transaction-value').val('');
 });
 
 // Amount has to be a number
@@ -108,14 +211,14 @@ function isAddress(str) {
 
 // Transaction has to be legitimate
 function validateTransaction(caller, callback) {
-	var amount = $('#transaction-amount').val();
+	var value = $('#transaction-value').val();
 	var unit = $('#send-unit').val();
-	var total = new BigNumber(amount).times(unit);
+	var total = new BigNumber(value).times(unit);
 	var address = $('#transaction-address').val();
 
 	// Verify number
-	if (!isNumber(amount)) {
-		tooltip('Enter numeric amount of Siacoin to send!', caller);
+	if (!isNumber(value)) {
+		tooltip('Enter numeric value of Siacoin to send!', caller);
 		return;
 	} 
 	// Verify balance
@@ -146,23 +249,10 @@ $('#confirm').click(function() {
 	if ($('#confirm').hasClass('transparent')) {
 		return;
 	}
-	validateTransaction(this, function(amount, address) {
+	validateTransaction(this, function(value, address) {
 		tooltip('Sending...', $('#confirm').get(0));
-		sendCoin(amount, address);
+		sendCoin(value, address);
 	});
 	$('#confirm').addClass('transparent');
-});
-
-// Button to load all wallet transactions
-$('#view-all-transactions').click(function() {
-	tooltip('Loading all transactions', this);
-	IPCRenderer.sendToHost('api-call', {
-		url: '/wallet/transactions',
-		args: {
-			startheight: 0,
-			endheight: 1000000,
-		},		
-		type: 'GET',
-	}, 'update-history');
 });
 

@@ -12,20 +12,12 @@ function update() {
 	// Get wallet status and balance
 	IPCRenderer.sendToHost('api-call', '/wallet', 'update-status');
 	// Get list of wallet transactions
-	IPCRenderer.sendToHost('api-call', {
-		url: '/wallet/transactions',
-		type: 'GET',
-		args: {
-			startheight: 0,
-			// Superfluous endheight to get whole history
-			endheight: 1000000,
-		}
-	}, 'update-transactions');
+	getTransactions();
 	// Get list of wallet addresses
-	IPCRenderer.sendToHost('api-call', {
-		url: '/wallet/addresses',
-		type: 'GET',
-	}, 'update-addresses');
+	//IPCRenderer.sendToHost('api-call', {
+	//	url: '/wallet/addresses',
+	//	type: 'GET',
+	//}, 'update-addresses');
 
 	updating = setTimeout(update, refreshRate);
 

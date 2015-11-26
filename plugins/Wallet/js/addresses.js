@@ -5,16 +5,7 @@ const Clipboard = require('clipboard');
 // Tracks addresses
 var addresses = [];
 // Tracks addresses fitting a search string
-var matchingAddresses = [];
-
-// Get transactions for a specific wallet address
-function updateAddrTxn(event) {
-	$('#transaction-list').empty();
-	IPCRenderer.sendToHost('api-call', {
-		url: '/wallet/transactions/' + event.target.innerText,
-		type: 'GET',
-	}, 'update-transactions');
-}
+var searchedAddresses = [];
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Address Page ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Make wallet address html element
@@ -32,7 +23,11 @@ function makeAddress(address, number) {
 	element.find('.address').text(address);
 
 	// Make clicking this address show relevant transactions
-	element.find('.address').click(updateAddrTxn);
+	element.find('.address').click(function(event) {
+		updateTransactionCriteria({
+			address: event.target.id,
+		});
+	});
 
 	// Make copy-to-clipboard button clickable
 	element.find('.copy-address').click(function() {
@@ -46,13 +41,10 @@ function makeAddress(address, number) {
 
 // Fill address page with search results or addresses
 function updateAddressPage() {
-	if (!$('#address-page').val()) {
-		return;
-	}
 	$('#address-list').empty();
 
 	// Determine if search or normal page 
-	var array = $('#search-bar').val() ? matchingAddresses : addresses;
+	var array = $('#search-bar').val() ? searchedAddresses : addresses;
 	$('#address-page').attr({
 		min: 1,
 		max: array.length === 0 ? 1 : Math.ceil(array.length / 25),
@@ -77,18 +69,15 @@ $('#address-page').on('input', updateAddressPage);
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Search ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Filter address list by search string
-function filterAddressList(searchstr) {
-	// Clear last search
-	matchingAddresses = [];
-
-	// Find matching addresses and record their original index in search array
+function filterAdresses(searchstr) {
+	// Record original index
 	addresses.forEach(function(addressObject, index) {
-		if (addressObject.address.indexOf(searchstr) > -1) {
-			matchingAddresses.push({
-				address: addressObject.address,
-				number: index + 1,
-			});
-		}
+		addressObject.number = index + 1;
+	});
+
+	// Filter
+	searchedAddresses = addresses.filter(function(addressObject) {
+		return (addressObject.address.indexOf(searchstr) > -1);
 	});
 }
 
@@ -99,7 +88,7 @@ function performSearch() {
 	// Don't search an empty string
 	if (bar.val().length !== 0) {
 		tooltip('Searching...', bar.get(0));
-		filterAddressList(bar.val());
+		filterAdresses(bar.val());
 	}
 	
 	// Reset page number and update
@@ -135,11 +124,10 @@ function addAddress(addressObject) {
 // Address creation
 $('#create-address').click(function() {
 	tooltip('Creating...', this);
-	var call = {
+	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/address',
 		type: 'GET',
-	};
-	IPCRenderer.sendToHost('api-call', call, 'new-address');
+	}, 'new-address');
 });
 
 // Add the new address and show it

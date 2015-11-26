@@ -115,13 +115,15 @@
 		"BigNumber": false,
 		"wallet": true,
 		"convertSiacoin": true,
+		"notify": true,
+		"tooltip": true,
+		"addResultListener": true,
 		"encrypt": true,
 		"lock": true,
 		"unlock": true,
 		"update": true,
-		"notify": true,
-		"tooltip": true,
-		"addResultListener": true
+		"getTransactions": true,
+		"updateTransactionCriteria": true
 	},
 	"indent"        : 4         // Specify indentation spacing
 }
