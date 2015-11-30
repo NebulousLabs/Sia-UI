@@ -170,6 +170,12 @@
 .transaction .type {
 	width: 5%;
 }
+.type.positive {
+	color: #00FF00;
+}
+.type.negative {
+	color: #FF0000;
+}
 .transaction .value {
 	width: 10%;
 	text-align: right;

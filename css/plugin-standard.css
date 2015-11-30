@@ -1,13 +1,14 @@
-/*	Style Guide: 
- *		Transparent: 70% Opacity
- *
- * 		White:      #FFFFFF
- * 		Grey-White: #F5F5F5
- *		Faint-Grey: #ECECEC
- *		Light-Grey: #DDDDDD
- *		Grey:       #C5C5C5
- * 		Grey-Black: #4A4A4A
- * 		Black:      #000000
+/*  Style Guide: 
+ *    Transparent: 70% Opacity
+ *    
+ *    White:      #FFFFFF
+ *    Grey-White: #F5F5F5
+ *    Faint-Grey: #ECECEC
+ *    Light-Grey: #DDDDDD
+ *    Grey:       #C5C5C5
+ *    Grey-Black: #4A4A4A
+ *    Black:      #000000
+ *    Neon-Green: #00CBA0
  */
 /* Overall Effects */
 @keyframes fadeout {

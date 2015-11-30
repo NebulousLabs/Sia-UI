@@ -18,8 +18,8 @@ var criteria = {
 		'claim output',
 		'miner payout',
 	],
-	confirmedtransactions: true,
-	uncomfirmedtransactions: true,
+	confirmedTransactions: true,
+	uncomfirmedTransactions: true,
 	txnId: undefined,
 	address: undefined,
 };
@@ -44,12 +44,23 @@ function makeTransaction(txn) {
 	var time = timestamp.toLocaleString();
 	element.find('.time').html(time);
 
-	// Set transaction type
-	if (txn.value < 0) {
-		element.find('.type').html(`<i class='fa fa-sign-out'></i>`);
+	// Set transaction positive or negative
+	if (txn.value > 0) {
+		element.find('.type').addClass('positive');
 	} else {
-		element.find('.type').html(`<i class='fa fa-sign-in'></i>`);
+		element.find('.type').addClass('negative');
 	}
+
+	// Set transaction type icon
+	var currencyIcon;
+	if (txn.type === 'miner') {
+		currencyIcon = '<i class=\'fa fa-heartbeat\'></i>';
+	} else if (txn.type === 'siafund') {
+		currencyIcon = '<i class=\'fa fa-diamond\'></i>';
+	} else if (txn.type === 'siacoin'){
+		currencyIcon = '<i class=\'fa fa-usd\'></i>';
+	}
+	element.find('.type').append(currencyIcon);
 
 	// Add and display transaction
 	$('#transaction-list').append(element);
@@ -81,11 +92,15 @@ function filterTransactions() {
 	transactions.forEach(function(txn) {
 		// Compute transaction net value
 		var value = new BigNumber(0);
+		var type;
 		if (txn.processedinputs) {
 			txn.processedinputs.forEach( function(input) {
 				if (input.walletaddress) {
 					value = value.sub(input.value);
 				}
+				// TODO: Imperfect way to go about determining type of
+				// transaction from 'miner', 'siacoin', or 'siafund'
+				type = input.fundtype.split(' ')[0];
 			});
 		}
 		if (txn.processedoutputs) {
@@ -93,9 +108,13 @@ function filterTransactions() {
 				if (output.walletaddress) {
 					value = value.add(output.value);
 				}
+				// TODO: Imperfect way to go about determining type of
+				// transaction from 'miner', 'siacoin', or 'siafund'
+				type = output.fundtype.split(' ')[0];
 			});
 		}
 		txn.value = convertSiacoin(value);
+		txn.type = type;
 	});
 
 	// Filter against criteria
@@ -143,10 +162,10 @@ addResultListener('update-transactions', function(result) {
 		transactions = result.transactions;
 	} else {
 		// All transactions
-		if (criteria.confirmedtransactions && result.confirmedtransactions !== null) {
+		if (criteria.confirmedTransactions && result.confirmedtransactions !== null) {
 			transactions = result.confirmedtransactions;
 		}
-		if (criteria.unconfirmedtransactions && result.unconfirmedtransactions !== null) {
+		if (criteria.unconfirmedTransactions && result.unconfirmedtransactions !== null) {
 			transactions = transactions.concat(result.unconfirmedtransactions);
 		}
 	}
