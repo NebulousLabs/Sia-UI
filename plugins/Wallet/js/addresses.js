@@ -54,6 +54,7 @@ function updateAddressPage() {
 		min: 1,
 		max: array.length === 0 ? 1 : Math.ceil(array.length / itemsPerPage),
 	});
+	$('#address-page').next().text('/' + maxPage);
 
 	// Make elements for this page
 	var n = (($('#address-page').val() - 1) * itemsPerPage);

@@ -68,7 +68,7 @@
 	padding: 0;
 	position: absolute;
 	right: 4px;
-	top: 0px;
+	top: 0;
 }
 
 /* Information Box */
@@ -95,18 +95,16 @@
 .title .button:first-child {
 	padding-right: 0;
 }
-.title input {
-	width: 42px;
-	height: 26px;
-}
 
 /* Controls */
 .controls {
+	font-size: 14px;
 	display: inline-block;
 	float: right;
-	padding-left: 0;
-	margin-left: 0;
 	width: 80%;
+	text-align: right;
+}
+.controls input {
 	text-align: right;
 }
 .transparent {

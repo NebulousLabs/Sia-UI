@@ -75,6 +75,7 @@ function updateTransactionPage() {
 		min: 1,
 		max: transactions.length === 0 ? 1 : Math.ceil(transactions.length / criteria.itemsPerPage),
 	});
+	$('#transaction-page').next().text('/' + maxPage);
 
 	// Make elements for this page
 	var n = (($('#transaction-page').val() - 1) * criteria.itemsPerPage);

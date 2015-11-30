@@ -18,9 +18,9 @@
 html,body {
 	position: relative;
 
-	margin: 0px;
-	padding: 0px;
-	border-spacing: 0px;
+	margin: 0;
+	padding: 0;
+	border-spacing: 0;
 
 	height: 100%;
 	width: 100%;
@@ -82,8 +82,8 @@ html,body {
 	height: 100%;
 
 	-webkit-box-sizing:border-box;
-	border-left: 0px solid #F5F5F5;
-	border-right: 0px solid #F5F5F5;
+	border-left: 0 solid #F5F5F5;
+	border-right: 0 solid #F5F5F5;
 }
 .button {
 	display:flex;
@@ -148,7 +148,7 @@ html,body {
 	position: absolute;
 	height: 100%;
 	min-width: calc(100% - 160px);
-	right: 0px;
+	right: 0;
 	opacity: 0;
 	z-index: -1;
 }
@@ -194,7 +194,7 @@ html,body {
 	background-color: #fff;
 	border: 1px solid #bdbdbd;
 	margin-top: 20px;
-	box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.25);
+	box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.25);
 	overflow-x: hidden;
 	overflow-y: hidden;
 	-webkit-transition: box-shadow 2s;
@@ -222,7 +222,7 @@ html,body {
 }
 .notification.hoverable:hover {
 	cursor: pointer;
-	box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.4);
+	box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.4);
 }
 .notification.type-error .icon {
 	color: #E57373;

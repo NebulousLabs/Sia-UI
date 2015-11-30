@@ -22,9 +22,9 @@
 html, body {
 	height: 100%;
 	min-width: 100%;
-	margin: 0px;
-	padding: 0px;
-	border-spacing: 0px;
+	margin: 0;
+	padding: 0;
+	border-spacing: 0;
 	font-family: 'Roboto Condensed', sans-serif;
 	font-weight: 300;
 	font-size: 18px;
@@ -60,7 +60,7 @@ html, body {
 	display: inline-block;
 	border: 1px solid #00CBA0;
 
-	border-radius: 0px;
+	border-radius: 0;
 	overflow: hidden;
 }
 .capsule .pod {
@@ -89,19 +89,14 @@ select, input {
 
 	margin: 0;
 	font-family: sans-serif;
-	font-size: 12px;
-	height: 30px;
-	padding-right: 4px;
-	padding-left: 6px;
 	box-shadow: none;
 	color:#4a4a4a;
 
 	border: solid 1px #dddddd;
 	transition: box-shadow 0.3s, border 0.3s;
+	box-sizing: content-box;
 }
 select {
-	height: 34px;
-	font-size: 16px;
 	background:#ffffff;
 }
 select:focus, input:focus {
