@@ -11,15 +11,15 @@ var criteria = {
 	minValue: undefined,
 	maxValue: undefined,
 	fundTypes: [
-		'SiacoinInput',
-		'SiacoinOutput',
-		'SiafundInput',
-		'SiafundOutput',
-		'ClaimOutput',
-		'MinerFee',
+		'siacoin input',
+		'siacoin output',
+		'siafund input',
+		'siafund output',
+		'claim output',
+		'miner payout',
 	],
-	confirmedHistory: true,
-	uncomfirmedHistory: true,
+	confirmedtransactions: true,
+	uncomfirmedtransactions: true,
 	txnId: undefined,
 	address: undefined,
 };
@@ -109,7 +109,7 @@ function filterTransactions() {
 
 	// Filter against criteria
 	transactions = transactions.filter(function(txn) {
-		// TODO
+		// TODO add criteria filtering
 		return true;
 	});
 }
@@ -152,10 +152,10 @@ addResultListener('update-transactions', function(result) {
 		transactions = result.transactions;
 	} else {
 		// All transactions
-		if (criteria.confirmedHistory) {
+		if (criteria.confirmedtransactions && result.confirmedtransactions !== null) {
 			transactions = result.confirmedtransactions;
 		}
-		if (criteria.unconfirmedHistory) {
+		if (criteria.unconfirmedtransactions && result.unconfirmedtransactions !== null) {
 			transactions = transactions.concat(result.unconfirmedtransactions);
 		}
 	}

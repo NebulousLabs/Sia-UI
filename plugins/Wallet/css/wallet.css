@@ -117,7 +117,7 @@
 .transparent:hover {
 	cursor: default;
 }
-#transaction-amount {
+#transaction-value {
 	width: 100px;
 	text-align: center;
 }
@@ -173,7 +173,7 @@
 	white-space: nowrap;
 	overflow: hidden;
 }
-.transaction .amount {
+.transaction .value {
 	display: inline-block;
 	text-align: right;
 	padding-right: 1%;
