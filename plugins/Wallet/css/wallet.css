@@ -152,49 +152,34 @@
 	padding: 0;
 	overflow-y: auto;
 }
-#transaction-list .transaction {
+.transaction {
 	padding: 10px;
 	color: #757575;
+	height:12px;
 	font-size: 14px;
 	background-color: #fff;
 	border-bottom: 1px solid #eeeeee;
 }
-#transaction-list .transaction:hover {
-	cursor: pointer;
-	background-color: #fafafa;
-}
-.transaction {
-	height:12px;
+.transaction > * {
+	display: inline-block;
+	padding-right: 1%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-align: left;
 }
 .transaction .type {
-	display: inline-block;
 	width: 5%;
-	padding-right: 1%;
-	white-space: nowrap;
-	overflow: hidden;
 }
 .transaction .value {
-	display: inline-block;
-	text-align: right;
-	padding-right: 1%;
 	width: 10%;
-	white-space: nowrap;
-	overflow: hidden;
+	text-align: right;
 }
 .transaction .txnid {
-	display: inline-block;
 	width: 60%;
-	text-align: left;
-	padding-right: 1%;
-	white-space: nowrap;
-	overflow: hidden;
 }
 .transaction .time {
-	display: inline-block;
-	text-align: center;
 	width: 20%;
-	white-space: nowrap;
-	overflow: hidden;
+	padding-right: 0;
 }
 
 /* Transactions list */

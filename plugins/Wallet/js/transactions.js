@@ -29,14 +29,7 @@ var criteria = {
 function makeTransaction(txn) {
 	var element = $(`
 		<div class='transaction' id='` + txn.transactionid + `'>
-			<div class='type'>
-				<div class='send'>
-					<i class='fa fa-sign-out'></i>
-				</div>
-				<div class='receive'>
-					<i class='fa fa-sign-in'></i>
-				</div>
-			</div>
+			<div class='type'></div>
 			<div class='value'></div>
 			<div class='txnid'></div>
 			<div class='time'></div>
@@ -53,11 +46,9 @@ function makeTransaction(txn) {
 
 	// Set transaction type
 	if (txn.value < 0) {
-		element.find('.send').show();
-		element.find('.receive').hide();
+		element.find('.type').html(`<i class='fa fa-sign-out'></i>`);
 	} else {
-		element.find('.send').hide();
-		element.find('.receive').show();
+		element.find('.type').html(`<i class='fa fa-sign-in'></i>`);
 	}
 
 	// Add and display transaction
