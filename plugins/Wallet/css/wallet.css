@@ -167,13 +167,13 @@
 	overflow: hidden;
 	text-align: left;
 }
-.transaction .type {
+.transaction .currency {
 	width: 5%;
 }
-.type.positive {
+.currency.positive {
 	color: #00FF00;
 }
-.type.negative {
+.currency.negative {
 	color: #FF0000;
 }
 .transaction .value {

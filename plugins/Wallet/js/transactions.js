@@ -1,7 +1,8 @@
 'use strict';
 
-// Tracks addresses
+// Variable to store transaction history
 var transactions = [];
+
 // Criteria by which to view transactions
 var criteria = {
 	startHeight: 0,
@@ -10,14 +11,14 @@ var criteria = {
 	endTime: undefined,
 	minValue: undefined,
 	maxValue: undefined,
-	fundTypes: [
-		'siacoin input',
-		'siacoin output',
-		'siafund input',
-		'siafund output',
-		'claim output',
-		'miner payout',
+	currency: [
+		'siacoin',
+		'siafund',
+		'claim',
+		'miner',
 	],
+	inputs: true,
+	outputs: true,
 	confirmedTransactions: true,
 	uncomfirmedTransactions: true,
 	txnId: undefined,
@@ -29,7 +30,7 @@ var criteria = {
 function makeTransaction(txn) {
 	var element = $(`
 		<div class='transaction' id='` + txn.transactionid + `'>
-			<div class='type'></div>
+			<div class='currency'></div>
 			<div class='value'></div>
 			<div class='txnid'></div>
 			<div class='time'></div>
@@ -46,21 +47,23 @@ function makeTransaction(txn) {
 
 	// Set transaction positive or negative
 	if (txn.value > 0) {
-		element.find('.type').addClass('positive');
+		element.find('.currency').addClass('positive');
 	} else {
-		element.find('.type').addClass('negative');
+		element.find('.currency').addClass('negative');
 	}
 
-	// Set transaction type icon
+	// Set transaction currency icon
 	var currencyIcon;
-	if (txn.type === 'miner') {
+	if (txn.currency === 'miner') {
 		currencyIcon = '<i class=\'fa fa-heartbeat\'></i>';
-	} else if (txn.type === 'siafund') {
+	} else if (txn.currency === 'claim') {
+		currencyIcon = '<i class=\'fa fa-percent\'></i>';
+	} else if (txn.currency === 'siafund') {
 		currencyIcon = '<i class=\'fa fa-diamond\'></i>';
-	} else if (txn.type === 'siacoin'){
+	} else if (txn.currency === 'siacoin'){
 		currencyIcon = '<i class=\'fa fa-usd\'></i>';
 	}
-	element.find('.type').append(currencyIcon);
+	element.find('.currency').append(currencyIcon);
 
 	// Add and display transaction
 	$('#transaction-list').append(element);
@@ -86,42 +89,45 @@ function updateTransactionPage() {
 // Update transactions on page navigation
 $('#transaction-page').on('input', updateTransactionPage);
 
-// Filters the transactions array down to what fits the criteria
-function filterTransactions() {
-	// Compute aggregate value of the transaction
-	transactions.forEach(function(txn) {
-		// Compute transaction net value
-		var value = new BigNumber(0);
-		var type;
-		if (txn.processedinputs) {
-			txn.processedinputs.forEach( function(input) {
-				if (input.walletaddress) {
-					value = value.sub(input.value);
-				}
-				// TODO: Imperfect way to go about determining type of
-				// transaction from 'miner', 'siacoin', or 'siafund'
-				type = input.fundtype.split(' ')[0];
-			});
-		}
-		if (txn.processedoutputs) {
-			txn.processedoutputs.forEach( function(output) {
-				if (output.walletaddress) {
-					value = value.add(output.value);
-				}
-				// TODO: Imperfect way to go about determining type of
-				// transaction from 'miner', 'siacoin', or 'siafund'
-				type = output.fundtype.split(' ')[0];
-			});
-		}
-		txn.value = convertSiacoin(value);
-		txn.type = type;
-	});
+// Check if the transaction fits the criteria
+function checkCriteria(txn) {
+	if (criteria.endTime !== undefined && txn.confirmationtimestamp > criteria.endTime) { return false; }
+	if (criteria.startTime !== undefined && txn.confirmationtimestamp < criteria.startTime) { return false; }
+	if (criteria.maxValue !== undefined && txn.value > criteria.maxValue) { return false; }
+	if (criteria.minValue !== undefined && txn.value < criteria.minValue) { return false; }
+	if (criteria.currency !== undefined && criteria.currency.indexOf(txn.currency) === -1) { return false; }
+	if (criteria.inputs === false && txn.value < 0) { return false; }
+	if (criteria.outputs === false && txn.value > 0) { return false; }
+	return true;
+}
 
-	// Filter against criteria
-	transactions = transactions.filter(function(txn) {
-		// TODO add criteria filtering
-		return true;
-	});
+// Compute aggregate value of the transaction
+function computeSum(txn) {
+	// Compute transaction net value
+	var value = new BigNumber(0);
+	var currency;
+	if (txn.inputs) {
+		txn.inputs.forEach( function(input) {
+			if (input.walletaddress) {
+				value = value.sub(input.value);
+			}
+			// TODO: Imperfect way to go about determining currency of
+			// transaction from 'miner', 'siacoin', or 'siafund'
+			currency = input.fundtype.split(' ')[0];
+		});
+	}
+	if (txn.outputs) {
+		txn.outputs.forEach( function(output) {
+			if (output.walletaddress) {
+				value = value.add(output.value);
+			}
+			// TODO: Imperfect way to go about determining currency of
+			// transaction from 'miner', 'siacoin', or 'siafund'
+			currency = output.fundtype.split(' ')[0];
+		});
+	}
+	txn.value = convertSiacoin(value);
+	txn.currency = currency;
 }
 
 // Fill transactions array
@@ -153,26 +159,27 @@ function getTransactions() {
 
 // Update transaction in memory with result from api call
 addResultListener('update-transactions', function(result) {
-	transactions = [];
+	var txns = [];
 	// Transaction by id
 	if (result.transaction) {
-		transactions.push(result.transaction);
-	} else if (result.transactions) {
+		txns.push(result.transaction);
+	} else if (result.txns) {
 		// Transactions by Address
-		transactions = result.transactions;
+		txns = result.transactions;
 	} else {
 		// All transactions
 		if (criteria.confirmedTransactions && result.confirmedtransactions !== null) {
-			transactions = result.confirmedtransactions;
+			txns = result.confirmedtransactions;
 		}
 		if (criteria.unconfirmedTransactions && result.unconfirmedtransactions !== null) {
-			transactions = transactions.concat(result.unconfirmedtransactions);
+			txns = txns.concat(result.unconfirmedtransactions);
 		}
 	}
 
 	// Reverse direction of transactions list (most recent first)
-	transactions.reverse();
-	filterTransactions();
+	txns.reverse();
+	txns.forEach(computeSum);
+	transactions = txns.filter(checkCriteria);
 	updateTransactionPage();
 });
 
