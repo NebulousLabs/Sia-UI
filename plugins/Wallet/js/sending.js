@@ -1,5 +1,44 @@
 'use strict';
 
+// By default, transactions assume Siacoin as the unit
+var unit = '1e24';
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Validation  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Amount has to be a number
+function isNumber(n) {
+	return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+// Address has to be lowercase hex and 76 chars
+function isAddress(str) {
+	return str.match(/^[a-f0-9]{76}$/) !== null;
+}
+
+// Transaction has to be legitimate
+function validateTransaction(caller, callback) {
+	var value = $('#transaction-value').val() || 0;
+	var address = $('#transaction-address').val();
+
+	// Verify number
+	if (!isNumber(value)) {
+		tooltip('Enter numeric value of Siacoin to send!', caller);
+		return;
+	} 
+	var total = new BigNumber(value).times(unit);
+	// Verify balance
+	if (wallet.confirmedsiacoinbalance < total) {
+		tooltip('Balance too low!', caller);
+		return;
+	} 
+	// Verify address
+	if (!isAddress(address)) {
+		tooltip('Enter correct address to send to!', caller);
+		return;
+	}
+
+	callback(total, address);
+}
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Sending  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Define send call
 function sendCoin(amount, address) {
@@ -23,60 +62,6 @@ addResultListener('coin-sent', function(result) {
 	$('#transaction-value').val('');
 });
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Validation  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Amount has to be a number
-function isNumber(n) {
-	return !isNaN(parseFloat(n)) && isFinite(n);
-}
-
-// Address has to be lowercase hex and 76 chars
-function isAddress(str) {
-	return str.match(/^[a-f0-9]{76}$/) !== null;
-}
-
-// Transaction has to be legitimate
-function validateTransaction(caller, callback) {
-	var value = $('#transaction-value').val() || 0;
-	var unit = $('#send-unit').val();
-	var total = new BigNumber(value).times(unit);
-	var address = $('#transaction-address').val();
-
-	// Verify number
-	if (!isNumber(value)) {
-		tooltip('Enter numeric value of Siacoin to send!', caller);
-		return;
-	} 
-	// Verify balance
-	if (wallet.confirmedsiacoinbalance < total) {
-		tooltip('Balance too low!', caller);
-		return;
-	} 
-	// Verify address
-	if (!isAddress(address)) {
-		tooltip('Enter correct address to send to!', caller);
-		return;
-	}
-
-	callback(total, address);
-}
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Buttons  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Show the transaction making frame
-$('#new-transaction').click(function() {
-	//if (!wallet.unlocked) {
-	//	tooltip('Can\'t make a transaction while the wallet is locked!', this);
-	//	return;
-	//}
-	$(this).closest('.frame').hide();
-	$('#make-transaction').show();
-});
-
-// Hide the transaction making frame
-$('.back').click(function() {
-	$(this).closest('.frame').hide();
-	$('#wallet').show();
-});
-
 // Button to send coin
 $('#send-money').click(function() {
 	validateTransaction(this, function() {
@@ -98,5 +83,70 @@ $('#confirm').click(function() {
 	$('#confirm').addClass('transparent');
 });
 
-// Calculate input fields based on changed one
-//function ()
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Responsive Fields  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Calculate input fields based on changed field
+function calculateFields(event) {
+	// Update total with correct unit
+	var bal;
+	if (unit !== '1') {
+		bal = wallet.confirmedsiacoinbalance;
+	} else {
+		bal = wallet.siafundbalance;
+	}
+	var total = new BigNumber(bal).dividedBy(unit);
+	$('#total').val(total);
+
+	// Update other two fields
+	var changedElement = event ? event.target : null;
+	var tosend = $('#tosend');
+	var remaining = $('#remaining');
+	if (changedElement !== tosend.get(0)) {
+		tosend.val(total.minus(remaining.val()));
+	}
+	if (changedElement !== remaining.get(0)) {
+		remaining.val(total.minus(tosend.val()));
+	}
+
+	// Check for negative numbers
+	if (tosend.val() < 0) {
+		tosend.val(0);
+		remaining.val(total);
+	}
+	if (remaining.val() < 0) {
+		remaining.val(0);
+		tosend.val(total);
+	}
+}
+
+$('#make-transaction').find('input').change(calculateFields);
+
+// Make sure all fields are the same unit
+$('#make-transaction').find('select').change(function() {
+	var units = $('#make-transaction').find('select');
+	unit = this.value;
+	units.val(unit);
+	if (unit === '1') {
+		units.addClass('siafund');
+	} else {
+		units.removeClass('siafund');
+	}
+	calculateFields();
+});
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Navigation  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Show the transaction making frame
+$('#new-transaction').click(function() {
+	if (!wallet.unlocked) {
+		tooltip('Can\'t make a transaction while the wallet is locked!', this);
+		return;
+	}
+	$(this).closest('.frame').hide();
+	$('#make-transaction').show();
+});
+
+// Hide the transaction making frame
+$('.back').click(function() {
+	$(this).closest('.frame').hide();
+	$('#wallet').show();
+});
+

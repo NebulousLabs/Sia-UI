@@ -1,13 +1,14 @@
-/*	Style Guide: 
- *		Transparent: 70% Opacity
- *
- * 		White:      #FFFFFF
- * 		Grey-White: #F5F5F5
- *		Faint-Grey: #ECECEC
- *		Light-Grey: #DDDDDD
- *		Grey:       #C5C5C5
- * 		Grey-Black: #4A4A4A
- * 		Black:      #000000
+/*  Style Guide: 
+ *    Transparent: 70% Opacity
+ *    
+ *    White:      #FFFFFF
+ *    Grey-White: #F5F5F5
+ *    Faint-Grey: #ECECEC
+ *    Light-Grey: #DDDDDD
+ *    Grey:       #C5C5C5
+ *    Grey-Black: #4A4A4A
+ *    Black:      #000000
+ *    Neon-Green: #00CBA0
  */
 /* Password box */
 .popup {
@@ -105,7 +106,7 @@
 	text-align: right;
 }
 .controls input {
-	height: 30px;
+	height: 28px;
 }
 /* Somewhat convoluted way to make spinner buttons appear cleanly on the left
  * side of the page numbers
@@ -120,21 +121,21 @@ input.page {
 input.page:focus {
 	box-shadow: none;
 }
-input.page[type=number]::-webkit-inner-spin-button { 
+.page[type=number]::-webkit-inner-spin-button { 
 	-webkit-appearance: none; 
 	margin: 0; 
 	cursor: pointer;
 }
-input.page[type=number]::-webkit-inner-spin-button:before,
-input.page[type=number]::-webkit-inner-spin-button:after {
+.page[type=number]::-webkit-inner-spin-button:before,
+.page[type=number]::-webkit-inner-spin-button:after {
 	content: "^";
 	position: absolute;
 	right: 0px;
 }
-input.page[type=number]::-webkit-inner-spin-button:before {
+.page[type=number]::-webkit-inner-spin-button:before {
 	top: 0;
 }
-input.page[type=number]::-webkit-inner-spin-button:after {
+.page[type=number]::-webkit-inner-spin-button:after {
 	bottom: 0;
 	-webkit-transform: scale(1, -1);
 }
@@ -200,9 +201,23 @@ input.page[type=number]::-webkit-inner-spin-button:after {
 }
 
 /* Make Transaction Frame */
-.col-1-2 {
+.halfpage {
+	display: inline-block;
 	text-align: center;
-	width: 50%;
+	width: 49%;
+	text-align: center;
+}
+.halfpage > * {
+	display: block;
+}
+.field input {
+	text-align: right;
+}
+.siafund {
+	background-color: #00CBA0;
+}
+#transaction-address {
+	width: 200px;
 }
 .transparent {
 	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
@@ -212,17 +227,6 @@ input.page[type=number]::-webkit-inner-spin-button:after {
 .transparent:hover {
 	cursor: default;
 }
-#transaction-value {
-	width: 100px;
-	text-align: center;
-}
-#send-unit {
-	width: 60px;
-}
-#transaction-address {
-	width: 200px;
-}
-
 
 /* Address list */
 #address-list {
@@ -266,4 +270,6 @@ input.page[type=number]::-webkit-inner-spin-button:after {
 	display: inline-block;
 	width: 25px;
 }
-
+#search-bar {
+	width: 300px;
+}
