@@ -8,6 +8,7 @@ const BrowserWindow = Electron.BrowserWindow;
 const Tray = Electron.Tray;
 const Dialog = Electron.dialog;
 const Menu = Electron.Menu;
+const GlobalShortcut = Electron.globalShortcut;
 const Path = require('path');
 const contextMenu = Menu.buildFromTemplate(require('./js/contextMenu.js'));
 const appMenu = Menu.buildFromTemplate(require('./js/appMenu.js'));
@@ -57,9 +58,26 @@ function startMainWindow() {
 
 // Quit when no renderer windows detected
 App.on('window-all-closed', App.quit);
+App.on('will-quit', function() {
+  // Unregister all shortcuts.
+  GlobalShortcut.unregisterAll();
+});
 
 // When Electron loading has finished, start the daemon then the UI
-App.on('ready', startMainWindow);
+App.on('ready', function() {
+	startMainWindow();
+	
+	// Add hotkey shortcut to view plugin devtools
+	var shortcut;
+	if (process.platform ==='darwin') {
+		shortcut = 'Alt+Command+P';
+	} else {
+		shortcut = 'Ctrl+Shift+P';
+	}
+	GlobalShortcut.register(shortcut, function() {
+		mainWindow.webContents.executeJavaScript('Plugins.Current.toggleDevTools();');
+	});
+});
 
 // Listen for if the renderer process wants to produce a dialog message
 IPCMain.on('dialog', function(event, type, options) {
