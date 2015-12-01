@@ -9,7 +9,7 @@
 	</head>
 	<body>
 		<!-- Frame -->
-		<div class='frame'>
+		<div class='frame' id='wallet'>
 			<!-- Header -->
 			<div class='header'>
 				<div class='title'>Wallet</div>
@@ -70,29 +70,16 @@
 			</div>
 
 			<!-- Transactions Box -->
-			<div class='box'>
+			<div class='box' id='transaction-box'>
 				<div class='row'>
 					<div class='title'>
 						Transactions
+						<div class='button' id='new-transaction'>
+							<i class='fa fa-plus'></i>
+						</div>
 					</div>
 					<div class='controls'>
-						<input type='number' id='transaction-value' placeholder='Amount'>
-						<select id='send-unit'>
-							<option value='1e30'>MS</option>
-							<option value='1e27'>kS</option>
-							<option value='1e24'selected='selected'>S</option>
-							<option value='1e21'>mS</option>
-							<option value='1e18'>&#956S</option>
-						</select>	
-						<input type='text' id='transaction-address' placeholder='Send to address'>
-						<div class='button' id='send-money'>
-							<i class='fa fa-sign-out'></i>
-						</div>
-						<div class='button transparent' id='confirm'>
-							<i class='fa fa-check-circle'></i>
-							Confirm?
-						</div>
-						<input type='number' id='transaction-page' value='1'>
+						<input type='number' class='page' id='transaction-page' value='1'>
 						<span>/MAX_PAGE</span>
 					</div>
 				</div>
@@ -105,18 +92,17 @@
 				<div class='row'>
 					<div class='title'>
 						Addresses
+						<div class='button' id='create-address'>
+							<i class='fa fa-plus'></i>
+						</div>
 					</div>
 					<div class='controls'>
 						<input type='search' id='search-bar' placeholder='Search addresses'></input>
-						<div class='button' id='create-address'>
-							<i class='fa fa-plus'></i>
-							Create Address
-						</div>
 						<!--div class='button' id='load-legacy-wallet'>
 							<i class='fa fa-folder-open-o'></i>
 							Load Legacy Wallet
 						</div-->
-						<input type='number' id='address-page' value='1'>
+						<input type='number' class='page' id='address-page' value='1'>
 						<span>/MAX_PAGE</span>
 					</div>
 				</div>
@@ -124,7 +110,67 @@
 				</div>
 			</div>
 		</div>
-		
+	
+		<!-- Make Transaction Frame-->
+		<div class='frame hidden' id='make-transaction'>
+			<div class='header'>
+				<div class='back button'>
+					<i class='fa fa-chevron-left'></i>
+				</div>
+				<div class='title'>
+					Make Transaction
+				</div>
+			</div>
+
+			<div class='col-1-2'>
+				<div class='field'>
+					<input type='number' id='total' placeholder='Total'>
+					<select>
+						<option value='1e30'>MS</option>
+						<option value='1e27'>kS</option>
+						<option value='1e24'selected='selected'>S</option>
+						<option value='1e21'>mS</option>
+						<option value='1e18'>&#956S</option>
+						<option class='siafund' value='1'>Siafund</option>
+					</select>	
+				</div>
+				<div class='field'>
+					<input type='number' id='tosend' placeholder='To Send'>
+					<select>
+						<option value='1e30'>MS</option>
+						<option value='1e27'>kS</option>
+						<option value='1e24'selected='selected'>S</option>
+						<option value='1e21'>mS</option>
+						<option value='1e18'>&#956S</option>
+						<option class='siafund' value='1'>Siafund</option>
+					</select>	
+				</div>
+				<div class='field'>
+					<input type='number' id='remaining' placeholder='Remaining'>
+					<select>
+						<option value='1e30'>MS</option>
+						<option value='1e27'>kS</option>
+						<option value='1e24'selected='selected'>S</option>
+						<option value='1e21'>mS</option>
+						<option value='1e18'>&#956S</option>
+						<option class='siafund' value='1'>Siafund</option>
+					</select>	
+				</div>
+			</div>
+
+			<div class='col-1-2'>
+				<input type='text' id='transaction-address' placeholder='Send to address'>
+				<div class='button' id='send-money'>
+					<i class='fa fa-sign-out'></i>
+					Send
+				</div>
+				<div class='button' id='confirm'>
+					<i class='fa fa-check-circle'></i>
+					Confirm?
+				</div>
+			</div>
+		</div>
+	
 		<!-- JS -->
 		<script>
 			// Library for communicating with Sia-UI
@@ -138,6 +184,7 @@
 		<script src='js/locking.js'></script>
 		<script src='js/buttons.js'></script>
 		<script src='js/transactions.js'></script>
+		<script src='js/sending.js'></script>
 		<script src='js/addresses.js'></script>
 		<script src='js/lifecycle.js'></script>
 	</body>

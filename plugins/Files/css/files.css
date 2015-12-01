@@ -93,19 +93,7 @@ input {
 	width: 100%;
 	display: inline-block;
 	text-align: center;
-	margin: 0;
-	font-family: sans-serif;
-	appearance: none;
 	box-shadow: none;
-	border-radius: 4px;
-	color: #4a4a4a;
-
-	transition: box-shadow 0.3s, border 0.3s;
-}
-input:focus {
-	outline: none;
-	border: solid 1px #4a4a4a;
-	box-shadow: 0 0 5px 1px #c5c5c5;
 }
 
 /* File browser and list */

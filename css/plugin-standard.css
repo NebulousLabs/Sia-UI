@@ -84,17 +84,15 @@ html, body {
 /** Form elements */
 select, input {
 	position: relative;
-	top: 10%;
-	transform: translateY(-10%);
 
 	margin: 0;
-	font-family: sans-serif;
 	box-shadow: none;
 	color:#4a4a4a;
 
 	border: solid 1px #dddddd;
 	transition: box-shadow 0.3s, border 0.3s;
 	box-sizing: content-box;
+	border-radius: 4px;
 }
 select {
 	background:#ffffff;

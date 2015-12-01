@@ -105,25 +105,38 @@
 	text-align: right;
 }
 .controls input {
+	height: 30px;
+}
+/* Somewhat convoluted way to make spinner buttons appear cleanly on the left
+ * side of the page numbers
+ */
+input.page {
+	font-family: 'Roboto Condensed', sans-serif;
+	font-size: 14px;
 	text-align: right;
+	border: 0;
+	background-color: #f5f5f5;
 }
-.transparent {
-	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
-	opacity: 0;
-	display: none;
+input.page:focus {
+	box-shadow: none;
 }
-.transparent:hover {
-	cursor: default;
+input.page[type=number]::-webkit-inner-spin-button { 
+	-webkit-appearance: none; 
+	margin: 0; 
+	cursor: pointer;
 }
-#transaction-value {
-	width: 100px;
-	text-align: center;
+input.page[type=number]::-webkit-inner-spin-button:before,
+input.page[type=number]::-webkit-inner-spin-button:after {
+	content: "^";
+	position: absolute;
+	right: 0px;
 }
-#send-unit {
-	width: 60px;
+input.page[type=number]::-webkit-inner-spin-button:before {
+	top: 0;
 }
-#transaction-address {
-	width: 200px;
+input.page[type=number]::-webkit-inner-spin-button:after {
+	bottom: 0;
+	-webkit-transform: scale(1, -1);
 }
 
 /* Box List */
@@ -186,7 +199,32 @@
 	padding-right: 0;
 }
 
-/* Transactions list */
+/* Make Transaction Frame */
+.col-1-2 {
+	text-align: center;
+	width: 50%;
+}
+.transparent {
+	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
+	opacity: 0;
+	display: none;
+}
+.transparent:hover {
+	cursor: default;
+}
+#transaction-value {
+	width: 100px;
+	text-align: center;
+}
+#send-unit {
+	width: 60px;
+}
+#transaction-address {
+	width: 200px;
+}
+
+
+/* Address list */
 #address-list {
 	background-color: #fafafa;
 	height: calc(100% - 60px);
