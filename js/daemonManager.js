@@ -14,10 +14,10 @@ function DaemonManager() {
 	var siaCommand;
 	// The localhost:port (default is 9980)
 	var address;
-	// Tracks if siad is running
-	this.Running = false;
 	// To keep a reference to the DaemonManager inside its functions
 	var self = this;
+	// Tracks if siad is running
+	self.Running = false;
 
 	/**
 	 * Relays calls to daemonAPI with the localhost:port address appended
@@ -38,6 +38,7 @@ function DaemonManager() {
 
 	/**
 	 * Detects whether siad is running on the current address
+	 * @function DaemonManager#ifSiad
 	 * @param {function} isRunning - function to run if Siad is running
 	 * @param {function} isNotRunning - function to run if Siad is not running
 	 */
@@ -52,22 +53,7 @@ function DaemonManager() {
 		});
 	}
 
-	/**
-	 * Checks if there is an update available
-	 * @function DaemonManager#update
-	 */
-	function updatePrompt() {
-		// Update check will delay API calls until successful. Will wait the
-		// duration that it takes to load up the blockchain.
-		apiCall('/daemon/updates/check', function(err, update) {
-			// TODO: proper update checking; maybe use GitHub API?
-			UI.notify('Sia client up to date!', 'success');
-		});
-	}
-
-	/**
-	 * Polls the siad API until it comes online
-	 */
+	// Polls the siad API until it comes online
 	function waitForSiad() {
 		ifSiad(function() {
 			UI.notify('Started siad!', 'success');
@@ -78,9 +64,7 @@ function DaemonManager() {
 		});
 	}
 	
-	/**
-	 * Starts the daemon as a long running background process
-	 */
+	// Starts the daemon as a long running background process
 	function start() {
 		ifSiad(function() {
 			UI.notify('attempted to start siad when it was already running', 'error');
@@ -142,13 +126,14 @@ function DaemonManager() {
 	 */
 	function init(config) {
 		setConfig(config, function() {
-			ifSiad(updatePrompt, start);
+			ifSiad(function() {
+				UI.notify('siad is running!', 'success');
+			}, start);
 		});
 	}
 
 	// Make certain functions public
 	this.init = init;
 	this.apiCall = apiCall;
-	this.update = updatePrompt;
 	this.ifSiad = ifSiad;
 }

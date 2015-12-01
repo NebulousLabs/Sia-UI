@@ -252,9 +252,6 @@ function UIManager() {
 			Daemon.init(config);
 			Plugins.init(config);
 		});
-		$('#update-button').click(function() {
-			Daemon.update();
-		});
 	};
 
 	/**
