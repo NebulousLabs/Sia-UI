@@ -221,7 +221,7 @@ function UIManager() {
 		}
 
 		showNotification(message, type, clickAction);
-	};
+	}
 	this.notify = notify;
 
 	/**
