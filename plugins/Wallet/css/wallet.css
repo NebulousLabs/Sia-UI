@@ -111,9 +111,11 @@
 /* Somewhat convoluted way to make spinner buttons appear cleanly on the left
  * side of the page numbers
  */
-input.page {
+input {
 	font-family: 'Roboto Condensed', sans-serif;
-	font-size: 14px;
+	font-size: 16px;
+}
+input.page {
 	text-align: right;
 	border: 0;
 	background-color: #f5f5f5;
@@ -203,15 +205,27 @@ input.page:focus {
 /* Make Transaction Frame */
 .halfpage {
 	display: inline-block;
-	text-align: center;
+	height: calc(100% - 60px);
 	width: 49%;
 	text-align: center;
+	vertical-align: top;
 }
-.halfpage > * {
+.halfpage .row {
+	margin-bottom: 4px;
+	padding: 0;
 	display: block;
+	height: 33%;
+	position: relative;
 }
-.field input {
-	text-align: right;
+.centered {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-right: -50%;
+	transform: translate(-50%, -50%);
+}
+.halfpage .button {
+	font-size: 30px;
 }
 .siafund {
 	background-color: #00CBA0;

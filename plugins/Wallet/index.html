@@ -123,50 +123,80 @@
 			</div>
 
 			<div class='halfpage'>
-				<div class='field'>
-					<input type='number' readonly id='total' min='0' placeholder='Total'>
-					<select id='transaction-unit'>
-						<option value='1e30'>MS</option>
-						<option value='1e27'>kS</option>
-						<option value='1e24'selected='selected'>S</option>
-						<option value='1e21'>mS</option>
-						<option value='1e18'>&#956S</option>
-						<option class='siafund' value='1'>Siafund</option>
-					</select>	
+				<div class='row'>
+					<div class='centered'>
+						<div>
+							Total Balance:
+						</div>
+						<input type='number' readonly id='total' min='0' placeholder='0'>
+						<select id='transaction-unit'>
+							<option value='1e30'>MS</option>
+							<option value='1e27'>kS</option>
+							<option value='1e24'selected='selected'>S</option>
+							<option value='1e21'>mS</option>
+							<option value='1e18'>&#956S</option>
+							<option class='siafund' value='1'>Siafund</option>
+						</select>	
+					</div>
 				</div>
-				<div class='field'>
-					<input type='number' id='tosend' min='0' placeholder='To Send'>
-					<select>
-						<option value='1e30'>MS</option>
-						<option value='1e27'>kS</option>
-						<option value='1e24'selected='selected'>S</option>
-						<option value='1e21'>mS</option>
-						<option value='1e18'>&#956S</option>
-						<option class='siafund' value='1'>Siafund</option>
-					</select>	
+				<div class='row'>
+					<div class='centered'>
+						<div>
+							Amount To Send:
+						</div>
+						<input type='number' id='amount' min='0' placeholder='0'>
+						<select>
+							<option value='1e30'>MS</option>
+							<option value='1e27'>kS</option>
+							<option value='1e24'selected='selected'>S</option>
+							<option value='1e21'>mS</option>
+							<option value='1e18'>&#956S</option>
+							<option class='siafund' value='1'>Siafund</option>
+						</select>	
+					</div>
 				</div>
-				<div class='field'>
-					<input type='number' id='remaining' min='0' placeholder='Remaining'>
-					<select>
-						<option value='1e30'>MS</option>
-						<option value='1e27'>kS</option>
-						<option value='1e24'selected='selected'>S</option>
-						<option value='1e21'>mS</option>
-						<option value='1e18'>&#956S</option>
-						<option class='siafund' value='1'>Siafund</option>
-					</select>	
+				<div class='row'>
+					<div class='centered'>
+						<div>
+							Remaining Balance:
+						</div>
+						<input type='number' id='remaining' min='0' placeholder='0'>
+						<select>
+							<option value='1e30'>MS</option>
+							<option value='1e27'>kS</option>
+							<option value='1e24'selected='selected'>S</option>
+							<option value='1e21'>mS</option>
+							<option value='1e18'>&#956S</option>
+							<option class='siafund' value='1'>Siafund</option>
+						</select>	
+					</div>
 				</div>
 			</div>
 
 			<div class='halfpage'>
-				<input type='text' id='transaction-address' placeholder='Send to address'>
-				<div class='button' id='send-money'>
-					<i class='fa fa-sign-out'></i>
-					Send
+				<div class='row'>
+					<div class='centered'>
+						<div>
+							Target Address:
+						</div>
+						<input type='text' id='transaction-address' placeholder='Send to address'>
+					</div>
 				</div>
-				<div class='button transparent' id='confirm'>
-					<i class='fa fa-check-circle'></i>
-					Confirm?
+				<div class='row'>
+					<div class='centered'>
+						<div class='button' id='send-money'>
+							<i class='fa fa-sign-out'></i>
+							Send
+						</div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='centered'>
+						<div class='button transparent' id='confirm'>
+							<i class='fa fa-check-circle'></i>
+							Confirm?
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

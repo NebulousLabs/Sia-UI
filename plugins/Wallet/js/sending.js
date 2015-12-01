@@ -98,23 +98,25 @@ function calculateFields(event) {
 
 	// Update other two fields
 	var changedElement = event ? event.target : null;
-	var tosend = $('#tosend');
+	var amount = $('#amount');
 	var remaining = $('#remaining');
-	if (changedElement !== tosend.get(0)) {
-		tosend.val(total.minus(remaining.val()));
+	if (changedElement !== amount.get(0)) {
+		var r = remaining.val() || '0';
+		amount.val(total.minus(r));
 	}
 	if (changedElement !== remaining.get(0)) {
-		remaining.val(total.minus(tosend.val()));
+		var a = amount.val() || '0';
+		remaining.val(total.minus(a));
 	}
 
 	// Check for negative numbers
-	if (tosend.val() < 0) {
-		tosend.val(0);
+	if (amount.val() < 0) {
+		amount.val(0);
 		remaining.val(total);
 	}
 	if (remaining.val() < 0) {
 		remaining.val(0);
-		tosend.val(total);
+		amount.val(total);
 	}
 }
 
@@ -142,6 +144,7 @@ $('#new-transaction').click(function() {
 	}
 	$(this).closest('.frame').hide();
 	$('#make-transaction').show();
+	calculateFields();
 });
 
 // Hide the transaction making frame
