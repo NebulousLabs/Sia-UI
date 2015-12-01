@@ -21,12 +21,16 @@ function validateTransaction(caller, callback) {
 
 	// Verify number
 	if (!isNumber(value)) {
-		tooltip('Enter numeric value of Siacoin to send!', caller);
+		tooltip('Enter numeric value to send!', caller);
 		return;
 	} 
-	var total = new BigNumber(value).times(unit);
 	// Verify balance
-	if (wallet.confirmedsiacoinbalance < total) {
+	var total = new BigNumber(value).times(unit);
+	// TODO: Sending siafunds is gravitous. Should make the whole wallet have a
+	// 'Siafund' mode. Add this option to the wallet settings page
+	// TODO: Add a wallet settings page
+	var bal = unit === '1' ? wallet.confirmedsiacoinbalance : wallet.siafundbalance;
+	if (bal < total) {
 		tooltip('Balance too low!', caller);
 		return;
 	} 
@@ -41,25 +45,26 @@ function validateTransaction(caller, callback) {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Sending  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Define send call
-function sendCoin(amount, address) {
+function sendTransaction(amount, address) {
+	var url = unit !== '1' ? '/wallet/siacoins' : '/wallet/siafunds';
 	var transaction = {
 		amount: amount.toString(),
 		destination: address,
 	};
 	IPCRenderer.sendToHost('api-call', {
-		url: '/wallet/siacoins',
+		url: url,
 		type: 'POST',
 		args: transaction,
 	}, 'coin-sent');
-
-	// Reflect it asap
-	setTimeout(update, 100);
 }
 
 // Transaction was sent
 addResultListener('coin-sent', function(result) {
 	notify('Transaction sent to network!', 'sent');
-	$('#transaction-value').val('');
+	$('#transaction-value').val('0');
+
+	// Reflect it asap
+	setTimeout(update, 100);
 });
 
 // Button to send coin
@@ -76,9 +81,9 @@ $('#confirm').click(function() {
 	if ($('#confirm').hasClass('transparent')) {
 		return;
 	}
-	validateTransaction(this, function(value, address) {
+	validateTransaction(this, function(total, address) {
 		tooltip('Sending...', $('#confirm').get(0));
-		sendCoin(value, address);
+		sendTransaction(total, address);
 	});
 	$('#confirm').addClass('transparent');
 });
@@ -98,25 +103,25 @@ function calculateFields(event) {
 
 	// Update other two fields
 	var changedElement = event ? event.target : null;
-	var amount = $('#amount');
-	var remaining = $('#remaining');
-	if (changedElement !== amount.get(0)) {
-		var r = remaining.val() || '0';
-		amount.val(total.minus(r));
+	var amountJQ = $('#amount');
+	var remainingJQ = $('#remaining');
+	if (changedElement !== amountJQ.get(0)) {
+		var r = remainingJQ.val() || '0';
+		amountJQ.val(total.minus(r));
 	}
-	if (changedElement !== remaining.get(0)) {
-		var a = amount.val() || '0';
-		remaining.val(total.minus(a));
+	if (changedElement !== remainingJQ.get(0)) {
+		var a = amountJQ.val() || '0';
+		remainingJQ.val(total.minus(a));
 	}
 
 	// Check for negative numbers
-	if (amount.val() < 0) {
-		amount.val(0);
-		remaining.val(total);
+	if (amountJQ.val() < 0) {
+		amountJQ.val(0);
+		remainingJQ.val(total);
 	}
-	if (remaining.val() < 0) {
-		remaining.val(0);
-		amount.val(total);
+	if (remainingJQ.val() < 0) {
+		remainingJQ.val(0);
+		amountJQ.val(total);
 	}
 }
 
@@ -124,13 +129,13 @@ $('#make-transaction').find('input').change(calculateFields);
 
 // Make sure all fields are the same unit
 $('#make-transaction').find('select').change(function() {
-	var units = $('#make-transaction').find('select');
+	var unitJQs = $('#make-transaction').find('select');
 	unit = this.value;
-	units.val(unit);
+	unitJQs.val(unit);
 	if (unit === '1') {
-		units.addClass('siafund');
+		unitJQs.addClass('siafund');
 	} else {
-		units.removeClass('siafund');
+		unitJQs.removeClass('siafund');
 	}
 	calculateFields();
 });

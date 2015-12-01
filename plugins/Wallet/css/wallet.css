@@ -111,11 +111,12 @@
 /* Somewhat convoluted way to make spinner buttons appear cleanly on the left
  * side of the page numbers
  */
-input {
+input, select {
 	font-family: 'Roboto Condensed', sans-serif;
 	font-size: 16px;
 }
 input.page {
+	font-size: 14px;
 	text-align: right;
 	border: 0;
 	background-color: #f5f5f5;
