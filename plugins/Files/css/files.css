@@ -45,18 +45,8 @@
 	overflow: auto;
 	padding: 10px;
 }
-.popup .button {
-	padding: 8px;
-	font-size: 22px;
-}
 .popup p {
 	padding: 8px;
-}
-
-/* Header */
-.header .button {
-	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
-	padding: 0px;
 }
 
 /* Information Box */
@@ -77,21 +67,14 @@
 .button {
 	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
 	display: inline-block;
-	font-size: 24px;
-	padding: 12px;
+	font-size: 20px;
+	padding: 8px;
 }
 
 /* Controls */
 .controls {
 	display: inline-block;
 	float: left;
-}
-.controls .button {
-	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
-	display: inline-block;
-	font-size: 20px;
-	padding: 0px;
-	padding-right: 30px;
 }
 .transparent {
 	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
