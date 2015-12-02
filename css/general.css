@@ -55,20 +55,19 @@ html,body {
 .logo {
 	padding-left: 20px;
 	padding-top: 14px;
-
 	pointer-events: none;
 }
 
 /* Header Buttons */
 .header-button {
 	float: right;
-	display: inline-block;
+	display: none;
 	padding: 30px;
 	font-size: 16px;
 	color: #AAAAAA;
 }
 .header-button:hover {
-	color: #888888;
+	color: #00CBA0;
 	cursor: pointer;
 }
 
@@ -207,7 +206,7 @@ html,body {
 	line-height: 80px;
 	font-size: 48px;
 	text-align: center;
-	color: #bdbdbd;
+	color: #00CBA0;
 	background-color: #f5f5f5;
 	border-right: 1px solid #eeeeee;
 }

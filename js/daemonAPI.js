@@ -45,10 +45,9 @@ function sendCall(url, type, args, callback) {
 			}
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
-			var errcode = textStatus + ' ' + jqXHR.status + ' ' + errorThrown;
 			// jqXHR is the XmlHttpRequest that jquery returns back on error
-			var errmsg = jqXHR.responseText;
-			callback(errcode + ' ' + errmsg);
+			var errcode = textStatus + ' ' + jqXHR.status + ' ' + errorThrown + ' ' + jqXHR.responseText;
+			callback(errcode);
 		},
 		data: args
 	});

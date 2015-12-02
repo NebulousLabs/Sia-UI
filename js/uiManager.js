@@ -190,7 +190,7 @@ function UIManager() {
 	 * @param {function} clickAction The function to call upon the user
 	 * clicking the notification
 	 */
-	this.notify = function notify(message, type, clickAction) {
+	function notify(message, type, clickAction) {
 		// Record errors for reference
 		if (type === 'error') {
 			if (!errorLog) {
@@ -221,7 +221,8 @@ function UIManager() {
 		}
 
 		showNotification(message, type, clickAction);
-	};
+	}
+	this.notify = notify;
 
 	/**
 	 * Refreshes notification of a certain type
@@ -237,11 +238,38 @@ function UIManager() {
 		}, 2500);
 	};
 
+	// Checks if there is an update available
+	function checkUpdate() {
+		$.ajax({
+			url: 'https://api.github.com/repos/NebulousLabs/Sia-UI/releases',
+			type: 'GET',
+			success: function(responseData, textStatus, jqXHR) {
+				// If version matches latest release version, do nothing
+				if (responseData[0].tag_name === require('./package.json').version) {
+					return;
+				}
+
+				// If not, provide links to UI release page
+				var updatePage = function() {
+					Shell.openExternal('https://github.com/NebulousLabs/Sia-UI/releases');
+				};
+				$('#update-ui').show().click(updatePage);
+				notify('Update available for UI', 'update', updatePage);
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				// jqXHR is the XmlHttpRequest that jquery returns back on error
+				var errCode = textStatus + ' ' + jqXHR.status + ' ' + errorThrown + ' ' + jqXHR.responseText;
+				notify('Update check failed: ' + errCode, 'error');
+			},
+		});
+	}
+
 	/**
 	* Called at window.onready, initalizes the UI
 	* @function UIManager#init
 	*/
 	this.init = function() {
+		checkUpdate();
 		Config.load(configPath, function(config) {
 			memConfig = config;
 
@@ -251,9 +279,6 @@ function UIManager() {
 			// Init other manager classes
 			Daemon.init(config);
 			Plugins.init(config);
-		});
-		$('#update-button').click(function() {
-			Daemon.update();
 		});
 	};
 
