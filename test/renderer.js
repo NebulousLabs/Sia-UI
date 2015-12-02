@@ -6,6 +6,7 @@ const Chai = require('chai');
 const ChaiAsPromised = require('chai-as-promised');
 const Path = require('path');
 const Crypto = require('crypto');
+const Fs = require('fs');
 
 // Chai's should syntax is executed to edit Object to have Object.should
 var should = Chai.should();
@@ -54,6 +55,7 @@ describe('renderer process', function() {
 
 	// Clicks all sidebar icons and ensures plugins are visible
 	it('navigates correctly', function() {
+		this.timeout(5000);
 		client.addCommand('showPlugin', function(name) {
 			return client.waitUntil(function() {
 					return isPluginLoaded(name);
@@ -112,6 +114,17 @@ describe('renderer process', function() {
 		}
 		it('appends 10000 addresses', function(done) {
 			addNAddresses(10000, done);
+		});
+		// Provide a json sample of transaction history to load into the UI
+		it.skip('loads transaction history', function(done) {
+			client.execute(function(jsonPath) {
+				var transactions = require(jsonPath);
+				Plugins.Wallet.on('did-finish-load', function() {
+					Plugins.Wallet.sendToView('update-transactions', null, transactions);
+				});
+			}, './test/transactions.json').then(function() {
+				done();
+			});
 		});
 	});
 });

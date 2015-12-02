@@ -6,12 +6,12 @@
  * @type {Object}
  */ 
 const defaultConfig = {
-	homePlugin: 'Overview',
+	homePlugin:  'Overview',
 	siadAddress: 'http://localhost:9980',
-	width: 800,
-	height: 600,
-	x: 0,
-	y: 0
+	width:       800,
+	height:      600,
+	x:           0,
+	y:           0,
 };
 
 /**

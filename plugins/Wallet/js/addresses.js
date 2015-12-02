@@ -5,31 +5,31 @@ const Clipboard = require('clipboard');
 // Tracks addresses
 var addresses = [];
 // Tracks addresses fitting a search string
-var matchingAddresses = [];
-
-// Get transactions for a specific wallet address
-function updateAddrTxn(event) {
-	$('#transaction-list').empty();
-	IPCRenderer.sendToHost('api-call', {
-		url: '/wallet/transactions/' + event.target.innerText,
-		type: 'GET',
-	}, 'update-history');
-}
+var searchedAddresses = [];
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Address Page ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Make wallet address html element
 function makeAddress(address, number) {
 	// Make and store a jquery element for the address
 	var element = $(`
-		<div class='entry' id='` + address + `'>
-			<div class='listnum'>` + number + `</div>
-			<div class='address'>` + address + `</div>
-			<div class='copy-address'><i class='fa fa-clipboard'></i></div>
+		<div class='entry' id=''>
+			<div class='listnum'></div>
+			<div class='address'></div>
+			<div class='copy-address'>
+				<i class='fa fa-clipboard'></i>
+			</div>
 		</div>
 	`);
+	element.attr('id', address);
+	element.find('.listnum').text(number);
+	element.find('.address').text(address);
 
 	// Make clicking this address show relevant transactions
-	element.find('.address').click(updateAddrTxn);
+	element.find('.address').click(function(event) {
+		updateTransactionCriteria({
+			address: event.target.id,
+		});
+	});
 
 	// Make copy-to-clipboard button clickable
 	element.find('.copy-address').click(function() {
@@ -43,21 +43,21 @@ function makeAddress(address, number) {
 
 // Fill address page with search results or addresses
 function updateAddressPage() {
-	if (!$('#address-page').val()) {
-		return;
-	}
+	// TODO: Merge this into Transaction's filter criteria and make an overall
+	// settings object, perhaps just as a member of the `wallet` object
+	var itemsPerPage = 25;
 	$('#address-list').empty();
 
 	// Determine if search or normal page 
-	var array = $('#search-bar').val() ? matchingAddresses : addresses;
+	var array = $('#search-bar').val() ? searchedAddresses : addresses;
 	$('#address-page').attr({
 		min: 1,
-		max: array.length === 0 ? 1 : Math.ceil(array.length / 25),
+		max: array.length === 0 ? 1 : Math.ceil(array.length / itemsPerPage),
 	});
 
 	// Make elements for this page
-	var n = (($('#address-page').val() - 1) * 25);
-	array.slice(n, n + 25).forEach(function(addressObject, index) {
+	var n = (($('#address-page').val() - 1) * itemsPerPage);
+	array.slice(n, n + itemsPerPage).forEach(function(addressObject, index) {
 		var number = addressObject.number || n + index + 1;
 		makeAddress(addressObject.address, number);
 	});
@@ -74,18 +74,15 @@ $('#address-page').on('input', updateAddressPage);
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Search ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Filter address list by search string
-function filterAddressList(searchstr) {
-	// Clear last search
-	matchingAddresses = [];
-
-	// Find matching addresses and record their original index in search array
+function filterAdresses(searchstr) {
+	// Record original index
 	addresses.forEach(function(addressObject, index) {
-		if (addressObject.address.indexOf(searchstr) > -1) {
-			matchingAddresses.push({
-				address: addressObject.address,
-				number: index + 1,
-			});
-		}
+		addressObject.number = index + 1;
+	});
+
+	// Filter
+	searchedAddresses = addresses.filter(function(addressObject) {
+		return (addressObject.address.indexOf(searchstr) > -1);
 	});
 }
 
@@ -96,7 +93,7 @@ function performSearch() {
 	// Don't search an empty string
 	if (bar.val().length !== 0) {
 		tooltip('Searching...', bar.get(0));
-		filterAddressList(bar.val());
+		filterAdresses(bar.val());
 	}
 	
 	// Reset page number and update
@@ -125,14 +122,24 @@ function locationOf(element, array, start, end) {
 }
 
 // Insert address into the sorted array
-function addAddress(address) {
-	addresses.splice(locationOf(address, addresses) + 1, 0, address);
+function addAddress(addressObject) {
+	addresses.splice(locationOf(addressObject, addresses) + 1, 0, addressObject);
 }
 
-// Add the new address
+// Address creation
+$('#create-address').click(function() {
+	tooltip('Creating...', this);
+	IPCRenderer.sendToHost('api-call', {
+		url: '/wallet/address',
+		type: 'GET',
+	}, 'new-address');
+});
+
+// Add the new address and show it
 addResultListener('new-address', function(result) {
 	notify('New address created', 'created');
-	addAddress(result.address);
-	filterAddressList(result.address);
+	addAddress(result);
+	$('#search-bar').val(result.address);
+	performSearch();
 });
 
