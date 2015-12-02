@@ -5,31 +5,32 @@ var transactions = [];
 
 // Criteria by which to view transactions
 var criteria = {
-	startHeight: 0,
-	endHeight: 1000000,
-	startTime: undefined,
-	endTime: undefined,
-	minValue: undefined,
-	maxValue: undefined,
+	startHeight:             0,
+	endHeight:               1000000,
+	startTime:               undefined,
+	endTime:                 undefined,
+	minValue:                undefined,
+	maxValue:                undefined,
 	currency: [
 		'siacoin',
 		'siafund',
 		'claim',
 		'miner',
 	],
-	inputs: true,
-	outputs: true,
-	confirmedTransactions: true,
+	inputs:                  true,
+	outputs:                 true,
+	confirmedTransactions:   true,
 	uncomfirmedTransactions: true,
-	txnId: undefined,
-	address: undefined,
+	txnId:                   undefined,
+	address:                 undefined,
+	itemsPerPage:            25,
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Updating  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Append a transaction to Transactions list
 function makeTransaction(txn) {
 	var element = $(`
-		<div class='transaction' id='` + txn.transactionid + `'>
+		<div class='transaction' id=''>
 			<div class='currency'></div>
 			<div class='value'></div>
 			<div class='txnid'></div>
@@ -53,17 +54,13 @@ function makeTransaction(txn) {
 	}
 
 	// Set transaction currency icon
-	var currencyIcon;
-	if (txn.currency === 'miner') {
-		currencyIcon = '<i class=\'fa fa-heartbeat\'></i>';
-	} else if (txn.currency === 'claim') {
-		currencyIcon = '<i class=\'fa fa-percent\'></i>';
-	} else if (txn.currency === 'siafund') {
-		currencyIcon = '<i class=\'fa fa-diamond\'></i>';
-	} else if (txn.currency === 'siacoin'){
-		currencyIcon = '<i class=\'fa fa-usd\'></i>';
-	}
-	element.find('.currency').append(currencyIcon);
+	var currencyIcon = {
+		miner:   'fa fa-heartbeat',
+		claim:   'fa fa-percent',
+		siafund: 'fa fa-diamond',
+		siacoin: 'fa fa-usd',
+	}[txn.currency];
+	element.find('.currency').append('<i class=\'' + currencyIcon + '\'></i>');
 
 	// Add and display transaction
 	$('#transaction-list').append(element);
@@ -76,12 +73,12 @@ function updateTransactionPage() {
 	// Set page limits
 	$('#transaction-page').attr({
 		min: 1,
-		max: transactions.length === 0 ? 1 : Math.ceil(transactions.length / 25),
+		max: transactions.length === 0 ? 1 : Math.ceil(transactions.length / criteria.itemsPerPage),
 	});
 
 	// Make elements for this page
-	var n = (($('#transaction-page').val() - 1) * 25);
-	transactions.slice(n, n + 25).forEach(function(processedTransaction) {
+	var n = (($('#transaction-page').val() - 1) * criteria.itemsPerPage);
+	transactions.slice(n, n + criteria.itemsPerPage).forEach(function(processedTransaction) {
 		makeTransaction(processedTransaction);
 	});
 }
@@ -89,16 +86,17 @@ function updateTransactionPage() {
 // Update transactions on page navigation
 $('#transaction-page').on('input', updateTransactionPage);
 
-// Check if the transaction fits the criteria
+// Returns if the transaction fits the criteria
 function checkCriteria(txn) {
-	if (criteria.endTime !== undefined && txn.confirmationtimestamp > criteria.endTime) { return false; }
-	if (criteria.startTime !== undefined && txn.confirmationtimestamp < criteria.startTime) { return false; }
-	if (criteria.maxValue !== undefined && txn.value > criteria.maxValue) { return false; }
-	if (criteria.minValue !== undefined && txn.value < criteria.minValue) { return false; }
-	if (criteria.currency !== undefined && criteria.currency.indexOf(txn.currency) === -1) { return false; }
-	if (criteria.inputs === false && txn.value < 0) { return false; }
-	if (criteria.outputs === false && txn.value > 0) { return false; }
-	return true;
+	// Checks each criteria value if it's relaxed or if the transaction passes
+	// Failing one check returns false but passing all checks returns true
+	return (criteria.endTime   === undefined || txn.confirmationtimestamp <= criteria.endTime)   &&
+	       (criteria.startTime === undefined || txn.confirmationtimestamp >= criteria.startTime) &&
+	       (criteria.maxValue  === undefined || txn.value                 <= criteria.maxValue)  &&
+	       (criteria.minValue  === undefined || txn.value                 >= criteria.minValue)  &&
+	       (criteria.currency  === undefined || criteria.currency.indexOf(txn.currency) !== -1)  &&
+	       (criteria.inputs    === true      || txn.value                 >= 0)                  &&
+	       (criteria.outputs   === true      || txn.value                 <= 0);
 }
 
 // Compute aggregate value of the transaction

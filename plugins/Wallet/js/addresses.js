@@ -15,7 +15,9 @@ function makeAddress(address, number) {
 		<div class='entry' id=''>
 			<div class='listnum'></div>
 			<div class='address'></div>
-			<div class='copy-address'><i class='fa fa-clipboard'></i></div>
+			<div class='copy-address'>
+				<i class='fa fa-clipboard'></i>
+			</div>
 		</div>
 	`);
 	element.attr('id', address);
@@ -41,18 +43,21 @@ function makeAddress(address, number) {
 
 // Fill address page with search results or addresses
 function updateAddressPage() {
+	// TODO: Merge this into Transaction's filter criteria and make an overall
+	// settings object, perhaps just as a member of the `wallet` object
+	var itemsPerPage = 25;
 	$('#address-list').empty();
 
 	// Determine if search or normal page 
 	var array = $('#search-bar').val() ? searchedAddresses : addresses;
 	$('#address-page').attr({
 		min: 1,
-		max: array.length === 0 ? 1 : Math.ceil(array.length / 25),
+		max: array.length === 0 ? 1 : Math.ceil(array.length / itemsPerPage),
 	});
 
 	// Make elements for this page
-	var n = (($('#address-page').val() - 1) * 25);
-	array.slice(n, n + 25).forEach(function(addressObject, index) {
+	var n = (($('#address-page').val() - 1) * itemsPerPage);
+	array.slice(n, n + itemsPerPage).forEach(function(addressObject, index) {
 		var number = addressObject.number || n + index + 1;
 		makeAddress(addressObject.address, number);
 	});

@@ -7,7 +7,7 @@ var wallet = {};
 // Helper function for the lock-icon to make sure its classes are cleared
 function setLockIcon(lockStatus, iconClass) {
 	$('#lock-status').html(lockStatus);
-	$('#lock-icon').className = 'fa ' + iconClass;
+	$('#lock-icon').get(0).className = 'fa ' + iconClass;
 }
 
 // Markup changes to reflect locked state
