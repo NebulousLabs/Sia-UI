@@ -1,7 +1,7 @@
 'use strict';
 
 // Template for OSX app menu commands
-var template = [
+module.exports = [
 	{
 		label: 'Edit',
 		submenu: [
@@ -15,6 +15,3 @@ var template = [
 		]
 	},
 ];
-
-// Exports the menu template
-module.exports = template;

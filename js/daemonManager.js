@@ -6,8 +6,6 @@
  * @class DaemonManager
  */
 function DaemonManager() {
-	// API namespace for API access logic
-	var API = require('./js/daemonAPI');
 	// The location of the folder containing siad
 	var siaPath;
 	// The command to start siad
@@ -31,9 +29,29 @@ function DaemonManager() {
 			call = {url: call};
 		}
 
-		// Add the localhost address and port to the url
+		// Add the localhost address and port to the url and default values
 		call.url = address + call.url;
-		API.makeCall(call, callback);
+
+		// Set success handler
+		call.success = function(responseData, textStatus, jqXHR) {
+			// Catches improperly constructed JSONs that JSON.parse would
+			// normally return a weird error on
+			try {
+				callback(null, JSON.parse(responseData), textStatus, jqXHR);
+			} catch(e) {
+				callback('Malformed JSON result! Response was: ' + responseData);
+			}
+		};
+
+		// Set error handler
+		call.error = function(jqXHR, textStatus, errorThrown) {
+			// jqXHR is the XmlHttpRequest that jquery returns back on error
+			var errcode = textStatus + ' ' + jqXHR.status + ' ' + errorThrown + ' ' + jqXHR.responseText;
+			callback(errcode);
+		};
+
+		// Make the call
+		$.ajax(call);
 	}
 
 	/**
