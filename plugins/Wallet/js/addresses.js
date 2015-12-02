@@ -50,9 +50,10 @@ function updateAddressPage() {
 
 	// Determine if search or normal page 
 	var array = $('#search-bar').val() ? searchedAddresses : addresses;
+	var maxPage = array.length === 0 ? 1 : Math.ceil(array.length / itemsPerPage);
 	$('#address-page').attr({
 		min: 1,
-		max: array.length === 0 ? 1 : Math.ceil(array.length / itemsPerPage),
+		max: maxPage,
 	});
 	$('#address-page').next().text('/' + maxPage);
 

@@ -99,7 +99,7 @@
 
 /* Controls */
 .controls {
-	font-size: 14px;
+	font-size: 16px;
 	display: inline-block;
 	float: right;
 	width: 80%;
@@ -108,39 +108,23 @@
 .controls input {
 	height: 28px;
 }
-/* Somewhat convoluted way to make spinner buttons appear cleanly on the left
- * side of the page numbers
- */
 input, select {
-	font-family: 'Roboto Condensed', sans-serif;
 	font-size: 16px;
 }
-input.page {
-	font-size: 14px;
+input[type=number] {
 	text-align: right;
+}
+.page {
 	border: 0;
 	background-color: #f5f5f5;
 }
-input.page:focus {
+.page:focus {
 	box-shadow: none;
+	border: 0;
 }
-.page[type=number]::-webkit-inner-spin-button { 
+.page::-webkit-inner-spin-button { 
 	-webkit-appearance: none; 
-	margin: 0; 
-	cursor: pointer;
-}
-.page[type=number]::-webkit-inner-spin-button:before,
-.page[type=number]::-webkit-inner-spin-button:after {
-	content: "^";
-	position: absolute;
-	right: 0px;
-}
-.page[type=number]::-webkit-inner-spin-button:before {
-	top: 0;
-}
-.page[type=number]::-webkit-inner-spin-button:after {
-	bottom: 0;
-	-webkit-transform: scale(1, -1);
+	margin: 0;
 }
 
 /* Box List */
@@ -207,32 +191,38 @@ input.page:focus {
 .halfpage {
 	display: inline-block;
 	height: calc(100% - 60px);
-	width: 49%;
+	width: 50%;
 	text-align: center;
 	vertical-align: top;
 }
-.halfpage .row {
-	margin-bottom: 4px;
+#make-transaction .row {
 	padding: 0;
 	display: block;
 	height: 33%;
 	position: relative;
 }
 .centered {
+	width: 100%;
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	margin-right: -50%;
 	transform: translate(-50%, -50%);
 }
-.halfpage .button {
+#make-transaction input[type=number], #make-transaction select {
+    height: 40px;
+    width: 100px;
+    font-size: 26px;
+}
+#make-transaction .button {
 	font-size: 30px;
 }
 .siafund {
 	background-color: #00CBA0;
 }
 #transaction-address {
-	width: 200px;
+	width: 80%;
+	height: 28px;
 }
 .transparent {
 	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */

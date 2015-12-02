@@ -26,7 +26,7 @@ function validateTransaction(caller, callback) {
 	} 
 	// Verify balance
 	var total = new BigNumber(value).times(unit);
-	// TODO: Sending siafunds is gravitous. Should make the whole wallet have a
+	// TODO: Sending siafunds is momentous. Should make the whole wallet have a
 	// 'Siafund' mode. Add this option to the wallet settings page
 	// TODO: Add a wallet settings page
 	var bal = unit === '1' ? wallet.confirmedsiacoinbalance : wallet.siafundbalance;

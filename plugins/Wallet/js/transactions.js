@@ -71,9 +71,10 @@ function updateTransactionPage() {
 	$('#transaction-list').empty();
 
 	// Set page limits
+	var maxPage = transactions.length === 0 ? 1 : Math.ceil(transactions.length / criteria.itemsPerPage);
 	$('#transaction-page').attr({
 		min: 1,
-		max: transactions.length === 0 ? 1 : Math.ceil(transactions.length / criteria.itemsPerPage),
+		max: maxPage,
 	});
 	$('#transaction-page').next().text('/' + maxPage);
 
