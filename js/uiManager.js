@@ -4,11 +4,11 @@
  * The first renderer process, handles initializing all other managers
  * @class UIManager
  */
-function UIManager() {
+module.exports = (function UIManager() {
 	// Config namespace for config management logic
-	var Config = require('./js/uiConfig.js');
+	var Config = require('./uiConfig');
 	// Config.json variables
-	var configPath = Path.join(__dirname, 'config.json');
+	var configPath = Path.join(__dirname, '..', 'config.json');
 	// Config variable held in working memory
 	var memConfig;
 	// Variable to track error log
@@ -142,7 +142,7 @@ function UIManager() {
 	 * @param {string} content The message to display in tooltip
 	 * @param {Object} offset The dimensions of the element to display over
 	 */
-	this.tooltip = function(content, offset) {
+	function tooltip(content, offset) {
 		offset = offset || {
 			top: 0,
 			left: 0,
@@ -222,7 +222,6 @@ function UIManager() {
 
 		showNotification(message, type, clickAction);
 	}
-	this.notify = notify;
 
 	/**
 	 * Refreshes notification of a certain type
@@ -230,7 +229,7 @@ function UIManager() {
 	 * @param {string} type The form of notification
 	 * TODO: Imperfect way to find notification
 	 */
-	this.renotify = function(type) {
+	function renotify(type) {
 		var notif = $('.type-' + type).first();
 		clearTimeout(notificationTimeout);
 		notificationTimeout = setTimeout(function() {
@@ -245,7 +244,7 @@ function UIManager() {
 			type: 'GET',
 			success: function(responseData, textStatus, jqXHR) {
 				// If version matches latest release version, do nothing
-				if (responseData[0].tag_name === require('./package.json').version) {
+				if (responseData[0].tag_name === require('../package.json').version) {
 					return;
 				}
 
@@ -268,7 +267,7 @@ function UIManager() {
 	* Called at window.onready, initalizes the UI
 	* @function UIManager#init
 	*/
-	this.init = function() {
+	function init() {
 		checkUpdate();
 		Config.load(configPath, function(config) {
 			memConfig = config;
@@ -286,7 +285,7 @@ function UIManager() {
 	* Called at window.beforeunload, closes the UI
 	* @function UIManager#kill
 	*/
-	this.kill = function(ev) {
+	function kill(ev) {
 		// Close the error write stream
 		if (errorLog) {
 			errorLog.end();
@@ -304,7 +303,7 @@ function UIManager() {
 		Config.save(memConfig, configPath);
 	};
 
-	this.config = function(args) {
+	function config(args) {
 		if (args.value === undefined) {
 			return memConfig[args.key];
 		} else {
@@ -312,4 +311,13 @@ function UIManager() {
 			return args.value;
 		}
 	};
-}
+
+	return {
+		init: init,
+		kill: kill,
+		tooltip: tooltip,
+		notify: notify,
+		renotify: renotify,
+		config: config,
+	};
+}());

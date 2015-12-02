@@ -12,7 +12,7 @@ function download(nickname) {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/download',
 		type: 'GET',
-		args: {
+		data: {
 			nickname: nickname,
 			destination: savePath,
 		},
@@ -26,7 +26,7 @@ function share(nickname) {
 	// Make a request to get the ascii share string
 	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/shareascii',
-		args: {
+		data: {
 			nickname: nickname,
 		}
 	}, 'shared');
@@ -46,7 +46,7 @@ function upload(filePath, nickname) {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/upload',
 		type: 'GET',
-		args: {
+		data: {
 			source: filePath,
 			nickname: nickname,
 		},
@@ -61,7 +61,7 @@ addResultListener('uploaded', function(result) {
 function loadDotSia(filePath) {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/load',
-		args: {
+		data: {
 			filename: filePath,
 		}
 	}, 'file-loaded');
@@ -104,7 +104,7 @@ function uploadDir(dirPath, nickname) {
 function loadAscii(ascii) {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/loadascii',
-		args: {
+		data: {
 			file: ascii,
 		}
 	}, 'ascii-loaded');
@@ -119,7 +119,7 @@ function deleteFile(nickname) {
 	// Make the request to delete the file.
 	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/delete',
-		args: {
+		data: {
 			nickname: nickname,
 		}
 	}, 'deleted');

@@ -5,7 +5,7 @@
  * provides functions to interact with it
  * @class DaemonManager
  */
-function DaemonManager() {
+module.exports = (function DaemonManager() {
 	// The location of the folder containing siad
 	var siaPath;
 	// The command to start siad
@@ -13,7 +13,7 @@ function DaemonManager() {
 	// The localhost:port (default is 9980)
 	var address;
 	// To keep a reference to the DaemonManager inside its functions
-	var self = this;
+	var self = {};
 	// Tracks if siad is running
 	self.Running = false;
 
@@ -91,17 +91,17 @@ function DaemonManager() {
 
 			// daemon logs output to files
 			var out, err;
-			Fs.open(Path.join(__dirname, siaPath, 'daemonOut.log'), 'w', function(e, filedescriptor) {
+			Fs.open(Path.join(siaPath, 'daemonOut.log'), 'w', function(e, filedescriptor) {
 				out = filedescriptor;
 			});
-			Fs.open(Path.join(__dirname, siaPath, 'daemonErr.log'), 'w', function(e, filedescriptor) {
+			Fs.open(Path.join(siaPath, 'daemonErr.log'), 'w', function(e, filedescriptor) {
 				err = filedescriptor;
 			});
 
 			// daemon process has to be detached without parent stdio pipes
 			var processOptions = {
 				stdio: ['ignore', out, err],
-				cwd: Path.join(__dirname, siaPath),
+				cwd: siaPath,
 			};
 			var daemonProcess = new Process(siaCommand, processOptions);
 
@@ -131,7 +131,7 @@ function DaemonManager() {
 	 * @param {callback} callback
 	 */
 	function setConfig(config, callback) {
-		siaPath = 'Sia';
+		siaPath = Path.join(__dirname, '..', 'Sia');
 		siaCommand = process.platform === 'win32' ? './siad.exe' : './siad';
 		address = config.siadAddress;
 		callback();
@@ -150,8 +150,9 @@ function DaemonManager() {
 		});
 	}
 
-	// Make certain functions public
-	this.init = init;
-	this.apiCall = apiCall;
-	this.ifSiad = ifSiad;
-}
+	// Make certain members public
+	self.init = init;
+	self.apiCall = apiCall;
+	self.ifSiad = ifSiad;
+	return self;
+}());

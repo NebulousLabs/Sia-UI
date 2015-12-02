@@ -78,7 +78,7 @@ function unlock(password) {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/unlock',
 		type: 'POST',
-		args: {
+		data: {
 			encryptionpassword : password,
 		},
 	}, 'unlocked');
@@ -106,7 +106,7 @@ function encrypt() {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/init',
 		type: 'POST',
-		args: {
+		data: {
 			dictionary: 'english',
 		},
 	}, 'encrypted');
@@ -133,7 +133,7 @@ function loadLegacyWallet(filename, password) {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/load/033x',
 		type: 'POST',
-		args: {
+		data: {
 			filepath: filename,
 			encryptionpassword: password,
 		},

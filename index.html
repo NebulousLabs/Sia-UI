@@ -47,8 +47,13 @@
 				<div class='content'></div>
 			</div>
 		</div>
+
 		<!-- Javascript -->
 		<script> 
+			// The following variables occupy the global namespace and should
+			// be limited to what's absolutely necessary
+
+			// Imported Electron modules
 			const Electron = require('electron');
 			const IPCRenderer = Electron.ipcRenderer;
 			const WebFrame = Electron.webFrame;
@@ -56,18 +61,21 @@
 			const Shell = Electron.shell;
 			const Remote = Electron.remote;
 			const mainWindow = Remote.getCurrentWindow();
+
+			// Imported Node modules
 			const Process = require('child_process').spawn;
 			const Path = require('path');
 			const Fs = require('fs');
+
+			// Imported Node packages
 			const $ = require('jquery');
-		</script>
-		<script src='js/daemonManager.js'></script>
-		<script src='js/pluginManager.js'></script>
-		<script src='js/uiManager.js'></script>
-		<script>
-			var UI = new UIManager();
-			var Daemon = new DaemonManager();
-			var Plugins = new PluginManager();
+
+			// Imported closures that manage the UI
+			var UI = require('./js/uiManager.js');
+			var Daemon = require('./js/daemonManager.js');
+			var Plugins = require('./js/pluginManager.js');
+
+			// Window start, stop, and right-click events
 			window.onload = UI.init;
 			window.onbeforeunload = UI.kill;
 			window.addEventListener('contextmenu', function (e) {

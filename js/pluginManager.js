@@ -4,15 +4,15 @@
  * PluginManager manages all plugin logic for the UI
  * @class PluginManager
  */
-function PluginManager() {
+module.exports = (function PluginManager() {
 	// Plugin constructor
-	var Plugin = require('./js/plugin');
+	var Plugin = require('./plugin');
 	// The home view to be opened first
 	var home;
 	// The plugins folder
 	var plugPath;
 	// reference to `this` to use in functions
-	var self = this;
+	var self = {};
 
 	/**
 	 * Detects the home Plugin or otherwise the alphabetically first
@@ -194,8 +194,12 @@ function PluginManager() {
 	 * @function PluginManager.init
 	 * @param {config} config - config in memory
 	 */
-	this.init = function(config) {
-		plugPath = Path.join(__dirname, 'plugins');
+	function init(config) {
+		plugPath = Path.join(__dirname, '..', 'plugins');
 		setConfig(config, initPlugins);
 	};
-}
+
+	// Make certain members public
+	self.init = init;
+	return self;
+}());
