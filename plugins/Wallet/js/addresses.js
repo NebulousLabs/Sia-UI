@@ -14,12 +14,14 @@ function makeAddress(address, number) {
 	var element = $(`
 		<div class='entry' id=''>
 			<div class='listnum'></div>
-			<div class='address'></div>
+			<div class='button address'>
+				<i class='fa fa-search fa-flip-horizontal'></i>
+			</div>
 		</div>
 	`);
 	element.attr('id', address);
 	element.find('.listnum').text(number);
-	element.find('.address').text(address);
+	element.find('.address').append(address);
 
 	// Make clicking this address show relevant transactions
 	element.find('.address').click(function(event) {
@@ -145,7 +147,11 @@ $('#create-address').click(function() {
 addResultListener('new-address', function(result) {
 	notify('New address created', 'created');
 	addAddress(result);
+	
+	// Display only the created address
 	$('#search-bar').val(result.address);
-	performSearch();
+	filterAdresses(result.address);
+	$('#address-page').val(1);
+	updateAddressPage();
 });
 

@@ -58,14 +58,13 @@
 }
 
 /* Address list */
-#address-list .entry:hover {
-	cursor: pointer;
-	background-color: #fafafa;
-}
 .listnum {
+	width: 5%;
 	display: inline-block;
 }
-.address {
+.address.button {
+	font-size: 14px;
+	padding: 0;
 	display: inline-block;
 	text-align: left;
 }
