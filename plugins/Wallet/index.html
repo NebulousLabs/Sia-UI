@@ -6,6 +6,7 @@
 		<link rel='stylesheet' href='../../css/font-awesome.min.css'>
 		<link rel='stylesheet' href='../../css/plugin-standard.css'>
 		<link rel='stylesheet' href='css/wallet.css'>
+		<link rel='stylesheet' href='css/lists.css'>
 	</head>
 	<body>
 		<!-- Frame -->
@@ -26,9 +27,7 @@
 			<!-- Popups -->
 			<div class='popup hidden' id='request-password'>
 				<div class='row'>
-					<div class='title'>
-						Enter your password
-					</div>
+					<div class='title'> Enter your password </div>
 					<div class='button close'>
 						<i class='fa fa-times'></i>
 					</div>
@@ -44,9 +43,7 @@
 
 			<div class='popup hidden' id='show-password'>
 				<div class='row'>
-					<div class='title'>
-						Welcome to your Sia Wallet!
-					</div>
+					<div class='title'> Welcome to your Sia Wallet!  </div>
 					<div class='button close'>
 						<i class='fa fa-times'></i>
 					</div>
@@ -72,11 +69,9 @@
 			<!-- Transactions Box -->
 			<div class='box' id='transaction-box'>
 				<div class='row'>
-					<div class='title'>
+					<div class='title button' id='view-all-transactions'>
+						<i class='fa fa-refresh'></i>
 						Transactions
-						<div class='button' id='new-transaction'>
-							<i class='fa fa-plus'></i>
-						</div>
 					</div>
 					<div class='controls'>
 						<input type='number' class='page' id='transaction-page' value='1'><span>/MAX_PAGE</span>
@@ -84,16 +79,17 @@
 				</div>
 				<div class='list' id='transaction-list'>
 				</div>
+				<div class='floating button' id='create-transaction'>
+					<i class='fa fa-plus'></i>
+				</div>
 			</div>
 
 			<!-- Addresses Box -->
 			<div class='box' id='address-box'>
 				<div class='row'>
-					<div class='title'>
+					<div class='title button' id='view-all-addresses'>
+						<i class='fa fa-refresh'></i>
 						Addresses
-						<div class='button' id='create-address'>
-							<i class='fa fa-plus'></i>
-						</div>
 					</div>
 					<div class='controls'>
 						<input type='search' id='search-bar' placeholder='Search addresses'></input>
@@ -106,6 +102,9 @@
 				</div>
 				<div class='list' id='address-list'>
 				</div>
+				<div class='floating button' id='create-address'>
+					<i class='fa fa-plus'></i>
+				</div>
 			</div>
 		</div>
 	
@@ -115,18 +114,14 @@
 				<div class='back button'>
 					<i class='fa fa-chevron-left'></i>
 				</div>
-				<div class='title'>
-					Make Transaction
-				</div>
+				<div class='title'> Make Transaction </div>
 			</div>
 
 			<div class='halfpage'>
 				<div class='row'>
 					<div class='centered'>
-						<div>
-							Total Balance:
-						</div>
-						<input type='number' readonly id='total' min='0' placeholder='0'>
+						<div> Total Balance: </div>
+						<input type='number' readonly id='total' min='0'>
 						<select id='transaction-unit'>
 							<option value='1e30'>MS</option>
 							<option value='1e27'>kS</option>
@@ -139,10 +134,8 @@
 				</div>
 				<div class='row'>
 					<div class='centered'>
-						<div>
-							Amount To Send:
-						</div>
-						<input type='number' id='amount' min='0' placeholder='0'>
+						<div> Amount To Send: </div>
+						<input type='number' id='amount' min='0'>
 						<select>
 							<option value='1e30'>MS</option>
 							<option value='1e27'>kS</option>
@@ -155,10 +148,8 @@
 				</div>
 				<div class='row'>
 					<div class='centered'>
-						<div>
-							Remaining Balance:
-						</div>
-						<input type='number' id='remaining' min='0' placeholder='0'>
+						<div> Remaining Balance: </div>
+						<input type='number' id='remaining' min='0'>
 						<select>
 							<option value='1e30'>MS</option>
 							<option value='1e27'>kS</option>
@@ -174,9 +165,7 @@
 			--><div class='halfpage'>
 				<div class='row'>
 					<div class='centered'>
-						<div>
-							Target Address:
-						</div>
+						<div> Target Address: </div>
 						<input type='text' id='transaction-address' placeholder='Send to address'>
 					</div>
 				</div>

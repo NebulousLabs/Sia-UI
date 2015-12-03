@@ -122,6 +122,7 @@
 		"lock": true,
 		"unlock": true,
 		"update": true,
+		"getAddresses": true,
 		"getTransactions": true,
 		"updateTransactionCriteria": true
 	},

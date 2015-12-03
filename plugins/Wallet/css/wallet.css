@@ -81,6 +81,10 @@
 	white-space: nowrap;
 	overflow: hidden;
 }
+.box {
+	height: calc(50% - 30px);
+	position: relative;
+}
 .box .title {
 	display: inline-block;
 	font-size: 20px;
@@ -95,6 +99,21 @@
 }
 .title .button:first-child {
 	padding-right: 0;
+}
+.floating.button {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	font-size: 20px;
+	height: 30px;
+	width: 30px;
+	border-radius: 50%;
+	box-shadow: 0px 5px 10px #dddddd;
+}
+.floating.button i {
+    display: block;
+    text-align: center;
+    margin-top: 5px;
 }
 
 /* Controls */
@@ -125,66 +144,6 @@ input[type=number] {
 .page::-webkit-inner-spin-button { 
 	-webkit-appearance: none; 
 	margin: 0;
-}
-
-/* Box List */
-.box {
-	height: calc(50% - 30px);
-}
-.list {
-	height: calc(50%);
-	padding: 16px;
-	overflow: hide;
-}
-.entry {
-	height: 24px;
-	font-size: 18px;
-	overflow: hidden;
-	color: #4a4a4a;
-}
-
-/* Transactions list */
-#transaction-list {
-	background-color: #fafafa;
-	height: calc(100% - 60px);
-	width: 100%;
-	padding: 0;
-	overflow-y: auto;
-}
-.transaction {
-	padding: 10px;
-	color: #757575;
-	height:12px;
-	font-size: 14px;
-	background-color: #fff;
-	border-bottom: 1px solid #eeeeee;
-}
-.transaction > * {
-	display: inline-block;
-	padding-right: 1%;
-	white-space: nowrap;
-	overflow: hidden;
-	text-align: left;
-}
-.transaction .currency {
-	width: 5%;
-}
-.currency.positive {
-	color: #00FF00;
-}
-.currency.negative {
-	color: #FF0000;
-}
-.transaction .value {
-	width: 10%;
-	text-align: right;
-}
-.transaction .txnid {
-	width: 60%;
-}
-.transaction .time {
-	width: 20%;
-	padding-right: 0;
 }
 
 /* Make Transaction Frame */
@@ -233,48 +192,3 @@ input[type=number] {
 	cursor: default;
 }
 
-/* Address list */
-#address-list {
-	background-color: #fafafa;
-	height: calc(100% - 60px);
-	width: 100%;
-	padding: 0;
-	overflow-y: auto;
-}
-#address-list .entry {
-	padding: 10px;
-	color: #757575;
-	font-size: 14px;
-	background-color: #fff;
-	border-bottom: 1px solid #eeeeee;
-}
-#address-list .entry:hover {
-	cursor: pointer;
-	background-color: #fafafa;
-}
-.entry .listnum {
-	display: inline-block;
-	width: 5%;
-	padding-right: 1%;
-	white-space: nowrap;
-	overflow: hidden;
-}
-.entry {
-	height: 12px;
-}
-.entry .address {
-	display: inline-block;
-	width: calc(94% - 45px);
-	text-align: left;
-	padding-right: 1%;
-	white-space: nowrap;
-	overflow: hidden;
-}
-.entry .copy-address {
-	float: right;
-	display: inline-block;
-	width: 25px;
-}
-#search-bar {
-	width: 300px;
-}

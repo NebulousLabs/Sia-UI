@@ -56,6 +56,14 @@ function updateAddressPage() {
 	});
 }
 
+// Retrieves address list from siad
+function getAddresses() {
+	IPCRenderer.sendToHost('api-call', {
+		url: '/wallet/addresses',
+		type: 'GET',
+	}, 'update-addresses');
+}
+
 // Update addresses array and page
 addResultListener('update-addresses', function(result) {
 	addresses = result.addresses;
@@ -64,6 +72,12 @@ addResultListener('update-addresses', function(result) {
 
 // Update addresses on page navigation
 $('#address-page').on('input', updateAddressPage);
+
+// Refresh button
+$('#view-all-addresses').click(function() {
+	$('#search-bar').val('');
+	getAddresses();
+});
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Search ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Filter address list by search string

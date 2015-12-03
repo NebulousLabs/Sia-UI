@@ -142,7 +142,7 @@ $('#make-transaction').find('select').change(function() {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Navigation  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Show the transaction making frame
-$('#new-transaction').click(function() {
+$('#create-transaction').click(function() {
 	if (!wallet.unlocked) {
 		tooltip('Can\'t make a transaction while the wallet is locked!', this);
 		return;

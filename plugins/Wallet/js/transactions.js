@@ -190,3 +190,10 @@ function updateTransactionCriteria(newCriteria) {
 	getTransactions();
 }
 
+// Refresh button
+$('#view-all-transactions').click(function() {
+	criteria.txnId = null;
+	criteria.address = null;
+	getTransactions();
+});
+
