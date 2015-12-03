@@ -14,7 +14,7 @@ function makeAddress(address, number) {
 	var element = $(`
 		<div class='entry' id=''>
 			<div class='listnum'></div>
-			<div class='button address'>
+			<div class='button address cssTooltip' tooltip-content='Show Related Transactions'>
 				<i class='fa fa-search fa-flip-horizontal'></i>
 			</div>
 		</div>

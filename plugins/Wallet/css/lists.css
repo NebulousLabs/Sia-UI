@@ -26,13 +26,11 @@
 	font-size: 14px;
 	background-color: #fff;
 	border-bottom: 1px solid #eeeeee;
-	overflow: hidden;
 }
 .entry > * {
 	display: inline-block;
 	margin-right: 4px;
 	white-space: nowrap;
-	overflow: hidden;
 	text-align: left;
 }
 .entry > *:last-child {
@@ -40,6 +38,9 @@
 }
 
 /* Transactions list */
+.transaction > * {
+	overflow: hidden;
+}
 .currency.positive {
 	color: #00FF00;
 }
@@ -67,7 +68,28 @@
 	padding: 0;
 	display: inline-block;
 	text-align: left;
+    width: calc(95% - 8px);
 }
+.cssTooltip {
+	display: inline;
+	position: relative;
+}
+.cssTooltip:hover:before {
+	background: #111;
+	background: rgba(0,0,0,.8);
+	border-radius: .5em;
+	top: 1.35em;
+	color: #fff;
+	content: attr(tooltip-content);
+	display: block;
+	left: 1em;
+	padding: .3em 1em;
+	position: absolute;
+	text-shadow: 0 1px 0 #000;
+	white-space: nowrap;
+	z-index: 9999998;
+}
+
 .copy-address {
 	display: inline-block;
 }

@@ -160,17 +160,17 @@ input {
 .file .delete:hover {
 	opacity: .5;
 }
-.simpleTooltip {
+.cssTooltip {
 	display: inline;
 	position: relative;
 }
-.simpleTooltip:hover:after {
+.cssTooltip:hover:after {
 	background: #111;
 	background: rgba(0,0,0,.8);
 	border-radius: .5em;
 	top: 1.35em;
 	color: #fff;
-	content: attr(data-tooltip);
+	content: attr(tooltip-content);
 	display: block;
 	right: 1em;
 	padding: .3em 1em;
