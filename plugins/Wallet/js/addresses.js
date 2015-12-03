@@ -15,9 +15,6 @@ function makeAddress(address, number) {
 		<div class='entry' id=''>
 			<div class='listnum'></div>
 			<div class='address'></div>
-			<div class='copy-address'>
-				<i class='fa fa-clipboard'></i>
-			</div>
 		</div>
 	`);
 	element.attr('id', address);
@@ -29,12 +26,6 @@ function makeAddress(address, number) {
 		updateTransactionCriteria({
 			address: event.target.id,
 		});
-	});
-
-	// Make copy-to-clipboard button clickable
-	element.find('.copy-address').click(function() {
-		Clipboard.writeText(this.parentNode.id);
-		notify('Copied address to clipboard', 'copied');
 	});
 
 	// Append and show the address element
