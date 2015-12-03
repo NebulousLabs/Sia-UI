@@ -237,8 +237,8 @@ module.exports = (function UIManager() {
 			mainWindow.setBounds(memConfig);
 
 			// Init other manager classes
-			Daemon.init(config);
-			Plugins.init(config);
+			Daemon.Init(config);
+			Plugins.Init(config);
 		});
 	}
 
@@ -276,11 +276,11 @@ module.exports = (function UIManager() {
 	}
 
 	return {
-		init: init,
-		kill: kill,
-		tooltip: tooltip,
-		notify: notify,
-		renotify: renotify,
-		config: config,
+		Init: init,
+		Kill: kill,
+		Tooltip: tooltip,
+		Notify: notify,
+		Renotify: renotify,
+		Config: config,
 	};
 })();

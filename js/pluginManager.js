@@ -85,17 +85,17 @@ module.exports = (function PluginManager() {
 					if (!Daemon.Running) {
 						return;
 					}
-					Daemon.apiCall(call, function(err, result) {
+					Daemon.ApiCall(call, function(err, result) {
 						if (err) {
 							// If a call didn't work, test that the
 							// `/daemon/version` call still works
-							Daemon.ifSiad(function() {
+							Daemon.IfSiad(function() {
 								// Send error response back to the plugin
 								plugin.sendToView(responseChannel, err, result);
 							}, function() {
 								// that call failed too, assume siad has
 								// stopped
-								UI.notify('siad seems to have stopped working!', 'stop');
+								UI.Notify('siad seems to have stopped working!', 'stop');
 							});
 						} else if (responseChannel) {
 							plugin.sendToView(responseChannel, err, result);
@@ -104,18 +104,18 @@ module.exports = (function PluginManager() {
 					break;
 				case 'notify':
 					// Use UI notification system
-					UI.notify.apply(null, event.args);
+					UI.Notify.apply(null, event.args);
 					break;
 				case 'tooltip':
 					// Use UI tooltip system
 					event.args[1].top += $('.header').height();
 					event.args[1].left += $('#sidebar').width();
-					UI.tooltip.apply(null, event.args);
+					UI.Tooltip.apply(null, event.args);
 					break;
 				case 'config':
 					// get or set something in the config.json
 					var args = event.args[0];
-					var result = UI.config(args);
+					var result = UI.Config(args);
 					responseChannel = event.args[1];
 					if (responseChannel) {
 						plugin.sendToView(responseChannel, result);
@@ -126,7 +126,7 @@ module.exports = (function PluginManager() {
 					plugin.toggleDevTools();
 					break;
 				default:
-					UI.notify('Unknown ipc message: ' + event.channel, 'error');
+					UI.Notify('Unknown ipc message: ' + event.channel, 'error');
 			}
 		});
 
@@ -166,7 +166,7 @@ module.exports = (function PluginManager() {
 	function initPlugins() {
 		Fs.readdir(plugPath, function(err, pluginNames) {
 			if (err) {
-				UI.notify('Couldn\'t read plugins folder: ' + err, 'error');
+				UI.Notify('Couldn\'t read plugins folder: ' + err, 'error');
 			}
 
 			// Determine default plugin
@@ -197,9 +197,9 @@ module.exports = (function PluginManager() {
 	function init(config) {
 		plugPath = Path.join(__dirname, '..', 'plugins');
 		setConfig(config, initPlugins);
-	};
+	}
 
 	// Make certain members public
-	self.init = init;
+	self.Init = init;
 	return self;
 }());

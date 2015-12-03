@@ -76,8 +76,8 @@
 			var Plugins = require('./js/pluginManager.js');
 
 			// Window start, stop, and right-click events
-			window.onload = UI.init;
-			window.onbeforeunload = UI.kill;
+			window.onload = UI.Init;
+			window.onbeforeunload = UI.Kill;
 			window.addEventListener('contextmenu', function (e) {
 				e.preventDefault();
 				IPCRenderer.send('context-menu');

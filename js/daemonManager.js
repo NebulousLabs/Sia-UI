@@ -75,20 +75,20 @@ module.exports = (function DaemonManager() {
 	// Polls the siad API until it comes online
 	function waitForSiad() {
 		ifSiad(function() {
-			UI.notify('Started siad!', 'success');
+			UI.Notify('Started siad!', 'success');
 		}, function() {
 			// check once per second until successful
 			setTimeout(waitForSiad, 1000);
-			UI.renotify('loading');
+			UI.Renotify('loading');
 		});
 	}
 	
 	// Starts the daemon as a long running background process
 	function start() {
 		ifSiad(function() {
-			UI.notify('attempted to start siad when it was already running', 'error');
+			UI.Notify('attempted to start siad when it was already running', 'error');
 		}, function() {
-			UI.notify('Loading siad...', 'loading');
+			UI.Notify('Loading siad...', 'loading');
 
 			// daemon logs output to files
 			var out, err;
@@ -109,16 +109,16 @@ module.exports = (function DaemonManager() {
 			// Listen for siad erroring
 			daemonProcess.on('error', function (error) {
 				if (error === 'Error: spawn ' + siaCommand + ' ENOENT') {
-					UI.notify('Missing siad!', 'error');
+					UI.Notify('Missing siad!', 'error');
 				} else {
-					UI.notify('siad errored: ' + error, 'error');
+					UI.Notify('siad errored: ' + error, 'error');
 				}
 			});
 
 			// Listen for siad exiting
 			daemonProcess.on('exit', function(code) {
 				self.Running = false;
-				UI.notify('siad exited with code: ' + code, 'stop');
+				UI.Notify('siad exited with code: ' + code, 'stop');
 			});
 
 			// Wait for siad to start
@@ -146,14 +146,14 @@ module.exports = (function DaemonManager() {
 	function init(config) {
 		setConfig(config, function() {
 			ifSiad(function() {
-				UI.notify('siad is running!', 'success');
+				UI.Notify('siad is running!', 'success');
 			}, start);
 		});
 	}
 
 	// Make certain members public
-	self.init = init;
-	self.apiCall = apiCall;
-	self.ifSiad = ifSiad;
+	self.Init = init;
+	self.ApiCall = apiCall;
+	self.IfSiad = ifSiad;
 	return self;
 }());
