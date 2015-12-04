@@ -70,8 +70,7 @@ function announce(settings) {
 	tooltip('Anouncing...', $('#announce').get(0));
 	var call = {
 		url: '/host/announce',
-		type: 'GET',
-		data: settings,
+		qs: settings,
 	};
 	IPCRenderer.sendToHost('api-call', call, 'announced');
 }
@@ -102,8 +101,7 @@ $('#save.button').click(function() {
 	// Define configuration call
 	var call = {
 		url: '/host/configure',
-		type: 'GET',
-		data: hostInfo,
+		qs: hostInfo,
 	};
 	IPCRenderer.sendToHost('api-call', call, 'configure');
 });

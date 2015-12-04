@@ -133,7 +133,7 @@ function computeSum(txn) {
 // Fill transactions array
 function getTransactions() {
 	// Decide what call to make based on criteria
-	var url, data;
+	var url, qs;
 	if (criteria.txnId) {
 		url = '/wallet/transaction/' + criteria.txnId;
 	} else if (criteria.address) {
@@ -141,7 +141,7 @@ function getTransactions() {
 	} else {
 		// Default call to /wallet/tranasctions
 		url = '/wallet/transactions';
-		data = {
+		qs = {
 			startheight: criteria.startHeight,
 			endheight: criteria.endHeight,
 		};
@@ -150,8 +150,7 @@ function getTransactions() {
 	// Make call
 	IPCRenderer.sendToHost('api-call', {
 		url: url,
-		type: 'GET',
-		data: data,
+		qs: qs,
 	}, 'update-transactions');
 }
 
