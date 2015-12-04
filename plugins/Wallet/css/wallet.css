@@ -1,13 +1,14 @@
-/*	Style Guide: 
- *		Transparent: 70% Opacity
- *
- * 		White:      #FFFFFF
- * 		Grey-White: #F5F5F5
- *		Faint-Grey: #ECECEC
- *		Light-Grey: #DDDDDD
- *		Grey:       #C5C5C5
- * 		Grey-Black: #4A4A4A
- * 		Black:      #000000
+/*  Style Guide: 
+ *    Transparent: 70% Opacity
+ *    
+ *    White:      #FFFFFF
+ *    Grey-White: #F5F5F5
+ *    Faint-Grey: #ECECEC
+ *    Light-Grey: #DDDDDD
+ *    Grey:       #C5C5C5
+ *    Grey-Black: #4A4A4A
+ *    Black:      #000000
+ *    Neon-Green: #00CBA0
  */
 /* Password box */
 .popup {
@@ -68,7 +69,7 @@
 	padding: 0;
 	position: absolute;
 	right: 4px;
-	top: 0px;
+	top: 0;
 }
 
 /* Information Box */
@@ -95,37 +96,35 @@
 .title .button:first-child {
 	padding-right: 0;
 }
-.title input {
-	width: 42px;
-	height: 26px;
-}
 
 /* Controls */
 .controls {
+	font-size: 16px;
 	display: inline-block;
 	float: right;
-	padding-left: 0;
-	margin-left: 0;
 	width: 80%;
 	text-align: right;
 }
-.transparent {
-	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
-	opacity: 0;
-	display: none;
+.controls input {
+	height: 28px;
 }
-.transparent:hover {
-	cursor: default;
+input, select {
+	font-size: 16px;
 }
-#transaction-value {
-	width: 100px;
-	text-align: center;
+input[type=number] {
+	text-align: right;
 }
-#send-unit {
-	width: 60px;
+.page {
+	border: 0;
+	background-color: #f5f5f5;
 }
-#transaction-address {
-	width: 200px;
+.page:focus {
+	box-shadow: none;
+	border: 0;
+}
+.page::-webkit-inner-spin-button { 
+	-webkit-appearance: none; 
+	margin: 0;
 }
 
 /* Box List */
@@ -188,7 +187,53 @@
 	padding-right: 0;
 }
 
-/* Transactions list */
+/* Make Transaction Frame */
+.halfpage {
+	display: inline-block;
+	height: calc(100% - 60px);
+	width: 50%;
+	text-align: center;
+	vertical-align: top;
+}
+#make-transaction .row {
+	padding: 0;
+	display: block;
+	height: 33%;
+	position: relative;
+}
+.centered {
+	width: 100%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-right: -50%;
+	transform: translate(-50%, -50%);
+}
+#make-transaction input[type=number], #make-transaction select {
+    height: 40px;
+    width: 100px;
+    font-size: 26px;
+}
+#make-transaction .button {
+	font-size: 30px;
+}
+.siafund {
+	background-color: #00CBA0;
+}
+#transaction-address {
+	width: 80%;
+	height: 28px;
+}
+.transparent {
+	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
+	opacity: 0;
+	display: none;
+}
+.transparent:hover {
+	cursor: default;
+}
+
+/* Address list */
 #address-list {
 	background-color: #fafafa;
 	height: calc(100% - 60px);
@@ -230,4 +275,6 @@
 	display: inline-block;
 	width: 25px;
 }
-
+#search-bar {
+	width: 300px;
+}

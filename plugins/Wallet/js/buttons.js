@@ -20,19 +20,6 @@ addResultListener('coin-sent', function(result) {
 	$('#transaction-amount').val('');
 });
 
-// Button to load all wallet transactions
-$('#view-all-transactions').click(function() {
-	tooltip('Loading all transactions', this);
-	IPCRenderer.sendToHost('api-call', {
-		url: '/wallet/transactions',
-		args: {
-			startheight: 0,
-			endheight: 1000000,
-		},		
-		type: 'GET',
-	}, 'update-history');
-});
-
 // Lock or unlock the wallet
 $('#lock-pod').click(function() {
 	var state = $('#lock-status').html();
@@ -146,3 +133,4 @@ $('#load-legacy-wallet').click(function() {
 		$('#request-password').show();
 	}
 });
+

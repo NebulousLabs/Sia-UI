@@ -71,10 +71,12 @@ function updateTransactionPage() {
 	$('#transaction-list').empty();
 
 	// Set page limits
+	var maxPage = transactions.length === 0 ? 1 : Math.ceil(transactions.length / criteria.itemsPerPage);
 	$('#transaction-page').attr({
 		min: 1,
-		max: transactions.length === 0 ? 1 : Math.ceil(transactions.length / criteria.itemsPerPage),
+		max: maxPage,
 	});
+	$('#transaction-page').next().text('/' + maxPage);
 
 	// Make elements for this page
 	var n = (($('#transaction-page').val() - 1) * criteria.itemsPerPage);
@@ -190,84 +192,4 @@ function updateTransactionCriteria(newCriteria) {
 	}
 	getTransactions();
 }
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Sending  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Define send call
-function sendCoin(amount, address) {
-	var transaction = {
-		amount: amount.toString(),
-		destination: address,
-	};
-	IPCRenderer.sendToHost('api-call', {
-		url: '/wallet/siacoins',
-		type: 'POST',
-		args: transaction,
-	}, 'coin-sent');
-
-	// Reflect it asap
-	setTimeout(update, 100);
-}
-
-// Transaction was sent
-addResultListener('coin-sent', function(result) {
-	notify('Transaction sent to network!', 'sent');
-	$('#transaction-value').val('');
-});
-
-// Amount has to be a number
-function isNumber(n) {
-	return !isNaN(parseFloat(n)) && isFinite(n);
-}
-
-// Address has to be lowercase hex and 76 chars
-function isAddress(str) {
-	return str.match(/^[a-f0-9]{76}$/) !== null;
-}
-
-// Transaction has to be legitimate
-function validateTransaction(caller, callback) {
-	var value = $('#transaction-value').val();
-	var unit = $('#send-unit').val();
-	var total = new BigNumber(value).times(unit);
-	var address = $('#transaction-address').val();
-
-	// Verify number
-	if (!isNumber(value)) {
-		tooltip('Enter numeric value of Siacoin to send!', caller);
-		return;
-	} 
-	// Verify balance
-	if (wallet.confirmedsiacoinbalance < total) {
-		tooltip('Balance too low!', caller);
-		return;
-	} 
-	// Verify address
-	if (!isAddress(address)) {
-		tooltip('Enter correct address to send to!', caller);
-		return;
-	}
-
-	callback(total, address);
-}
-
-// Button to send coin
-$('#send-money').click(function() {
-	validateTransaction(this, function() {
-		tooltip('Are you sure?', $('#confirm').get(0));
-		$('#confirm').removeClass('transparent');
-	});
-});
-
-// Button to confirm transaction
-$('#confirm').click(function() {
-	// If the button's transparent, don't do anything
-	if ($('#confirm').hasClass('transparent')) {
-		return;
-	}
-	validateTransaction(this, function(value, address) {
-		tooltip('Sending...', $('#confirm').get(0));
-		sendCoin(value, address);
-	});
-	$('#confirm').addClass('transparent');
-});
 
