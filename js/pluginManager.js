@@ -81,21 +81,21 @@ module.exports = (function PluginManager() {
 					// Redirect api calls to the daemonManager
 					var call = event.args[0];
 					responseChannel = event.args[1];
-					// Send the call only if the Daemon appears to be running
-					if (!Daemon.Running) {
+					if (!Daemon.running) {
 						return;
 					}
-					Daemon.ApiCall(call, function(err, result) {
+					// Send the call only if the Daemon appears to be running
+					Daemon.call(call, function(err, result) {
 						if (err) {
 							// If a call didn't work, test that the
 							// `/daemon/version` call still works
-							Daemon.IfSiad(function() {
+							Daemon.ifRunning(function() {
 								// Send error response back to the plugin
 								plugin.sendToView(responseChannel, err, result);
 							}, function() {
 								// that call failed too, assume siad has
 								// stopped
-								UI.Notify('siad seems to have stopped working!', 'stop');
+								UI.notify('siad seems to have stopped working!', 'stop');
 							});
 						} else if (responseChannel) {
 							plugin.sendToView(responseChannel, err, result);
@@ -104,18 +104,18 @@ module.exports = (function PluginManager() {
 					break;
 				case 'notify':
 					// Use UI notification system
-					UI.Notify.apply(null, event.args);
+					UI.notify.apply(null, event.args);
 					break;
 				case 'tooltip':
 					// Use UI tooltip system
 					event.args[1].top += $('.header').height();
 					event.args[1].left += $('#sidebar').width();
-					UI.Tooltip.apply(null, event.args);
+					UI.tooltip.apply(null, event.args);
 					break;
 				case 'config':
 					// get or set something in the config.json
 					var args = event.args[0];
-					var result = UI.Config(args);
+					var result = UI.config(args);
 					responseChannel = event.args[1];
 					if (responseChannel) {
 						plugin.sendToView(responseChannel, result);
@@ -126,7 +126,7 @@ module.exports = (function PluginManager() {
 					plugin.toggleDevTools();
 					break;
 				default:
-					UI.Notify('Unknown ipc message: ' + event.channel, 'error');
+					UI.notify('Unknown ipc message: ' + event.channel, 'error');
 			}
 		});
 
@@ -166,7 +166,7 @@ module.exports = (function PluginManager() {
 	function initPlugins() {
 		Fs.readdir(plugPath, function(err, pluginNames) {
 			if (err) {
-				UI.Notify('Couldn\'t read plugins folder: ' + err, 'error');
+				UI.notify('Couldn\'t read plugins folder: ' + err, 'error');
 			}
 
 			// Determine default plugin
@@ -200,6 +200,6 @@ module.exports = (function PluginManager() {
 	}
 
 	// Make certain members public
-	self.Init = init;
+	self.init = init;
 	return self;
 }());

@@ -1,21 +1,26 @@
 'use strict';
 
+const util = require('util');
+const EventEmitter = require('events');
+
 /**
  * DaemonManager, a closure, initializes siad as a background process and
  * provides functions to interact with it
  * @class DaemonManager
  */
-module.exports = (function DaemonManager() {
+function DaemonManager() {
 	// The location of the folder containing siad
-	var siaPath;
-	// The command to start siad
-	var siaCommand;
+	var siadPath;
 	// The localhost:port (default is 9980)
-	var address;
-	// To keep a reference to the DaemonManager inside its functions
-	var self = {};
-	// Tracks if siad is running
-	self.Running = false;
+	var siadAddress;
+	// The command to start siad
+	var siadCommand;
+	// Object to be returned
+	var self = this;
+	// Track if Daemon is running
+	self.running = false;
+	// Inherit `EventEmitter` properties
+	EventEmitter.call(self);
 
 	/**
 	 * Relays calls to daemonAPI with the localhost:port address appended
@@ -28,10 +33,11 @@ module.exports = (function DaemonManager() {
 		if (typeof call === 'string') {
 			call = {url: call};
 		}
+		// If no callback provided, have it be an empty function
+		callback = callback || function() {};
 
-		console.log(call);
 		// Add the localhost address and port to the url and default values
-		call.url = address + call.url;
+		call.url = siadAddress + call.url;
 
 		// Set success handler
 		call.success = function(responseData, textStatus, jqXHR) {
@@ -56,104 +62,88 @@ module.exports = (function DaemonManager() {
 	}
 
 	/**
-	 * Detects whether siad is running on the current address
-	 * @function DaemonManager#ifSiad
-	 * @param {function} isRunning - function to run if Siad is running
-	 * @param {function} isNotRunning - function to run if Siad is not running
+	 * Checks whether siad is running on the current address
+	 * @function DaemonManager#ifRunning
+	 * @param {callback} callback - returns if siad is running
 	 */
-	function ifSiad(isRunning, isNotRunning) {
+	function ifRunning(is, not) {
 		apiCall('/daemon/version', function(err) {
-			self.Running = !err;
-			if (self.Running) {
-				isRunning();
-			} else if (!self.Running) {
-				isNotRunning();
+			self.running = !err;
+			if (self.running) {
+				is();
+			} else {
+				not();
 			}
 		});
 	}
 
 	// Polls the siad API until it comes online
-	function waitForSiad() {
-		ifSiad(function() {
-			UI.Notify('Started siad!', 'success');
-		}, function() {
-			// check once per second until successful
-			setTimeout(waitForSiad, 1000);
-			UI.Renotify('loading');
+	function waitUntilLoaded(callback) {
+		ifRunning(callback, function() {
+			setTimeout(function() {
+				waitUntilLoaded(callback);
+			}, 1000);
 		});
 	}
 	
 	// Starts the daemon as a long running background process
-	function start() {
-		ifSiad(function() {
-			UI.Notify('attempted to start siad when it was already running', 'error');
+	function start(callback) {
+		ifRunning(function() {
+			callback(new Error('Attempted to start siad when it was already running'));
 		}, function() {
-			UI.Notify('Loading siad...', 'loading');
-
-			// daemon logs output to files
-			var out, err;
-			Fs.open(Path.join(siaPath, 'daemonOut.log'), 'w', function(e, filedescriptor) {
-				out = filedescriptor;
-			});
-			Fs.open(Path.join(siaPath, 'daemonErr.log'), 'w', function(e, filedescriptor) {
-				err = filedescriptor;
-			});
-
-			// daemon process has to be detached without parent stdio pipes
+			// Set siad folder as configured siadPath
 			var processOptions = {
-				stdio: ['ignore', out, err],
-				cwd: siaPath,
+				cwd: siadPath,
 			};
-			var daemonProcess = new Process(siaCommand, processOptions);
+			var daemonProcess = new Process(siadCommand, processOptions);
 
 			// Listen for siad erroring
+			// TODO: How to change this error to give more accurate hint. Does this
+			// work?
 			daemonProcess.on('error', function (error) {
-				if (error === 'Error: spawn ' + siaCommand + ' ENOENT') {
-					UI.Notify('Missing siad!', 'error');
-				} else {
-					UI.Notify('siad errored: ' + error, 'error');
+				if (error === 'Error: spawn ' + siadCommand + ' ENOENT') {
+					error.message = 'Missing siad!';
 				}
+				self.emit('error', error);
 			});
-
-			// Listen for siad exiting
 			daemonProcess.on('exit', function(code) {
-				self.Running = false;
-				UI.Notify('siad exited with code: ' + code, 'stop');
+				self.running = false;
+				self.emit('exit', code);
 			});
 
-			// Wait for siad to start
-			waitForSiad();
+			// Wait until siad finishes loading to call callback
+			waitUntilLoaded(callback);
 		});
+	}
+
+	function stop(callback) {
+		apiCall('/daemon/stop', callback);
 	}
 
 	/**
 	 * Sets the member variables based on the passed config
-	 * @param {config} config - the config object derived from config.json
-	 * @param {callback} callback
+	 * @param {config} c - the config object derived from config.json
+	 * @param {callback} callback - returns if siad is running
 	 */
-	function setConfig(config, callback) {
-		siaPath = Path.join(__dirname, '..', 'Sia');
-		siaCommand = process.platform === 'win32' ? './siad.exe' : './siad';
-		address = config.siadAddress;
-		callback();
-	}
-
-	/**
-	 * Initializes the daemon manager and starts siad
-	 * @function DaemonManager#init
-	 * @param {config} config - config in memory
-	 */
-	function init(config) {
-		setConfig(config, function() {
-			ifSiad(function() {
-				UI.Notify('siad is running!', 'success');
-			}, start);
-		});
+	function configure(settings, callback) {
+		siadPath = settings.siadPath;
+		siadAddress = settings.siadAddress;
+		siadCommand = settings.siadCommand;
+		if (callback) {
+			callback();
+		}
 	}
 
 	// Make certain members public
-	self.Init = init;
-	self.ApiCall = apiCall;
-	self.IfSiad = ifSiad;
+	self.configure = configure;
+	self.start = start;
+	self.stop = stop;
+	self.call = apiCall;
+	self.ifRunning = ifRunning;
 	return self;
-}());
+};
+
+// Inherit functions from `EventEmitter`'s prototype
+util.inherits(DaemonManager, EventEmitter);
+
+module.exports = new DaemonManager();

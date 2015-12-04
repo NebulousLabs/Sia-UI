@@ -152,7 +152,7 @@ module.exports = (function UIManager() {
 	 * clicking the notification
 	 */
 	function notify(message, type, clickAction) {
-		// Record errors for reference
+		// Record errors for reference in `errors.log`
 		if (type === 'error') {
 			if (!errorLog) {
 				errorLog = Fs.createWriteStream(Path.join(__dirname, '..', 'errors.log'));
@@ -164,38 +164,33 @@ module.exports = (function UIManager() {
 			}
 		}
 
+		// Check if notification with same type/message is already shown
+		var notif = $('.type-' + type);
+		if (notif.length !== 0 && notif.find('.content').text() === message) {
+			// Don't spam it and instead empphasize it and prolong it
+			clearTimeout(notificationTimeout);
+			notificationTimeout = setTimeout(function() {
+				removeNotification(notif);
+			}, 2500);
+			return;
+		}
+
 		// TODO: This delay system is technically broken, but not noticably
-		// wait approximately 250ms between notifications
+		// Wait approximately 250ms between notifications
 		if (new Date().getTime() < lastNotificationTime + 250) {
 			notificationsInQueue++;
-
 			setTimeout(function() {
 				notify(message, type, clickAction);
 			}, notificationsInQueue * 250);
-
 			return;
 		}
 
 		lastNotificationTime = new Date().getTime();
 		if (notificationsInQueue > 0) {
-			notificationsInQueue --;
+			notificationsInQueue--;
 		}
 
 		showNotification(message, type, clickAction);
-	}
-
-	/**
-	 * Refreshes notification of a certain type
-	 * @function UIManager#renotify
-	 * @param {string} type The form of notification
-	 * TODO: Imperfect way to find notification
-	 */
-	function renotify(type) {
-		var notif = $('.type-' + type).first();
-		clearTimeout(notificationTimeout);
-		notificationTimeout = setTimeout(function() {
-			removeNotification(notif);
-		}, 2500);
 	}
 
 	// Checks if there is an update available
@@ -237,8 +232,37 @@ module.exports = (function UIManager() {
 			mainWindow.setBounds(memConfig);
 
 			// Init other manager classes
-			Daemon.Init(config);
-			Plugins.Init(config);
+			Plugins.init(config);
+			Daemon.configure(config);
+
+			// Let user know siad is running
+			Daemon.ifRunning(function(running) {
+				notify('siad is running!', 'success');
+			}, function() {
+				// Keep user notified of siad loading
+				var loading = setInterval(function() {
+					notify('Loading siad...', 'loading');
+				}, 2000);
+
+				// Start siad
+				Daemon.start(function(err) {
+					if (err) {
+						notify(err, 'error');
+						return;
+					}
+					clearInterval(loading);
+					notify('Started siad!', 'success');
+				});
+
+				// Listen for siad erroring
+				Daemon.on('error', function (error) {
+					notify('siad errored: ' + error, 'error');
+				});
+				// Listen for siad exiting
+				Daemon.on('exit', function(code) {
+					notify('siad exited with code: ' + code, 'stop');
+				});
+			});
 		});
 	}
 
@@ -276,11 +300,10 @@ module.exports = (function UIManager() {
 	}
 
 	return {
-		Init: init,
-		Kill: kill,
-		Tooltip: tooltip,
-		Notify: notify,
-		Renotify: renotify,
-		Config: config,
+		init: init,
+		kill: kill,
+		tooltip: tooltip,
+		notify: notify,
+		config: config,
 	};
 })();
