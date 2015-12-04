@@ -1,6 +1,14 @@
 'use strict';
 
-const util = require('util');
+// Library for making requests
+const Request = require('request');
+
+// Necessary node libraries
+// TODO: Path is in the global scope, but this file can soon be it's own node
+// package as a siad wrapper. So with that, it will need its own require
+// statements for node libraries
+//const Path = require('path');
+const Util = require('util');
 const EventEmitter = require('events');
 
 /**
@@ -9,56 +17,48 @@ const EventEmitter = require('events');
  * @class DaemonManager
  */
 function DaemonManager() {
-	// The location of the folder containing siad
-	var siadPath;
-	// The localhost:port (default is 9980)
-	var siadAddress;
-	// The command to start siad
-	var siadCommand;
+	// siad details with default values
+	var siad = {
+		path: Path.join(__dirname, 'Sia'),
+		address: 'http://localhost:9980',
+		command: process.platform === 'win32' ? 'siad.exe' : 'siad',
+		headers: {
+			'User-Agent': 'Sia-Agent',
+		},
+	};
 	// Object to be returned
 	var self = this;
 	// Track if Daemon is running
-	self.running = false;
+	this.running = false;
 	// Inherit `EventEmitter` properties
-	EventEmitter.call(self);
+	EventEmitter.call(this);
 
 	/**
 	 * Relays calls to daemonAPI with the localhost:port address appended
-	 * @function DaemonManager#call
+	 * @function DaemonManager#apiCall
 	 * @param {apiCall} call - function to run if Siad is running
 	 * @param {apiResponse} callback
 	 */
 	function apiCall(call, callback) {
-		// Interpret address-only calls as 'GET'
+		// Things to prevent unimportant errors
 		if (typeof call === 'string') {
-			call = {url: call};
+			call = { url: call };
 		}
-		// If no callback provided, have it be an empty function
 		callback = callback || function() {};
 
-		// Add the localhost address and port to the url and default values
-		call.url = siadAddress + call.url;
-
-		// Set success handler
-		call.success = function(responseData, textStatus, jqXHR) {
-			// Catches improperly constructed JSONs that JSON.parse would
-			// normally return a weird error on
-			try {
-				callback(null, JSON.parse(responseData), textStatus, jqXHR);
-			} catch(e) {
-				callback('Malformed JSON result! Response was: ' + responseData);
+		// Setup request
+		call.url = siad.address + call.url;
+		call.json = true;
+		call.headers = siad.headers;
+		return new Request(call, function (error, response, body) {
+			if (!error && response.statusCode !== 200) {
+				// siad's error is returned as body
+				error = body;
+			} 
+			if (typeof callback === 'function') {
+				callback(error, body);
 			}
-		};
-
-		// Set error handler
-		call.error = function(jqXHR, textStatus, errorThrown) {
-			// jqXHR is the XmlHttpRequest that jquery returns back on error
-			var errcode = textStatus + ' ' + jqXHR.status + ' ' + errorThrown + ' ' + jqXHR.responseText;
-			callback(errcode);
-		};
-
-		// Make the call
-		$.ajax(call);
+		});
 	}
 
 	/**
@@ -69,9 +69,9 @@ function DaemonManager() {
 	function ifRunning(is, not) {
 		apiCall('/daemon/version', function(err) {
 			self.running = !err;
-			if (self.running) {
+			if (self.running && typeof is === 'function') {
 				is();
-			} else {
+			} else if (typeof not === 'function') {
 				not();
 			}
 		});
@@ -86,22 +86,26 @@ function DaemonManager() {
 		});
 	}
 	
-	// Starts the daemon as a long running background process
+	/**
+	 * Starts the daemon as a long running background process
+	 * @param {callback} callback - function to be run if successful
+	 */
 	function start(callback) {
 		ifRunning(function() {
 			callback(new Error('Attempted to start siad when it was already running'));
 		}, function() {
 			// Set siad folder as configured siadPath
 			var processOptions = {
-				cwd: siadPath,
+				cwd: siad.path,
 			};
-			var daemonProcess = new Process(siadCommand, processOptions);
+			const Process = require('child_process').spawn;
+			var daemonProcess = new Process(siad.command, processOptions);
 
 			// Listen for siad erroring
-			// TODO: How to change this error to give more accurate hint. Does this
-			// work?
+			// TODO: How to change this error to give more accurate hint. Does
+			// this work?
 			daemonProcess.on('error', function (error) {
-				if (error === 'Error: spawn ' + siadCommand + ' ENOENT') {
+				if (error === 'Error: spawn ' + siad.command + ' ENOENT') {
 					error.message = 'Missing siad!';
 				}
 				self.emit('error', error);
@@ -116,6 +120,10 @@ function DaemonManager() {
 		});
 	}
 
+	/**
+	 * Sends a stop call to the daemon
+	 * @param {callback} callback - function to be run if successful
+	 */
 	function stop(callback) {
 		apiCall('/daemon/stop', callback);
 	}
@@ -126,24 +134,25 @@ function DaemonManager() {
 	 * @param {callback} callback - returns if siad is running
 	 */
 	function configure(settings, callback) {
-		siadPath = settings.siadPath;
-		siadAddress = settings.siadAddress;
-		siadCommand = settings.siadCommand;
-		if (callback) {
+		siad.path = settings.siad.path || siad.path;
+		siad.address = settings.siad.address || siad.address;
+		siad.command = settings.siad.command || siad.command;
+		if (typeof callback === 'function') {
 			callback();
 		}
 	}
 
+
 	// Make certain members public
-	self.configure = configure;
-	self.start = start;
-	self.stop = stop;
-	self.call = apiCall;
-	self.ifRunning = ifRunning;
-	return self;
-};
+	this.call = apiCall;
+	this.ifRunning = ifRunning;
+	this.start = start;
+	this.stop = stop;
+	this.configure = configure;
+	return this;
+}
 
 // Inherit functions from `EventEmitter`'s prototype
-util.inherits(DaemonManager, EventEmitter);
+Util.inherits(DaemonManager, EventEmitter);
 
 module.exports = new DaemonManager();

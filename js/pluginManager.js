@@ -86,20 +86,7 @@ module.exports = (function PluginManager() {
 					}
 					// Send the call only if the Daemon appears to be running
 					Daemon.call(call, function(err, result) {
-						if (err) {
-							// If a call didn't work, test that the
-							// `/daemon/version` call still works
-							Daemon.ifRunning(function() {
-								// Send error response back to the plugin
-								plugin.sendToView(responseChannel, err, result);
-							}, function() {
-								// that call failed too, assume siad has
-								// stopped
-								UI.notify('siad seems to have stopped working!', 'stop');
-							});
-						} else if (responseChannel) {
-							plugin.sendToView(responseChannel, err, result);
-						}
+						plugin.sendToView(responseChannel, err, result);
 					});
 					break;
 				case 'notify':

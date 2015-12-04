@@ -62,7 +62,7 @@ addResultListener('update-status', function(result) {
 function lock() {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/lock',
-		type: 'POST',
+		method: 'POST',
 	}, 'locked');
 }
 addResultListener('locked', function(result) {
@@ -77,8 +77,8 @@ addResultListener('locked', function(result) {
 function unlock(password) {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/unlock',
-		type: 'POST',
-		data: {
+		method: 'POST',
+		qs: {
 			encryptionpassword : password,
 		},
 	}, 'unlocked');
@@ -105,8 +105,8 @@ IPCRenderer.on('unlocked', function(event, err, result) {
 function encrypt() {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/init',
-		type: 'POST',
-		data: {
+		method: 'POST',
+		qs: {
 			dictionary: 'english',
 		},
 	}, 'encrypted');
@@ -132,8 +132,8 @@ addResultListener('encrypted', function(result) {
 function loadLegacyWallet(filename, password) {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/load/033x',
-		type: 'POST',
-		data: {
+		method: 'POST',
+		qs: {
 			filepath: filename,
 			encryptionpassword: password,
 		},

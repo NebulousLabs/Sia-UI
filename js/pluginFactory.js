@@ -41,7 +41,6 @@ module.exports = {
 		// Make webview element
 		var v = document.createElement('webview');
 		v.id = name + '-view';
-		v.useragent = 'Sia-Agent';
 		v.className = 'webview';
 		v.src = markupPath;
 

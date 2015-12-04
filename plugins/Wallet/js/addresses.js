@@ -133,7 +133,6 @@ $('#create-address').click(function() {
 	tooltip('Creating...', this);
 	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/address',
-		type: 'GET',
 	}, 'new-address');
 });
 
