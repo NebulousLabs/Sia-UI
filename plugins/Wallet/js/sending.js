@@ -53,8 +53,8 @@ function sendTransaction(amount, address) {
 	};
 	IPCRenderer.sendToHost('api-call', {
 		url: url,
-		type: 'POST',
-		args: transaction,
+		method: 'POST',
+		qs: transaction,
 	}, 'coin-sent');
 }
 

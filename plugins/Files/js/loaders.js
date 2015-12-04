@@ -1,6 +1,5 @@
 'use strict';
 
-// TODO: Can a webview use IPCRenderer.sendSync?
 function download(nickname) {
 	var savePath = IPCRenderer.sendSync('dialog', 'save', {
 		defaultPath: nickname,
@@ -11,8 +10,7 @@ function download(nickname) {
 	notify('Downloading ' + nickname + ' to '+ savePath +' folder', 'download');
 	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/download',
-		type: 'GET',
-		args: {
+		qs: {
 			nickname: nickname,
 			destination: savePath,
 		},
@@ -26,7 +24,7 @@ function share(nickname) {
 	// Make a request to get the ascii share string
 	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/shareascii',
-		args: {
+		qs: {
 			nickname: nickname,
 		}
 	}, 'shared');
@@ -45,8 +43,7 @@ addResultListener('shared', function(result) {
 function upload(filePath, nickname) {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/upload',
-		type: 'GET',
-		args: {
+		qs: {
 			source: filePath,
 			nickname: nickname,
 		},
@@ -61,7 +58,7 @@ addResultListener('uploaded', function(result) {
 function loadDotSia(filePath) {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/load',
-		args: {
+		qs: {
 			filename: filePath,
 		}
 	}, 'file-loaded');
@@ -104,7 +101,7 @@ function uploadDir(dirPath, nickname) {
 function loadAscii(ascii) {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/loadascii',
-		args: {
+		qs: {
 			file: ascii,
 		}
 	}, 'ascii-loaded');
@@ -119,7 +116,7 @@ function deleteFile(nickname) {
 	// Make the request to delete the file.
 	IPCRenderer.sendToHost('api-call', {
 		url: '/renter/files/delete',
-		args: {
+		qs: {
 			nickname: nickname,
 		}
 	}, 'deleted');

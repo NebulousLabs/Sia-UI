@@ -7,21 +7,16 @@
  */ 
 const defaultConfig = {
 	homePlugin:  'Overview',
-	siadAddress: 'http://localhost:9980',
+	siad: {
+		path:    Path.join(__dirname, '..', 'Sia'),
+		address: 'http://localhost:9980',
+		command: process.platform === 'win32' ? './siad.exe' : './siad',
+	},
 	width:       800,
 	height:      600,
 	x:           0,
 	y:           0,
 };
-
-/**
- * The config object derived from the config.json file used to store UI settings
- * @typedef {Object} config
- * @property {string} homePlugin - The name of the default plugin, usually 'Overview'
- * @property {string} siadAddress - Usually 'http://localhost:9980'
- * @property {string} siadCommand - The command to run siad
- * @property {number} zoom - The zoom factor for the UI
- */
 
 /**
  * Holds all config.json related logic for the UI

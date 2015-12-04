@@ -20,6 +20,18 @@ addResultListener('coin-sent', function(result) {
 	$('#transaction-amount').val('');
 });
 
+// Button to load all wallet transactions
+$('#view-all-transactions').click(function() {
+	tooltip('Loading all transactions', this);
+	IPCRenderer.sendToHost('api-call', {
+		url: '/wallet/transactions',
+		qs: {
+			startheight: 0,
+			endheight: 1000000,
+		},		
+	}, 'update-history');
+});
+
 // Lock or unlock the wallet
 $('#lock-pod').click(function() {
 	var state = $('#lock-status').html();
@@ -99,8 +111,8 @@ $('.close').click(function() {
 function loadLegacyWallet(filename, password) {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/load/033x',
-		type: 'POST',
-		args: {
+		method: 'POST',
+		qs: {
 			filepath: filename,
 			encryptionpassword: password,
 		},
