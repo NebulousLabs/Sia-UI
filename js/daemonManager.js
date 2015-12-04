@@ -29,6 +29,7 @@ module.exports = (function DaemonManager() {
 			call = {url: call};
 		}
 
+		console.log(call);
 		// Add the localhost address and port to the url and default values
 		call.url = address + call.url;
 

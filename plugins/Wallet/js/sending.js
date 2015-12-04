@@ -54,7 +54,7 @@ function sendTransaction(amount, address) {
 	IPCRenderer.sendToHost('api-call', {
 		url: url,
 		type: 'POST',
-		args: transaction,
+		data: transaction,
 	}, 'coin-sent');
 }
 

@@ -113,7 +113,7 @@ function loadLegacyWallet(filename, password) {
 	IPCRenderer.sendToHost('api-call', {
 		url: '/wallet/load/033x',
 		type: 'POST',
-		args: {
+		data: {
 			filepath: filename,
 			encryptionpassword: password,
 		},

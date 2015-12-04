@@ -5,8 +5,8 @@
  * @class UIManager
  */
 module.exports = (function UIManager() {
-	// Config namespace for config management logic
-	var Config = require('./uiConfig');
+	// Namespace for config management logic
+	var settings = require('./uiConfig');
 	// Config.json variables
 	var configPath = Path.join(__dirname, '..', 'config.json');
 	// Config variable held in working memory
@@ -52,48 +52,6 @@ module.exports = (function UIManager() {
 	var eTooltip = $('#tooltip');
 	var tooltipTimeout, tooltipVisible;
 
-	function tooltip(element, content, offset) {
-		offset = offset || {
-			top: 0,
-			left: 0,
-		};
-		element = $(element);
-
-		eTooltip.show();
-		eTooltip.html(content);
-		var middleX = element.offset().left + element.width()/2;
-		var topY = element.offset().top - element.height();
-
-		eTooltip.offset({
-			top: topY - eTooltip.height() + offset.top,
-			left: middleX - eTooltip.width()/2 + offset.left
-		});
-
-		if (!tooltipVisible) {
-			eTooltip.stop();
-			eTooltip.css({'opacity':0});
-			tooltipVisible = true;
-			eTooltip.animate({
-				'opacity':1
-			}, 400);
-		} else{
-			eTooltip.stop();
-			eTooltip.show();
-			eTooltip.css({'opacity':1});
-		}
-
-		clearTimeout(tooltipTimeout);
-		tooltipTimeout = setTimeout(function() {
-			// eTooltip.hide();
-			eTooltip.animate({
-				'opacity':'0'
-			}, 400, function() {
-				tooltipVisible = false;
-				eTooltip.hide();
-			});
-		}, 1400);
-	}
-	
 	// Removes a notification element
 	function removeNotification(el) {
 		el.slideUp(function() {
@@ -147,6 +105,7 @@ module.exports = (function UIManager() {
 			top: 0,
 			left: 0,
 		};
+
 		// Show the tooltip at the proper location
 		eTooltip.show();
 		eTooltip.html(content);
@@ -156,6 +115,7 @@ module.exports = (function UIManager() {
 			top: topY,
 			left: middleX,
 		});
+
 		// Fade the toolip from 0 to 1
 		if (!tooltipVisible) {
 			eTooltip.stop();
@@ -169,6 +129,7 @@ module.exports = (function UIManager() {
 			eTooltip.show();
 			eTooltip.css({'opacity':1});
 		}
+
 		// Hide the tooltip after 1.4 seconds
 		clearTimeout(tooltipTimeout);
 		tooltipTimeout = setTimeout(function() {
@@ -180,7 +141,7 @@ module.exports = (function UIManager() {
 				eTooltip.hide();
 			});
 		}, 1400);
-	};
+	}
 
 	/**
 	 * Shows notification in lower right of UI window
@@ -194,7 +155,7 @@ module.exports = (function UIManager() {
 		// Record errors for reference
 		if (type === 'error') {
 			if (!errorLog) {
-				errorLog = Fs.createWriteStream(Path.join(__dirname, 'errors.log'));
+				errorLog = Fs.createWriteStream(Path.join(__dirname, '..', 'errors.log'));
 			}
 			try {
 				errorLog.write(message + '\n');
@@ -235,7 +196,7 @@ module.exports = (function UIManager() {
 		notificationTimeout = setTimeout(function() {
 			removeNotification(notif);
 		}, 2500);
-	};
+	}
 
 	// Checks if there is an update available
 	function checkUpdate() {
@@ -269,7 +230,7 @@ module.exports = (function UIManager() {
 	*/
 	function init() {
 		checkUpdate();
-		Config.load(configPath, function(config) {
+		settings.load(configPath, function(config) {
 			memConfig = config;
 
 			// Load the window's size and position
@@ -279,7 +240,7 @@ module.exports = (function UIManager() {
 			Daemon.init(config);
 			Plugins.init(config);
 		});
-	};
+	}
 
 	/**
 	* Called at window.beforeunload, closes the UI
@@ -300,17 +261,19 @@ module.exports = (function UIManager() {
 		}
 
 		// Save the config
-		Config.save(memConfig, configPath);
-	};
+		settings.save(memConfig, configPath);
+	}
 
+	/**
+	* Get or set a config key
+	* @function UIManager#config
+	*/
 	function config(args) {
-		if (args.value === undefined) {
-			return memConfig[args.key];
-		} else {
+		if (args.value !== undefined) {
 			memConfig[args.key] = args.value;
-			return args.value;
 		}
-	};
+		return memConfig[args.key];
+	}
 
 	return {
 		init: init,
@@ -320,4 +283,4 @@ module.exports = (function UIManager() {
 		renotify: renotify,
 		config: config,
 	};
-}());
+})();
