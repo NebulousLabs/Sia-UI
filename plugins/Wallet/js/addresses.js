@@ -12,10 +12,13 @@ var searchedAddresses = [];
 function makeAddress(address, number) {
 	// Make and store a jquery element for the address
 	var element = $(`
-		<div class='entry' id=''>
+		<div class='entry s-font' id=''>
 			<div class='listnum'></div>
 			<div class='button address cssTooltip' tooltip-content='Show Related Transactions'>
 				<i class='fa fa-search fa-flip-horizontal'></i>
+			</div>
+			<div class='button copy-address'>
+				<i class='fa fa-clipboard'></i>
 			</div>
 		</div>
 	`);
@@ -28,6 +31,12 @@ function makeAddress(address, number) {
 		updateTransactionCriteria({
 			address: event.target.id,
 		});
+	});
+
+	// Make copy-to-clipboard button clickable
+	element.find('.copy-address').click(function() {
+		Clipboard.writeText(this.parentNode.id);
+		notify('Copied address to clipboard', 'copied');
 	});
 
 	// Append and show the address element

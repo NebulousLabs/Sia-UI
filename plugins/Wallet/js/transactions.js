@@ -30,7 +30,7 @@ var criteria = {
 // Append a transaction to Transactions list
 function makeTransaction(txn) {
 	var element = $(`
-		<div class='transaction entry' id=''>
+		<div class='transaction entry s-font' id=''>
 			<div class='currency'></div>
 			<div class='value'></div>
 			<div class='txnid'></div>

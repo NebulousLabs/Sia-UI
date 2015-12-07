@@ -10,6 +10,17 @@
  *    Black:      #000000
  *    Neon-Green: #00CBA0
  */
+
+.s-font {
+	font-size: 11px;
+}
+.m-font {
+	font-size: 16px;
+}
+.l-font {
+	font-size: 24px;
+}
+
 /* Password box */
 .popup {
 	position: absolute;
@@ -28,20 +39,10 @@
 	border: solid 1px #c5c5c5;
 	border-radius: 8px;
 	text-align: center;
-	font-size: 16px;
 	overflow: auto;
 }
 .popup .title {
-	font-size: 24px;
 	display: block;
-}
-.popup .address-list {
-	font-family: monospace;
-	font-size: 11px;
-	max-height: 200px;
-	max-width: 600px;
-	overflow: auto;
-	padding: 20px;
 }
 #generated-password {
 	margin: 0;
@@ -63,7 +64,6 @@
 }
 .warning {
 	color: red;
-	font-size: 12px;
 }
 .popup .close {
 	padding: 0;
@@ -87,13 +87,11 @@
 }
 .box .title {
 	display: inline-block;
-	font-size: 20px;
 	margin-bottom: 4px;
 	width: 18%;
 }
 .button {
 	display: inline-block;
-	font-size: 16px;
 	padding: 4px;
 }
 .title .button:first-child {
@@ -104,7 +102,6 @@
 	position: absolute;
 	bottom: 10px;
 	right: 30px;
-	font-size: 20px;
 	height: 30px;
 	width: 30px;
 	border-radius: 50%;
@@ -113,12 +110,11 @@
 .floating.button i {
     display: block;
     text-align: center;
-    margin-top: 5px;
+    margin-top: 4px;
 }
 
 /* Controls */
 .controls {
-	font-size: 16px;
 	display: inline-block;
 	float: right;
 	width: 80%;
@@ -126,9 +122,6 @@
 }
 .controls input {
 	height: 28px;
-}
-input, select {
-	font-size: 16px;
 }
 input[type=number] {
 	text-align: right;
@@ -171,7 +164,6 @@ input[type=number] {
 #make-transaction input[type=number], #make-transaction select {
     height: 40px;
     width: 100px;
-    font-size: 26px;
 }
 #make-transaction .button {
 	font-size: 30px;

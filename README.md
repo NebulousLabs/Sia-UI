@@ -7,7 +7,7 @@
 
 # A Highly Efficient Decentralized Storage Network
 
-![Visit sia.tech for the bird's eye view of what Sia is](/doc/assets/files.png)
+![A snapshot of the the file library](/doc/assets/files.png)
 This is the user interface for [Sia](https://github.com/NebulousLabs/Sia), it
 is a desktop application based off the
 [electron](https://github.com/atom/electron) framework. The ambition behind
@@ -60,6 +60,3 @@ will output style suggestions for the UI's javascript, including for plugins.
 Contributions are sought after like a rare pokemon!
 Please read the [Developer's Guide](doc/Developers.md) before getting started.
 
-## License
-
-[MIT](LICENSE)
