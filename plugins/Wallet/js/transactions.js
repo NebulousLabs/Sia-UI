@@ -5,8 +5,8 @@ var transactions = [];
 
 // Criteria by which to view transactions
 var criteria = {
-	startHeight:             0,
-	endHeight:               1000000,
+	startHeight:             '0',
+	endHeight:               '1000000',
 	startTime:               undefined,
 	endTime:                 undefined,
 	minValue:                undefined,
@@ -133,17 +133,15 @@ function computeSum(txn) {
 // Fill transactions array
 function getTransactions() {
 	// Decide what call to make based on criteria
-	var url, args;
+	var url, qs;
 	if (criteria.txnId) {
-		args = {};
 		url = '/wallet/transaction/' + criteria.txnId;
 	} else if (criteria.address) {
-		args = {};
 		url = '/wallet/transactions/' + criteria.address;
 	} else {
 		// Default call to /wallet/tranasctions
 		url = '/wallet/transactions';
-		args = {
+		qs = {
 			startheight: criteria.startHeight,
 			endheight: criteria.endHeight,
 		};
@@ -152,8 +150,7 @@ function getTransactions() {
 	// Make call
 	IPCRenderer.sendToHost('api-call', {
 		url: url,
-		type: 'GET',
-		args: args,
+		qs: qs,
 	}, 'update-transactions');
 }
 

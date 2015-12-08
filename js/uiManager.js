@@ -4,15 +4,68 @@
  * The first renderer process, handles initializing all other managers
  * @class UIManager
  */
-function UIManager() {
-	// Config namespace for config management logic
-	var Config = require('./js/uiConfig.js');
+module.exports = (function UIManager() {
+	// Namespace for config management logic
+	var settings = require('./uiConfig');
 	// Config.json variables
-	var configPath = Path.join(__dirname, 'config.json');
+	var configPath = Path.join(__dirname, '..', 'config.json');
 	// Config variable held in working memory
 	var memConfig;
 	// Variable to track error log
 	var errorLog;
+
+	// Shows tooltip with content on given element
+	var eTooltip = $('#tooltip');
+	var tooltipTimeout, tooltipVisible;
+
+	/**
+	 * Shows tooltip with content at given offset location
+	 * @function UIManager#tooltip
+	 * @param {string} content The message to display in tooltip
+	 * @param {Object} offset The dimensions of the element to display over
+	 */
+	function tooltip(content, offset) {
+		offset = offset || {
+			top: 0,
+			left: 0,
+		};
+
+		// Show the tooltip at the proper location
+		eTooltip.show();
+		eTooltip.html(content);
+		var middleX = offset.left - (eTooltip.width()/2) + (offset.width/2);
+		var topY = offset.top - (eTooltip.height()) - (offset.height/2);
+		eTooltip.offset({
+			top: topY,
+			left: middleX,
+		});
+
+		// Fade the toolip from 0 to 1
+		if (!tooltipVisible) {
+			eTooltip.stop();
+			eTooltip.css({'opacity':0});
+			tooltipVisible = true;
+			eTooltip.animate({
+				'opacity':1
+			}, 400);
+		} else{
+			eTooltip.stop();
+			eTooltip.show();
+			eTooltip.css({'opacity':1});
+		}
+
+		// Hide the tooltip after 1.4 seconds
+		clearTimeout(tooltipTimeout);
+		tooltipTimeout = setTimeout(function() {
+			// eTooltip.hide();
+			eTooltip.animate({
+				'opacity':'0'
+			}, 400, function() {
+				tooltipVisible = false;
+				eTooltip.hide();
+			});
+		}, 1400);
+	}
 
 	// Involved in the notification queue
 	var notifications = [];
@@ -48,52 +101,6 @@ function UIManager() {
 		asciifile: 'clipboard',
 	};
 
-	// Shows tooltip with content on given element
-	var eTooltip = $('#tooltip');
-	var tooltipTimeout, tooltipVisible;
-
-	function tooltip(element, content, offset) {
-		offset = offset || {
-			top: 0,
-			left: 0,
-		};
-		element = $(element);
-
-		eTooltip.show();
-		eTooltip.html(content);
-		var middleX = element.offset().left + element.width()/2;
-		var topY = element.offset().top - element.height();
-
-		eTooltip.offset({
-			top: topY - eTooltip.height() + offset.top,
-			left: middleX - eTooltip.width()/2 + offset.left
-		});
-
-		if (!tooltipVisible) {
-			eTooltip.stop();
-			eTooltip.css({'opacity':0});
-			tooltipVisible = true;
-			eTooltip.animate({
-				'opacity':1
-			}, 400);
-		} else{
-			eTooltip.stop();
-			eTooltip.show();
-			eTooltip.css({'opacity':1});
-		}
-
-		clearTimeout(tooltipTimeout);
-		tooltipTimeout = setTimeout(function() {
-			// eTooltip.hide();
-			eTooltip.animate({
-				'opacity':'0'
-			}, 400, function() {
-				tooltipVisible = false;
-				eTooltip.hide();
-			});
-		}, 1400);
-	}
-	
 	// Removes a notification element
 	function removeNotification(el) {
 		el.slideUp(function() {
@@ -137,52 +144,6 @@ function UIManager() {
 	}
 
 	/**
-	 * Shows tooltip with content at given offset location
-	 * @function UIManager#tooltip
-	 * @param {string} content The message to display in tooltip
-	 * @param {Object} offset The dimensions of the element to display over
-	 */
-	this.tooltip = function(content, offset) {
-		offset = offset || {
-			top: 0,
-			left: 0,
-		};
-		// Show the tooltip at the proper location
-		eTooltip.show();
-		eTooltip.html(content);
-		var middleX = offset.left - (eTooltip.width()/2) + (offset.width/2);
-		var topY = offset.top - (eTooltip.height()) - (offset.height/2);
-		eTooltip.offset({
-			top: topY,
-			left: middleX,
-		});
-		// Fade the toolip from 0 to 1
-		if (!tooltipVisible) {
-			eTooltip.stop();
-			eTooltip.css({'opacity':0});
-			tooltipVisible = true;
-			eTooltip.animate({
-				'opacity':1
-			}, 400);
-		} else{
-			eTooltip.stop();
-			eTooltip.show();
-			eTooltip.css({'opacity':1});
-		}
-		// Hide the tooltip after 1.4 seconds
-		clearTimeout(tooltipTimeout);
-		tooltipTimeout = setTimeout(function() {
-			// eTooltip.hide();
-			eTooltip.animate({
-				'opacity':'0'
-			}, 400, function() {
-				tooltipVisible = false;
-				eTooltip.hide();
-			});
-		}, 1400);
-	};
-
-	/**
 	 * Shows notification in lower right of UI window
 	 * @function UIManager#notify
 	 * @param {string} message What to display in notification
@@ -191,10 +152,10 @@ function UIManager() {
 	 * clicking the notification
 	 */
 	function notify(message, type, clickAction) {
-		// Record errors for reference
+		// Record errors for reference in `errors.log`
 		if (type === 'error') {
 			if (!errorLog) {
-				errorLog = Fs.createWriteStream(Path.join(__dirname, 'errors.log'));
+				errorLog = Fs.createWriteStream(Path.join(__dirname, '..', 'errors.log'));
 			}
 			try {
 				errorLog.write(message + '\n');
@@ -203,40 +164,34 @@ function UIManager() {
 			}
 		}
 
+		// Check if notification with same type/message is already shown
+		var notif = $('.type-' + type);
+		if (notif.length !== 0 && notif.find('.content').text() === message) {
+			// Don't spam it and instead empphasize it and prolong it
+			clearTimeout(notificationTimeout);
+			notificationTimeout = setTimeout(function() {
+				removeNotification(notif);
+			}, 2500);
+			return;
+		}
+
 		// TODO: This delay system is technically broken, but not noticably
-		// wait approximately 250ms between notifications
+		// Wait approximately 250ms between notifications
 		if (new Date().getTime() < lastNotificationTime + 250) {
 			notificationsInQueue++;
-
 			setTimeout(function() {
 				notify(message, type, clickAction);
 			}, notificationsInQueue * 250);
-
 			return;
 		}
 
 		lastNotificationTime = new Date().getTime();
 		if (notificationsInQueue > 0) {
-			notificationsInQueue --;
+			notificationsInQueue--;
 		}
 
 		showNotification(message, type, clickAction);
 	}
-	this.notify = notify;
-
-	/**
-	 * Refreshes notification of a certain type
-	 * @function UIManager#renotify
-	 * @param {string} type The form of notification
-	 * TODO: Imperfect way to find notification
-	 */
-	this.renotify = function(type) {
-		var notif = $('.type-' + type).first();
-		clearTimeout(notificationTimeout);
-		notificationTimeout = setTimeout(function() {
-			removeNotification(notif);
-		}, 2500);
-	};
 
 	// Checks if there is an update available
 	function checkUpdate() {
@@ -245,7 +200,7 @@ function UIManager() {
 			type: 'GET',
 			success: function(responseData, textStatus, jqXHR) {
 				// If version matches latest release version, do nothing
-				if (responseData[0].tag_name === require('./package.json').version) {
+				if (responseData[0].tag_name === require('../package.json').version) {
 					return;
 				}
 
@@ -268,25 +223,55 @@ function UIManager() {
 	* Called at window.onready, initalizes the UI
 	* @function UIManager#init
 	*/
-	this.init = function() {
+	function init() {
 		checkUpdate();
-		Config.load(configPath, function(config) {
+		settings.load(configPath, function(config) {
 			memConfig = config;
 
 			// Load the window's size and position
 			mainWindow.setBounds(memConfig);
 
 			// Init other manager classes
-			Daemon.init(config);
 			Plugins.init(config);
+			Daemon.configure(config);
+
+			// Let user know siad is running
+			Daemon.ifRunning(function(running) {
+				notify('siad is running!', 'success');
+			}, function() {
+				// Keep user notified of siad loading
+				var loading = setInterval(function() {
+					notify('Loading siad...', 'loading');
+				}, 2000);
+
+				// Start siad
+				Daemon.start(function(err) {
+					if (err) {
+						notify(err, 'error');
+						return;
+					}
+					clearInterval(loading);
+					notify('Started siad!', 'success');
+				});
+
+				// Listen for siad erroring
+				Daemon.on('error', function (error) {
+					notify('siad errored: ' + error, 'error');
+				});
+
+				// Listen for siad exiting
+				Daemon.on('exit', function(code) {
+					notify('siad exited with code: ' + code, 'stop');
+				});
+			});
 		});
-	};
+	}
 
 	/**
 	* Called at window.beforeunload, closes the UI
 	* @function UIManager#kill
 	*/
-	this.kill = function(ev) {
+	function kill(ev) {
 		// Close the error write stream
 		if (errorLog) {
 			errorLog.end();
@@ -301,15 +286,25 @@ function UIManager() {
 		}
 
 		// Save the config
-		Config.save(memConfig, configPath);
-	};
+		settings.save(memConfig, configPath);
+	}
 
-	this.config = function(args) {
-		if (args.value === undefined) {
-			return memConfig[args.key];
-		} else {
+	/**
+	* Get or set a config key
+	* @function UIManager#config
+	*/
+	function config(args) {
+		if (args.value !== undefined) {
 			memConfig[args.key] = args.value;
-			return args.value;
 		}
+		return memConfig[args.key];
+	}
+
+	return {
+		init: init,
+		kill: kill,
+		tooltip: tooltip,
+		notify: notify,
+		config: config,
 	};
-}
+})();

@@ -65,13 +65,12 @@ function stop() {
 $('#announce.button').click(function() {
 	$('#address.popup').show();
 });
-function announce(args) {
+function announce(settings) {
 	$('#address.popup').hide();
 	tooltip('Anouncing...', $('#announce').get(0));
 	var call = {
 		url: '/host/announce',
-		type: 'GET',
-		args: args,
+		qs: settings,
 	};
 	IPCRenderer.sendToHost('api-call', call, 'announced');
 }
@@ -102,8 +101,7 @@ $('#save.button').click(function() {
 	// Define configuration call
 	var call = {
 		url: '/host/configure',
-		type: 'GET',
-		args: hostInfo,
+		qs: hostInfo,
 	};
 	IPCRenderer.sendToHost('api-call', call, 'configure');
 });
