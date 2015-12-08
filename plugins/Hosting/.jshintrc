@@ -112,17 +112,9 @@
 	"maxerr"        : 100,      // Maximum errors before stopping.
 	"globals"       : {         // Extra globals.
 		"IPCRenderer": false,
-		"BigNumber": false,
-		"hostProperties": true,
-		"hosting": true,
-		"tooltip": true,
-		"convertSiacoin": true,
-		"formatBytes": true,
-		"update": true,
-		"updating": true,
-		"notify": true,
-		"tooltip": true,
-		"addResultListener": true
+		"Daemon": true,
+		"Host": true,
+		"Lifecycle": true
 	},
 	"indent"        : 4         // Specify indentation spacing
 }

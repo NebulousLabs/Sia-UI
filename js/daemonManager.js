@@ -4,10 +4,9 @@
 const Request = require('request');
 
 // Necessary node libraries
-// TODO: Path is in the global scope, but this file can soon be it's own node
-// package as a siad wrapper. So with that, it will need its own require
-// statements for node libraries
-//const Path = require('path');
+/* jshint ignore:start */
+const Path = require('path');
+/* jshint ignore:end */
 const Util = require('util');
 const EventEmitter = require('events');
 
@@ -54,6 +53,7 @@ function DaemonManager() {
 			if (!error && response.statusCode !== 200) {
 				// siad's error is returned as body
 				error = body;
+				body = null;
 			} 
 			if (typeof callback === 'function') {
 				callback(error, body);

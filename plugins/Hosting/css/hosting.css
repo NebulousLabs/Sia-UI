@@ -80,7 +80,7 @@
 }
 
 /* Properties */
-.frame .properties {
+#properties {
 	height: 50%;
 	font-size: 14px;
 	overflow-x: hidden;
@@ -95,10 +95,4 @@
 .frame .property .value {
 	border-left: 1px solid #e0e0e0;
 	padding: 10px;
-}
-.host-message {
-	text-align: center;
-	padding: 10px;
-	font-size: 16px;
-	color: #9e9e9e;
 }
