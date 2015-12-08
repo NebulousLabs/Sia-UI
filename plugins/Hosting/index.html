@@ -71,11 +71,6 @@
 			const IPCRenderer = require('electron').ipcRenderer;
 			// Jquery
 			const $ = require('jquery');
-			// Library for arbitrary precision in numbers
-			const BigNumber = require('bignumber.js');
-			// Ensure precision
-			BigNumber.config({ DECIMAL_PLACES: 24 });
-			BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 			// Siad wrapper/manager
 			const Daemon = require('../../js/daemonManager.js')
 
