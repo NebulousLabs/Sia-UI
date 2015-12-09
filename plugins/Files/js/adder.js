@@ -33,6 +33,7 @@ function exitFileAdder() {
 	for (var j = 0; j < paths.length; j++) {
 		paths[j].innerHTML = '';
 	}
+	update();
 }
 eID('back').onclick = exitFileAdder;
 eID('back-dir').onclick = exitFileAdder;

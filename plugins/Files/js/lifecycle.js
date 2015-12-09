@@ -1,30 +1,11 @@
 'use strict';
 
-// Regularly update the file library and status
-function update() {
-	IPCRenderer.sendToHost('api-call', '/renter/files/list', 'update-list');
-	IPCRenderer.sendToHost('api-call', '/renter/status', 'update-status');
-	
-	updating = setTimeout(update, 15000);
-}
-
-// On receiving api call result for file list
-addResultListener('update-list', function(result) {
-	// sort alphabetically by nickname
-	result.sort(function(a, b) {
-		return a.Nickname.localeCompare(b.Nickname);
-	});
-	// clear existing file list
-	eID('file-browser').innerHTML = '';
-	// insert each file
-	result.forEach(updateFile);
-});
+// Keeps track of if the view is shown
+var updating;
 
 // Convert to Siacoin
 // TODO: Enable commas for large numbers
 function convertSiacoin(hastings) {
-	// TODO: JS automatically loses precision when taking numbers from the API.
-	// This deals with that imperfectly
 	var number = new BigNumber(Math.round(hastings).toString());
 	var ConversionFactor = new BigNumber(10).pow(24);
 	return number.dividedBy(ConversionFactor).round();
@@ -32,13 +13,21 @@ function convertSiacoin(hastings) {
 
 // Update capsule values with renter status
 // TODO /renter/status is deprecated: get price estimate from hostdb instead
-addResultListener('update-status', function(result) {
+function updateStatus(result) {
 	var priceDisplay = convertSiacoin(result.Price).toFixed(2) + ' S / GB (estimated)';
 	eID('price').innerHTML = priceDisplay;
 
 	var hostsDisplay = result.KnownHosts + ' known hosts';
 	eID('host-count').innerHTML = hostsDisplay;
-});
+}
+
+// Regularly update the file library and status
+function update() {
+	Siad.apiCall('/renter/files/list', updateList);
+	Siad.apiCall('/renter/status', updateStatus);
+	
+	updating = setTimeout(update, 15000);
+}
 
 // Called upon showing
 function start() {
