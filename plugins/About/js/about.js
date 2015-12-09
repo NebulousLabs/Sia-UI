@@ -4,6 +4,12 @@
 const IPCRenderer = require('electron').ipcRenderer;
 // Siad wrapper
 const Siad = require('sia.js');
+IPCRenderer.sendToHost('config', {key: 'siad'}, 'siadsettings');
+IPCRenderer.on('siadsettings', function(settings) {
+	Siad.configure({
+		siad: settings,
+	});
+});
 // Keeps track of if the view is shown
 var updating;
 

@@ -9,6 +9,12 @@ BigNumber.config({ DECIMAL_PLACES: 24 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 // Siad wrapper
 const Siad = require('sia.js');
+IPCRenderer.sendToHost('config', {key: 'siad'}, 'siadsettings');
+IPCRenderer.on('siadsettings', function(settings) {
+	Siad.configure({
+		siad: settings,
+	});
+});
 // Keeps track of if the view is shown
 var updating;
 

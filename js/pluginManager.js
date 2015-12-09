@@ -11,7 +11,7 @@ module.exports = (function PluginManager() {
 	var home;
 	// The plugins folder
 	var plugPath;
-	// reference to `this` to use in functions
+	// Object to hold plugins and other public members
 	var self = {};
 
 	/**
@@ -100,7 +100,7 @@ module.exports = (function PluginManager() {
 					UI.tooltip.apply(null, event.args);
 					break;
 				case 'config':
-					// get or set something in the config.json
+					// Get or set something in the config.json
 					var args = event.args[0];
 					var result = UI.config(args);
 					responseChannel = event.args[1];
@@ -186,7 +186,7 @@ module.exports = (function PluginManager() {
 		setConfig(config, initPlugins);
 	}
 
-	// Make certain members public
+	// Return public members
 	self.init = init;
 	return self;
 }());
