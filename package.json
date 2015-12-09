@@ -10,11 +10,11 @@
     "chai-as-promised": "^5.1.0",
     "electron-mocha": "^0.6.1",
     "electron-packager": "^5.1.1",
-    "electron-prebuilt": "^0.35.0",
+    "electron-prebuilt": "^0.35.4",
     "ink-docstrap": "^0.5.2",
     "jsdoc": "^3.3.3",
     "jshint": "^2.8.0",
-    "spectron": "^0.34.0"
+    "spectron": "^0.35.3"
   },
   "dependencies": {
     "bignumber.js": "^2.1.0",

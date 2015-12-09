@@ -10,6 +10,17 @@
  *    Black:      #000000
  *    Neon-Green: #00CBA0
  */
+
+.s-font {
+	font-size: 11px;
+}
+.m-font {
+	font-size: 16px;
+}
+.l-font {
+	font-size: 24px;
+}
+
 /* Password box */
 .popup {
 	position: absolute;
@@ -28,20 +39,10 @@
 	border: solid 1px #c5c5c5;
 	border-radius: 8px;
 	text-align: center;
-	font-size: 16px;
 	overflow: auto;
 }
 .popup .title {
-	font-size: 24px;
 	display: block;
-}
-.popup .address-list {
-	font-family: monospace;
-	font-size: 11px;
-	max-height: 200px;
-	max-width: 600px;
-	overflow: auto;
-	padding: 20px;
 }
 #generated-password {
 	margin: 0;
@@ -63,7 +64,6 @@
 }
 .warning {
 	color: red;
-	font-size: 12px;
 }
 .popup .close {
 	padding: 0;
@@ -81,25 +81,40 @@
 	white-space: nowrap;
 	overflow: hidden;
 }
+.box {
+	height: calc(50% - 30px);
+	position: relative;
+}
 .box .title {
 	display: inline-block;
-	font-size: 20px;
 	margin-bottom: 4px;
 	width: 18%;
 }
 .button {
-	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
 	display: inline-block;
-	font-size: 16px;
 	padding: 4px;
 }
 .title .button:first-child {
 	padding-right: 0;
 }
+.floating.button {
+	background-color: #ffffff;
+	position: absolute;
+	bottom: 10px;
+	right: 30px;
+	height: 30px;
+	width: 30px;
+	border-radius: 50%;
+	box-shadow: 0px 5px 10px #dddddd;
+}
+.floating.button i {
+    display: block;
+    text-align: center;
+    margin-top: 4px;
+}
 
 /* Controls */
 .controls {
-	font-size: 16px;
 	display: inline-block;
 	float: right;
 	width: 80%;
@@ -107,9 +122,6 @@
 }
 .controls input {
 	height: 28px;
-}
-input, select {
-	font-size: 16px;
 }
 input[type=number] {
 	text-align: right;
@@ -125,66 +137,6 @@ input[type=number] {
 .page::-webkit-inner-spin-button { 
 	-webkit-appearance: none; 
 	margin: 0;
-}
-
-/* Box List */
-.box {
-	height: calc(50% - 30px);
-}
-.list {
-	height: calc(50%);
-	padding: 16px;
-	overflow: hide;
-}
-.entry {
-	height: 24px;
-	font-size: 18px;
-	overflow: hidden;
-	color: #4a4a4a;
-}
-
-/* Transactions list */
-#transaction-list {
-	background-color: #fafafa;
-	height: calc(100% - 60px);
-	width: 100%;
-	padding: 0;
-	overflow-y: auto;
-}
-.transaction {
-	padding: 10px;
-	color: #757575;
-	height:12px;
-	font-size: 14px;
-	background-color: #fff;
-	border-bottom: 1px solid #eeeeee;
-}
-.transaction > * {
-	display: inline-block;
-	padding-right: 1%;
-	white-space: nowrap;
-	overflow: hidden;
-	text-align: left;
-}
-.transaction .currency {
-	width: 5%;
-}
-.currency.positive {
-	color: #00FF00;
-}
-.currency.negative {
-	color: #FF0000;
-}
-.transaction .value {
-	width: 10%;
-	text-align: right;
-}
-.transaction .txnid {
-	width: 60%;
-}
-.transaction .time {
-	width: 20%;
-	padding-right: 0;
 }
 
 /* Make Transaction Frame */
@@ -212,7 +164,6 @@ input[type=number] {
 #make-transaction input[type=number], #make-transaction select {
     height: 40px;
     width: 100px;
-    font-size: 26px;
 }
 #make-transaction .button {
 	font-size: 30px;
@@ -225,7 +176,7 @@ input[type=number] {
 	height: 28px;
 }
 .transparent {
-	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
+	-webkit-animation: fadeout .5s; /* Safari, Chrome and Opera > 12.1 */
 	opacity: 0;
 	display: none;
 }
@@ -233,48 +184,3 @@ input[type=number] {
 	cursor: default;
 }
 
-/* Address list */
-#address-list {
-	background-color: #fafafa;
-	height: calc(100% - 60px);
-	width: 100%;
-	padding: 0;
-	overflow-y: auto;
-}
-#address-list .entry {
-	padding: 10px;
-	color: #757575;
-	font-size: 14px;
-	background-color: #fff;
-	border-bottom: 1px solid #eeeeee;
-}
-#address-list .entry:hover {
-	cursor: pointer;
-	background-color: #fafafa;
-}
-.entry .listnum {
-	display: inline-block;
-	width: 5%;
-	padding-right: 1%;
-	white-space: nowrap;
-	overflow: hidden;
-}
-.entry {
-	height: 12px;
-}
-.entry .address {
-	display: inline-block;
-	width: calc(94% - 45px);
-	text-align: left;
-	padding-right: 1%;
-	white-space: nowrap;
-	overflow: hidden;
-}
-.entry .copy-address {
-	float: right;
-	display: inline-block;
-	width: 25px;
-}
-#search-bar {
-	width: 300px;
-}

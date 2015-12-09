@@ -61,9 +61,6 @@
 	width: calc(100% - 30px);
 	overflow: hidden;
 }
-.row .title {
-	display: inline-block;
-}
 .button {
 	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
 	display: inline-block;
@@ -111,7 +108,6 @@ input {
 }
 #file-browser .file:hover {
 	cursor: pointer;
-	background-color: #fafafa;
 }
 .file .graphic {
 	display: inline-block;
@@ -164,17 +160,17 @@ input {
 .file .delete:hover {
 	opacity: .5;
 }
-.simpleTooltip {
+.cssTooltip {
 	display: inline;
 	position: relative;
 }
-.simpleTooltip:hover:after {
+.cssTooltip:hover:after {
 	background: #111;
 	background: rgba(0,0,0,.8);
 	border-radius: .5em;
 	top: 1.35em;
 	color: #fff;
-	content: attr(data-tooltip);
+	content: attr(tooltip-content);
 	display: block;
 	right: 1em;
 	padding: .3em 1em;
@@ -185,46 +181,6 @@ input {
 }
 
 /* Add file window */
-.file-upload-container {
-	display: inline-block;
-	position: relative;
-	width: 150px;
-	height: 40px;
-	overflow: hidden;
-}
-.pod:hover .file-upload-container,
-::-webkit-file-upload-button {
-	cursor: pointer;
-}
-.file-upload-label {
-	width: 150px;
-	height: 40px;
-	text-align: center;
-}
-.file-upload-label i {
-	margin-right: 8px;
-}
-#fileupload {
-	position: absolute;
-	top: 0;
-	left: 0;
-	margin: 0;
-	padding: 0;
-	font-size: 60px;
-	cursor: pointer;
-	opacity: 0;
-	filter: alpha(opacity=0);
-}
-.file-add-filename {
-	display: inline-block;
-	vertical-align: top;
-	margin-top: 2px;
-	height: 40px;
-	color: #333;
-	line-height: 40px;
-	margin-left: 16px;
-	margin-right: 24px;
-}
 .description-field {
 	padding: 1%;
 	width: 94%;
@@ -239,21 +195,12 @@ input {
 .step .button {
 	font-size: 32px;
 	-webkit-box-sizing: border-box;
-	color: #c5c5c5;
+	margin: auto;
 }
 #add-sia-file {
 	height: 66.667%;
 }
 .step .capsule {
 	background-color: #fff;
-}
-.button.upload {
-	font-size: 24px;
-	padding: 20px;
-	color: #eeeeee;
-	margin-top: -10px;
-}
-.button.upload:hover {
-	background-color: rgba(0, 0, 0, 0.25);
 }
 

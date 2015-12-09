@@ -14,7 +14,7 @@ function update() {
 	// Get list of wallet transactions
 	getTransactions();
 	// Get list of wallet addresses
-	IPCRenderer.sendToHost('api-call', '/wallet/addresses', 'update-addresses');
+	getAddresses();
 
 	updating = setTimeout(update, refreshRate);
 

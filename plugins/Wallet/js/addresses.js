@@ -12,17 +12,19 @@ var searchedAddresses = [];
 function makeAddress(address, number) {
 	// Make and store a jquery element for the address
 	var element = $(`
-		<div class='entry' id=''>
+		<div class='entry s-font' id=''>
 			<div class='listnum'></div>
-			<div class='address'></div>
-			<div class='copy-address'>
+			<div class='button address cssTooltip' tooltip-content='Show Related Transactions'>
+				<i class='fa fa-search fa-flip-horizontal'></i>
+			</div>
+			<div class='button copy-address'>
 				<i class='fa fa-clipboard'></i>
 			</div>
 		</div>
 	`);
 	element.attr('id', address);
 	element.find('.listnum').text(number);
-	element.find('.address').text(address);
+	element.find('.address').append(address);
 
 	// Make clicking this address show relevant transactions
 	element.find('.address').click(function(event) {
@@ -65,6 +67,14 @@ function updateAddressPage() {
 	});
 }
 
+// Retrieves address list from siad
+function getAddresses() {
+	IPCRenderer.sendToHost('api-call', {
+		url: '/wallet/addresses',
+		type: 'GET',
+	}, 'update-addresses');
+}
+
 // Update addresses array and page
 addResultListener('update-addresses', function(result) {
 	addresses = result.addresses;
@@ -73,6 +83,12 @@ addResultListener('update-addresses', function(result) {
 
 // Update addresses on page navigation
 $('#address-page').on('input', updateAddressPage);
+
+// Refresh button
+$('#view-all-addresses').click(function() {
+	$('#search-bar').val('');
+	getAddresses();
+});
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Search ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Filter address list by search string
@@ -140,7 +156,11 @@ $('#create-address').click(function() {
 addResultListener('new-address', function(result) {
 	notify('New address created', 'created');
 	addAddress(result);
+	
+	// Display only the created address
 	$('#search-bar').val(result.address);
-	performSearch();
+	filterAdresses(result.address);
+	$('#address-page').val(1);
+	updateAddressPage();
 });
 

@@ -5,12 +5,12 @@ var transactions = [];
 
 // Criteria by which to view transactions
 var criteria = {
-	startHeight:             '0',
-	endHeight:               '1000000',
-	startTime:               undefined,
-	endTime:                 undefined,
-	minValue:                undefined,
-	maxValue:                undefined,
+	startHeight:             0,
+	endHeight:               1000000,
+	startTime:               null,
+	endTime:                 null,
+	minValue:                null,
+	maxValue:                null,
 	currency: [
 		'siacoin',
 		'siafund',
@@ -21,8 +21,8 @@ var criteria = {
 	outputs:                 true,
 	confirmedTransactions:   true,
 	uncomfirmedTransactions: true,
-	txnId:                   undefined,
-	address:                 undefined,
+	txnId:                   null,
+	address:                 null,
 	itemsPerPage:            25,
 };
 
@@ -30,7 +30,7 @@ var criteria = {
 // Append a transaction to Transactions list
 function makeTransaction(txn) {
 	var element = $(`
-		<div class='transaction' id=''>
+		<div class='transaction entry s-font' id=''>
 			<div class='currency'></div>
 			<div class='value'></div>
 			<div class='txnid'></div>
@@ -47,10 +47,10 @@ function makeTransaction(txn) {
 	element.find('.time').html(time);
 
 	// Set transaction positive or negative
-	if (txn.value > 0) {
-		element.find('.currency').addClass('positive');
-	} else {
+	if (txn.value.isNegative()) {
 		element.find('.currency').addClass('negative');
+	} else {
+		element.find('.currency').addClass('positive');
 	}
 
 	// Set transaction currency icon
@@ -92,13 +92,13 @@ $('#transaction-page').on('input', updateTransactionPage);
 function checkCriteria(txn) {
 	// Checks each criteria value if it's relaxed or if the transaction passes
 	// Failing one check returns false but passing all checks returns true
-	return (criteria.endTime   === undefined || txn.confirmationtimestamp <= criteria.endTime)   &&
-	       (criteria.startTime === undefined || txn.confirmationtimestamp >= criteria.startTime) &&
-	       (criteria.maxValue  === undefined || txn.value                 <= criteria.maxValue)  &&
-	       (criteria.minValue  === undefined || txn.value                 >= criteria.minValue)  &&
-	       (criteria.currency  === undefined || criteria.currency.indexOf(txn.currency) !== -1)  &&
-	       (criteria.inputs    === true      || txn.value                 >= 0)                  &&
-	       (criteria.outputs   === true      || txn.value                 <= 0);
+	return (criteria.endTime   === null || txn.confirmationtimestamp <= criteria.endTime)   &&
+	       (criteria.startTime === null || txn.confirmationtimestamp >= criteria.startTime) &&
+	       (criteria.maxValue  === null || txn.value                 <= criteria.maxValue)  &&
+	       (criteria.minValue  === null || txn.value                 >= criteria.minValue)  &&
+	       (criteria.currency  === null || criteria.currency.indexOf(txn.currency) !== -1)  &&
+	       (criteria.inputs    === true || txn.value                 >= 0)                  &&
+	       (criteria.outputs   === true || txn.value                 <= 0);
 }
 
 // Compute aggregate value of the transaction
@@ -189,4 +189,11 @@ function updateTransactionCriteria(newCriteria) {
 	}
 	getTransactions();
 }
+
+// Refresh button
+$('#view-all-transactions').click(function() {
+	criteria.txnId = null;
+	criteria.address = null;
+	getTransactions();
+});
 
