@@ -13,7 +13,7 @@ function lifecycle() {
 
 	// Get host status regularly
 	function update() {
-		Daemon.apiCall('/host', function(result) {
+		Siad.apiCall('/host', function(result) {
 			Host.update(result);
 		});
 		updating = setTimeout(update, refreshRate);

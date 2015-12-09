@@ -112,7 +112,7 @@
 	"maxerr"        : 100,      // Maximum errors before stopping.
 	"globals"       : {         // Extra globals.
 		"IPCRenderer": false,
-		"Daemon": true,
+		"Siad": true,
 		"Host": true,
 		"Lifecycle": true
 	},

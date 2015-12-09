@@ -63,7 +63,7 @@ function host() {
 	// Announce host on the network
 	function announce(settings) {
 		settings = settings || null;
-		Daemon.apiCall({
+		Siad.apiCall({
 			url: '/host/announce',
 			method: 'POST',
 			qs: settings,
@@ -79,7 +79,7 @@ function host() {
 			settings[name] = math.revertToBaseUnit(value, props[name].conversion);
 		});
 		// Send configuration call
-		Daemon.apiCall({
+		Siad.apiCall({
 			url: '/host',
 			method: 'POST',
 			qs: settings,

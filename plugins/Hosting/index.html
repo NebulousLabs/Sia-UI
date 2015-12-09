@@ -71,14 +71,24 @@
 			const IPCRenderer = require('electron').ipcRenderer;
 			// Jquery
 			const $ = require('jquery');
-			// Siad wrapper/manager
-			const Daemon = require('../../js/daemonManager.js')
 
 			// Host settings manager
 			var Host = require('./js/host.js')
-			// Slight modification to Daemon object for standard error handling
-			Daemon.apiCall = function(callObj, callback) {
-				Daemon.call(callObj, function(err, result) {
+			// Lifecycle manager
+			var Lifecycle = require('./js/lifecycle.js');
+
+			// Siad wrapper/manager
+			var Siad = require('../../js/daemonManager.js')
+			// Make sure Siad settings are in sync with the rest of the UI's
+			IPCRenderer.sendToHost('config', {key: 'siad'}, 'siadsettings');
+			IPCRenderer.on('siadsettings', function(settings) {
+				Siad.configure({
+					siad: settings,
+				});
+			});
+			// Slight modification to Siad wrapper for standard error handling
+			Siad.apiCall = function(callObj, callback) {
+				Siad.call(callObj, function(err, result) {
 					if (err) {
 						console.error(callObj, err);
 						Lifecycle.notify(err, 'error');
@@ -87,8 +97,6 @@
 					}
 				});
 			}
-			// Lifecycle manager
-			var Lifecycle = require('./js/lifecycle.js');
 
 			// Expose start and stop methods to global namespace so they're
 			// automatically called by the general UI
