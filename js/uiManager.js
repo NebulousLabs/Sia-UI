@@ -23,6 +23,7 @@ module.exports = (function UIManager() {
 	 * @function UIManager#tooltip
 	 * @param {string} content The message to display in tooltip
 	 * @param {Object} offset The dimensions of the element to display over
+	 * TODO: separate out tooltip management from this file
 	 */
 	function tooltip(content, offset) {
 		offset = offset || {
@@ -150,6 +151,7 @@ module.exports = (function UIManager() {
 	 * @param {string} type The form of notification
 	 * @param {function} clickAction The function to call upon the user
 	 * clicking the notification
+	 * TODO: separate out notification management from this file
 	 */
 	function notify(message, type, clickAction) {
 		// Record errors for reference in `errors.log`
@@ -166,7 +168,7 @@ module.exports = (function UIManager() {
 
 		// Check if notification with same type/message is already shown
 		var notif = $('.type-' + type);
-		if (notif.length !== 0 && notif.find('.content').text() === message) {
+		if (notif.length !== 0 && notif.find('.content').first().text() === message) {
 			// Don't spam it and instead empphasize it and prolong it
 			clearTimeout(notificationTimeout);
 			notificationTimeout = setTimeout(function() {
@@ -255,9 +257,11 @@ module.exports = (function UIManager() {
 				// Keep user notified of siad loading
 				var loading = setInterval(function() {
 					notify('Loading siad...', 'loading');
-				}, 2000);
+				}, 500);
 
 				// Start siad
+				// TODO: Detect error of Siad not being found and download it
+				// instead of endlessly sending loading notifications
 				Siad.start(function(err) {
 					clearInterval(loading);
 					if (err) {
