@@ -220,14 +220,14 @@ module.exports = (function UIManager() {
 	}
 
 	// Notifies the siad wrapper's error and exit
-	function watchDaemon() {
+	function addSiadListeners() {
 		// Listen for siad erroring
-		Daemon.on('error', function (error) {
+		Siad.on('error', function (error) {
 			notify('siad errored: ' + error, 'error');
 		});
 
 		// Listen for siad exiting
-		Daemon.on('exit', function(code) {
+		Siad.on('exit', function(code) {
 			notify('siad exited: ' + code, 'stop');
 		});
 	}
@@ -246,10 +246,10 @@ module.exports = (function UIManager() {
 
 			// Initialize other manager classes
 			Plugins.init(config);
-			Daemon.configure(config);
+			Siad.configure(config);
 
 			// Let user know if siad is running or starts
-			Daemon.ifRunning(function(running) {
+			Siad.ifRunning(function(running) {
 				notify('siad is running!', 'success');
 			}, function() {
 				// Keep user notified of siad loading
@@ -258,7 +258,7 @@ module.exports = (function UIManager() {
 				}, 2000);
 
 				// Start siad
-				Daemon.start(function(err) {
+				Siad.start(function(err) {
 					clearInterval(loading);
 					if (err) {
 						notify(err, 'error');
@@ -268,8 +268,8 @@ module.exports = (function UIManager() {
 				});
 			});
 
-			// Listen for Daemon events and notify accordingly
-			watchDaemon();
+			// Listen for siad events and notify accordingly
+			addSiadListeners();
 		});
 	}
 

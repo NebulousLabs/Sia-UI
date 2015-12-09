@@ -91,7 +91,7 @@
 		"mainWindow": true,
 		/* UI globals */
 		"UI": true,
-		"Daemon": true,
+		"Siad": true,
 		"Plugins": true
 	},
 	"indent"        : 4         // Specify indentation spacing

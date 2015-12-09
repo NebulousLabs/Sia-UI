@@ -81,11 +81,11 @@ module.exports = (function PluginManager() {
 					// Redirect api calls to the API
 					var call = event.args[0];
 					responseChannel = event.args[1];
-					if (!Daemon.running) {
+					// Send the call only if the Siad appears to be running
+					if (!Siad.running) {
 						return;
 					}
-					// Send the call only if the Daemon appears to be running
-					Daemon.call(call, function(err, result) {
+					Siad.call(call, function(err, result) {
 						plugin.sendToView(responseChannel, err, result);
 					});
 					break;
