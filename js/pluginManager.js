@@ -78,7 +78,7 @@ module.exports = (function PluginManager() {
 			var responseChannel;
 			switch(event.channel) {
 				case 'api-call':
-					// Redirect api calls to the daemonManager
+					// Redirect api calls to the API
 					var call = event.args[0];
 					responseChannel = event.args[1];
 					if (!Daemon.running) {
