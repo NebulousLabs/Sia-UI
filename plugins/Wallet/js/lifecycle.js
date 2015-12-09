@@ -10,7 +10,7 @@ var updating;
 // Make API calls, sending a channel name to listen for responses
 function update() {
 	// Get wallet status and balance
-	IPCRenderer.sendToHost('api-call', '/wallet', 'update-status');
+	getStatus();
 	// Get list of wallet transactions
 	getTransactions();
 	// Get list of wallet addresses

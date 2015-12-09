@@ -30,8 +30,8 @@ function setUnencrypted() {
 	setLockIcon('Create Wallet', 'fa-plus');
 }
 
-// Update wallet summary in header
-addResultListener('update-status', function(result) {
+// Update wallet summary in header capsule
+function updateStatus(result) {
 	wallet = result;
 
 	// Show correct lock status.
@@ -55,90 +55,89 @@ addResultListener('update-status', function(result) {
 		$('#confirmed').hide();
 		$('#unconfirmed').hide();
 	}
-});
+}
+
+// Make wallet api call
+function getStatus() {
+	Siad.apiCall('/wallet', updateStatus);
+}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Locking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Lock the wallet
 function lock() {
-	IPCRenderer.sendToHost('api-call', {
+	Siad.apiCall({
 		url: '/wallet/lock',
 		method: 'POST',
-	}, 'locked');
+	}, function(result) {
+		setLocked();
+		notify('Wallet locked', 'locked');	
+		update();
+	});
 }
-addResultListener('locked', function(result) {
-	setLocked();
-	notify('Wallet locked', 'locked');	
-
-	update();
-});
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Unlocking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Unlock the wallet
 function unlock(password) {
-	IPCRenderer.sendToHost('api-call', {
+	// Password attempted, show responsive processing icon
+	setUnlocking();
+	Siad.call({
 		url: '/wallet/unlock',
 		method: 'POST',
 		qs: {
 			encryptionpassword : password,
 		},
-	}, 'unlocked');
-
-	// Password attempted, show responsive processing icon
-	setUnlocking();
+	}, function(err, result) {
+		// Remove unlocking icon
+		if (err) {
+			setLocked();
+			notify('Wrong password', 'error');
+			$('#request-password').show();
+		} else {
+			setUnlocked();
+			notify('Wallet unlocked', 'unlocked');
+		}
+	
+		update();
+	});
 }
-IPCRenderer.on('unlocked', function(event, err, result) {
-	// Remove unlocking icon
-	if (err) {
-		setLocked();
-		notify('Wrong password', 'error');
-		$('#request-password').show();
-	} else {
-		setUnlocked();
-		notify('Wallet unlocked', 'unlocked');
-	}
-
-	update();
-});
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Encrypting ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Encrypt the wallet (only applies to first time opening)
 function encrypt() {
-	IPCRenderer.sendToHost('api-call', {
+	Siad.apiCall({
 		url: '/wallet/init',
 		method: 'POST',
 		qs: {
 			dictionary: 'english',
 		},
-	}, 'encrypted');
-	setLocked();
-}
-addResultListener('encrypted', function(result) {
-	var popup = $('#show-password');
-	popup.show();
-
-	// Clear old password in config if there is one
-	IPCRenderer.sendToHost('config', {
-		key: 'walletPassword',
-		value: '',
+	}, function(result) {
+		setLocked();
+		var popup = $('#show-password');
+		popup.show();
+	
+		// Clear old password in config if there is one
+		IPCRenderer.sendToHost('config', {
+			key: 'walletPassword',
+			value: '',
+		});
+	
+		// Show password in the popup
+		$('#generated-password').text(result.primaryseed);
+	
+		update();
 	});
-
-	// Show password in the popup
-	$('#generated-password').text(result.primaryseed);
-
-	update();
-});
+}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 function loadLegacyWallet(filename, password) {
-	IPCRenderer.sendToHost('api-call', {
+	Siad.apiCall({
 		url: '/wallet/load/033x',
 		method: 'POST',
 		qs: {
 			filepath: filename,
 			encryptionpassword: password,
 		},
-	}, 'load-wallet');
+	}, function(result) {
+		notify('Loaded Wallet', 'success');
+	});
 }
-addResultListener('load-wallet', function(result) {
-	notify('Loaded Wallet', 'success');
-});

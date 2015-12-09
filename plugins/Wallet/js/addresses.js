@@ -69,17 +69,14 @@ function updateAddressPage() {
 
 // Retrieves address list from siad
 function getAddresses() {
-	IPCRenderer.sendToHost('api-call', {
+	Siad.apiCall({
 		url: '/wallet/addresses',
 		type: 'GET',
-	}, 'update-addresses');
+	}, function(result) {
+		addresses = result.addresses;
+		updateAddressPage();
+	});
 }
-
-// Update addresses array and page
-addResultListener('update-addresses', function(result) {
-	addresses = result.addresses;
-	updateAddressPage();
-});
 
 // Update addresses on page navigation
 $('#address-page').on('input', updateAddressPage);
@@ -106,12 +103,11 @@ function filterAdresses(searchstr) {
 
 // Show addresses based on search bar string
 function performSearch() {
-	var bar = $('#search-bar');
+	var searchString = $('#search-bar').val();
 
 	// Don't search an empty string
-	if (bar.val().length !== 0) {
-		tooltip('Searching...', bar.get(0));
-		filterAdresses(bar.val());
+	if (searchString.length !== 0) {
+		filterAdresses(searchString);
 	}
 	
 	// Reset page number and update
@@ -120,7 +116,10 @@ function performSearch() {
 }
 
 // Start search when typing in Search field
-$('#search-bar').on('input', performSearch);
+$('#search-bar').on('input', function() {
+	tooltip('Searching...', this);
+	performSearch();
+});
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ New Address ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Find location of address in addresses array
@@ -147,20 +146,14 @@ function addAddress(addressObject) {
 // Address creation
 $('#create-address').click(function() {
 	tooltip('Creating...', this);
-	IPCRenderer.sendToHost('api-call', {
+	Siad.apiCall({
 		url: '/wallet/address',
-	}, 'new-address');
+	}, function(result) {
+		notify('New address created', 'created');
+		addAddress(result);
+		
+		// Display only the created address
+		$('#search-bar').val(result.address);
+		performSearch();
+	});
 });
-
-// Add the new address and show it
-addResultListener('new-address', function(result) {
-	notify('New address created', 'created');
-	addAddress(result);
-	
-	// Display only the created address
-	$('#search-bar').val(result.address);
-	filterAdresses(result.address);
-	$('#address-page').val(1);
-	updateAddressPage();
-});
-

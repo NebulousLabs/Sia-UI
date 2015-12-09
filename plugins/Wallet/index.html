@@ -135,7 +135,7 @@
 				<div class='row'>
 					<div class='centered'>
 						<div> Amount To Send: </div>
-						<input type='number' class='l-font' id='amount' min='0'>
+						<input type='number' class='l-font' id='transaction-value' min='0'>
 						<select class='l-font'>
 							<option value='1e30'>MS</option>
 							<option value='1e27'>kS</option>
@@ -196,6 +196,27 @@
 			const BigNumber = require('bignumber.js');
 			// Jquery
 			const $ = require('jquery');
+
+			// Siad wrapper/manager
+			var Siad = require('sia.js')
+			// Make sure Siad settings are in sync with the rest of the UI's
+			IPCRenderer.sendToHost('config', {key: 'siad'}, 'siadsettings');
+			IPCRenderer.on('siadsettings', function(settings) {
+				Siad.configure({
+					siad: settings,
+				});
+			});
+			// Slight modification to Siad wrapper for standard error handling
+			Siad.apiCall = function(callObj, callback) {
+				Siad.call(callObj, function(err, result) {
+					if (err) {
+						console.error(callObj, err);
+						notify(err, 'error');
+					} else {
+						callback(result);
+					}
+				});
+			}
 		</script>
 		<script src='js/helpers.js'></script>
 		<script src='js/locking.js'></script>

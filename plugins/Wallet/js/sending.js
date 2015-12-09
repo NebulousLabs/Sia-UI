@@ -51,21 +51,18 @@ function sendTransaction(amount, address) {
 		amount: amount.toString(),
 		destination: address,
 	};
-	IPCRenderer.sendToHost('api-call', {
+	Siad.apiCall({
 		url: url,
 		method: 'POST',
 		qs: transaction,
-	}, 'coin-sent');
+	}, function(result) {
+		notify('Transaction sent to network!', 'sent');
+		$('#transaction-value').val('0');
+	
+		// Reflect it asap
+		setTimeout(update, 100);
+	});
 }
-
-// Transaction was sent
-addResultListener('coin-sent', function(result) {
-	notify('Transaction sent to network!', 'sent');
-	$('#transaction-value').val('0');
-
-	// Reflect it asap
-	setTimeout(update, 100);
-});
 
 // Button to send coin
 $('#send-money').click(function() {

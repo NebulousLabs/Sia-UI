@@ -3,7 +3,7 @@
 // Variable to store transaction history
 var transactions = [];
 
-// Criteria by which to view transactions
+// Criteria by which to filter transactions
 var criteria = {
 	startHeight:             0,
 	endHeight:               1000000,
@@ -26,7 +26,50 @@ var criteria = {
 	itemsPerPage:            25,
 };
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Updating  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~ Checking Transactions ~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Returns if the transaction fits the criteria
+function checkCriteria(txn) {
+	// Checks each criteria value if it's relaxed or if the transaction passes
+	// Failing one check returns false but passing all checks returns true
+	return (criteria.endTime   === null || txn.confirmationtimestamp <= criteria.endTime)   &&
+	       (criteria.startTime === null || txn.confirmationtimestamp >= criteria.startTime) &&
+	       (criteria.maxValue  === null || txn.value                 <= criteria.maxValue)  &&
+	       (criteria.minValue  === null || txn.value                 >= criteria.minValue)  &&
+	       (criteria.currency  === null || criteria.currency.indexOf(txn.currency) !== -1)  &&
+	       (criteria.inputs    === true || txn.value                 >= 0)                  &&
+	       (criteria.outputs   === true || txn.value                 <= 0);
+}
+
+// Compute aggregate value of the transaction
+function computeSum(txn) {
+	// Compute transaction net value
+	var value = new BigNumber(0);
+	var currency;
+	if (txn.inputs) {
+		txn.inputs.forEach( function(input) {
+			if (input.walletaddress) {
+				value = value.sub(input.value);
+			}
+			// TODO: Imperfect way to go about determining currency of
+			// transaction from 'miner', 'siacoin', or 'siafund'
+			currency = input.fundtype.split(' ')[0];
+		});
+	}
+	if (txn.outputs) {
+		txn.outputs.forEach( function(output) {
+			if (output.walletaddress) {
+				value = value.add(output.value);
+			}
+			// TODO: Imperfect way to go about determining currency of
+			// transaction from 'miner', 'siacoin', or 'siafund'
+			currency = output.fundtype.split(' ')[0];
+		});
+	}
+	txn.value = convertSiacoin(value);
+	txn.currency = currency;
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Updating DOM  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Append a transaction to Transactions list
 function makeTransaction(txn) {
 	var element = $(`
@@ -88,74 +131,9 @@ function updateTransactionPage() {
 // Update transactions on page navigation
 $('#transaction-page').on('input', updateTransactionPage);
 
-// Returns if the transaction fits the criteria
-function checkCriteria(txn) {
-	// Checks each criteria value if it's relaxed or if the transaction passes
-	// Failing one check returns false but passing all checks returns true
-	return (criteria.endTime   === null || txn.confirmationtimestamp <= criteria.endTime)   &&
-	       (criteria.startTime === null || txn.confirmationtimestamp >= criteria.startTime) &&
-	       (criteria.maxValue  === null || txn.value                 <= criteria.maxValue)  &&
-	       (criteria.minValue  === null || txn.value                 >= criteria.minValue)  &&
-	       (criteria.currency  === null || criteria.currency.indexOf(txn.currency) !== -1)  &&
-	       (criteria.inputs    === true || txn.value                 >= 0)                  &&
-	       (criteria.outputs   === true || txn.value                 <= 0);
-}
-
-// Compute aggregate value of the transaction
-function computeSum(txn) {
-	// Compute transaction net value
-	var value = new BigNumber(0);
-	var currency;
-	if (txn.inputs) {
-		txn.inputs.forEach( function(input) {
-			if (input.walletaddress) {
-				value = value.sub(input.value);
-			}
-			// TODO: Imperfect way to go about determining currency of
-			// transaction from 'miner', 'siacoin', or 'siafund'
-			currency = input.fundtype.split(' ')[0];
-		});
-	}
-	if (txn.outputs) {
-		txn.outputs.forEach( function(output) {
-			if (output.walletaddress) {
-				value = value.add(output.value);
-			}
-			// TODO: Imperfect way to go about determining currency of
-			// transaction from 'miner', 'siacoin', or 'siafund'
-			currency = output.fundtype.split(' ')[0];
-		});
-	}
-	txn.value = convertSiacoin(value);
-	txn.currency = currency;
-}
-
-// Fill transactions array
-function getTransactions() {
-	// Decide what call to make based on criteria
-	var url, qs;
-	if (criteria.txnId) {
-		url = '/wallet/transaction/' + criteria.txnId;
-	} else if (criteria.address) {
-		url = '/wallet/transactions/' + criteria.address;
-	} else {
-		// Default call to /wallet/tranasctions
-		url = '/wallet/transactions';
-		qs = {
-			startheight: criteria.startHeight,
-			endheight: criteria.endHeight,
-		};
-	}
-
-	// Make call
-	IPCRenderer.sendToHost('api-call', {
-		url: url,
-		qs: qs,
-	}, 'update-transactions');
-}
-
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~ Updating Transactions ~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Update transaction in memory with result from api call
-addResultListener('update-transactions', function(result) {
+function updateTransactions(result) {
 	var txns = [];
 	// Transaction by id
 	if (result.transaction) {
@@ -178,7 +156,31 @@ addResultListener('update-transactions', function(result) {
 	txns.forEach(computeSum);
 	transactions = txns.filter(checkCriteria);
 	updateTransactionPage();
-});
+}
+
+// Fill transactions array
+function getTransactions() {
+	// Decide what call to make based on criteria
+	var url, qs;
+	if (criteria.txnId) {
+		url = '/wallet/transaction/' + criteria.txnId;
+	} else if (criteria.address) {
+		url = '/wallet/transactions/' + criteria.address;
+	} else {
+		// Default call to /wallet/tranasctions
+		url = '/wallet/transactions';
+		qs = {
+			startheight: criteria.startHeight,
+			endheight: criteria.endHeight,
+		};
+	}
+
+	// Make call
+	Siad.apiCall({
+		url: url,
+		qs: qs,
+	}, updateTransactions);
+}
 
 // Apply new criteria and update
 function updateTransactionCriteria(newCriteria) {
@@ -190,8 +192,9 @@ function updateTransactionCriteria(newCriteria) {
 	getTransactions();
 }
 
-// Refresh button
+// Refresh button to load all wallet transactions
 $('#view-all-transactions').click(function() {
+	tooltip('Loading all transactions', this);
 	criteria.txnId = null;
 	criteria.address = null;
 	getTransactions();

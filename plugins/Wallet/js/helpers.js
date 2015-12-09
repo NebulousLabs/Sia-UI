@@ -33,15 +33,3 @@ function tooltip(message, element) {
 		length: rect.length,
 	});
 }
-
-// IPC API listening shortcut that checks for errors
-function addResultListener(channel, callback) {
-	IPCRenderer.on(channel, function(event, err, result) {
-		if (err) {
-			console.error(channel, err);
-			notify(err, 'error');
-		} else {
-			callback(result);
-		}
-	});
-}

@@ -4,6 +4,7 @@
 const IPCRenderer = require('electron').ipcRenderer;
 // Siad wrapper
 const Siad = require('sia.js');
+// Make sure Siad settings are in sync with the rest of the UI's
 IPCRenderer.sendToHost('config', {key: 'siad'}, 'siadsettings');
 IPCRenderer.on('siadsettings', function(settings) {
 	Siad.configure({

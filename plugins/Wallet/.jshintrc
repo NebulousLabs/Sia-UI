@@ -113,15 +113,16 @@
 	"globals"       : {         // Extra globals.
 		"IPCRenderer": false,
 		"BigNumber": false,
+		"Siad": true,
 		"wallet": true,
 		"convertSiacoin": true,
 		"notify": true,
 		"tooltip": true,
-		"addResultListener": true,
 		"encrypt": true,
 		"lock": true,
 		"unlock": true,
 		"update": true,
+		"getStatus": true,
 		"getAddresses": true,
 		"getTransactions": true,
 		"updateTransactionCriteria": true
