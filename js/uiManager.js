@@ -223,6 +223,22 @@ module.exports = (function UIManager() {
 	* Called at window.onready, initalizes the UI
 	* @function UIManager#init
 	*/
+	function watchDaemon() {
+		// Listen for siad erroring
+		Daemon.on('error', function (error) {
+			notify('siad errored: ' + error, 'error');
+		});
+
+		// Listen for siad exiting
+		Daemon.on('exit', function(code) {
+			notify('siad exited: ' + code, 'stop');
+		});
+	}
+
+	/**
+	* Called at window.onready, initalizes the UI
+	* @function UIManager#init
+	*/
 	function init() {
 		checkUpdate();
 		settings.load(configPath, function(config) {
@@ -231,11 +247,11 @@ module.exports = (function UIManager() {
 			// Load the window's size and position
 			mainWindow.setBounds(memConfig);
 
-			// Init other manager classes
+			// Initialize other manager classes
 			Plugins.init(config);
 			Daemon.configure(config);
 
-			// Let user know siad is running
+			// Let user know if siad is running or starts
 			Daemon.ifRunning(function(running) {
 				notify('siad is running!', 'success');
 			}, function() {
@@ -246,24 +262,17 @@ module.exports = (function UIManager() {
 
 				// Start siad
 				Daemon.start(function(err) {
+					clearInterval(loading);
 					if (err) {
 						notify(err, 'error');
 						return;
 					}
-					clearInterval(loading);
 					notify('Started siad!', 'success');
 				});
-
-				// Listen for siad erroring
-				Daemon.on('error', function (error) {
-					notify('siad errored: ' + error, 'error');
-				});
-
-				// Listen for siad exiting
-				Daemon.on('exit', function(code) {
-					notify('siad exited with code: ' + code, 'stop');
-				});
 			});
+
+			// Listen for Daemon events and notify accordingly
+			watchDaemon();
 		});
 	}
 
