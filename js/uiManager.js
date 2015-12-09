@@ -219,10 +219,7 @@ module.exports = (function UIManager() {
 		});
 	}
 
-	/**
-	* Called at window.onready, initalizes the UI
-	* @function UIManager#init
-	*/
+	// Notifies the siad wrapper's error and exit
 	function watchDaemon() {
 		// Listen for siad erroring
 		Daemon.on('error', function (error) {
