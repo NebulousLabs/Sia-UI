@@ -248,6 +248,12 @@ module.exports = (function UIManager() {
 
 			// Initialize other manager classes
 			Plugins.init(config);
+			// TODO: save siad configuration returned from this function.
+			// Enables easily synchronizing this SiadWrapper instance with the
+			// plugins' instances.
+			//
+			// configure() doesn't return anything yet for sia.js:0.1.0 but it
+			// should soon from a pending pull request
 			Siad.configure(config);
 
 			// Let user know if siad is running or starts
