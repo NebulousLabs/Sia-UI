@@ -75,18 +75,6 @@ module.exports = (function PluginManager() {
 		plugin.on('ipc-message', function(event) {
 			var responseChannel;
 			switch(event.channel) {
-				case 'api-call':
-					// Redirect api calls to the API
-					var call = event.args[0];
-					responseChannel = event.args[1];
-					// Send the call only if the Siad appears to be running
-					if (!Siad.running) {
-						return;
-					}
-					Siad.call(call, function(err, result) {
-						plugin.sendToView(responseChannel, err, result);
-					});
-					break;
 				case 'notify':
 					// Use UI notification system
 					UI.notify.apply(null, event.args);
