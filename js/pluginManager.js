@@ -51,8 +51,6 @@ module.exports = (function PluginManager() {
 		/** 
 		 * Standard transition upon button click.
 		 * @typedef transition
-		 * TODO: Can sometime have two 'current' buttons when selecting a
-		 * sidebar button too quickly
 		 */
 		plugin.transition(function() {
 			// Don't do anything if already on this plugin
