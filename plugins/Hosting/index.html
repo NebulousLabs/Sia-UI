@@ -8,16 +8,6 @@
 		<link rel='stylesheet' href='../../css/grids-responsive-min.css'>
 		<link rel="stylesheet" href="../../css/plugin-standard.css">
 		<link rel='stylesheet' href='css/hosting.css'>
-
-		<!-- Hosting Configuration Property blueprint -->
-		<div class='property hidden pure-g' id='propertybp'>
-			<div class='pure-u-2-3'>
-				<div class='name'>PROPERTY NAME</div>
-			</div>
-			<div class='pure-u-1-3'>
-				<div class='value' contentEditable='true'>PROPERTY VALUE</div>
-			</div>
-		</div>
 	</head>
 	<body>
 		<!-- Frame -->
@@ -26,10 +16,10 @@
 			<div class='header'>
 				<div class='title'>Hosting</div>
 				<div class='capsule'>
-					<div class='pod' id='contracts'></div>
+					<div class='pod' id='numcontracts'></div>
 					<div class='pod' id='storage'></div>
-					<div class='pod' id='potentialprofit'></div>
-					<div class='pod' id='profit'></div>
+					<div class='pod' id='revenue'></div>
+					<div class='pod' id='upcomingrevenue'></div>
 				</div>
 			</div>
 
@@ -70,23 +60,50 @@
 						</div>
 					</div>
 				</div>
-				<div class='properties' id='properties'>
+				<div id='properties'>
 				</div>
 			</div>
-			<div class='host-message' id='hmessage'></div>
 		</div>
 
 		<!-- JS -->
 		<script>
 			// Library for communicating with Sia-UI
 			const IPCRenderer = require('electron').ipcRenderer;
-			// Library for arbitrary precision in numbers
-			const BigNumber = require('bignumber.js');
 			// Jquery
 			const $ = require('jquery');
+
+			// Host settings manager
+			var Host = require('./js/host.js')
+			// Lifecycle manager
+			var Lifecycle = require('./js/lifecycle.js');
+
+			// Siad wrapper/manager
+			var Siad = require('../../js/daemonManager.js')
+			// Make sure Siad settings are in sync with the rest of the UI's
+			IPCRenderer.sendToHost('config', {key: 'siad'}, 'siadsettings');
+			IPCRenderer.on('siadsettings', function(settings) {
+				Siad.configure({
+					siad: settings,
+				});
+			});
+			// Slight modification to Siad wrapper for standard error handling
+			Siad.apiCall = function(callObj, callback) {
+				Siad.call(callObj, function(err, result) {
+					if (err) {
+						console.error(callObj, err);
+						Lifecycle.notify(err, 'error');
+					} else {
+						callback(result);
+					}
+				});
+			}
+
+			// Expose start and stop methods to global namespace so they're
+			// automatically called by the general UI
+			var start = Lifecycle.update;
+			var stop = Lifecycle.stop;
 		</script>
-		<script src='js/helpers.js'></script>
-		<script src='js/hosting.js'></script>
+		<script src='./js/buttons.js'></script>
 	</body>
 </html>
 
