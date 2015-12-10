@@ -3,16 +3,14 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Capsule ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Get and use password from the UI's config.json
 function getPassword() {
-	IPCRenderer.sendToHost('config', {key: 'walletPassword'}, 'use-password');
-}
-IPCRenderer.on('use-password', function(event, pw) {
+	var pw = IPCRenderer.sendSync('config', 'walletPassword');
 	if (pw) {
 		unlock(pw);
 	} else {
 		$('#request-password').show();
 		$('#password-field').focus();
 	}
-});
+}
 
 // Lock or unlock the wallet
 $('#lock-pod').click(function() {
@@ -31,10 +29,7 @@ $('#lock-pod').click(function() {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Popups ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Save password to the UI's config.json
 function savePassword(pw) {
-	IPCRenderer.sendToHost('config', {
-		key: 'walletPassword',
-		value: pw,
-	});
+	IPCRenderer.sendSync('config', 'walletPassword', pw);
 }
 
 // On popup upon entering an encrypted, locked wallet, enter password

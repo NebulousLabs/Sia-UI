@@ -10,17 +10,15 @@ BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 // Siad wrapper
 const Siad = require('sia.js');
 // Make sure Siad settings are in sync with the rest of the UI's
-IPCRenderer.sendToHost('config', {key: 'siad'}, 'siadsettings');
-IPCRenderer.on('siadsettings', function(event, settings) {
-	var siad = Siad.configure(settings);
-});
+var settings = IPCRenderer.sendSync('config', 'siad');
+Siad.configure(settings);
 // Keeps track of if the view is shown
 var updating;
 
 // Returns if API call has an error or null result
 function errored(err, result) {
 	if (err) {
-		IPCRenderer.sendToHost('notify', err.toString(), 'error');
+		IPCRenderer.sendToHost('notify', err, 'error');
 		return true;
 	} else if (!result) {
 		IPCRenderer.sendToHost('notify', 'API result not found!', 'error');

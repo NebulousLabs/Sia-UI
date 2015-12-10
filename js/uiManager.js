@@ -15,17 +15,9 @@ const $ = require('jquery');
  * @class UIManager
  */
 module.exports = (function UIManager() {
-	// Namespace for config management logic
-	var settings = require('./uiConfig');
-	// Config.json variables
-	var configPath = Path.join(__dirname, '..', 'config.json');
-	// Config variable held in working memory
-	var memConfig;
 	// Variable to track error log
 	var errorLog;
-
 	// Shows tooltip with content on given element
-	var eTooltip = $('#tooltip');
 	var tooltipTimeout, tooltipVisible;
 
 	/**
@@ -36,6 +28,7 @@ module.exports = (function UIManager() {
 	 * TODO: separate out tooltip management from this file
 	 */
 	function tooltip(content, offset) {
+		var eTooltip = $('#tooltip');
 		offset = offset || {
 			top: 0,
 			left: 0,
@@ -59,7 +52,7 @@ module.exports = (function UIManager() {
 			eTooltip.animate({
 				'opacity':1
 			}, 400);
-		} else{
+		} else {
 			eTooltip.stop();
 			eTooltip.show();
 			eTooltip.css({'opacity':1});
@@ -91,7 +84,7 @@ module.exports = (function UIManager() {
 		success: 'check',
 		// siad
 		loading: 'spinner fa-pulse',
-		stop: 'stop',
+		stop: 'exit',
 		// Wallet
 		locked: 'lock',
 		unlocked: 'unlock',
@@ -231,61 +224,12 @@ module.exports = (function UIManager() {
 		});
 	}
 
-	// Notifies the siad wrapper's error and exit
-	function addSiadListeners() {
-		// Listen for siad erroring
-		Siad.on('error', function (error) {
-			notify('siad errored: ' + error, 'error');
-		});
-
-		// Listen for siad exiting
-		Siad.on('exit', function(code) {
-			notify('siad exited: ' + code, 'stop');
-		});
-	}
-
 	/**
 	* Called at window.onready, initalizes the UI
 	* @function UIManager#init
 	*/
 	function init() {
 		checkUpdate();
-		settings.load(configPath, function(config) {
-			memConfig = config;
-
-			// Load the window's size and position
-			mainWindow.setBounds(memConfig);
-
-			// Initialize other manager classes
-			Plugins.init(config);
-			Siad.configure(config.siad);
-
-			// Listen for siad events and notify accordingly
-			addSiadListeners();
-
-			// Let user know if siad is running or starts
-			if (Siad.isRunning()) {
-				notify('siad is running!', 'success');
-				return;
-			}
-
-			// Siad is not running, keep user notified of siad loading
-			var loading = setInterval(function() {
-				notify('Loading siad...', 'loading');
-			}, 500);
-
-			// Start siad
-			// TODO: Detect error of Siad not being found and download it
-			// instead of endlessly sending loading notifications
-			Siad.start(function(err) {
-				clearInterval(loading);
-				if (err) {
-					notify(err, 'error');
-					return;
-				}
-				notify('Started siad!', 'success');
-			});
-		});
 	}
 
 	/**
@@ -297,28 +241,6 @@ module.exports = (function UIManager() {
 		if (errorLog) {
 			errorLog.end();
 		}
-
-		// Save the window's size and position
-		var bounds = mainWindow.getBounds();
-		for (var k in bounds) {
-			if (bounds.hasOwnProperty(k)) {
-				memConfig[k] = bounds[k];
-			}
-		}
-
-		// Save the config
-		settings.save(memConfig, configPath);
-	}
-
-	/**
-	* Get or set a config key
-	* @function UIManager#config
-	*/
-	function config(args) {
-		if (args.value !== undefined) {
-			memConfig[args.key] = args.value;
-		}
-		return memConfig[args.key];
 	}
 
 	return {
@@ -326,6 +248,5 @@ module.exports = (function UIManager() {
 		kill: kill,
 		tooltip: tooltip,
 		notify: notify,
-		config: config,
 	};
 })();
