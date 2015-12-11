@@ -18,7 +18,7 @@ var updating;
 // Returns if API call has an error or null result
 function errored(err, result) {
 	if (err) {
-		IPCRenderer.sendToHost('notify', err, 'error');
+		IPCRenderer.sendToHost('notify', err.toString(), 'error');
 		return true;
 	} else if (!result) {
 		IPCRenderer.sendToHost('notify', 'API result not found!', 'error');
