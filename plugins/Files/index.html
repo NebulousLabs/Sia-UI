@@ -208,7 +208,7 @@
 				Siad.call(callObj, function(err, result) {
 					if (err) {
 						console.error(callObj, err);
-						notify(err, 'error');
+						notify(err.toString(), 'error');
 					} else {
 						callback(result);
 					}

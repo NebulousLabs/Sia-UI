@@ -91,7 +91,7 @@
 				Siad.call(callObj, function(err, result) {
 					if (err) {
 						console.error(callObj, err);
-						Lifecycle.notify(err, 'error');
+						Lifecycle.notify(err.toString(), 'error');
 					} else {
 						callback(result);
 					}
