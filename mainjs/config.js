@@ -28,6 +28,18 @@ function configManager(path) {
 	}
 
 	/**
+	 * Gets or sets a config attribute
+	 * @param {object} key - key to get or set
+	 * @param {object} value - value to set config[key] as
+	 */
+	config.attr = function(key, value) {
+		if (value !== undefined) {
+			this[key] = value;
+		}
+		return config[key];
+	};
+
+	/**
 	 * Writes the current config to defaultConfigPath
 	 * @param {string} path - UI's defaultConfigPath
 	 */
