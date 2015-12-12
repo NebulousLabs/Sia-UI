@@ -37,8 +37,8 @@ function startMainWindow(settings) {
 
 	// Create the browser
 	mainWindow = new BrowserWindow({
-		'icon':   iconPath,
-		'title':  'Sia-UI-beta',
+		icon:   iconPath,
+		title:  'Sia-UI-beta',
 	});
 
 	// Load the index.html of the app.
@@ -82,32 +82,13 @@ function startMainWindow(settings) {
 	}
 }
 
-// Configures, checks, and, if needed, starts siad
-function initializeSiad(settings) {
-	// TODO: save siad configuration returned from this function.
-	// Enables easily synchronizing this SiadWrapper instance with the
-	// plugins' instances.
-	//
-	// configure() doesn't return anything yet for sia.js:0.1.0 but it
-	// should soon from a pending pull request
-	settings.siad = Siad.configure(settings.siad);
-
-	// TODO: Let user know if siad is running or starts
-	if (Siad.isRunning()) {
-		return;
-	}
-
-	// Siad is not running, keep user notified of siad loading
-	// Check synchronously if siad doesn't exist at siad.path
-	try {
-		require('fs').statSync(settings.siad.path);
-	} catch (e) {
-		// TODO: If it isn't found, use dialogs to find or download it
-		return;
-	}
-
-	// Start siad
-	Siad.start();
+// Start siad and pipe events to UI notification system
+function startSiad() {
+	Siad.start(function(err) {
+		if (err) {
+			console.error(err);
+		}
+	});
 
 	// Pipe siad events to UI notification system through IPC
 	var allCPEvents = ['close', 'disconnect', 'error', 'exit', 'message'];
@@ -118,13 +99,93 @@ function initializeSiad(settings) {
 	});
 }
 
+// Configures, checks, and, if needed, starts siad
+function initializeSiad(settings) {
+	// TODO: save siad configuration returned from this function.
+	// Enables easily synchronizing this SiadWrapper instance with the
+	// plugins' instances.
+	//
+	// configure() doesn't return anything yet for sia.js:0.1.0 but it
+	// should soon from a pending pull request
+	settings = Siad.configure(settings);
+
+	// TODO: Let user know if siad is running or starts
+	if (Siad.isRunning()) {
+		return;
+	}
+
+	// Siad is not running, keep user notified of siad loading
+	// Check if siad doesn't exist at siad.path
+	require('fs').stat(settings.path, function (err) {
+		if (!err) {
+			// It's found, start siad
+			startSiad();
+			return;
+		}
+
+		// If it isn't found, use dialogs to find or download it
+		var iconPath = Path.join(__dirname, 'assets', 'icon.png');
+		var selected = Dialog.showMessageBox(mainWindow, {
+			title:   'Missing siad!',
+			message: 'Sia-UI requires siad to function.',
+			detail:  'Would you like to open it or download a copy?',
+			icon:    iconPath,
+			type:    'question',
+			buttons: ['Open', 'Download', 'Cancel'],
+		});
+
+		// Commonalities between the Open and Download optioins
+		var options = {
+			defaultPath: settings.path,
+			filters: [{ name: 'Siad', extensions: ['exe'] }],
+		};
+		var siadPath;
+
+		// 'Open' selected
+		if (selected === 0) {
+			options.title = 'Open siad';
+			options.properties = ['openFile'];
+
+			// Get directory of siad and parse file name
+			siadPath = Dialog.showOpenDialog(mainWindow, options)[0];
+			if (!siadPath) {
+				App.quit();
+				return;
+			}
+			var lastIndex = siadPath.lastIndexOf('/');
+			settings.command = siadPath.substring(lastIndex);
+			settings.path = siadPath.substring(0, lastIndex);
+
+			// Try this path
+			initializeSiad(settings);
+		} else if (selected === 1) {
+			// 'Download' selected
+			options.title = 'Download siad to directory';
+			options.properties = ['openDirectory'];
+			siadPath = Dialog.showOpenDialog(mainWindow, options)[0];
+			if (!siadPath) {
+				App.quit();
+				return;
+			}
+			settings.path = siadPath;
+
+			// Begin download and start siad after
+			Siad.download(settings.path, startSiad);
+		} else {
+			// 'Cancel' selected
+			App.quit();
+			return;
+		}
+	});
+}
+
 // When Electron loading has finished, start the daemon then the UI
 App.on('ready', function() {
 	// Load config.json
 	var configPath = Path.join(__dirname, 'config.json');
 	config = new ConfigManager(configPath);
 	
-	initializeSiad(config);
+	initializeSiad(config.siad);
 	startMainWindow(config);
 });
 // Quit when UI window closing

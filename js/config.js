@@ -1,12 +1,10 @@
 'use strict';
 
-// Library for saving config
-const Fs = require('fs');
 // The default settings 
 const defaultConfig = {
 	homePlugin:  'Overview',
 	siad: {
-    	path: require('path').join(__dirname, 'Sia'),
+    	path: require('path').join(__dirname, '..', 'Sia'),
 	},
 	width:       800,
 	height:      600,
@@ -34,7 +32,7 @@ function configManager(path) {
 	 * @param {string} path - UI's defaultConfigPath
 	 */
 	config.save = function() {
-		Fs.writeFileSync(path, JSON.stringify(config, null, '\t'));
+		require('fs').writeFileSync(path, JSON.stringify(config, null, '\t'));
 	};
 
 	/**
