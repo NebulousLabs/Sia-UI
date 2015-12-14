@@ -27,9 +27,16 @@ function startSiad(mainWindow) {
 
 // Configures, checks, and, if needed, starts siad
 module.exports = function initSiad(settings, mainWindow) {
-	// Set settings for Siad to work off of
-	// configure() doesn't update `running` for sia.js:0.1.1 but it
-	// should soon from a pending pull request
+	// Stop siad upon the main window being closed. Else it continues as a
+	// child process of electron, forcing electron to keep running until siad
+	// has stopped
+	mainWindow.on('close', function() {
+		Siad.stop();
+	});
+
+	// Set settings for Siad to work off of configure() doesn't update
+	// `running` for sia.js:0.1.1 but it should soon from a pending pull
+	// request
 	Siad.configure(settings.siad);
 
 	// TODO: Let user know if siad is running 

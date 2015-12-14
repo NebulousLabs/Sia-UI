@@ -27,6 +27,38 @@ var mainWindow;
 var appIcon;
 var config;
 
+// Listen for if the renderer process wants to produce a dialog message
+IPCMain.on('dialog', function(event, type, options) {
+	var response;
+	switch (type) {
+		case 'open':
+			response = Dialog.showOpenDialog(mainWindow, options);
+			break;
+		case 'save':
+			response = Dialog.showSaveDialog(mainWindow, options);
+			break;
+		case 'message':
+			response = Dialog.showMessageBox(mainWindow, options);
+			break;
+		case 'error':
+			Dialog.showErrorBox(options.title, options.content);
+			break;
+		default:
+			console.error('Unknown dialog ipc');
+	}
+	event.returnValue = response ? response : null;
+});
+
+// Enable right-click context menu from renderer process event
+IPCMain.on('context-menu', function(event, template) {
+	ContextMenu.popup(mainWindow);
+});
+
+// Allow any process to interact with the configManager
+IPCMain.on('config', function(event, key, value) {
+	event.returnValue = config.attr(key, value);
+});
+
 // Creates the window and loads index.html
 function startMainWindow(settings) {
 	// Give tray/taskbar icon path
@@ -96,34 +128,3 @@ App.on('window-all-closed', function() {
 	App.quit();
 });
 
-// Listen for if the renderer process wants to produce a dialog message
-IPCMain.on('dialog', function(event, type, options) {
-	var response;
-	switch (type) {
-		case 'open':
-			response = Dialog.showOpenDialog(mainWindow, options);
-			break;
-		case 'save':
-			response = Dialog.showSaveDialog(mainWindow, options);
-			break;
-		case 'message':
-			response = Dialog.showMessageBox(mainWindow, options);
-			break;
-		case 'error':
-			Dialog.showErrorBox(options.title, options.content);
-			break;
-		default:
-			console.error('Unknown dialog ipc');
-	}
-	event.returnValue = response ? response : null;
-});
-
-// Enable right-click context menu from renderer process event
-IPCMain.on('context-menu', function(event, template) {
-	ContextMenu.popup(mainWindow);
-});
-
-// Allow any process to interact with the configManager
-IPCMain.on('config', function(event, key, value) {
-	event.returnValue = config.attr(key, value);
-});
