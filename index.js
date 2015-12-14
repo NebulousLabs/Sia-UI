@@ -4,16 +4,13 @@
 const Electron = require('electron');
 const App = Electron.app;
 const IPCMain = Electron.ipcMain;
-const BrowserWindow = Electron.BrowserWindow;
-const Tray = Electron.Tray;
 const Dialog = Electron.dialog;
 const Menu = Electron.Menu;
-const GlobalShortcut = Electron.globalShortcut;
+const Tray = Electron.Tray;
 // Node libraries
 const Path = require('path');
 // Main process logic partitioned to other files
 const ContextMenu = Menu.buildFromTemplate(require('./mainjs/contextMenu.js'));
-const AppMenu = Menu.buildFromTemplate(require('./mainjs/appMenu.js'));
 const ConfigManager = require('./mainjs/config.js');
 
 // Uncomment to visit localhost:9222 to see devtools remotely
@@ -59,66 +56,18 @@ IPCMain.on('config', function(event, key, value) {
 	event.returnValue = config.attr(key, value);
 });
 
-// Creates the window and loads index.html
-function startMainWindow(settings) {
-	// Give tray/taskbar icon path
+// When Electron loading has finished, start the daemon then the UI
+App.on('ready', function() {
+	// Load tray icon
 	var iconPath = Path.join(__dirname, 'assets', 'icon.png');
 	appIcon = new Tray(iconPath);
 	appIcon.setToolTip('Sia - The Collaborative Cloud.');
 
-	// Create the browser
-	mainWindow = new BrowserWindow({
-		icon:   iconPath,
-		title:  'Sia-UI-beta',
-	});
-
-	// Load the index.html of the app.
-	mainWindow.loadURL('file://' + __dirname + '/index.html');
-
-	// Load the window's size and position
-	mainWindow.setBounds(settings);
-	
-	// Add hotkey shortcut to view plugin devtools
-	var shortcut;
-	if (process.platform ==='darwin') {
-		shortcut = 'Alt+Command+P';
-	} else {
-		shortcut = 'Ctrl+Shift+P';
-	}
-	GlobalShortcut.register(shortcut, function() {
-		mainWindow.webContents.executeJavaScript('Plugins.Current.toggleDevTools();');
-	});
-
-	// Emitted when the window is closed.
-	mainWindow.on('close', function() {
-		// Save the window's size and position
-		var bounds = mainWindow.getBounds();
-		for (var k in bounds) {
-			if (bounds.hasOwnProperty(k)) {
-				config[k] = bounds[k];
-			}
-		}
-
-		// Dereference the window object so that the GC cleans up.
-		mainWindow = null;
-	});
-
-	// Choose not to show the menubar
-	if (process.platform !== 'darwin') {
-		mainWindow.setMenuBarVisibility(false);
-	} else {
-		// Create the Application's main menu - OSX version might feel weird without a menubar
-		Menu.setApplicationMenu(AppMenu);
-	}
-}
-
-// When Electron loading has finished, start the daemon then the UI
-App.on('ready', function() {
 	// Load config.json
 	var configPath = Path.join(__dirname, 'config.json');
 	config = new ConfigManager(configPath);
 	
-	startMainWindow(config);
+	mainWindow = require('./mainjs/initWindow.js')(config);
 	require('./mainjs/initSiad.js')(config, mainWindow);
 });
 
