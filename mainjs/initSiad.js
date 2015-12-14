@@ -12,13 +12,49 @@ const Siad = require('sia.js');
 var config;
 var mainWindow;
 
-// Start siad and pipe events to UI notification system
+// Send to UI notification system
+function notify(msg, type) {
+	var wc = mainWindow.webContents;
+	if (wc.isLoading()) {
+		wc.on('did-finish-load', function() {
+			wc.send('notification', msg, type);
+		});
+	} else {
+		wc.send('notification', msg, type);
+	}
+}
+
+// Start siad
 function startSiad() {
+	// Keep notifying of siad loading the blockchain until it's started
+	var starting = setInterval(function() {
+		notify('siad: loading...', 'loading');
+	}, 500);
 	Siad.start(function(err) {
 		if (err) {
 			console.error(err);
 			mainWindow.close();
 		}
+		notify('siad: started!', 'success');
+		clearInterval(starting);
+	});
+}
+
+// Download siad to config.siad.path
+function downloadSiad() {
+	// Keep notifying of siad downloading
+	var downloading = setInterval(function() {
+		notify('siad: downloading...', 'loading');
+	}, 500);
+	Siad.download(config.siad.path, function(err) {
+		if (err) {
+			console.error(err);
+			mainWindow.close();
+			return;
+		}
+		notify('siad: downloaded to ' + config.siad.path, 'success');
+		clearInterval(downloading);
+		startSiad();
 	});
 }
 
@@ -102,15 +138,7 @@ function checkSiadPath() {
 		} else if (selected === 1) {
 			config.siad.path = siadPath;
 			// Begin download and start siad after
-			// TODO: alert UI of download and start progress
-			Siad.download(config.siad.path, function(err) {
-				if (err) {
-					console.error(err);
-					mainWindow.close();
-					return;
-				}
-				startSiad();
-			});
+			downloadSiad();
 		}
 	});
 }
@@ -124,7 +152,7 @@ module.exports = function initSiad(cnfg, mW) {
 	var allCPEvents = ['close', 'disconnect', 'error', 'exit', 'message'];
 	allCPEvents.forEach(function(ev) {
 		Siad.on(ev, function(msg) {
-			mainWindow.webContents.send('notification', 'siad: ' + msg, ev);
+			notify('siad: ' + msg, ev);
 		});
 	});
 
@@ -140,8 +168,10 @@ module.exports = function initSiad(cnfg, mW) {
 	// request
 	Siad.configure(config.siad);
 
-	// TODO: Let user know if siad is running 
-	if (!Siad.isRunning()) {
+	// Let user know if siad is running or check siad's location
+	if (Siad.isRunning()) {
+		notify('siad: running!', 'success');
+	} else {
 		checkSiadPath();
 	}
 };

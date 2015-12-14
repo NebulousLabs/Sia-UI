@@ -61,7 +61,9 @@
 				e.preventDefault();
 				IPCRenderer.send('context-menu');
 			}, false);
-			require('electron').ipcRenderer.on('notification', UI.notify);
+			require('electron').ipcRenderer.on('notification', function (e, msg, type) {
+				UI.notify(msg, type);
+			});
 		</script>
 	</body>
 </html>
