@@ -20,7 +20,7 @@
     "bignumber.js": "^2.1.0",
     "jquery": "^2.1.4",
     "request": "^2.67.0",
-    "sia.js": "^0.1.1"
+    "sia.js": "^0.1.2"
   },
   "scripts": {
     "start": "electron .",

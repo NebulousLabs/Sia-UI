@@ -248,38 +248,33 @@ module.exports = (function UIManager() {
 
 			// Initialize other manager classes
 			Plugins.init(config);
-			// TODO: save siad configuration returned from this function.
-			// Enables easily synchronizing this SiadWrapper instance with the
-			// plugins' instances.
-			//
-			// configure() doesn't return anything yet for sia.js:0.1.0 but it
-			// should soon from a pending pull request
 			Siad.configure(config);
-
-			// Let user know if siad is running or starts
-			Siad.ifRunning(function(running) {
-				notify('siad is running!', 'success');
-			}, function() {
-				// Keep user notified of siad loading
-				var loading = setInterval(function() {
-					notify('Loading siad...', 'loading');
-				}, 500);
-
-				// Start siad
-				// TODO: Detect error of Siad not being found and download it
-				// instead of endlessly sending loading notifications
-				Siad.start(function(err) {
-					clearInterval(loading);
-					if (err) {
-						notify(err, 'error');
-						return;
-					}
-					notify('Started siad!', 'success');
-				});
-			});
 
 			// Listen for siad events and notify accordingly
 			addSiadListeners();
+
+			// Let user know if siad is running or starts
+			if (Siad.isRunning()) {
+				notify('siad is running!', 'success');
+				return;
+			}
+
+			// Siad is not running, keep user notified of siad loading
+			var loading = setInterval(function() {
+				notify('Loading siad...', 'loading');
+			}, 500);
+
+			// Start siad
+			// TODO: Detect error of Siad not being found and download it
+			// instead of endlessly sending loading notifications
+			Siad.start(function(err) {
+				clearInterval(loading);
+				if (err) {
+					notify(err, 'error');
+					return;
+				}
+				notify('Started siad!', 'success');
+			});
 		});
 	}
 
