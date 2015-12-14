@@ -9,8 +9,6 @@ const defaultConfig = {
 	homePlugin:  'Overview',
 	siad: {
 		path:    Path.join(__dirname, '..', 'Sia'),
-		address: 'http://localhost:9980',
-		command: process.platform === 'win32' ? './siad.exe' : './siad',
 	},
 	width:       800,
 	height:      600,

@@ -11,7 +11,7 @@ module.exports = (function PluginManager() {
 	var home;
 	// The plugins folder
 	var plugPath;
-	// reference to `this` to use in functions
+	// Object to hold plugins and other public members
 	var self = {};
 
 	/**
@@ -51,8 +51,6 @@ module.exports = (function PluginManager() {
 		/** 
 		 * Standard transition upon button click.
 		 * @typedef transition
-		 * TODO: Can sometime have two 'current' buttons when selecting a
-		 * sidebar button too quickly
 		 */
 		plugin.transition(function() {
 			// Don't do anything if already on this plugin
@@ -77,18 +75,6 @@ module.exports = (function PluginManager() {
 		plugin.on('ipc-message', function(event) {
 			var responseChannel;
 			switch(event.channel) {
-				case 'api-call':
-					// Redirect api calls to the daemonManager
-					var call = event.args[0];
-					responseChannel = event.args[1];
-					if (!Daemon.running) {
-						return;
-					}
-					// Send the call only if the Daemon appears to be running
-					Daemon.call(call, function(err, result) {
-						plugin.sendToView(responseChannel, err, result);
-					});
-					break;
 				case 'notify':
 					// Use UI notification system
 					UI.notify.apply(null, event.args);
@@ -100,7 +86,7 @@ module.exports = (function PluginManager() {
 					UI.tooltip.apply(null, event.args);
 					break;
 				case 'config':
-					// get or set something in the config.json
+					// Get or set something in the config.json
 					var args = event.args[0];
 					var result = UI.config(args);
 					responseChannel = event.args[1];
@@ -186,7 +172,7 @@ module.exports = (function PluginManager() {
 		setConfig(config, initPlugins);
 	}
 
-	// Make certain members public
+	// Return public members
 	self.init = init;
 	return self;
 }());

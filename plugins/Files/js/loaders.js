@@ -8,71 +8,61 @@ function download(nickname) {
 		return;
 	}
 	notify('Downloading ' + nickname + ' to '+ savePath +' folder', 'download');
-	IPCRenderer.sendToHost('api-call', {
+	Siad.apiCall({
 		url: '/renter/files/download',
 		qs: {
 			nickname: nickname,
 			destination: savePath,
 		},
-	}, 'downloaded');
+	}, update);
 }
-addResultListener('downloaded', function(result) {
-	update();
-});
 
 function share(nickname) {
+	// Set popup title
+	eID('show-ascii').querySelector('.title').innerHTML = nickname;
+
 	// Make a request to get the ascii share string
-	IPCRenderer.sendToHost('api-call', {
+	Siad.apiCall({
 		url: '/renter/files/shareascii',
 		qs: {
 			nickname: nickname,
 		}
-	}, 'shared');
-	// Set popup title
-	eID('show-ascii').querySelector('.title').innerHTML = nickname;
+	}, function(result) {
+		var popup = eID('show-ascii');
+		show(popup);
+	
+		popup.querySelector('.ascii').innerHTML = result.File;
+	
+		update();
+	});
 }
-addResultListener('shared', function(result) {
-	var popup = eID('show-ascii');
-	show(popup);
-
-	popup.querySelector('.ascii').innerHTML = result.File;
-
-	update();
-});
 
 function upload(filePath, nickname) {
-	IPCRenderer.sendToHost('api-call', {
+	notify('Uploading ' + nickname + ' to Sia Network', 'upload');
+	Siad.apiCall({
 		url: '/renter/files/upload',
 		qs: {
 			source: filePath,
 			nickname: nickname,
 		},
-	}, 'uploaded');
-	notify('Uploading ' + nickname + ' to Sia Network', 'upload');
+	}, exitFileAdder);
 }
-addResultListener('uploaded', function(result) {
-	exitFileAdder();
-	update();
-});
 
 function loadDotSia(filePath) {
-	IPCRenderer.sendToHost('api-call', {
+	notify('Adding ' + nameFromPath(filePath) + ' to library', 'siafile');
+	Siad.apiCall({
 		url: '/renter/files/load',
 		qs: {
 			filename: filePath,
 		}
-	}, 'file-loaded');
-	notify('Adding ' + nameFromPath(filePath) + ' to library', 'siafile');
+	}, exitFileAdder);
 }
-addResultListener('file-loaded', function(result) {
-	exitFileAdder();
-	update();
-});
 
 // Checks whether a path starts with or contains a hidden file or a folder.
 function isUnixHiddenPath(path) {
 	return (/(^|\/)\.[^\/\.]/g).test(path);
 }
+
 // Non-recursively upload all files in a directory
 function uploadDir(dirPath, nickname) {
 	// Upload files one at a time
@@ -99,29 +89,22 @@ function uploadDir(dirPath, nickname) {
 }
 
 function loadAscii(ascii) {
-	IPCRenderer.sendToHost('api-call', {
+	notify('Adding file(s) to library', 'asciifile');
+	Siad.apiCall({
 		url: '/renter/files/loadascii',
 		qs: {
 			file: ascii,
 		}
-	}, 'ascii-loaded');
-	notify('Adding file(s) to library', 'asciifile');
+	}, exitFileAdder);
 }
-addResultListener('ascii-loaded', function(result) {
-	exitFileAdder();
-	update();
-});
 
 function deleteFile(nickname) {
 	// Make the request to delete the file.
-	IPCRenderer.sendToHost('api-call', {
+	Siad.apiCall({
 		url: '/renter/files/delete',
 		qs: {
 			nickname: nickname,
 		}
-	}, 'deleted');
+	}, update);
 }
-addResultListener('deleted', function(result) {
-	update();
-});
 

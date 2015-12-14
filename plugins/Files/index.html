@@ -193,6 +193,27 @@
 			const Fs = require('fs');
 			// Module for handling and transforming file paths
 			const Path = require('path');
+
+			// Siad wrapper/manager
+			var Siad = require('sia.js')
+			// Make sure Siad settings are in sync with the rest of the UI's
+			IPCRenderer.sendToHost('config', {key: 'siad'}, 'siadsettings');
+			IPCRenderer.on('siadsettings', function(settings) {
+				Siad.configure({
+					siad: settings,
+				});
+			});
+			// Slight modification to Siad wrapper for standard error handling
+			Siad.apiCall = function(callObj, callback) {
+				Siad.call(callObj, function(err, result) {
+					if (err) {
+						console.error(callObj, err);
+						notify(err.toString(), 'error');
+					} else {
+						callback(result);
+					}
+				});
+			}
 		</script>
 		<script src='js/helpers.js'></script>
 		<script src='js/loaders.js'></script>

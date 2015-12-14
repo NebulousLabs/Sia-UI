@@ -78,7 +78,7 @@
 			var Lifecycle = require('./js/lifecycle.js');
 
 			// Siad wrapper/manager
-			var Siad = require('../../js/daemonManager.js')
+			var Siad = require('sia.js')
 			// Make sure Siad settings are in sync with the rest of the UI's
 			IPCRenderer.sendToHost('config', {key: 'siad'}, 'siadsettings');
 			IPCRenderer.on('siadsettings', function(settings) {
@@ -91,7 +91,7 @@
 				Siad.call(callObj, function(err, result) {
 					if (err) {
 						console.error(callObj, err);
-						Lifecycle.notify(err, 'error');
+						Lifecycle.notify(err.toString(), 'error');
 					} else {
 						callback(result);
 					}

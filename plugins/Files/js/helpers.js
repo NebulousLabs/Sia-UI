@@ -3,10 +3,6 @@
 // Ensure precision
 BigNumber.config({ DECIMAL_PLACES: 24 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
-// Variable to store api result values
-var renting = {};
-// Keeps track of if the view is shown
-var updating;
 
 // DOM shortcuts
 function eID(id) {
@@ -49,18 +45,6 @@ function tooltip(message, element) {
 		height: rect.height,
 		width: rect.width,
 		length: rect.length,
-	});
-}
-
-// IPC API listening shortcut that checks for errors
-function addResultListener(channel, callback) {
-	IPCRenderer.on(channel, function(event, err, result) {
-		if (err) {
-			console.error(channel, err);
-			notify(err, 'error');
-		} else if (callback) {
-			callback(result);
-		}
 	});
 }
 

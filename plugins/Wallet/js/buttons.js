@@ -14,24 +14,6 @@ IPCRenderer.on('use-password', function(event, pw) {
 	}
 });
 
-// Transaction was sent
-addResultListener('coin-sent', function(result) {
-	notify('Transaction sent to network!', 'sent');
-	$('#transaction-amount').val('');
-});
-
-// Button to load all wallet transactions
-$('#view-all-transactions').click(function() {
-	tooltip('Loading all transactions', this);
-	IPCRenderer.sendToHost('api-call', {
-		url: '/wallet/transactions',
-		qs: {
-			startheight: 0,
-			endheight: 1000000,
-		},		
-	}, 'update-history');
-});
-
 // Lock or unlock the wallet
 $('#lock-pod').click(function() {
 	var state = $('#lock-status').html();
@@ -109,18 +91,17 @@ $('.close').click(function() {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Load legacy wallet from 0.33 fork
 function loadLegacyWallet(filename, password) {
-	IPCRenderer.sendToHost('api-call', {
+	Siad.apiCall({
 		url: '/wallet/load/033x',
 		method: 'POST',
 		qs: {
 			filepath: filename,
 			encryptionpassword: password,
 		},
-	}, 'load-wallet');
+	}, function(result) {
+		notify('Loaded Wallet', 'success');
+	});
 }
-addResultListener('load-wallet', function(result) {
-	notify('Loaded Wallet', 'success');
-});
 
 // Load legacy wallet from 0.33 fork
 $('#load-legacy-wallet').click(function() {

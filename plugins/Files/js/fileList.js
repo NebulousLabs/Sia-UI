@@ -97,3 +97,15 @@ eID('search-bar').onkeyup = function() {
 	filterFileList(searchstr);
 };
 
+// Refresh file list
+function updateList(result) {
+	// sort alphabetically by nickname
+	result.sort(function(a, b) {
+		return a.Nickname.localeCompare(b.Nickname);
+	});
+	// clear existing file list
+	eID('file-browser').innerHTML = '';
+	// insert each file
+	result.forEach(updateFile);
+}
+

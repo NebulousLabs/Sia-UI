@@ -81,17 +81,17 @@
 	"maxerr"        : 100,      // Maximum errors before stopping.
 	"globals"       : {         // Extra globals.
 		/* Global Libraries */
+		"Electron": false,
 		"Path": false,
 		"WebFrame": false,
 		"ElectronScreen": false,
 		"Fs": false,
 		"Shell": false,
-		"Process": false,
 		"Remote": false,
 		"mainWindow": true,
 		/* UI globals */
 		"UI": true,
-		"Daemon": true,
+		"Siad": true,
 		"Plugins": true
 	},
 	"indent"        : 4         // Specify indentation spacing
