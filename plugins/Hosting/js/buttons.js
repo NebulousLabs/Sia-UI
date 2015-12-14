@@ -2,20 +2,18 @@
 
 // Announce button
 $('#announce.button').click(function() {
-	$('#address.popup').show();
+	$('#announce-address.popup').show();
 	$('#address-field').val(Host.address());
 });
-$('#custom.button').click(function() {
-	$('#address.popup').hide();
+$('#announce-address .confirm.button').click(function() {
+	$('#announce-address.popup').hide();
 	Lifecycle.tooltip('Anouncing...', $('#announce').get(0));
 	Host.announce({
 		address: $('#address-field').text(),
 	});
 });
-$('#default.button').click(function() {
-	Lifecycle.tooltip('Anouncing...', $('#announce').get(0));
-	$('#address.popup').hide();
-	Host.announce();
+$('#announce-address .cancel.button').click(function() {
+	$('#announce-address.popup').hide();
 });
 
 // Save button
