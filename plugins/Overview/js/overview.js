@@ -40,7 +40,7 @@ function formatSiacoin(hastings) {
 	return display;
 }
 
-// Update DOM froms calls
+// Update wallet balance and lock status from call result
 function updateWallet(err, result) {
 	if (errored(err, result)) {
 		return;
@@ -55,12 +55,16 @@ function updateWallet(err, result) {
 	var bal = unlocked ? formatSiacoin(result.confirmedsiacoinbalance) : '--';
 	document.getElementById('balance').innerText = 'Balance: ' + bal;
 }
+
+// Update peer count from call result
 function updatePeers(err, result) {
 	if (errored(err, result)) {
 		return;
 	}
 	document.getElementById('peers').innerText = 'Peers: ' + result.Peers.length;
 }
+
+// Update block height from call result
 function updateHeight(err, result) {
 	if (errored(err, result)) {
 		return;
