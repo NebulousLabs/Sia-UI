@@ -34,12 +34,12 @@
     "sia-kill": "killall siad; while pgrep siad; do sleep .5; done;",
     "sia-refresh": "npm run sia-kill && rm -rf Sia && npm run sia-import",
     "release-args": "electron-packager . Sia-UI --app-version=0.4.8-beta --version=0.34.1 --overwrite --prune --ignore=release --out=release/v0.4.8-beta --icon=app/assets/icon",
-    "release": "npm run sia-import ; npm run release-args -- --all && ./.finalizeRelease.sh",
-    "release-lin64": "npm run release-args -- --platform=linux --arch=x64 && ./.finalizeRelease.sh",
-    "release-lin32": "npm run release-args -- --platform=linux --arch=ia32 && ./.finalizeRelease.sh",
-    "release-win64": "npm run release-args -- --platform=win32 --arch=x64 && ./.finalizeRelease.sh",
-    "release-win32": "npm run release-args -- --platform=win32 --arch=ia32 && ./.finalizeRelease.sh",
-    "release-mac": "npm run release-args -- --platform=darwin --arch=x64 && ./.finalizeRelease.sh"
+    "release": "npm run release-args -- --all && ./.finalizeRelease.sh all",
+    "release-lin64": "npm run release-args -- --platform=linux --arch=x64 && ./.finalizeRelease.sh linux-x64",
+    "release-lin32": "npm run release-args -- --platform=linux --arch=ia32 && ./.finalizeRelease.sh linux-ia32",
+    "release-win64": "npm run release-args -- --platform=win32 --arch=x64 && ./.finalizeRelease.sh win32-x64",
+    "release-win32": "npm run release-args -- --platform=win32 --arch=ia32 && ./.finalizeRelease.sh wi32-ia32",
+    "release-mac": "npm run release-args -- --platform=darwin --arch=x64 && ./.finalizeRelease.sh darwin-x64"
   },
   "repository": {
     "type": "git",
