@@ -11,11 +11,10 @@ const Path = require('path');
 const AppMenu = Menu.buildFromTemplate(require('./appMenu.js'));
 
 // Creates the window and loads index.html
-module.exports = function(settings) {
+module.exports = function(config, paths) {
 	// Create the browser
-	var iconPath = Path.join(__dirname, 'assets', 'icon.png');
 	var mainWindow = new BrowserWindow({
-		icon:   iconPath,
+		icon:   paths.icon,
 		title:  'Sia-UI-beta',
 	});
 
@@ -31,7 +30,7 @@ module.exports = function(settings) {
 	});
 
 	// Load the window's size and position
-	mainWindow.setBounds(settings);
+	mainWindow.setBounds(config);
 	
 	// Emitted when the window is closed.
 	mainWindow.on('close', function() {
@@ -39,7 +38,7 @@ module.exports = function(settings) {
 		var bounds = mainWindow.getBounds();
 		for (var k in bounds) {
 			if (bounds.hasOwnProperty(k)) {
-				settings[k] = bounds[k];
+				config[k] = bounds[k];
 			}
 		}
 
@@ -51,7 +50,7 @@ module.exports = function(settings) {
 	});
 
 	// Load the index.html of the app.
-	mainWindow.loadURL('file://' + __dirname + '/../index.html');
+	mainWindow.loadURL(paths.index);
 
 	// Choose not to show the menubar
 	if (process.platform !== 'darwin') {
@@ -61,5 +60,5 @@ module.exports = function(settings) {
 		Menu.setApplicationMenu(AppMenu);
 	}
 	return mainWindow;
-}
+};
 

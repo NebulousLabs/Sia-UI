@@ -26,7 +26,7 @@ function startSiad(mainWindow) {
 }
 
 // Configures, checks, and, if needed, starts siad
-module.exports = function initSiad(settings, mainWindow) {
+module.exports = function initSiad(config, mainWindow) {
 	// Stop siad upon the main window being closed. Else it continues as a
 	// child process of electron, forcing electron to keep running until siad
 	// has stopped
@@ -34,10 +34,10 @@ module.exports = function initSiad(settings, mainWindow) {
 		Siad.stop();
 	});
 
-	// Set settings for Siad to work off of configure() doesn't update
+	// Set config for Siad to work off of configure() doesn't update
 	// `running` for sia.js:0.1.1 but it should soon from a pending pull
 	// request
-	Siad.configure(settings.siad);
+	Siad.configure(config.siad);
 
 	// TODO: Let user know if siad is running 
 	if (Siad.isRunning()) {
@@ -45,7 +45,7 @@ module.exports = function initSiad(settings, mainWindow) {
 	}
 
 	// Siad is not running, check if siad doesn't exist at siad.path
-	Fs.stat(settings.siad.path, function (err) {
+	Fs.stat(config.siad.path, function (err) {
 		if (!err) {
 			// It's found, start siad
 			startSiad(mainWindow);
@@ -65,7 +65,7 @@ module.exports = function initSiad(settings, mainWindow) {
 
 		// Commonalities between the Open and Download optioins
 		var options = {
-			defaultPath: settings.siad.path,
+			defaultPath: config.siad.path,
 			filters: [{ name: 'Siad', extensions: ['*'] }],
 		};
 		var siadPath;
@@ -81,11 +81,11 @@ module.exports = function initSiad(settings, mainWindow) {
 				// Path returned from showOpenDialog() in array
 				siadPath = siadPath[0];
 				var lastIndex = siadPath.lastIndexOf('/');
-				settings.siad.command = siadPath.substring(lastIndex);
-				settings.siad.path = siadPath.substring(0, lastIndex);
+				config.siad.command = siadPath.substring(lastIndex);
+				config.siad.path = siadPath.substring(0, lastIndex);
 			}
 			// Try this path
-			initSiad(settings, mainWindow);
+			initSiad(config, mainWindow);
 		} else if (selected === 1) {
 			// 'Download' selected
 			options.title = 'Download siad to directory';
@@ -94,11 +94,11 @@ module.exports = function initSiad(settings, mainWindow) {
 			if (siadPath) {
 				// Path returned from showOpenDialog() in array
 				siadPath = siadPath[0];
-				settings.siad.path = Path.join(siadPath, 'Sia');
+				config.siad.path = Path.join(siadPath, 'Sia');
 			}
 			// Begin download and start siad after
 			// TODO: alert UI of download and start progress
-			Siad.download(settings.siad.path, startSiad);
+			Siad.download(config.siad.path, startSiad);
 		} else {
 			// 'Cancel' selected
 			mainWindow.close();
