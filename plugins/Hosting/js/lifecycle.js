@@ -8,7 +8,7 @@ function lifecycle() {
 
 	// Notification shortcut 
 	function notify(msg, type) {
-		IPCRenderer.sendToHost('notify', msg, type);
+		IPCRenderer.sendToHost('notification', msg, type);
 	}
 
 	// Get host status regularly

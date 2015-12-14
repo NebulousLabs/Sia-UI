@@ -14,7 +14,7 @@ var updating;
 function update() {
 	Siad.call('/daemon/version', function(err, result) {
 		if (err) {
-			IPCRenderer.sendToHost('notify', '/daemon/version call failed!', 'error');
+			IPCRenderer.sendToHost('notification', '/daemon/version call failed!', 'error');
 		} else {
 			document.getElementById('siaversion').innerHTML = result;
 		}
