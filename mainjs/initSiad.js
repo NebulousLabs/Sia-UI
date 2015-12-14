@@ -8,13 +8,117 @@ const Path = require('path');
 const Fs = require('fs');
 const Siad = require('sia.js');
 
+// Reference to commonly used variables
+var config;
+var mainWindow;
+
 // Start siad and pipe events to UI notification system
-function startSiad(mainWindow) {
+function startSiad() {
 	Siad.start(function(err) {
 		if (err) {
 			console.error(err);
+			mainWindow.close();
 		}
 	});
+}
+
+// Download siad to a selected path
+function downloadSiadDialog() {
+	var siadPath = Dialog.showOpenDialog(mainWindow, {
+		title: 'Download siad to directory',
+		properties: ['openDirectory'],
+		defaultPath: config.siad.path,
+		filters: [{ name: 'Siad', extensions: ['*'] }],
+	});
+	if (siadPath) {
+		// Path returned from showOpenDialog() in array
+		siadPath = siadPath[0];
+		siadPath = Path.join(siadPath, 'Sia');
+	}
+	return siadPath;
+}
+
+// Get directory of siad and parse file name
+function openSiadDialog() {
+	var siadPath = Dialog.showOpenDialog(mainWindow, {
+		title: 'Open siad',
+		properties: ['openFile'],
+		defaultPath: config.siad.path,
+		filters: [{ name: 'Siad', extensions: ['*'] }],
+	});
+	if (siadPath) {
+		// Path returned from showOpenDialog() in array
+		siadPath = siadPath[0];
+	}
+	return siadPath;
+}
+
+// Ask user to open or download siad with an electron dialog message
+function missingSiadDialog() {
+	var iconPath = Path.join(__dirname, '..', 'assets', 'icon.png');
+	return Dialog.showMessageBox(mainWindow, {
+		title:   'Missing siad!',
+		message: 'Sia-UI requires siad to function.',
+		detail:  'Would you like to open it or download a copy?',
+		icon:    iconPath,
+		type:    'question',
+		buttons: ['Open', 'Download', 'Cancel'],
+	});
+}
+
+// Siad is not running, check if siad doesn't exist at siad.path
+function checkSiadPath() {
+	Fs.stat(config.siad.path, function (err) {
+		if (!err) {
+			// It's found, start siad
+			startSiad();
+			return;
+		}
+
+		// If it isn't found, use dialogs to find or download it
+		var selected = missingSiadDialog();
+		var siadPath;
+
+		// 'Open' selected
+		if (selected === 0) {
+			siadPath = openSiadDialog();
+		} else if (selected === 1) {
+			// 'Download' selected
+			siadPath = downloadSiadDialog();
+		} else {
+			// 'Cancel' selected
+			mainWindow.close();
+			return;
+		}
+		
+		// Verify chosen path
+		if (!siadPath) {
+			checkSiadPath();
+		} else if (selected === 0) {
+			var lastIndex = siadPath.lastIndexOf('/');
+			config.siad.command = siadPath.substring(lastIndex);
+			config.siad.path = siadPath.substring(0, lastIndex);
+			checkSiadPath();
+		} else if (selected === 1) {
+			config.siad.path = siadPath;
+			// Begin download and start siad after
+			// TODO: alert UI of download and start progress
+			Siad.download(config.siad.path, function(err) {
+				if (err) {
+					console.error(err);
+					mainWindow.close();
+					return;
+				}
+				startSiad();
+			});
+		}
+	});
+}
+
+// Configures, checks, and, if needed, starts siad
+module.exports = function initSiad(cnfg, mW) {
+	config = cnfg;
+	mainWindow = mW;
 
 	// Pipe siad events to UI notification system through IPC
 	var allCPEvents = ['close', 'disconnect', 'error', 'exit', 'message'];
@@ -23,10 +127,7 @@ function startSiad(mainWindow) {
 			mainWindow.webContents.send('notification', 'siad: ' + msg, ev);
 		});
 	});
-}
 
-// Configures, checks, and, if needed, starts siad
-module.exports = function initSiad(config, mainWindow) {
 	// Stop siad upon the main window being closed. Else it continues as a
 	// child process of electron, forcing electron to keep running until siad
 	// has stopped
@@ -40,69 +141,8 @@ module.exports = function initSiad(config, mainWindow) {
 	Siad.configure(config.siad);
 
 	// TODO: Let user know if siad is running 
-	if (Siad.isRunning()) {
-		return;
+	if (!Siad.isRunning()) {
+		checkSiadPath();
 	}
-
-	// Siad is not running, check if siad doesn't exist at siad.path
-	Fs.stat(config.siad.path, function (err) {
-		if (!err) {
-			// It's found, start siad
-			startSiad(mainWindow);
-			return;
-		}
-
-		// If it isn't found, use dialogs to find or download it
-		var iconPath = Path.join(__dirname, '..', 'assets', 'icon.png');
-		var selected = Dialog.showMessageBox(mainWindow, {
-			title:   'Missing siad!',
-			message: 'Sia-UI requires siad to function.',
-			detail:  'Would you like to open it or download a copy?',
-			icon:    iconPath,
-			type:    'question',
-			buttons: ['Open', 'Download', 'Cancel'],
-		});
-
-		// Commonalities between the Open and Download optioins
-		var options = {
-			defaultPath: config.siad.path,
-			filters: [{ name: 'Siad', extensions: ['*'] }],
-		};
-		var siadPath;
-
-		// 'Open' selected
-		if (selected === 0) {
-			options.title = 'Open siad';
-			options.properties = ['openFile'];
-
-			// Get directory of siad and parse file name
-			siadPath = Dialog.showOpenDialog(mainWindow, options);
-			if (siadPath) {
-				// Path returned from showOpenDialog() in array
-				siadPath = siadPath[0];
-				var lastIndex = siadPath.lastIndexOf('/');
-				config.siad.command = siadPath.substring(lastIndex);
-				config.siad.path = siadPath.substring(0, lastIndex);
-			}
-			// Try this path
-			initSiad(config, mainWindow);
-		} else if (selected === 1) {
-			// 'Download' selected
-			options.title = 'Download siad to directory';
-			options.properties = ['openDirectory'];
-			siadPath = Dialog.showOpenDialog(mainWindow, options);
-			if (siadPath) {
-				// Path returned from showOpenDialog() in array
-				siadPath = siadPath[0];
-				config.siad.path = Path.join(siadPath, 'Sia');
-			}
-			// Begin download and start siad after
-			// TODO: alert UI of download and start progress
-			Siad.download(config.siad.path, startSiad);
-		} else {
-			// 'Cancel' selected
-			mainWindow.close();
-		}
-	});
 };
 

@@ -11,10 +11,11 @@ const Path = require('path');
 const AppMenu = Menu.buildFromTemplate(require('./appMenu.js'));
 
 // Creates the window and loads index.html
-module.exports = function(config, paths) {
+module.exports = function(config) {
 	// Create the browser
+	var iconPath = Path.join(__dirname, '..', 'assets', 'icon.png');
 	var mainWindow = new BrowserWindow({
-		icon:   paths.icon,
+		icon:   iconPath,
 		title:  'Sia-UI-beta',
 	});
 
@@ -44,13 +45,10 @@ module.exports = function(config, paths) {
 
 		// Unregister all shortcuts.
 		GlobalShortcut.unregisterAll();
-
-		// Dereference the window object so that the GC cleans up.
-		mainWindow = null;
 	});
 
 	// Load the index.html of the app.
-	mainWindow.loadURL(paths.index);
+	mainWindow.loadURL('file://' + __dirname + '/../index.html');
 
 	// Choose not to show the menubar
 	if (process.platform !== 'darwin') {

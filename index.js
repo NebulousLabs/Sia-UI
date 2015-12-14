@@ -30,11 +30,15 @@ App.on('ready', function() {
 	appIcon = new Tray(iconPath);
 	appIcon.setToolTip('Sia - The Collaborative Cloud.');
 	
-	// Load mainWindow and Siad
-	mainWindow = require('./mainjs/initWindow.js')(config, {
-		icon: iconPath,
-		index: 'file://' + __dirname + '/index.html',
+	// Load mainWindow
+	mainWindow = require('./mainjs/initWindow.js')(config);
+
+	// Upon exiting, dereference the window object so that the GC cleans up.
+	mainWindow.on('close', function() {
+		mainWindow = null;
 	});
+
+	// Load siad
 	require('./mainjs/initSiad.js')(config, mainWindow);
 });
 
