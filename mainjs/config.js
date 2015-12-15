@@ -13,14 +13,12 @@ const defaultConfig = {
 };
 // Variable to hold the current configuration in memory
 var config;
-var path;
 
 /**
  * Holds all config.json related logic 
  * @module configManager
  */
 function configManager(path) {
-	path = path;
 	try {
 		config = require(path);
 	} catch (err) {
@@ -54,7 +52,10 @@ function configManager(path) {
 		config = configManager(path);
 	};
 
+	// Save to disk immediately when loaded
+	config.save();
 
+	// Return the config object with the above 3 member functions
 	return config;
 }
 

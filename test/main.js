@@ -13,6 +13,7 @@ Chai.use(ChaiAsPromised);
 
 // The one app that this suite is testing is Sia-UI
 describe('main process', function() {
+	this.timeout(5000);
 	var config;
 	var app;
 	var client;
@@ -26,18 +27,10 @@ describe('main process', function() {
 		});
 		return app.start();
 	});
-	
-	// Close session to save a config.json 
-	before('record config.json', function(done) {
-		app.stop().then(function() {
-			config = require('./../config.json');
-			done();
-		});
-	});
 
-	// Start again to prep for tests
-	before('start electron again', function() {
-		return app.start();
+	// to save a config.json 
+	before('record config.json', function() {
+		config = require('./../config.json');
 	});
 
 	// Extends ChaiAsPromised's syntax with spectron's electron-specific
