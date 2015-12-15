@@ -1,7 +1,9 @@
 'use strict';
 
 // Plugin Factory namespace to hold plugin creation logic
-var Factory = require('./pluginFactory');
+const Factory = require('./pluginFactory');
+// Node module
+const Path = require('path');
 
 /**
  * Constructs the webview and button from a plugin folder

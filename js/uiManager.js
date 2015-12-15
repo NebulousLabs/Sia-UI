@@ -1,5 +1,15 @@
 'use strict';
 
+// Imported Electron modules
+const Electron = require('electron');
+const mainWindow = Electron.remote.getCurrentWindow();
+// Imported Node modules
+const Path = require('path');
+const Fs = require('fs');
+// Imported Other modules
+const Siad = require('sia.js');
+const $ = require('jquery');
+
 /**
  * The first renderer process, handles initializing all other managers
  * @class UIManager
@@ -208,7 +218,7 @@ module.exports = (function UIManager() {
 
 				// If not, provide links to UI release page
 				var updatePage = function() {
-					Shell.openExternal('https://github.com/NebulousLabs/Sia-UI/releases');
+					Electron.shell.openExternal('https://github.com/NebulousLabs/Sia-UI/releases');
 				};
 				$('#update-ui').show().click(updatePage);
 				notify('Update available for UI', 'update', updatePage);
@@ -248,7 +258,7 @@ module.exports = (function UIManager() {
 
 			// Initialize other manager classes
 			Plugins.init(config);
-			Siad.configure(config);
+			Siad.configure(config.siad);
 
 			// Listen for siad events and notify accordingly
 			addSiadListeners();

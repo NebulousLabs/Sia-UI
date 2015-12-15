@@ -1,35 +1,84 @@
 #!/bin/bash
 
 set -o errexit # Exit on error
-readonly UI_VERSION="v0.4.8-beta"
+readonly VERSION="v0.4.8-beta"
+declare -a Electron_Archs=("linux-x64" "linux-ia32" "win32-x64" "win32-ia32" "darwin-x64")
+declare -a Sia_Archs=("linux-amd64" "linux-386" "windows-amd64" "windows-386" "darwin-amd64")
 
-cd "release/$UI_VERSION"
+cd "release/$VERSION"
 
-# Array of different distribution strings
-declare -a OSes=("linux-x64" "linux-ia32" "win32-x64" "win32-ia32" "darwin-x64")
-
-for OS in "${OSes[@]}"
-do
-	declare ui="Sia-UI-$OS"
-
-	# Do nothing if the release folder wasn't made
-	if ! [ -d "$ui" ]; then
-		break
+# generic packaging function
+package() {
+	local electron_arch="$1"
+	local ui="Sia-UI-$electron_arch"
+	local extension=".zip"
+	if [ "${1:0:5}" == "linux" ]; then
+		extension=".tar.gz"
 	fi
 
-	# Clean default_app folders
-	if [ "$OS" == "darwin-x64" ]; then
-		rm -rf $ui/resources/default_app
-	else
-		rm -rf $ui/Sia-UI.app/Contents/Resources/default_app
-	fi
+	local sia_arch=""
+	for i in "${!Electron_Archs[@]}"; do
+	   if [[ "${Electron_Archs[$i]}" = "${1}" ]]; then
+	       sia_arch="${Sia_Archs[$i]}";
+	   fi
+	done
+	local sia_folder="Sia-${VERSION}-${sia_arch}"
+	local sia_archive="${sia_folder}${extension}"
+	local sia_url="https://github.com/NebulousLabs/Sia/releases/download/${VERSION}/${sia_archive}"
 
-	# Make zip or tarball of folder
-	if [ "${OS:0:5}" == "linux" ]; then
-		echo "Tarring up $ui"
-		tar -czf $ui.tar.gz $ui
-	else
+	# Download Sia release
+	wget -q $sia_url
+
+	# Import siad, remove default_app folder, archive release
+	if [ "$electron_arch" == "darwin-x64" ]; then
+		local resources="$ui/Sia-UI.app/Contents/Resources"
+		rm -rf "$resources/default_app"
+
+		# Extract and rename Sia release
+		unzip -quo "$sia_archive" -d "$resources/app"
+		mv "$resources/app/$sia_folder" "$resources/app/Sia"
+
+		# Create archive
 		echo "Zipping up $ui"
-		zip -FSqr $ui.zip $ui
+		zip -FSqr $ui$extension $ui
+	elif [[ $electron_arch == "win32-x64" || $electron_arch == "win32-ia32" ]]; then
+		rm -rf "$ui/resources/default_app"
+
+		# Extract and rename Sia release
+		unzip -quo "$sia_archive" -d "$ui/resources/app"
+		mv "$ui/resources/app/$sia_folder" "$ui/resources/app/Sia"
+
+		# Create archive
+		echo "Zipping up $ui"
+		zip -FSqr $ui$extension $ui
+	else # linux
+		rm -rf "$ui/resources/default_app"
+
+		# Extract and rename Sia release
+		tar -xzf "$sia_archive" -C "$ui/resources/app"
+		mv "$ui/resources/app/$sia_folder" "$ui/resources/app/Sia"
+
+		# Create archive
+		echo "Tarring up $ui"
+		tar -czf $ui$extension $ui
 	fi
-done
+
+	# Delete Sia archive once put in the UI
+	rm -f $sia_archive
+}
+
+# dispatch on argument
+case "$1" in
+	linux-x64|linux-ia32|win32-x64|win32-ia32|darwin-x64)
+		package "$1"
+		;;
+	all|"")
+		for arch in "${Electron_Archs[@]}"; do
+			package "$arch"
+		done
+		;;
+	*)
+		echo "Usage: $0 {all|$Electron_Archs}"
+    	exit 1
+esac
+

@@ -16,9 +16,6 @@ the Sia network.
 
 ## Prerequisites
 
-- [golang 1.4+](https://golang.org/doc/install) (with a proper GOPATH environment variable)
-	- [Sia](https://github.com/NebulousLabs/Sia) (if not, just run `npm run
-	  sia-repo` after setting up golang)
 - [node & npm (packaged together)](https://nodejs.org/download/)
 
 ## Running
@@ -28,7 +25,6 @@ the Sia network.
 ### OR
 
 Run from source
-* (If you don't have the Sia repo) `npm run sia-repo`
 * `npm install`
 * `npm start`
 
