@@ -48,5 +48,5 @@ function lifecycle() {
 }
 
 // requiring this file gives an instance of the above class
-module.exports = new lifecycle();
+module.exports = lifecycle();
 
