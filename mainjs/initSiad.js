@@ -152,7 +152,7 @@ module.exports = function initSiad(cnfg, mW) {
 	var allCPEvents = ['close', 'disconnect', 'error', 'exit', 'message'];
 	allCPEvents.forEach(function(ev) {
 		Siad.on(ev, function(msg) {
-			notify('siad: ' + msg, ev);
+			notify('siad ' + ev + ': ' + msg, ev);
 		});
 	});
 

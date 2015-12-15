@@ -11,7 +11,6 @@ const Siad = require('sia.js');
 const $ = require('jquery');
 
 /**
- * The first renderer process, handles initializing all other managers
  * @class UIManager
  */
 module.exports = (function UIManager() {
@@ -19,6 +18,32 @@ module.exports = (function UIManager() {
 	var errorLog;
 	// Shows tooltip with content on given element
 	var tooltipTimeout, tooltipVisible;
+	// Notification system
+	var notification = require('./notificationManager.js');
+
+	/**
+	 * Shows notification in lower right of UI window
+	 * @function UIManager#notify
+	 * @param {string} message What to display in notification
+	 * @param {string} type The form of notification
+	 * @param {function} clickAction The function to call upon the user
+	 * clicking the notification
+	 * TODO: separate out notification management from this file
+	 */
+	function notify(message, type, clickAction) {
+		// Record errors for reference in `errors.log`
+		if (type === 'error') {
+			if (!errorLog) {
+				errorLog = Fs.createWriteStream(Path.join(__dirname, '..', 'errors.log'));
+			}
+			try {
+				errorLog.write(message + '\n');
+			} catch (e) {
+				errorLog.write(e.toString() + '\n');
+			}
+		}
+		notification(message, type, clickAction);
+	}
 
 	/**
 	 * Shows tooltip with content at given offset location
@@ -69,133 +94,6 @@ module.exports = (function UIManager() {
 				eTooltip.hide();
 			});
 		}, 1400);
-	}
-
-	// Involved in the notification queue
-	var notifications = [];
-	var lastNotificationTime = 0;
-	var notificationTimeout;
-	var notificationsInQueue = 0;
-	var notificationIcons = {
-		// General
-		alert: 'exclamation',
-		error: 'exclamation-circle',
-		update: 'arrow-circle-o-up',
-		success: 'check',
-		// siad
-		loading: 'spinner fa-pulse',
-		stop: 'exit',
-		// Wallet
-		locked: 'lock',
-		unlocked: 'unlock',
-		sent: 'send',
-		created: 'plus',
-		copied: 'clipboard',
-		// Progress
-		started: 'hourglass-start',
-		finished: 'hourglass-end',
-		// Hosting
-		announced: 'bullhorn',
-		saved: 'floppy-o',
-		reset: 'refresh',
-		// Files
-		download: 'arrow-circle-down',
-		upload: 'upload',
-		siafile: 'file-o',
-		asciifile: 'clipboard',
-	};
-
-	// Removes a notification element
-	function removeNotification(el) {
-		el.slideUp(function() {
-			el.remove();
-		});
-	} 
-
-	// Produces a notification element
-	function showNotification(message, type, clickAction) {
-		type = type || 'alert';
-
-		var element = $('.notification.blueprint').clone().removeClass('blueprint');
-		element.find('.icon i').addClass('fa-' + notificationIcons[type]);
-		element.addClass('type-' + type);
-		element.find('.content').text(message);
-		element.css({'opacity':0});
-		$('.notification-container').prepend(element);
-		if (clickAction) {
-			element.addClass('hoverable');
-			element.click(clickAction);
-		}
-
-		// Control the disappearance of notifications
-		element.mouseover(function() {
-			// don't let the notification disappear if the user is debating
-			// clicking
-			clearTimeout(notificationTimeout);
-		});
-		element.mouseout(function() {
-			// the user isn't interested, restart deletion timer
-			notificationTimeout = setTimeout(function() {
-				removeNotification(element);
-			}, 2500);
-		});
-		element.animate({
-			'opacity':1,
-		});
-		notificationTimeout = setTimeout(function() {
-			removeNotification(element);
-		}, 4000);
-	}
-
-	/**
-	 * Shows notification in lower right of UI window
-	 * @function UIManager#notify
-	 * @param {string} message What to display in notification
-	 * @param {string} type The form of notification
-	 * @param {function} clickAction The function to call upon the user
-	 * clicking the notification
-	 * TODO: separate out notification management from this file
-	 */
-	function notify(message, type, clickAction) {
-		// Record errors for reference in `errors.log`
-		if (type === 'error') {
-			if (!errorLog) {
-				errorLog = Fs.createWriteStream(Path.join(__dirname, '..', 'errors.log'));
-			}
-			try {
-				errorLog.write(message + '\n');
-			} catch (e) {
-				errorLog.write(e.toString() + '\n');
-			}
-		}
-
-		// Check if notification with same type/message is already shown
-		var notif = $('.type-' + type);
-		if (notif.length !== 0 && notif.find('.content').first().text() === message) {
-			// Don't spam it and instead empphasize it and prolong it
-			clearTimeout(notificationTimeout);
-			notificationTimeout = setTimeout(function() {
-				removeNotification(notif);
-			}, 2500);
-			return;
-		}
-
-		// TODO: This delay system is technically broken, but not noticably
-		// Wait approximately 250ms between notifications
-		if (new Date().getTime() < lastNotificationTime + 250) {
-			notificationsInQueue++;
-			setTimeout(function() {
-				notify(message, type, clickAction);
-			}, notificationsInQueue * 250);
-			return;
-		}
-
-		lastNotificationTime = new Date().getTime();
-		if (notificationsInQueue > 0) {
-			notificationsInQueue--;
-		}
-
-		showNotification(message, type, clickAction);
 	}
 
 	// Checks if there is an update available
