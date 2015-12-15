@@ -1,5 +1,11 @@
 'use strict';
 
+// Imported Node modules
+const Path = require('path');
+const Fs = require('fs');
+// Imported Other modules
+const $ = require('jquery');
+
 /**
  * PluginManager manages all plugin logic for the UI
  * @class PluginManager

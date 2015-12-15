@@ -1,5 +1,8 @@
 'use strict';
 
+// Node module
+const Path = require('path');
+const Fs = require('fs');
 /** 
  * The default settings 
  * @private

@@ -49,7 +49,7 @@ module.exports = {
 
 		// Have all plugins displaying UI's zoom by default
 		v.addEventListener('dom-ready', function() {
-			var zoomCode = 'require("web-frame").setZoomFactor(' + WebFrame.getZoomFactor() + ');';
+			var zoomCode = 'require("electron").webFrame.setZoomFactor(' + require('electron').webFrame.getZoomFactor() + ');';
 			v.executeJavaScript(zoomCode);
 		});
 
