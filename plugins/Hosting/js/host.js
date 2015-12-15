@@ -114,5 +114,5 @@ function host() {
 }
 
 // Requiring this file gives an instance of the above class
-module.exports = new host();
+module.exports = host();
 

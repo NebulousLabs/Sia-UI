@@ -66,8 +66,8 @@ module.exports = {
 	button: function button(iconPath, name) {
 		// Make button elements and combine
 		var b = document.createElement('div');
-		b.appendChild(new icon(iconPath));
-		b.appendChild(new text(name));
+		b.appendChild(icon(iconPath));
+		b.appendChild(text(name));
 
 		// Set inner values
 		b.id = name + '-button';

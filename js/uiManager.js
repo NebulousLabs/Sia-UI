@@ -248,7 +248,7 @@ module.exports = (function UIManager() {
 
 			// Initialize other manager classes
 			Plugins.init(config);
-			Siad.configure(config);
+			Siad.configure(config.siad);
 
 			// Listen for siad events and notify accordingly
 			addSiadListeners();
