@@ -166,13 +166,13 @@ module.exports = function initSiad(cnfg, mW) {
 	// Set config for Siad to work off of configure() doesn't update
 	// `running` for sia.js:0.1.1 but it should soon from a pending pull
 	// request
-	Siad.configure(config.siad);
-
-	// Let user know if siad is running or check siad's location
-	if (Siad.isRunning()) {
-		notify('siad: running!', 'success');
-	} else {
-		checkSiadPath();
-	}
+	Siad.configure(config.siad, function() {
+		// Let user know if siad is running or check siad's location
+		if (Siad.isRunning()) {
+			notify('siad: running!', 'success');
+		} else {
+			checkSiadPath();
+		}
+	});
 };
 
