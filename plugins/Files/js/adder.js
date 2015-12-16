@@ -7,7 +7,7 @@ const Clipboard = require('clipboard');
 // Used to hide subsequent steps when selecting an earlier one
 function hideSteps(steps) {
 	steps.forEach(function(step) {
-		var c = eID('step' + step).children;
+		var c = $('#step' + step).children;
 		for (var i = 0; i < c.length; i++) {
 			if(!hidden(c[i])) {
 				hide(c[i]);
@@ -35,54 +35,52 @@ function exitFileAdder() {
 	}
 	update();
 }
-eID('back').onclick = exitFileAdder;
-eID('back-dir').onclick = exitFileAdder;
+$('#back').click(exitFileAdder);
+$('#back-dir').click(exitFileAdder;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Add File ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // TODO: Get sliding frame in to work
-eID('new-file').onclick = function() {
+$('#new-file').click(function() {
 	show('add-file');
 	hide('file-library');
-};
+});
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Upload ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Upload file option chosen
-eID('upload-choice').onclick = function() {
+$('#upload-choice').click(function() {
 	hideSteps([2,3]);
-
 	var loadPath = IPCRenderer.sendSync('dialog', 'open', {
 		title: 'Upload Path',
 		properties: ['openFile'],
 	});
 	if (loadPath) {
-		eID('nickname-file').querySelector('.file-path').innerHTML = loadPath;
-		eID('nickname-file-input').value = nameFromPath(loadPath[0]);
+		$('#nickname-file').querySelector('.file-path').innerHTML = loadPath;
+		$('#nickname-file-input').value = nameFromPath(loadPath[0]);
 		show('nickname-file');
 		show('upload-file');
 		// TODO: this does not work for some reason. Perhaps the view needs to
 		// be refocused after the dialog box is closed.
-		eID('nickname-file-input').focus();
+		$('#nickname-file-input').focus();
 	}
-};
+});
 
 // An 'Enter' keypress in the input field will submit it.
-eID('nickname-file-input').addEventListener('keydown', function(e) {
-    e = e || window.event;
-    if (e.keyCode === 13) {
-        eID('upload-file').click();
+$('#nickname-file-input').keyup(function(e) {
+    if (e.which === 13) {
+        $('#upload-file').click();
     }
-}, false);
+});
 
 // Upload file confirmed
-eID('upload-file').onclick = function() {
-	var loadPath = eID('nickname-file').querySelector('.file-path').innerHTML;
-	var nickname = eID('nickname-file-input').value;
+$('#upload-file').click(function() {
+	var loadPath = $('#nickname-file').querySelector('.file-path').innerHTML;
+	var nickname = $('#nickname-file-input').value;
 	upload(loadPath, nickname);
-};
+});
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ .Sia file ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Sia file option chosen
-eID('sia-choice').onclick = function() {
+$('#sia-choice').click(function() {
 	hideSteps([2,3]);
 
 	var loadPath = IPCRenderer.sendSync('dialog', 'open', {
@@ -93,62 +91,62 @@ eID('sia-choice').onclick = function() {
 		properties: ['openFile'],
 	});
 	if (loadPath) {
-		eID('sia-file').querySelector('.file-path').innerHTML = loadPath;
+		$('#sia-file').querySelector('.file-path').innerHTML = loadPath;
 		show('sia-file');
 		show('add-sia-file');
 	}
-};
+});
 
 // Add .sia file confirmed
-eID('add-sia-file').onclick = function() {
-	var loadPath = eID('sia-file').querySelector('.file-path').innerHTML;
+$('#add-sia-file').click(function() {
+	var loadPath = $('#sia-file').querySelector('.file-path').innerHTML;
 	loadDotSia(loadPath);
-};
+});
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ASCII code ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ASCII file option chosen
-eID('ascii-choice').onclick = function() {
+$('#ascii-choice').click(function() {
 	hideSteps([2,3]);
 
 	show('paste-ascii');
 	show('add-ascii-file');
-	eID('paste-ascii-input').focus();
-};
+	$('#paste-ascii-input').focus();
+});
 
 // An 'Enter' keypress in the input field will submit it.
-eID('paste-ascii-input').addEventListener('keydown', function(e) {
+$('#paste-ascii-input').keyup(function(e) {
     e = e || window.event;
     if (e.keyCode === 13) {
-        eID('add-ascii-file').click();
+        $('#add-ascii-file').click();
     }
-}, false);
+});
 
 // Add file from ascii
-eID('add-ascii-file').onclick = function() {
-	loadAscii(eID('paste-ascii-input').value);
-};
+$('#add-ascii-file').click(function() {
+	loadAscii($('#paste-ascii-input').value);
+});
 
 // Share ASCII popup
-eID('copy-ascii').onclick = function() {
-	var file = eID('show-ascii').querySelector('.ascii').innerHTML;
-	var nickname = eID('show-ascii').querySelector('.title').innerHTML;
+$('#copy-ascii').click(function() {
+	var file = $('#show-ascii').querySelector('.ascii').innerHTML;
+	var nickname = $('#show-ascii').querySelector('.title').innerHTML;
 	Clipboard.writeText(file);
 	notify('Copied ' + nickname + '.sia to clipboard!', 'asciifile');
 	hide('show-ascii');
-};
-eID('cancel-ascii').onclick = function() {
+});
+$('#cancel-ascii').click(function() {
 	hide('show-ascii');
-};
+});
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Add directory ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Select directory sliding frame
-eID('new-dir').onclick = function() {
+$('#new-dir').click(function() {
 	show('add-dir');
 	hide('file-library');
-};
+});
 
 // Upload directory option chosen
-eID('upload-dir-choice').onclick = function() {
+$('#upload-dir-choice').click(function() {
 	hideSteps(['f2','f3']);
 
 	var loadPath = IPCRenderer.sendSync('dialog', 'open', {
@@ -158,21 +156,21 @@ eID('upload-dir-choice').onclick = function() {
 
 	// Check that loadPath is a valid path
 	if (loadPath) {
-		eID('nickname-dir').querySelector('.dir-path').innerHTML = loadPath;
+		$('#nickname-dir').querySelector('.dir-path').innerHTML = loadPath;
 		loadPath = loadPath[0].split(Path.sep);
-		eID('nickname-dir-input').value = loadPath[loadPath.length - 1] + '_';
+		$('#nickname-dir-input').value = loadPath[loadPath.length - 1] + '_';
 		show('nickname-dir');
 		show('upload-dir');
-		eID('nickname-dir-input').focus();
+		$('#nickname-dir-input').focus();
 	}
-};
+});
 
 // Upload directory confirmed
-eID('upload-dir').onclick = function() {
-	var loadPath = eID('nickname-dir').querySelector('.dir-path').innerHTML;
-	var nickname = eID('nickname-dir-input').value;
+$('#upload-dir').click(function() {
+	var loadPath = $('#nickname-dir').querySelector('.dir-path').innerHTML;
+	var nickname = $('#nickname-dir-input').value;
 	// Illegal filename characters in nickname seems to throw errors
 	// So, substitute \ and / with underscore (_)
 	nickname.replace(/[/\\\\]/g, '_');
 	uploadDir(loadPath, nickname);
-};
+});

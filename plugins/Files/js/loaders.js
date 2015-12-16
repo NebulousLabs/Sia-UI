@@ -1,6 +1,6 @@
 'use strict';
 
-function download(nickname) {
+function download(nickname, callback) {
 	var savePath = IPCRenderer.sendSync('dialog', 'save', {
 		defaultPath: nickname,
 	});
@@ -17,7 +17,7 @@ function download(nickname) {
 	}, update);
 }
 
-function share(nickname) {
+function share(nickname, callback) {
 	// Set popup title
 	eID('show-ascii').querySelector('.title').innerHTML = nickname;
 
@@ -37,7 +37,7 @@ function share(nickname) {
 	});
 }
 
-function upload(filePath, nickname) {
+function upload(filePath, nickname, callback) {
 	notify('Uploading ' + nickname + ' to Sia Network', 'upload');
 	Siad.apiCall({
 		url: '/renter/files/upload',
@@ -48,7 +48,7 @@ function upload(filePath, nickname) {
 	}, exitFileAdder);
 }
 
-function loadDotSia(filePath) {
+function loadDotSia(filePath, callback) {
 	notify('Adding ' + nameFromPath(filePath) + ' to library', 'siafile');
 	Siad.apiCall({
 		url: '/renter/files/load',
@@ -64,7 +64,7 @@ function isUnixHiddenPath(path) {
 }
 
 // Non-recursively upload all files in a directory
-function uploadDir(dirPath, nickname) {
+function uploadDir(dirPath, nickname, callback) {
 	// Upload files one at a time
 	Fs.readdir(dirPath, function(err, files) {
 		if (err) {
@@ -88,7 +88,7 @@ function uploadDir(dirPath, nickname) {
 	});
 }
 
-function loadAscii(ascii) {
+function loadAscii(ascii, callback) {
 	notify('Adding file(s) to library', 'asciifile');
 	Siad.apiCall({
 		url: '/renter/files/loadascii',
@@ -98,7 +98,7 @@ function loadAscii(ascii) {
 	}, exitFileAdder);
 }
 
-function deleteFile(nickname) {
+function deleteFile(nickname, callback) {
 	// Make the request to delete the file.
 	Siad.apiCall({
 		url: '/renter/files/delete',

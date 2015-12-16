@@ -184,38 +184,6 @@
 		</div>
 		
 		<!-- JS -->
-		<script>
-			// Library for communicating with Sia-UI
-			const IPCRenderer = require('electron').ipcRenderer;
-			// Library for arbitrary precision in numbers
-			const BigNumber = require('bignumber.js');
-			// File system module
-			const Fs = require('fs');
-			// Module for handling and transforming file paths
-			const Path = require('path');
-
-			// Siad wrapper/manager
-			var Siad = require('sia.js')
-			// Make sure Siad settings are in sync with the rest of the UI's
-			var settings = IPCRenderer.sendSync('config', 'siad');
-			Siad.configure(settings);
-			// Slight modification to Siad wrapper for standard error handling
-			Siad.apiCall = function(callObj, callback) {
-				Siad.call(callObj, function(err, result) {
-					if (err) {
-						console.error(callObj, err);
-						notify(err.toString(), 'error');
-					} else {
-						callback(result);
-					}
-				});
-			}
-		</script>
-		<script src='js/helpers.js'></script>
-		<script src='js/loaders.js'></script>
-		<script src='js/adder.js'></script>
-		<script src='js/popups.js'></script>
-		<script src='js/fileList.js'></script>
-		<script src='js/lifecycle.js'></script>
+		<script src='js/global.js'></script>
 	</body>
 </html>

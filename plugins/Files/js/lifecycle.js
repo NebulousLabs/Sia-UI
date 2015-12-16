@@ -3,6 +3,11 @@
 // DEVTOOL: uncomment to bring up devtools on plugin view
 // IPCRenderer.sendToHost('devtools');
 
+// Node modules
+const Siad = require('sia.js');
+const $ = require('jquery');
+const Library = require('./files.js');
+
 // Keeps track of if the view is shown
 var updating;
 
@@ -11,22 +16,22 @@ var updating;
 function convertSiacoin(hastings) {
 	var number = new BigNumber(Math.round(hastings).toString());
 	var ConversionFactor = new BigNumber(10).pow(24);
-	return number.dividedBy(ConversionFactor).round();
+	return number.dividedBy(ConversionFactor).round(2);
 }
 
 // Update capsule values with renter status
 // TODO /renter/status is deprecated: get price estimate from hostdb instead
 function updateStatus(result) {
-	var priceDisplay = convertSiacoin(result.Price).toFixed(2) + ' S / GB (estimated)';
-	eID('price').innerHTML = priceDisplay;
+	var priceDisplay = convertSiacoin(result.Price) + ' S / GB (estimated)';
+	$('#price.pod').text(priceDisplay);
 
 	var hostsDisplay = result.KnownHosts + ' known hosts';
-	eID('host-count').innerHTML = hostsDisplay;
+	$('#host-count.pod').text(hostsDisplay);
 }
 
 // Regularly update the file library and status
 function update() {
-	Siad.apiCall('/renter/files/list', updateList);
+	Siad.apiCall('/renter/files/list', files.updateList);
 	Siad.apiCall('/renter/status', updateStatus);
 	
 	updating = setTimeout(update, 15000);
