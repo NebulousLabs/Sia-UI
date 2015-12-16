@@ -73,12 +73,7 @@ function Plugin(plugPath, name) {
 		 * @param {...*} messages - ipc messages sent over channel to view
 		 */
 		sendToView: function() {
-			// https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#32-leaking-arguments
-			var args = new Array(arguments.length);
-			for(var i = 0; i < args.length; ++i) {
-				args[i] = arguments[i];
-			}
-			view.send.apply(view, args);
+			view.send.apply(view, arguments);
 		},
 
 		/**
