@@ -5,6 +5,11 @@
  *   Tracks hosting properties between the DOM and Siad
  */
 
+// Jquery
+const $ = require('jquery');
+// Siad wrapper/manager
+const Siad = require('sia.js');
+
 // Tracks details about the various hosting properties
 var props = require('./hostProperties.js');
 // Hold Sia math logic 
@@ -64,19 +69,17 @@ function update(hostInfo) {
 }
 
 // Announce host on the network
-function announce(settings) {
+function announce(settings, callback) {
 	settings = settings || null;
 	Siad.apiCall({
 		url: '/host/announce',
 		method: 'POST',
 		qs: settings,
-	}, function() {
-		Lifecycle.notify('Host successfully announced!', 'announced');
-	});
+	}, callback);
 }
 
 // Save hosting settings
-function save(settings) {
+function save(settings, callback) {
 	// Revert each value to base units
 	$.each(settings, function(name, value) {
 		settings[name] = math.revertToBaseUnit(value, props[name].conversion);
@@ -86,10 +89,7 @@ function save(settings) {
 		url: '/host',
 		method: 'POST',
 		qs: settings,
-	}, function() {
-		Lifecycle.notify('Hosting configuration saved!', 'saved');
-		Lifecycle.update();
-	});
+	}, callback);
 }
 
 // Returns array of converted values relevant to settings configuration table

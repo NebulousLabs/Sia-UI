@@ -5,6 +5,13 @@
  *   Updates plugin periodically and communicates with the general UI.
  */
 
+// Library for communicating with Sia-UI
+const IPCRenderer = require('electron').ipcRenderer;
+// Host settings manager
+const Host = require('./host.js');
+// Siad wrapper/manager
+const Siad = require('sia.js');
+
 // Tracks if the view is shown
 var updating;
 var refreshRate = 15000;
