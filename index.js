@@ -7,7 +7,7 @@ const Tray = Electron.Tray;
 // Node libraries
 const Path = require('path');
 // config.json manager
-const ConfigManager = require('./mainjs/config.js');
+const ConfigManager = require('./js/mainjs/config.js');
 
 // Uncomment to visit localhost:9222 to see devtools remotely
 // App.commandLine.appendSwitch('remote-debugging-port', '9222');
@@ -21,7 +21,7 @@ var appIcon;
 var config = new ConfigManager(Path.join(__dirname, 'config.json'));
 
 // Add IPCMain listeners
-require('./mainjs/addIPCListeners.js')(config, mainWindow);
+require('./js/mainjs/addIPCListeners.js')(config, mainWindow);
 
 // When Electron loading has finished, start the daemon then the UI
 App.on('ready', function() {
@@ -31,7 +31,7 @@ App.on('ready', function() {
 	appIcon.setToolTip('Sia - The Collaborative Cloud.');
 	
 	// Load mainWindow
-	mainWindow = require('./mainjs/initWindow.js')(config);
+	mainWindow = require('./js/mainjs/initWindow.js')(config);
 
 	// Upon exiting, dereference the window object so that the GC cleans up.
 	mainWindow.on('close', function() {
@@ -39,7 +39,7 @@ App.on('ready', function() {
 	});
 
 	// Load siad
-	require('./mainjs/initSiad.js')(config, mainWindow);
+	require('./js/mainjs/initSiad.js')(config, mainWindow);
 });
 
 // Quit when UI window closing

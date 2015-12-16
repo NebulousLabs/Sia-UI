@@ -8,7 +8,7 @@ const $ = require('jquery');
 const Plugin = require('./plugin');
 
 // The plugins folder
-var plugPath = Path.join(__dirname, '..', 'plugins');
+var plugPath = Path.join(__dirname, '../..', 'plugins');
 // Object to hold plugins and other public members
 var plugins = {};
 

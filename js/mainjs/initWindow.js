@@ -13,7 +13,7 @@ const AppMenu = Menu.buildFromTemplate(require('./appMenu.js'));
 // Creates the window and loads index.html
 module.exports = function(config) {
 	// Create the browser
-	var iconPath = Path.join(__dirname, '..', 'assets', 'icon.png');
+	var iconPath = Path.join(__dirname, '../..', 'assets', 'icon.png');
 	var mainWindow = new BrowserWindow({
 		icon:   iconPath,
 		title:  'Sia-UI-beta',
@@ -48,7 +48,7 @@ module.exports = function(config) {
 	});
 
 	// Load the index.html of the app.
-	mainWindow.loadURL('file://' + __dirname + '/../index.html');
+	mainWindow.loadURL('file://' + __dirname + '/../../index.html');
 
 	// Choose not to show the menubar
 	if (process.platform !== 'darwin') {

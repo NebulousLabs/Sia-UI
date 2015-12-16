@@ -30,7 +30,7 @@ describe('main process', function() {
 
 	// to save a config.json 
 	before('record config.json', function() {
-		config = require('./../config.json');
+		config = require('../config.json');
 	});
 
 	// Extends ChaiAsPromised's syntax with spectron's electron-specific

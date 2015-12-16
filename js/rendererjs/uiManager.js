@@ -34,7 +34,7 @@ module.exports = (function UIManager() {
 		// Record errors for reference in `errors.log`
 		if (type === 'error') {
 			if (!errorLog) {
-				errorLog = Fs.createWriteStream(Path.join(__dirname, '..', 'errors.log'));
+				errorLog = Fs.createWriteStream(Path.join(__dirname, '../..', 'errors.log'));
 			}
 			try {
 				errorLog.write(message + '\n');
@@ -103,7 +103,7 @@ module.exports = (function UIManager() {
 			type: 'GET',
 			success: function(responseData, textStatus, jqXHR) {
 				// If version matches latest release version, do nothing
-				if (responseData[0].tag_name === require('../package.json').version) {
+				if (responseData[0].tag_name === require('../../package.json').version) {
 					return;
 				}
 

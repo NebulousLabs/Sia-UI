@@ -91,7 +91,7 @@ function openSiadDialog() {
 
 // Ask user to open or download siad with an electron dialog message
 function missingSiadDialog() {
-	var iconPath = Path.join(__dirname, '..', 'assets', 'icon.png');
+	var iconPath = Path.join(__dirname, '../..', 'assets', 'icon.png');
 	return Dialog.showMessageBox(mainWindow, {
 		title:   'Missing siad!',
 		message: 'Sia-UI requires siad to function.',
