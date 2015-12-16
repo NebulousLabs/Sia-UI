@@ -11,10 +11,8 @@ BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 const Siad = require('sia.js');
 // Make sure Siad settings are in sync with the rest of the UI's
 IPCRenderer.sendToHost('config', {key: 'siad'}, 'siadsettings');
-IPCRenderer.on('siadsettings', function(settings) {
-	Siad.configure({
-		siad: settings,
-	});
+IPCRenderer.on('siadsettings', function(event, settings) {
+	var siad = Siad.configure(settings);
 });
 // Keeps track of if the view is shown
 var updating;
