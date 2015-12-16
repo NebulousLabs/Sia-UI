@@ -1,7 +1,10 @@
 'use strict';
 
-// This file holds functions to manipulate host property values. Strongly
-// coupled with hostData.js
+/*
+ * hostMath module:
+ *   Used by the host module to manipulate host property values.
+ *   Strongly coupled with hostProperties.js
+ */
 
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
