@@ -1,5 +1,10 @@
 'use strict';
 
+/*
+ * Lifecycle module:
+ *   Updates plugin periodically and communicates with the general UI.
+ */
+
 // Tracks if the view is shown
 var updating;
 var refreshRate = 15000;

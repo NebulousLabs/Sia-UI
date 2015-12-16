@@ -1,5 +1,11 @@
 'use strict';
 
+/*
+ * hostProperties module:
+ *   Holds data and/or conversion information about each hosting property.
+ *   Strongly coupled with hostMath.js
+ */
+
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
 // Ensure precision

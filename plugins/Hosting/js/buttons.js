@@ -1,5 +1,10 @@
 'use strict';
 
+/*
+ * buttons.js:
+ *   Adds click action to the DOM that interacts with the modules
+ */
+
 // Announce button
 $('#announce.button').click(function() {
 	$('#announce-address.popup').show();
@@ -34,7 +39,7 @@ $('#save.button').click(function() {
 // Reset button
 $('#reset.button').click(function() {
 	Lifecycle.tooltip('Reseting...', this);
-	var values = Host.resetValues();
+	var values = Host.reset();
 	$.each(values, function(name, value) {
 		var item = $('#' + name);
 		item.find('.value').text(value);

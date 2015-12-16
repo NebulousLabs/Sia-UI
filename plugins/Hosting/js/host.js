@@ -1,5 +1,10 @@
 'use strict';
 
+/*
+ * host module:
+ *   Tracks hosting properties between the DOM and Siad
+ */
+
 // Tracks details about the various hosting properties
 var props = require('./hostProperties.js');
 // Hold Sia math logic 
@@ -88,7 +93,7 @@ function save(settings) {
 }
 
 // Returns array of converted values relevant to settings configuration table
-function resetValues() {
+function reset() {
 	var convertedValues = {};
 	configurable.forEach(function(name) {
 		convertedValues[name] = math.convertProperty(props[name]);
@@ -104,7 +109,7 @@ function address() {
 // Requiring this file gives an object with the following functions
 module.exports = {
 	update: update,
-	resetValues: resetValues,
+	reset: reset,
 	announce: announce,
 	save: save,
 	address: address,
