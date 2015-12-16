@@ -1,52 +1,57 @@
 'use strict';
 
-// Manges the lifecycle of the plugin
-function lifecycle() {
-	// Tracks if the view is shown
-	var updating;
-	var refreshRate = 15000;
+/*
+ * Lifecycle module:
+ *   Updates plugin periodically and communicates with the general UI.
+ */
 
-	// Notification shortcut 
-	function notify(msg, type) {
-		IPCRenderer.sendToHost('notify', msg, type);
-	}
+// Library for communicating with Sia-UI
+const IPCRenderer = require('electron').ipcRenderer;
+// Host settings manager
+const Host = require('./host.js');
+// Siad wrapper/manager
+const Siad = require('sia.js');
 
-	// Get host status regularly
-	function update() {
-		Siad.apiCall('/host', function(result) {
-			Host.update(result);
-		});
-		updating = setTimeout(update, refreshRate);
-	}
+// Tracks if the view is shown
+var updating;
+var refreshRate = 15000;
 
-	// Called upon transitioning away from this view
-	function stop() {
-		clearTimeout(updating);
-	}
-	
-	// Ask UI to show tooltip bubble above element
-	function tooltip(message, element) {
-		var rect = element.getBoundingClientRect();
-		IPCRenderer.sendToHost('tooltip', message, {
-			top: rect.top,
-			bottom: rect.bottom,
-			left: rect.left,
-			right: rect.right,
-			height: rect.height,
-			width: rect.width,
-			length: rect.length,
-		});
-	}
-	
-	// Expose public members
-	return {
-		update: update,
-		stop: stop,
-		notify: notify,
-		tooltip: tooltip,
-	};
+// Notification shortcut 
+function notify(msg, type) {
+	IPCRenderer.sendToHost('notify', msg, type);
 }
 
-// requiring this file gives an instance of the above class
-module.exports = lifecycle();
+// Get host status regularly
+function update() {
+	Siad.apiCall('/host', function(result) {
+		Host.update(result);
+	});
+	updating = setTimeout(update, refreshRate);
+}
 
+// Called upon transitioning away from this view
+function stop() {
+	clearTimeout(updating);
+}
+
+// Ask UI to show tooltip bubble above element
+function tooltip(message, element) {
+	var rect = element.getBoundingClientRect();
+	IPCRenderer.sendToHost('tooltip', message, {
+		top: rect.top,
+		bottom: rect.bottom,
+		left: rect.left,
+		right: rect.right,
+		height: rect.height,
+		width: rect.width,
+		length: rect.length,
+	});
+}
+
+// Requiring this file gives an object with the following functions
+module.exports = {
+	update: update,
+	stop: stop,
+	notify: notify,
+	tooltip: tooltip,
+};
