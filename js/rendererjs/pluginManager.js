@@ -71,7 +71,6 @@ function addListeners(plugin) {
 	
 	// Handle any ipc messages from the plugin
 	plugin.on('ipc-message', function(event) {
-		var responseChannel;
 		switch(event.channel) {
 			case 'notification':
 				// Use UI notification system

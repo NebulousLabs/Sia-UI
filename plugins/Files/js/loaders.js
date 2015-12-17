@@ -98,13 +98,3 @@ function loadAscii(ascii, callback) {
 	}, exitFileAdder);
 }
 
-function deleteFile(nickname, callback) {
-	// Make the request to delete the file.
-	Siad.apiCall({
-		url: '/renter/files/delete',
-		qs: {
-			nickname: nickname,
-		}
-	}, update);
-}
-

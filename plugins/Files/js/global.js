@@ -20,19 +20,14 @@ BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
 // Siad wrapper/manager
 const Siad = require('sia.js')
 // Make sure Siad settings are in sync with the rest of the UI's
-IPCRenderer.sendToHost('config', {key: 'siad'}, 'siadsettings');
-IPCRenderer.on('siadsettings', function(settings) {
-	Siad.configure({
-		siad: settings,
-	});
-});
+Siad.configure(IPCRenderer.sendSync('config', 'siad'));
 // Slight modification to Siad wrapper for standard error handling
 Siad.apiCall = function(callObj, callback) {
 	Siad.call(callObj, function(err, result) {
 		if (err) {
 			console.error(callObj, err);
 			notify(err.toString(), 'error');
-		} else {
+		} else if (callback) {
 			callback(result);
 		}
 	});
@@ -61,23 +56,6 @@ function tooltip(message, element) {
 		length: rect.length,
 	});
 }
-
-// Broken way to simulate callback function style given ipc
-// configCallback is set to the most recent callback to be executed upon
-// results returned from ipc. Would not work with rapid config calls
-var configCallback;
-function config(key, value, callback) {
-	if (callback === undefined) {
-		callback = value;
-		value = undefined;
-	}
-	IPCRenderer.sendToHost('config', {
-		key: key,
-		value: value,
-	}, 'config');
-	configCallback = callback;
-}
-IPCRenderer.on('config', configCallback);
 
 // Confirm file deletion
 $('#delete-file').click(function() {
