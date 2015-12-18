@@ -4,9 +4,9 @@
 // IPCRenderer.sendToHost('devtools');
 
 // Node modules
-const Siad = require('sia.js');
+const siad = require('sia.js');
 const $ = require('jquery');
-const Library = require('./files.js');
+const files = require('./files.js');
 
 // Keeps track of if the view is shown
 var updating;
@@ -31,8 +31,8 @@ function updateStatus(result) {
 
 // Regularly update the file library and status
 function update() {
-	Siad.apiCall('/renter/files/list', files.updateList);
-	Siad.apiCall('/renter/status', updateStatus);
+	siad.apiCall('/renter/files/list', files.updateList);
+	siad.apiCall('/renter/status', updateStatus);
 	
 	updating = setTimeout(update, 15000);
 }

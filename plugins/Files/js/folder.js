@@ -1,10 +1,5 @@
 'use strict';
 
-// Inherits from entity
-const entity = require('./entity');
-// Siad wrapper/manager
-const Siad = require('sia.js');
-
 /*
  * folder:
  *   folder is an object literal that inherits from entity by instantiating one
@@ -12,10 +7,17 @@ const Siad = require('sia.js');
  *   files, aide file browsing, and facilitate recursive file operations.
  */
 
+// Inherits from entity
+const entity = require('./entity');
+// siad wrapper/manager
+const siad = require('sia.js');
+// For making file system directories
+const mkdirp = require('mkdirp');
+
 let folder = Object.assign(Object.create(entity), {
 	type: 'folder',
 	contents: {},
-	// Changes folder's nickname with Siad call
+	// Changes folder's nickname with siad call
 	setPath (newPath, cb) {
 		// Perform all async delete operations in parallel
 		var names = Object.keys(contents);
@@ -30,7 +32,7 @@ let folder = Object.assign(Object.create(entity), {
 				}
 			});
 		});
-		// Called only if there were no contents
+		// Called iff there were no contents
 		if (count === 0 && cb) {
 			this.path = newPath;
 			cb();
@@ -45,15 +47,18 @@ let folder = Object.assign(Object.create(entity), {
 		var count = names.length;
 		names.forEach(function(name) {
 			contents[name].delete(function() {
+				delete contents[name];
 				// Execute the callback iff all operations succeed
 				count--;
 				if (count === 0 && cb) {
+					// TODO: Can I make this folder delete itself?
 					cb();
 				}
 			});
 		});
-		// Called only if there were no contents
+		// Called iff there were no contents
 		if (count === 0 && cb) {
+			// TODO: Can I make this folder delete itself?
 			cb();
 		}
 	},
@@ -61,6 +66,9 @@ let folder = Object.assign(Object.create(entity), {
 		// Perform all async delete operations in parallel
 		var names = Object.keys(contents);
 		var count = names.length;
+		// Make folder at destination
+		mkdirp.sync(`${destination}/${this.name}`);
+		// Download contents to above folder
 		names.forEach(function(name) {
 			contents[name].download(`${destination}/${this.name}/${name}`, function() {
 				// Execute the callback iff all operations succeed
@@ -70,7 +78,7 @@ let folder = Object.assign(Object.create(entity), {
 				}
 			});
 		});
-		// Called only if there were no contents
+		// Called iff there were no contents
 		if (count === 0 && cb) {
 			cb();
 		}
@@ -79,8 +87,11 @@ let folder = Object.assign(Object.create(entity), {
 		// Perform all async delete operations in parallel
 		var names = Object.keys(contents);
 		var count = names.length;
+		// Make folder at destination
+		mkdirp.sync(`${filepath}/${this.name}`);
+		// Make .sia files in above folder
 		names.forEach(function(name) {
-			contents[name].share(`${destination}/${this.name}/${name}`, function() {
+			contents[name].share(`${filepath}/${this.name}/${name}`, function() {
 				// Execute the callback iff all operations succeed
 				count--;
 				if (count === 0 && cb) {
@@ -88,6 +99,10 @@ let folder = Object.assign(Object.create(entity), {
 				}
 			});
 		});
+		// Called iff there were no contents
+		if (count === 0 && cb) {
+			cb();
+		}
 	},
 });
 
@@ -97,9 +112,9 @@ function folderFactory(arg) {
 	let f = Object.create(folder);
 	if (typeof arg === 'object'){
 		Object.assign(f, arg);
-		f.fullName = arg.Nickname;
+		f.path = arg.Nickname;
 	} else if (typeof arg === 'string') {
-		f.fullName = arg;
+		f.path = arg;
 	}
 	return f;
 }

@@ -7,23 +7,26 @@
  *   and other startup procedures for this plugin
  */
 
-// Library for communicating with Sia-UI
-const IPCRenderer = require('electron').ipcRenderer;
 // Node modules
-const Fs = require('fs');
-const Path = require('path');
-// Library for arbitrary precision in numbers
+const ipcRenderer = require('electron').ipcRenderer;
+const fs = require('fs');
+const path = require('path');
 const BigNumber = require('bignumber.js');
+const siad = require('sia.js')
+
+// Notification shortcut 
+function notify(msg, type) {
+	ipcRenderer.sendToHost('notify', msg, type);
+}
+
 // Ensure precision
 BigNumber.config({ DECIMAL_PLACES: 24 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
-// Siad wrapper/manager
-const Siad = require('sia.js')
-// Make sure Siad settings are in sync with the rest of the UI's
-Siad.configure(IPCRenderer.sendSync('config', 'siad'));
-// Slight modification to Siad wrapper for standard error handling
-Siad.apiCall = function(callObj, callback) {
-	Siad.call(callObj, function(err, result) {
+// Make sure siad settings are in sync with the rest of the UI's
+siad.configure(ipcRenderer.sendSync('config', 'siad'));
+// Slight modification to siad wrapper for standard error handling
+siad.apiCall = function(callObj, callback) {
+	siad.call(callObj, function(err, result) {
 		if (err) {
 			console.error(callObj, err);
 			notify(err.toString(), 'error');
@@ -33,20 +36,10 @@ Siad.apiCall = function(callObj, callback) {
 	});
 }
 
-// Get filename from filepath
-function nameFromPath(path) {
-	return path.replace(/^.*[\\\/]/, '');
-}
-
-// Notification shortcut 
-function notify(msg, type) {
-	IPCRenderer.sendToHost('notify', msg, type);
-}
-
 // Ask UI to show tooltip bubble
 function tooltip(message, element) {
 	var rect = element.getBoundingClientRect();
-	IPCRenderer.sendToHost('tooltip', message, {
+	ipcRenderer.sendToHost('tooltip', message, {
 		top: rect.top,
 		bottom: rect.bottom,
 		left: rect.left,

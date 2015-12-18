@@ -1,8 +1,5 @@
 'use strict';
 
-// Helper Node Module
-const Path = require('path');
-
 /*
  * entity:
  *   entity is akin to a virtual class. It shouldn't be instantiated but is
@@ -11,6 +8,9 @@ const Path = require('path');
  *   uses, need to share these properties and methods for the file browser to
  *   be seemlessly operated.
  */
+
+// Helper Node Module
+const path = require('path');
 
 let entity = {
 	// Abstract members, inheritors must set
@@ -27,18 +27,28 @@ let entity = {
 	},
 	// Virtual functions, can be overwritten
 	get name () {
-		return Path.basename(this.path);
+		return path.basename(this.path);
 	},
 	get directory () {
-		return Path.dirname(this.path);
+		return path.dirname(this.path);
 	},
+	get extension () {
+		return path.extname(this.path);
+	},
+	get nameNoExtension () {
+		return path.basename(this.path, this.extension);
+	}
 	// These can't use set syntax because they're necessarily asynchronous
 	setName (newName, cb) {
-		var newPath = this.path + newName;
+		var newPath = `${this.directory}/${newName}`;
 		this.setPath(newPath, cb);
 	},
-	setPath (newPath, cb) {
-		var newPath = newPath + this.name;
+	setDirectory (newDirectory, cb) {
+		var newPath = `${newDirectory}/${this.name}`;
+		this.setPath(newPath, cb);
+	},
+	setExtension (newExtension, cb) {
+		var newPath = `${this.directory}/${this.nameNoExtension}${newExtension}`;
 		this.setPath(newPath, cb);
 	},
 };

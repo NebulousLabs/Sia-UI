@@ -1,12 +1,5 @@
 'use strict';
 
-// Inherits from entity
-const entity = require('./entity');
-// Siad wrapper/manager
-const Siad = require('sia.js');
-// Path Node module
-const Path = require('path');
-
 /*
  * file:
  *   file is an object literal that inherits from entity by instantiating one
@@ -14,11 +7,16 @@ const Path = require('path');
  *   hold, and change information about renter files
  */
 
+// Inherits from entity
+const entity = require('./entity');
+// siad wrapper/manager
+const siad = require('sia.js');
+
 let file = Object.assign(Object.create(entity), {
 	type: 'file',
-	// Changes file's nickname with Siad call
+	// Changes file's nickname with siad call
 	setPath (newPath, cb) {
-		Siad.apiCall({
+		siad.apiCall({
 			url: '/renter/files/rename',
 			qs: {
 				nickname: this.path,
@@ -31,24 +29,12 @@ let file = Object.assign(Object.create(entity), {
 			}
 		});
 	},
-	/*
-	 * TODO: Don't know if this is needed yet
-	get extension () {
-		return Path.extname(this.path);
-	},
-	get nameNoExtension () {
-		return Path.basename(this.path, this.extension);
-	}
-	setExtension (newExtension, cb) {
-		var newPath = `${this.directory}/${thi.nameNoExtension}${newExtension}`;
-		this.setPath(newPath, cb);
-	},
-	*/
 	// The below are just function forms of the renter calls a function can
 	// enact on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
 	delete (cb) {
-		Siad.apiCall({
+		// TODO: Can I make this file delete itself?
+		siad.apiCall({
 			url: '/renter/files/delete'
 			qs: {
 				nickname: this.path,
@@ -56,7 +42,7 @@ let file = Object.assign(Object.create(entity), {
 		}, cb);
 	},
 	download (destination, cb) {
-		Siad.apiCall({
+		siad.apiCall({
 			url: '/renter/files/download',
 			qs: {
 				nickname: this.path,
@@ -65,7 +51,7 @@ let file = Object.assign(Object.create(entity), {
 		}, cb);
 	},
 	share (filepath, cb) {
-		Siad.apiCall({
+		siad.apiCall({
 			url: '/renter/files/share',
 			qs: {
 				nickname: this.path,
@@ -74,7 +60,7 @@ let file = Object.assign(Object.create(entity), {
 		}, cb);
 	},
 	shareASCII (cb) {
-		Siad.apiCall({
+		siad.apiCall({
 			url: '/renter/files/shareascii',
 			qs: {
 				nickname: this.path,

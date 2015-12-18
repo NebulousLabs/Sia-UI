@@ -1,42 +1,5 @@
 'use strict';
 
-function download(nickname, callback) {
-	var savePath = IPCRenderer.sendSync('dialog', 'save', {
-		defaultPath: nickname,
-	});
-	if (!savePath) {
-		return;
-	}
-	notify('Downloading ' + nickname + ' to '+ savePath +' folder', 'download');
-	Siad.apiCall({
-		url: '/renter/files/download',
-		qs: {
-			nickname: nickname,
-			destination: savePath,
-		},
-	}, update);
-}
-
-function share(nickname, callback) {
-	// Set popup title
-	eID('show-ascii').querySelector('.title').innerHTML = nickname;
-
-	// Make a request to get the ascii share string
-	Siad.apiCall({
-		url: '/renter/files/shareascii',
-		qs: {
-			nickname: nickname,
-		}
-	}, function(result) {
-		var popup = eID('show-ascii');
-		show(popup);
-	
-		popup.querySelector('.ascii').innerHTML = result.File;
-	
-		update();
-	});
-}
-
 function upload(filePath, nickname, callback) {
 	notify('Uploading ' + nickname + ' to Sia Network', 'upload');
 	Siad.apiCall({
