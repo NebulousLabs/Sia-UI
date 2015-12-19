@@ -116,10 +116,7 @@ function encrypt() {
 		popup.show();
 	
 		// Clear old password in config if there is one
-		IPCRenderer.sendToHost('config', {
-			key: 'walletPassword',
-			value: '',
-		});
+		IPCRenderer.sendSync('config', 'walletPassword', null);
 	
 		// Show password in the popup
 		$('#generated-password').text(result.primaryseed);

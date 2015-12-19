@@ -31,7 +31,7 @@ function nameFromPath(path) {
 
 // Notification shortcut 
 function notify(msg, type) {
-	IPCRenderer.sendToHost('notify', msg, type);
+	IPCRenderer.sendToHost('notification', msg, type);
 }
 
 // Ask UI to show tooltip bubble

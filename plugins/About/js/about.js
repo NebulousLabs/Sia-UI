@@ -5,10 +5,8 @@ const IPCRenderer = require('electron').ipcRenderer;
 // Siad wrapper
 const Siad = require('sia.js');
 // Make sure Siad settings are in sync with the rest of the UI's
-IPCRenderer.sendToHost('config', {key: 'siad'}, 'siadsettings');
-IPCRenderer.on('siadsettings', function(event, settings) {
-	Siad.configure(settings);
-});
+var settings = IPCRenderer.sendSync('config', 'siad');
+Siad.configure(settings);
 // Keeps track of if the view is shown
 var updating;
 
@@ -16,7 +14,7 @@ var updating;
 function update() {
 	Siad.call('/daemon/version', function(err, result) {
 		if (err) {
-			IPCRenderer.sendToHost('notify', '/daemon/version call failed!', 'error');
+			IPCRenderer.sendToHost('notification', '/daemon/version call failed!', 'error');
 		} else {
 			document.getElementById('siaversion').innerHTML = result;
 		}
