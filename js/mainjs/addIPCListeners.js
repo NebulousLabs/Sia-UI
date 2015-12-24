@@ -22,6 +22,10 @@ module.exports = function(config, mainWindow) {
 				response = Dialog.showSaveDialog(mainWindow, options);
 				break;
 			case 'message':
+				// Give all message boxes the sia icon by default
+				if (!options.icon) {
+					options.icon = require('path').join(__dirname, '../..', 'assets', 'icon.png');
+				}
 				response = Dialog.showMessageBox(mainWindow, options);
 				break;
 			case 'error':
