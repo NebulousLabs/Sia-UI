@@ -9,13 +9,14 @@
  *   be seemlessly operated.
  */
 
-// Helper Node Module
+// Node modules
 const path = require('path');
+const $ = require('jquery');
 
 let entity = {
 	// Abstract members, inheritors must set
-	type: 'entity',
-	path: '/',
+	type:    'entity',
+	path:    '',
 	// Abstract functions, inheritors must implement
 	setPath (newPath, cb) {
 	},
@@ -25,19 +26,22 @@ let entity = {
 	},
 	share (cb) {
 	},
-	// Virtual functions, can be overwritten
+	// Virtual functions
 	get name () {
 		return path.basename(this.path);
 	},
 	get directory () {
 		return path.dirname(this.path);
 	},
+	get folders () {
+		return path.dirname(this.path).split('/');
+	},
 	get extension () {
 		return path.extname(this.path);
 	},
 	get nameNoExtension () {
 		return path.basename(this.path, this.extension);
-	}
+	},
 	// These can't use set syntax because they're necessarily asynchronous
 	setName (newName, cb) {
 		var newPath = `${this.directory}/${newName}`;

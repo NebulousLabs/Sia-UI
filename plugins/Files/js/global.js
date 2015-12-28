@@ -8,8 +8,6 @@
  */
 
 // Node modules
-const electron = require('electron');
-const clipboard = electron.clipboard;
 const path = require('path');
 const BigNumber = require('bignumber.js');
 const siad = require('sia.js');
@@ -39,7 +37,7 @@ siad.apiCall = function(callObj, callback) {
 };
 
 // Make lifecycle.start|stop global functions
-var start = lifecycle.update;
+var start = lifecycle.start;
 var stop = lifecycle.stop;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Buttons ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -143,12 +141,12 @@ $('#ascii-choice').click(function() {
 	hideSteps([2,3]);
 
 	$('#paste-ascii').show();
-	$('#add-ascii-file').show();
 	$('#paste-ascii-input').focus();
 });
 
 // An 'Enter' keypress in the input field will submit it.
-$('#paste-ascii-input').keyup(function(e) {
+$('#paste-ascii-input').keypress(function(e) {
+	$('#add-ascii-file').show();
     e = e || window.event;
     if (e.keyCode === 13) {
         $('#add-ascii-file').click();
@@ -163,14 +161,6 @@ $('#add-ascii-file').click(function() {
 
 // Share ASCII popup
 $('#copy-ascii').click(function() {
-	var file = $('#show-ascii').find('.ascii').text();
-	var nickname = $('#show-ascii').find('.title').text();
-	clipboard.writeText(file);
-	tools.notify('Copied ' + nickname + '.sia to clipboard!', 'asciifile');
-	$('#show-ascii').hide();
-});
-$('#cancel-ascii').click(function() {
-	$('#show-ascii').hide();
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Add directory ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

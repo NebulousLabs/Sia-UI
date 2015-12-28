@@ -4,9 +4,10 @@
 // IPCRenderer.sendToHost('devtools');
 
 // Node modules
+const BigNumber = require('bignumber.js');
 const siad = require('sia.js');
 const $ = require('jquery');
-const files = require('./files.js');
+const browser = require('./browser');
 
 // Keeps track of if the view is shown
 var updating;
@@ -31,7 +32,7 @@ function updateStatus(result) {
 
 // Regularly update the file library and status
 function update() {
-	siad.apiCall('/renter/files/list', files.updateList);
+	siad.apiCall('/renter/files/list', browser.updateList);
 	siad.apiCall('/renter/status', updateStatus);
 	
 	updating = setTimeout(update, 15000);
@@ -42,4 +43,3 @@ IPCRenderer.on('shown', update);
 // Called upon transitioning away from this view
 IPCRenderer.on('hidden', function() {
 	clearTimeout(updating);
-});

@@ -7,27 +7,6 @@
 		<link rel='stylesheet' href='../../css/pure-min.css'>
 		<link rel='stylesheet' href='../../css/plugin-standard.css'>
 		<link rel='stylesheet' href='css/files.css'>
-
-		<!-- Blueprint -->
-		<div class='file hidden' id='filebp'>
-			<div class='graphic'>
-				<i class='fa fa-file'></i>
-			</div>
-			<div class='available'>
-				<div class='yes'>
-					<i class='fa fa-check'></i>
-				</div>
-				<div class='no'>
-					<i class='fa fa-refresh fa-spin'></i>
-				</div>
-			</div>
-			<div class='name'></div>
-			<div class='size'></div>
-			<div class='time'></div>
-			<div class='download cssTooltip' tooltip-content="Download"><i class='fa fa-download'></i></div>
-			<div class='share cssTooltip' tooltip-content="Share"><i class='fa fa-share-alt'></i></div>
-			<div class='delete cssTooltip' tooltip-content="Delete"><i class='fa fa-remove'></i></div>
-		</div>
 	</head>
 	<body>
 		<!-- Frame -->
@@ -61,38 +40,10 @@
 				<div id='file-browser'>
 				</div>
 			</div>
-
-			<!-- Share Popup -->
-			<div class='popup hidden' id='show-ascii'>
-				<div class='row'>
-					<div class='title'></div>
-				</div>
-				<p class='ascii'></p>
-				<span class='button' id='copy-ascii'>
-					<i class='fa fa-chain'>Copy to Clipboard</i>
-				</span>
-				<span class='button' id='cancel-ascii'>
-					<i class='fa fa-close'>Cancel</i>
-				</span>
-			</div>
-
-			<!-- Delete Popup -->
-			<div class='popup hidden' id='confirm-delete'>
-				<div class='row'>
-					<div class='title'>Confirm</div>
-				</div>
-				<p class='nickname'></p>
-				<span class='button' id='delete-file'>
-					<i class='fa fa-check'>Delete</i>
-				</span>
-				<span class='button' id='cancel-delete'>
-					<i class='fa fa-close'>Cancel</i>
-				</span>
-			</div>
 		</div>
 
 		<!-- New File Frame -->
-		<div class='frame hidden' id='add-file'>
+		<div class='frame' id='add-file'>
 			<div class='header'>
 				<div class='button' id='back'>
 					<i class='fa fa-chevron-left'></i>
@@ -150,7 +101,7 @@
 		</div>
 
 		<!-- New Folder Frame -->
-		<div class='frame hidden' id='add-dir'>
+		<div class='frame' id='add-dir'>
 			<div class='header'>
 				<div class='button' id='back-dir'>
 					<i class='fa fa-chevron-left'></i>

@@ -20,10 +20,10 @@ let folder = Object.assign(Object.create(entity), {
 	// Changes folder's nickname with siad call
 	setPath (newPath, cb) {
 		// Perform all async delete operations in parallel
-		var names = Object.keys(contents);
+		var names = Object.keys(this.contents);
 		var count = names.length;
 		names.forEach(function(name) {
-			contents[name].setPath(`${newPath}/${name}`, function() {
+			this.contents[name].setPath(`${newPath}/${name}`, function() {
 				// Execute the callback iff all operations succeed
 				count--;
 				if (count === 0 && cb) {
@@ -43,11 +43,11 @@ let folder = Object.assign(Object.create(entity), {
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
 	delete (cb) {
 		// Perform all async delete operations in parallel
-		var names = Object.keys(contents);
+		var names = Object.keys(this.contents);
 		var count = names.length;
 		names.forEach(function(name) {
-			contents[name].delete(function() {
-				delete contents[name];
+			this.contents[name].delete(function() {
+				delete this.contents[name];
 				// Execute the callback iff all operations succeed
 				count--;
 				if (count === 0 && cb) {
@@ -64,13 +64,13 @@ let folder = Object.assign(Object.create(entity), {
 	},
 	download (destination, cb) {
 		// Perform all async delete operations in parallel
-		var names = Object.keys(contents);
+		var names = Object.keys(this.contents);
 		var count = names.length;
 		// Make folder at destination
 		mkdirp.sync(`${destination}/${this.name}`);
 		// Download contents to above folder
 		names.forEach(function(name) {
-			contents[name].download(`${destination}/${this.name}/${name}`, function() {
+			this.contents[name].download(`${destination}/${this.name}/${name}`, function() {
 				// Execute the callback iff all operations succeed
 				count--;
 				if (count === 0 && cb) {
@@ -85,13 +85,13 @@ let folder = Object.assign(Object.create(entity), {
 	},
 	share (filepath, cb) {
 		// Perform all async delete operations in parallel
-		var names = Object.keys(contents);
+		var names = Object.keys(this.contents);
 		var count = names.length;
 		// Make folder at destination
 		mkdirp.sync(`${filepath}/${this.name}`);
 		// Make .sia files in above folder
 		names.forEach(function(name) {
-			contents[name].share(`${filepath}/${this.name}/${name}`, function() {
+			this.contents[name].share(`${filepath}/${this.name}/${name}`, function() {
 				// Execute the callback iff all operations succeed
 				count--;
 				if (count === 0 && cb) {
@@ -108,13 +108,13 @@ let folder = Object.assign(Object.create(entity), {
 
 // Factory to create instances of the file object
 function folderFactory(arg) {
-	// Folders can be constructed from a full path/nickname and 
+	// Folders can be constructed from a '/' deliminated string, representing
+	// their path with their name included as the last segment
 	let f = Object.create(folder);
-	if (typeof arg === 'object'){
-		Object.assign(f, arg);
-		f.path = arg.Nickname;
-	} else if (typeof arg === 'string') {
+	if (typeof arg === 'string') {
 		f.path = arg;
+	} else {
+		console.error('Unrecognized constructur argument: ', arguments);
 	}
 	return f;
 }

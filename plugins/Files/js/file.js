@@ -29,13 +29,12 @@ let file = Object.assign(Object.create(entity), {
 			}
 		});
 	},
-	// The below are just function forms of the renter calls a function can
-	// enact on itself, see the API.md
+	// The below are just function forms of the renter calls a file can enact
+	// on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
 	delete (cb) {
-		// TODO: Can I make this file delete itself?
 		siad.apiCall({
-			url: '/renter/files/delete'
+			url: '/renter/files/delete',
 			qs: {
 				nickname: this.path,
 			},
@@ -79,6 +78,8 @@ function fileFactory(arg, browser) {
 		f.path = arg.Nickname;
 	} else if (typeof arg === 'string') {
 		f.path = arg;
+	} else {
+		console.error('Unrecognized constructur argument: ', arguments);
 	}
 	return f;
 }
