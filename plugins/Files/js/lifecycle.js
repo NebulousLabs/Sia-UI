@@ -43,3 +43,4 @@ IPCRenderer.on('shown', update);
 // Called upon transitioning away from this view
 IPCRenderer.on('hidden', function() {
 	clearTimeout(updating);
+});

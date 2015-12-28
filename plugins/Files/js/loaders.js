@@ -24,6 +24,7 @@ function isUnixHiddenPath(path) {
 
 // Non-recursively upload all files in a directory
 function uploadDir(dirPath, nickname, callback) {
+	tools.notify('Uploading ' + path.basename(dirPath) + ' to Sia Network', 'upload');
 	// Upload files one at a time
 	fs.readdir(dirPath, function(err, files) {
 		if (err) {

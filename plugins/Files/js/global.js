@@ -41,46 +41,19 @@ var start = lifecycle.start;
 var stop = lifecycle.stop;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Buttons ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Used to hide subsequent steps when selecting an earlier one
-function hideSteps(steps) {
-	steps.forEach(function(step) {
-		$('#step' + step).children().hide();
-	});
-}
-
-// Exit function to return to general filelist view
-function exitFileAdder() {
-	$('#add-dir').hide();
-	$('#add-file').hide();
-	$('#file-library').show();
-
-	hideSteps([2,3,'f2','f3']);
-
-	// Clear fields
-	$('.description-field').val('');
-	$('.file-path, .dir-path').text('');
-	lifecycle.update();
-}
-$('#back').click(exitFileAdder);
-$('#back-dir').click(exitFileAdder);
-
 // File list search
 $('#search-bar').keypress(function() {
 	tools.tooltip('Searching...', this);
 	browser.filter(this.value);
 });
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Add File ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// TODO: Get sliding frame in to work
-$('#new-file').click(function() {
-	$('#add-file').show();
-	$('#file-library').hide();
+$('#new.button').click(function() {
+	$('.hidden.dropdown').toggle('fast');
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Upload ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Upload file option chosen
 $('#upload-choice').click(function() {
-	hideSteps([2,3]);
 	var loadPath = tools.dialog('open', {
 		title: 'Upload Path',
 		properties: ['openFile'],
@@ -113,8 +86,6 @@ $('#upload-file').click(function() {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ .Sia file ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Sia file option chosen
 $('#sia-choice').click(function() {
-	hideSteps([2,3]);
-
 	var loadPath = tools.dialog('open', {
 		title: 'Sia File Path',
 		filters: [
@@ -138,8 +109,6 @@ $('#add-sia-file').click(function() {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ASCII code ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ASCII file option chosen
 $('#ascii-choice').click(function() {
-	hideSteps([2,3]);
-
 	$('#paste-ascii').show();
 	$('#paste-ascii-input').focus();
 });
@@ -167,14 +136,11 @@ $('#copy-ascii').click(function() {
 // Select directory sliding frame
 $('#new-dir').click(function() {
 	$('#add-dir').show();
-	$('#file-library').hide();
+	$('#file-browser').hide();
 });
 
 // Upload directory option chosen
-// TODO: Combine this with upload file
 $('#upload-dir-choice').click(function() {
-	hideSteps(['f2','f3']);
-
 	var loadPath = tools.dialog('open', {
 		title: 'Select Directory',
 		properties: ['openDirectory'],

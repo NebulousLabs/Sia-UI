@@ -50,12 +50,13 @@ function updateFile(result) {
 
 	// Make and display file element
 	var f = currentFolder.contents[fileName];
-	$('#file-browser').append(addFile(f));
+	$('#file-list').append(addFile(f));
 }
 
 // Filter file list by search string
+// TODO: only searches the current folder for now
 function filterList(searchstr) {
-	$('#file-browser').children().each(function(entry) {
+	$('#file-list').children().each(function(entry) {
 		if ($(this).find('.name').html().indexOf(searchstr) > -1) {
 			entry.show();
 		} else {
@@ -66,7 +67,7 @@ function filterList(searchstr) {
 
 // Refresh file list
 function updateList(results) {
-	$('#file-browser').empty();
+	$('#file-list').empty();
 
 	// Add each file
 	results.forEach(updateFile);

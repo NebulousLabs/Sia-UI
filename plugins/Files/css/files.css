@@ -10,6 +10,17 @@
  * 		Black:      #000000
  */
 
+/* General */
+input {
+	width: 100%;
+	display: inline-block;
+	text-align: center;
+	box-shadow: none;
+}
+.hidden {
+	display: none;
+}
+
 /* Information Box */
 .box {
 	height: 100%;
@@ -17,57 +28,67 @@
 .row {
 	background: #f5f5f5;
 	display: block;
-	height: 30px;
-	padding: 15px;
-	width: calc(100% - 30px);
-	overflow: hidden;
+	height: 40px;
+	padding: 10px;
+	width: calc(100% - 20px);
 }
 .button {
-	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
 	display: inline-block;
 	font-size: 20px;
 	padding: 8px;
 }
+.button i {
+	vertical-align: middle;
+}
 
 /* Controls */
 .controls {
+	position: relative;
 	display: inline-block;
-	float: left;
-}
-.transparent {
-	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
-	opacity: 0;
-	cursor: none;
-}
-.search {
-	font-size: 24px;
 	float: right;
 }
-.search input {
+.controls input {
 	text-align: left;
 	width: 200px;
 }
-input {
-	width: 100%;
-	display: inline-block;
-	text-align: center;
-	box-shadow: none;
+.dropdown {
+	position: absolute;
+	top: 20px;
+	z-index: 1;
+	left: 15px;
+
+	border: 1px solid black;
+	border-radius: 6px;
+	margin: 0;
+	padding: 0;
+
+	white-space: nowrap;
+	background: white;
+	font-size: 20px;
+	list-style: none;
+}
+.dropdown .button {
+	display: block;
+	font-size: 12px;
+}
+hr {
+	margin: 0;
 }
 
-/* File browser and list */
-#file-browser {
+/* File list */
+#file-list {
 	background-color: #fafafa;
 	height: calc(100% - 60px);
 	overflow-y: auto;
 }
-#file-browser .file {
+#file-list .file {
 	padding: 10px;
 	color: #757575;
 	font-size: 14px;
 	background-color: #fff;
 	border-bottom: 1px solid #eeeeee;
 }
-#file-browser .file:hover {
+#file-list .file:hover {
 	cursor: pointer;
 }
 .file .graphic {
@@ -142,26 +163,14 @@ input {
 }
 
 /* Add file window */
-.description-field {
-	padding: 1%;
-	width: 94%;
-	border-radius: 4px;
-}
 .step {
 	background-color: #f5f5f5;
 	text-align: center;
-	height: 33.333%;
+	height: 50%;
 	border-bottom: solid 4px #fff;
 }
-.step .button {
+.step.button {
 	font-size: 32px;
 	-webkit-box-sizing: border-box;
 	margin: auto;
 }
-#add-sia-file {
-	height: 66.667%;
-}
-.step .capsule {
-	background-color: #fff;
-}
-
