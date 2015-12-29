@@ -1,36 +1,31 @@
 'use strict';
 
 /*
- * fileElement:
- *   This module holds the creation logic for file elements.
+ * folderElement:
+ *   This module holds the creation logic for folder elements.
  */
 
 // Node modules
-const electron = require('electron');
-const clipboard = electron.clipboard;
 const $ = require('jquery');
 const tools = require('./uiTools');
+const BigNumber = require('bignumber.js');
 
-// Make file element with jquery
-function addFile(f) {
+// Make folder element with jquery
+function addFolder(f) {
 	var el = $(`
-		<div class='file hidden' id='${f.path}'>
+		<div class='folder hidden' id='${f.path}'>
 			<div class='graphic'>
-				<i class='fa fa-file'></i>
-			</div>
-			<div class='available'>
-				<i class='fa'></i>
+				<i class='fa fa-folder'></i>
 			</div>
 			<div class='name'></div>
 			<div class='size'></div>
-			<div class='time'></div>
 			<div class='download cssTooltip' tooltip-content="Download"><i class='fa fa-download'></i></div>
 			<div class='share cssTooltip' tooltip-content="Share"><i class='fa fa-share-alt'></i></div>
 			<div class='delete cssTooltip' tooltip-content="Delete"><i class='fa fa-remove'></i></div>
 		</div>
 	`);
 
-	// Give the file buttons clickability
+	// Give the folder buttons clickability
 	el.find('.download').click(function() {
 		var destination = tools.dialog('save');
 		if (!destination) {
@@ -42,10 +37,13 @@ function addFile(f) {
 		});
 	});
 	el.find('.share').click(function() {
-		// Get the ascii share string
-		f.shareASCII(function(result) {
-			clipboard.writeText(result.File);
-			tools.notify('Copied ' + f.name + '.sia to clipboard!', 'asciifile');
+		var destination = tools.dialog('save');
+		if (!destination) {
+			return;
+		}
+		// Download siafiles to location
+		f.share(destination, function() {
+			tools.notify('Downloaded ' + f.name + '\'s .sia files to '+ destination, 'download');
 		});
 	});
 	el.find('.delete').click(function() {
@@ -65,17 +63,6 @@ function addFile(f) {
 	// Set field display values
 	el.find('.name').html(f.name);
 	el.find('.size').html(tools.formatBytes(f.size));
-	if (f.UploadProgress === 0) {
-		el.find('.time').html('Processing...');
-	} else if (f.UploadProgress < 100) {
-		el.find('.time').html(f.UploadProgress.toFixed(0) + '%');
-	} else {
-		el.find('.time').html(f.TimeRemaining + ' blocks left');
-	}
-
-	// Set availability graphic
-	var availabilityGraphic = f.Available ? 'fa-check' : 'fa-refresh fa-spin';
-	el.find('.available i').addClass(availabilityGraphic);
 }
 
-module.exports = addFile;
+module.exports = addFolder;

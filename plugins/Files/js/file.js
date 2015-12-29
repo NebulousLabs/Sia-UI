@@ -29,6 +29,15 @@ let file = Object.assign(Object.create(entity), {
 			}
 		});
 	},
+	// Get file size
+	get size () {
+		return this.Filesize;
+	},
+	// Update/record file stats
+	update (stats) {
+		Object.assign(this, stats);
+		this.path = stats.Nickname;
+	},
 	// The below are just function forms of the renter calls a file can enact
 	// on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter

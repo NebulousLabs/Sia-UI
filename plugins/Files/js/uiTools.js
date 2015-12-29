@@ -3,6 +3,7 @@
 // Node modules
 const electron = require('electron');
 const ipcRenderer = electron.ipcRenderer;
+const BigNumber = require('bignumber.js');
 
 // Notification shortcut 
 function notify(msg, type) {
@@ -34,9 +35,23 @@ function dialog(type, options) {
 	return ipcRenderer.sendSync('dialog', type, options);
 }
 
+// Format to data size representation with 3 or less digits
+function formatByte(bytes) {
+	bytes = new BigNumber(bytes);
+	if (bytes.isZero()) {
+		return '0 B';
+	}
+	var k = 1000;
+	var units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+	var i = Math.floor((Math.log(bytes) + 1) / Math.log(k));
+	var number = new BigNumber(bytes).div(Math.pow(k, i)).round(2);
+	return number + " " + units[i];
+}
+
 module.exports = {
 	notify: notify,
 	tooltip: tooltip,
 	config: config,
 	dialog: dialog,
+	formatByte: formatByte,
 };

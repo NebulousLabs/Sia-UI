@@ -38,6 +38,14 @@ let folder = Object.assign(Object.create(entity), {
 			cb();
 		}
 	},
+	// Calculate sum of file sizes
+	get size () {
+		var sum = 0;
+		Object.keys(this.contents).forEach(function(name) {
+			sum += this.contents[name].size;
+		});
+		return sum;
+	},
 	// The below are just function forms of the renter calls a function can
 	// enact on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
