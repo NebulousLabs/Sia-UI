@@ -11,13 +11,13 @@ const tools = require('./uiTools');
 const BigNumber = require('bignumber.js');
 
 // Make folder element with jquery
-function addFolder(f) {
+function makeFolderElement(f) {
 	var el = $(`
-		<div class='folder' id='${f.path}'>
+		<div class='folder entity' id='${f.path}'>
 			<div class='graphic'>
 				<i class='fa fa-folder'></i>
 			</div>
-			<div class='name'></div>
+			<div class='name'>${f.name}</div>
 			<div class='size'></div>
 			<div class='download cssTooltip' tooltip-content="Download"><i class='fa fa-download'></i></div>
 			<div class='share cssTooltip' tooltip-content="Share"><i class='fa fa-share-alt'></i></div>
@@ -61,13 +61,11 @@ function addFolder(f) {
 	});
 
 	// Set field display values
-	el.find('.name').text(f.name);
-	console.log(f, f.self)
-	var displayedSize = f.isEmpty() ? 'empty' : tools.formatByte(f.size);
+	var displayedSize = f.isEmpty() ? 'empty' : tools.formatByte(f.size());
 	el.find('.size').text(displayedSize);
 	
 	// Return the new element
 	return el;
 }
 
-module.exports = addFolder;
+module.exports = makeFolderElement;

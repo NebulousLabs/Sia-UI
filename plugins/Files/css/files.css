@@ -81,65 +81,66 @@ hr {
 	height: calc(100% - 60px);
 	overflow-y: auto;
 }
-#file-list .file {
+#file-list .entity {
 	padding: 10px;
 	color: #757575;
 	font-size: 14px;
 	background-color: #fff;
 	border-bottom: 1px solid #eeeeee;
+	white-space: nowrap;
 }
-#file-list .file:hover {
+#file-list .entity:hover {
 	cursor: pointer;
 }
-.file .graphic {
+.entity .graphic {
 	display: inline-block;
 	width: 20px;
 	font-size: 12px;
 	text-align: center;
 }
-.file .available {
+.entity .available {
 	display: inline-block;
 	width: 20px;
 }
-.file .name {
+.entity .name {
 	display: inline-block;
 	text-align: left;
 	width: calc(98% - 350px);
 	overflow: hidden;
 	white-space: nowrap;
 }
-.file .size {
+.entity .size {
 	display: inline-block;
 	text-align: right;
 	width: 75px;
 }
-.file .time {
+.entity .time {
 	display: inline-block;
 	text-align: center;
 	width: 150px;
 }
-.file .download {
+.entity .download {
 	float: right;
 	display: inline-block;
 	width: 25px;
 }
-.file .download:hover {
+.entity .download:hover {
 	opacity: .5;
 }
-.file .share {
+.entity .share {
 	float: right;
 	display: inline-block;
 	width: 25px;
 }
-.file .share:hover {
+.entity .share:hover {
 	opacity: .5;
 }
-.file .delete {
+.entity .delete {
 	float: right;
 	display: inline-block;
 	width: 25px;
 }
-.file .delete:hover {
+.entity .delete:hover {
 	opacity: .5;
 }
 .cssTooltip {

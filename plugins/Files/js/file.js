@@ -14,12 +14,6 @@ const siad = require('sia.js');
 
 var file = {
 	type: 'file',
-	// Used for debugging purposes, returns 'this' from the
-	// object definition POV. Helpful to demystify Object.assign
-	// and Object.create
-	get self () {
-		return this;
-	},
 	// Changes file's nickname with siad call
 	setPath (newPath, cb) {
 		var self = this;
@@ -35,6 +29,13 @@ var file = {
 				cb(newPath);
 			}
 		});
+	},
+	// Return file size
+	// TODO: I'm not 100% sure, but making this a
+	// getter doesn't work because Object.assign()
+	// evaluates getters
+	size () {
+		return this.Filesize;
 	},
 	// Update/record file stats
 	update (stats) {

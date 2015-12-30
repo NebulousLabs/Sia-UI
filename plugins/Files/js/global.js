@@ -111,7 +111,6 @@ $('.dropdown .button').click(function() {
 		tools.tooltip('Invalid action!', this);
 	} else {
 		$('.dropdown').hide('fast');
-		browser.update();
 	}
 });
 

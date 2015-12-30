@@ -9,6 +9,8 @@
 
 // Inherits from entity
 const entity = require('./entity');
+// Contains files
+const file = require('./file');
 // siad wrapper/manager
 const siad = require('sia.js');
 // For making file system directories
@@ -17,12 +19,6 @@ const mkdirp = require('mkdirp');
 var folder = {
 	type: 'folder',
 	contents: {},
-	// Used for debugging purposes, returns 'this' from the
-	// object definition POV. Helpful to demystify Object.assign
-	// and Object.create
-	get self () {
-		return this;
-	},
 	// Changes folder's nickname with siad call
 	setPath (newPath, cb) {
 		// Perform all async delete operations in parallel
@@ -49,18 +45,26 @@ var folder = {
 		}
 	},
 	// Calculate sum of file sizes
-	get size () {
+	size () {
 		var sum = 0;
 		var self = this;
 		Object.keys(this.contents).forEach(function(name) {
-			sum += self.contents[name].size;
+			sum += self.contents[name].size();
 		});
 		return sum;
+	},
+	// Add a file
+	addFile (fileObject) {
+		// TODO: verify that the fileObject belongs in this folder
+		var f = file(fileObject);
+		this.contents[f.name] = f;
+		f.parentFolder = this;
 	},
 	// Return if it's an empty folder
 	isEmpty () {
 		return Object.keys(this.contents).length === 0;
 	},
+
 	// The below are just function forms of the renter calls a function can
 	// enact on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
@@ -146,7 +150,7 @@ var folder = {
 function folderFactory(arg) {
 	// Folders can be constructed from a '/' deliminated string, representing
 	// their path with their name included as the last segment
-	let f = Object.assign(Object.create(entity), folder);
+	var f = Object.assign(Object.create(entity), folder);
 	if (typeof arg === 'string') {
 		f.path = arg;
 	} else {

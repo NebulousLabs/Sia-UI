@@ -34,7 +34,10 @@ module.exports = function(config, mainWindow) {
 			default:
 				console.error('Unknown dialog ipc');
 		}
-		event.returnValue = response ? response : null;
+		// TODO: Make async and adapt plugins
+		if (response !== undefined) {
+			event.returnValue = response;
+		}
 	});
 
 	// Enable right-click context menu from renderer process event

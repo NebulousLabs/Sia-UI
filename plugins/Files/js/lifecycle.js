@@ -32,7 +32,7 @@ function updateStatus(result) {
 
 // Regularly update the file library and status
 function update() {
-	siad.apiCall('/renter/files/list', browser.update);
+	browser.update();
 	siad.apiCall('/renter/status', updateStatus);
 	
 	updating = setTimeout(update, 15000);

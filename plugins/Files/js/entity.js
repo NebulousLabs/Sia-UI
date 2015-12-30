@@ -26,15 +26,25 @@ let entity = {
 	},
 	share (cb) {
 	},
+	// Used for debugging purposes, returns 'this' from the
+	// object definition POV. Helpful to demystify Object.assign
+	// and Object.create
+	get self () {
+		return this;
+	},
 	// Virtual functions
 	get name () {
 		return path.basename(this.path);
 	},
 	get directory () {
-		return path.dirname(this.path);
+		var directory = path.dirname(this.path);
+		// Prevent path.dirname from returning '.'
+		return (directory === '.' ? '' : directory);
 	},
 	get folders () {
-		return path.dirname(this.path).split('/');
+		var folders = this.directory.split('/');
+		// Prevent string.split from returning ['']
+		return (folders[0] === '' ? [] : folders);
 	},
 	get extension () {
 		return path.extname(this.path);

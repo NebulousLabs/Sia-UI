@@ -12,10 +12,9 @@ const path = require('path');
 const $ = require('jquery');
 const siad = require('sia.js');
 const tools = require('./uiTools');
-const file = require('./file');
-const addFile = require('./fileElement');
+const fileElement = require('./fileElement');
 const folder = require('./folder');
-const addFolder = require('./folderElement');
+const folderElement = require('./folderElement');
 
 // Root folder object to hold all other file and folder objects
 var rootFolder = folder('');
@@ -33,10 +32,11 @@ function filterList(searchstr) {
 	});
 }
 
-// Refresh the view according to the currentFolder
+// Refresh the file list according to the currentFolder
 function updateList() {
-	$('#file-list').children().filter(function() {
-		// Don't clear empty folders, they're not representation in renter/files/list
+	var list = $('#file-list');
+	list.children().filter(function() {
+		// Don't clear empty folders, they're not represented in renter/files/list
 		var entry = $(this);
 		return !(entry.hasClass('folder') && entry.find('.size').text() === 'empty');
 	}).remove();
@@ -44,10 +44,10 @@ function updateList() {
 		var entity = currentFolder.contents[contentName];
 		if (entity.type === 'file') {
 			// Make and display a file element
-			$('#file-list').append(addFile(entity));
+			list.append(fileElement(entity));
 		} else if (entity.type === 'folder') {
 			// Make and display a folder element
-			$('#file-list').append(addFolder(entity));
+			list.append(folderElement(entity));
 		} else {
 			console.error('Unknown entity type', entity);
 		}
@@ -60,32 +60,79 @@ function updateFile(result) {
 	var fileName = fileFolders.pop();
 
 	// Make any needed folders
-	var tempFolder = rootFolder;
+	var folderIter = rootFolder;
 	for (let i = 0; i < fileFolders.length; i++) {
 		var folderName = fileFolders[i];
+
 		// Make folder if it doesn't already exist
-		if (!tempFolder.contents[folderName]) {
+		if (!folderIter.contents[folderName]) {
 			let folderPath = fileFolders.slice(0, i + 1).join('/');
-			tempFolder.contents[folderName] = folder(folderPath);
+			folderIter.contents[folderName] = folder(folderPath);
 		}
+
 		// Continue to next folder
-		tempFolder = tempFolder.contents[folderName];
+		folderIter = folderIter.contents[folderName];
 	}
 
 	// Make file if needed
-	if (!tempFolder.contents[fileName]) {
-		tempFolder.contents[fileName] = file(result);
+	if (!folderIter.contents[fileName]) {
+		folderIter.addFile(result);
 	} else {
 		// Update the stats on the file object
-		tempFolder.contents[fileName].update(result);
+		folderIter.contents[fileName].update(result);
+	}
+}
+
+// Refresh the folder list representing the current working directory
+function updateCWD() {
+	var cwd = $('#cwd');
+	cwd.empty();
+	var folders = currentFolder.folders;
+
+	// Add an icon for the root folder
+	var rootIcon = $(`	<span class='button directory'>
+							<i class='fa fa-folder'></i>
+						</span>`);
+	rootIcon.click(function() {
+		currentFolder = rootFolder;
+		updateList();
+	});
+	cwd.append(rootIcon);
+
+	// Add a directory element per folder
+	for (let i = 0; i < folders.length; i++) {
+		let folderName = folders[i];
+		let el = $(`<span class='button directory'>${folderName}</span>`);
+
+		// Clicking the element navigates to that folder
+		el.click(function() {
+			// Reset currentFolder to rootFolder then step up the path to the
+			// clicked folder
+			currentFolder = rootFolder;
+			for (let j = 0; j <= i; j++) {
+				currentFolder = currentFolder.contents[folders[j]];
+			}
+			updateList();
+		});
+		cwd.append(el);
 	}
 }
 
 // Update files in the browser
-function updateBrowser(results) {
-	// Add or update each file
-	results.forEach(updateFile);
-	updateList();
+function updateBrowser() {
+	// TODO: This call doesn't always include a file added right before the
+	// call to this function. Waiting 100ms provides a not-noticeable delay and
+	// allows siad time to provide an up to date list, but is flawed
+	setTimeout(function() {
+		siad.apiCall('/renter/files/list', function(results) {
+			// Update the current working directory
+			updateCWD();
+			// Add or update each file from a `renter/files/list` call
+			results.forEach(updateFile);
+			// Update the file list
+			updateList();
+		});
+	}, 100);
 }
 
 // Makes a new folder element temporarily
@@ -100,15 +147,13 @@ function makeFolder() {
 	}
 	var newFolder = folder(`${currentFolder.path}/${name}`);
 	currentFolder.contents[name] = newFolder;
-	$('#file-list').append(addFolder(newFolder));
+	$('#file-list').append(folderElement(newFolder));
 }
 
 // Uploads a file from the given filePath
 function upload(filePath, callback) {
-	var name = path.basename(filePath);
-	tools.notify('Uploading ' + name, 'upload');
-
 	// Include the current folder's path in the nickname
+	var name = path.basename(filePath);
 	var nickname = `${currentFolder.path}/${name}`;
 	siad.apiCall({
 		url: '/renter/files/upload',
@@ -116,7 +161,13 @@ function upload(filePath, callback) {
 			source: filePath,
 			nickname: nickname,
 		},
-	}, callback);
+	}, function(result) {
+		if (callback) {
+			callback(result);
+		}
+		updateBrowser();
+		tools.notify(`Uploaded ${name}!`, 'upload');
+	});
 }
 
 // Checks whether a path starts with or contains a hidden file or a folder.
@@ -127,7 +178,6 @@ function isUnixHiddenPath(path) {
 // Non-recursively upload all files in a directory
 // TODO: Make recursive
 function uploadFolder(dirPath, callback) {
-	tools.notify('Uploading ' + path.basename(dirPath), 'upload');
 	// Upload files one at a time
 	fs.readdir(dirPath, function(err, files) {
 		if (err) {
@@ -140,7 +190,7 @@ function uploadFolder(dirPath, callback) {
 			// Skip hidden files and directories
 			fs.stat(filePath, function(err, stats) {
 				if (err) {
-					tools.notify('Cannot read ' + file, 'error');
+					tools.notify(`Cannot read ${file}!`, 'error');
 					return;
 				}
 				if (!isUnixHiddenPath(filePath) && stats.isFile()) {
@@ -152,23 +202,36 @@ function uploadFolder(dirPath, callback) {
 }
 
 function loadDotSia(filePath, callback) {
-	tools.notify('Adding ' + path.basename(filePath), 'siafile');
+	var name = path.basename(filePath, '.sia');
 	siad.apiCall({
 		url: '/renter/files/load',
 		qs: {
 			filename: filePath,
 		}
-	}, callback);
+	}, function(result) {
+		if (callback) {
+			callback(result);
+		}
+		updateBrowser();
+		// TODO: Read result.FilesAdded and interpret for notification
+		tools.notify(`Added ${name}!`, 'siafile');
+	});
 }
 
 function loadAscii(ascii, callback) {
-	tools.notify('Adding file(s) to library', 'asciifile');
 	siad.apiCall({
 		url: '/renter/files/loadascii',
 		qs: {
 			file: ascii,
 		}
-	}, callback);
+	}, function(result) {
+		if (callback) {
+			callback(result);
+		}
+		updateBrowser();
+		// TODO: Read result.FilesAdded and interpret for notification
+		tools.notify('Added ascii file(s)!', 'asciifile');
+	});
 }
 
 module.exports = {

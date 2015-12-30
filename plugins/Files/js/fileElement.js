@@ -12,17 +12,17 @@ const $ = require('jquery');
 const tools = require('./uiTools');
 
 // Make file element with jquery
-function addFile(f) {
+function makeFileElement(f) {
 	var el = $(`
-		<div class='file' id='${f.path}'>
+		<div class='file entity' id='${f.path}'>
 			<div class='graphic'>
 				<i class='fa fa-file'></i>
 			</div>
 			<div class='available'>
 				<i class='fa'></i>
 			</div>
-			<div class='name'></div>
-			<div class='size'></div>
+			<div class='name'>${f.name}</div>
+			<div class='size'>${tools.formatByte(f.size())}</div>
 			<div class='time'></div>
 			<div class='download cssTooltip' tooltip-content="Download"><i class='fa fa-download'></i></div>
 			<div class='share cssTooltip' tooltip-content="Share"><i class='fa fa-share-alt'></i></div>
@@ -61,20 +61,17 @@ function addFile(f) {
 		if (confirmation === 0) {
 			f.delete(function() {
 				el.remove();
+				// TODO: Not sure how to verify if this deletes all references
+				// to this file
+				delete f.parentFolder.contents[f.name];
+				f = null;
 			});
 		}
 	});
 
 	// Set field display values
-	el.find('.name').text(f.name);
-	el.find('.size').text(tools.formatByte(f.Filesize));
-	if (f.UploadProgress === 0) {
-		el.find('.time').text('Processing...');
-	} else if (f.UploadProgress < 100) {
-		el.find('.time').text(f.UploadProgress.toFixed(0) + '%');
-	} else {
-		el.find('.time').text(f.TimeRemaining + ' blocks left');
-	}
+	var timeText = f.UploadProgress ? f.UploadProgress.toFixed(0) + '%' : 'Processing...';
+	el.find('.time').text(timeText);
 
 	// Set availability graphic
 	var availabilityGraphic = f.Available ? 'fa-check' : 'fa-refresh fa-spin';
@@ -84,4 +81,4 @@ function addFile(f) {
 	return el;
 }
 
-module.exports = addFile;
+module.exports = makeFileElement;
