@@ -20,9 +20,6 @@ var appIcon;
 // config.json manager
 var config = require('./js/mainjs/config.js')(Path.join(__dirname, 'config.json'));
 
-// Add IPCMain listeners
-require('./js/mainjs/addIPCListeners.js')(config, mainWindow);
-
 // When Electron loading has finished, start the daemon then the UI
 App.on('ready', function() {
 	// Load tray icon
@@ -32,6 +29,9 @@ App.on('ready', function() {
 	
 	// Load mainWindow
 	mainWindow = require('./js/mainjs/initWindow.js')(config);
+
+	// Add IPCMain listeners
+	require('./js/mainjs/addIPCListeners.js')(config, mainWindow);
 
 	// Upon exiting, dereference the window object so that the GC cleans up.
 	mainWindow.on('close', function() {

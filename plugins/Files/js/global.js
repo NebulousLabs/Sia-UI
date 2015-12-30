@@ -8,11 +8,11 @@
  */
 
 // Node modules
+const electron = require('electron');
 const path = require('path');
 const BigNumber = require('bignumber.js');
 const siad = require('sia.js');
 const $ = require('jquery');
-const loaders = require('./js/loaders');
 const tools = require('./js/uiTools');
 const browser = require('./js/browser');
 const lifecycle = require('./js/lifecycle');
