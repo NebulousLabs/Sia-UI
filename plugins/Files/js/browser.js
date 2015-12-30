@@ -35,7 +35,11 @@ function filterList(searchstr) {
 
 // Refresh the view according to the currentFolder
 function updateList() {
-	$('#file-list').empty();
+	$('#file-list').children().filter(function() {
+		// Don't clear empty folders, they're not representation in renter/files/list
+		var entry = $(this);
+		return !(entry.hasClass('folder') && entry.find('.size').text() === 'empty');
+	}).remove();
 	Object.keys(currentFolder.contents).forEach(function(contentName) {
 		var entity = currentFolder.contents[contentName];
 		if (entity.type === 'file') {
@@ -86,16 +90,26 @@ function updateBrowser(results) {
 
 // Makes a new folder element temporarily
 function makeFolder() {
-	$('#file-list').append(addFolder(currentFolder.path + '/New Folder'));
+	var name = 'New Folder';
+	if (currentFolder.contents[name]) {
+		var n = 0;
+		while (currentFolder.contents[`${name}_${n}`]) {
+			n++;
+		}
+		name = `${name}_${n}`;
+	}
+	var newFolder = folder(`${currentFolder.path}/${name}`);
+	currentFolder.contents[name] = newFolder;
+	$('#file-list').append(addFolder(newFolder));
 }
 
 // Uploads a file from the given filePath
 function upload(filePath, callback) {
 	var name = path.basename(filePath);
-	tools.notify('Uploading ' + name + ' to Sia Network', 'upload');
+	tools.notify('Uploading ' + name, 'upload');
 
 	// Include the current folder's path in the nickname
-	var nickname = currentFolder.path + '/' + name;
+	var nickname = `${currentFolder.path}/${name}`;
 	siad.apiCall({
 		url: '/renter/files/upload',
 		qs: {
@@ -113,7 +127,7 @@ function isUnixHiddenPath(path) {
 // Non-recursively upload all files in a directory
 // TODO: Make recursive
 function uploadFolder(dirPath, callback) {
-	tools.notify('Uploading ' + path.basename(dirPath) + ' to Sia Network', 'upload');
+	tools.notify('Uploading ' + path.basename(dirPath), 'upload');
 	// Upload files one at a time
 	fs.readdir(dirPath, function(err, files) {
 		if (err) {
@@ -138,7 +152,7 @@ function uploadFolder(dirPath, callback) {
 }
 
 function loadDotSia(filePath, callback) {
-	tools.notify('Adding ' + path.basename(filePath) + ' to library', 'siafile');
+	tools.notify('Adding ' + path.basename(filePath), 'siafile');
 	siad.apiCall({
 		url: '/renter/files/load',
 		qs: {

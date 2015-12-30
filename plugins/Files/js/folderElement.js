@@ -31,9 +31,9 @@ function addFolder(f) {
 		if (!destination) {
 			return;
 		}
-		tools.notify('Downloading ' + f.name + ' to ' + destination, 'download');
+		tools.notify(`Downloading ${f.name} to ${destination}`, 'download');
 		f.download(destination, function() {
-			tools.notify(f.name + ' downloaded to ' + destination, 'success');
+			tools.notify(`${f.name} downloaded to ${destination}`, 'success');
 		});
 	});
 	el.find('.share').click(function() {
@@ -43,7 +43,7 @@ function addFolder(f) {
 		}
 		// Download siafiles to location
 		f.share(destination, function() {
-			tools.notify('Downloaded ' + f.name + '\'s .sia files to '+ destination, 'download');
+			tools.notify(`Put ${f.name}'s .sia files at ${destination}`, 'download');
 		});
 	});
 	el.find('.delete').click(function() {
@@ -61,8 +61,10 @@ function addFolder(f) {
 	});
 
 	// Set field display values
-	el.find('.name').html(f.name);
-	el.find('.size').html(tools.formatByte(f.size));
+	el.find('.name').text(f.name);
+	console.log(f, f.self)
+	var displayedSize = f.isEmpty() ? 'empty' : tools.formatByte(f.size);
+	el.find('.size').text(displayedSize);
 	
 	// Return the new element
 	return el;

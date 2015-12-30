@@ -37,16 +37,16 @@ function addFile(f) {
 		if (!destination) {
 			return;
 		}
-		tools.notify('Downloading ' + f.name + ' to ' + destination, 'download');
+		tools.notify(`Downloading ${f.name} to ${destination}`, 'download');
 		f.download(destination, function() {
-			tools.notify(f.name + ' downloaded to ' + destination, 'success');
+			tools.notify(`{f.name} downloaded to ${destination}`, 'success');
 		});
 	});
 	el.find('.share').click(function() {
 		// Get the ascii share string
 		f.shareASCII(function(result) {
 			clipboard.writeText(result.File);
-			tools.notify('Copied ' + f.name + '.sia to clipboard!', 'asciifile');
+			tools.notify(`Copied ${f.name}.sia to clipboard!`, 'asciifile');
 		});
 	});
 	el.find('.delete').click(function() {
@@ -66,14 +66,14 @@ function addFile(f) {
 	});
 
 	// Set field display values
-	el.find('.name').html(f.name);
-	el.find('.size').html(tools.formatByte(f.Filesize));
+	el.find('.name').text(f.name);
+	el.find('.size').text(tools.formatByte(f.Filesize));
 	if (f.UploadProgress === 0) {
-		el.find('.time').html('Processing...');
+		el.find('.time').text('Processing...');
 	} else if (f.UploadProgress < 100) {
-		el.find('.time').html(f.UploadProgress.toFixed(0) + '%');
+		el.find('.time').text(f.UploadProgress.toFixed(0) + '%');
 	} else {
-		el.find('.time').html(f.TimeRemaining + ' blocks left');
+		el.find('.time').text(f.TimeRemaining + ' blocks left');
 	}
 
 	// Set availability graphic

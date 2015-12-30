@@ -45,7 +45,7 @@ function formatByte(bytes) {
 	var units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 	var i = Math.floor((Math.log(bytes) + 1) / Math.log(k));
 	var number = new BigNumber(bytes).div(Math.pow(k, i)).round(2);
-	return number + " " + units[i];
+	return number + ' ' + units[i];
 }
 
 module.exports = {

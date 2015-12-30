@@ -12,7 +12,7 @@ const entity = require('./entity');
 // siad wrapper/manager
 const siad = require('sia.js');
 
-let file = {
+var file = {
 	type: 'file',
 	// Used for debugging purposes, returns 'this' from the
 	// object definition POV. Helpful to demystify Object.assign
@@ -22,14 +22,15 @@ let file = {
 	},
 	// Changes file's nickname with siad call
 	setPath (newPath, cb) {
+		var self = this;
 		siad.apiCall({
 			url: '/renter/files/rename',
 			qs: {
-				nickname: this.path,
+				nickname: self.path,
 				newname: newPath,
 			}
 		}, function() {
-			this.path = newPath;
+			self.path = newPath;
 			if (cb) {
 				cb(newPath);
 			}
@@ -44,10 +45,11 @@ let file = {
 	// on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
 	delete (cb) {
+		var self = this;
 		siad.apiCall({
 			url: '/renter/files/delete',
 			qs: {
-				nickname: this.path,
+				nickname: self.path,
 			},
 		}, cb);
 	},
@@ -55,7 +57,7 @@ let file = {
 		siad.apiCall({
 			url: '/renter/files/download',
 			qs: {
-				nickname: this.path,
+				nickname: self.path,
 				destination: destination,
 			},
 		}, cb);
@@ -64,7 +66,7 @@ let file = {
 		siad.apiCall({
 			url: '/renter/files/share',
 			qs: {
-				nickname: this.path,
+				nickname: self.path,
 				filepath: filepath + '.sia',
 			},
 		}, cb);
@@ -73,7 +75,7 @@ let file = {
 		siad.apiCall({
 			url: '/renter/files/shareascii',
 			qs: {
-				nickname: this.path,
+				nickname: self.path,
 			},
 		}, cb);
 	},
@@ -83,7 +85,7 @@ let file = {
 function fileFactory(arg) {
 	// Files can be constructed from either a nickname or a status object
 	// returned from /renter/files/list||downloadqueue
-	let f = Object.assign(Object.create(entity), file);
+	var f = Object.assign(Object.create(entity), file);
 	if (typeof arg === 'object'){
 		Object.assign(f, arg);
 		f.path = arg.Nickname;
