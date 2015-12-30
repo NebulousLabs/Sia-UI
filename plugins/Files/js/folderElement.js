@@ -13,7 +13,7 @@ const BigNumber = require('bignumber.js');
 // Make folder element with jquery
 function addFolder(f) {
 	var el = $(`
-		<div class='folder hidden' id='${f.path}'>
+		<div class='folder' id='${f.path}'>
 			<div class='graphic'>
 				<i class='fa fa-folder'></i>
 			</div>
@@ -62,7 +62,10 @@ function addFolder(f) {
 
 	// Set field display values
 	el.find('.name').html(f.name);
-	el.find('.size').html(tools.formatBytes(f.size));
+	el.find('.size').html(tools.formatByte(f.size));
+	
+	// Return the new element
+	return el;
 }
 
 module.exports = addFolder;

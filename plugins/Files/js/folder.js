@@ -14,9 +14,15 @@ const siad = require('sia.js');
 // For making file system directories
 const mkdirp = require('mkdirp');
 
-let folder = Object.assign(Object.create(entity), {
+let folder = {
 	type: 'folder',
 	contents: {},
+	// Used for debugging purposes, returns 'this' from the
+	// object definition POV. Helpful to demystify Object.assign
+	// and Object.create
+	get self () {
+		return this;
+	},
 	// Changes folder's nickname with siad call
 	setPath (newPath, cb) {
 		// Perform all async delete operations in parallel
@@ -112,13 +118,13 @@ let folder = Object.assign(Object.create(entity), {
 			cb();
 		}
 	},
-});
+};
 
 // Factory to create instances of the file object
 function folderFactory(arg) {
 	// Folders can be constructed from a '/' deliminated string, representing
 	// their path with their name included as the last segment
-	let f = Object.create(folder);
+	let f = Object.assign(Object.create(entity), folder);
 	if (typeof arg === 'string') {
 		f.path = arg;
 	} else {

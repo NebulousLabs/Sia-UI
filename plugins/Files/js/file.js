@@ -12,8 +12,14 @@ const entity = require('./entity');
 // siad wrapper/manager
 const siad = require('sia.js');
 
-let file = Object.assign(Object.create(entity), {
+let file = {
 	type: 'file',
+	// Used for debugging purposes, returns 'this' from the
+	// object definition POV. Helpful to demystify Object.assign
+	// and Object.create
+	get self () {
+		return this;
+	},
 	// Changes file's nickname with siad call
 	setPath (newPath, cb) {
 		siad.apiCall({
@@ -28,10 +34,6 @@ let file = Object.assign(Object.create(entity), {
 				cb(newPath);
 			}
 		});
-	},
-	// Get file size
-	get size () {
-		return this.Filesize;
 	},
 	// Update/record file stats
 	update (stats) {
@@ -75,13 +77,13 @@ let file = Object.assign(Object.create(entity), {
 			},
 		}, cb);
 	},
-});
+};
 
 // Factory to create instances of the file object
-function fileFactory(arg, browser) {
+function fileFactory(arg) {
 	// Files can be constructed from either a nickname or a status object
 	// returned from /renter/files/list||downloadqueue
-	let f = Object.create(file);
+	let f = Object.assign(Object.create(entity), file);
 	if (typeof arg === 'object'){
 		Object.assign(f, arg);
 		f.path = arg.Nickname;

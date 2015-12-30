@@ -157,7 +157,6 @@ function loadAscii(ascii, callback) {
 	}, callback);
 }
 
-
 module.exports = {
 	update: updateBrowser,
 	filter: filterList,

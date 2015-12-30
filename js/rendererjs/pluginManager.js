@@ -94,7 +94,7 @@ function addListeners(plugin) {
 	// Display any console messages from the plugin
 	plugin.on('console-message', function(event) {
 		var srcFile = event.sourceId.replace(/^.*[\\\/]/, '');
-		console.log(plugin.name + ' plugin logged from ' + srcFile +'(' + event.line + '): ' + event.message);
+		console.log(plugin.name + ', ' + srcFile +'(' + event.line + '): ' + event.message);
 	});
 }
 

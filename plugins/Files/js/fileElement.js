@@ -14,7 +14,7 @@ const tools = require('./uiTools');
 // Make file element with jquery
 function addFile(f) {
 	var el = $(`
-		<div class='file hidden' id='${f.path}'>
+		<div class='file' id='${f.path}'>
 			<div class='graphic'>
 				<i class='fa fa-file'></i>
 			</div>
@@ -32,6 +32,7 @@ function addFile(f) {
 
 	// Give the file buttons clickability
 	el.find('.download').click(function() {
+		// Get path to download to
 		var destination = tools.dialog('save');
 		if (!destination) {
 			return;
@@ -58,13 +59,15 @@ function addFile(f) {
 			buttons: ['Okay', 'Cancel'],
 		});
 		if (confirmation === 0) {
-			f.delete(el.remove);
+			f.delete(function() {
+				el.remove();
+			});
 		}
 	});
 
 	// Set field display values
 	el.find('.name').html(f.name);
-	el.find('.size').html(tools.formatBytes(f.size));
+	el.find('.size').html(tools.formatByte(f.Filesize));
 	if (f.UploadProgress === 0) {
 		el.find('.time').html('Processing...');
 	} else if (f.UploadProgress < 100) {
@@ -76,6 +79,9 @@ function addFile(f) {
 	// Set availability graphic
 	var availabilityGraphic = f.Available ? 'fa-check' : 'fa-refresh fa-spin';
 	el.find('.available i').addClass(availabilityGraphic);
+	
+	// Return the new element
+	return el;
 }
 
 module.exports = addFile;

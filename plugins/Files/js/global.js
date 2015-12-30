@@ -64,7 +64,7 @@ $('.dropdown .button').click(function() {
 			userInput = tools.dialog('open', {
 				title: 'Upload File',
 				properties: ['openFile'],
-			});
+			})[0];
 			if (userInput) {
 				browser.upload(userInput);
 			}
@@ -73,7 +73,7 @@ $('.dropdown .button').click(function() {
 			userInput = tools.dialog('open', {
 				title: 'Upload Folder',
 				properties: ['openDirectory'],
-			});
+			})[0];
 			if (userInput) {
 				browser.uploadFolder(userInput);
 			}
@@ -85,7 +85,7 @@ $('.dropdown .button').click(function() {
 					{ name: 'Sia file', extensions: ['sia'] }
 				],
 				properties: ['openFile'],
-			});
+			})[0];
 			if (userInput) {
 				browser.loadDotSia(userInput);
 			}
@@ -111,6 +111,7 @@ $('.dropdown .button').click(function() {
 		tools.tooltip('Invalid action!', this);
 	} else {
 		$('.dropdown').hide('fast');
+		browser.update();
 	}
 });
 
