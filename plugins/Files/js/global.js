@@ -47,122 +47,77 @@ $('#search-bar').keypress(function() {
 	browser.filter(this.value);
 });
 
+// New file/folder button
 $('#new.button').click(function() {
 	$('.hidden.dropdown').toggle('fast');
 });
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Upload ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Upload file option chosen
-$('#upload-choice').click(function() {
-	var loadPath = tools.dialog('open', {
-		title: 'Upload Path',
-		properties: ['openFile'],
-	});
-	if (loadPath) {
-		$('#nickname-file').find('.file-path').text(loadPath);
-		$('#nickname-file-input').val(path.basename(loadPath));
-		$('#nickname-file').show();
-		$('#upload-file').show();
-		// TODO: this does not work for some reason. Perhaps the view needs to
-		// be refocused after the dialog box is closed.
-		$('#nickname-file-input').focus();
+// Dropdown below the new button
+$('.dropdown .button').click(function() {
+	var userInput;
+	var option = this.textContent.trim();
+	switch (option) {
+		case 'Folder':
+			browser.makeFolder();
+			break;
+		case 'File Upload':
+			userInput = tools.dialog('open', {
+				title: 'Upload File',
+				properties: ['openFile'],
+			});
+			if (userInput) {
+				browser.upload(userInput);
+			}
+			break;
+		case 'Folder Upload':
+			userInput = tools.dialog('open', {
+				title: 'Upload Folder',
+				properties: ['openDirectory'],
+			});
+			if (userInput) {
+				browser.uploadFolder(userInput);
+			}
+			break;
+		case '.Sia File':
+			userInput = tools.dialog('open', {
+				title: 'Load .sia File',
+				filters: [
+					{ name: 'Sia file', extensions: ['sia'] }
+				],
+				properties: ['openFile'],
+			});
+			if (userInput) {
+				browser.loadDotSia(userInput);
+			}
+			break;
+		case 'ASCII File':
+			$('.dropdown li').hide('fast');
+			$('#paste-ascii').show('fast');
+			$('#paste-ascii input').focus();
+			return;
+		case 'Add ASCII File':
+			var ascii = $('#paste-ascii input').val();
+			if (ascii) {
+				browser.loadASCII(ascii);
+			}
+			$('.dropdown li').show('fast');
+			$('#paste-ascii').hide('fast');
+			break;
+		default:
+			console.error('Unknown button!', this);
+			break;
+	}
+	if (!userInput && option !== 'Folder') {
+		tools.tooltip('Invalid action!', this);
+	} else {
+		$('.dropdown').hide('fast');
 	}
 });
 
-// An 'Enter' keypress in the input field will submit it.
-$('#nickname-file-input').keyup(function(e) {
-    if (e.which === 13) {
-        $('#upload-file').click();
-    }
-});
-
-// Upload file confirmed
-$('#upload-file').click(function() {
-	var loadPath = $('#nickname-file').find('.file-path').text();
-	var nickname = $('#nickname-file-input').value;
-	loaders.upload(loadPath, nickname, exitFileAdder);
-});
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ .Sia file ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Sia file option chosen
-$('#sia-choice').click(function() {
-	var loadPath = tools.dialog('open', {
-		title: 'Sia File Path',
-		filters: [
-			{ name: 'Sia file', extensions: ['sia'] }
-		],
-		properties: ['openFile'],
-	});
-	if (loadPath) {
-		$('#sia-file').find('.file-path').text(loadPath);
-		$('#sia-file').show();
-		$('#add-sia-file').show();
+// Show add-ascii-file button when input box has content
+$('#paste-ascii input').keypress(function(e) {
+	$('#paste-ascii .button').show('fast');
+	if (e.keyCode === 13) {
+		$('#paste-ascii .button').click();
 	}
-});
-
-// Add .sia file confirmed
-$('#add-sia-file').click(function() {
-	var loadPath = $('#sia-file').find('.file-path').text();
-	loaders.loadDotSia(loadPath, exitFileAdder);
-});
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ASCII code ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ASCII file option chosen
-$('#ascii-choice').click(function() {
-	$('#paste-ascii').show();
-	$('#paste-ascii-input').focus();
-});
-
-// An 'Enter' keypress in the input field will submit it.
-$('#paste-ascii-input').keypress(function(e) {
-	$('#add-ascii-file').show();
-    e = e || window.event;
-    if (e.keyCode === 13) {
-        $('#add-ascii-file').click();
-    }
-});
-
-// Add file from ascii
-$('#add-ascii-file').click(function() {
-	var ascii = $('#paste-ascii-input').val();
-	loaders.loadAscii(ascii, exitFileAdder);
-});
-
-// Share ASCII popup
-$('#copy-ascii').click(function() {
-});
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Add directory ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Select directory sliding frame
-$('#new-dir').click(function() {
-	$('#add-dir').show();
-	$('#file-browser').hide();
-});
-
-// Upload directory option chosen
-$('#upload-dir-choice').click(function() {
-	var loadPath = tools.dialog('open', {
-		title: 'Select Directory',
-		properties: ['openDirectory'],
-	});
-
-	// Check that loadPath is a valid path
-	if (loadPath) {
-		$('#nickname-dir').find('.dir-path').text(loadPath);
-		loadPath = loadPath[0].split(path.sep);
-		$('#nickname-dir-input').value = loadPath[loadPath.length - 1] + '_';
-		$('#nickname-dir').show();
-		$('#upload-dir').show();
-		$('#nickname-dir-input').focus();
-	}
-});
-
-// Upload directory confirmed
-$('#upload-dir').click(function() {
-	var loadPath = $('#nickname-dir').find('.dir-path').text();
-	var nickname = $('#nickname-dir-input').value;
-	// Illegal filename characters in nickname seems to throw errors
-	// So, substitute \ and / with underscore (_)
-	nickname.replace(/[/\\\\]/g, '_');
-	loaders.uploadDir(loadPath, nickname);
 });

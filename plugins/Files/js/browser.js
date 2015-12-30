@@ -7,7 +7,11 @@
  */
 
 // Node modules
+const fs = require('fs');
+const path = require('path');
 const $ = require('jquery');
+const siad = require('siad');
+const tools = require('./uiTools');
 const file = require('./file');
 const addFile = require('./fileElement');
 const folder = require('./folder');
@@ -80,7 +84,86 @@ function updateBrowser(results) {
 	updateList();
 }
 
+// Makes a new folder element temporarily
+function makeFolder() {
+	$('#file-list').append(addFolder(currentFolder.path + '/New Folder'));
+}
+
+// Uploads a file from the given filePath
+function upload(filePath, callback) {
+	var name = path.basename(filePath);
+	tools.notify('Uploading ' + name + ' to Sia Network', 'upload');
+
+	// Include the current folder's path in the nickname
+	var nickname = currentFolder.path + '/' + name;
+	siad.apiCall({
+		url: '/renter/files/upload',
+		qs: {
+			source: filePath,
+			nickname: nickname,
+		},
+	}, callback);
+}
+
+// Checks whether a path starts with or contains a hidden file or a folder.
+function isUnixHiddenPath(path) {
+	return (/(^|\/)\.[^\/\.]/g).test(path);
+}
+
+// Non-recursively upload all files in a directory
+// TODO: Make recursive
+function uploadFolder(dirPath, callback) {
+	tools.notify('Uploading ' + path.basename(dirPath) + ' to Sia Network', 'upload');
+	// Upload files one at a time
+	fs.readdir(dirPath, function(err, files) {
+		if (err) {
+			tools.notify('Failed retrieving directory contents', 'error');
+			return;
+		}
+		files.forEach(function(file) {
+			var filePath = path.join(dirPath, file);
+
+			// Skip hidden files and directories
+			fs.stat(filePath, function(err, stats) {
+				if (err) {
+					tools.notify('Cannot read ' + file, 'error');
+					return;
+				}
+				if (!isUnixHiddenPath(filePath) && stats.isFile()) {
+					upload(filePath);
+				}
+			});
+		});
+	});
+}
+
+function loadDotSia(filePath, callback) {
+	tools.notify('Adding ' + path.basename(filePath) + ' to library', 'siafile');
+	siad.apiCall({
+		url: '/renter/files/load',
+		qs: {
+			filename: filePath,
+		}
+	}, callback);
+}
+
+function loadAscii(ascii, callback) {
+	tools.notify('Adding file(s) to library', 'asciifile');
+	siad.apiCall({
+		url: '/renter/files/loadascii',
+		qs: {
+			file: ascii,
+		}
+	}, callback);
+}
+
+
 module.exports = {
 	update: updateBrowser,
 	filter: filterList,
+	makeFolder: makeFolder,
+	upload: upload,
+	uploadFolder: uploadFolder,
+	loadDotSia: loadDotSia,
+	loadAscii: loadAscii,
 };
