@@ -131,9 +131,8 @@ function checkSiadPath() {
 		if (!siadPath) {
 			checkSiadPath();
 		} else if (selected === 0) {
-			var lastIndex = siadPath.lastIndexOf('/');
-			config.siad.command = siadPath.substring(lastIndex);
-			config.siad.path = siadPath.substring(0, lastIndex);
+			config.siad.fileName = Path.basename(siadPath);
+			config.siad.path = Path.dirname(siadPath);
 			checkSiadPath();
 		} else if (selected === 1) {
 			config.siad.path = siadPath;
@@ -160,7 +159,9 @@ module.exports = function initSiad(cnfg, mW) {
 	// child process of electron, forcing electron to keep running until siad
 	// has stopped
 	mainWindow.on('close', function() {
-		Siad.stop();
+		if (!config.siad.detached) {
+			Siad.stop();
+		}
 	});
 
 	// Set config for Siad to work off of configure() doesn't update
