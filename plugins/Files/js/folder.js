@@ -9,7 +9,7 @@
 
 // Inherits from entity
 const entity = require('./entity');
-// Contains files
+// Contains files and folders
 const file = require('./file');
 // siad wrapper/manager
 const siad = require('sia.js');
@@ -59,12 +59,33 @@ var folder = {
 		var f = file(fileObject);
 		this.contents[f.name] = f;
 		f.parentFolder = this;
+		return f;
+	},
+	// Add a folder
+	addFolder (name) {
+		console.log(`made folder ${name} for ${this.name}`)
+		console.log(this, this.contents)
+		// Prefer paths of 'foo' over '/foo' in root folder
+		var path = this.path === '' ? name : `${this.path}/${name}`;
+
+		// Copy this folder and erase its info to create a new folder
+		// TODO: This seems like an imperfect way to add a new Folder. Can't
+		// use folderFactory function down below because of convention/linting
+		// rules.
+		var f = Object.create(this);
+		f.path = path;
+		f.contents = {};
+
+		// Link new folder to this one and vice versa
+		f.parentFolder = this;
+		this.contents[name] = f;
+		console.log(this, this.contents)
+		return f;
 	},
 	// Return if it's an empty folder
 	isEmpty () {
 		return Object.keys(this.contents).length === 0;
 	},
-
 	// The below are just function forms of the renter calls a function can
 	// enact on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter

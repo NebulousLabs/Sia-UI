@@ -13,11 +13,10 @@ const $ = require('jquery');
 const siad = require('sia.js');
 const tools = require('./uiTools');
 const fileElement = require('./fileElement');
-const folder = require('./folder');
 const folderElement = require('./folderElement');
 
 // Root folder object to hold all other file and folder objects
-var rootFolder = folder('');
+var rootFolder = require('./folder')('');
 var currentFolder = rootFolder;
 
 // Filter file list by search string
@@ -49,7 +48,7 @@ function updateList() {
 			// Make and display a folder element
 			list.append(folderElement(entity));
 		} else {
-			console.error('Unknown entity type', entity);
+			console.error('Unknown entity type: ' + entity.type, entity);
 		}
 	});
 }
@@ -60,26 +59,18 @@ function updateFile(result) {
 	var fileName = fileFolders.pop();
 
 	// Make any needed folders
-	var folderIter = rootFolder;
-	for (let i = 0; i < fileFolders.length; i++) {
-		var folderName = fileFolders[i];
-
-		// Make folder if it doesn't already exist
-		if (!folderIter.contents[folderName]) {
-			let folderPath = fileFolders.slice(0, i + 1).join('/');
-			folderIter.contents[folderName] = folder(folderPath);
-		}
-
-		// Continue to next folder
-		folderIter = folderIter.contents[folderName];
-	}
+	var folderIterator = rootFolder;
+	fileFolders.forEach(function(folderName) {
+		// Continue to next folder or make folder if it doesn't already exist
+		folderIterator = folderIterator.contents[folderName] ? folderIterator.contents[folderName] : folderIterator.addFolder(folderName);
+	});
 
 	// Make file if needed
-	if (!folderIter.contents[fileName]) {
-		folderIter.addFile(result);
+	if (!folderIterator.contents[fileName]) {
+		folderIterator.addFile(result);
 	} else {
 		// Update the stats on the file object
-		folderIter.contents[fileName].update(result);
+		folderIterator.contents[fileName].update(result);
 	}
 }
 
@@ -100,22 +91,15 @@ function updateCWD() {
 	cwd.append(rootIcon);
 
 	// Add a directory element per folder
-	for (let i = 0; i < folders.length; i++) {
-		let folderName = folders[i];
-		let el = $(`<span class='button directory'>${folderName}</span>`);
-
+	folders.forEach(function(folder) {
+		let el = $(`<span class='button directory'>${folder.name}</span>`);
 		// Clicking the element navigates to that folder
 		el.click(function() {
-			// Reset currentFolder to rootFolder then step up the path to the
-			// clicked folder
-			currentFolder = rootFolder;
-			for (let j = 0; j <= i; j++) {
-				currentFolder = currentFolder.contents[folders[j]];
-			}
+			currentFolder = folder;
 			updateList();
 		});
 		cwd.append(el);
-	}
+	});
 }
 
 // Update files in the browser
@@ -145,9 +129,9 @@ function makeFolder() {
 		}
 		name = `${name}_${n}`;
 	}
-	var newFolder = folder(`${currentFolder.path}/${name}`);
-	currentFolder.contents[name] = newFolder;
-	$('#file-list').append(folderElement(newFolder));
+	var folder = currentFolder.addFolder(name);
+	var element = folderElement(folder);
+	$('#file-list').append(element);
 }
 
 // Uploads a file from the given filePath

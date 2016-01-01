@@ -70,7 +70,14 @@ function makeFileElement(f) {
 	});
 
 	// Set field display values
-	var timeText = f.UploadProgress ? f.UploadProgress.toFixed(0) + '%' : 'Processing...';
+	var timeText
+	if (f.UploadProgress === 0) {
+		timeText = 'Processing...';
+	} else if (f.UploadProgress < 100) {
+		timeText = f.UploadProgress.toFixed(0) + '%'; 
+	} else {
+		timeText = 'Expires at block ' + f.Expiration;
+	}
 	el.find('.time').text(timeText);
 
 	// Set availability graphic

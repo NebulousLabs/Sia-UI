@@ -41,10 +41,18 @@ let entity = {
 		// Prevent path.dirname from returning '.'
 		return (directory === '.' ? '' : directory);
 	},
-	get folders () {
+	get folderNames () {
 		var folders = this.directory.split('/');
 		// Prevent string.split from returning ['']
 		return (folders[0] === '' ? [] : folders);
+	},
+	get folders () {
+		var parentFolders = [];
+		// iterate through parentFolders
+		for (let i = this.parentFolder; i; i = i.parentFolder) {
+			parentFolders.push(this.parentFolder);
+		}
+		return parentFolders.reverse();
 	},
 	get extension () {
 		return path.extname(this.path);
