@@ -34,7 +34,6 @@ input {
 }
 .button {
 	display: inline-block;
-	font-size: 20px;
 	padding: 8px;
 }
 .button i {
@@ -64,7 +63,6 @@ input {
 
 	white-space: nowrap;
 	background: white;
-	font-size: 20px;
 	list-style: none;
 }
 .dropdown .button {
@@ -95,7 +93,6 @@ hr {
 .entity .graphic {
 	display: inline-block;
 	width: 20px;
-	font-size: 16px;
 	text-align: center;
 }
 .entity .available {
@@ -124,7 +121,6 @@ hr {
 	display: inline-block;
 	width: 25px;
 	padding: 0;
-	font-size: 16px;
 }
 .entity .button:hover {
 /*	opacity: .5;*/
