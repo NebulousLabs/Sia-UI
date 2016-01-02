@@ -58,62 +58,57 @@ $('#new.button').click(function() {
 $('.dropdown .button').click(function() {
 	var userInput;
 	var option = this.textContent.trim();
+
+	// Dialog window options common to any button case that uses it
+	var dialogOptions = {
+		title: option,
+		properties: ['multiSelections', 'createDirectory'],
+	};
+
+	// Determine which button was pressed based on the textContent
 	switch (option) {
 		case 'Folder':
-			browser.makeFolder();
 			break;
 		case 'File Upload':
-			userInput = tools.dialog('open', {
-				title: 'Upload File',
-				properties: ['openFile'],
-			})[0];
-			if (userInput) {
-				browser.upload(userInput);
-			}
+			dialogOptions.properties.push('openFile');
+			userInput = tools.dialog('open', dialogOptions);
 			break;
 		case 'Folder Upload':
-			userInput = tools.dialog('open', {
-				title: 'Upload Folder',
-				properties: ['openDirectory'],
-			})[0];
-			if (userInput) {
-				browser.uploadFolder(userInput);
-			}
+			dialogOptions.properties.push('openDirectory');
+			userInput = tools.dialog('open', dialogOptions);
 			break;
 		case '.Sia File':
-			userInput = tools.dialog('open', {
-				title: 'Load .sia File',
-				filters: [
-					{ name: 'Sia file', extensions: ['sia'] }
-				],
-				properties: ['openFile'],
-			})[0];
-			if (userInput) {
-				browser.loadDotSia(userInput);
-			}
+			dialogOptions.properties.push('openFile');
+			dialogOptions.filters = [{ name: 'Sia file', extensions: ['sia'] }];
+			userInput = tools.dialog('open', dialogOptions);
 			break;
 		case 'ASCII File':
 			$('.dropdown li').hide('fast');
 			$('#paste-ascii').show('fast');
 			$('#paste-ascii input').focus();
-			return;
+			return; // Don't close dropdown
 		case 'Add ASCII File':
-			var ascii = $('#paste-ascii input').val();
-			if (ascii) {
-				browser.loadASCII(ascii);
-			}
+			userInput = $('#paste-ascii input').val();
 			$('.dropdown li').show('fast');
 			$('#paste-ascii').hide('fast');
+			$('#paste-ascii input').empty();
 			break;
 		default:
 			console.error('Unknown button!', this);
-			break;
+			return; // Don't close dropdown
 	}
+
+	// Detect flawed userInput from actions that require it, hide if fine
 	if (!userInput && option !== 'Folder') {
 		tools.tooltip('Invalid action!', this);
-	} else {
-		$('.dropdown').hide('fast');
+		return; // Don't close dropdown
 	}
+
+	// Close dropdown
+	$('.dropdown').hide('fast');
+
+	// Call the function that corresponds to the selected option
+	browser[option](userInput);
 });
 
 // Show add-ascii-file button when input box has content

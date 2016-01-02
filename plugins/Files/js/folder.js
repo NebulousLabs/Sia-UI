@@ -137,12 +137,7 @@ var folder = {
 		var count = names.length;
 		// Make folder at destination
 		mkdirp.sync(`${filepath}/${this.name}`);
-		// Called iff no contents
-		if (this.isEmpty() && callback) {
-			this.path = newPath;
-			callback();
-			return;
-		}
+
 		// Make .sia files in above folder
 		names.forEach(function(name) {
 			self.contents[name].share(`${filepath}/${self.name}/${name}`, function() {

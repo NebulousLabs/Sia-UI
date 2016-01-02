@@ -70,13 +70,13 @@ function makeFileElement(f) {
 	});
 
 	// Set field display values
-	var timeText
+	var timeText;
 	if (f.UploadProgress === 0) {
 		timeText = 'Processing...';
 	} else if (f.UploadProgress < 100) {
 		timeText = f.UploadProgress.toFixed(0) + '%'; 
 	} else {
-		timeText = 'Expires at block ' + f.Expiration;
+		timeText = 'Expires on block ' + f.Expiration;
 	}
 	el.find('.time').text(timeText);
 

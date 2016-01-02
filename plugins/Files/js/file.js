@@ -55,6 +55,7 @@ var file = {
 		}, cb);
 	},
 	download (destination, cb) {
+		var self = this;
 		siad.apiCall({
 			url: '/renter/files/download',
 			qs: {
@@ -64,6 +65,7 @@ var file = {
 		}, cb);
 	},
 	share (filepath, cb) {
+		var self = this;
 		siad.apiCall({
 			url: '/renter/files/share',
 			qs: {
@@ -73,6 +75,7 @@ var file = {
 		}, cb);
 	},
 	shareASCII (cb) {
+		var self = this;
 		siad.apiCall({
 			url: '/renter/files/shareascii',
 			qs: {

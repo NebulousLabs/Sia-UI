@@ -83,6 +83,34 @@ function isUnixHiddenPath(path) {
 	return (/(^|\/)\.[^\/\.]/g).test(path);
 }
 
+// This handles if userInput is undefined or an empty array as happens
+// when the user exits out of a dialog window or some other error.
+function handleNoInput(input, callback) {
+	if (!input || input.length === 0) {
+		if (callback) {
+			callback();
+		}
+		console.error('Improper user input passed into browser.' + handleNoInput.caller.name);
+		return true;
+	}
+	return false;
+}
+
+// Calls a function for each item in an array of file paths to upload or load,
+// calling the callback only after each async task has finished
+function waterFall(func, filePaths, callback) {
+	var count = filePaths.length;
+	filePaths.forEach(function(fp) {
+		// Call per array item
+		func(fp, function() {
+			// Callback iff all calls finishe
+			if (--count === 0 && callback) {
+				callback();
+			}
+		});
+	});
+}
+
 // The browser object
 var browser = {
 	// Update files in the browser
@@ -133,7 +161,7 @@ var browser = {
 		$('#file-list').append(element);
 	},
 	// Uploads a file from the given filePath
-	upload (filePath, callback) {
+	uploadFile (filePath, callback) {
 		// Include the current folder's path in the nickname
 		var name = path.basename(filePath);
 		var nickname = `${currentFolder.path}/${name}`;
@@ -150,6 +178,11 @@ var browser = {
 			browser.update();
 			tools.notify(`Uploaded ${name}!`, 'upload');
 		});
+	},
+	uploadFiles (filePaths, callback) {
+		if (!handleNoInput(filePaths, callback)) {
+			waterFall(browser.uploadFile, filePaths, callback);
+		}
 	},
 	// Non-recursively upload all files in a directory
 	// TODO: Make recursive
@@ -170,12 +203,18 @@ var browser = {
 						return;
 					}
 					if (!isUnixHiddenPath(filePath) && stats.isFile()) {
-						browser.upload(filePath);
+						browser.uploadFile(filePath);
 					}
 				});
 			});
 		});
 	},
+	uploadFolders (dirPaths, callback) {
+		if (!handleNoInput(dirPaths, callback)) {
+			waterFall(browser.uploadFolder, dirPaths, callback);
+		}
+	},
+	// Loads a .sia file into the library
 	loadDotSia (filePath, callback) {
 		var name = path.basename(filePath, '.sia');
 		siad.apiCall({
@@ -192,6 +231,12 @@ var browser = {
 			tools.notify(`Added ${name}!`, 'siafile');
 		});
 	},
+	loadDotSias (filePaths, callback) {
+		if (!handleNoInput(filePaths, callback)) {
+			waterFall(browser.loadDotSia, filePaths, callback);
+		}
+	},
+	// Loads an ascii represenation of a .sia file into the library
 	loadAscii (ascii, callback) {
 		siad.apiCall({
 			url: '/renter/files/loadascii',
@@ -208,5 +253,12 @@ var browser = {
 		});
 	},
 };
+
+// Redirects dropdown options (see global.js) to their respective functions
+browser['Folder'] = browser.makeFolder;
+browser['File Upload'] = browser.uploadFiles;
+browser['Folder Upload'] = browser.uploadFolders;
+browser['.Sia File'] = browser.loadDotSias;
+browser['Add ASCII File'] = browser.loadAscii;
 
 module.exports = browser;
