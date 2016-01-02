@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * file:
+ * file factory module:
  *   file is an object literal that inherits from entity by instantiating one
  *   and assigning more specific members on top of it. It's meant to interpret,
  *   hold, and change information about renter files

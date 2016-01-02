@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * browser:
+ * browser instance module:
  *   browser is the manager that renders file/folder elements and navigates
  *   through a user's sia files
  */
@@ -255,7 +255,7 @@ var browser = {
 };
 
 // Redirects dropdown options (see global.js) to their respective functions
-browser['Folder'] = browser.makeFolder;
+browser.Folder = browser.makeFolder;
 browser['File Upload'] = browser.uploadFiles;
 browser['Folder Upload'] = browser.uploadFolders;
 browser['.Sia File'] = browser.loadDotSias;

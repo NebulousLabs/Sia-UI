@@ -1,5 +1,12 @@
 'use strict';
 
+/*
+ * uiTools namespace module:
+ *   uiTools holds various, useful functions that don't have a place elsewhere
+ *   and shouldn't pollute the global namespace. These include communicating
+ *   with the general UI, calculations, and formatting numbers
+ */
+
 // Node modules
 const electron = require('electron');
 const ipcRenderer = electron.ipcRenderer;

@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * fileElement:
+ * fileElement function module:
  *   This module holds the creation logic for file elements.
  */
 

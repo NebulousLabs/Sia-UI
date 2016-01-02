@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * hostProperties module:
+ * hostProperties object module:
  *   Holds data and/or conversion information about each hosting property.
  *   Strongly coupled with hostMath.js
  */

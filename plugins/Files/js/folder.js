@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * folder:
+ * folder factory module:
  *   folder is an object literal that inherits from entity by instantiating one
  *   and assigning more specific members on top of it. It's meant to point to
  *   files, aide file browsing, and facilitate recursive file operations.

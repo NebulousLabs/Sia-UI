@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * hostMath module:
+ * hostMath namespace module:
  *   Used by the host module to manipulate host property values.
  *   Strongly coupled with hostProperties.js
  */

@@ -1,7 +1,9 @@
 'use strict';
 
-// DEVTOOL: uncomment to bring up devtools on plugin view
-// IPCRenderer.sendToHost('devtools');
+/*
+ * lifecycle instance module:
+ *   Updates plugin periodically
+ */
 
 // Node modules
 const BigNumber = require('bignumber.js');

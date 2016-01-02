@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * folderElement:
+ * folderElement function module:
  *   This module holds the creation logic for folder elements.
  */
 
