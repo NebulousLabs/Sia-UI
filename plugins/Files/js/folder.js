@@ -20,7 +20,7 @@ var folder = {
 	type: 'folder',
 	contents: {},
 	// Changes folder's nickname with siad call
-	setPath (newPath, cb) {
+	setPath (newPath, callback) {
 		// Perform all async delete operations in parallel
 		var names = Object.keys(this.contents);
 		var count = names.length;
@@ -30,18 +30,17 @@ var folder = {
 		names.forEach(function(name) {
 			self.contents[name].setPath(`${newPath}/${name}`, function() {
 				// Execute the callback iff all operations succeed
-				count--;
-				if (count === 0 && cb) {
+				if (--count === 0 && callback) {
 					self.path = newPath;
-					cb();
+					callback();
 				}
 			});
 		});
 
 		// Called iff no contents
-		if (this.isEmpty() && cb) {
+		if (this.isEmpty() && callback) {
 			this.path = newPath;
-			cb();
+			callback();
 		}
 	},
 	// Calculate sum of file sizes
@@ -86,7 +85,7 @@ var folder = {
 	// The below are just function forms of the renter calls a function can
 	// enact on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
-	delete (cb) {
+	delete (callback) {
 		var self = this;
 		// Perform all async delete operations in parallel
 		var names = Object.keys(this.contents);
@@ -97,19 +96,18 @@ var folder = {
 			self.contents[name].delete(function() {
 				delete self.contents[name];
 				// Execute the callback iff all operations succeed
-				count--;
-				if (count === 0 && cb) {
-					cb();
+				if (--count === 0 && callback) {
+					callback();
 				}
 			});
 		});
 
 		// Called iff no contents
-		if (this.isEmpty() && cb) {
-			cb();
+		if (this.isEmpty() && callback) {
+			callback();
 		}
 	},
-	download (destination, cb) {
+	download (destination, callback) {
 		var self = this;
 		// Perform all async delete operations in parallel
 		var names = Object.keys(this.contents);
@@ -121,19 +119,18 @@ var folder = {
 		names.forEach(function(name) {
 			self.contents[name].download(`${destination}/${self.name}/${name}`, function() {
 				// Execute the callback iff all operations succeed
-				count--;
-				if (count === 0 && cb) {
-					cb();
+				if (--count === 0 && callback) {
+					callback();
 				}
 			});
 		});
 
 		// Called iff no contents
-		if (this.isEmpty() && cb) {
-			cb();
+		if (this.isEmpty() && callback) {
+			callback();
 		}
 	},
-	share (filepath, cb) {
+	share (filepath, callback) {
 		var self = this;
 		// Perform all async delete operations in parallel
 		var names = Object.keys(this.contents);
@@ -141,25 +138,24 @@ var folder = {
 		// Make folder at destination
 		mkdirp.sync(`${filepath}/${this.name}`);
 		// Called iff no contents
-		if (this.isEmpty() && cb) {
+		if (this.isEmpty() && callback) {
 			this.path = newPath;
-			cb();
+			callback();
 			return;
 		}
 		// Make .sia files in above folder
 		names.forEach(function(name) {
 			self.contents[name].share(`${filepath}/${self.name}/${name}`, function() {
 				// Execute the callback iff all operations succeed
-				count--;
-				if (count === 0 && cb) {
-					cb();
+				if (--count === 0 && callback) {
+					callback();
 				}
 			});
 		});
 
 		// Called iff no contents
-		if (this.isEmpty() && cb) {
-			cb();
+		if (this.isEmpty() && callback) {
+			callback();
 		}
 	},
 };
