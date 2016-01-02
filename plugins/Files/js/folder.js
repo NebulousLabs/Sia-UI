@@ -63,8 +63,6 @@ var folder = {
 	},
 	// Add a folder
 	addFolder (name) {
-		console.log(`made folder ${name} for ${this.name}`)
-		console.log(this, this.contents)
 		// Prefer paths of 'foo' over '/foo' in root folder
 		var path = this.path === '' ? name : `${this.path}/${name}`;
 
@@ -79,7 +77,6 @@ var folder = {
 		// Link new folder to this one and vice versa
 		f.parentFolder = this;
 		this.contents[name] = f;
-		console.log(this, this.contents)
 		return f;
 	},
 	// Return if it's an empty folder

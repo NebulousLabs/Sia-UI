@@ -41,6 +41,8 @@ var start = lifecycle.start;
 var stop = lifecycle.stop;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Buttons ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Home folder button
+$('#home-folder').click(browser.navigateTo);
 // File list search
 $('#search-bar').keypress(function() {
 	tools.tooltip('Searching...', this);

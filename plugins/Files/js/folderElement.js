@@ -11,7 +11,7 @@ const tools = require('./uiTools');
 const BigNumber = require('bignumber.js');
 
 // Make folder element with jquery
-function makeFolderElement(f) {
+function makeFolderElement(f, navigateTo) {
 	var el = $(`
 		<div class='folder entity' id='${f.path}'>
 			<div class='graphic'>
@@ -19,13 +19,13 @@ function makeFolderElement(f) {
 			</div>
 			<div class='name'>${f.name}</div>
 			<div class='size'></div>
-			<div class='download cssTooltip' tooltip-content="Download"><i class='fa fa-download'></i></div>
-			<div class='share cssTooltip' tooltip-content="Share"><i class='fa fa-share-alt'></i></div>
-			<div class='delete cssTooltip' tooltip-content="Delete"><i class='fa fa-remove'></i></div>
+			<div class='button download cssTooltip' tooltip-content="Download"><i class='fa fa-download'></i></div>
+			<div class='button share cssTooltip' tooltip-content="Share"><i class='fa fa-share-alt'></i></div>
+			<div class='button delete cssTooltip' tooltip-content="Delete"><i class='fa fa-remove'></i></div>
 		</div>
 	`);
 
-	// Give the folder buttons clickability
+	// Give the folder and its buttons clickability
 	el.find('.download').click(function() {
 		var destination = tools.dialog('save');
 		if (!destination) {
@@ -57,6 +57,12 @@ function makeFolderElement(f) {
 		});
 		if (confirmation === 0) {
 			f.delete(el.remove);
+		}
+	});
+	el.click(function(e) {
+		// Navigate to folder only if the element, not its buttons, was clicked
+		if (!$(e.target).hasClass('button')) {
+			navigateTo(f);
 		}
 	});
 

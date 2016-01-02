@@ -82,9 +82,9 @@ hr {
 	overflow-y: auto;
 }
 #file-list .entity {
-	padding: 10px;
+	padding: 6px;
 	color: #757575;
-	font-size: 14px;
+	font-size: 16px;
 	background-color: #fff;
 	border-bottom: 1px solid #eeeeee;
 	white-space: nowrap;
@@ -95,7 +95,7 @@ hr {
 .entity .graphic {
 	display: inline-block;
 	width: 20px;
-	font-size: 12px;
+	font-size: 16px;
 	text-align: center;
 }
 .entity .available {
@@ -119,29 +119,15 @@ hr {
 	text-align: center;
 	width: 150px;
 }
-.entity .download {
+.entity .button {
 	float: right;
 	display: inline-block;
 	width: 25px;
+	padding: 0;
+	font-size: 16px;
 }
-.entity .download:hover {
-	opacity: .5;
-}
-.entity .share {
-	float: right;
-	display: inline-block;
-	width: 25px;
-}
-.entity .share:hover {
-	opacity: .5;
-}
-.entity .delete {
-	float: right;
-	display: inline-block;
-	width: 25px;
-}
-.entity .delete:hover {
-	opacity: .5;
+.entity .button:hover {
+/*	opacity: .5;*/
 }
 .cssTooltip {
 	display: inline;

@@ -46,9 +46,9 @@ let entity = {
 		// Prevent string.split from returning ['']
 		return (folders[0] === '' ? [] : folders);
 	},
-	get folders () {
+	get parentFolders () {
 		var parentFolders = [];
-		// iterate through parentFolders
+		// iterate through parentFolder links to populate parentFolders
 		for (let i = this.parentFolder; i; i = i.parentFolder) {
 			parentFolders.push(this.parentFolder);
 		}

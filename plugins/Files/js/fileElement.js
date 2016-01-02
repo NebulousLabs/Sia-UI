@@ -24,9 +24,9 @@ function makeFileElement(f) {
 			<div class='name'>${f.name}</div>
 			<div class='size'>${tools.formatByte(f.size())}</div>
 			<div class='time'></div>
-			<div class='download cssTooltip' tooltip-content="Download"><i class='fa fa-download'></i></div>
-			<div class='share cssTooltip' tooltip-content="Share"><i class='fa fa-share-alt'></i></div>
-			<div class='delete cssTooltip' tooltip-content="Delete"><i class='fa fa-remove'></i></div>
+			<div class='button download cssTooltip' tooltip-content="Download"><i class='fa fa-download'></i></div>
+			<div class='button share cssTooltip' tooltip-content="Share"><i class='fa fa-share-alt'></i></div>
+			<div class='button delete cssTooltip' tooltip-content="Delete"><i class='fa fa-remove'></i></div>
 		</div>
 	`);
 
