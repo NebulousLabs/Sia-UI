@@ -53,7 +53,7 @@ let entity = {
 		var parentFolders = [];
 		// iterate through parentFolder links to populate parentFolders
 		for (let i = this.parentFolder; i; i = i.parentFolder) {
-			parentFolders.push(this.parentFolder);
+			parentFolders.push(i);
 		}
 		return parentFolders.reverse();
 	},

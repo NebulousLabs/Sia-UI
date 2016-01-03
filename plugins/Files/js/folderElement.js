@@ -61,7 +61,7 @@ function makeFolderElement(f, navigateTo) {
 	});
 	el.click(function(e) {
 		// Navigate to folder only if the element, not its buttons, was clicked
-		if (!$(e.target).hasClass('button')) {
+		if (!$(e.target).hasClass('fa')) {
 			navigateTo(f);
 		}
 	});

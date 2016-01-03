@@ -28,16 +28,27 @@ input {
 .row {
 	background: #f5f5f5;
 	display: block;
-	height: 40px;
-	padding: 10px;
+	height: 30px;
+	font-size: 20px;
+	padding: 15px;
 	width: calc(100% - 20px);
+}
+
+/* Current Directory Path */
+.directory {
+	vertical-align: middle;
 }
 .button {
 	display: inline-block;
-	padding: 8px;
 }
 .button i {
 	vertical-align: middle;
+}
+#cwd {
+	display: inline-block;
+	width: calc(100% - 261.5px);
+	white-space: nowrap;
+	overflow-x: auto;
 }
 
 /* Controls */
@@ -45,6 +56,9 @@ input {
 	position: relative;
 	display: inline-block;
 	float: right;
+}
+.controls #new {
+	width: 55px;
 }
 .controls input {
 	text-align: left;
@@ -68,6 +82,7 @@ input {
 .dropdown .button {
 	display: block;
 	font-size: 12px;
+	margin: 4px;
 }
 hr {
 	margin: 0;
@@ -82,7 +97,7 @@ hr {
 #file-list .entity {
 	padding: 6px;
 	color: #757575;
-	font-size: 16px;
+	font-size: 12px;
 	background-color: #fff;
 	border-bottom: 1px solid #eeeeee;
 	white-space: nowrap;

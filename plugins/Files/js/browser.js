@@ -66,20 +66,35 @@ function updateCWD(navigateTo) {
 	folders.push(currentFolder);
 
 	// Add a directory element per folder
-	// TODO: This adds a textless button for the root folder, which is flawed
-	// Could be more elegant.
-	folders.forEach(function(folder) {
-		let el = $('#home-folder').clone().html(folder.name);
+	folders.forEach(function(f) {
+		var el = $(`
+			<span class='button directory' id='${f.path}'>
+				${f.name}/
+			</span>
+		`);
+
 		// Clicking the element navigates to that folder
 		el.click(function() {
-			navigateTo(folder);
+			navigateTo(f);
 		});
+
+		// Append and add icon for root folder
 		cwd.append(el);
+		if (f.path === '') {
+			el.prepend('<i class=\'fa fa-folder\'></i>');
+		}
 	});
 }
 
 // The browser object
 var browser = {
+	// Expose these, mostly for debugging purposes
+	get currentFolder () {
+		return currentFolder;
+	},
+	get rootFolder () {
+		return rootFolder;
+	},
 	// Update files in the browser
 	update () {
 		// TODO: This call doesn't always include a file added right before the
