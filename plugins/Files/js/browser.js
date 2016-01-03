@@ -147,50 +147,73 @@ var browser = {
 	},
 
 	// Uploads a file from the given filePath
-	uploadFile (filePath, callback) {
-		// Include the current folder's path in the nickname
+	uploadFile (filePath, virtualPath, callback) {
+		// Files upload as currentFolder.path/name by default
+		if (typeof virtualPath === 'function') {
+			callback = virtualPath;
+			virtualPath = currentFolder.path;
+		}
+
+		// Determine the nickname
 		var name = path.basename(filePath);
-		var nickname = `${currentFolder.path}/${name}`;
+		var nickname = `${virtualPath.path}/${name}`;
+
+		// Upload the file
+		tools.notify(`Uploading ${name}!`, 'upload');
 		siad.apiCall({
 			url: '/renter/files/upload',
 			qs: {
 				source: filePath,
 				nickname: nickname,
 			},
-		}, function(result) {
-			if (callback) {
-				callback(result);
-			}
-			browser.update();
-			tools.notify(`Uploaded ${name}!`, 'upload');
-		});
+		}, callback);
 	},
 
-	// Non-recursively upload all files in a directory
-	// TODO: Make recursive
-	uploadFolder (dirPath, callback) {
-		// Upload files one at a time
+	// Recursively upload all files in a directory
+	uploadFolder (dirPath, virtualPath, callback) {
+		// virtualPath is the path to prepend to the file/folder's nickname
+		// It's used and built upon recursively
+		if (typeof virtualPath === 'function') {
+			callback = virtualPath;
+			virtualPath = currentFolder.path;
+		}
+		var dirName = path.basename(dirPath);
+		virtualPath = `${virtualPath}/${dirName}`;
+
+		// Get a list of files in the selected directory
 		fs.readdir(dirPath, function(err, files) {
 			if (err) {
 				tools.notify('Failed retrieving directory contents', 'error');
 				return;
 			}
-			files.forEach(function(file) {
-				var filePath = path.join(dirPath, file);
-	
-				// Skip hidden files and directories
+
+			// Setup waterfalling the async calls
+			// TODO: Delegate this to uiTools.js
+			var count = files.length;
+			function protectCallback() {
+				if (--count === 0 && callback) {
+					callback();
+				}
+			}
+
+			// Process files into sources and nicknames
+			var filePaths = files.map(file => path.resolve(dirPath, file));
+			var nicknames = files.map(file => `${virtualPath}/${file}`);
+			filePaths.forEach(function(filePath, i) {
+				// Appropriately upload each file/folder
 				fs.stat(filePath, function(err, stats) {
 					if (err) {
-						tools.notify(`Cannot read ${file}!`, 'error');
-						return;
-					}
-					if (!tools.isUnixHiddenPath(filePath) && stats.isFile()) {
-						browser.uploadFile(filePath);
+						tools.notify(err.message, 'error');
+					} else if (stats.isFile()) {
+						browser.uploadFile(filePath, nicknames[i], protectCallback);
+					} else if (stats.isDirectory()) {
+						browser.uploadFolder(filePath, virtualPath, protectCallback);
 					}
 				});
 			});
 		});
 	},
+
 
 	// Loads a .sia file into the library
 	loadDotSia (filePath, callback) {
@@ -204,7 +227,6 @@ var browser = {
 			if (callback) {
 				callback(result);
 			}
-			browser.update();
 			// TODO: Read result.FilesAdded and interpret for notification
 			tools.notify(`Added ${name}!`, 'siafile');
 		});
@@ -221,7 +243,6 @@ var browser = {
 			if (callback) {
 				callback(result);
 			}
-			browser.update();
 			// TODO: Read result.FilesAdded and interpret for notification
 			tools.notify('Added ascii file(s)!', 'asciifile');
 		});

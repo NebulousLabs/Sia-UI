@@ -29,9 +29,7 @@ var folder = {
 		// Don't prepend '/' to names if newPath is an empty string
 		if (newPath) {
 			// Make array of new paths per folder's content
-			names = names.map(function(name) {
-				return `${newPath}/${name}`;
-			});
+			names = names.map(name => `${newPath}/${name}`);
 		}
 
 		// Call callback only if all operations succeed
@@ -45,7 +43,7 @@ var folder = {
 	size () {
 		var sum = 0;
 		var self = this;
-		Object.keys(this.contents).forEach(function(name) {
+		Object.keys(this.contents).forEach(name => {
 			sum += self.contents[name].size();
 		});
 		return sum;
@@ -115,9 +113,7 @@ var folder = {
 		var functs = names.map(key => self.contents[key].download);
 
 		// Make corresponding array of destination paths
-		names = names.map(function(name) {
-			return `${destination}/${self.name}/${name}`;
-		});
+		names = names.map(name => `${destination}/${self.name}/${name}`);
 
 		// Call callback iff all operations succeed
 		tools.waterfall(functs, names, callback);
@@ -135,9 +131,7 @@ var folder = {
 		var functs = names.map(key => self.contents[key].share);
 
 		// Make corresponding array of file paths
-		names = names.map(function(name) {
-			return `${filepath}/${self.name}/${name}`;
-		});
+		names = names.map(name => `${filepath}/${self.name}/${name}`);
 
 		// Call callback iff all operations succeed
 		tools.waterfall(functs, names, callback);

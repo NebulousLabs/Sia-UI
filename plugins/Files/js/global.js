@@ -108,7 +108,7 @@ $('.dropdown .button').click(function() {
 	$('.dropdown').hide('fast');
 
 	// Call the function that corresponds to the selected option
-	browser[option](userInput);
+	browser[option](userInput, browser.update);
 });
 
 // Show add-ascii-file button when input box has content
