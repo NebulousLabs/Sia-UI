@@ -17,6 +17,7 @@ let entity = {
 	// Abstract members, inheritors must set
 	type:    'entity',
 	path:    '',
+
 	// Abstract functions, inheritors must implement
 	setPath (newPath, cb) {
 	},
@@ -26,12 +27,14 @@ let entity = {
 	},
 	share (cb) {
 	},
+
 	// Used for debugging purposes, returns 'this' from the
 	// object definition POV. Helpful to demystify Object.assign
 	// and Object.create
 	get self () {
 		return this;
 	},
+
 	// Virtual functions
 	get name () {
 		return path.basename(this.path);
@@ -60,6 +63,7 @@ let entity = {
 	get nameNoExtension () {
 		return path.basename(this.path, this.extension);
 	},
+
 	// These can't use set syntax because they're necessarily asynchronous
 	setName (newName, cb) {
 		var newPath = `${this.directory}/${newName}`;

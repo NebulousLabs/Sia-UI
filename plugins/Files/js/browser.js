@@ -78,39 +78,6 @@ function updateCWD(navigateTo) {
 	});
 }
 
-// Checks whether a path starts with or contains a hidden file or a folder.
-function isUnixHiddenPath(path) {
-	return (/(^|\/)\.[^\/\.]/g).test(path);
-}
-
-// This handles if userInput is undefined or an empty array as happens
-// when the user exits out of a dialog window or some other error.
-function handleNoInput(input, callback) {
-	if (!input || input.length === 0) {
-		if (callback) {
-			callback();
-		}
-		console.error('Improper user input passed into browser.' + handleNoInput.caller.name);
-		return true;
-	}
-	return false;
-}
-
-// Calls a function for each item in an array of file paths to upload or load,
-// calling the callback only after each async task has finished
-function waterFall(func, filePaths, callback) {
-	var count = filePaths.length;
-	filePaths.forEach(function(fp) {
-		// Call per array item
-		func(fp, function() {
-			// Callback iff all calls finishe
-			if (--count === 0 && callback) {
-				callback();
-			}
-		});
-	});
-}
-
 // The browser object
 var browser = {
 	// Update files in the browser
@@ -129,6 +96,7 @@ var browser = {
 			});
 		}, 100);
 	},
+
 	// Filter file list by search string
 	// TODO: only searches the current folder for now
 	filter (searchstr) {
@@ -140,12 +108,14 @@ var browser = {
 			}
 		});
 	},
+
 	// Navigate to a given folder or rootFolder by default
 	navigateTo (folder) {
 		folder = folder.type === 'folder' ? folder : rootFolder;
 		currentFolder = folder;
 		browser.update();
 	},
+
 	// Makes a new folder element temporarily
 	makeFolder () {
 		var name = 'New Folder';
@@ -160,6 +130,7 @@ var browser = {
 		var element = folderElement(folder, browser.navigateTo);
 		$('#file-list').append(element);
 	},
+
 	// Uploads a file from the given filePath
 	uploadFile (filePath, callback) {
 		// Include the current folder's path in the nickname
@@ -179,11 +150,7 @@ var browser = {
 			tools.notify(`Uploaded ${name}!`, 'upload');
 		});
 	},
-	uploadFiles (filePaths, callback) {
-		if (!handleNoInput(filePaths, callback)) {
-			waterFall(browser.uploadFile, filePaths, callback);
-		}
-	},
+
 	// Non-recursively upload all files in a directory
 	// TODO: Make recursive
 	uploadFolder (dirPath, callback) {
@@ -202,18 +169,14 @@ var browser = {
 						tools.notify(`Cannot read ${file}!`, 'error');
 						return;
 					}
-					if (!isUnixHiddenPath(filePath) && stats.isFile()) {
+					if (!tools.isUnixHiddenPath(filePath) && stats.isFile()) {
 						browser.uploadFile(filePath);
 					}
 				});
 			});
 		});
 	},
-	uploadFolders (dirPaths, callback) {
-		if (!handleNoInput(dirPaths, callback)) {
-			waterFall(browser.uploadFolder, dirPaths, callback);
-		}
-	},
+
 	// Loads a .sia file into the library
 	loadDotSia (filePath, callback) {
 		var name = path.basename(filePath, '.sia');
@@ -231,11 +194,7 @@ var browser = {
 			tools.notify(`Added ${name}!`, 'siafile');
 		});
 	},
-	loadDotSias (filePaths, callback) {
-		if (!handleNoInput(filePaths, callback)) {
-			waterFall(browser.loadDotSia, filePaths, callback);
-		}
-	},
+
 	// Loads an ascii represenation of a .sia file into the library
 	loadAscii (ascii, callback) {
 		siad.apiCall({
@@ -256,9 +215,15 @@ var browser = {
 
 // Redirects dropdown options (see global.js) to their respective functions
 browser.Folder = browser.makeFolder;
-browser['File Upload'] = browser.uploadFiles;
-browser['Folder Upload'] = browser.uploadFolders;
-browser['.Sia File'] = browser.loadDotSias;
+browser['File Upload'] = function uploadFiles(filePaths, callback) {
+	tools.waterfall(browser.uploadFile, filePaths, callback);
+};
+browser['Folder Upload'] = function uploadFolders(dirPaths, callback) {
+	tools.waterfall(browser.uploadFolder, dirPaths, callback);
+};
+browser['.Sia File'] = function loadDotSias(filePaths, callback) {
+	tools.waterfall(browser.loadDotSia, filePaths, callback);
+};
 browser['Add ASCII File'] = browser.loadAscii;
 
 module.exports = browser;

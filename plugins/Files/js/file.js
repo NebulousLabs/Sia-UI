@@ -15,7 +15,7 @@ const siad = require('sia.js');
 var file = {
 	type: 'file',
 	// Changes file's nickname with siad call
-	setPath (newPath, cb) {
+	setPath (newPath, callback) {
 		var self = this;
 		siad.apiCall({
 			url: '/renter/files/rename',
@@ -25,8 +25,8 @@ var file = {
 			}
 		}, function() {
 			self.path = newPath;
-			if (cb) {
-				cb(newPath);
+			if (callback) {
+				callback(newPath);
 			}
 		});
 	},
@@ -45,16 +45,19 @@ var file = {
 	// The below are just function forms of the renter calls a file can enact
 	// on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
-	delete (cb) {
+	delete (callback) {
 		var self = this;
 		siad.apiCall({
 			url: '/renter/files/delete',
 			qs: {
 				nickname: self.path,
 			},
-		}, cb);
+		}, function(result) {
+			delete self.parentFolder.contents[self.name];
+			callback(result);
+		});
 	},
-	download (destination, cb) {
+	download (destination, callback) {
 		var self = this;
 		siad.apiCall({
 			url: '/renter/files/download',
@@ -62,9 +65,9 @@ var file = {
 				nickname: self.path,
 				destination: destination,
 			},
-		}, cb);
+		}, callback);
 	},
-	share (filepath, cb) {
+	share (filepath, callback) {
 		var self = this;
 		siad.apiCall({
 			url: '/renter/files/share',
@@ -72,16 +75,16 @@ var file = {
 				nickname: self.path,
 				filepath: filepath + '.sia',
 			},
-		}, cb);
+		}, callback);
 	},
-	shareASCII (cb) {
+	shareASCII (callback) {
 		var self = this;
 		siad.apiCall({
 			url: '/renter/files/shareascii',
 			qs: {
 				nickname: self.path,
 			},
-		}, cb);
+		}, callback);
 	},
 };
 

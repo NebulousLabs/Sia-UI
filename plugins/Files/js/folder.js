@@ -7,42 +7,40 @@
  *   files, aide file browsing, and facilitate recursive file operations.
  */
 
-// Inherits from entity
-const entity = require('./entity');
-// Contains files and folders
-const file = require('./file');
-// siad wrapper/manager
+// Node modules
 const siad = require('sia.js');
-// For making file system directories
 const mkdirp = require('mkdirp');
+const entity = require('./entity');
+const file = require('./file');
+const tools = require('.//uiTools');
 
 var folder = {
 	type: 'folder',
 	contents: {},
-	// Changes folder's nickname with siad call
+
+	// Changes folder's and its contents' paths with siad call
 	setPath (newPath, callback) {
-		// Perform all async delete operations in parallel
-		var names = Object.keys(this.contents);
-		var count = names.length;
 		var self = this;
+		var names = Object.keys(this.contents);
 
-		// Recursively rename
-		names.forEach(function(name) {
-			self.contents[name].setPath(`${newPath}/${name}`, function() {
-				// Execute the callback iff all operations succeed
-				if (--count === 0 && callback) {
-					self.path = newPath;
-					callback();
-				}
+		// Make array of each content's setPath function
+		var functs = names.map(key => self.contents[key].setPath);
+
+		// Don't prepend '/' to names if newPath is an empty string
+		if (newPath) {
+			// Make array of new paths per folder's content
+			names = names.map(function(name) {
+				return `${newPath}/${name}`;
 			});
-		});
-
-		// Called iff no contents
-		if (this.isEmpty() && callback) {
-			this.path = newPath;
-			callback();
 		}
+
+		// Call callback only if all operations succeed
+		tools.waterfall(functs, names, function() {
+			self.path = newPath;
+			callback();
+		});
 	},
+
 	// Calculate sum of file sizes
 	size () {
 		var sum = 0;
@@ -52,6 +50,7 @@ var folder = {
 		});
 		return sum;
 	},
+
 	// Add a file
 	addFile (fileObject) {
 		// TODO: verify that the fileObject belongs in this folder
@@ -60,6 +59,7 @@ var folder = {
 		f.parentFolder = this;
 		return f;
 	},
+
 	// Add a folder
 	addFolder (name) {
 		// Prefer paths of 'foo' over '/foo' in root folder
@@ -78,80 +78,69 @@ var folder = {
 		this.contents[name] = f;
 		return f;
 	},
+
 	// Return if it's an empty folder
 	isEmpty () {
 		return Object.keys(this.contents).length === 0;
 	},
+
 	// The below are just function forms of the renter calls a function can
 	// enact on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
+	
+	// Recursively delete folder and its contents
 	delete (callback) {
 		var self = this;
-		// Perform all async delete operations in parallel
-		var names = Object.keys(this.contents);
-		var count = names.length;
 
-		// Recursively delete
-		names.forEach(function(name) {
-			self.contents[name].delete(function() {
-				delete self.contents[name];
-				// Execute the callback iff all operations succeed
-				if (--count === 0 && callback) {
-					callback();
-				}
-			});
-		});
+		// Make array of each content's delete function
+		var functs = Object.keys(self.contents).map(key => self.contents[key].delete);
 
-		// Called iff no contents
-		if (this.isEmpty() && callback) {
+		// Call callback only if all operations succeed
+		tools.waterfall(functs, function() {
+			// Delete parent folder's reference to this folder
+			delete self.parentFolder.contents[self.name];
 			callback();
-		}
+		});
 	},
+
+	// Download files in folder at filepath with same structure
 	download (destination, callback) {
 		var self = this;
-		// Perform all async delete operations in parallel
 		var names = Object.keys(this.contents);
-		var count = names.length;
+
 		// Make folder at destination
 		mkdirp.sync(`${destination}/${this.name}`);
 
-		// Download contents to above folder
-		names.forEach(function(name) {
-			self.contents[name].download(`${destination}/${self.name}/${name}`, function() {
-				// Execute the callback iff all operations succeed
-				if (--count === 0 && callback) {
-					callback();
-				}
-			});
+		// Make array of each content's download function
+		var functs = names.map(key => self.contents[key].download);
+
+		// Make corresponding array of destination paths
+		names = names.map(function(name) {
+			return `${destination}/${self.name}/${name}`;
 		});
 
-		// Called iff no contents
-		if (this.isEmpty() && callback) {
-			callback();
-		}
+		// Call callback iff all operations succeed
+		tools.waterfall(functs, names, callback);
 	},
+
+	// Share .sia files into folder at filepath with same structure
 	share (filepath, callback) {
 		var self = this;
-		// Perform all async delete operations in parallel
 		var names = Object.keys(this.contents);
-		var count = names.length;
+
 		// Make folder at destination
 		mkdirp.sync(`${filepath}/${this.name}`);
 
-		// Make .sia files in above folder
-		names.forEach(function(name) {
-			self.contents[name].share(`${filepath}/${self.name}/${name}`, function() {
-				// Execute the callback iff all operations succeed
-				if (--count === 0 && callback) {
-					callback();
-				}
-			});
+		// Make array of each content's share function
+		var functs = names.map(key => self.contents[key].share);
+
+		// Make corresponding array of file paths
+		names = names.map(function(name) {
+			return `${filepath}/${self.name}/${name}`;
 		});
 
-		// Called iff no contents
-		if (this.isEmpty() && callback) {
-			callback();
-		}
+		// Call callback iff all operations succeed
+		tools.waterfall(functs, names, callback);
 	},
 };
 
