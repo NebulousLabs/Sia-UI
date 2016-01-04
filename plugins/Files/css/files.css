@@ -94,7 +94,14 @@ hr {
 	height: calc(100% - 60px);
 	overflow-y: auto;
 }
-#file-list .entity {
+.entity.label:hover {
+	cursor: default;
+}
+.label #buttons-label {
+	text-align: center;
+	width: 75px;
+}
+.entity {
 	padding: 6px;
 	color: #757575;
 	font-size: 12px;
@@ -102,43 +109,40 @@ hr {
 	border-bottom: 1px solid #eeeeee;
 	white-space: nowrap;
 }
-#file-list .entity:hover {
+.entity.selected {
+	background-color: #ccc;
+}
+.entity:hover {
 	cursor: pointer;
 }
+.entity > * {
+	display: inline-block
+}
 .entity .graphic {
-	display: inline-block;
 	width: 20px;
 	text-align: center;
 }
-.entity .available {
-	display: inline-block;
-	width: 20px;
-}
 .entity .name {
-	display: inline-block;
 	text-align: left;
-	width: calc(98% - 350px);
+	width: calc(100% - 330px);
 	overflow: hidden;
 	white-space: nowrap;
 }
 .entity .size {
-	display: inline-block;
 	text-align: right;
 	width: 75px;
 }
 .entity .time {
-	display: inline-block;
 	text-align: center;
 	width: 150px;
 }
 .entity .button {
 	float: right;
-	display: inline-block;
 	width: 25px;
 	padding: 0;
 }
 .entity .button:hover {
-/*	opacity: .5;*/
+	opacity: .5;
 }
 .cssTooltip {
 	display: inline;

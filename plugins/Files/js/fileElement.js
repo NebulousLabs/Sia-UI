@@ -15,13 +15,10 @@ const entityElement = require('./entityElement');
 function makeFileElement(f) {
 	var el = entityElement(f);
 
-	// Set availability graphic
-	var availabilityGraphic = f.Available ? 'fa-check' : 'fa-refresh fa-spin';
-	el.find('.graphic').after(`
-		<div class='available'>
-			<i class='fa ${availabilityGraphic}'></i>
-		</div>
-	`);
+	// Set unavailable graphic if needed
+	if (!f.Available) {
+		el.find('.fa.fa-file').removeClass('fa-file').addClass('fa-refresh fa-spin');
+	}
 
 	// Set time text
 	var timeText;
