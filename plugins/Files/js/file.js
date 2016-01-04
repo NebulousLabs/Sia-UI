@@ -45,14 +45,13 @@ var file = {
 	// on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
 	delete (callback) {
-		var self = this;
 		siad.apiCall({
 			url: '/renter/files/delete',
 			qs: {
-				nickname: self.path,
+				nickname: this.path,
 			},
-		}, function(result) {
-			delete self.parentFolder.contents[self.name];
+		}, result => {
+			delete this.parentFolder.contents[this.name];
 			callback(result);
 		});
 	},
@@ -61,11 +60,10 @@ var file = {
 			console.error('Improper argument!', destination);
 			return;
 		}
-		var self = this;
 		siad.apiCall({
 			url: '/renter/files/download',
 			qs: {
-				nickname: self.path,
+				nickname: this.path,
 				destination: destination,
 			},
 		}, callback);
@@ -75,21 +73,19 @@ var file = {
 			console.error('Improper argument!', destination);
 			return;
 		}
-		var self = this;
 		siad.apiCall({
 			url: '/renter/files/share',
 			qs: {
-				nickname: self.path,
+				nickname: this.path,
 				filepath: destination,
 			},
 		}, callback);
 	},
 	shareASCII (callback) {
-		var self = this;
 		siad.apiCall({
 			url: '/renter/files/shareascii',
 			qs: {
-				nickname: self.path,
+				nickname: this.path,
 			},
 		}, callback);
 	},

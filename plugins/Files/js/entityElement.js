@@ -13,7 +13,7 @@ const tools = require('./uiTools');
 // Make entity element with jquery
 function makeEntityElement(entity) {
 	var el = $(`
-		<div class='${entity.type} entity' id='${entity.path}'>
+		<div class='${entity.type} entity' id='${entity.name}'>
 			<div class='graphic'>
 				<i class='fa fa-${entity.type}'></i>
 			</div>
@@ -24,6 +24,11 @@ function makeEntityElement(entity) {
 			<div class='button delete cssTooltip' tooltip-content="Delete"><i class='fa fa-remove'></i></div>
 		</div>
 	`);
+
+	// If the entity was selected, mark it so
+	if (entity.selected) {
+		el.addClass('selected');
+	}
 
 	// Give the entity buttons clickability
 	el.find('.download').click(function() {
@@ -54,6 +59,14 @@ function makeEntityElement(entity) {
 				delete entity.parentFolder.contents[entity.name];
 				entity = null;
 			});
+		}
+	});
+
+	// Clicking the element itself and not a button selects it
+	el.click(function(e) {
+		if (!$(e.target).is('.button, .fa') && !el.hasClass('selected')) {
+			el.addClass('selected');
+			entity.selected = true;
 		}
 	});
 	

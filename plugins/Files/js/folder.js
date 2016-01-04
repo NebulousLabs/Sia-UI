@@ -20,11 +20,10 @@ var folder = {
 
 	// Changes folder's and its contents' paths with siad call
 	setPath (newPath, callback) {
-		var self = this;
 		var names = Object.keys(this.contents);
 
 		// Make array of each content's setPath function
-		var functs = names.map(key => self.contents[key].setPath);
+		var functs = names.map(key => this.contents[key].setPath);
 
 		// Don't prepend '/' to names if newPath is an empty string
 		if (newPath) {
@@ -33,8 +32,8 @@ var folder = {
 		}
 
 		// Call callback only if all operations succeed
-		tools.waterfall(functs, names, function() {
-			self.path = newPath;
+		tools.waterfall(functs, names, () => {
+			this.path = newPath;
 			callback();
 		});
 	},
@@ -42,9 +41,8 @@ var folder = {
 	// Calculate sum of file sizes
 	size () {
 		var sum = 0;
-		var self = this;
 		Object.keys(this.contents).forEach(name => {
-			sum += self.contents[name].size();
+			sum += this.contents[name].size();
 		});
 		return sum;
 	},
@@ -88,29 +86,26 @@ var folder = {
 	
 	// Recursively delete folder and its contents
 	delete (callback) {
-		var self = this;
-
 		// Make array of each content's delete function
-		var functs = Object.keys(self.contents).map(key => self.contents[key].delete);
+		var functs = Object.keys(this.contents).map(key => this.contents[key].delete);
 
 		// Call callback only if all operations succeed
-		tools.waterfall(functs, function() {
+		tools.waterfall(functs, () => {
 			// Delete parent folder's reference to this folder
-			delete self.parentFolder.contents[self.name];
+			delete this.parentFolder.contents[this.name];
 			callback();
 		});
 	},
 
 	// Download files in folder at destination with same structure
 	download (destination, callback) {
-		var self = this;
 		var names = Object.keys(this.contents);
 
 		// Make folder at destination
 		mkdirp.sync(destination);
 
 		// Make array of each content's download function
-		var functs = names.map(key => self.contents[key].download);
+		var functs = names.map(key => this.contents[key].download);
 
 		// Make corresponding array of destination paths
 		names = names.map(name => `${destination}/${name}`);
@@ -121,14 +116,13 @@ var folder = {
 
 	// Share .sia files into folder at destination with same structure
 	share (destination, callback) {
-		var self = this;
 		var names = Object.keys(this.contents);
 
 		// Make folder at destination
 		mkdirp.sync(destination);
 
 		// Make array of each content's share function
-		var functs = names.map(key => self.contents[key].share);
+		var functs = names.map(key => this.contents[key].share);
 
 		// Make corresponding array of file paths
 		names = names.map(name => `${destination}/${name}`);

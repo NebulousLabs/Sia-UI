@@ -35,7 +35,7 @@ function makeFolderElement(f, navigateTo) {
 	});
 
 	// Navigate to the folder if the element, not its buttons, is clicked
-	el.click(function(e) {
+	el.dblclick(function(e) {
 		if (!$(e.target).is('.button, .fa')) {
 			navigateTo(f);
 		}
