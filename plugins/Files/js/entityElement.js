@@ -25,11 +25,6 @@ function makeEntityElement(entity) {
 		</div>
 	`);
 
-	// If the entity was selected, mark it so
-	if (entity.selected) {
-		el.addClass('selected');
-	}
-
 	// Give the entity buttons clickability
 	el.find('.download').click(function() {
 		// Get file system path to download to
@@ -55,6 +50,9 @@ function makeEntityElement(entity) {
 			entity.delete(el.remove);
 		}
 	});
+
+	// Allow renaming
+	el.find('.name').click();
 	
 	// Return the new element
 	return el;

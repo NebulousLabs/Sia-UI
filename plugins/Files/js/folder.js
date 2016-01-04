@@ -14,35 +14,6 @@ const entity = require('./entity');
 const file = require('./file');
 const tools = require('.//uiTools');
 
-// TODO: How to place a getter in the object definition without it being
-// evaluated and misconstrued upon Object.assign?
-function addGetters(f) {
-	// Return the names of the contents
-	Object.defineProperty(f, 'contentsNames', {
-		get: function () {
-			return Object.keys(this.contents);
-		},
-	});
-
-	// Return the files object as an array instead
-	Object.defineProperty(f, 'contentsArray', {
-		get: function () {
-			return this.contentsNames.map(name => this.contents[name]);
-		},
-	});
-
-	// Calculate sum of file sizes
-	Object.defineProperty(f, 'size', {
-		get: function () {
-			var sum = 0;
-			//this.contentsArray.forEach(content => {
-			//	sum += content.size;
-			//});
-			return sum;
-		},
-	});
-}
-
 var folder = {
 	type: 'folder',
 	contents: {},
@@ -156,6 +127,35 @@ var folder = {
 		tools.waterfall(functs, names, callback);
 	},
 };
+
+// TODO: How to place a getter in the object definition without it being
+// evaluated and misconstrued upon Object.assign?
+function addGetters(f) {
+	// Return the names of the contents
+	Object.defineProperty(f, 'contentsNames', {
+		get: function () {
+			return Object.keys(this.contents);
+		},
+	});
+
+	// Return the files object as an array instead
+	Object.defineProperty(f, 'contentsArray', {
+		get: function () {
+			return this.contentsNames.map(name => this.contents[name]);
+		},
+	});
+
+	// Calculate sum of file sizes
+	Object.defineProperty(f, 'size', {
+		get: function () {
+			var sum = 0;
+			//this.contentsArray.forEach(content => {
+			//	sum += content.size;
+			//});
+			return sum;
+		},
+	});
+}
 
 // Factory to create instances of the file object
 function folderFactory(arg) {

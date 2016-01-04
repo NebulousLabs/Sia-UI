@@ -121,11 +121,24 @@ $('#paste-ascii input').keypress(function(e) {
 });
 
 // Clicking within the file-list affects what elements are selected
-$('#file-list').click(function(e) {
+$('#file-browser').click(function(e) {
+	e.preventDefault();
 	var el = $(e.target);
-	browser.deselectAll();
-	if (el.closest('.entity')) {
-		browser.select(el.closest('.entity'));
+	var entity = el.closest('.entity');
+
+	// Don't react to button clicks
+	var buttonClicked = el.hasClass('button') || el.parent().hasClass('button');
+	if (buttonClicked) {
+		return;
+	}
+
+	if (e.shiftKey) {
+		browser.selectTo(entity);
+	} else if (e.ctrlKey) {
+		browser.toggle(entity);
+	} else {
+		browser.deselectAll();
+		browser.select(entity);
 	}
 });
 

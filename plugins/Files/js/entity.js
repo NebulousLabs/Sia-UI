@@ -43,6 +43,9 @@ var entity = {
 	deselect () {
 		this.selected = false;
 	},
+	toggle () {
+		this.selected = !this.selected;
+	},
 	get name () {
 		return path.basename(this.path);
 	},

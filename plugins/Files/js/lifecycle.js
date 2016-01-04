@@ -6,6 +6,8 @@
  */
 
 // Node modules
+const electron = require('electron');
+const ipcRenderer = electron.ipcRenderer;
 const BigNumber = require('bignumber.js');
 const siad = require('sia.js');
 const $ = require('jquery');
@@ -41,8 +43,8 @@ function update() {
 }
 
 // Called upon showing
-IPCRenderer.on('shown', update);
+ipcRenderer.on('shown', update);
 // Called upon transitioning away from this view
-IPCRenderer.on('hidden', function() {
+ipcRenderer.on('hidden', function() {
 	clearTimeout(updating);
 });

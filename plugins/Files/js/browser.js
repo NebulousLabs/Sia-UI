@@ -18,21 +18,37 @@ const folderElement = require('./folderElement');
 // Root folder object to hold all other file and folder objects
 var rootFolder = require('./folder')('');
 var currentFolder = rootFolder;
+// Used in the selection system
+var anchor;
 
 // Refresh the file list according to the currentFolder
 function updateList(navigateTo) {
 	var list = $('#file-list');
+
+	// Get array of selected element's ids (same as their names)
+	var selected = list.find('.selected.entity').get();
+	var selected = selected.map(el => el.id);
+
+	// Refresh the list
 	list.empty();
 	currentFolder.contentsArray.forEach(function(content) {
+		var el;
 		if (content.type === 'file') {
 			// Make and display a file element
-			list.append(fileElement(content));
+			el = fileElement(content);
 		} else if (content.type === 'folder') {
 			// Make and display a folder element
-			list.append(folderElement(content, navigateTo));
+			el = folderElement(content, navigateTo);
 		} else {
 			console.error('Unknown entity type: ' + content.type, content);
 		}
+
+		// If it was previously selected, mark it so
+		if (selected.indexOf(content.name) !== -1) {
+			el.addClass('selected');
+		}
+
+		list.append(el);
 	});
 }
 
@@ -97,19 +113,44 @@ var browser = {
 
 	// Select an item in the current folder
 	select (el) {
-		currentFolder.contents[el.attr('id')].select();
+		if (el.length === 0) {
+			return;
+		}
+		anchor = el;
 		el.addClass('selected');
+	},
+	toggle (el) {
+		el.toggleClass('selected');
+		if (el.hasClass('selected')) {
+			anchor = el;
+		}
+	},
+
+	// Select items from the last selected entity to the one passed in
+	selectTo (el) {
+		if (!anchor) {
+			this.select(el);
+		} else if (el.length !== 0) {
+			$('#file-list .entity').removeClass('selected');
+			anchor.addClass('selected');
+			el.addClass('selected');
+			if (el.index() > anchor.index()) {
+				anchor.nextUntil(el).addClass('selected');
+			} else {
+				el.nextUntil(anchor).addClass('selected');
+			}
+		}
 	},
 
 	// Select all items in the current folder
 	selectAll () {
-		currentFolder.contentsArray.forEach(content => content.select());
+		anchor = null;
 		$('#file-list .entity').addClass('selected');
 	},
 
 	// Deselect all items in the current folder
 	deselectAll () {
-		currentFolder.contentsArray.forEach(content => content.deselect());
+		anchor = null;
 		$('#file-list .entity').removeClass('selected');
 	},
 
