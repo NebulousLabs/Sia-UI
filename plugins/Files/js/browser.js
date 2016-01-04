@@ -23,16 +23,15 @@ var currentFolder = rootFolder;
 function updateList(navigateTo) {
 	var list = $('#file-list');
 	list.empty();
-	Object.keys(currentFolder.contents).forEach(function(contentName) {
-		var entity = currentFolder.contents[contentName];
-		if (entity.type === 'file') {
+	currentFolder.contentsArray.forEach(function(content) {
+		if (content.type === 'file') {
 			// Make and display a file element
-			list.append(fileElement(entity));
-		} else if (entity.type === 'folder') {
+			list.append(fileElement(content));
+		} else if (content.type === 'folder') {
 			// Make and display a folder element
-			list.append(folderElement(entity, navigateTo));
+			list.append(folderElement(content, navigateTo));
 		} else {
-			console.error('Unknown entity type: ' + entity.type, entity);
+			console.error('Unknown entity type: ' + content.type, content);
 		}
 	});
 }
@@ -95,6 +94,25 @@ var browser = {
 	get rootFolder () {
 		return rootFolder;
 	},
+
+	// Select an item in the current folder
+	select (el) {
+		currentFolder.contents[el.attr('id')].select();
+		el.addClass('selected');
+	},
+
+	// Select all items in the current folder
+	selectAll () {
+		currentFolder.contentsArray.forEach(content => content.select());
+		$('#file-list .entity').addClass('selected');
+	},
+
+	// Deselect all items in the current folder
+	deselectAll () {
+		currentFolder.contentsArray.forEach(content => content.deselect());
+		$('#file-list .entity').removeClass('selected');
+	},
+
 	// Update files in the browser
 	update () {
 		// TODO: This call doesn't always include a file added right before the
@@ -180,7 +198,7 @@ var browser = {
 		var dirName = path.basename(dirPath);
 		virtualPath = `${virtualPath}/${dirName}`;
 
-		// Get a list of files in the selected directory
+		// Get a list of files in the chosen directory
 		fs.readdir(dirPath, function(err, files) {
 			if (err) {
 				tools.notify('Failed retrieving directory contents', 'error');

@@ -30,12 +30,6 @@ var file = {
 			}
 		});
 	},
-	// Return file size
-	// TODO: I'm not 100% sure, but making this a getter doesn't work because
-	// Object.assign() evaluates getters
-	size () {
-		return this.Filesize;
-	},
 	// Update/record file stats
 	update (stats) {
 		Object.assign(this, stats);
@@ -104,6 +98,15 @@ function fileFactory(arg) {
 	} else {
 		console.error('Unrecognized constructur argument: ', arguments);
 	}
+
+	// TODO: How to place a getter in the object definition without it being
+	// Return file size
+	Object.defineProperty(f, 'size', {
+		get: function () {
+			return this.Filesize;
+		},
+	});
+
 	return f;
 }
 

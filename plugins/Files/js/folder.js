@@ -14,13 +14,42 @@ const entity = require('./entity');
 const file = require('./file');
 const tools = require('.//uiTools');
 
+// TODO: How to place a getter in the object definition without it being
+// evaluated and misconstrued upon Object.assign?
+function addGetters(f) {
+	// Return the names of the contents
+	Object.defineProperty(f, 'contentsNames', {
+		get: function () {
+			return Object.keys(this.contents);
+		},
+	});
+
+	// Return the files object as an array instead
+	Object.defineProperty(f, 'contentsArray', {
+		get: function () {
+			return this.contentsNames.map(name => this.contents[name]);
+		},
+	});
+
+	// Calculate sum of file sizes
+	Object.defineProperty(f, 'size', {
+		get: function () {
+			var sum = 0;
+			//this.contentsArray.forEach(content => {
+			//	sum += content.size;
+			//});
+			return sum;
+		},
+	});
+}
+
 var folder = {
 	type: 'folder',
 	contents: {},
 
 	// Changes folder's and its contents' paths with siad call
 	setPath (newPath, callback) {
-		var names = Object.keys(this.contents);
+		var names = this.contentsNames;
 
 		// Make array of each content's setPath function
 		var functs = names.map(key => this.contents[key].setPath);
@@ -38,15 +67,6 @@ var folder = {
 		});
 	},
 
-	// Calculate sum of file sizes
-	size () {
-		var sum = 0;
-		Object.keys(this.contents).forEach(name => {
-			sum += this.contents[name].size();
-		});
-		return sum;
-	},
-
 	// Add a file
 	addFile (fileObject) {
 		// TODO: verify that the fileObject belongs in this folder
@@ -56,19 +76,24 @@ var folder = {
 		return f;
 	},
 
-	// Add a folder
+	// Add a folder, defined after folderFactory() to use it without breaking
+	// strict convention
 	addFolder (name) {
 		// Prefer paths of 'foo' over '/foo' in root folder
 		var path = this.path === '' ? name : `${this.path}/${name}`;
-
-		// Copy this folder and erase its info to create a new folder
+	
+		// Copy this folder and erase its state to 'create' a new folder
 		// TODO: This seems like an imperfect way to add a new Folder. Can't
-		// use folderFactory function down below because of convention/linting
-		// rules.
+		// use folderFactory function down below because using the folder
+		// factory again seems to return the same folder. Example:
+		//   rootFolder.addFolder('foo') returns a rootFolder with a path of
+		//   'foo' but all the same contents, resulting in circular pointers
+		//   Thus rootFolder.contents === rootFolder.contents.foo.contents
 		var f = Object.create(this);
 		f.path = path;
 		f.contents = {};
-
+		f.selected = false;
+	
 		// Link new folder to this one and vice versa
 		f.parentFolder = this;
 		this.contents[name] = f;
@@ -77,7 +102,7 @@ var folder = {
 
 	// Return if it's an empty folder
 	isEmpty () {
-		return Object.keys(this.contents).length === 0;
+		return this.contentsNames.length === 0;
 	},
 
 	// The below are just function forms of the renter calls a function can
@@ -87,7 +112,7 @@ var folder = {
 	// Recursively delete folder and its contents
 	delete (callback) {
 		// Make array of each content's delete function
-		var functs = Object.keys(this.contents).map(key => this.contents[key].delete);
+		var functs = this.contentsArray.map(content => content.delete);
 
 		// Call callback only if all operations succeed
 		tools.waterfall(functs, () => {
@@ -99,7 +124,7 @@ var folder = {
 
 	// Download files in folder at destination with same structure
 	download (destination, callback) {
-		var names = Object.keys(this.contents);
+		var names = this.contentsNames;
 
 		// Make folder at destination
 		mkdirp.sync(destination);
@@ -116,7 +141,7 @@ var folder = {
 
 	// Share .sia files into folder at destination with same structure
 	share (destination, callback) {
-		var names = Object.keys(this.contents);
+		var names = this.contentNames;
 
 		// Make folder at destination
 		mkdirp.sync(destination);
@@ -137,11 +162,13 @@ function folderFactory(arg) {
 	// Folders can be constructed from a '/' deliminated string, representing
 	// their path with their name included as the last segment
 	var f = Object.assign(Object.create(entity), folder);
+	addGetters(f);
 	if (typeof arg === 'string') {
 		f.path = arg;
 	} else {
 		console.error('Unrecognized constructur argument: ', arguments);
 	}
+
 	return f;
 }
 

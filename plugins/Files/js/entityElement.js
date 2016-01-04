@@ -18,7 +18,7 @@ function makeEntityElement(entity) {
 				<i class='fa fa-${entity.type}'></i>
 			</div>
 			<div class='name'>${entity.name}</div>
-			<div class='size'>${tools.formatByte(entity.size())}</div>
+			<div class='size'>${tools.formatByte(entity.size)}</div>
 			<div class='button download cssTooltip' tooltip-content="Download"><i class='fa fa-download'></i></div>
 			<div class='button share cssTooltip' tooltip-content="Share"><i class='fa fa-share-alt'></i></div>
 			<div class='button delete cssTooltip' tooltip-content="Delete"><i class='fa fa-remove'></i></div>
@@ -52,21 +52,7 @@ function makeEntityElement(entity) {
 			buttons: ['Okay', 'Cancel'],
 		});
 		if (confirmation === 0) {
-			entity.delete(function() {
-				el.remove();
-				// TODO: Not sure how to verify if this deletes all references
-				// to this entity
-				delete entity.parentFolder.contents[entity.name];
-				entity = null;
-			});
-		}
-	});
-
-	// Clicking the element itself and not a button selects it
-	el.click(function(e) {
-		if (!$(e.target).is('.button, .fa') && !el.hasClass('selected')) {
-			el.addClass('selected');
-			entity.selected = true;
+			entity.delete(el.remove);
 		}
 	});
 	

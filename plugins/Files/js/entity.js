@@ -13,10 +13,13 @@
 const path = require('path');
 const $ = require('jquery');
 
-let entity = {
+var entity = {
 	// Abstract members, inheritors must set
-	type:    'entity',
-	path:    '',
+	type:     'entity',
+	path:     '',
+
+	// Common members
+	selected: false,
 
 	// Abstract functions, inheritors must implement
 	setPath (newPath, cb) {
@@ -28,14 +31,18 @@ let entity = {
 	share (cb) {
 	},
 
-	// Used for debugging purposes, returns 'this' from the
-	// object definition POV. Helpful to demystify Object.assign
-	// and Object.create
+	// Common functions
+	// Used for debugging purposes, returns 'this' from the object definition
+	// POV. Helpful to demystify Object.assign and Object.create
 	get self () {
 		return this;
 	},
-
-	// Virtual functions
+	select () {
+		this.selected = true;
+	},
+	deselect () {
+		this.selected = false;
+	},
 	get name () {
 		return path.basename(this.path);
 	},

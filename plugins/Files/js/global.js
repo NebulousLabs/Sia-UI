@@ -43,6 +43,7 @@ var stop = lifecycle.stop;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Buttons ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Home folder button
 $('#home-folder').click(browser.navigateTo);
+
 // File list search
 $('#search-bar').keypress(function() {
 	tools.tooltip('Searching...', this);
@@ -118,3 +119,13 @@ $('#paste-ascii input').keypress(function(e) {
 		$('#paste-ascii .button').click();
 	}
 });
+
+// Clicking within the file-list affects what elements are selected
+$('#file-list').click(function(e) {
+	var el = $(e.target);
+	browser.deselectAll();
+	if (el.closest('.entity')) {
+		browser.select(el.closest('.entity'));
+	}
+});
+
