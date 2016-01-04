@@ -31,9 +31,8 @@ var file = {
 		});
 	},
 	// Return file size
-	// TODO: I'm not 100% sure, but making this a
-	// getter doesn't work because Object.assign()
-	// evaluates getters
+	// TODO: I'm not 100% sure, but making this a getter doesn't work because
+	// Object.assign() evaluates getters
 	size () {
 		return this.Filesize;
 	},
@@ -58,6 +57,10 @@ var file = {
 		});
 	},
 	download (destination, callback) {
+		if (typeof destination !== 'string') {
+			console.error('Improper argument!', destination);
+			return;
+		}
 		var self = this;
 		siad.apiCall({
 			url: '/renter/files/download',
@@ -67,13 +70,17 @@ var file = {
 			},
 		}, callback);
 	},
-	share (filepath, callback) {
+	share (destination, callback) {
+		if (typeof destination !== 'string' || destination.slice(-4) !== '.sia') {
+			console.error('Improper argument!', destination);
+			return;
+		}
 		var self = this;
 		siad.apiCall({
 			url: '/renter/files/share',
 			qs: {
 				nickname: self.path,
-				filepath: filepath + '.sia',
+				filepath: destination,
 			},
 		}, callback);
 	},

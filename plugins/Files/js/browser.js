@@ -68,7 +68,7 @@ function updateCWD(navigateTo) {
 	// Add a directory element per folder
 	folders.forEach(function(f) {
 		var el = $(`
-			<span class='button directory' id='${f.path}'>
+			<span class='button directory' id='dir-${f.path}'>
 				${f.name}/
 			</span>
 		`);
@@ -149,7 +149,7 @@ var browser = {
 	// Uploads a file from the given filePath
 	uploadFile (filePath, virtualPath, callback) {
 		// Files upload as currentFolder.path/name by default
-		if (typeof virtualPath === 'function') {
+		if (typeof virtualPath !== 'string') {
 			callback = virtualPath;
 			virtualPath = currentFolder.path;
 		}
@@ -173,7 +173,7 @@ var browser = {
 	uploadFolder (dirPath, virtualPath, callback) {
 		// virtualPath is the path to prepend to the file/folder's nickname
 		// It's used and built upon recursively
-		if (typeof virtualPath === 'function') {
+		if (typeof virtualPath !== 'string') {
 			callback = virtualPath;
 			virtualPath = currentFolder.path;
 		}

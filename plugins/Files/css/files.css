@@ -71,7 +71,7 @@ input {
 	left: 15px;
 
 	border: 1px solid black;
-	border-radius: 6px;
+	border-radius: 0 6px 6px 6px;
 	margin: 0;
 	padding: 0;
 

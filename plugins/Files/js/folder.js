@@ -101,37 +101,37 @@ var folder = {
 		});
 	},
 
-	// Download files in folder at filepath with same structure
+	// Download files in folder at destination with same structure
 	download (destination, callback) {
 		var self = this;
 		var names = Object.keys(this.contents);
 
 		// Make folder at destination
-		mkdirp.sync(`${destination}/${this.name}`);
+		mkdirp.sync(destination);
 
 		// Make array of each content's download function
 		var functs = names.map(key => self.contents[key].download);
 
 		// Make corresponding array of destination paths
-		names = names.map(name => `${destination}/${self.name}/${name}`);
+		names = names.map(name => `${destination}/${name}`);
 
 		// Call callback iff all operations succeed
 		tools.waterfall(functs, names, callback);
 	},
 
-	// Share .sia files into folder at filepath with same structure
-	share (filepath, callback) {
+	// Share .sia files into folder at destination with same structure
+	share (destination, callback) {
 		var self = this;
 		var names = Object.keys(this.contents);
 
 		// Make folder at destination
-		mkdirp.sync(`${filepath}/${this.name}`);
+		mkdirp.sync(destination);
 
 		// Make array of each content's share function
 		var functs = names.map(key => self.contents[key].share);
 
 		// Make corresponding array of file paths
-		names = names.map(name => `${filepath}/${self.name}/${name}`);
+		names = names.map(name => `${destination}/${name}`);
 
 		// Call callback iff all operations succeed
 		tools.waterfall(functs, names, callback);
