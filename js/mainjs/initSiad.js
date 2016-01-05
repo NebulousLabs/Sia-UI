@@ -6,7 +6,7 @@ const Dialog = Electron.dialog;
 // Node libraries
 const Path = require('path');
 const Fs = require('fs');
-const Siad = require('sia.js');
+var Siad = require('sia.js');
 
 // Reference to commonly used variables
 var config;
@@ -29,14 +29,16 @@ function startSiad() {
 	// Keep signalling of siad loading the blockchain until it's started
 	var starting = setInterval(function() {
 		signal('loading');
-	}, 500);
+	}, 100);
 	Siad.start(function(err) {
+		clearInterval(starting);
+		// If failed to start, signal the UI's loading screen
 		if (err) {
+			signal('failure', err);
 			console.error(err);
-			mainWindow.close();
+			return;
 		}
 		signal('started');
-		clearInterval(starting);
 	});
 }
 
@@ -45,14 +47,15 @@ function downloadSiad() {
 	// Keep signalling of siad downloading
 	var downloading = setInterval(function() {
 		signal('downloading');
-	}, 500);
+	}, 100);
 	Siad.download(function(err) {
+		clearInterval(downloading);
+		// If failed to download, signal the UI's loading screen
 		if (err) {
+			signal('failure', err);
 			console.error(err);
-			mainWindow.close();
 			return;
 		}
-		clearInterval(downloading);
 		startSiad();
 	});
 }
@@ -161,6 +164,7 @@ module.exports = function initSiad(cnfg, mW) {
 		if (!config.siad.detached) {
 			Siad.stop();
 		}
+		Siad = null;
 	});
 
 	// Set config for Siad to work off of configure() doesn't update
