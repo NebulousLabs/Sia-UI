@@ -14,6 +14,9 @@ var mainWindow;
 
 // Send to UI through IPC
 function signal(arg0, arg1, arg2) {
+	if (!mainWindow) {
+		return;
+	}
 	var wc = mainWindow.webContents;
 	if (wc.isLoading()) {
 		wc.on('did-finish-load', function() {
