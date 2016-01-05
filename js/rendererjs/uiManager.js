@@ -12,8 +12,6 @@ const Siad = require('sia.js');
 const $ = require('jquery');
 // Notification system
 const notification = require('./notificationManager.js');
-// Plugin initializer
-const plugins = require('./pluginManager.js');
 
 // Variable to track error log
 var errorLog;
@@ -126,6 +124,60 @@ function checkUpdate() {
 }
 
 /**
+* Called at window.onload, waits for siad to finish loading to show the UI
+* @function UIManager#init
+*/
+function init() {
+	// Hide 
+	var overlay = $('.overlay');
+	overlay.show('fast');
+
+	// Update the user on siad's progress, but show a crash screen if no signal
+	// from siad for too long
+	function crash() {
+		overlay.text('Siad stopped responding :(');
+		IPCRenderer.removeAllListeners('siad');
+	}
+	var crashClock = setTimeout(crash, 150);
+	function delay(msg) {
+		overlay.text(msg);
+		clearTimeout(crashClock);
+		crashClock = setTimeout(crash, 150)
+	}
+	function showUI(msg) {
+		// Initialize plugins
+		require('./pluginManager.js');
+		// Display success text
+		overlay.text(msg);
+		clearTimeout(crashClock);
+		setTimeout(function() {
+			overlay.hide('fast')
+		}, 3000);
+	}
+
+	IPCRenderer.on('siad', function(e, signal, arg0, arg1) {
+		switch (signal) {
+			case 'running':
+				showUI('siad is running!');
+				break;
+			case 'downloading':
+				delay('Downloading siad...');
+				break;
+			case 'loading':
+				delay('Loading siad...');
+				break;
+			case 'started':
+				showUI('siad has started!');
+				break;
+			default:
+				// For piped child process events, notify
+				var eventmsg = `siad ${signal}: ${arg0 || ''} ${arg1 || ''}`;
+				notify(eventmsg, signal);
+		}
+	});
+}
+
+/**
 * Called at window.beforeunload, closes the errorLog
 * @function UIManager#kill
 */
@@ -137,7 +189,7 @@ function closeLog() {
 }
 
 // Set up responses upon the window loading and closing
-window.onload = checkUpdate;
+window.onload = init;
 window.onbeforeunload = closeLog;
 
 // Right-click brings up a context menu without blocking the UI
@@ -145,11 +197,6 @@ window.addEventListener('contextmenu', function (e) {
 	e.preventDefault();
 	IPCRenderer.send('context-menu');
 }, false);
-
-// Handle notification requests from main process
-IPCRenderer.on('notification', function(e, msg, type) {
-	notify(msg, type);
-});
 
 module.exports = {
 	tooltip: tooltip,

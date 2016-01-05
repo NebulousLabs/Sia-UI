@@ -12,39 +12,39 @@ const Siad = require('sia.js');
 var config;
 var mainWindow;
 
-// Send to UI notification system
-function notify(msg, type) {
+// Send to UI through IPC
+function signal(arg0, arg1, arg2) {
 	var wc = mainWindow.webContents;
 	if (wc.isLoading()) {
 		wc.on('did-finish-load', function() {
-			wc.send('notification', msg, type);
+			wc.send('siad', arg0, arg1, arg2);
 		});
 	} else {
-		wc.send('notification', msg, type);
+		wc.send('siad', arg0, arg1, arg2);
 	}
 }
 
 // Start siad
 function startSiad() {
-	// Keep notifying of siad loading the blockchain until it's started
+	// Keep signalling of siad loading the blockchain until it's started
 	var starting = setInterval(function() {
-		notify('siad: loading...', 'loading');
+		signal('loading');
 	}, 500);
 	Siad.start(function(err) {
 		if (err) {
 			console.error(err);
 			mainWindow.close();
 		}
-		notify('siad: started!', 'success');
+		signal('started');
 		clearInterval(starting);
 	});
 }
 
 // Download siad to config.siad.path
 function downloadSiad() {
-	// Keep notifying of siad downloading
+	// Keep signalling of siad downloading
 	var downloading = setInterval(function() {
-		notify('siad: downloading...', 'loading');
+		signal('downloading');
 	}, 500);
 	Siad.download(function(err) {
 		if (err) {
@@ -52,7 +52,6 @@ function downloadSiad() {
 			mainWindow.close();
 			return;
 		}
-		notify('siad: downloaded to ' + config.siad.path, 'success');
 		clearInterval(downloading);
 		startSiad();
 	});
@@ -147,11 +146,11 @@ module.exports = function initSiad(cnfg, mW) {
 	config = cnfg;
 	mainWindow = mW;
 
-	// Pipe siad events to UI notification system through IPC
-	var allCPEvents = ['close', 'disconnect', 'error', 'exit', 'message'];
-	allCPEvents.forEach(function(ev) {
-		Siad.on(ev, function(msg) {
-			notify('siad ' + ev + ': ' + msg, ev);
+	// Pipe siad events to UI 
+	var siadEvents = ['close', 'disconnect', 'error', 'exit', 'message'];
+	siadEvents.forEach(function(ev) {
+		Siad.on(ev, function(arg0, arg1) {
+			signal(ev, arg0, arg1);
 		});
 	});
 
@@ -170,7 +169,7 @@ module.exports = function initSiad(cnfg, mW) {
 	Siad.configure(config.siad, function() {
 		// Let user know if siad is running or check siad's location
 		if (Siad.isRunning()) {
-			notify('siad: running!', 'success');
+			signal('running');
 		} else {
 			checkSiadPath();
 		}
