@@ -47,7 +47,7 @@ function Plugin(plugPath, name) {
 		 */
 		show: function() {
 			button.classList.add('current');
-			view.executeJavaScript('if (typeof start === "function") start();');
+			view.send('shown');
 			setTimeout(function() {
 				view.classList.add('current');
 			}, 170);
@@ -59,7 +59,7 @@ function Plugin(plugPath, name) {
 		 */
 		hide: function() {
 			button.classList.remove('current');
-			view.executeJavaScript('if (typeof stop === "function") stop();');
+			view.send('hidden');
 			setTimeout(function() {
 				view.classList.remove('current');
 			}, 170);

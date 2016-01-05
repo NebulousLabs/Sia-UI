@@ -6,6 +6,9 @@ var finalRefreshRate = 1000 * 60 * 5; // five-minutes
 // Keeps track of if the view is shown
 var updating;
 
+// DEVTOOL: uncomment to bring up devtools on plugin view
+// IPCRenderer.sendToHost('devtools');
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Updating  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Make API calls, sending a channel name to listen for responses
 function update() {
@@ -22,18 +25,9 @@ function update() {
 	refreshRate = finalRefreshRate;
 }
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Start/Stop ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Called upon showing
-function start() {
-	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPCRenderer.sendToHost('devtools');
-
-	update();
-}
-
+IPCRenderer.on('shown', update);
 // Called upon transitioning away from this view
-function stop() {
-	// Stop updating
+IPCRenderer.on('hidden', function() {
 	clearTimeout(updating);
-}
-
+});

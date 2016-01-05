@@ -18,11 +18,10 @@ const Host = require('./js/host.js');
 // Lifecycle manager
 const Lifecycle = require('./js/lifecycle.js');
 
-
-// Expose start and stop methods to global namespace so they're
-// automatically called by the general UI
-var start = Lifecycle.update;
-var stop = Lifecycle.stop;
+// Called upon showing
+IPCRenderer.on('shown', Lifecycle.update);
+// Called upon transitioning away from this view
+IPCRenderer.on('hidden', Lifecycle.stop);
 
 // Make sure Siad settings are in sync with the rest of the UI's
 IPCRenderer.sendToHost('config', {key: 'siad'}, 'siadsettings');
