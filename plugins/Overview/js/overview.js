@@ -24,6 +24,7 @@ var updating;
 // Returns if API call has an error or null result
 function errored(err, result) {
 	if (err) {
+		console.error(err);
 		IPCRenderer.sendToHost('notification', err.toString(), 'error');
 		return true;
 	} else if (!result) {
@@ -63,7 +64,7 @@ function updatePeers(err, result) {
 	if (errored(err, result)) {
 		return;
 	}
-	document.getElementById('peers').innerText = 'Peers: ' + result.Peers.length;
+	document.getElementById('peers').innerText = 'Peers: ' + result.peers.length;
 }
 
 // Update block height from call result
@@ -77,7 +78,7 @@ function updateHeight(err, result) {
 // Make API calls, sending a channel name to listen for responses
 function update() {
 	Siad.call('/wallet', updateWallet);
-	Siad.call('/gateway/status', updatePeers);
+	Siad.call('/gateway', updatePeers);
 	Siad.call('/consensus', updateHeight);
 	updating = setTimeout(update, 5000);
 }

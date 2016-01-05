@@ -85,9 +85,11 @@ $('.close').click(function() {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Load legacy wallet from 0.33 fork
+// TODO: Reimplement this currently unused code in a pretty fashion
+// TODO: Enable loading from siagkey and seed as well
 function loadLegacyWallet(filename, password) {
 	Siad.apiCall({
-		url: '/wallet/load/033x',
+		url: '/wallet/033x',
 		method: 'POST',
 		qs: {
 			filepath: filename,
