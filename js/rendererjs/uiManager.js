@@ -10,8 +10,10 @@ const Fs = require('fs');
 // Imported Other modules
 const Siad = require('sia.js');
 const $ = require('jquery');
-// Notification system
+// Notification System
 const notification = require('./notificationManager.js');
+// Loading Screen 
+const loadingScreen = require('./loadingScreen');
 
 // Variable to track error log
 var errorLog;
@@ -123,53 +125,9 @@ function checkUpdate() {
 * @function UIManager#init
 */
 function init() {
-	// Hide 
-	var overlay = $('.overlay');
-	overlay.show('fast');
-
-	// Update the user on siad's progress, but show a crash screen if no signal
-	// from siad for too long
-	function crash() {
-		overlay.text('Siad stopped responding :(');
-		IPCRenderer.removeAllListeners('siad');
-	}
-	var crashClock = setTimeout(crash, 150);
-	function delay(msg) {
-		overlay.text(msg);
-		clearTimeout(crashClock);
-		crashClock = setTimeout(crash, 150)
-	}
-	function showUI(msg) {
-		// Initialize plugins
-		require('./pluginManager.js');
-		// Display success text
-		overlay.text(msg);
-		clearTimeout(crashClock);
-		setTimeout(function() {
-			overlay.hide('fast')
-		}, 3000);
-	}
-
-	IPCRenderer.on('siad', function(e, signal, arg0, arg1) {
-		switch (signal) {
-			case 'running':
-				showUI('siad is running!');
-				break;
-			case 'downloading':
-				delay('Downloading siad...');
-				break;
-			case 'loading':
-				delay('Loading siad...');
-				break;
-			case 'started':
-				showUI('siad has started!');
-				break;
-			default:
-				// For piped child process events, notify
-				var eventmsg = `siad ${signal}: ${arg0 || ''} ${arg1 || ''}`;
-				notify(eventmsg, signal);
-		}
-	});
+	// Initialize plugins
+	require('./pluginManager.js');
+	checkUpdate();
 }
 
 /**
@@ -184,7 +142,9 @@ function closeLog() {
 }
 
 // Set up responses upon the window loading and closing
-window.onload = init;
+window.onload = function() {
+	loadingScreen(init);
+};
 window.onbeforeunload = closeLog;
 
 // Right-click brings up a context menu without blocking the UI
