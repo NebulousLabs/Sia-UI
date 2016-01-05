@@ -50,20 +50,10 @@
 
 		<!-- Javascript -->
 		<script> 
-			// Imported closures that manage the UI
+			// UI or uiManager is the only module exposed to the global
+			// namespace, allowing other modules to use its functions
+			// It initiates all other functionality, directly or indirectly
 			var UI = require('./js/rendererjs/uiManager.js');
-			var Plugins = require('./js/rendererjs/pluginManager.js');
-
-			// Window start, stop, and right-click events
-			window.onload = UI.init;
-			window.onbeforeunload = UI.kill;
-			window.addEventListener('contextmenu', function (e) {
-				e.preventDefault();
-				require('electron').ipcRenderer.send('context-menu');
-			}, false);
-			require('electron').ipcRenderer.on('notification', function (e, msg, type) {
-				UI.notify(msg, type);
-			});
 		</script>
 	</body>
 </html>
