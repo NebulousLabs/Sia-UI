@@ -4,16 +4,22 @@
 const IPCRenderer = require('electron').ipcRenderer;
 // Library for arbitrary precision in numbers
 const BigNumber = require('bignumber.js');
+// Siad wrapper
+const Siad = require('sia.js');
+
 // Ensure precision
 BigNumber.config({ DECIMAL_PLACES: 24 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
-// Siad wrapper
-const Siad = require('sia.js');
+
 // Make sure Siad settings are in sync with the rest of the UI's
 var settings = IPCRenderer.sendSync('config', 'siad');
 Siad.configure(settings);
+
 // Keeps track of if the view is shown
 var updating;
+
+// DEVTOOL: uncomment to bring up devtools on plugin view
+// IPCRenderer.sendToHost('devtools');
 
 // Returns if API call has an error or null result
 function errored(err, result) {
@@ -76,17 +82,9 @@ function update() {
 	updating = setTimeout(update, 5000);
 }
 
-// Called by the UI upon showing
-function start() {
-	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPCRenderer.sendToHost('devtools');
-	
-	// Call the API
-	update();
-}
-
-// Called by the UI upon transitioning away from this view
-function stop() {
+// Called upon showing
+IPCRenderer.on('shown', update);
+// Called upon transitioning away from this view
+IPCRenderer.on('hidden', function() {
 	clearTimeout(updating);
-}
-
+});

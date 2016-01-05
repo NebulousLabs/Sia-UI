@@ -14,7 +14,7 @@ const Siad = require('sia.js');
 
 // Tracks if the view is shown
 var updating;
-var refreshRate = 15000;
+const refreshRate = 15000;
 
 // Notification shortcut 
 function notify(msg, type) {

@@ -1,5 +1,8 @@
 'use strict';
 
+// DEVTOOL: uncomment to bring up devtools on plugin view
+// IPCRenderer.sendToHost('devtools');
+
 // Keeps track of if the view is shown
 var updating;
 
@@ -30,17 +33,8 @@ function update() {
 }
 
 // Called upon showing
-function start() {
-	// DEVTOOL: uncomment to bring up devtools on plugin view
-	// IPCRenderer.sendToHost('devtools');
-	
-	// Call the API
-	update();
-}
-
+IPCRenderer.on('shown', update);
 // Called upon transitioning away from this view
-function stop() {
-	// Stop updating
+IPCRenderer.on('hidden', function() {
 	clearTimeout(updating);
-}
-
+});
