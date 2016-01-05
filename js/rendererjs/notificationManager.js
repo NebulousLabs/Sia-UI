@@ -10,11 +10,10 @@ var icons = {
 	// General
 	alert: 'exclamation',
 	error: 'exclamation-circle',
+	exit: 'exclamation-circle',
+	close: 'exclamation-circle',
 	update: 'arrow-circle-o-up',
 	success: 'check',
-	// siad
-	loading: 'spinner fa-pulse',
-	stop: 'exit',
 	// Wallet
 	locked: 'lock',
 	unlocked: 'unlock',
