@@ -59,7 +59,7 @@
 			window.onbeforeunload = UI.kill;
 			window.addEventListener('contextmenu', function (e) {
 				e.preventDefault();
-				IPCRenderer.send('context-menu');
+				require('electron').ipcRenderer.send('context-menu');
 			}, false);
 			require('electron').ipcRenderer.on('notification', function (e, msg, type) {
 				UI.notify(msg, type);
