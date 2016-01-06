@@ -46,7 +46,17 @@ function buildProps(hostInfo) {
 function update(hostInfo) {
 	// Store hostInfo results property data
 	$.each(hostInfo, function(name, value) {
-		props[name].value = value;
+		// Try-catch statement to be fault-tolerant. If just one name from the
+		// api call result, hostInfo, isn't in hostProperties or has a
+		// different name, such as with an unexpected siad version, other
+		// properties will still update.
+		try {
+			props[name].value = value;
+		} catch (e) {
+			console.error(e);
+			console.log('Error updating host properties object:');
+			console.log(hostInfo, props);
+		}
 	});
 
 	// Process host info

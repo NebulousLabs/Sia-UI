@@ -124,17 +124,3 @@ function encrypt() {
 		update();
 	});
 }
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-function loadLegacyWallet(filename, password) {
-	Siad.apiCall({
-		url: '/wallet/load/033x',
-		method: 'POST',
-		qs: {
-			filepath: filename,
-			encryptionpassword: password,
-		},
-	}, function(result) {
-		notify('Loaded Wallet', 'success');
-	});
-}

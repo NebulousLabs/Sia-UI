@@ -57,11 +57,6 @@ var props = {
 		unit: 'GB',
 		conversion: B_per_GB,
 	},
-	storageremaining: {
-		descr: 'Total Storage',
-		unit: 'GB',
-		conversion: B_per_GB,
-	},
 	unlockhash: {
 		descr: 'Payout Address',
 		unit: 'Hex',
@@ -79,6 +74,11 @@ var props = {
 		descr: 'Revenue Earned',
 		unit: 'S',
 		conversion: H_per_S,
+	},
+	storageremaining: {
+		descr: 'Total Storage',
+		unit: 'GB',
+		conversion: B_per_GB,
 	},
 	upcomingrevenue: {
 		descr: 'Revenue to be Earned',
