@@ -30,7 +30,7 @@ Siad.configure(IPCRenderer.sendSync('config', 'siad'));
 Siad.apiCall = function(callObj, callback) {
 	Siad.call(callObj, function(err, result) {
 		if (err) {
-			console.error(callObj, err);
+			console.error(err);
 			Lifecycle.notify(err.toString(), 'error');
 		} else {
 			callback(result);

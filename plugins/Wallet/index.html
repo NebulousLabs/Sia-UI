@@ -206,7 +206,7 @@
 			Siad.apiCall = function(callObj, callback) {
 				Siad.call(callObj, function(err, result) {
 					if (err) {
-						console.error(callObj, err);
+						console.error(err);
 						notify(err.toString(), 'error');
 					} else {
 						callback(result);
