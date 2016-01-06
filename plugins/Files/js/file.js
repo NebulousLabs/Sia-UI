@@ -16,15 +16,18 @@ var file = {
 	type: 'file',
 	// Changes file's nickname with siad call
 	setPath (newPath, callback) {
-		var self = this;
+		if (typeof newPath !== 'string') {
+			console.error('Improper argument!', newPath);
+			return;
+		}
 		siad.apiCall({
-			url: '/renter/files/rename',
+			url: '/renter/rename/' + this.path ,
+			method: 'POST',
 			qs: {
-				nickname: self.path,
 				newname: newPath,
-			}
-		}, function() {
-			self.path = newPath;
+			},
+		}, () => {
+			this.path = newPath;
 			if (callback) {
 				callback(newPath);
 			}
@@ -33,17 +36,15 @@ var file = {
 	// Update/record file stats
 	update (stats) {
 		Object.assign(this, stats);
-		this.path = stats.Nickname;
+		this.path = stats.nickname;
 	},
 	// The below are just function forms of the renter calls a file can enact
 	// on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
 	delete (callback) {
 		siad.apiCall({
-			url: '/renter/files/delete',
-			qs: {
-				nickname: this.path,
-			},
+			url: '/renter/delete/' + this.path,
+			method: 'POST',
 		}, result => {
 			delete this.parentFolder.contents[this.name];
 			callback(result);
@@ -55,9 +56,8 @@ var file = {
 			return;
 		}
 		siad.apiCall({
-			url: '/renter/files/download',
+			url: '/renter/download/' + this.path,
 			qs: {
-				nickname: this.path,
 				destination: destination,
 			},
 		}, callback);
@@ -68,19 +68,15 @@ var file = {
 			return;
 		}
 		siad.apiCall({
-			url: '/renter/files/share',
+			url: '/renter/share/' + this.path,
 			qs: {
-				nickname: this.path,
 				filepath: destination,
 			},
 		}, callback);
 	},
 	shareASCII (callback) {
 		siad.apiCall({
-			url: '/renter/files/shareascii',
-			qs: {
-				nickname: this.path,
-			},
+			url: '/renter/shareascii/' + this.path,
 		}, callback);
 	},
 };
@@ -88,11 +84,11 @@ var file = {
 // Factory to create instances of the file object
 function fileFactory(arg) {
 	// Files can be constructed from either a nickname or a status object
-	// returned from /renter/files/list||downloadqueue
+	// returned from /renter/list||downloadqueue
 	var f = Object.assign(Object.create(entity), file);
 	if (typeof arg === 'object'){
 		Object.assign(f, arg);
-		f.path = arg.Nickname;
+		f.path = arg.nickname;
 	} else if (typeof arg === 'string') {
 		f.path = arg;
 	} else {

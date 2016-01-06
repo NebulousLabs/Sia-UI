@@ -54,7 +54,7 @@ function updateList(navigateTo) {
 
 // Update file from api result
 function updateFile(result) {
-	var fileFolders = result.Nickname.split('/');
+	var fileFolders = result.nickname.split('/');
 	var fileName = fileFolders.pop();
 
 	// Make any needed folders
@@ -160,11 +160,11 @@ var browser = {
 		// call to this function. Waiting 100ms provides a not-noticeable delay and
 		// allows siad time to provide an up to date list, but is flawed
 		setTimeout(function() {
-			siad.apiCall('/renter/files/list', function(results) {
+			siad.apiCall('/renter/files', function(results) {
 				// Update the current working directory
 				updateCWD(browser.navigateTo);
 				// Add or update each file from a `renter/files/list` call
-				results.forEach(updateFile);
+				results.files.forEach(updateFile);
 				// Update the file list
 				updateList(browser.navigateTo);
 			});
@@ -220,10 +220,9 @@ var browser = {
 		// Upload the file
 		tools.notify(`Uploading ${name}!`, 'upload');
 		siad.apiCall({
-			url: '/renter/files/upload',
+			url: '/renter/upload/' + nickname,
 			qs: {
 				source: filePath,
-				nickname: nickname,
 			},
 		}, callback);
 	},
@@ -278,7 +277,7 @@ var browser = {
 	loadDotSia (filePath, callback) {
 		var name = path.basename(filePath, '.sia');
 		siad.apiCall({
-			url: '/renter/files/load',
+			url: '/renter/load',
 			qs: {
 				filename: filePath,
 			}
@@ -294,7 +293,7 @@ var browser = {
 	// Loads an ascii represenation of a .sia file into the library
 	loadAscii (ascii, callback) {
 		siad.apiCall({
-			url: '/renter/files/loadascii',
+			url: '/renter/loadascii',
 			qs: {
 				file: ascii,
 			}

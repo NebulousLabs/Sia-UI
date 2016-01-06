@@ -12,7 +12,7 @@ const siad = require('sia.js');
 const mkdirp = require('mkdirp');
 const entity = require('./entity');
 const file = require('./file');
-const tools = require('.//uiTools');
+const tools = require('./uiTools');
 
 var folder = {
 	type: 'folder',
@@ -21,18 +21,17 @@ var folder = {
 	// Changes folder's and its contents' paths with siad call
 	setPath (newPath, callback) {
 		var names = this.contentsNames;
+		var paths
 
 		// Make array of each content's setPath function
 		var functs = names.map(key => this.contents[key].setPath);
 
-		// Don't prepend '/' to names if newPath is an empty string
-		if (newPath) {
-			// Make array of new paths per folder's content
-			names = names.map(name => `${newPath}/${name}`);
-		}
+		// Make array of new paths per folder's content, ensuring that no name
+		// starts with '/' if newPath is '' for the rootFolder
+		paths = newPath !== '' ? names.map(name => `${newPath}/${name}`) : names;
 
 		// Call callback only if all operations succeed
-		tools.waterfall(functs, names, () => {
+		tools.waterfall(functs, paths, () => {
 			this.path = newPath;
 			callback();
 		});
@@ -50,9 +49,6 @@ var folder = {
 	// Add a folder, defined after folderFactory() to use it without breaking
 	// strict convention
 	addFolder (name) {
-		// Prefer paths of 'foo' over '/foo' in root folder
-		var path = this.path === '' ? name : `${this.path}/${name}`;
-	
 		// Copy this folder and erase its state to 'create' a new folder
 		// TODO: This seems like an imperfect way to add a new Folder. Can't
 		// use folderFactory function down below because using the folder
@@ -61,7 +57,7 @@ var folder = {
 		//   'foo' but all the same contents, resulting in circular pointers
 		//   Thus rootFolder.contents === rootFolder.contents.foo.contents
 		var f = Object.create(this);
-		f.path = path;
+		f.path = this.path !== '' ? `${this.path}/${name}` : name;
 		f.contents = {};
 		f.selected = false;
 	
@@ -149,9 +145,9 @@ function addGetters(f) {
 	Object.defineProperty(f, 'size', {
 		get: function () {
 			var sum = 0;
-			//this.contentsArray.forEach(content => {
-			//	sum += content.size;
-			//});
+			this.contentsArray.forEach(content => {
+				sum += content.size;
+			});
 			return sum;
 		},
 	});

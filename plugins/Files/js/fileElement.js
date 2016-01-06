@@ -16,18 +16,18 @@ function makeFileElement(f) {
 	var el = entityElement(f);
 
 	// Set unavailable graphic if needed
-	if (!f.Available) {
+	if (!f.available) {
 		el.find('.fa.fa-file').removeClass('fa-file').addClass('fa-refresh fa-spin');
 	}
 
 	// Set time text
 	var timeText;
-	if (f.UploadProgress === 0) {
+	if (f.uploadProgress === 0) {
 		timeText = 'Processing...';
-	} else if (f.UploadProgress < 100) {
-		timeText = f.UploadProgress.toFixed(0) + '%'; 
+	} else if (f.uploadProgress < 100) {
+		timeText = f.uploadProgress.toFixed(0) + '%'; 
 	} else {
-		timeText = 'Expires on block ' + f.Expiration;
+		timeText = 'Expires on block ' + f.expiration;
 	}
 	el.find('.size').after(`<div class='time'>${timeText}</div>`);
 
@@ -57,7 +57,7 @@ function makeFileElement(f) {
 		} else if (option === 1) {
 			// Get the ascii share string
 			f.shareASCII(function(result) {
-				clipboard.writeText(result.File);
+				clipboard.writeText(result.file);
 				tools.notify(`Copied ${f.name}.sia to clipboard!`, 'asciifile');
 			});
 		}

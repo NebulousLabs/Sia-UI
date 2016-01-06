@@ -31,35 +31,30 @@ var entity = {
 	share (cb) {
 	},
 
-	// Common functions
 	// Used for debugging purposes, returns 'this' from the object definition
 	// POV. Helpful to demystify Object.assign and Object.create
 	get self () {
 		return this;
 	},
-	select () {
-		this.selected = true;
-	},
-	deselect () {
-		this.selected = false;
-	},
-	toggle () {
-		this.selected = !this.selected;
-	},
+
+	// Common functions
 	get name () {
+		// path of 'foo/bar/baz' would return 'baz'
 		return path.basename(this.path);
 	},
 	get directory () {
+		// path of 'foo/bar/baz' would return 'foo/bar'
 		var directory = path.dirname(this.path);
 		// Prevent path.dirname from returning '.'
 		return (directory === '.' ? '' : directory);
 	},
 	get folderNames () {
-		var folders = this.directory.split('/');
-		// Prevent string.split from returning ['']
-		return (folders[0] === '' ? [] : folders);
+		// path of 'foo/bar/baz' would return ['foo', 'bar']
+		return this.directory.split('/');
 	},
 	get parentFolders () {
+		// path of 'foo/bar/baz' would return folder objects whose paths are
+		// ['foo', 'foo/bar'] respectively
 		var parentFolders = [];
 		// iterate through parentFolder links to populate parentFolders
 		for (let i = this.parentFolder; i; i = i.parentFolder) {

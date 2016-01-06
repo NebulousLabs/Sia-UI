@@ -28,17 +28,13 @@ siad.configure(tools.config('siad'));
 siad.apiCall = function(callObj, callback) {
 	siad.call(callObj, function(err, result) {
 		if (err) {
-			console.error(callObj, err);
+			console.error(err);
 			tools.notify(err.toString(), 'error');
 		} else if (callback) {
 			callback(result);
 		}
 	});
 };
-
-// Make lifecycle.start|stop global functions
-var start = lifecycle.start;
-var stop = lifecycle.stop;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Buttons ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Home folder button
