@@ -19,8 +19,8 @@ function crash(err) {
 
 // Crash after .3s because after sending a 'loading' or 'unloading' signal, the
 // main process should be sending a signal every .1s
-function delayCrash(msg) {
-	overlay.find('p').text(msg);
+function delayCrash() {
+	overlay.find('p').text('Loading Sia...');
 	clearTimeout(crashClock);
 	crashClock = setTimeout(crash, 300);
 }
@@ -48,11 +48,8 @@ module.exports = function(initUI) {
 			case 'running':
 				showUI('Hello again!');
 				break;
-			case 'downloading':
-				delayCrash('Downloading siad...');
-				break;
 			case 'loading':
-				delayCrash('Loading siad...');
+				delayCrash();
 				break;
 			case 'exit':
 			case 'failure':

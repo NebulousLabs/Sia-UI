@@ -45,40 +45,6 @@ function startSiad() {
 	});
 }
 
-// Download siad to config.siad.path
-function downloadSiad() {
-	// Keep signalling of siad downloading
-	var downloading = setInterval(function() {
-		signal('downloading');
-	}, 100);
-	Siad.download(function(err) {
-		clearInterval(downloading);
-		// If failed to download, signal the UI's loading screen
-		if (err) {
-			signal('failure', err);
-			console.error(err);
-			return;
-		}
-		startSiad();
-	});
-}
-
-// Download siad to a selected path
-function downloadSiadDialog() {
-	var siadPath = Dialog.showOpenDialog(mainWindow, {
-		title: 'Download siad to directory',
-		properties: ['openDirectory'],
-		defaultPath: config.siad.path,
-		filters: [{ name: 'Siad', extensions: ['*'] }],
-	});
-	if (siadPath) {
-		// Path returned from showOpenDialog() in array
-		siadPath = siadPath[0];
-		siadPath = Path.join(siadPath, 'Sia');
-	}
-	return siadPath;
-}
-
 // Get directory of siad and parse file name
 function openSiadDialog() {
 	var siadPath = Dialog.showOpenDialog(mainWindow, {
@@ -94,16 +60,16 @@ function openSiadDialog() {
 	return siadPath;
 }
 
-// Ask user to open or download siad with an electron dialog message
+// Ask user to open siad with an electron dialog message
 function missingSiadDialog() {
 	var iconPath = Path.join(__dirname, '../..', 'assets', 'icon.png');
 	return Dialog.showMessageBox(mainWindow, {
 		title:   'Missing siad!',
 		message: 'Sia-UI requires siad to function.',
-		detail:  'Would you like to open it or download a copy?',
+		detail:  'Please open it to proceed',
 		icon:    iconPath,
-		type:    'question',
-		buttons: ['Open', 'Download', 'Cancel'],
+		type:    'info',
+		buttons: ['Open', 'Cancel'],
 	});
 }
 
@@ -116,16 +82,13 @@ function checkSiadPath() {
 			return;
 		}
 
-		// If it isn't found, use dialogs to find or download it
+		// If it isn't found, use dialogs to find
 		var selected = missingSiadDialog();
 		var siadPath;
 
 		// 'Open' selected
 		if (selected === 0) {
 			siadPath = openSiadDialog();
-		} else if (selected === 1) {
-			// 'Download' selected
-			siadPath = downloadSiadDialog();
 		} else {
 			// 'Cancel' selected
 			mainWindow.close();
@@ -135,14 +98,10 @@ function checkSiadPath() {
 		// Verify chosen path
 		if (!siadPath) {
 			checkSiadPath();
-		} else if (selected === 0) {
+		} else {
 			config.siad.fileName = Path.basename(siadPath);
 			config.siad.path = Path.dirname(siadPath);
 			Siad.configure(config.siad, checkSiadPath);
-		} else if (selected === 1) {
-			config.siad.path = siadPath;
-			// Begin download and start siad after
-			Siad.configure(config.siad, downloadSiad);
 		}
 	});
 }

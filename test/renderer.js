@@ -64,9 +64,7 @@ describe('renderer process', function() {
 		});
 		client.addCommand('waitUntilNWindows', function(n) {
 			return client.waitUntil(function() {
-				return client.getWindowCount().then(function(count) {
-					return count >= n;
-				});
+				return client.getWindowCount().should.eventually.be.at.least(n);
 			});
 		});
 	});
@@ -78,31 +76,15 @@ describe('renderer process', function() {
 			return client.waitForVisible('.overlay');
 		});
 		it('hides the loading overlay after siad loads', function() {
-			return client
-				.waitForVisible('.overlay', false);
-		});
-		it('loads 0 plugins', function() {
-			return client
-				.waitUntilNWindows(1);
-		});
-		it('loads 1 plugins', function() {
-			return client
-				.waitUntilNWindows(2);
-		});
-		it('loads 2 plugins', function() {
-			return client
-				.waitUntilNWindows(3);
-		});
-		it('loads 3 plugins', function() {
-			return client
-				.waitUntilNWindows(4);
-		});
-		it('loads 4 plugins', function() {
-			return client
-				.waitUntilNWindows(5);
+			return client.waitForVisible('.overlay', true);
 		});
 		it('loads 5 plugins', function() {
 			return client
+				.waitUntilNWindows(1)
+				.waitUntilNWindows(2)
+				.waitUntilNWindows(3)
+				.waitUntilNWindows(4)
+				.waitUntilNWindows(5)
 				.waitUntilNWindows(6);
 		});
 
