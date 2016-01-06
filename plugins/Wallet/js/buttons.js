@@ -14,12 +14,12 @@ function getPassword() {
 
 // Lock or unlock the wallet
 $('#lock-pod').click(function() {
-	var state = $('#lock-status').html();
+	var state = $('#lock-pod span').html();
 	if (!wallet.unlocked && state === 'Create Wallet') {
 		encrypt();
 	} else if (wallet.unlocked && state === 'Lock Wallet') {
 		lock();
-	} else if (!wallet.unlocked && state === 'Unlock Wallet'){
+	} else if (!wallet.unlocked && state === 'Unlock Wallet') {
 		getPassword();
 	} else {
 		console.error('lock-pod disagrees with wallet variable!', wallet.unlocked, state);
