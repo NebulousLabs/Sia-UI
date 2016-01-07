@@ -21,7 +21,7 @@ function update() {
 
 	updating = setTimeout(update, refreshRate);
 
-	// slow down after first call
+	// Slow down after first call
 	refreshRate = finalRefreshRate;
 }
 

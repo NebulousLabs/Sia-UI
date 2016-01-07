@@ -6,26 +6,20 @@ var wallet = {};
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Lock Icon  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Helper function for the lock-icon to make sure its classes are cleared
 function setLockIcon(lockStatus, iconClass) {
-	$('#lock-status').html(lockStatus);
-	$('#lock-icon').get(0).className = 'fa ' + iconClass;
+	$('#lock-pod span').text(lockStatus);
+	$('#lock-pod .fa').get(0).className = 'fa ' + iconClass;
 }
 
-// Markup changes to reflect locked state
+// Markup changes to reflect state
 function setLocked() {
 	setLockIcon('Unlock Wallet', 'fa-lock');
 }
-
-// Markup changes to reflect unlocked state
 function setUnlocked() {
 	setLockIcon('Lock Wallet', 'fa-unlock');
 }
-
-// Markup changes to reflect unlocked state
 function setUnlocking() {
 	setLockIcon('Unlocking', 'fa-cog fa-spin');
 }
-
-// setUnencrypted sets the wallet lock status to unencrypted.
 function setUnencrypted() {
 	setLockIcon('Create Wallet', 'fa-plus');
 }
@@ -59,7 +53,9 @@ function updateStatus(result) {
 
 // Make wallet api call
 function getStatus() {
-	Siad.apiCall('/wallet', updateStatus);
+	// TODO: Don't understand why the setImmediate is needed, but without it,
+	// the '/wallet' call seems to not return right after a locking/unlocking
+	setImmediate(() => Siad.apiCall('/wallet', updateStatus));
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Locking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -69,7 +65,6 @@ function lock() {
 		url: '/wallet/lock',
 		method: 'POST',
 	}, function(result) {
-		setLocked();
 		notify('Wallet locked', 'locked');	
 		update();
 	});
@@ -87,16 +82,12 @@ function unlock(password) {
 			encryptionpassword : password,
 		},
 	}, function(err, result) {
-		// Remove unlocking icon
 		if (err) {
-			setLocked();
 			notify('Wrong password', 'error');
 			$('#request-password').show();
 		} else {
-			setUnlocked();
 			notify('Wallet unlocked', 'unlocked');
 		}
-	
 		update();
 	});
 }
@@ -120,7 +111,6 @@ function encrypt() {
 	
 		// Show password in the popup
 		$('#generated-password').text(result.primaryseed);
-	
 		update();
 	});
 }

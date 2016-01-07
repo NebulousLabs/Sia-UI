@@ -33,7 +33,10 @@ function configManager(path) {
 	 */
 	config.attr = function(key, value) {
 		if (value !== undefined) {
-			this[key] = value;
+			config[key] = value;
+		}
+		if (config[key] === undefined) {
+			config[key] = null;
 		}
 		return config[key];
 	};
