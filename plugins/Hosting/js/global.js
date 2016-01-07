@@ -64,8 +64,13 @@ $('#save.button').click(function() {
 	// Record configuration settings
 	var settings = {};
 	$('#properties').children().each(function() {
-		var value = $(this).find('.value').text();
-		settings[this.id] = value;
+		var field = $(this).find('.value');
+		var value = field.text();
+		if (!isNaN(value)) {
+			settings[this.id] = value;
+		} else {
+			Lifecycle.tooltip(value + ' is not a number!', field.get(0));
+		}
 	});
 
 	// Save configuration settings
