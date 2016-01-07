@@ -84,7 +84,7 @@ function announce(settings, callback) {
 	Siad.apiCall({
 		url: '/host/announce',
 		method: 'POST',
-		qs: settings,
+		form: settings,
 	}, callback);
 }
 
@@ -98,7 +98,7 @@ function save(settings, callback) {
 	Siad.apiCall({
 		url: '/host',
 		method: 'POST',
-		qs: settings,
+		form: settings,
 	}, callback);
 }
 

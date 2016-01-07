@@ -78,7 +78,7 @@ function unlock(password) {
 	Siad.call({
 		url: '/wallet/unlock',
 		method: 'POST',
-		qs: {
+		form: {
 			encryptionpassword : password,
 		},
 	}, function(err, result) {
@@ -98,7 +98,7 @@ function encrypt() {
 	Siad.apiCall({
 		url: '/wallet/init',
 		method: 'POST',
-		qs: {
+		form: {
 			dictionary: 'english',
 		},
 	}, function(result) {
