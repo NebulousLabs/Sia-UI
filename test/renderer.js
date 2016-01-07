@@ -15,7 +15,7 @@ Chai.use(ChaiAsPromised);
 
 // The one app that this suite is testing is Sia-UI
 describe('renderer process', function() {
-	this.timeout(5000);
+	this.timeout(10000);
 	var app;
 	var client;
 

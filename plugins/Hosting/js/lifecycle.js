@@ -23,9 +23,7 @@ function notify(msg, type) {
 
 // Get host status regularly
 function update() {
-	Siad.apiCall('/host', function(result) {
-		Host.update(result);
-	});
+	Host.update();
 	updating = setTimeout(update, refreshRate);
 }
 

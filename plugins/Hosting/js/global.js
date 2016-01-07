@@ -64,25 +64,33 @@ $('#save.button').click(function() {
 	// Record configuration settings
 	var settings = {};
 	$('#properties').children().each(function() {
-		var value = $(this).find('.value').text();
-		settings[this.id] = value;
+		var field = $(this).find('.value');
+		var value = field.text();
+		if (!isNaN(value)) {
+			settings[this.id] = value;
+		} else {
+			Lifecycle.tooltip(value + ' is not a number!', field.get(0));
+		}
 	});
 
 	// Save configuration settings
 	Host.save(settings, function() {
-		Lifecycle.notify('Hosting configuration saved!', 'saved');
-		Lifecycle.update();
+		Host.update(function() {
+			Lifecycle.notify('Hosting configuration saved!', 'saved');
+		});
 	});
 });
 
 // Reset button
 $('#reset.button').click(function() {
 	Lifecycle.tooltip('Reseting...', this);
-	var values = Host.reset();
-	$.each(values, function(name, value) {
-		var item = $('#' + name);
-		item.find('.value').text(value);
+	Host.update(function() {
+		var values = Host.reset();
+		$.each(values, function(name, value) {
+			var item = $('#' + name);
+			item.find('.value').text(value);
+		});
+		Lifecycle.notify('Hosting configuration reset', 'reset');
 	});
-	Lifecycle.notify('Hosting configuration reset', 'reset');
 });
 
