@@ -70,19 +70,22 @@ $('#save.button').click(function() {
 
 	// Save configuration settings
 	Host.save(settings, function() {
-		Lifecycle.notify('Hosting configuration saved!', 'saved');
-		Lifecycle.update();
+		Host.update(function() {
+			Lifecycle.notify('Hosting configuration saved!', 'saved');
+		});
 	});
 });
 
 // Reset button
 $('#reset.button').click(function() {
 	Lifecycle.tooltip('Reseting...', this);
-	var values = Host.reset();
-	$.each(values, function(name, value) {
-		var item = $('#' + name);
-		item.find('.value').text(value);
+	Host.update(function() {
+		var values = Host.reset();
+		$.each(values, function(name, value) {
+			var item = $('#' + name);
+			item.find('.value').text(value);
+		});
+		Lifecycle.notify('Hosting configuration reset', 'reset');
 	});
-	Lifecycle.notify('Hosting configuration reset', 'reset');
 });
 

@@ -43,7 +43,7 @@ function buildProps(hostInfo) {
 }
 
 // Update capsule information
-function update(hostInfo) {
+function updateStatus(hostInfo, callback) {
 	// Store hostInfo results property data
 	$.each(hostInfo, function(name, value) {
 		// Try-catch statement to be fault-tolerant. If just one name from the
@@ -76,6 +76,18 @@ function update(hostInfo) {
 		buildProps(hostInfo);
 		propsMade = true;
 	}
+
+	// Call the callback if it's there
+	if (callback) {
+		callback();
+	}
+}
+
+// Retrieve host status information
+function getStatus(callback) {
+	Siad.apiCall('/host', function(result) {
+		updateStatus(result, callback);
+	});
 }
 
 // Announce host on the network
@@ -118,7 +130,7 @@ function address() {
 
 // Requiring this file gives an object with the following functions
 module.exports = {
-	update: update,
+	update: getStatus,
 	reset: reset,
 	announce: announce,
 	save: save,
