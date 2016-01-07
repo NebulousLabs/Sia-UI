@@ -54,7 +54,7 @@ function sendTransaction(amount, address) {
 	Siad.apiCall({
 		url: url,
 		method: 'POST',
-		qs: transaction,
+		form: transaction,
 	}, function(result) {
 		notify('Transaction sent to network!', 'sent');
 		$('#transaction-value').val('0');
