@@ -1,19 +1,26 @@
 'use strict';
 
 /*
- * file factory module:
- *   file is an object literal that inherits from entity by instantiating one
- *   and assigning more specific members on top of it. It's meant to interpret,
- *   hold, and change information about renter files
+ * file class module:
+ *   file is an object literal meant to interpret, hold, and change
+ *   information about renter files. 
  */
 
-// Inherits from entity
-const entity = require('./entity');
-// siad wrapper/manager
+// Node modules
+const path = require('path');
+const $ = require('jquery');
 const siad = require('sia.js');
 
 var file = {
-	type: 'file',
+	type:     'file',
+	path:     '',
+
+	// Update/record file stats
+	update (stats) {
+		Object.assign(this, stats);
+		this.path = stats.nickname;
+	},
+
 	// Changes file's nickname with siad call
 	setPath (newPath, callback) {
 		if (typeof newPath !== 'string') {
@@ -33,11 +40,7 @@ var file = {
 			}
 		});
 	},
-	// Update/record file stats
-	update (stats) {
-		Object.assign(this, stats);
-		this.path = stats.nickname;
-	},
+
 	// The below are just function forms of the renter calls a file can enact
 	// on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
@@ -70,7 +73,7 @@ var file = {
 		siad.apiCall({
 			url: '/renter/share/' + this.path,
 			qs: {
-				filepath: destination,
+				destination: destination,
 			},
 		}, callback);
 	},
@@ -79,31 +82,55 @@ var file = {
 			url: '/renter/shareascii/' + this.path,
 		}, callback);
 	},
+
+	// Common functions
+	get name () {
+		// path of 'foo/bar/baz' would return 'baz'
+		return path.basename(this.path);
+	},
+	get directory () {
+		// path of 'foo/bar/baz' would return 'foo/bar'
+		var directory = path.dirname(this.path);
+		// Prevent path.dirname from returning '.'
+		return (directory === '.' ? '' : directory);
+	},
+	get folderNames () {
+		// path of 'foo/bar/baz' would return ['foo', 'bar']
+		return this.directory.split('/');
+	},
+	get parentFolders () {
+		// path of 'foo/bar/baz' would return folder objects whose paths are
+		// ['foo', 'foo/bar'] respectively
+		var parentFolders = [];
+		// iterate through parentFolder links to populate parentFolders
+		for (let i = this.parentFolder; i; i = i.parentFolder) {
+			parentFolders.push(i);
+		}
+		return parentFolders.reverse();
+	},
+	get extension () {
+		return path.extname(this.path);
+	},
+	get nameNoExtension () {
+		return path.basename(this.path, this.extension);
+	},
+	get size () {
+		return this.filesize;
+	},
+
+	// These can't use set syntax because they're necessarily asynchronous
+	setName (newName, cb) {
+		var newPath = `${this.directory}/${newName}`;
+		this.setPath(newPath, cb);
+	},
+	setDirectory (newDirectory, cb) {
+		var newPath = `${newDirectory}/${this.name}`;
+		this.setPath(newPath, cb);
+	},
+	setExtension (newExtension, cb) {
+		var newPath = `${this.directory}/${this.nameNoExtension}${newExtension}`;
+		this.setPath(newPath, cb);
+	},
 };
 
-// Factory to create instances of the file object
-function fileFactory(arg) {
-	// Files can be constructed from either a nickname or a status object
-	// returned from /renter/list||downloadqueue
-	var f = Object.assign(Object.create(entity), file);
-	if (typeof arg === 'object'){
-		Object.assign(f, arg);
-		f.path = arg.nickname;
-	} else if (typeof arg === 'string') {
-		f.path = arg;
-	} else {
-		console.error('Unrecognized constructur argument: ', arguments);
-	}
-
-	// TODO: How to place a getter in the object definition without it being
-	// Return file size
-	Object.defineProperty(f, 'size', {
-		get: function () {
-			return this.filesize;
-		},
-	});
-
-	return f;
-}
-
-module.exports = fileFactory;
+module.exports = file;

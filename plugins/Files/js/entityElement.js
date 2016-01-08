@@ -2,7 +2,7 @@
 
 /*
  * entityElement function module:
- *   This module makes an element with all common aspect between file/folder
+ *   This module makes an element with all common aspects between file/folder
  *   elements in the browser's file list
  */
 
@@ -32,6 +32,9 @@ function makeEntityElement(entity) {
 			title:       'Download ' + entity.name,
 			defaultPath: entity.name,
 		});
+		if (!destination) {
+			return;
+		}
 		tools.notify(`Downloading ${entity.name} to ${destination}`, 'download');
 		entity.download(destination, function() {
 			tools.notify(`{entity.name} downloaded to ${destination}`, 'success');
@@ -47,7 +50,7 @@ function makeEntityElement(entity) {
 			buttons: ['Okay', 'Cancel'],
 		});
 		if (confirmation === 0) {
-			entity.delete(el.remove);
+			entity.delete(() => el.remove());
 		}
 	});
 

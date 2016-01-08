@@ -1,8 +1,8 @@
 'use strict';
 
 /*
- * folder factory module:
- *   folder is an object literal that inherits from entity by instantiating one
+ * folder class module:
+ *   folder is an object literal that inherits from file by instantiating one
  *   and assigning more specific members on top of it. It's meant to point to
  *   files, aide file browsing, and facilitate recursive file operations.
  */
@@ -10,8 +10,8 @@
 // Node modules
 const siad = require('sia.js');
 const mkdirp = require('mkdirp');
-const entity = require('./entity');
 const file = require('./file');
+const fileFactory = require('./fileFactory');
 const tools = require('./uiTools');
 
 var folder = {
@@ -39,7 +39,7 @@ var folder = {
 	// Add a file
 	addFile (fileObject) {
 		// TODO: verify that the fileObject belongs in this folder
-		var f = file(fileObject);
+		var f = fileFactory(fileObject);
 		this.contents[f.name] = f;
 		f.parentFolder = this;
 		return f;
@@ -123,48 +123,4 @@ var folder = {
 	},
 };
 
-// TODO: How to place a getter in the object definition without it being
-// evaluated and misconstrued upon Object.assign?
-function addGetters(f) {
-	// Return the names of the contents
-	Object.defineProperty(f, 'contentsNames', {
-		get: function () {
-			return Object.keys(this.contents);
-		},
-	});
-
-	// Return the files object as an array instead
-	Object.defineProperty(f, 'contentsArray', {
-		get: function () {
-			return this.contentsNames.map(name => this.contents[name]);
-		},
-	});
-
-	// Calculate sum of file sizes
-	Object.defineProperty(f, 'size', {
-		get: function () {
-			var sum = 0;
-			this.contentsArray.forEach(content => {
-				sum += content.size;
-			});
-			return sum;
-		},
-	});
-}
-
-// Factory to create instances of the file object
-function folderFactory(arg) {
-	// Folders can be constructed from a '/' deliminated string, representing
-	// their path with their name included as the last segment
-	var f = Object.assign(Object.create(entity), folder);
-	addGetters(f);
-	if (typeof arg === 'string') {
-		f.path = arg;
-	} else {
-		console.error('Unrecognized constructur argument: ', arguments);
-	}
-
-	return f;
-}
-
-module.exports = folderFactory;
+module.exports = Object.assign(Object.create(file), folder);

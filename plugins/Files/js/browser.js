@@ -13,11 +13,11 @@ const $ = require('jquery');
 const siad = require('sia.js');
 const tools = require('./uiTools');
 const fileElement = require('./fileElement');
-const loader = require('./fileLoader');
+const loader = require('./loader');
 const folderElement = require('./folderElement');
 
 // Root folder object to hold all other file and folder objects
-var rootFolder = require('./folder')('');
+var rootFolder = require('./folderFactory')('');
 var currentFolder = rootFolder;
 // Used in the selection system
 var anchor;
