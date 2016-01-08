@@ -46,11 +46,6 @@ $('#search-bar').keypress(function() {
 	browser.filter(this.value);
 });
 
-// New file/folder button
-$('#new.button').click(function() {
-	$('.hidden.dropdown').toggle('fast');
-});
-
 // Dropdown below the new button
 $('.dropdown .button').click(function() {
 	var userInput;

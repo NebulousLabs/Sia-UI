@@ -53,12 +53,8 @@ input {
 
 /* Controls */
 .controls {
-	position: relative;
 	display: inline-block;
 	float: right;
-}
-.controls #new {
-	width: 55px;
 }
 .controls input {
 	text-align: left;
@@ -66,9 +62,7 @@ input {
 }
 .dropdown {
 	position: absolute;
-	top: 20px;
 	z-index: 1;
-	left: 15px;
 
 	border: 1px solid black;
 	border-radius: 0 6px 6px 6px;

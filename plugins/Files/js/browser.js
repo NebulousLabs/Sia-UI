@@ -19,7 +19,7 @@ const folderElement = require('./folderElement');
 // Root folder object to hold all other file and folder objects
 var rootFolder = require('./folderFactory')('');
 var currentFolder = rootFolder;
-// Used in the selection system
+// Point of reference for shift-click multi-select
 var anchor;
 
 // Refresh the file list according to the currentFolder
@@ -99,6 +99,18 @@ function updateCWD(navigateTo) {
 		if (f.path === '') {
 			el.prepend('<i class=\'fa fa-folder\'></i>');
 		}
+	});
+
+	// New file/folder button
+	var cwdLength = 0;
+	cwd.children().not(':last').each(function() {
+		var width = Number($(this).css('width').slice(0, -2));
+		cwdLength += width;
+	});
+	cwd.children().last().click(function() {
+		var dropdown = $('.hidden.dropdown');
+		dropdown.css('left', cwdLength + 'px');
+		dropdown.toggle('fast');
 	});
 }
 
