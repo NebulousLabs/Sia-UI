@@ -34,7 +34,11 @@ module.exports = function(config, mainWindow) {
 			default:
 				console.error('Unknown dialog ipc');
 		}
-		response = response === undefined ? null : response;
+		// Can't return an `undefined` from synchronous ipc because it will
+		// keep the renderer waiting for a response, thus blocking it
+		if (response === undefined) {
+			response = null;
+		}
 		// TODO: Make async and adapt plugins
 		event.returnValue = response;
 	});
