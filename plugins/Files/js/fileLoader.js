@@ -21,6 +21,7 @@ function uploadFile(filePath, virtualPath, callback) {
 	tools.notify(`Uploading ${name}!`, 'upload');
 	siad.apiCall({
 		url: '/renter/upload/' + nickname,
+		method: 'POST',
 		qs: {
 			source: filePath,
 		},
@@ -39,30 +40,12 @@ function uploadFolder(dirPath, virtualPath, callback) {
 			return;
 		}
 
-		// Setup waterfalling the async calls
-		// TODO: Delegate this to uiTools.js
-		var count = files.length;
-		function protectCallback() {
-			if (--count === 0 && callback) {
-				callback();
-			}
-		}
-
 		// Process files into sources and nicknames
 		var filePaths = files.map(file => path.resolve(dirPath, file));
-		var nicknames = files.map(file => `${virtualPath}/${file}`);
-		filePaths.forEach(function(filePath, i) {
-			// Appropriately upload each file/folder
-			fs.stat(filePath, function(err, stats) {
-				if (err) {
-					tools.notify(err.message, 'error');
-				} else if (stats.isFile()) {
-					uploadFile(filePath, nicknames[i], protectCallback);
-				} else if (stats.isDirectory()) {
-					uploadFolder(filePath, virtualPath, protectCallback);
-				}
-			});
-		});
+		// Process the appropriate function per file
+		var functs = filePaths.map(filePath =>
+			fs.statSync(filePath).isFile() ? uploadFile : uploadFolder);
+		tools.waterfall(functs, virtualPath, callback);
 	});
 }
 
@@ -71,8 +54,9 @@ function loadDotSia(filePath, callback) {
 	var name = path.basename(filePath, '.sia');
 	siad.apiCall({
 		url: '/renter/load',
+		method: 'POST',
 		qs: {
-			filename: filePath + '.sia',
+			filename: filePath,
 		}
 	}, function(result) {
 		if (callback) {
@@ -87,6 +71,7 @@ function loadDotSia(filePath, callback) {
 function loadAscii(ascii, callback) {
 	siad.apiCall({
 		url: '/renter/loadascii',
+		method: 'POST',
 		qs: {
 			file: ascii,
 		}

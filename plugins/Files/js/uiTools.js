@@ -96,7 +96,8 @@ module.exports = {
 
 		// Call funct per array item
 		array.forEach(function(item) {
-			var specificParams = params.slice(0).unshift(item);
+			var specificParams = params.slice(0);
+			specificParams.unshift(item);
 			funct.apply(null, specificParams);
 		});
 	},

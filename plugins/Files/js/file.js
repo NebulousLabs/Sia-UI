@@ -99,7 +99,7 @@ function fileFactory(arg) {
 	// Return file size
 	Object.defineProperty(f, 'size', {
 		get: function () {
-			return this.Filesize;
+			return this.filesize;
 		},
 	});
 
