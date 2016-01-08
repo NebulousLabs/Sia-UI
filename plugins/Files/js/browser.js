@@ -13,6 +13,7 @@ const $ = require('jquery');
 const siad = require('sia.js');
 const tools = require('./uiTools');
 const fileElement = require('./fileElement');
+const loader = require('./fileLoader');
 const folderElement = require('./folderElement');
 
 // Root folder object to hold all other file and folder objects
@@ -27,7 +28,7 @@ function updateList(navigateTo) {
 
 	// Get array of selected element's ids (same as their names)
 	var selected = list.find('.selected.entity').get();
-	var selected = selected.map(el => el.id);
+	selected = selected.map(el => el.id);
 
 	// Refresh the list
 	list.empty();
@@ -204,119 +205,20 @@ var browser = {
 		var element = folderElement(folder, browser.navigateTo);
 		$('#file-list').append(element);
 	},
-
-	// Uploads a file from the given filePath
-	uploadFile (filePath, virtualPath, callback) {
-		// Files upload as currentFolder.path/name by default
-		if (typeof virtualPath !== 'string') {
-			callback = virtualPath;
-			virtualPath = currentFolder.path;
-		}
-
-		// Determine the nickname
-		var name = path.basename(filePath);
-		var nickname = `${virtualPath.path}/${name}`;
-
-		// Upload the file
-		tools.notify(`Uploading ${name}!`, 'upload');
-		siad.apiCall({
-			url: '/renter/upload/' + nickname,
-			qs: {
-				source: filePath,
-			},
-		}, callback);
-	},
-
-	// Recursively upload all files in a directory
-	uploadFolder (dirPath, virtualPath, callback) {
-		// virtualPath is the path to prepend to the file/folder's nickname
-		// It's used and built upon recursively
-		if (typeof virtualPath !== 'string') {
-			callback = virtualPath;
-			virtualPath = currentFolder.path;
-		}
-		var dirName = path.basename(dirPath);
-		virtualPath = `${virtualPath}/${dirName}`;
-
-		// Get a list of files in the chosen directory
-		fs.readdir(dirPath, function(err, files) {
-			if (err) {
-				tools.notify('Failed retrieving directory contents', 'error');
-				return;
-			}
-
-			// Setup waterfalling the async calls
-			// TODO: Delegate this to uiTools.js
-			var count = files.length;
-			function protectCallback() {
-				if (--count === 0 && callback) {
-					callback();
-				}
-			}
-
-			// Process files into sources and nicknames
-			var filePaths = files.map(file => path.resolve(dirPath, file));
-			var nicknames = files.map(file => `${virtualPath}/${file}`);
-			filePaths.forEach(function(filePath, i) {
-				// Appropriately upload each file/folder
-				fs.stat(filePath, function(err, stats) {
-					if (err) {
-						tools.notify(err.message, 'error');
-					} else if (stats.isFile()) {
-						browser.uploadFile(filePath, nicknames[i], protectCallback);
-					} else if (stats.isDirectory()) {
-						browser.uploadFolder(filePath, virtualPath, protectCallback);
-					}
-				});
-			});
-		});
-	},
-
-
-	// Loads a .sia file into the library
-	loadDotSia (filePath, callback) {
-		var name = path.basename(filePath, '.sia');
-		siad.apiCall({
-			url: '/renter/load',
-			qs: {
-				filename: filePath,
-			}
-		}, function(result) {
-			if (callback) {
-				callback(result);
-			}
-			// TODO: Read result.FilesAdded and interpret for notification
-			tools.notify(`Added ${name}!`, 'siafile');
-		});
-	},
-
-	// Loads an ascii represenation of a .sia file into the library
-	loadAscii (ascii, callback) {
-		siad.apiCall({
-			url: '/renter/loadascii',
-			qs: {
-				file: ascii,
-			}
-		}, function(result) {
-			if (callback) {
-				callback(result);
-			}
-			// TODO: Read result.FilesAdded and interpret for notification
-			tools.notify('Added ascii file(s)!', 'asciifile');
-		});
-	},
 };
 
 // Redirects dropdown options (see global.js) to their respective functions
 browser.Folder = browser.makeFolder;
 browser['File Upload'] = function uploadFiles(filePaths, callback) {
-	tools.waterfall(browser.uploadFile, filePaths, callback);
+	// Files upload to currentFolder.path/name by default
+	tools.waterfall(loader.uploadFile, filePaths, currentFolder.path, callback);
 };
 browser['Folder Upload'] = function uploadFolders(dirPaths, callback) {
-	tools.waterfall(browser.uploadFolder, dirPaths, callback);
+	// Uploads to currentFolder.path/name, keeping their original structure
+	tools.waterfall(loader.uploadFolder, dirPaths, currentFolder.path, callback);
 };
 browser['.Sia File'] = function loadDotSias(filePaths, callback) {
-	tools.waterfall(browser.loadDotSia, filePaths, callback);
+	tools.waterfall(loader.loadDotSia, filePaths, callback);
 };
 browser['Add ASCII File'] = browser.loadAscii;
 

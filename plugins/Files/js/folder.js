@@ -21,14 +21,13 @@ var folder = {
 	// Changes folder's and its contents' paths with siad call
 	setPath (newPath, callback) {
 		var names = this.contentsNames;
-		var paths
 
 		// Make array of each content's setPath function
 		var functs = names.map(key => this.contents[key].setPath);
 
 		// Make array of new paths per folder's content, ensuring that no name
 		// starts with '/' if newPath is '' for the rootFolder
-		paths = newPath !== '' ? names.map(name => `${newPath}/${name}`) : names;
+		var paths = newPath !== '' ? names.map(name => `${newPath}/${name}`) : names;
 
 		// Call callback only if all operations succeed
 		tools.waterfall(functs, paths, () => {

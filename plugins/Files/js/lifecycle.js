@@ -33,9 +33,9 @@ function updateStatus(result) {
 		var avg = prices.reduce((a, b) => a.plus(b))
 									.div(count)
 									.div(MONTHLY_DATA_COST);
-		var priceDisplay = `Price: ${avg.round(3)} S/GB/Month`;
+		priceDisplay = `Price: ${avg.round(3)} S/GB/Month`;
 
-		var hostsDisplay = result.hosts.length + hostsDisplay;
+		hostsDisplay = result.hosts.length + hostsDisplay;
 		// Singular label for only 1 host
 		if (count === 1) {
 			hostsDisplay = hostsDisplay.slice(0, -1);
@@ -45,8 +45,8 @@ function updateStatus(result) {
 		hostsDisplay = 'No' + hostsDisplay;
 	}
 	$('#price.pod').text(priceDisplay);
-	// TODO: Make pod clickable for expanded host information
-	$('#host-count.pod').text(hostsDisplay);
+	// TODO: Could make pod clickable for expanded host information
+	$('#host-count.pod span').text(hostsDisplay);
 }
 
 // Regularly update the file library and status
@@ -59,7 +59,8 @@ function update() {
 
 // Clicking the host pod toggles it between all hosts and active hosts
 $('#host-count.pod').click(function() {
-	hostsType = hostsType === 'all' ? 'active' : 'all'
+	$('#host-count.pod .fa').toggleClass('fa-globe fa-users');
+	hostsType = hostsType === 'all' ? 'active' : 'all';
 	update();
 });
 

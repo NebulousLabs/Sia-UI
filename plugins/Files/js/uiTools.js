@@ -63,8 +63,31 @@ module.exports = {
 
 	// Calls an async function for each item in an array, calling the callback
 	// only after all tasks have finished
-	oneFunctionWaterfall (funct, array, callback) {
+	oneFunctionWaterfall (funct, array) {
 		var count = array.length;
+
+		// Any amount of optional parameters
+		var params = [];
+		for (let i = 2; i < arguments.length - 1; i++) {
+			let arg = arguments[i];
+			params.push(arg);
+		}
+
+		// Last parameter should be the callback
+		var lastParam = arguments[arguments.length - 1];
+		if (typeof lastParam !== 'function') {
+			// Ensure this is being used properly
+			console.error('No need to waterfall a function without a callback');
+			return;
+		}
+		var callback = lastParam;
+
+		// Callback iff all calls finished
+		params.push(function () {
+			if (--count === 0 && callback) {
+				callback();
+			}
+		});
 
 		// Called iff empty array, ensures callback is still called
 		if (count === 0 && callback) {
@@ -73,36 +96,39 @@ module.exports = {
 
 		// Call funct per array item
 		array.forEach(function(item) {
-			funct(item, function() {
-				// Callback iff all calls finished
-				if (--count === 0 && callback) {
-					callback();
-				}
-			});
+			var specificParams = params.slice(0).unshift(item);
+			funct.apply(null, specificParams);
 		});
 	},
 
 	// Calls async functions from an array, calling the callback only after all
 	// tasks have finished. Second argument, params, is optional. It's an array
 	// of parameters to pass into each function.
-	multiFunctionWaterfall (functs, params, callback) {
-		// params array is optional
-		if (typeof params === 'function') {
-			callback = params;
-			params = undefined;
-		} else if (params.length !== functs.length) {
-			// Ensure this is being used properly
-			console.error('Provided functions and parameters don\'t match!');
-			return;
+	multiFunctionWaterfall (functs) {
+		var count = functs.length;
+
+		// Any amount of optional parameters
+		var params = [];
+		for (let i = 2; i < arguments.length - 1; i++) {
+			let arg = arguments[i];
+			params.push(arg);
 		}
 
-		// Setup waterfalling the async calls
-		var count = functs.length;
-		function protectCallback() {
+		// Last parameter should be the callback
+		var lastParam = arguments[arguments.length - 1];
+		if (typeof lastParam !== 'function') {
+			// Ensure this is being used properly
+			console.error('No need to waterfall a function without a callback');
+			return;
+		}
+		var callback = lastParam;
+
+		// Callback iff all calls finished
+		params.push(function () {
 			if (--count === 0 && callback) {
 				callback();
 			}
-		}
+		});
 
 		// Called iff empty funct array, ensures callback is still called
 		if (count === 0 && callback) {
@@ -110,24 +136,23 @@ module.exports = {
 			return;
 		}
 
-		// Call with or without a parameter per function
-		if (params) {
-			functs.forEach(function(funct, index) {
-				funct(params[index], protectCallback);
-			});
-		} else {
-			functs.forEach(function(funct) {
-				funct(protectCallback);
-			});
-		}
+    	// Call per function with params (Array or single param allowed)
+		functs.forEach(function(funct, index) {
+			var specificParams = params.map(param => Array.isArray(param) ? param[index] : param);
+			funct.apply(null, specificParams);
+		});
 	},
 	
 	// Determines which waterfall behavior is being used
-	waterfall(funct, params, callback) {
+	waterfall(funct) {
+		var args = [];
+		for (let i = 0; i < arguments.length; i++) {
+			args.push(arguments[i]);
+		}
 		if (typeof funct === 'function') {
-			this.oneFunctionWaterfall(funct, params, callback);
+			this.oneFunctionWaterfall.apply(null, args);
 		} else if (Array.isArray(funct)) {
-			this.multiFunctionWaterfall(funct, params, callback);
+			this.multiFunctionWaterfall.apply(null, args);
 		} else {
 			console.error('Improper use of waterfall function!');
 		}
