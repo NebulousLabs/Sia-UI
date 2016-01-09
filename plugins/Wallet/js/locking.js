@@ -53,9 +53,7 @@ function updateStatus(result) {
 
 // Make wallet api call
 function getStatus() {
-	// TODO: Don't understand why the setImmediate is needed, but without it,
-	// the '/wallet' call seems to not return right after a locking/unlocking
-	setImmediate(() => Siad.apiCall('/wallet', updateStatus));
+	Siad.apiCall('/wallet', updateStatus);
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Locking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

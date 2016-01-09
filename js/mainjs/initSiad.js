@@ -46,7 +46,7 @@ function downloadSiad() {
 	var downloading = setInterval(function() {
 		notify('siad: downloading...', 'loading');
 	}, 500);
-	Siad.download(config.siad.path, function(err) {
+	Siad.download(function(err) {
 		if (err) {
 			console.error(err);
 			mainWindow.close();
@@ -133,11 +133,11 @@ function checkSiadPath() {
 		} else if (selected === 0) {
 			config.siad.fileName = Path.basename(siadPath);
 			config.siad.path = Path.dirname(siadPath);
-			checkSiadPath();
+			Siad.configure(config.siad, checkSiadPath);
 		} else if (selected === 1) {
 			config.siad.path = siadPath;
 			// Begin download and start siad after
-			downloadSiad();
+			Siad.configure(config.siad, downloadSiad);
 		}
 	});
 }
