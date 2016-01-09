@@ -22,6 +22,25 @@ var currentFolder = rootFolder;
 // Point of reference for shift-click multi-select
 var anchor;
 
+// Get rid of an anchor
+function deselectAnchor() {
+	if (anchor) {
+		anchor.removeClass('anchor');
+		anchor = null;
+	}
+}
+
+// Make an element the anchor
+function selectAnchor(el) {
+	if (!el || el.length === 0) {
+		return;
+	}
+	deselectAnchor();
+	anchor = el;
+	el.addClass('anchor');
+	el.addClass('selected');
+}
+
 // Returns selected elements from current file list
 function getSelectedElements() {
 	// Get array of selected element's names (same as their ids)
@@ -137,24 +156,13 @@ var browser = {
 
 	// Select an item in the current folder
 	select (el) {
-		if (anchor) {
-			anchor.removeClass('anchor');
-		}
-		if (el.length === 0) {
-			return;
-		}
-		anchor = el;
-		anchor.addClass('anchor');
-		el.addClass('selected');
+		selectAnchor(el);
 	},
 	toggle (el) {
-		if (anchor) {
-			anchor.removeClass('anchor');
-		}
+		deselectAnchor();
 		el.toggleClass('selected');
 		if (el.hasClass('selected')) {
-			anchor = el;
-			anchor.addClass('anchor');
+			selectAnchor(el);
 		}
 	},
 
@@ -176,19 +184,13 @@ var browser = {
 
 	// Select all items in the current folder
 	selectAll () {
-		if (anchor) {
-			anchor.removeClass('anchor');
-		}
-		anchor = null;
+		deselectAnchor();
 		$('#file-list .file').addClass('selected');
 	},
 
 	// Deselect all items in the current folder
 	deselectAll () {
-		if (anchor) {
-			anchor.removeClass('anchor');
-		}
-		anchor = null;
+		deselectAnchor();
 		$('#file-list .file').removeClass('selected');
 	},
 
