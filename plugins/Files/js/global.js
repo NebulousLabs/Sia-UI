@@ -59,27 +59,27 @@ $('.dropdown .button').click(function() {
 
 	// Determine which button was pressed based on the textContent
 	switch (option) {
-		case 'Folder':
+		case 'Make Folder':
 			break;
-		case 'File Upload':
+		case 'Upload File':
 			dialogOptions.properties.push('openFile');
 			userInput = tools.dialog('open', dialogOptions);
 			break;
-		case 'Folder Upload':
+		case 'Upload Folder':
 			dialogOptions.properties.push('openDirectory');
 			userInput = tools.dialog('open', dialogOptions);
 			break;
-		case '.Sia File':
+		case 'Load .Sia File':
 			dialogOptions.properties.push('openFile');
 			dialogOptions.filters = [{ name: 'Sia file', extensions: ['sia'] }];
 			userInput = tools.dialog('open', dialogOptions);
 			break;
-		case 'ASCII File':
+		case 'Paste ASCII File':
 			$('.dropdown li').hide('fast');
 			$('#paste-ascii').show('fast');
 			$('#paste-ascii input').focus();
 			return; // Don't close dropdown
-		case 'Add ASCII File':
+		case 'Load ASCII File':
 			userInput = $('#paste-ascii input').val();
 			$('.dropdown li').show('fast');
 			$('#paste-ascii').hide('fast');
@@ -91,7 +91,7 @@ $('.dropdown .button').click(function() {
 	}
 
 	// Detect flawed userInput from actions that require it, hide if fine
-	if (!userInput && option !== 'Folder') {
+	if (!userInput && option !== 'Make Folder') {
 		tools.tooltip('Invalid action!', this);
 		return; // Don't close dropdown
 	}
@@ -115,21 +115,47 @@ $('#paste-ascii input').keypress(function(e) {
 $('#file-browser').click(function(e) {
 	e.preventDefault();
 	var el = $(e.target);
-	var entity = el.closest('.entity');
+	var file = el.closest('.file');
 
 	// Don't react to button clicks
-	var buttonClicked = el.hasClass('button') || el.parent().hasClass('button');
+	var buttonClicked = el.closest('.button').length;
 	if (buttonClicked) {
 		return;
 	}
 
+	// Clicking affects selected items
 	if (e.shiftKey) {
-		browser.selectTo(entity);
+		browser.selectTo(file);
 	} else if (e.ctrlKey) {
-		browser.toggle(entity);
+		browser.toggle(file);
 	} else {
 		browser.deselectAll();
-		browser.select(entity);
+		browser.select(file);
 	}
 });
 
+
+// Clicking controls buttons affects selected elements
+$('.controls .delete').click(browser.deleteSelected);
+$('.controls .share').click(browser.shareSelected);
+$('.controls .download').click(browser.downloadSelected);
+
+// Clicking the general document closes popups, deselects files,
+// and stops file name editing
+$(document).on('click', function(event) {
+	var el = $(event.target);
+	var dropdownClicked = el.closest('.dropdown').length;
+	var lastDirectoryClicked = el.closest('#cwd').length && el.is(':last-child');
+	if (!dropdownClicked && !lastDirectoryClicked) {
+		$('.dropdown').hide('fast');
+	}
+	var fileClicked = el.closest('.file').length;
+	if (!fileClicked) {
+		browser.deselectAll();
+	}
+	var fileNameClicked = el.closest('.name.button').length;
+	if (!fileNameClicked) {
+		let edited = $('.name.button[contentEditable=true]');
+		edited.text(edited.attr('id')).attr('contentEditable', false);
+	}
+});

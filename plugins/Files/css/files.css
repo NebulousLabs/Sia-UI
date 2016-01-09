@@ -46,7 +46,7 @@ input {
 }
 #cwd {
 	display: inline-block;
-	width: calc(100% - 261.5px);
+	width: calc(100% - 231px);
 	white-space: nowrap;
 	overflow-x: auto;
 }
@@ -58,13 +58,17 @@ input {
 }
 .controls input {
 	text-align: left;
-	width: 200px;
+	width: 140px;
+}
+.controls .button {
+	font-size: 10px;
+	padding: 4px;
 }
 .dropdown {
 	position: absolute;
 	z-index: 1;
 
-	border: 1px solid black;
+	border: 1px solid #dddddd;
 	border-radius: 0 6px 6px 6px;
 	margin: 0;
 	padding: 0;
@@ -88,17 +92,17 @@ hr {
 	height: calc(100% - 60px);
 	overflow-y: auto;
 }
-.entity.label {
+.file.label {
 	background-color: #ddd;
 }
-.entity.label:hover {
+.file.label:hover {
 	cursor: default;
 }
 .label #buttons-label {
 	text-align: center;
 	width: 75px;
 }
-.entity {
+.file {
 	padding: 6px;
 	color: #757575;
 	font-size: 12px;
@@ -107,40 +111,35 @@ hr {
 	white-space: nowrap;
     -webkit-user-select: none;
 }
-.entity.selected {
+.file.selected {
 	background-color: #ddd;
 }
-.entity:hover {
+.file.anchor {
+	border: 1px solid #00CBA0;
+}
+.file:hover {
 	cursor: pointer;
 }
-.entity > * {
+.file > * {
 	display: inline-block;
 }
-.entity .graphic {
+.file .graphic {
 	width: 20px;
 	text-align: center;
 }
-.entity .name {
+.file .name {
 	text-align: left;
-	width: calc(100% - 330px);
+	width: calc(100% - 250px);
 	overflow: hidden;
 	white-space: nowrap;
 }
-.entity .size {
+.file .size {
 	text-align: right;
 	width: 75px;
 }
-.entity .time {
+.file .time {
 	text-align: center;
 	width: 150px;
-}
-.entity .button {
-	float: right;
-	width: 25px;
-	padding: 0;
-}
-.entity .button:hover {
-	opacity: .5;
 }
 .cssTooltip {
 	display: inline;
@@ -154,9 +153,9 @@ hr {
 	color: #fff;
 	content: attr(tooltip-content);
 	display: block;
-	right: 1em;
 	padding: .3em 1em;
 	position: absolute;
+	right: 1em;
 	text-shadow: 0 1px 0 #000;
 	white-space: nowrap;
 	z-index: 9999998;

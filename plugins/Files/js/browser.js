@@ -22,17 +22,27 @@ var currentFolder = rootFolder;
 // Point of reference for shift-click multi-select
 var anchor;
 
+// Returns selected elements from current file list
+function getSelectedElements() {
+	// Get array of selected element's names (same as their ids)
+	var list = $('#file-list');
+	var selected = list.find('.selected.file').get();
+	return selected.map(el => el.id);
+}
+
+// Returns selected files/folders from currentFolder
+function getSelectedFiles() {
+	return getSelectedElements().map(el => currentFolder.contents[el.id]);
+}
+
 // Refresh the file list according to the currentFolder
+// TODO: folders before files, sort alphabetically
 function updateList(navigateTo) {
 	var list = $('#file-list');
 
-	// Get array of selected element's ids (same as their names)
-	var selected = list.find('.selected.entity').get();
-	selected = selected.map(el => el.id);
-
 	// Refresh the list
 	list.empty();
-	currentFolder.contentsArray.forEach(function(content) {
+	currentFolder.contentsArray.forEach(content => {
 		var el;
 		if (content.type === 'file') {
 			// Make and display a file element
@@ -41,15 +51,14 @@ function updateList(navigateTo) {
 			// Make and display a folder element
 			el = folderElement(content, navigateTo);
 		} else {
-			console.error('Unknown entity type: ' + content.type, content);
+			console.error('Unknown file type: ' + content.type, content);
 		}
-
-		// If it was previously selected, mark it so
-		if (selected.indexOf(content.name) !== -1) {
-			el.addClass('selected');
-		}
-
 		list.append(el);
+	});
+
+	// Reselect all those that were selected
+	var selected = getSelectedElements().forEach(el => {
+		$(el).addClass('selected');
 	});
 }
 
@@ -101,12 +110,14 @@ function updateCWD(navigateTo) {
 		}
 	});
 
-	// New file/folder button
+	// Sum up widths to move dropdown right as directory is deeper
 	var cwdLength = 0;
 	cwd.children().not(':last').each(function() {
 		var width = Number($(this).css('width').slice(0, -2));
 		cwdLength += width;
 	});
+
+	// New file/folder button appears below last folder
 	cwd.children().last().click(function() {
 		var dropdown = $('.hidden.dropdown');
 		dropdown.css('left', cwdLength + 'px');
@@ -126,25 +137,33 @@ var browser = {
 
 	// Select an item in the current folder
 	select (el) {
+		if (anchor) {
+			anchor.removeClass('anchor');
+		}
 		if (el.length === 0) {
 			return;
 		}
 		anchor = el;
+		anchor.addClass('anchor');
 		el.addClass('selected');
 	},
 	toggle (el) {
+		if (anchor) {
+			anchor.removeClass('anchor');
+		}
 		el.toggleClass('selected');
 		if (el.hasClass('selected')) {
 			anchor = el;
+			anchor.addClass('anchor');
 		}
 	},
 
-	// Select items from the last selected entity to the one passed in
+	// Select items from the last selected file to the one passed in
 	selectTo (el) {
 		if (!anchor) {
 			this.select(el);
 		} else if (el.length !== 0) {
-			$('#file-list .entity').removeClass('selected');
+			$('#file-list .file').removeClass('selected');
 			anchor.addClass('selected');
 			el.addClass('selected');
 			if (el.index() > anchor.index()) {
@@ -157,14 +176,93 @@ var browser = {
 
 	// Select all items in the current folder
 	selectAll () {
+		if (anchor) {
+			anchor.removeClass('anchor');
+		}
 		anchor = null;
-		$('#file-list .entity').addClass('selected');
+		$('#file-list .file').addClass('selected');
 	},
 
 	// Deselect all items in the current folder
 	deselectAll () {
+		if (anchor) {
+			anchor.removeClass('anchor');
+		}
 		anchor = null;
-		$('#file-list .entity').removeClass('selected');
+		$('#file-list .file').removeClass('selected');
+	},
+
+	// Deletes selected files
+	deleteSelected () {
+		var files = getSelectedFiles();
+		var itemCount = files.length;
+		var totalCount = files.reduce((a, b) => a + b.count, 0);
+		var label;
+
+		// Check for any selected files, and make messages singular or plural 
+		if (itemCount === 0) {
+			tools.tooltip('No selected files', $('.controls .delete').get(0));
+			return;
+		} else if (itemCount === 1) {
+			label = files[0].name;
+		} else {
+			label = totalCount + ' files';
+		}
+
+		// Confirm deletion
+		var confirmation = tools.dialog('message', {
+			type:    'warning',
+			title:   'Confirm Deletion',
+			message: `Are you sure you want to delete ${label}?`,
+			detail:  'This will remove it from your library!',
+			buttons: ['Okay', 'Cancel'],
+		});
+		if (confirmation === 1) {
+			return;
+		}
+
+		// Delete files and file elements
+		files.forEach(function(file) {
+			file.delete(function() {
+				$('#' + file.name).remove();
+			});
+		});
+	},
+
+	// Prompts user for destination and downloads selected files to it
+	downloadSelected () {
+		var files = getSelectedFiles();
+		var itemCount = files.length;
+		var totalCount = files.reduce((a, b) => a + b.count, 0);
+		var label;
+
+		// Check for any selected files, and make messages singular or plural 
+		if (itemCount === 0) {
+			tools.tooltip('No selected files', $('.controls .download').get(0));
+			return;
+		} else if (itemCount === 1) {
+			label = files[0].name;
+		} else {
+			label = totalCount + ' files';
+		}
+
+		// Save file/folder into specific place
+		var destination = tools.dialog('save', {
+			title:       'Download ' + label,
+			defaultPath: label,
+		});
+
+		// Ensure destination exists
+		if (!destination) {
+			return;
+		}
+
+		// Setup async calls to each file to download them
+		tools.notify(`Downloading ${label} to ${destination}`, 'download');
+		var functs = files.map(file => file.download);
+		tools.waterfall(functs, destination, function() {
+			tools.notify(`Downloaded {label} to ${destination}`, 'success');
+		});
 	},
 
 	// Update files in the browser
@@ -206,6 +304,7 @@ var browser = {
 	// Makes a new folder element temporarily
 	makeFolder () {
 		var name = 'New Folder';
+		// Ensure unique name
 		if (currentFolder.contents[name]) {
 			var n = 0;
 			while (currentFolder.contents[`${name}_${n}`]) {
@@ -220,18 +319,18 @@ var browser = {
 };
 
 // Redirects dropdown options (see global.js) to their respective functions
-browser.Folder = browser.makeFolder;
-browser['File Upload'] = function uploadFiles(filePaths, callback) {
+browser['Make Folder'] = browser.makeFolder;
+browser['Upload File'] = function uploadFiles(filePaths, callback) {
 	// Files upload to currentFolder.path/name by default
 	tools.waterfall(loader.uploadFile, filePaths, currentFolder.path, callback);
 };
-browser['Folder Upload'] = function uploadFolders(dirPaths, callback) {
+browser['Upload Folder'] = function uploadFolders(dirPaths, callback) {
 	// Uploads to currentFolder.path/name, keeping their original structure
 	tools.waterfall(loader.uploadFolder, dirPaths, currentFolder.path, callback);
 };
-browser['.Sia File'] = function loadDotSias(filePaths, callback) {
+browser['Load .Sia File'] = function loadDotSias(filePaths, callback) {
 	tools.waterfall(loader.loadDotSia, filePaths, callback);
 };
-browser['Add ASCII File'] = browser.loadAscii;
+browser['Load ASCII File'] = browser.loadAscii;
 
 module.exports = browser;

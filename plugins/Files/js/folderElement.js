@@ -9,16 +9,18 @@
 const $ = require('jquery');
 const BigNumber = require('bignumber.js');
 const tools = require('./uiTools');
-const entityElement = require('./entityElement');
+const fileElement = require('./fileElement');
 
 // Make folder element with jquery
 function makeFolderElement(f, navigateTo) {
-	var el = entityElement(f);
+	var el = fileElement(f);
+	el.addClass('folder');
 
 	// Set size as empty if there are no contents
 	if (f.isEmpty()) {
 		el.find('.size').text('empty');
 	}
+	el.find('.time').text('--');
 	
 	// Share button, when clicked, downloads .sia files to specified location
 	// with the same structure as in the browser

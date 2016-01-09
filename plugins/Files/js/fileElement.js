@@ -8,12 +8,21 @@
 // Node modules
 const electron = require('electron');
 const clipboard = electron.clipboard;
+const $ = require('jquery');
 const tools = require('./uiTools');
-const entityElement = require('./entityElement');
 
 // Make file element with jquery
 function makeFileElement(f) {
-	var el = entityElement(f);
+	var el = $(`
+		<div class='file' id='${f.name}'>
+			<div class='graphic'>
+				<i class='fa fa-${f.type}'></i>
+			</div>
+			<div class='name button'>${f.name}</div>
+			<div class='size'>${tools.formatByte(f.size)}</div>
+			<div class='time'></div>
+		</div>
+	`);
 
 	// Set unavailable graphic if needed
 	if (!f.available) {
@@ -29,7 +38,7 @@ function makeFileElement(f) {
 	} else {
 		timeText = 'Expires on block ' + f.expiration;
 	}
-	el.find('.size').after(`<div class='time'>${timeText}</div>`);
+	el.find('.time').text(timeText);
 
 	// Share button, when clicked, asks to download a .sia or copy an ascii
 	el.find('.share').click(function() {
@@ -62,8 +71,31 @@ function makeFileElement(f) {
 			});
 		}
 	});
+
+	// Allow user to rename the file
+	el.find('.name.button').click(function() {
+		this.contentEditable = true;
+		$(this).focus();
+	}).keypress(function(e) {
+		var field = $(this);
+		var newName = field.text();
+		var nameChanged = newName !== f.name ? true : false;
+
+		// Pressing 'Enter' saves the name change
+		if (e.which === 13 && nameChanged) {
+			//e.preventDefault();
+			f.setName(newName, () => {
+				this.id = newName;
+			});
+			this.contentEditable = false;
+		} else if (e.which === 27) {
+			// Pressing 'Esc' resets the name
+			$(this).text(f.name).attr('contentEditable', false);
+		}
+	});
 	
 	// Return the new element
+	// TODO: Implement right click actions on these files
 	return el;
 }
 

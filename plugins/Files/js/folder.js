@@ -14,7 +14,7 @@ const file = require('./file');
 const fileFactory = require('./fileFactory');
 const tools = require('./uiTools');
 
-var folder = {
+var folder = Object.assign(Object.create(file), {
 	type: 'folder',
 	contents: {},
 
@@ -121,6 +121,44 @@ var folder = {
 		// Call callback iff all operations succeed
 		tools.waterfall(functs, names, callback);
 	},
-};
+});
 
-module.exports = Object.assign(Object.create(file), folder);
+// TODO: How to place a getter in the object definition without it being
+// evaluated and misconstrued upon Object.assign?
+// Return the names of the contents
+Object.defineProperty(folder, 'contentsNames', {
+	get: function () {
+		return Object.keys(this.contents);
+	},
+});
+
+// Return the files object as an array instead
+Object.defineProperty(folder, 'contentsArray', {
+	get: function () {
+		return this.contentsNames.map(name => this.contents[name]);
+	},
+});
+
+// Calculate sum of file sizes
+Object.defineProperty(folder, 'size', {
+	get: function () {
+		var sum = 0;
+		this.contentsArray.forEach(content => {
+			sum += content.size;
+		});
+		return sum;
+	},
+});
+
+// Count the number of files
+Object.defineProperty(folder, 'count', {
+	get: function () {
+		var sum = 0;
+		this.contentsArray.forEach(content => {
+			sum += content.count;
+		});
+		return sum;
+	},
+});
+
+module.exports = folder;

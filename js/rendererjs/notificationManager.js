@@ -34,6 +34,7 @@ module.exports = (function notificationManager() {
 		// Files
 		download: 'arrow-circle-down',
 		upload: 'upload',
+		delete: 'trash-o',
 		siafile: 'file-o',
 		asciifile: 'clipboard',
 	};

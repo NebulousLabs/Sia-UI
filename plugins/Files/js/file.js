@@ -117,6 +117,9 @@ var file = {
 	get size () {
 		return this.filesize;
 	},
+	get count () {
+		return 1;
+	},
 
 	// These can't use set syntax because they're necessarily asynchronous
 	setName (newName, cb) {
