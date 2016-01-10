@@ -24,14 +24,13 @@ IPCRenderer.on('shown', Lifecycle.update);
 IPCRenderer.on('hidden', Lifecycle.stop);
 
 // Make sure Siad settings are in sync with the rest of the UI's
-var settings = IPCRenderer.sendSync('config', 'siad');
-Siad.configure(settings);
+Siad.configure(IPCRenderer.sendSync('config', 'siad'));
 
 // Slight modification to Siad wrapper for standard error handling
 Siad.apiCall = function(callObj, callback) {
 	Siad.call(callObj, function(err, result) {
 		if (err) {
-			console.error(callObj, err);
+			console.error(err);
 			Lifecycle.notify(err.toString(), 'error');
 		} else {
 			callback(result);

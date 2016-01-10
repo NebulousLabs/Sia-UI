@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * Lifecycle module:
+ * lifecycle instance module:
  *   Updates plugin periodically and communicates with the general UI.
  */
 

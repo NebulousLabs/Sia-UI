@@ -184,11 +184,7 @@ function getTransactions() {
 
 // Apply new criteria and update
 function updateTransactionCriteria(newCriteria) {
-	for (var prop in newCriteria) {
-		if (newCriteria.hasOwnProperty(prop)) {
-			criteria[prop] = newCriteria[prop];
-		}
-	}
+	Object.assign(criteria, newCriteria);
 	getTransactions();
 }
 

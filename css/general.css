@@ -224,7 +224,7 @@ html,body {
 	cursor: pointer;
 	box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.4);
 }
-.notification.type-error .icon {
+.notification.type-error .icon, .notification.type-exit .icon {
 	color: #E57373;
 	background-color: #FFCDD2;
 }

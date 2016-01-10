@@ -4,218 +4,98 @@
 		<!-- CSS -->
 		<link rel='stylesheet' href='../../css/roboto-condensed-min.css'>
 		<link rel='stylesheet' href='../../css/font-awesome.min.css'>
-		<link rel='stylesheet' href='../../css/pure-min.css'>
 		<link rel='stylesheet' href='../../css/plugin-standard.css'>
 		<link rel='stylesheet' href='css/files.css'>
-
-		<!-- Blueprint -->
-		<div class='file hidden' id='filebp'>
-			<div class='graphic'>
-				<i class='fa fa-file'></i>
-			</div>
-			<div class='available'>
-				<div class='yes'>
-					<i class='fa fa-check'></i>
-				</div>
-				<div class='no'>
-					<i class='fa fa-refresh fa-spin'></i>
-				</div>
-			</div>
-			<div class='name'></div>
-			<div class='size'></div>
-			<div class='time'></div>
-			<div class='download cssTooltip' tooltip-content="Download"><i class='fa fa-download'></i></div>
-			<div class='share cssTooltip' tooltip-content="Share"><i class='fa fa-share-alt'></i></div>
-			<div class='delete cssTooltip' tooltip-content="Delete"><i class='fa fa-remove'></i></div>
-		</div>
 	</head>
 	<body>
 		<!-- Frame -->
-		<div class='frame' id='file-library'>
+		<div class='frame'>
 			<!-- Header -->
 			<div class='header'>
 				<div class='title'>Files</div>
 				<div class='capsule'>
-					<div class='pod' id='host-count'></div>
+					<div class='pod button' id='host-count'>
+						<i class='fa fa-globe'></i>
+						<span></span>
+					</div>
 					<div class='pod' id='price'></div>
 				</div>
 			</div>
 
 			<!-- File Browser -->
-			<div class='box'>
+			<div class='box' id='file-browser'>
 				<div class='row'>
-					<div class='controls'>
-						<div class='button' id='new-file'>
-							<i class='fa fa-plus'></i>
-							Add File
+					<span id='cwd'>
+					</span>
+					<ul class='dropdown hidden'>
+						<li class='button'>
+							<span class='fa-stack'>
+								<i class='fa fa-folder-o fa-stack-2x'></i>
+								<i class='fa fa-plus fa-stack-1x'></i>
+							</span>
+							Make Folder
+						</li>
+						<hr>
+						<li class='button'>
+							<span class='fa-stack'>
+								<i class='fa fa-file-o fa-stack-2x'></i>
+								<i class='fa fa-arrow-up fa-stack-1x'></i>
+							</span>
+							Upload File
+						</li>
+						<li class='button'>
+							<span class='fa-stack'>
+								<i class='fa fa-folder-o fa-stack-2x'></i>
+								<i class='fa fa-arrow-up fa-stack-1x'></i>
+							</span>
+							Upload Folder
+						</li>
+						<hr>
+						<li class='button'>
+							<i class='fa fa-file-text-o fa-2x'></i>
+							Load .Sia File
+						</li>
+						<li class='button'>
+							<i class='fa fa-clipboard fa-2x'></i>
+							Paste ASCII File
+						</li>
+						<div class='hidden' id='paste-ascii'>
+							<input placeholder='Paste your .sia ASCII'></input>
+							<div class='button hidden'>
+								<i class='fa fa-check fa-2x'></i>
+								Load ASCII File
+							</div>
 						</div>
-						<div class='button' id='new-dir'>
-							<i class='fa fa-folder-open'></i>
-							Add Folder
+					</ul>
+					<span class='controls'>
+						<div class='button download cssTooltip' tooltip-content="Download selected">
+							<i class='fa fa-download fa-2x'></i>
 						</div>
-					</div>
-					<div class='search'>
+						<div class='button share cssTooltip' tooltip-content="Share selected">
+							<i class='fa fa-share-alt fa-2x'></i>
+						</div>
+						<div class='button delete cssTooltip' tooltip-content="Delete selected">
+							<i class='fa fa-remove fa-2x'></i>
+						</div>
 						<input type='search' id='search-bar' placeholder='Search files'></input>
+					</span>
+				</div>
+
+				<!-- File list for current folder -->
+				<div class='file label'>
+					<div class='graphic'>
+						<i class='fa'></i>
 					</div>
+					<div class='name'>Name</div>
+					<div class='size'>Size</div>
+					<div class='time'>Time</div>
 				</div>
-				<div id='file-browser'>
-				</div>
-			</div>
-
-			<!-- Share Popup -->
-			<div class='popup hidden' id='show-ascii'>
-				<div class='row'>
-					<div class='title'></div>
-				</div>
-				<p class='ascii'></p>
-				<span class='button' id='copy-ascii'>
-					<i class='fa fa-chain'>Copy to Clipboard</i>
-				</span>
-				<span class='button' id='cancel-ascii'>
-					<i class='fa fa-close'>Cancel</i>
-				</span>
-			</div>
-
-			<!-- Delete Popup -->
-			<div class='popup hidden' id='confirm-delete'>
-				<div class='row'>
-					<div class='title'>Confirm</div>
-				</div>
-				<p class='nickname'></p>
-				<span class='button' id='delete-file'>
-					<i class='fa fa-check'>Delete</i>
-				</span>
-				<span class='button' id='cancel-delete'>
-					<i class='fa fa-close'>Cancel</i>
-				</span>
-			</div>
-		</div>
-
-		<!-- New File Frame -->
-		<div class='frame hidden' id='add-file'>
-			<div class='header'>
-				<div class='button' id='back'>
-					<i class='fa fa-chevron-left'></i>
-				</div>
-				<div class='title'>
-					Add File
-				</div>
-			</div>
-
-			<div class='pure-g step' id='step1'>
-				<div class='pure-u-1-3 button' id='upload-choice'>
-					<i class='fa fa-upload'></i>
-					<p>Select File</p>
-				</div>
-				<div class='pure-u-1-3 button' id='sia-choice'>
-					<i class='fa fa-file-o'></i>
-					<p>.sia file</p>
-				</div>
-				<div class='pure-u-1-3 button' id='ascii-choice'>
-					<i class='fa fa-clipboard'></i>
-					<p>.sia ASCII</p>
-				</div>
-			</div>
-
-			<div class='pure-g step' id='step2'>
-				<div class='pure-u-1-1 hidden' id='nickname-file'>
-					<p>Give it a Name</p>
-					<input class='description-field' id='nickname-file-input'></input>
-					<div class='file-path hidden'></div>
-				</div>
-				<div class='pure-u-1-1 hidden' id='sia-file'>
-					<p>.sia file</p>
-					<div class='file-path'></div>
-				</div>
-				<div class='pure-u-1-1 hidden' id='paste-ascii'>
-					<p>Paste Your ASCII</p>
-					<input class='description-field' id='paste-ascii-input'></input>
-				</div>
-			</div>
-
-			<div class='pure-g step' id='step3'>
-				<div class='pure-u-1-1 hidden button' id='upload-file'>
-					<i class='fa fa-plus'></i>
-					<p>Upload</p>
-				</div>
-				<div class='pure-u-1-1 hidden button' id='add-sia-file'>
-					<i class='fa fa-plus'></i>
-					<p>Import</p>
-				</div>
-				<div class='pure-u-1-1 hidden button' id='add-ascii-file'>
-					<i class='fa fa-plus'></i>
-					<p>Import</p>
-				</div>
-			</div>
-		</div>
-
-		<!-- New Folder Frame -->
-		<div class='frame hidden' id='add-dir'>
-			<div class='header'>
-				<div class='button' id='back-dir'>
-					<i class='fa fa-chevron-left'></i>
-				</div>
-				<div class='title'>
-					Add Folder
-				</div>
-			</div>
-
-			<div class='pure-g step' id='stepf1'>
-				<div class='pure-u-1-1 button' id='upload-dir-choice'>
-					<i class='fa fa-upload'></i>
-					<p>Select Folder</p>
-				</div>
-			</div>
-
-			<div class='pure-g step' id='stepf2'>
-				<div class='pure-u-1-1 hidden' id='nickname-dir'>
-					<p>Set optional file prefix</p>
-					<input class='description-field' id='nickname-dir-input'></input>
-					<div class='dir-path hidden'></div>
-				</div>
-			</div>
-
-			<div class='pure-g step' id='stepf3'>
-				<div class='pure-u-1-1 hidden button' id='upload-dir'>
-					<i class='fa fa-plus'></i>
-					<p>Upload</p>
+				<div id='file-list'>
 				</div>
 			</div>
 		</div>
 		
 		<!-- JS -->
-		<script>
-			// Library for communicating with Sia-UI
-			const IPCRenderer = require('electron').ipcRenderer;
-			// Library for arbitrary precision in numbers
-			const BigNumber = require('bignumber.js');
-			// File system module
-			const Fs = require('fs');
-			// Module for handling and transforming file paths
-			const Path = require('path');
-
-			// Siad wrapper/manager
-			var Siad = require('sia.js')
-			// Make sure Siad settings are in sync with the rest of the UI's
-			var settings = IPCRenderer.sendSync('config', 'siad');
-			Siad.configure(settings);
-			// Slight modification to Siad wrapper for standard error handling
-			Siad.apiCall = function(callObj, callback) {
-				Siad.call(callObj, function(err, result) {
-					if (err) {
-						console.error(callObj, err);
-						notify(err.toString(), 'error');
-					} else {
-						callback(result);
-					}
-				});
-			}
-		</script>
-		<script src='js/helpers.js'></script>
-		<script src='js/loaders.js'></script>
-		<script src='js/adder.js'></script>
-		<script src='js/popups.js'></script>
-		<script src='js/fileList.js'></script>
-		<script src='js/lifecycle.js'></script>
+		<script src='js/global.js'></script>
 	</body>
 </html>

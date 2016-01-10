@@ -6,8 +6,6 @@ const App = Electron.app;
 const Tray = Electron.Tray;
 // Node libraries
 const Path = require('path');
-// config.json manager
-const ConfigManager = require('./js/mainjs/config.js');
 
 // Uncomment to visit localhost:9222 to see devtools remotely
 // App.commandLine.appendSwitch('remote-debugging-port', '9222');
@@ -18,10 +16,9 @@ const ConfigManager = require('./js/mainjs/config.js');
 // garbage collection
 var mainWindow;
 var appIcon;
-var config = new ConfigManager(Path.join(__dirname, 'config.json'));
 
-// Add IPCMain listeners
-require('./js/mainjs/addIPCListeners.js')(config, mainWindow);
+// config.json manager
+var config = require('./js/mainjs/config.js')(Path.join(__dirname, 'config.json'));
 
 // When Electron loading has finished, start the daemon then the UI
 App.on('ready', function() {
@@ -32,6 +29,9 @@ App.on('ready', function() {
 	
 	// Load mainWindow
 	mainWindow = require('./js/mainjs/initWindow.js')(config);
+
+	// Add IPCMain listeners
+	require('./js/mainjs/addIPCListeners.js')(config, mainWindow);
 
 	// Upon exiting, dereference the window object so that the GC cleans up.
 	mainWindow.on('close', function() {

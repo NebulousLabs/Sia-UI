@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * host module:
+ * host instance module:
  *   Tracks hosting properties between the DOM and Siad
  */
 

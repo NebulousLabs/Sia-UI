@@ -22,6 +22,10 @@ module.exports = function(config, mainWindow) {
 				response = Dialog.showSaveDialog(mainWindow, options);
 				break;
 			case 'message':
+				// Give all message boxes the sia icon by default
+				if (!options.icon) {
+					options.icon = require('path').join(__dirname, '../..', 'assets', 'icon.png');
+				}
 				response = Dialog.showMessageBox(mainWindow, options);
 				break;
 			case 'error':
@@ -30,7 +34,9 @@ module.exports = function(config, mainWindow) {
 			default:
 				console.error('Unknown dialog ipc');
 		}
-		event.returnValue = response ? response : null;
+		response = response === undefined ? null : response;
+		// TODO: Make async and adapt plugins
+		event.returnValue = response;
 	});
 
 	// Enable right-click context menu from renderer process event

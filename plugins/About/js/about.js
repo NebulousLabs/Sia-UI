@@ -12,7 +12,7 @@ Siad.configure(settings);
 // Update version shown
 Siad.call('/daemon/version', function(err, result) {
 	if (err) {
-		IPCRenderer.sendToHost('notification', '/daemon/version call failed!', 'error');
+		IPCRenderer.sendToHost('notification', err.toString(), 'error');
 	} else {
 		document.getElementById('siaversion').innerHTML = result.version;
 	}

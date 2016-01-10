@@ -10,43 +10,15 @@
  * 		Black:      #000000
  */
 
-/* Share Popup */
-.popup {
-	position: absolute;
-	min-height: 100px;
-	max-height: 50%;
-	min-width: 100px;
-	max-width: 75%;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	-webkit-animation: fadein 0.5s;
-
-	background-color: #ffffff;
-	z-index: 2;
-
-	border: solid 1px #c5c5c5;
-	border-radius: 8px;
+/* General */
+input {
+	width: 100%;
+	display: inline-block;
 	text-align: center;
-	overflow: overlay;
+	box-shadow: none;
 }
-.popup .title {
-	font-size: 22px;
-	display: block;
-	overflow-wrap: break-word;
-}
-.popup .ascii {
-	font-family: monospace;
-	font-size: 12px;
-	text-align: justify;
-	word-break: break-all;
-
-	max-height: 40px;
-	overflow: auto;
-	padding: 10px;
-}
-.popup p {
-	padding: 8px;
+.hidden {
+	display: none;
 }
 
 /* Information Box */
@@ -56,109 +28,118 @@
 .row {
 	background: #f5f5f5;
 	display: block;
-	height: 30px;
-	padding: 15px;
-	width: calc(100% - 30px);
-	overflow: hidden;
+	height: 24px;
+	font-size: 20px;
+	padding: 10px;
+	width: calc(100% - 20px);
+}
+
+/* Current Directory Path */
+.directory {
+	vertical-align: middle;
 }
 .button {
-	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
 	display: inline-block;
-	font-size: 20px;
-	padding: 8px;
+}
+.button i {
+	vertical-align: middle;
+}
+#cwd {
+	display: inline-block;
+	width: calc(100% - 231px);
+	white-space: nowrap;
+	overflow-x: auto;
 }
 
 /* Controls */
 .controls {
 	display: inline-block;
-	float: left;
-}
-.transparent {
-	-webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
-	opacity: 0;
-	cursor: none;
-}
-.search {
-	font-size: 24px;
 	float: right;
 }
-.search input {
+.controls input {
 	text-align: left;
-	width: 200px;
+	width: 140px;
 }
-input {
-	width: 100%;
-	display: inline-block;
-	text-align: center;
-	box-shadow: none;
+.controls .button {
+	font-size: 10px;
+	padding: 4px;
+}
+.dropdown {
+	position: absolute;
+	z-index: 1;
+
+	border: 1px solid #dddddd;
+	border-radius: 0 6px 6px 6px;
+	margin: 0;
+	padding: 0;
+
+	white-space: nowrap;
+	background: white;
+	list-style: none;
+}
+.dropdown .button {
+	display: block;
+	font-size: 12px;
+	margin: 4px;
+}
+hr {
+	margin: 0;
 }
 
-/* File browser and list */
-#file-browser {
+/* File list */
+#file-list {
 	background-color: #fafafa;
 	height: calc(100% - 60px);
 	overflow-y: auto;
 }
-#file-browser .file {
-	padding: 10px;
+.file.label {
+	background-color: #ddd;
+}
+.file.label:hover {
+	cursor: default;
+}
+.label #buttons-label {
+	text-align: center;
+	width: 75px;
+}
+.file {
+	padding: 6px;
 	color: #757575;
-	font-size: 14px;
+	font-size: 12px;
 	background-color: #fff;
 	border-bottom: 1px solid #eeeeee;
+	white-space: nowrap;
+    -webkit-user-select: none;
 }
-#file-browser .file:hover {
+.file.selected {
+	background-color: #ddd;
+}
+.file.anchor {
+	border: 1px solid #00CBA0;
+}
+.file:hover {
 	cursor: pointer;
 }
-.file .graphic {
+.file > * {
 	display: inline-block;
+}
+.file .graphic {
 	width: 20px;
-	font-size: 12px;
 	text-align: center;
 }
-.file .available {
-	display: inline-block;
-	width: 20px;
-}
 .file .name {
-	display: inline-block;
 	text-align: left;
-	width: calc(98% - 350px);
+	width: calc(100% - 250px);
 	overflow: hidden;
 	white-space: nowrap;
 }
 .file .size {
-	display: inline-block;
 	text-align: right;
 	width: 75px;
 }
 .file .time {
-	display: inline-block;
 	text-align: center;
 	width: 150px;
-}
-.file .download {
-	float: right;
-	display: inline-block;
-	width: 25px;
-}
-.file .download:hover {
-	opacity: .5;
-}
-.file .share {
-	float: right;
-	display: inline-block;
-	width: 25px;
-}
-.file .share:hover {
-	opacity: .5;
-}
-.file .delete {
-	float: right;
-	display: inline-block;
-	width: 25px;
-}
-.file .delete:hover {
-	opacity: .5;
 }
 .cssTooltip {
 	display: inline;
@@ -172,35 +153,10 @@ input {
 	color: #fff;
 	content: attr(tooltip-content);
 	display: block;
-	right: 1em;
 	padding: .3em 1em;
 	position: absolute;
+	right: 1em;
 	text-shadow: 0 1px 0 #000;
 	white-space: nowrap;
 	z-index: 9999998;
 }
-
-/* Add file window */
-.description-field {
-	padding: 1%;
-	width: 94%;
-	border-radius: 4px;
-}
-.step {
-	background-color: #f5f5f5;
-	text-align: center;
-	height: 33.333%;
-	border-bottom: solid 4px #fff;
-}
-.step .button {
-	font-size: 32px;
-	-webkit-box-sizing: border-box;
-	margin: auto;
-}
-#add-sia-file {
-	height: 66.667%;
-}
-.step .capsule {
-	background-color: #fff;
-}
-
