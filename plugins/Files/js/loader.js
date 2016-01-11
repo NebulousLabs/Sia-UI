@@ -11,6 +11,24 @@ const path = require('path');
 const tools = require('./uiTools');
 const siad = require('sia.js');
 
+// Whether to upload files with autorenew feature or some block duration
+// Default behavior is to renew automatically
+// TODO: Settings page
+var renew = true;
+var duration = null;
+
+// Get files plugin settings for uploading
+var settings = tools.config('files');
+if (!settings) {
+	tools.config('files', {
+		renew: renew,
+		duration: duration,
+	});
+} else {
+	renew = settings.renew;
+	duration = settings.duration;
+}
+
 // Uploads a file from the given source to the given virtualPath.
 function uploadFile(source, virtualPath, callback) {
 	// Determine the nickname
@@ -24,7 +42,8 @@ function uploadFile(source, virtualPath, callback) {
 		method: 'POST',
 		qs: {
 			source: source,
-			renew: true,
+			duration: duration,
+			renew: renew,
 		},
 	}, callback);
 }

@@ -34,8 +34,11 @@ module.exports = {
 	
 	// Config shortcut
 	config (key, value) {
-		value = value || undefined;
-		return ipcRenderer.sendSync('config', key);
+		if (value === undefined) {
+			return ipcRenderer.sendSync('config', key);
+		} else {
+			return ipcRenderer.sendSync('config', key, value);
+		}
 	},
 	
 	// Dialog shortcut

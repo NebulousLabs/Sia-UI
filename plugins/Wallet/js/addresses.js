@@ -45,7 +45,7 @@ function makeAddress(address, number) {
 
 // Fill address page with search results or addresses
 function updateAddressPage() {
-	// TODO: Merge this into Transaction's filter criteria and make an overall
+	// TODO: Merge itemsPerPage into Transaction's filter criteria and make an overall
 	// settings object, perhaps just as a member of the `wallet` object
 	var itemsPerPage = 25;
 	$('#address-list').empty();

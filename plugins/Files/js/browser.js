@@ -13,8 +13,8 @@ const $ = require('jquery');
 const siad = require('sia.js');
 const tools = require('./uiTools');
 const fileElement = require('./fileElement');
-const loader = require('./loader');
 const folderElement = require('./folderElement');
+const loader = require('./loader');
 
 // Root folder object to hold all other file and folder objects
 var rootFolder = require('./folderFactory')('');
