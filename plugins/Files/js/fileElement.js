@@ -41,6 +41,7 @@ function makeFileElement(f) {
 	el.find('.time').text(timeText);
 
 	// Share button, when clicked, asks to download a .sia or copy an ascii
+	/* TODO: move to browser for aggregate action
 	el.find('.share').click(function() {
 		// Present option between .Sia or ASCII method of sharing
 		var option = tools.dialog('message', {
@@ -71,6 +72,7 @@ function makeFileElement(f) {
 			});
 		}
 	});
+	*/
 
 	// Allow user to rename the file
 	el.find('.name.button').click(function() {

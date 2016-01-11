@@ -136,7 +136,9 @@ $('#file-browser').click(function(e) {
 
 
 // Clicking controls buttons affects selected elements
+// TODO: Needs testing
 $('.controls .delete').click(browser.deleteSelected);
+// TODO: Need to make browser.shareSelected
 $('.controls .share').click(browser.shareSelected);
 $('.controls .download').click(browser.downloadSelected);
 

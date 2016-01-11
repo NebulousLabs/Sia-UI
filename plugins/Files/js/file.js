@@ -12,14 +12,20 @@ const $ = require('jquery');
 const siad = require('sia.js');
 
 var file = {
-	type:     'file',
-	path:     '',
+	// Properties every file should have
+	type:         'file',
+	path:         '',
+	parentFolder: null,
 
 	// Update/record file stats
 	update (stats) {
 		Object.assign(this, stats);
 		this.path = stats.nickname;
 	},
+
+	// The below are just function forms of the renter calls a file can enact
+	// on itself, see the API.md
+	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
 
 	// Changes file's nickname with siad call
 	setPath (newPath, callback) {
@@ -31,7 +37,7 @@ var file = {
 			url: '/renter/rename/' + this.path ,
 			method: 'POST',
 			qs: {
-				newname: newPath,
+				newsiapath: newPath,
 			},
 		}, () => {
 			this.path = newPath;
@@ -40,10 +46,6 @@ var file = {
 			}
 		});
 	},
-
-	// The below are just function forms of the renter calls a file can enact
-	// on itself, see the API.md
-	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
 	delete (callback) {
 		siad.apiCall({
 			url: '/renter/delete/' + this.path,
@@ -71,19 +73,23 @@ var file = {
 			return;
 		}
 		siad.apiCall({
-			url: '/renter/share/' + this.path,
+			url: '/renter/share',
 			qs: {
+				siapaths: [this.path],
 				destination: destination,
 			},
 		}, callback);
 	},
 	shareASCII (callback) {
 		siad.apiCall({
-			url: '/renter/shareascii/' + this.path,
+			url: '/renter/shareascii',
+			qs: {
+				siapaths: [this.path],
+			},
 		}, callback);
 	},
 
-	// Common functions
+	// Path related functions
 	get name () {
 		// path of 'foo/bar/baz' would return 'baz'
 		return path.basename(this.path);
@@ -98,16 +104,6 @@ var file = {
 		// path of 'foo/bar/baz' would return ['foo', 'bar']
 		return this.directory.split('/');
 	},
-	get parentFolders () {
-		// path of 'foo/bar/baz' would return folder objects whose paths are
-		// ['foo', 'foo/bar'] respectively
-		var parentFolders = [];
-		// iterate through parentFolder links to populate parentFolders
-		for (let i = this.parentFolder; i; i = i.parentFolder) {
-			parentFolders.push(i);
-		}
-		return parentFolders.reverse();
-	},
 	get extension () {
 		return path.extname(this.path);
 	},
@@ -115,6 +111,7 @@ var file = {
 		return path.basename(this.path, this.extension);
 	},
 	get size () {
+		// Returns the attribute given to file objects from `/renter/files`
 		return this.filesize;
 	},
 	get count () {
@@ -133,6 +130,18 @@ var file = {
 	setExtension (newExtension, cb) {
 		var newPath = `${this.directory}/${this.nameNoExtension}${newExtension}`;
 		this.setPath(newPath, cb);
+	},
+
+	// Misc. functions
+	get parentFolders () {
+		// path of 'foo/bar/baz' would return folder objects whose paths are
+		// ['foo', 'foo/bar'] respectively
+		var parentFolders = [];
+		// iterate through parentFolder links to populate parentFolders
+		for (let i = this.parentFolder; i; i = i.parentFolder) {
+			parentFolders.push(i);
+		}
+		return parentFolders.reverse();
 	},
 };
 

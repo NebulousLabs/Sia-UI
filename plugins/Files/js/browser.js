@@ -60,6 +60,9 @@ function updateList(navigateTo) {
 	var list = $('#file-list');
 
 	// Refresh the list
+	// TODO: Don't empty list, update elements and add new elements if needed,
+	// track untouched elements (indicates removal is needed) in an object and
+	// remove if updated or created
 	list.empty();
 	currentFolder.contentsArray.forEach(content => {
 		var el;

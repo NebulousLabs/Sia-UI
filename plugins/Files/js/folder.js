@@ -18,7 +18,12 @@ var folder = Object.assign(Object.create(file), {
 	type: 'folder',
 	contents: {},
 
+	// The below are just function forms of the renter calls a function can
+	// enact on itself, see the API.md
+	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
+
 	// Changes folder's and its contents' paths with siad call
+	// TODO: Verify if works
 	setPath (newPath, callback) {
 		var names = this.contentsNames;
 
@@ -36,45 +41,6 @@ var folder = Object.assign(Object.create(file), {
 		});
 	},
 
-	// Add a file
-	addFile (fileObject) {
-		// TODO: verify that the fileObject belongs in this folder
-		var f = fileFactory(fileObject);
-		this.contents[f.name] = f;
-		f.parentFolder = this;
-		return f;
-	},
-
-	// Add a folder, defined after folderFactory() to use it without breaking
-	// strict convention
-	addFolder (name) {
-		// Copy this folder and erase its state to 'create' a new folder
-		// TODO: This seems like an imperfect way to add a new Folder. Can't
-		// use folderFactory function down below because using the folder
-		// factory again seems to return the same folder. Example:
-		//   rootFolder.addFolder('foo') returns a rootFolder with a path of
-		//   'foo' but all the same contents, resulting in circular pointers
-		//   Thus rootFolder.contents === rootFolder.contents.foo.contents
-		var f = Object.create(this);
-		f.path = this.path !== '' ? `${this.path}/${name}` : name;
-		f.contents = {};
-		f.selected = false;
-	
-		// Link new folder to this one and vice versa
-		f.parentFolder = this;
-		this.contents[name] = f;
-		return f;
-	},
-
-	// Return if it's an empty folder
-	isEmpty () {
-		return this.contentsNames.length === 0;
-	},
-
-	// The below are just function forms of the renter calls a function can
-	// enact on itself, see the API.md
-	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
-	
 	// Recursively delete folder and its contents
 	delete (callback) {
 		// Make array of each content's delete function
@@ -105,8 +71,19 @@ var folder = Object.assign(Object.create(file), {
 		tools.waterfall(functs, names, callback);
 	},
 
-	// Share .sia files into folder at destination with same structure
+	// Share .sia files of all contents (deep) to destination
 	share (destination, callback) {
+		/* TODO: complete
+		var names = this.contentNames;
+
+		// Make array of content paths
+		var paths = names.map(key => this.contents[key].paths);
+		*/
+	},
+
+	// Share ascii of all contents (deep)
+	shareascii (destination, callback) {
+		/* TODO: complete
 		var names = this.contentNames;
 
 		// Make folder at destination
@@ -120,7 +97,45 @@ var folder = Object.assign(Object.create(file), {
 
 		// Call callback iff all operations succeed
 		tools.waterfall(functs, names, callback);
+		*/
 	},
+
+	// Misc. functions
+	// Add a file
+	// TODO: Verify if works
+	addFile (fileObject) {
+		// TODO: verify that the fileObject belongs in this folder
+		var f = fileFactory(fileObject);
+		this.contents[f.name] = f;
+		f.parentFolder = this;
+		return f;
+	},
+
+	// Add a folder, defined after folderFactory() to use it without breaking
+	// strict convention
+	addFolder (name) {
+		// Copy this folder and erase its state to 'create' a new folder
+		// TODO: This seems like an imperfect way to add a new Folder. Can't
+		// use folderFactory function down below because using the folder
+		// factory again seems to return the same folder. Example:
+		//   rootFolder.addFolder('foo') returns a rootFolder with a path of
+		//   'foo' but all the same contents, resulting in circular pointers
+		//   Thus rootFolder.contents === rootFolder.contents.foo.contents
+		var f = Object.create(this);
+		f.path = this.path !== '' ? `${this.path}/${name}` : name;
+		f.contents = {};
+	
+		// Link new folder to this one and vice versa
+		f.parentFolder = this;
+		this.contents[name] = f;
+		return f;
+	},
+
+	// Return if it's an empty folder
+	isEmpty () {
+		return this.contentsNames.length === 0;
+	},
+
 });
 
 // TODO: How to place a getter in the object definition without it being

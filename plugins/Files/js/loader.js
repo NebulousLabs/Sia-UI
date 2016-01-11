@@ -11,11 +11,11 @@ const path = require('path');
 const tools = require('./uiTools');
 const siad = require('sia.js');
 
-// Uploads a file from the given filePath to the given virtualPath.
-function uploadFile(filePath, virtualPath, callback) {
+// Uploads a file from the given source to the given virtualPath.
+function uploadFile(source, virtualPath, callback) {
 	// Determine the nickname
-	var name = path.basename(filePath);
-	var nickname = `${virtualPath.path}/${name}`;
+	var name = path.basename(source);
+	var nickname = `${virtualPath}/${name}`;
 
 	// Upload the file
 	tools.notify(`Uploading ${name}!`, 'upload');
@@ -23,7 +23,8 @@ function uploadFile(filePath, virtualPath, callback) {
 		url: '/renter/upload/' + nickname,
 		method: 'POST',
 		qs: {
-			source: filePath,
+			source: source,
+			renew: true,
 		},
 	}, callback);
 }
@@ -50,13 +51,13 @@ function uploadFolder(dirPath, virtualPath, callback) {
 }
 
 // Loads a .sia file into the library
-function loadDotSia(filePath, callback) {
-	var name = path.basename(filePath, '.sia');
+function loadDotSia(source, callback) {
+	var name = path.basename(source, '.sia');
 	siad.apiCall({
 		url: '/renter/load',
 		method: 'POST',
 		qs: {
-			filename: filePath,
+			source: source,
 		}
 	}, function(result) {
 		if (callback) {
@@ -73,7 +74,7 @@ function loadAscii(ascii, callback) {
 		url: '/renter/loadascii',
 		method: 'POST',
 		qs: {
-			file: ascii,
+			asciisia: ascii,
 		}
 	}, function(result) {
 		if (callback) {

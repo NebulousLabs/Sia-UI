@@ -24,6 +24,7 @@ function makeFolderElement(f, navigateTo) {
 	
 	// Share button, when clicked, downloads .sia files to specified location
 	// with the same structure as in the browser
+	/* TODO: move to browser for aggregate action
 	el.find('.share').click(function() {
 		var destination = tools.dialog('save', {
 			title:       `Share ${f.name}'s .sia files'`,
@@ -35,6 +36,7 @@ function makeFolderElement(f, navigateTo) {
 			tools.notify(`Put ${f.name}'s .sia files at ${destination}`, 'download');
 		});
 	});
+	*/
 
 	// Navigate to the folder if the element, not its buttons, is clicked
 	el.dblclick(function(e) {
