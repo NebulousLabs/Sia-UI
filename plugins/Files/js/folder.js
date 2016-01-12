@@ -25,6 +25,9 @@ var folder = Object.assign(Object.create(file), {
 	// Changes folder's and its contents' paths with siad call
 	// TODO: Verify if works
 	setPath (newPath, callback) {
+		if (tools.notType(newPath, 'string')) {
+			return;
+		}
 		var names = this.contentsNames;
 
 		// Make array of each content's setPath function
@@ -56,6 +59,9 @@ var folder = Object.assign(Object.create(file), {
 
 	// Download files in folder at destination with same structure
 	download (destination, callback) {
+		if (tools.notType(destination, 'string')) {
+			return;
+		}
 		var names = this.contentsNames;
 
 		// Make folder at destination
@@ -73,37 +79,38 @@ var folder = Object.assign(Object.create(file), {
 
 	// Share .sia files of all contents (deep) to destination
 	share (destination, callback) {
-		/* TODO: complete
-		var names = this.contentNames;
-
-		// Make array of content paths
-		var paths = names.map(key => this.contents[key].paths);
-		*/
+		if (tools.notType(destination, 'string')) {
+			return;
+		} else if (destination.slice(-4) !== '.sia') {
+			console.error('Share path needs end in ".sia"!', destination);
+			return;
+		}
+		siad.apiCall({
+			url: '/renter/share',
+			qs: {
+				siapaths: this.paths,
+				destination: destination,
+			},
+		}, callback);
 	},
 
 	// Share ascii of all contents (deep)
-	shareascii (destination, callback) {
-		/* TODO: complete
-		var names = this.contentNames;
-
-		// Make folder at destination
-		mkdirp.sync(destination);
-
-		// Make array of each content's share function
-		var functs = names.map(key => this.contents[key].share);
-
-		// Make corresponding array of file paths
-		names = names.map(name => `${destination}/${name}`);
-
-		// Call callback iff all operations succeed
-		tools.waterfall(functs, names, callback);
-		*/
+	shareascii (callback) {
+		siad.apiCall({
+			url: '/renter/shareascii',
+			qs: {
+				siapaths: this.paths,
+			},
+		}, callback);
 	},
 
 	// Misc. functions
 	// Add a file
 	// TODO: Verify if works
 	addFile (fileObject) {
+		if (tools.notType(fileObject, 'object')) {
+			return;
+		}
 		// TODO: verify that the fileObject belongs in this folder
 		var f = fileFactory(fileObject);
 		this.contents[f.name] = f;
@@ -114,6 +121,9 @@ var folder = Object.assign(Object.create(file), {
 	// Add a folder, defined after folderFactory() to use it without breaking
 	// strict convention
 	addFolder (name) {
+		if (tools.notType(name, 'string')) {
+			return;
+		}
 		// Copy this folder and erase its state to 'create' a new folder
 		// TODO: This seems like an imperfect way to add a new Folder. Can't
 		// use folderFactory function down below because using the folder
@@ -140,6 +150,12 @@ var folder = Object.assign(Object.create(file), {
 
 // TODO: How to place a getter in the object definition without it being
 // evaluated and misconstrued upon Object.assign?
+function addGetter(name, getter) {
+	Object.defineProperty(folder, name, {
+		get: getter,
+	});
+}
+
 // Return the names of the contents
 Object.defineProperty(folder, 'contentsNames', {
 	get: function () {
@@ -154,12 +170,17 @@ Object.defineProperty(folder, 'contentsArray', {
 	},
 });
 
+var typeError = 'type is neither folder nor file!';
+
+// The below getters follow the same structure of recursively (bfs) getting
+// data of all files within a folder
+
 // Calculate sum of file sizes
-Object.defineProperty(folder, 'size', {
+Object.defineProperty(folder, 'filesize', {
 	get: function () {
 		var sum = 0;
 		this.contentsArray.forEach(content => {
-			sum += content.size;
+			sum += content.filesize;
 		});
 		return sum;
 	},
@@ -170,9 +191,32 @@ Object.defineProperty(folder, 'count', {
 	get: function () {
 		var sum = 0;
 		this.contentsArray.forEach(content => {
-			sum += content.count;
+			if (content.type === 'folder') {
+				sum += content.count;
+			} else if (content.type === 'file') {
+				sum++;
+			} else {
+				console.error(typeError, content);
+			}
 		});
 		return sum;
+	},
+});
+
+// Return one-dimensional array of all siapaths in this folder
+Object.defineProperty(folder, 'paths', {
+	get: function () {
+		var paths = [];
+		this.contentsArray.forEach(content => {
+			if (content.type === 'folder') {
+				paths = paths.concat(content.paths);
+			} else if (content.type === 'file') {
+				paths.push(content.path);
+			} else {
+				console.error(typeError, content);
+			}
+		});
+		return paths;
 	},
 });
 

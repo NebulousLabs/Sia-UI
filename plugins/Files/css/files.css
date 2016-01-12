@@ -129,15 +129,17 @@ hr {
 }
 .file .name {
 	text-align: left;
-	width: calc(100% - 250px);
+	max-width: calc(100% - 250px);
 	overflow: hidden;
 	white-space: nowrap;
 }
 .file .size {
+	float: right;
 	text-align: right;
 	width: 75px;
 }
-.file .time {
+.file .detail {
+	float: right;
 	text-align: center;
 	width: 150px;
 }

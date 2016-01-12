@@ -19,8 +19,10 @@ function makeFolderElement(f, navigateTo) {
 	// Set size as empty if there are no contents
 	if (f.isEmpty()) {
 		el.find('.size').text('empty');
+		el.find('.detail').text('--');
+	} else {
+		el.find('.detail').text(f.count + ' files');
 	}
-	el.find('.time').text('--');
 	
 	// Share button, when clicked, downloads .sia files to specified location
 	// with the same structure as in the browser

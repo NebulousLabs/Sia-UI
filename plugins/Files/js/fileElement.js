@@ -19,8 +19,8 @@ function makeFileElement(f) {
 				<i class='fa fa-${f.type}'></i>
 			</div>
 			<div class='name button'>${f.name}</div>
-			<div class='size'>${tools.formatByte(f.size)}</div>
-			<div class='time'></div>
+			<div class='size'>${tools.formatByte(f.filesize)}</div>
+			<div class='detail'></div>
 		</div>
 	`);
 
@@ -29,16 +29,18 @@ function makeFileElement(f) {
 		el.find('.fa.fa-file').removeClass('fa-file').addClass('fa-refresh fa-spin');
 	}
 
-	// Set time text
-	var timeText;
-	if (f.uploadProgress === 0) {
-		timeText = 'Processing...';
-	} else if (f.uploadProgress < 100) {
-		timeText = f.uploadProgress.toFixed(0) + '%'; 
+	// Set detail text
+	var detailText;
+	if (f.uploadprogress === 0) {
+		detailText = 'Processing...';
+	} else if (f.uploadprogress < 100) {
+		detailText = f.uploadprogress.toFixed(0) + '%'; 
+	} else if (f.renewing) {
+		detailText = 'Renews on block ' + f.expiration;
 	} else {
-		timeText = 'Expires on block ' + f.expiration;
+		detailText = 'Expires on block ' + f.expiration;
 	}
-	el.find('.time').text(timeText);
+	el.find('.detail').text(detailText);
 
 	// Share button, when clicked, asks to download a .sia or copy an ascii
 	/* TODO: move to browser for aggregate action

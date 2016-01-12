@@ -10,6 +10,7 @@
 const path = require('path');
 const $ = require('jquery');
 const siad = require('sia.js');
+const tools = require('./uiTools');
 
 var file = {
 	// Properties every file should have
@@ -19,6 +20,9 @@ var file = {
 
 	// Update/record file stats
 	update (stats) {
+		if (tools.notType(stats, 'object')) {
+			return;
+		}
 		Object.assign(this, stats);
 		this.path = stats.nickname;
 	},
@@ -29,8 +33,7 @@ var file = {
 
 	// Changes file's nickname with siad call
 	setPath (newPath, callback) {
-		if (typeof newPath !== 'string') {
-			console.error('Improper argument!', newPath);
+		if (tools.notType(newPath, 'string')) {
 			return;
 		}
 		siad.apiCall({
@@ -56,8 +59,7 @@ var file = {
 		});
 	},
 	download (destination, callback) {
-		if (typeof destination !== 'string') {
-			console.error('Improper argument!', destination);
+		if (tools.notType(destination, 'string')) {
 			return;
 		}
 		siad.apiCall({
@@ -68,8 +70,10 @@ var file = {
 		}, callback);
 	},
 	share (destination, callback) {
-		if (typeof destination !== 'string' || destination.slice(-4) !== '.sia') {
-			console.error('Improper argument!', destination);
+		if (tools.notType(destination, 'string')) {
+			return;
+		} else if (destination.slice(-4) !== '.sia') {
+			console.error('Share path needs end in ".sia"!', destination);
 			return;
 		}
 		siad.apiCall({
@@ -110,24 +114,26 @@ var file = {
 	get nameNoExtension () {
 		return path.basename(this.path, this.extension);
 	},
-	get size () {
-		// Returns the attribute given to file objects from `/renter/files`
-		return this.filesize;
-	},
-	get count () {
-		return 1;
-	},
 
 	// These can't use set syntax because they're necessarily asynchronous
 	setName (newName, cb) {
+		if (tools.notType(newName, 'string')) {
+			return;
+		}
 		var newPath = `${this.directory}/${newName}`;
 		this.setPath(newPath, cb);
 	},
 	setDirectory (newDirectory, cb) {
+		if (tools.notType(newDirectory, 'string')) {
+			return;
+		}
 		var newPath = `${newDirectory}/${this.name}`;
 		this.setPath(newPath, cb);
 	},
 	setExtension (newExtension, cb) {
+		if (tools.notType(newExtension, 'string')) {
+			return;
+		}
 		var newPath = `${this.directory}/${this.nameNoExtension}${newExtension}`;
 		this.setPath(newPath, cb);
 	},

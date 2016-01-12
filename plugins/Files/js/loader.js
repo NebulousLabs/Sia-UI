@@ -31,14 +31,14 @@ if (!settings) {
 
 // Uploads a file from the given source to the given virtualPath.
 function uploadFile(source, virtualPath, callback) {
-	// Determine the nickname
+	// Determine the siapath
 	var name = path.basename(source);
-	var nickname = `${virtualPath}/${name}`;
+	var siapath = `${virtualPath}/${name}`;
 
 	// Upload the file
 	tools.notify(`Uploading ${name}!`, 'upload');
 	siad.apiCall({
-		url: '/renter/upload/' + nickname,
+		url: '/renter/upload/' + siapath,
 		method: 'POST',
 		qs: {
 			source: source,
@@ -60,7 +60,7 @@ function uploadFolder(dirPath, virtualPath, callback) {
 			return;
 		}
 
-		// Process files into sources and nicknames
+		// Process files into sources and siapaths
 		var filePaths = files.map(file => path.resolve(dirPath, file));
 		// Process the appropriate function per file
 		var functs = filePaths.map(filePath =>

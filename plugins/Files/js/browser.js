@@ -86,7 +86,7 @@ function updateList(navigateTo) {
 
 // Update file from api result
 function updateFile(result) {
-	var fileFolders = result.nickname.split('/');
+	var fileFolders = result.siapath.split('/');
 	var fileName = fileFolders.pop();
 
 	// Make any needed folders

@@ -45,10 +45,14 @@ module.exports = {
 	dialog (type, options) {
 		return ipcRenderer.sendSync('dialog', type, options);
 	},
-	
-	// Checks whether a path starts with or contains a hidden file or a folder.
-	isUnixHiddenPath (path) {
-		return (/(^|\/)\.[^\/\.]/g).test(path);
+
+	// Logs an error to output for non-string arguments
+	notType (str, type) {
+		if (typeof str !== type) {
+			console.error('Improper argument!', str);
+			return true;
+		}
+		return false;
 	},
 	
 	// Format to data size representation with 3 or less digits

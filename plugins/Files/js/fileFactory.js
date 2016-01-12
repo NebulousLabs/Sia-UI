@@ -10,12 +10,12 @@ const file = require('./file');
 
 // Factory to create instances of the file object
 function fileFactory(arg) {
-	// Files can be constructed from either a nickname or a status object
+	// Files can be constructed from either a siapath or a status object
 	// returned from /renter/files||downloads
 	var f = Object.create(file);
 	if (typeof arg === 'object'){
 		Object.assign(f, arg);
-		f.path = arg.nickname;
+		f.path = arg.siapath;
 	} else if (typeof arg === 'string') {
 		f.path = arg;
 	} else {
