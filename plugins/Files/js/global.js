@@ -115,7 +115,7 @@ $('#paste-ascii input').keypress(function(e) {
 $('#file-browser').click(function(e) {
 	e.preventDefault();
 	var el = $(e.target);
-	var file = el.closest('.file');
+	var file = el.closest('.file:not(.label)');
 
 	// Don't react to button clicks
 	var buttonClicked = el.closest('.button').length;
@@ -130,7 +130,10 @@ $('#file-browser').click(function(e) {
 		browser.toggle(file);
 	} else {
 		browser.deselectAll();
-		browser.select(file);
+		var fileClicked = file.length;
+		if (fileClicked) {
+			browser.select(file);
+		}
 	}
 });
 
@@ -147,8 +150,9 @@ $('.controls .download').click(browser.downloadSelected);
 $(document).on('click', function(event) {
 	var el = $(event.target);
 	var dropdownClicked = el.closest('.dropdown').length;
-	var lastDirectoryClicked = el.closest('#cwd').length && el.is(':last-child');
+	var lastDirectoryClicked = el.closest('#cwd').length && el.closest('.directory').is(':last-child');
 	if (!dropdownClicked && !lastDirectoryClicked) {
+		console.log('yo')
 		$('.dropdown').hide('fast');
 	}
 	var fileClicked = el.closest('.file').length;
@@ -156,7 +160,8 @@ $(document).on('click', function(event) {
 		browser.deselectAll();
 	}
 	var fileNameClicked = el.closest('.name').length;
-	if (!fileNameClicked) {
+	var fileNameButtonClicked = el.prev('.name').length;
+	if (!fileNameClicked && !fileNameButtonClicked) {
 		let edited = $('.name[contentEditable=true]');
 		edited.text(edited.attr('id')).attr('contentEditable', false);
 	}

@@ -113,12 +113,25 @@ function updateCWD(navigateTo) {
 	folders.push(currentFolder);
 
 	// Add a directory element per folder
-	folders.forEach(function(f) {
+	folders.forEach(function(f, i) {
 		var el = $(`
 			<span class='button directory' id='dir-${f.path}'>
-				${f.name}/
 			</span>
 		`);
+		// Root folder
+		if (f.path === '') {
+			el.html('<i class=\'fa fa-folder\'></i>');
+		} else {
+			// Middle folders
+			el.html(f.name);
+		}
+
+		// Last folder
+		if (i === folders.length - 1) {
+			el.append(' <i class=\'fa fa-caret-down\'></i>');
+		} else {
+			el.append('/');
+		}
 
 		// Clicking the element navigates to that folder
 		el.click(function() {
@@ -127,9 +140,6 @@ function updateCWD(navigateTo) {
 
 		// Append and add icon for root folder
 		cwd.append(el);
-		if (f.path === '') {
-			el.prepend('<i class=\'fa fa-folder\'></i>');
-		}
 	});
 
 	// Sum up widths to move dropdown right as directory is deeper
@@ -140,7 +150,7 @@ function updateCWD(navigateTo) {
 	});
 
 	// New file/folder button appears below last folder
-	cwd.children().last().click(function() {
+	cwd.children().last().off('click').click(function() {
 		var dropdown = $('.hidden.dropdown');
 		dropdown.css('left', cwdLength + 'px');
 		dropdown.toggle('fast');

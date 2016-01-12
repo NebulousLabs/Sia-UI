@@ -36,7 +36,14 @@ input {
 
 /* Current Directory Path */
 .directory {
+	border: 1px solid #F5F5F5;
 	vertical-align: middle;
+	-webkit-animation: fadein 0.3s;
+}
+.directory:hover {
+	border: 1px solid #DDDDDD;
+	-webkit-box-shadow: inset 0 0 3px #ECECEC;
+	-webkit-animation: fadein 0.3s;
 }
 .button {
 	display: inline-block;
