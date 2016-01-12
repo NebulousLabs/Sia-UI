@@ -129,19 +129,19 @@ hr {
 }
 .file .name {
 	text-align: left;
-	max-width: calc(100% - 250px);
-	overflow: hidden;
+	max-width: calc(100% - 215px);
 	white-space: nowrap;
 }
 .file .size {
 	float: right;
 	text-align: right;
-	width: 75px;
+	width: 60px;
+	margin-right: 10px;
 }
 .file .detail {
 	float: right;
-	text-align: center;
-	width: 150px;
+	text-align: left;
+	width: 120px;
 }
 .cssTooltip {
 	display: inline;

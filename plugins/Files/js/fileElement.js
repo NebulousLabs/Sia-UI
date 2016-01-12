@@ -19,8 +19,8 @@ function makeFileElement(f) {
 				<i class='fa fa-${f.type}'></i>
 			</div>
 			<div class='name button'>${f.name}</div>
-			<div class='size'>${tools.formatByte(f.filesize)}</div>
 			<div class='detail'></div>
+			<div class='size'>${tools.formatByte(f.filesize)}</div>
 		</div>
 	`);
 

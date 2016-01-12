@@ -24,14 +24,14 @@ var file = {
 			return;
 		}
 		Object.assign(this, stats);
-		this.path = stats.nickname;
+		this.path = stats.siapath;
 	},
 
 	// The below are just function forms of the renter calls a file can enact
 	// on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
 
-	// Changes file's nickname with siad call
+	// Changes file's siapath with siad call
 	setPath (newPath, callback) {
 		if (tools.notType(newPath, 'string')) {
 			return;
