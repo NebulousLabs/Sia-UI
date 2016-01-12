@@ -61,9 +61,11 @@ function updateAddressPage() {
 
 	// Make elements for this page
 	var n = (($('#address-page').val() - 1) * itemsPerPage);
-	array.slice(n, n + itemsPerPage).forEach(function(addressObject, index) {
-		var number = addressObject.number || n + index + 1;
-		makeAddress(addressObject.address, number);
+	array.slice(n, n + itemsPerPage).forEach(function(addr, index) {
+		// If searching, the array will contain objects instead of strings
+		var number = addr.number || n + index + 1;
+		var address = addr.address || addr;
+		makeAddress(address, number);
 	});
 }
 
@@ -90,13 +92,9 @@ $('#view-all-addresses').click(function() {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Search ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Filter address list by search string
 function filterAdresses(searchstr) {
-	// Record original index
-	addresses.forEach(function(addressObject, index) {
-		addressObject.number = index + 1;
-	});
-
 	// Filter
-	searchedAddresses = addresses.filter(function(addressObject) {
+	searchedAddresses = addresses.map(address => ({address: address}));
+	searchedAddresses = searchedAddresses.filter(function(addressObject) {
 		return (addressObject.address.indexOf(searchstr) > -1);
 	});
 }
@@ -127,11 +125,11 @@ function locationOf(element, array, start, end) {
 	start = start || 0;
 	end = end || array.length;
 	var pivot = parseInt(start + (end - start) / 2, 10);
-	if (array[pivot].address === element) {
+	if (array[pivot] === element) {
 		return pivot;
 	} else if (end - start <= 1) {
-		return array[pivot].address > element ? pivot - 1 : pivot;
-	} else if (array[pivot].address < element) {
+		return array[pivot] > element ? pivot - 1 : pivot;
+	} else if (array[pivot] < element) {
 		return locationOf(element, array, pivot, end);
 	} else {
 		return locationOf(element, array, start, pivot);
@@ -139,8 +137,8 @@ function locationOf(element, array, start, end) {
 }
 
 // Insert address into the sorted array
-function addAddress(addressObject) {
-	addresses.splice(locationOf(addressObject, addresses) + 1, 0, addressObject);
+function addAddress(address) {
+	addresses.splice(locationOf(address, addresses) + 1, 0, address);
 }
 
 // Address creation
@@ -150,7 +148,7 @@ $('#create-address').click(function() {
 		url: '/wallet/address',
 	}, function(result) {
 		notify('New address created', 'created');
-		addAddress(result);
+		addAddress(result.address);
 		
 		// Display only the created address
 		$('#search-bar').val(result.address);
