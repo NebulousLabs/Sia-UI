@@ -155,9 +155,9 @@ $(document).on('click', function(event) {
 	if (!fileClicked) {
 		browser.deselectAll();
 	}
-	var fileNameClicked = el.closest('.name.button').length;
+	var fileNameClicked = el.closest('.name').length;
 	if (!fileNameClicked) {
-		let edited = $('.name.button[contentEditable=true]');
+		let edited = $('.name[contentEditable=true]');
 		edited.text(edited.attr('id')).attr('contentEditable', false);
 	}
 });

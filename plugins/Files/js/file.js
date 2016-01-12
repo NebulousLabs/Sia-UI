@@ -27,6 +27,18 @@ var file = {
 		this.path = stats.siapath;
 	},
 
+	// Get array of folder objects that contain this particular file
+	get parentFolders () {
+		// path of 'foo/bar/baz' would return folder objects whose paths are
+		// 'foo' and 'foo/bar' respectively
+		var parentFolders = [];
+		// iterate through parentFolder links to populate parentFolders
+		for (let i = this.parentFolder; i; i = i.parentFolder) {
+			parentFolders.push(i);
+		}
+		return parentFolders.reverse();
+	},
+
 	// The below are just function forms of the renter calls a file can enact
 	// on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
@@ -136,18 +148,6 @@ var file = {
 		}
 		var newPath = `${this.directory}/${this.nameNoExtension}${newExtension}`;
 		this.setPath(newPath, cb);
-	},
-
-	// Misc. functions
-	get parentFolders () {
-		// path of 'foo/bar/baz' would return folder objects whose paths are
-		// ['foo', 'foo/bar'] respectively
-		var parentFolders = [];
-		// iterate through parentFolder links to populate parentFolders
-		for (let i = this.parentFolder; i; i = i.parentFolder) {
-			parentFolders.push(i);
-		}
-		return parentFolders.reverse();
 	},
 };
 

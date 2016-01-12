@@ -129,17 +129,21 @@ hr {
 }
 .file .name {
 	text-align: left;
-	max-width: calc(100% - 215px);
+	max-width: calc(100% - 210px);
 	white-space: nowrap;
 }
-.file .size {
+.file .info {
 	float: right;
+}
+.file .info > * {
+	display: inline-block;
+}
+.file .size {
 	text-align: right;
 	width: 60px;
 	margin-right: 10px;
 }
 .file .detail {
-	float: right;
 	text-align: left;
 	width: 120px;
 }

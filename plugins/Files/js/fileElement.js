@@ -15,12 +15,15 @@ const tools = require('./uiTools');
 function makeFileElement(f) {
 	var el = $(`
 		<div class='file' id='${f.name}'>
-			<div class='graphic'>
-				<i class='fa fa-${f.type}'></i>
+			<i class='fa fa-${f.type}'></i>
+			<div class='name'>
+				${f.name}
 			</div>
-			<div class='name button'>${f.name}</div>
-			<div class='detail'></div>
-			<div class='size'>${tools.formatByte(f.filesize)}</div>
+			<i class='button fa fa-pencil'></i>
+			<div class='info'>
+				<div class='size'>${tools.formatByte(f.filesize)}</div>
+				<div class='detail'></div>
+			</div>
 		</div>
 	`);
 
@@ -76,10 +79,28 @@ function makeFileElement(f) {
 	});
 	*/
 
-	// Allow user to rename the file
-	el.find('.name.button').click(function() {
-		this.contentEditable = true;
-		$(this).focus();
+	// Double clicking a file prompts to download
+	el.dblclick(function() {
+		// Save file/folder into specific place
+		var destination = tools.dialog('save', {
+			title:       'Download ' + f.name,
+			defaultPath: f.name,
+		});
+
+		// Ensure destination exists
+		if (!destination) {
+			return;
+		}
+
+		tools.notify(`Downloading ${f.name} to ${destination}`, 'download');
+		f.download(destination, function() {
+			tools.notify(`Downloaded {f.name} to ${destination}`, 'success');
+		});
+	}).find('.fa-pencil.button').click(function() {
+		// Allow user to rename the file
+		var name = $(this).prev();
+		name.attr('contentEditable', true);
+		name.focus();
 	}).keypress(function(e) {
 		var field = $(this);
 		var newName = field.text();

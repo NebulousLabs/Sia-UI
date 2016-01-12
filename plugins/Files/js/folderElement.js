@@ -21,7 +21,7 @@ function makeFolderElement(f, navigateTo) {
 		el.find('.size').text('empty');
 		el.find('.detail').text('--');
 	} else {
-		el.find('.detail').text(f.count + ' files');
+		el.find('.detail').text(f.count + ' items');
 	}
 	
 	// Share button, when clicked, downloads .sia files to specified location
@@ -41,6 +41,7 @@ function makeFolderElement(f, navigateTo) {
 	*/
 
 	// Navigate to the folder if the element, not its buttons, is clicked
+	el.off('dblclick');
 	el.dblclick(function(e) {
 		if (!$(e.target).is('.button, .fa')) {
 			navigateTo(f);

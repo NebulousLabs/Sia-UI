@@ -149,6 +149,23 @@ function updateCWD(navigateTo) {
 
 // The browser object
 var browser = {
+	// Update files in the browser
+	update () {
+		// TODO: This call doesn't always include a file added right before the
+		// call to this function. Waiting 100ms provides a not-noticeable delay and
+		// allows siad time to provide an up to date list, but is flawed
+		setTimeout(function() {
+			siad.apiCall('/renter/files', function(results) {
+				// Update the current working directory
+				updateCWD(browser.navigateTo);
+				// Add or update each file from a `renter/files/list` call
+				results.files.forEach(updateFile);
+				// Update the file list
+				updateList(browser.navigateTo);
+			});
+		}, 100);
+	},
+
 	// Expose these, mostly for debugging purposes
 	get currentFolder () {
 		return currentFolder;
@@ -252,10 +269,13 @@ var browser = {
 		}
 
 		// Save file/folder into specific place
-		var destination = tools.dialog('save', {
+		var dialogOptions = {
 			title:       'Download ' + label,
-			defaultPath: label,
-		});
+		};
+		if (itemCount === 1) {
+			dialogOptions.defaultPath = label;
+		}
+		var destination = tools.dialog('save', dialogOptions);
 
 		// Ensure destination exists
 		if (!destination) {
@@ -268,23 +288,6 @@ var browser = {
 		tools.waterfall(functs, destination, function() {
 			tools.notify(`Downloaded {label} to ${destination}`, 'success');
 		});
-	},
-
-	// Update files in the browser
-	update () {
-		// TODO: This call doesn't always include a file added right before the
-		// call to this function. Waiting 100ms provides a not-noticeable delay and
-		// allows siad time to provide an up to date list, but is flawed
-		setTimeout(function() {
-			siad.apiCall('/renter/files', function(results) {
-				// Update the current working directory
-				updateCWD(browser.navigateTo);
-				// Add or update each file from a `renter/files/list` call
-				results.files.forEach(updateFile);
-				// Update the file list
-				updateList(browser.navigateTo);
-			});
-		}, 100);
 	},
 
 	// Filter file list by search string
