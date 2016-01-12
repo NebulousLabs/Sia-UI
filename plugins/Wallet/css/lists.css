@@ -51,10 +51,10 @@
 	text-align: right;
 }
 .txnid {
-	width: calc(100% - 260px);
+	width: calc(100% - 250px);
 }
 .time {
-	width: 130px;
+	width: 110px;
 }
 
 /* Address list */
