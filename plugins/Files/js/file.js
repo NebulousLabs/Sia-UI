@@ -62,6 +62,7 @@ var file = {
 		});
 	},
 	delete (callback) {
+		console.log(this.path)
 		siad.apiCall({
 			url: '/renter/delete/' + this.path,
 			method: 'POST',

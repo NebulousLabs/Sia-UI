@@ -46,7 +46,7 @@ function getSelectedElements() {
 	// Get array of selected element's names (same as their ids)
 	var list = $('#file-list');
 	var selected = list.find('.selected.file').get();
-	return selected.map(el => el.id);
+	return selected;
 }
 
 // Returns selected files/folders from currentFolder
@@ -218,7 +218,6 @@ var browser = {
 	deleteSelected () {
 		var files = getSelectedFiles();
 		var itemCount = files.length;
-		var totalCount = files.reduce((a, b) => a + b.count, 0);
 		var label;
 
 		// Check for any selected files, and make messages singular or plural 
@@ -228,6 +227,13 @@ var browser = {
 		} else if (itemCount === 1) {
 			label = files[0].name;
 		} else {
+			let totalCount = files.reduce(function(a, b) {
+				if (b.type === 'folder') {
+					return a + b.count;
+				} else {
+					return ++a;
+				}
+			}, 0);
 			label = totalCount + ' files';
 		}
 
@@ -255,27 +261,35 @@ var browser = {
 	downloadSelected () {
 		var files = getSelectedFiles();
 		var itemCount = files.length;
-		var totalCount = files.reduce((a, b) => a + b.count, 0);
 		var label;
+		var destination;
 
 		// Check for any selected files, and make messages singular or plural 
 		if (itemCount === 0) {
 			tools.tooltip('No selected files', $('.controls .download').get(0));
 			return;
 		} else if (itemCount === 1) {
+			// Save file/folder into specific place
 			label = files[0].name;
+			destination = tools.dialog('save', {
+				title: 'Download ' + label,
+				defaultPath: label,
+			});
 		} else {
+			let totalCount = files.reduce(function(a, b) {
+				if (b.type === 'folder') {
+					return a + b.count;
+				} else {
+					return ++a;
+				}
+			}, 0);
+			// Save files/folders into directory
 			label = totalCount + ' files';
+			destination = tools.dialog('open', {
+				title: 'Download ' + label,
+				properties: ['openDirectory', 'createDirectory'],
+			});
 		}
-
-		// Save file/folder into specific place
-		var dialogOptions = {
-			title:       'Download ' + label,
-		};
-		if (itemCount === 1) {
-			dialogOptions.defaultPath = label;
-		}
-		var destination = tools.dialog('save', dialogOptions);
 
 		// Ensure destination exists
 		if (!destination) {
@@ -284,10 +298,17 @@ var browser = {
 
 		// Setup async calls to each file to download them
 		tools.notify(`Downloading ${label} to ${destination}`, 'download');
-		var functs = files.map(file => file.download);
-		tools.waterfall(functs, destination, function() {
-			tools.notify(`Downloaded {label} to ${destination}`, 'success');
-		});
+		if (itemCount === 1) {
+			files[0].download(destination, function() {
+				tools.notify(`Downloaded {label} to ${destination}`, 'success');
+			});
+		} else {
+			let functs = files.map(file => file.download);
+			let destinations = files.map(file => `${destination}/${file.name}`);
+			tools.waterfall(functs, destinations, function() {
+				tools.notify(`Downloaded {label} to ${destination}`, 'success');
+			});
+		}
 	},
 
 	// Filter file list by search string
@@ -339,6 +360,6 @@ browser['Upload Folder'] = function uploadFolders(dirPaths, callback) {
 browser['Load .Sia File'] = function loadDotSias(filePaths, callback) {
 	tools.waterfall(loader.loadDotSia, filePaths, callback);
 };
-browser['Load ASCII File'] = browser.loadAscii;
+browser['Load ASCII File'] = loader.loadAscii;
 
 module.exports = browser;
