@@ -41,6 +41,17 @@ function selectAnchor(el) {
 	el.addClass('selected');
 }
 
+// Show action buttons iff there are selected files
+function checkActionButtons() {
+	var someSelected = $('.selected').length;
+	var buttonsAreVisible = $('.controls .button').is(':visible');
+	if (someSelected && !buttonsAreVisible) {
+		$('.controls .button').fadeIn('fast');
+	} else if (!someSelected && buttonsAreVisible) {
+		$('.controls .button').fadeOut('fast');
+	}
+}
+
 // Returns selected elements from current file list
 function getSelectedElements() {
 	// Get array of selected element's names (same as their ids)
@@ -160,7 +171,7 @@ function updateCWD(navigateTo) {
 // The browser object
 var browser = {
 	// Update files in the browser
-	update () {
+	update (callback) {
 		// TODO: This call doesn't always include a file added right before the
 		// call to this function. Waiting 100ms provides a not-noticeable delay and
 		// allows siad time to provide an up to date list, but is flawed
@@ -172,8 +183,11 @@ var browser = {
 				results.files.forEach(updateFile);
 				// Update the file list
 				updateList(browser.navigateTo);
+				if (callback) {
+					callback();
+				}
 			});
-		}, 100);
+		}, 50);
 	},
 
 	// Expose these, mostly for debugging purposes
@@ -187,6 +201,7 @@ var browser = {
 	// Select an item in the current folder
 	select (el) {
 		selectAnchor(el);
+		checkActionButtons();
 	},
 	toggle (el) {
 		deselectAnchor();
@@ -194,6 +209,7 @@ var browser = {
 		if (el.hasClass('selected')) {
 			selectAnchor(el);
 		}
+		checkActionButtons();
 	},
 
 	// Select items from the last selected file to the one passed in
@@ -210,18 +226,21 @@ var browser = {
 				el.nextUntil(anchor).addClass('selected');
 			}
 		}
+		checkActionButtons();
 	},
 
 	// Select all items in the current folder
 	selectAll () {
 		deselectAnchor();
 		$('#file-list .file').addClass('selected');
+		checkActionButtons();
 	},
 
 	// Deselect all items in the current folder
 	deselectAll () {
 		deselectAnchor();
 		$('#file-list .file').removeClass('selected');
+		checkActionButtons();
 	},
 
 	// Deletes selected files
@@ -341,7 +360,7 @@ var browser = {
 	},
 
 	// Makes a new folder element temporarily
-	makeFolder () {
+	makeFolder (userInput, callback) {
 		var name = 'New Folder';
 		// Ensure unique name
 		if (currentFolder.files[name]) {
@@ -354,6 +373,9 @@ var browser = {
 		var folder = currentFolder.addFolder(name);
 		var element = folderElement(folder, browser.navigateTo);
 		$('#file-list').append(element);
+		if (callback) {
+			callback();
+		}
 	},
 };
 

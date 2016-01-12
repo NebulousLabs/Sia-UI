@@ -137,13 +137,14 @@ $('#file-browser').click(function(e) {
 	}
 });
 
-
 // Clicking controls buttons affects selected elements
 // TODO: Needs testing
 $('.controls .delete').click(browser.deleteSelected);
 // TODO: Need to make browser.shareSelected
 $('.controls .share').click(browser.shareSelected);
 $('.controls .download').click(browser.downloadSelected);
+// Hide buttons to start, they're shown when files are selected
+$('.controls .button').fadeOut();
 
 // Clicking the general document closes popups, deselects files,
 // and stops file name editing
@@ -152,7 +153,6 @@ $(document).on('click', function(event) {
 	var dropdownClicked = el.closest('.dropdown').length;
 	var lastDirectoryClicked = el.closest('#cwd').length && el.closest('.directory').is(':last-child');
 	if (!dropdownClicked && !lastDirectoryClicked) {
-		console.log('yo')
 		$('.dropdown').hide('fast');
 	}
 	var fileClicked = el.closest('.file').length;
