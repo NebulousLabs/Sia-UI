@@ -10,30 +10,30 @@
 // Node modules
 const siad = require('sia.js');
 const mkdirp = require('mkdirp');
-const file = require('./file');
+const fileClass = require('./file');
 const fileFactory = require('./fileFactory');
 const tools = require('./uiTools');
 
-var folder = Object.assign(Object.create(file), {
+var folder = Object.assign(Object.create(fileClass), {
 	type: 'folder',
-	contents: {},
+	files: {},
 
 	// The below are just function forms of the renter calls a function can
 	// enact on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
 
-	// Changes folder's and its contents' paths with siad call
+	// Changes folder's and its files' paths with siad call
 	// TODO: Verify if works
 	setPath (newPath, callback) {
 		if (tools.notType(newPath, 'string')) {
 			return;
 		}
-		var names = this.contentsNames;
+		var names = this.fileNames;
 
-		// Make array of each content's setPath function
-		var functs = names.map(key => this.contents[key].setPath);
+		// Make array of each file's setPath function
+		var functs = names.map(key => this.files[key].setPath);
 
-		// Make array of new paths per folder's content, ensuring that no name
+		// Make array of new paths per folder's file, ensuring that no name
 		// starts with '/' if newPath is '' for the rootFolder
 		var paths = newPath !== '' ? names.map(name => `${newPath}/${name}`) : names;
 
@@ -44,15 +44,15 @@ var folder = Object.assign(Object.create(file), {
 		});
 	},
 
-	// Recursively delete folder and its contents
+	// Recursively delete folder and its files
 	delete (callback) {
-		// Make array of each content's delete function
-		var functs = this.contentsArray.map(content => content.delete);
+		// Make array of each file's delete function
+		var functs = this.filesArray.map(file => file.delete);
 
 		// Call callback only if all operations succeed
 		tools.waterfall(functs, () => {
 			// Delete parent folder's reference to this folder
-			delete this.parentFolder.contents[this.name];
+			delete this.parentFolder.files[this.name];
 			callback();
 		});
 	},
@@ -62,13 +62,13 @@ var folder = Object.assign(Object.create(file), {
 		if (tools.notType(destination, 'string')) {
 			return;
 		}
-		var names = this.contentsNames;
+		var names = this.fileNames;
 
 		// Make folder at destination
 		mkdirp.sync(destination);
 
-		// Make array of each content's download function
-		var functs = names.map(key => this.contents[key].download);
+		// Make array of each file's download function
+		var functs = names.map(key => this.files[key].download);
 
 		// Make corresponding array of destination paths
 		names = names.map(name => `${destination}/${name}`);
@@ -77,7 +77,7 @@ var folder = Object.assign(Object.create(file), {
 		tools.waterfall(functs, names, callback);
 	},
 
-	// Share .sia files of all contents (deep) to destination
+	// Share .sia files of all files (deep) to destination
 	share (destination, callback) {
 		if (tools.notType(destination, 'string')) {
 			return;
@@ -94,7 +94,7 @@ var folder = Object.assign(Object.create(file), {
 		}, callback);
 	},
 
-	// Share ascii of all contents (deep)
+	// Share ascii of all files (deep)
 	shareascii (callback) {
 		siad.apiCall({
 			url: '/renter/shareascii',
@@ -113,7 +113,7 @@ var folder = Object.assign(Object.create(file), {
 		}
 		// TODO: verify that the fileObject belongs in this folder
 		var f = fileFactory(fileObject);
-		this.contents[f.name] = f;
+		this.files[f.name] = f;
 		f.parentFolder = this;
 		return f;
 	},
@@ -129,21 +129,21 @@ var folder = Object.assign(Object.create(file), {
 		// use folderFactory function down below because using the folder
 		// factory again seems to return the same folder. Example:
 		//   rootFolder.addFolder('foo') returns a rootFolder with a path of
-		//   'foo' but all the same contents, resulting in circular pointers
-		//   Thus rootFolder.contents === rootFolder.contents.foo.contents
+		//   'foo' but all the same files, resulting in circular pointers
+		//   Thus rootFolder.files === rootFolder.files.foo.files
 		var f = Object.create(this);
 		f.path = this.path !== '' ? `${this.path}/${name}` : name;
-		f.contents = {};
+		f.files = {};
 	
 		// Link new folder to this one and vice versa
 		f.parentFolder = this;
-		this.contents[name] = f;
+		this.files[name] = f;
 		return f;
 	},
 
 	// Return if it's an empty folder
 	isEmpty () {
-		return this.contentsNames.length === 0;
+		return this.fileNames.length === 0;
 	},
 
 });
@@ -156,17 +156,17 @@ function addGetter(name, getter) {
 	});
 }
 
-// Return the names of the contents
-Object.defineProperty(folder, 'contentsNames', {
+// Return the names of the files
+Object.defineProperty(folder, 'fileNames', {
 	get: function () {
-		return Object.keys(this.contents);
+		return Object.keys(this.files);
 	},
 });
 
 // Return the files object as an array instead
-Object.defineProperty(folder, 'contentsArray', {
+Object.defineProperty(folder, 'filesArray', {
 	get: function () {
-		return this.contentsNames.map(name => this.contents[name]);
+		return this.fileNames.map(name => this.files[name]);
 	},
 });
 
@@ -179,8 +179,8 @@ var typeError = 'type is neither folder nor file!';
 Object.defineProperty(folder, 'filesize', {
 	get: function () {
 		var sum = 0;
-		this.contentsArray.forEach(content => {
-			sum += content.filesize;
+		this.filesArray.forEach(file => {
+			sum += file.filesize;
 		});
 		return sum;
 	},
@@ -190,13 +190,13 @@ Object.defineProperty(folder, 'filesize', {
 Object.defineProperty(folder, 'count', {
 	get: function () {
 		var sum = 0;
-		this.contentsArray.forEach(content => {
-			if (content.type === 'folder') {
-				sum += content.count;
-			} else if (content.type === 'file') {
+		this.filesArray.forEach(file => {
+			if (file.type === 'folder') {
+				sum += file.count;
+			} else if (file.type === 'file') {
 				sum++;
 			} else {
-				console.error(typeError, content);
+				console.error(typeError, file);
 			}
 		});
 		return sum;
@@ -207,13 +207,13 @@ Object.defineProperty(folder, 'count', {
 Object.defineProperty(folder, 'paths', {
 	get: function () {
 		var paths = [];
-		this.contentsArray.forEach(content => {
-			if (content.type === 'folder') {
-				paths = paths.concat(content.paths);
-			} else if (content.type === 'file') {
-				paths.push(content.path);
+		this.filesArray.forEach(file => {
+			if (file.type === 'folder') {
+				paths = paths.concat(file.paths);
+			} else if (file.type === 'file') {
+				paths.push(file.path);
 			} else {
-				console.error(typeError, content);
+				console.error(typeError, file);
 			}
 		});
 		return paths;

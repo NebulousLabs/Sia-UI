@@ -51,7 +51,7 @@ function getSelectedElements() {
 
 // Returns selected files/folders from currentFolder
 function getSelectedFiles() {
-	return getSelectedElements().map(el => currentFolder.contents[el.id]);
+	return getSelectedElements().map(el => currentFolder.files[el.id]);
 }
 
 // Refresh the file list according to the currentFolder
@@ -64,16 +64,16 @@ function updateList(navigateTo) {
 	// track untouched elements (indicates removal is needed) in an object and
 	// remove if updated or created
 	list.empty();
-	currentFolder.contentsArray.forEach(content => {
+	currentFolder.filesArray.forEach(file => {
 		var el;
-		if (content.type === 'file') {
+		if (file.type === 'file') {
 			// Make and display a file element
-			el = fileElement(content);
-		} else if (content.type === 'folder') {
+			el = fileElement(file);
+		} else if (file.type === 'folder') {
 			// Make and display a folder element
-			el = folderElement(content, navigateTo);
+			el = folderElement(file, navigateTo);
 		} else {
-			console.error('Unknown file type: ' + content.type, content);
+			console.error('Unknown file type: ' + file.type, file);
 		}
 		list.append(el);
 	});
@@ -93,15 +93,15 @@ function updateFile(result) {
 	var folderIterator = rootFolder;
 	fileFolders.forEach(function(folderName) {
 		// Continue to next folder or make folder if it doesn't already exist
-		folderIterator = folderIterator.contents[folderName] ? folderIterator.contents[folderName] : folderIterator.addFolder(folderName);
+		folderIterator = folderIterator.files[folderName] ? folderIterator.files[folderName] : folderIterator.addFolder(folderName);
 	});
 
 	// Make file if needed
-	if (!folderIterator.contents[fileName]) {
+	if (!folderIterator.files[fileName]) {
 		folderIterator.addFile(result);
 	} else {
 		// Update the stats on the file object
-		folderIterator.contents[fileName].update(result);
+		folderIterator.files[fileName].update(result);
 	}
 }
 
@@ -344,9 +344,9 @@ var browser = {
 	makeFolder () {
 		var name = 'New Folder';
 		// Ensure unique name
-		if (currentFolder.contents[name]) {
+		if (currentFolder.files[name]) {
 			var n = 0;
-			while (currentFolder.contents[`${name}_${n}`]) {
+			while (currentFolder.files[`${name}_${n}`]) {
 				n++;
 			}
 			name = `${name}_${n}`;

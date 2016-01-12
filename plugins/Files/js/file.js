@@ -66,7 +66,7 @@ var file = {
 			url: '/renter/delete/' + this.path,
 			method: 'POST',
 		}, result => {
-			delete this.parentFolder.contents[this.name];
+			delete this.parentFolder.files[this.name];
 			callback(result);
 		});
 	},

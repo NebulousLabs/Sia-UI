@@ -16,7 +16,7 @@ function makeFolderElement(f, navigateTo) {
 	var el = fileElement(f);
 	el.addClass('folder');
 
-	// Set size as empty if there are no contents
+	// Set size as empty if there are no files
 	if (f.isEmpty()) {
 		el.find('.size').text('empty');
 		el.find('.detail').text('--');
