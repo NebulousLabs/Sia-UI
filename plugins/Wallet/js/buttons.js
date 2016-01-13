@@ -1,14 +1,16 @@
 'use strict';
 
+// Popup creating functions
+const popups = require('./js/popups');
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Capsule ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Get and use password from the UI's config.json
 function getPassword() {
 	var settings = IPCRenderer.sendSync('config', 'wallet');
-	if (settings && settings.password !== undefined && settings.password !== null) {
-		unlock(settings.password);
+	if (settings && settings.password) {
+		callback(settings.password);
 	} else {
-		$('#request-password').show();
-		$('#password-field').focus();
+		popups.password(callback);
 	}
 }
 
@@ -20,33 +22,18 @@ $('#lock-pod').click(function() {
 	} else if (wallet.unlocked && state === 'Lock Wallet') {
 		lock();
 	} else if (!wallet.unlocked && state === 'Unlock Wallet') {
-		getPassword();
+		getPassword(unlock);
 	} else {
 		console.error('lock-pod disagrees with wallet variable!', wallet.unlocked, state);
 	}
 });
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Popups ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Save password to the UI's config.json
 function savePassword(pw) {
 	var settings = IPCRenderer.sendSync('config', 'wallet') || {};
 	settings.password = pw;
 	IPCRenderer.sendSync('config', 'wallet', settings);
 }
-
-// On popup upon entering an encrypted, locked wallet, enter password
-$('#enter-password').click(function() {
-	// Save password if checked
-	var pw = $('#password-field').val();
-	if ($(this).siblings('.save-password').get(0).checked) {
-		savePassword(pw);
-	}
-
-	// Hide popup and start the plugin
-	unlock(pw);
-	$('#password-field').val('');
-	$('#request-password').hide();
-});
 
 // Make sure the user read the password
 $('#confirm-password').click(function() {
@@ -62,48 +49,23 @@ $('#confirm-password').click(function() {
 	$('#show-password').hide();
 });
 
-// An 'Enter' keypress in the input field will submit it.
-$('#password-field').keydown(function(e) {
-	e = e || window.event;
-	if (e.keyCode === 13) {
-		$('#enter-password').click();
-	}
-});
-
-// If the user wants to save the password in either popup, they
-// should be warned of the security risks
-$('.save-password').click(function() {
-	if (this.checked) {
-		$(this).siblings('.warning').show();
-	} else {
-		$(this).siblings('.warning').hide();
-	}
-});
-
-// Exit popup
-$('.close').click(function() {
-	$(this).closest('.popup').hide();
-});
-
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Load legacy wallet from 0.33 fork
-// TODO: Reimplement this currently unused code in a pretty fashion
-// TODO: Enable loading from siagkey and seed as well
-function loadLegacyWallet(filename, password) {
+function loadLegacyWallet(source, password) {
 	Siad.apiCall({
 		url: '/wallet/033x',
 		method: 'POST',
 		qs: {
-			filepath: filename,
+			source: source,
 			encryptionpassword: password,
 		},
 	}, function(result) {
-		notify('Loaded Wallet', 'success');
+		notify('Loaded Wallet!', 'success');
 	});
 }
 
-// Load legacy wallet from 0.33 fork
-$('#load-legacy-wallet').click(function() {
+// Get data from user input to load a legacy wallet
+function loadLegacyWalletPrompts() {
 	var loadPath = IPCRenderer.sendSync('dialog', 'open', {
 		title: 'Legacy Wallet File Path',
 		filters: [
@@ -112,17 +74,66 @@ $('#load-legacy-wallet').click(function() {
 		properties: ['openFile'],
 	});
 	if (loadPath) {
-		// kind of a hack; we want to reuse the enter-password dialog, but in
-		// order to do so we must temporarily overwrite its onclick method.
-		var oldOnclick = $('#enter-password').get(0).onclick;
-		$('#enter-password').click(function() {
-			var field = $('#password-field');
-			loadLegacyWallet(loadPath[0], field.val());
-			field.val('');
-			$('#enter-password').click(oldOnclick);
-			$('#request-password').hide();
+		getPassword(function(pw) {
+			loadLegacyWallet(loadPath[0], pw);
 		});
-		$('#request-password').show();
+	}
+}
+
+// Load legacy wallet from 0.33 fork
+function loadSeed(password, seed) {
+	Siad.apiCall({
+		url: '/wallet/seed',
+		method: 'POST',
+		qs: {
+			encryptionpassword: password,
+			dictionary: 'english',
+			seed: seed,
+		},
+	}, function(result) {
+		notify('Loaded Seed', 'success');
+	});
+}
+
+// Get data from user input to load a seed
+function loadSeedPrompt() {
+	var pw = IPCRenderer.sendSync('config', 'walletPassword');
+	// Password stored, don't need to ask for it
+	if (pw) {
+		popups.seed(function(seed) {
+			loadSeed(pw, seed);
+		});
+	} else {
+		// Password not stored, ask for it along with seed
+		popups.passwordSeed(function(password, seed) {
+			loadSeed(password, seed);
+		});
+	}
+}
+
+// Load siagkey, seed, or legacy wallet from 0.33 fork
+$('#load').click(function() {
+	var choice = IPCRenderer.sendSync('dialog', 'message', {
+		type: 'question',
+		title: 'Load Into Wallet',
+		message: 'Load previous wallet keys, seeds, or backups',
+		detail: `If you haven't had a previous wallet or involvement with Sia,
+			this probably isn't for you`,
+		buttons: ['Siagkey', 'Seed', 'Legacy Wallet', 'Cancel'],
+	});
+	switch (choice) {
+		case 0:
+			return;
+		case 1:
+			loadSeedPrompt();
+			break;
+		case 2:
+			loadLegacyWalletPrompts();
+			break;
+		case 3:
+			//TODO:
+			return;
+		default:
 	}
 });
 

@@ -94,6 +94,9 @@
 	display: inline-block;
 	padding: 4px;
 }
+.header .title.button:hover {
+	color: #00CBA0;
+}
 .title .button:first-child {
 	padding-right: 0;
 }

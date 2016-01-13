@@ -14,7 +14,10 @@
 		<div class='frame' id='wallet'>
 			<!-- Header -->
 			<div class='header'>
-				<div class='title'>Wallet</div>
+				<div class='title button' id='load'>
+					<i class='fa fa-cloud'></i>
+					Wallet
+				</div>
 				<div class='capsule'>
 					<div class='pod' id='confirmed'></div>
 					<div class='pod' id='unconfirmed'></div>
@@ -26,25 +29,9 @@
 			</div>
 
 			<!-- Popups -->
-			<div class='popup m-font hidden' id='request-password'>
-				<div class='row'>
-					<div class='title'> Enter your password </div>
-					<div class='button close'>
-						<i class='fa fa-times'></i>
-					</div>
-				</div>
-				<input type='checkbox' class='save-password'>Save password <br/>
-				<div class='hidden warning s-font'>Warning: This is equivalent to having an
-					unencrypted wallet and poses a security risk!</div>
-				<input type='password' id='password-field' placeholder='Wallet password'>
-				<div class='button' id='enter-password'>
-					<i class='fa fa-check-circle'></i>
-				</div>
-			</div>
-
 			<div class='popup m-font hidden' id='show-password'>
 				<div class='row'>
-					<div class='title'> Welcome to your Sia Wallet!  </div>
+					<div class='title'>Welcome to your Sia Wallet!</div>
 					<div class='button close'>
 						<i class='fa fa-times'></i>
 					</div>
@@ -93,10 +80,6 @@
 					</div>
 					<div class='controls m-font'>
 						<input type='search' id='search-bar' placeholder='Search addresses'></input>
-						<!--div class='button' id='load-legacy-wallet'>
-							<i class='fa fa-folder-open-o'></i>
-							Load Legacy Wallet
-						</div-->
 						<input type='number' class='page m-font' id='address-page' value='1'><span>/MAX_PAGE</span>
 					</div>
 				</div>
@@ -111,10 +94,10 @@
 		<!-- Make Transaction Frame-->
 		<div class='frame hidden' id='make-transaction'>
 			<div class='header'>
-				<div class='back button'>
+				<div class='back title button'>
 					<i class='fa fa-chevron-left'></i>
+					Make Transaction
 				</div>
-				<div class='title'> Make Transaction </div>
 			</div>
 
 			<div class='halfpage'>
