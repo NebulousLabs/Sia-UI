@@ -10,6 +10,11 @@ const Fs = require('fs');
 const Siad = require('sia.js');
 const $ = require('jquery');
 
+// Clicking the logo links to sia.tech
+$('.logo-container').click(function() {
+	Electron.shell.openExternal('http://sia.tech');
+});
+
 /**
  * @class UIManager
  */
