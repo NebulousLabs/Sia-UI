@@ -58,6 +58,9 @@ html,body {
 	padding-top: 14px;
 	pointer-events: none;
 }
+.logo-container:hover {
+	cursor: pointer;
+}
 
 /* Header Buttons */
 .header-button {
@@ -86,9 +89,9 @@ html,body {
 	border-right: 0 solid #F5F5F5;
 }
 .button {
-	display:flex;
+	display: flex;
 	font-size: 16px;
-	align-items:center;
+	align-items: center;
 	position: relative;
 	height: 60px;
 

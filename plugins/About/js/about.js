@@ -21,4 +21,4 @@ Siad.call('/daemon/version', function(err, result) {
 
 document.getElementById('faq').onclick = function() {
 	electron.shell.openExternal('http://sia.tech/faq');
-}
+};
