@@ -62,42 +62,38 @@ function getSelectedElements() {
 
 // Returns selected files/folders from currentFolder
 function getSelectedFiles() {
-	return getSelectedElements().map(el => currentFolder.files[el.id]);
+	return getSelectedElements().map(el => currentFolder.files[el.find('.name').text()]);
 }
 
 // Refresh the file list according to the currentFolder
 // TODO: folders before files, sort alphabetically
 function updateList(navigateTo) {
-	var list = $('#file-list');
+	// Get rid of all elements that don't belong
+	var files = currentFolder.filesArray;
+	var hashes = files.map(file => file.hashedPath);
+	$('.file:not(.label)').each(function() {
+		if (hashes.indexOf(this.id) === -1) {
+			$(this).remove();
+		}
+	});
 
 	// Refresh the list
-	// TODO: Don't empty list, update elements and add new elements if needed,
-	// track untouched elements (indicates removal is needed) in an object and
-	// remove if updated or created
-	list.empty();
-	currentFolder.filesArray.forEach(file => {
-		var el;
+	files.forEach(file => {
 		if (file.type === 'file') {
 			// Make and display a file element
-			el = fileElement(file);
+			fileElement(file);
 		} else if (file.type === 'folder') {
 			// Make and display a folder element
-			el = folderElement(file, navigateTo);
+			folderElement(file, navigateTo);
 		} else {
 			console.error('Unknown file type: ' + file.type, file);
 		}
-		list.append(el);
-	});
-
-	// Reselect all those that were selected
-	var selected = getSelectedElements().forEach(el => {
-		$(el).addClass('selected');
 	});
 }
 
 // Update file from api result
-function updateFile(result) {
-	var fileFolders = result.siapath.split('/');
+function updateFile(file) {
+	var fileFolders = file.siapath.split('/');
 	var fileName = fileFolders.pop();
 
 	// Make any needed folders
@@ -109,11 +105,47 @@ function updateFile(result) {
 
 	// Make file if needed
 	if (!folderIterator.files[fileName]) {
-		folderIterator.addFile(result);
+		return folderIterator.addFile(file);
 	} else {
 		// Update the stats on the file object
-		folderIterator.files[fileName].update(result);
+		return folderIterator.files[fileName].update(file);
 	}
+}
+
+// Update file from api files
+function updateFiles(files) {
+	// Track files in current folder for old files
+	var currentFiles = currentFolder.fileNames;
+	var currentFolderName = currentFolder.name;
+
+	// Update or add each file
+	files.forEach(function(file) {
+		var f = updateFile(file);
+
+		// If the file isn't in the currentfolder, don't need to consider
+		// removing it
+		if (!currentFolder.contains(f)) {
+			return;
+		}
+
+		// Files deep inside this folder would show up as a folder name
+		var name = currentFolder.innerNameOf(f);
+		var i = currentFiles.indexOf(name);
+
+		// Mark files that still exist
+		currentFiles.splice(i, 1);
+	});
+
+	// Remove elements of and pointers to nonexistent files
+	currentFiles.forEach(name => {
+		// Unless it's an empty folder
+		let file = currentFolder.files[name];
+		if (file.type === 'folder' && file.isEmpty()) {
+			return;
+		}
+		$('#' + file.hashedPath).remove();
+		delete currentFolder.files[file.name];
+	});
 }
 
 // Refresh the folder list representing the current working directory
@@ -180,7 +212,7 @@ var browser = {
 				// Update the current working directory
 				updateCWD(browser.navigateTo);
 				// Add or update each file from a `renter/files/list` call
-				results.files.forEach(updateFile);
+				updateFiles(results.files);
 				// Update the file list
 				updateList(browser.navigateTo);
 				if (callback) {
@@ -237,9 +269,11 @@ var browser = {
 	},
 
 	// Deselect all items in the current folder
-	deselectAll () {
-		deselectAnchor();
-		$('#file-list .file').removeClass('selected');
+	deselectAll (exception) {
+		if (exception !== anchor) {
+			deselectAnchor();
+		}
+		$('#file-list .file').not(exception).removeClass('selected');
 		checkActionButtons();
 	},
 
@@ -281,7 +315,7 @@ var browser = {
 		// Delete files and file elements
 		files.forEach(function(file) {
 			file.delete(function() {
-				$('#' + file.name).remove();
+				$('#' + file.hashedPath).remove();
 			});
 		});
 	},

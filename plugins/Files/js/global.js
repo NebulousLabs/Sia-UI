@@ -111,32 +111,6 @@ $('#paste-ascii input').keypress(function(e) {
 	}
 });
 
-// Clicking within the file-list affects what elements are selected
-$('#file-browser').click(function(e) {
-	e.preventDefault();
-	var el = $(e.target);
-	var file = el.closest('.file:not(.label)');
-
-	// Don't react to button clicks
-	var buttonClicked = el.closest('.button').length;
-	if (buttonClicked) {
-		return;
-	}
-
-	// Clicking affects selected items
-	if (e.shiftKey) {
-		browser.selectTo(file);
-	} else if (e.ctrlKey) {
-		browser.toggle(file);
-	} else {
-		browser.deselectAll();
-		var fileClicked = file.length;
-		if (fileClicked) {
-			browser.select(file);
-		}
-	}
-});
-
 // Clicking controls buttons affects selected elements
 // TODO: Needs testing
 $('.controls .delete').click(browser.deleteSelected);
@@ -150,19 +124,38 @@ $('.controls .button').fadeOut();
 // and stops file name editing
 $(document).on('click', function(event) {
 	var el = $(event.target);
+	// Don't react to button clicks
+	var buttonClicked = el.closest('.button').length;
+	if (buttonClicked) {
+		return;
+	}
 	var dropdownClicked = el.closest('.dropdown').length;
 	var lastDirectoryClicked = el.closest('#cwd').length && el.closest('.directory').is(':last-child');
 	if (!dropdownClicked && !lastDirectoryClicked) {
 		$('.dropdown').hide('fast');
 	}
-	var fileClicked = el.closest('.file').length;
+	// Clicking affects what elements are selected
+	var file = el.closest('.file:not(.label)');
+	var fileClicked = file.length;
 	if (!fileClicked) {
 		browser.deselectAll();
+	} else {
+		// Clicking affects selected items
+		if (event.shiftKey) {
+			browser.selectTo(file);
+		} else if (event.ctrlKey) {
+			browser.toggle(file);
+		} else {
+			if (fileClicked) {
+				browser.select(file);
+			}
+			browser.deselectAll(file);
+		}
 	}
 	var fileNameClicked = el.closest('.name').length;
 	var fileNameButtonClicked = el.prev('.name').length;
 	if (!fileNameClicked && !fileNameButtonClicked) {
 		let edited = $('.name[contentEditable=true]');
-		edited.text(edited.attr('id')).attr('contentEditable', false);
+		edited.text(edited.find('.name').text()).attr('contentEditable', false);
 	}
 });

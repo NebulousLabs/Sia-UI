@@ -146,6 +146,58 @@ var folder = Object.assign(Object.create(fileClass), {
 		return this.fileNames.length === 0;
 	},
 
+	// Return if a file belongs in this folder
+	contains (f) {
+		var folderNames;
+		// File passed in is a file object
+		if (typeof f === 'object') {
+			folderNames = f.folderNames;
+		} else if (typeof f === 'string') {
+			// File passed in is a file path
+			folderNames = f.split('/');
+			folderNames.pop();
+		}
+
+		// Verify
+		var index = folderNames.indexOf(this.name);
+		var thisFoldersNames = this.folderNames;
+
+		// Root folder contains all
+		if (this.path === '') {
+			return true;
+		} else if (index === -1) {
+			// This folder's name isn't in the file path
+			return false;
+		} else if (folderNames.length < thisFoldersNames.length) {
+			return false;
+		} else {
+			// Test if all of this folder's names are included in the passed in
+			// file's path
+			return thisFoldersNames.every(function(fName, i) {
+    			return fName === folderNames[i]; 
+			});		
+		}
+	},
+
+	// Return the name a file would show up as in this folder. If the file
+	// doesn't belong in this folder, return -1
+	innerNameOf (f) {
+		if (!this.contains(f)) {
+			return -1;
+		}
+
+		var pathArray;
+		// File passed in is a file object
+		if (typeof f === 'object') {
+			pathArray = f.pathArray;
+		} else if (typeof f === 'string') {
+			// File passed in is a file path
+			pathArray = f.split('/');
+		}
+
+		var index = pathArray.indexOf(this.name);
+		return pathArray[index + 1];
+	}
 });
 
 // TODO: How to place a getter in the object definition without it being

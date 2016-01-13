@@ -11,10 +11,9 @@ const BigNumber = require('bignumber.js');
 const tools = require('./uiTools');
 const fileElement = require('./fileElement');
 
-// Make folder element with jquery
-function makeFolderElement(f, navigateTo) {
-	var el = fileElement(f);
-	el.addClass('folder');
+// Update file element with jquery
+function updateFolderElement(f, el) {
+	el = el || $('#' + f.hashedPath);
 
 	// Set size as empty if there are no files
 	if (f.isEmpty()) {
@@ -23,6 +22,17 @@ function makeFolderElement(f, navigateTo) {
 	} else {
 		el.find('.detail').text(f.count + ' items');
 	}
+
+	return el;
+}
+
+// Make folder element with jquery
+function makeFolderElement(f, navigateTo) {
+	var el = fileElement(f);
+	el.addClass('folder');
+
+	// Populate its fields and graphics
+	updateFolderElement(f, el);
 	
 	// Share button, when clicked, downloads .sia files to specified location
 	// with the same structure as in the browser
@@ -52,4 +62,11 @@ function makeFolderElement(f, navigateTo) {
 	return el;
 }
 
-module.exports = makeFolderElement;
+module.exports = function(f, funct) {
+	// Determine to update or add a folder element based on if it exists already
+	if (!$('#' + f.hashedPath).length) {
+		return makeFolderElement(f, funct);
+	} else {
+		return updateFolderElement(f);
+	}
+};

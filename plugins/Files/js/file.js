@@ -25,6 +25,7 @@ var file = {
 		}
 		Object.assign(this, stats);
 		this.path = stats.siapath;
+		return this;
 	},
 
 	// Get array of folder objects that contain this particular file
@@ -110,6 +111,10 @@ var file = {
 		// path of 'foo/bar/baz' would return 'baz'
 		return path.basename(this.path);
 	},
+	get pathArray () {
+		// path of 'foo/bar/baz' would return ['foo', 'bar', 'baz]
+		return this.path.split('/');
+	},
 	get directory () {
 		// path of 'foo/bar/baz' would return 'foo/bar'
 		var directory = path.dirname(this.path);
@@ -125,6 +130,12 @@ var file = {
 	},
 	get nameNoExtension () {
 		return path.basename(this.path, this.extension);
+	},
+	// Since spaces, chinese characters, etc. are allowable in file names but
+	// not in html ids, hashedPath() gets a unique representations of files that
+	// is html id friendly
+	get hashedPath() {
+		return require('crypto').createHash('md5').update(this.path).digest('hex');
 	},
 
 	// These can't use set syntax because they're necessarily asynchronous

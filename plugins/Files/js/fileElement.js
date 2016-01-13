@@ -11,25 +11,19 @@ const clipboard = electron.clipboard;
 const $ = require('jquery');
 const tools = require('./uiTools');
 
-// Make file element with jquery
-function makeFileElement(f) {
-	var el = $(`
-		<div class='file' id='${f.name}'>
-			<i class='fa fa-${f.type}'></i>
-			<div class='name'>
-				${f.name}
-			</div>
-			<i class='button fa fa-pencil'></i>
-			<div class='info'>
-				<div class='size'>${tools.formatByte(f.filesize)}</div>
-				<div class='detail'></div>
-			</div>
-		</div>
-	`);
+// Update file element with jquery
+function updateFileElement(f, el) {
+	el = el || $('#' + f.hashedPath);
 
 	// Set unavailable graphic if needed
 	if (!f.available) {
-		el.find('.fa.fa-file').removeClass('fa-file').addClass('fa-refresh fa-spin');
+		el.find('.fa.fa-file')
+			.removeClass('fa-file')
+			.addClass('fa-refresh fa-spin');
+	} else {
+		el.find('.fa.fa-refresh.fa-spin')
+			.removeClass('fa-refresh fa-spin')
+			.addClass('fa-file');
 	}
 
 	// Set detail text
@@ -44,6 +38,30 @@ function makeFileElement(f) {
 		detailText = 'Expires on block ' + f.expiration;
 	}
 	el.find('.detail').text(detailText);
+
+	// Set size
+	var sizeText = tools.formatByte(f.filesize);
+	el.find('.size').text(sizeText);
+
+	return el;
+}
+
+// Make file element with jquery
+function makeFileElement(f) {
+	var el = $(`
+		<div class='file' id='${f.hashedPath}'>
+			<i class='fa fa-${f.type}'></i>
+			<div class='name'>${f.name}</div>
+			<i class='button fa fa-pencil'></i>
+			<div class='info'>
+				<div class='size'></div>
+				<div class='detail'></div>
+			</div>
+		</div>
+	`);
+
+	// Populate its fields and graphics
+	updateFileElement(f, el);
 
 	// Share button, when clicked, asks to download a .sia or copy an ascii
 	/* TODO: move to browser for aggregate action
@@ -108,9 +126,8 @@ function makeFileElement(f) {
 
 		// Pressing 'Enter' saves the name change
 		if (e.which === 13 && nameChanged) {
-			//e.preventDefault();
 			f.setName(newName, () => {
-				this.id = newName;
+				updateFileElement(f, el);
 			});
 			this.contentEditable = false;
 		} else if (e.which === 27) {
@@ -119,9 +136,17 @@ function makeFileElement(f) {
 		}
 	});
 	
-	// Return the new element
+	// Add and return the new element
 	// TODO: Implement right click actions on these files
+	$('#file-list').append(el);
 	return el;
 }
 
-module.exports = makeFileElement;
+module.exports = function(f) {
+	// Determine to update or add a file element based on if it exists already
+	if (!$('#' + f.hashedPath).length) {
+		return makeFileElement(f);
+	} else {
+		return updateFileElement(f);
+	}
+};
