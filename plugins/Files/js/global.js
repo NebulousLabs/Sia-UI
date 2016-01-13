@@ -35,6 +35,8 @@ siad.apiCall = function(callObj, callback) {
 		}
 	});
 };
+// Ensure browser updates once initially
+browser.update();
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Buttons ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Home folder button

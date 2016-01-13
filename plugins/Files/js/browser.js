@@ -417,14 +417,26 @@ var browser = {
 browser['Make Folder'] = browser.makeFolder;
 browser['Upload File'] = function uploadFiles(filePaths, callback) {
 	// Files upload to currentFolder.path/name by default
-	tools.waterfall(loader.uploadFile, filePaths, currentFolder.path, callback);
+	tools.notify(`Uploading ${filePaths.length} file(s)!`, 'upload');
+	tools.waterfall(loader.uploadFile, filePaths, currentFolder.path, function() {
+		tools.notify(`Upload for ${filePaths.length} file(s) completed!`, 'success');
+		callback();
+	});
 };
 browser['Upload Folder'] = function uploadFolders(dirPaths, callback) {
 	// Uploads to currentFolder.path/name, keeping their original structure
-	tools.waterfall(loader.uploadFolder, dirPaths, currentFolder.path, callback);
+	tools.notify(`Uploading ${dirPaths.length} folder(s)!`, 'upload');
+	tools.waterfall(loader.uploadFolder, dirPaths, currentFolder.path, function() {
+		tools.notify(`Upload for ${dirPaths.length} folder(s) completed!`, 'success');
+		callback();
+	});
 };
 browser['Load .Sia File'] = function loadDotSias(filePaths, callback) {
-	tools.waterfall(loader.loadDotSia, filePaths, callback);
+	tools.notify(`Loading ${filePaths.length} .sia file(s)!`, 'siafile');
+	tools.waterfall(loader.loadDotSia, filePaths, function() {
+		tools.notify(`Loaded ${filePaths.length} .sia(s) file(s)!`, 'success');
+		callback();
+	});
 };
 browser['Load ASCII File'] = loader.loadAscii;
 

@@ -29,14 +29,17 @@ if (!settings) {
 	duration = settings.duration;
 }
 
-// Uploads a file from the given source to the given virtualPath.
-function uploadFile(source, virtualPath, callback) {
+// Uploads a file from the given source to the given siapath.
+function uploadFile(source, siapath, callback) {
 	// Determine the siapath
-	var name = path.basename(source);
-	var siapath = `${virtualPath}/${name}`;
+	var fileName = path.basename(source);
+	if (siapath !== '') {
+		siapath = `${siapath}/${fileName}`;
+	} else {
+		siapath = fileName;
+	}
 
 	// Upload the file
-	tools.notify(`Uploading ${name}!`, 'upload');
 	siad.apiCall({
 		url: '/renter/upload/' + siapath,
 		method: 'POST',
@@ -49,9 +52,13 @@ function uploadFile(source, virtualPath, callback) {
 }
 
 // Recursively upload all files in a directory
-function uploadFolder(dirPath, virtualPath, callback) {
+function uploadFolder(dirPath, siapath, callback) {
 	var dirName = path.basename(dirPath);
-	virtualPath = `${virtualPath}/${dirName}`;
+	if (siapath !== '') {
+		siapath = `${siapath}/${dirName}`;
+	} else {
+		siapath = dirName;
+	}
 
 	// Get a list of files in the chosen directory
 	fs.readdir(dirPath, function(err, files) {
@@ -65,26 +72,19 @@ function uploadFolder(dirPath, virtualPath, callback) {
 		// Process the appropriate function per file
 		var functs = filePaths.map(filePath =>
 			fs.statSync(filePath).isFile() ? uploadFile : uploadFolder);
-		tools.waterfall(functs, virtualPath, callback);
+		tools.waterfall(functs, siapath, callback);
 	});
 }
 
 // Loads a .sia file into the library
 function loadDotSia(source, callback) {
-	var name = path.basename(source, '.sia');
 	siad.apiCall({
 		url: '/renter/load',
 		method: 'POST',
 		qs: {
 			source: source,
 		}
-	}, function(result) {
-		if (callback) {
-			callback(result);
-		}
-		// TODO: Read result.FilesAdded and interpret for notification
-		tools.notify(`Added ${name}!`, 'siafile');
-	});
+	}, callback);
 }
 
 // Loads an ascii represenation of a .sia file into the library
