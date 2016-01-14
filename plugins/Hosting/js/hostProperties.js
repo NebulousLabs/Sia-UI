@@ -33,7 +33,7 @@ var props = {
 		unit: 'S/GB/month',
 		conversion: MONTHLY_DATA_COST,
 	},
-	ipaddress: {
+	netaddress: {
 		descr: 'Network Address',
 		unit: 'IP Address',
 	},
