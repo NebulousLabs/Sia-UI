@@ -35,6 +35,7 @@ siad.apiCall = function(callObj, callback) {
 		}
 	});
 };
+
 // Ensure browser updates once initially
 browser.update();
 
@@ -126,15 +127,25 @@ $('.controls .button').fadeOut();
 // and stops file name editing
 $(document).on('click', function(event) {
 	var el = $(event.target);
-	// Don't react to button clicks
-	var buttonClicked = el.closest('.button').length;
-	if (buttonClicked) {
-		return;
-	}
+	// Clicking minimizes the dropdown
 	var dropdownClicked = el.closest('.dropdown').length;
 	var lastDirectoryClicked = el.closest('#cwd').length && el.closest('.directory').is(':last-child');
 	if (!dropdownClicked && !lastDirectoryClicked) {
 		$('.dropdown').hide('fast');
+	}
+	// Clicking cancels file name editing
+	var fileNameClicked = el.closest('.name').length;
+	var fileNameButtonClicked = el.prev('.name').length;
+	if (!fileNameClicked && !fileNameButtonClicked) {
+		let edited = $('.name[contentEditable=true]');
+		let name = edited.attr('id');
+		edited.text(name).attr('contentEditable', false);
+	}
+	// Don't react to button clicks past this
+	var buttonClicked = el.closest('.button').length;
+	if (buttonClicked) {
+		browser.deselectAll();
+		return;
 	}
 	// Clicking affects what elements are selected
 	var file = el.closest('.file:not(.label)');
@@ -153,11 +164,5 @@ $(document).on('click', function(event) {
 			}
 			browser.deselectAll(file);
 		}
-	}
-	var fileNameClicked = el.closest('.name').length;
-	var fileNameButtonClicked = el.prev('.name').length;
-	if (!fileNameClicked && !fileNameButtonClicked) {
-		let edited = $('.name[contentEditable=true]');
-		edited.text(edited.find('.name').text()).attr('contentEditable', false);
 	}
 });

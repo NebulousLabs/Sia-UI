@@ -95,18 +95,35 @@ function loadAscii(ascii, callback) {
 		qs: {
 			asciisia: ascii,
 		}
-	}, function(result) {
-		if (callback) {
-			callback(result);
+	}, callback);
+}
+
+// Place one .sia file to destination for potentially many file paths
+function shareDotSia(paths, destination, callback) {
+	siad.apiCall({
+		url: '/renter/share',
+		qs: {
+			siapaths: paths.join(','),
+			destination: destination,
 		}
-		// TODO: Read result.FilesAdded and interpret for notification
-		tools.notify('Added ascii file(s)!', 'asciifile');
-	});
+	}, callback);
+}
+
+// Share one .sia ascii for potentially many file paths
+function shareAscii(paths, callback) {
+	siad.apiCall({
+		url: '/renter/shareascii',
+		qs: {
+			siapaths: paths.join(','),
+		}
+	}, callback);
 }
 
 module.exports = {
 	uploadFile: uploadFile,
 	uploadFolder: uploadFolder,
-	loadAscii: loadAscii,
 	loadDotSia: loadDotSia,
+	loadAscii: loadAscii,
+	shareDotSia: shareDotSia,
+	shareAscii: shareAscii,
 };

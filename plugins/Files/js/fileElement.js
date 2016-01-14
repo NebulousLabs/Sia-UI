@@ -62,40 +62,6 @@ function makeFileElement(f) {
 	// Populate its fields and graphics
 	updateFileElement(f, el);
 
-	// Share button, when clicked, asks to download a .sia or copy an ascii
-	/* TODO: move to browser for aggregate action
-	el.find('.share').click(function() {
-		// Present option between .Sia or ASCII method of sharing
-		var option = tools.dialog('message', {
-			type:    'question',
-			title:   'Share ' + f.name,
-			message: 'Share via .sia file or ASCII text?',
-			detail:  'Choose to download .sia file or copy ASCII text to clipboard.',
-			buttons: ['.Sia file', 'ASCII text', 'Cancel'],
-		});
-
-		// Choose a location to download the .sia file to
-		if (option === 0) {
-			var destination = tools.dialog('save', {
-				title:       `Share ${f.name}.sia`,
-				defaultPath: f.name + '.sia',
-				filters:     [{ name: 'Sia file', extensions: ['sia'] }],
-			});
-
-			// Download siafile to location
-			f.share(destination, function() {
-				tools.notify(`Put ${f.name}'s .sia files at ${destination}`, 'download');
-			});
-		} else if (option === 1) {
-			// Get the ascii share string
-			f.shareASCII(function(result) {
-				clipboard.writeText(result.file);
-				tools.notify(`Copied ${f.name}.sia to clipboard!`, 'asciifile');
-			});
-		}
-	});
-	*/
-
 	// Double clicking a file prompts to download
 	el.dblclick(function() {
 		// Save file/folder into specific place

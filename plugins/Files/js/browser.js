@@ -7,6 +7,8 @@
  */
 
 // Node modules
+const electron = require('electron');
+const clipboard = electron.clipboard;
 const fs = require('fs');
 const path = require('path');
 const $ = require('jquery');
@@ -312,6 +314,77 @@ var browser = {
 				$('#' + file.hashedPath).remove();
 			});
 		});
+	},
+
+	// Prompts user for Ascii or .sia method of sharing
+	shareSelected () {
+		var files = getSelectedFiles();
+		var itemCount = files.length;
+		var label;
+		var paths;
+
+		// Check for any selected files, and make messages singular or plural
+		// Also get paths of selected files, including files several layers
+		// inside a folder, in a one dimensional array
+		if (itemCount === 0) {
+			tools.tooltip('No selected files', $('.controls .share').get(0));
+			return;
+		} else if (itemCount === 1) {
+			let file = files[0];
+			label = file.name;
+			paths = file.type === 'folder' ? file.paths : [file.path];
+		} else {
+			// Reduce array of files to array of all file paths
+			paths = files.reduce(function(a, b) {
+				if (b.type === 'folder') {
+					return a.concat(b.paths);
+				} else {
+					a.push(b.path);
+					return a;
+				}
+			}, []);
+			label = paths.length + ' files';
+		}
+
+		// Present option between .Sia or ASCII method of sharing
+		var option = tools.dialog('message', {
+			type:    'question',
+			title:   'Share ' + label,
+			message: 'Share via .sia file or ASCII text?',
+			detail:  'Choose to download .sia file or copy ASCII text to clipboard.',
+			buttons: ['.Sia file', 'ASCII text', 'Cancel'],
+		});
+
+		// Choose a location to download the .sia file to
+		if (option === 0) {
+			let dialogOptions = {
+				title:       'Share .sia for ' + label,
+				filters:     [{ name: 'Sia file', extensions: ['sia'] }],
+			};
+			if (itemCount === 1) {
+				dialogOptions.defaultPath = label;
+			}
+			var destination = tools.dialog('save', dialogOptions);
+
+			// Ensure destination exists
+			if (!destination) {
+				return;
+			}
+
+			// Place siafile to location
+			tools.notify(`Sharing ${label} to ${destination}`, 'siafile');
+			loader.shareDotSia(paths, destination, function() {
+				tools.notify(`Put ${label}'s .sia files at ${destination}`, 'success');
+			});
+		} else if (option === 1) {
+			// Get the ascii share string
+			tools.notify(`Getting ascii for ${label}`, 'asciifile');
+			loader.shareAscii(paths, function(result) {
+				// Write it to system clipboard
+				clipboard.writeText(result.asciisia);
+				tools.notify(`Copied ascii for ${label} to clipboard!`, 'asciifile');
+			});
+		}
 	},
 
 	// Prompts user for destination and downloads selected files to it

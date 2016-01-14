@@ -34,22 +34,6 @@ function makeFolderElement(f, navigateTo) {
 	// Populate its fields and graphics
 	updateFolderElement(f, el);
 	
-	// Share button, when clicked, downloads .sia files to specified location
-	// with the same structure as in the browser
-	/* TODO: move to browser for aggregate action
-	el.find('.share').click(function() {
-		var destination = tools.dialog('save', {
-			title:       `Share ${f.name}'s .sia files'`,
-			defaultPath: f.name,
-		});
-
-		// Download siafiles to location
-		f.share(destination, function() {
-			tools.notify(`Put ${f.name}'s .sia files at ${destination}`, 'download');
-		});
-	});
-	*/
-
 	// Navigate to the folder if the element, not its buttons, is clicked
 	el.off('dblclick');
 	el.dblclick(function(e) {
