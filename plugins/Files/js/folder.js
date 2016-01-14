@@ -223,6 +223,23 @@ var typeError = 'type is neither folder nor file!';
 // The below getters follow the same structure of recursively (bfs) getting
 // data of all files within a folder
 
+// Return one-dimensional array of all files in this folder
+Object.defineProperty(folder, 'filesArrayDeep', {
+	get: function () {
+		var files = [];
+		this.filesArray.forEach(file => {
+			if (file.type === 'folder') {
+				files = files.concat(file.filesArrayDeep);
+			} else if (file.type === 'file') {
+				files.push(file);
+			} else {
+				console.error(typeError, file);
+			}
+		});
+		return files;
+	},
+});
+
 // Calculate sum of file sizes
 Object.defineProperty(folder, 'filesize', {
 	get: function () {
@@ -237,17 +254,7 @@ Object.defineProperty(folder, 'filesize', {
 // Count the number of files
 Object.defineProperty(folder, 'count', {
 	get: function () {
-		var sum = 0;
-		this.filesArray.forEach(file => {
-			if (file.type === 'folder') {
-				sum += file.count;
-			} else if (file.type === 'file') {
-				sum++;
-			} else {
-				console.error(typeError, file);
-			}
-		});
-		return sum;
+		return this.filesArrayDeep.length;
 	},
 });
 
@@ -255,17 +262,7 @@ Object.defineProperty(folder, 'count', {
 // for share and shareascii
 Object.defineProperty(folder, 'paths', {
 	get: function () {
-		var paths = [];
-		this.filesArray.forEach(file => {
-			if (file.type === 'folder') {
-				paths = paths.concat(file.paths);
-			} else if (file.type === 'file') {
-				paths.push(file.path);
-			} else {
-				console.error(typeError, file);
-			}
-		});
-		return paths;
+		return this.filesArrayDeep.map(file => file.path);
 	},
 });
 

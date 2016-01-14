@@ -23,6 +23,8 @@ var rootFolder = require('./folderFactory')('');
 var currentFolder = rootFolder;
 // Point of reference for shift-click multi-select
 var anchor;
+// Keeps track of if there is content in the search bar
+var searching = '';
 
 // Get rid of an anchor
 function deselectAnchor() {
@@ -110,38 +112,25 @@ function updateFile(file) {
 }
 
 // Update file from api files
-function updateFiles(files) {
-	// Track files in current folder for old files
-	var currentFiles = currentFolder.fileNames;
-	var currentFolderName = currentFolder.name;
-
+function updateFiles(fileObjects) {
 	// Update or add each file
-	files.forEach(function(file) {
+	fileObjects.forEach(function(file) {
 		var f = updateFile(file);
-
-		// If the file isn't in the currentfolder, don't need to consider
-		// removing it
-		if (!currentFolder.contains(f)) {
-			return;
-		}
-
-		// Files deep inside this folder would show up as a folder name
-		var name = currentFolder.innerNameOf(f);
-		var i = currentFiles.indexOf(name);
-
-		// Mark files that still exist
-		currentFiles.splice(i, 1);
 	});
 
+	// Track files to find old files
+	var paths = fileObjects.map(fo => fo.siapath);
+	var allFiles = rootFolder.filesArrayDeep;
+	var oldFiles = allFiles.filter(f => !paths.includes(f.path));
+
 	// Remove elements of and pointers to nonexistent files
-	currentFiles.forEach(name => {
+	oldFiles.forEach(f => {
 		// Unless it's an empty folder
-		let file = currentFolder.files[name];
-		if (file.type === 'folder' && file.isEmpty()) {
+		if (f.type === 'folder' && f.isEmpty()) {
 			return;
 		}
-		$('#' + file.hashedPath).remove();
-		delete currentFolder.files[file.name];
+		$('#' + f.hashedPath).remove();
+		delete f.parentFolder.files[f.name];
 	});
 }
 
@@ -205,13 +194,16 @@ function updateCWD(navigateTo) {
 var browser = {
 	// Update files in the browser
 	update (callback) {
+		searching = $('#search-bar').val();
 		siad.apiCall('/renter/files', function(results) {
 			// Update the current working directory
 			updateCWD(browser.navigateTo);
-			// Add or update each file from a `renter/files/list` call
-			updateFiles(results.files);
-			// Update the file list
-			updateList(browser.navigateTo);
+			if (!searching) {
+				// Add or update each file from a `renter/files/list` call
+				updateFiles(results.files);
+				// Update the file list
+				updateList(browser.navigateTo);
+			}
 			if (typeof callback === 'function') {
 				callback();
 			}
@@ -436,14 +428,22 @@ var browser = {
 	},
 
 	// Filter file list by search string
-	// TODO: only searches the current folder for now
 	filter (searchstr) {
-		$('#file-list').children().each(function(entry) {
-			if ($(this).find('.name').text().includes(searchstr)) {
-				entry.show();
-			} else {
-				entry.hide();
-			}
+		searching = searchstr;
+		if (!searchstr) {
+			return;
+		}
+		// Clear file list
+		$('#file-list').empty();
+
+		// Match files and make the elements
+		var files = currentFolder.filesArrayDeep;
+		files = files.filter(file => file.path.includes(searchstr));
+		var eles = files.map(file => fileElement(file));
+
+		// Show full path for the entry when searching
+		eles.forEach(function(el, i) {
+			el.find('.name').text(files[i].path);
 		});
 	},
 

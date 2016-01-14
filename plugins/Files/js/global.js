@@ -44,9 +44,13 @@ browser.update();
 $('#home-folder').click(browser.navigateTo);
 
 // File list search
-$('#search-bar').keypress(function() {
+$('#search-bar').keyup(function() {
 	tools.tooltip('Searching...', this);
-	browser.filter(this.value);
+	if (this.value) {
+		browser.filter(this.value);
+	} else {
+		browser.update();
+	}
 });
 
 // Dropdown below the new button
