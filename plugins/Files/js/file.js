@@ -109,7 +109,11 @@ var file = {
 	// Path related functions
 	get name () {
 		// path of 'foo/bar/baz' would return 'baz'
-		return path.basename(this.path);
+		if (this.path.slice(-1) === '/') {
+			return '';
+		} else {
+			return path.basename(this.path);
+		}
 	},
 	get pathArray () {
 		// path of 'foo/bar/baz' would return ['foo', 'bar', 'baz]
@@ -117,9 +121,7 @@ var file = {
 	},
 	get directory () {
 		// path of 'foo/bar/baz' would return 'foo/bar'
-		var directory = path.dirname(this.path);
-		// Prevent path.dirname from returning '.'
-		return (directory === '.' ? '' : directory);
+		return this.pathArray.slice(0, -1).join('/');
 	},
 	get folderNames () {
 		// path of 'foo/bar/baz' would return ['foo', 'bar']
@@ -143,21 +145,24 @@ var file = {
 		if (tools.notType(newName, 'string')) {
 			return;
 		}
-		var newPath = `${this.directory}/${newName}`;
+		var d = this.directory;
+		var newPath = d === '' ? newName : `${d}/${newName}`;
 		this.setPath(newPath, cb);
 	},
 	setDirectory (newDirectory, cb) {
 		if (tools.notType(newDirectory, 'string')) {
 			return;
 		}
-		var newPath = `${newDirectory}/${this.name}`;
+		var newPath = newDirectory === '' ? this.name : `${newDirectory}/${this.name}`;
 		this.setPath(newPath, cb);
 	},
 	setExtension (newExtension, cb) {
 		if (tools.notType(newExtension, 'string')) {
 			return;
 		}
-		var newPath = `${this.directory}/${this.nameNoExtension}${newExtension}`;
+		var d = this.directory;
+		var newPath = d === '' ? '' : d + '/';
+		newPath = newPath + this.nameNoExtension + newExtension;
 		this.setPath(newPath, cb);
 	},
 };

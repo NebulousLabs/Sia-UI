@@ -103,9 +103,9 @@ module.exports = {
 
 		// Call funct per array item
 		array.forEach(function(item) {
-			var specificParams = params.slice(0);
-			specificParams.unshift(item);
-			funct.apply(null, specificParams);
+			var singleParam = params.slice(0);
+			singleParam.unshift(item);
+			funct.apply(null, singleParam);
 		});
 	},
 
@@ -117,7 +117,7 @@ module.exports = {
 
 		// Any amount of optional parameters
 		var params = [];
-		for (let i = 2; i < arguments.length - 1; i++) {
+		for (let i = 1; i < arguments.length - 1; i++) {
 			let arg = arguments[i];
 			params.push(arg);
 		}
@@ -146,8 +146,8 @@ module.exports = {
 
     	// Call per function with params (Array or single param allowed)
 		functs.forEach(function(funct, index) {
-			var specificParams = params.map(param => Array.isArray(param) ? param[index] : param);
-			funct.apply(null, specificParams);
+			var singleParams = params.map(param => Array.isArray(param) ? param[index] : param);
+			funct.apply(null, singleParams);
 		});
 	},
 	

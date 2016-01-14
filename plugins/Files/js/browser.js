@@ -355,17 +355,11 @@ var browser = {
 
 		// Setup async calls to each file to download them
 		tools.notify(`Downloading ${label} to ${destination}`, 'download');
-		if (itemCount === 1) {
-			files[0].download(destination, function() {
-				tools.notify(`Downloaded {label} to ${destination}`, 'success');
-			});
-		} else {
-			let functs = files.map(file => file.download);
+			let functs = files.map(file => file.download.bind(file));
 			let destinations = files.map(file => `${destination}/${file.name}`);
 			tools.waterfall(functs, destinations, function() {
-				tools.notify(`Downloaded {label} to ${destination}`, 'success');
+				tools.notify(`Downloaded ${label} to ${destination}`, 'success');
 			});
-		}
 	},
 
 	// Filter file list by search string

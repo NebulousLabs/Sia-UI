@@ -28,14 +28,14 @@ var folder = Object.assign(Object.create(fileClass), {
 		if (tools.notType(newPath, 'string')) {
 			return;
 		}
-		var names = this.fileNames;
 
-		// Make array of each file's setPath function
-		var functs = names.map(key => this.files[key].setPath);
+		// Make array of each file's setPath function with its `this` variable
+		// set to prevent waterfall from changing it
+		var functs = this.filesArray.map(file => file.setPath.bind(file));
 
 		// Make array of new paths per folder's file, ensuring that no name
 		// starts with '/' if newPath is '' for the rootFolder
-		var paths = newPath !== '' ? names.map(name => `${newPath}/${name}`) : names;
+		var paths = newPath !== '' ? this.fileNames.map(name => `${newPath}/${name}`) : this.fileNames;
 
 		// Call callback only if all operations succeed
 		tools.waterfall(functs, paths, () => {
@@ -46,8 +46,9 @@ var folder = Object.assign(Object.create(fileClass), {
 
 	// Recursively delete folder and its files
 	delete (callback) {
-		// Make array of each file's delete function
-		var functs = this.filesArray.map(file => file.delete);
+		// Make array of each file's delete function with its `this` variable
+		// set to prevent waterfall from changing it
+		var functs = this.filesArray.map(file => file.delete.bind(file));
 
 		// Call callback only if all operations succeed
 		tools.waterfall(functs, () => {
@@ -62,22 +63,22 @@ var folder = Object.assign(Object.create(fileClass), {
 		if (tools.notType(destination, 'string')) {
 			return;
 		}
-		var names = this.fileNames;
 
 		// Make folder at destination
 		mkdirp.sync(destination);
 
-		// Make array of each file's download function
-		var functs = names.map(key => this.files[key].download);
+		// Make array of each file's download function with its `this` variable
+		// set to prevent waterfall from changing it
+		var functs = this.filesArray.map(file => file.download.bind(file));
 
 		// Make corresponding array of destination paths
-		names = names.map(name => `${destination}/${name}`);
+		var names = this.fileNames.map(name => `${destination}/${name}`);
 
 		// Call callback iff all operations succeed
 		tools.waterfall(functs, names, callback);
 	},
 
-	// Share .sia files of all files (deep) to destination
+	// Share .sia files of all files in this folder and subfolders to destination
 	share (destination, callback) {
 		if (tools.notType(destination, 'string')) {
 			return;
@@ -94,7 +95,7 @@ var folder = Object.assign(Object.create(fileClass), {
 		}, callback);
 	},
 
-	// Share ascii of all files (deep)
+	// Share ascii of all files in this folder and subfolders
 	shareascii (callback) {
 		siad.apiCall({
 			url: '/renter/shareascii',
@@ -165,11 +166,6 @@ var folder = Object.assign(Object.create(fileClass), {
 		// Root folder contains all
 		if (this.path === '') {
 			return true;
-		} else if (index === -1) {
-			// This folder's name isn't in the file path
-			return false;
-		} else if (folderNames.length < thisFoldersNames.length) {
-			return false;
 		} else {
 			// Test if all of this folder's names are included in the passed in
 			// file's path
@@ -255,7 +251,8 @@ Object.defineProperty(folder, 'count', {
 	},
 });
 
-// Return one-dimensional array of all siapaths in this folder
+// Return one-dimensional array of all siapaths in this folder, used primarily
+// for share and shareascii
 Object.defineProperty(folder, 'paths', {
 	get: function () {
 		var paths = [];

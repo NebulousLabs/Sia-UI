@@ -6,14 +6,13 @@
  */
 
 // Node modules
-const electron = require('electron');
-const clipboard = electron.clipboard;
 const $ = require('jquery');
 const tools = require('./uiTools');
 
 // Update file element with jquery
 function updateFileElement(f, el) {
 	el = el || $('#' + f.hashedPath);
+	el.id = f.hashedPath;
 
 	// Set unavailable graphic if needed
 	if (!f.available) {
@@ -33,7 +32,7 @@ function updateFileElement(f, el) {
 	} else if (f.uploadprogress < 100) {
 		detailText = f.uploadprogress.toFixed(0) + '%'; 
 	} else if (f.renewing) {
-		detailText = 'Renews on block ' + f.expiration;
+		detailText = 'Renewing';
 	} else {
 		detailText = 'Expires on block ' + f.expiration;
 	}
@@ -51,7 +50,7 @@ function makeFileElement(f) {
 	var el = $(`
 		<div class='file' id='${f.hashedPath}'>
 			<i class='fa fa-${f.type}'></i>
-			<div class='name'>${f.name}</div>
+			<div class='name' id='${f.name}'>${f.name}</div>
 			<i class='button fa fa-pencil'></i>
 			<div class='info'>
 				<div class='size'></div>
@@ -112,28 +111,31 @@ function makeFileElement(f) {
 
 		tools.notify(`Downloading ${f.name} to ${destination}`, 'download');
 		f.download(destination, function() {
-			tools.notify(`Downloaded {f.name} to ${destination}`, 'success');
+			tools.notify(`Downloaded ${f.name} to ${destination}`, 'success');
 		});
-	}).find('.fa-pencil.button').click(function() {
-		// Allow user to rename the file
-		var name = $(this).prev();
-		name.attr('contentEditable', true);
-		name.focus();
-	}).keypress(function(e) {
+	});
+	el.find('.name').keydown(function(e) {
 		var field = $(this);
 		var newName = field.text();
 		var nameChanged = newName !== f.name ? true : false;
 
 		// Pressing 'Enter' saves the name change
-		if (e.which === 13 && nameChanged) {
+		if (e.keyCode === 13 && nameChanged) {
+			e.preventDefault();
 			f.setName(newName, () => {
 				updateFileElement(f, el);
 			});
 			this.contentEditable = false;
-		} else if (e.which === 27) {
+		} else if (e.keyCode === 27) {
 			// Pressing 'Esc' resets the name
 			$(this).text(f.name).attr('contentEditable', false);
 		}
+	});
+	el.find('.fa-pencil.button').click(function() {
+		// Allow user to rename the file
+		var name = $(this).prev();
+		name.attr('contentEditable', true);
+		name.focus();
 	});
 	
 	// Add and return the new element
