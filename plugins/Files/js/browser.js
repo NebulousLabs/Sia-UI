@@ -52,17 +52,12 @@ function checkActionButtons() {
 	}
 }
 
-// Returns selected elements from current file list
-function getSelectedElements() {
-	// Get array of selected element's names (same as their ids)
-	var list = $('#file-list');
-	var selected = list.find('.selected.file').get();
-	return selected;
-}
-
 // Returns selected files/folders from currentFolder
 function getSelectedFiles() {
-	return getSelectedElements().map(el => currentFolder.files[el.find('.name').text()]);
+	var selected = $('.selected.file');
+	var nameFields = selected.map((i, el) => $(el).find('.name')).get();
+	var names = nameFields.map(field => field.text());
+	return names.map(name => currentFolder.files[name]);
 }
 
 // Refresh the file list according to the currentFolder
@@ -151,6 +146,10 @@ function updateFiles(files) {
 // Refresh the folder list representing the current working directory
 function updateCWD(navigateTo) {
 	var cwd = $('#cwd');
+	var oldPath = cwd.children().last().attr('id');
+	if (oldPath === currentFolder.path) {
+		return;
+	}
 	cwd.empty();
 	var folders = currentFolder.parentFolders;
 	folders.push(currentFolder);
@@ -158,7 +157,7 @@ function updateCWD(navigateTo) {
 	// Add a directory element per folder
 	folders.forEach(function(f, i) {
 		var el = $(`
-			<span class='button directory' id='dir-${f.path}'>
+			<span class='button directory' id='${f.path}'>
 			</span>
 		`);
 		// Root folder
@@ -204,22 +203,17 @@ function updateCWD(navigateTo) {
 var browser = {
 	// Update files in the browser
 	update (callback) {
-		// TODO: This call doesn't always include a file added right before the
-		// call to this function. Waiting 100ms provides a not-noticeable delay and
-		// allows siad time to provide an up to date list, but is flawed
-		setTimeout(function() {
-			siad.apiCall('/renter/files', function(results) {
-				// Update the current working directory
-				updateCWD(browser.navigateTo);
-				// Add or update each file from a `renter/files/list` call
-				updateFiles(results.files);
-				// Update the file list
-				updateList(browser.navigateTo);
-				if (callback) {
-					callback();
-				}
-			});
-		}, 50);
+		siad.apiCall('/renter/files', function(results) {
+			// Update the current working directory
+			updateCWD(browser.navigateTo);
+			// Add or update each file from a `renter/files/list` call
+			updateFiles(results.files);
+			// Update the file list
+			updateList(browser.navigateTo);
+			if (typeof callback === 'function') {
+				callback();
+			}
+		});
 	},
 
 	// Expose these, mostly for debugging purposes
