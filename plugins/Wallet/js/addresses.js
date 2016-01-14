@@ -94,8 +94,8 @@ $('#view-all-addresses').click(function() {
 function filterAdresses(searchstr) {
 	// Filter
 	searchedAddresses = addresses.map(address => ({address: address}));
-	searchedAddresses = searchedAddresses.filter(function(addressObject) {
-		return (addressObject.address.indexOf(searchstr) > -1);
+	searchedAddresses = addresses.filter(function(addressObject) {
+		return (addressObject.address.includes(searchstr));
 	});
 }
 

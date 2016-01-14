@@ -35,7 +35,7 @@ function checkCriteria(txn) {
 	       (criteria.startTime === null || txn.confirmationtimestamp >= criteria.startTime) &&
 	       (criteria.maxValue  === null || txn.value                 <= criteria.maxValue)  &&
 	       (criteria.minValue  === null || txn.value                 >= criteria.minValue)  &&
-	       (criteria.currency  === null || criteria.currency.indexOf(txn.currency) !== -1)  &&
+	       (criteria.currency  === null || criteria.currency.includes(txn.currency))        &&
 	       (criteria.inputs    === true || txn.value                 >= 0)                  &&
 	       (criteria.outputs   === true || txn.value                 <= 0);
 }

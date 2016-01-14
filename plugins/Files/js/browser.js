@@ -72,7 +72,7 @@ function updateList(navigateTo) {
 	var files = currentFolder.filesArray;
 	var hashes = files.map(file => file.hashedPath);
 	$('.file:not(.label)').each(function() {
-		if (hashes.indexOf(this.id) === -1) {
+		if (!hashes.includes(this.id)) {
 			$(this).remove();
 		}
 	});
@@ -378,7 +378,7 @@ var browser = {
 	// TODO: only searches the current folder for now
 	filter (searchstr) {
 		$('#file-list').children().each(function(entry) {
-			if ($(this).find('.name').html().indexOf(searchstr) > -1) {
+			if ($(this).find('.name').text().includes(searchstr)) {
 				entry.show();
 			} else {
 				entry.hide();
