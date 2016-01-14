@@ -16,14 +16,14 @@ const browser = require('./browser');
 // Keeps track of if the view is shown
 var updating;
 // 'all' or 'active'
-var hostsType = 'all';
+var hostsType = 'active';
 // Hastings per Siacoin (1e24) / B per GB (1e9) / Blocks per 30-day month (4320)
 const MONTHLY_DATA_COST = new BigNumber('1e+24').div('1e+9').div('4320');
 
 // Update capsule values with renter status
 function updateStatus(result) {
 	var priceDisplay;
-    var hostsDisplay = hostsType === 'all' ? ' Hosts' : ' Active Hosts';
+    var hostsDisplay = hostsType === 'active' ? ' Active Hosts' : ' Hosts';
 
 	// Determine capsule display values
 	if (result.hosts) {
@@ -60,7 +60,7 @@ function update() {
 // Clicking the host pod toggles it between all hosts and active hosts
 $('#host-count.pod').click(function() {
 	$('#host-count.pod .fa').toggleClass('fa-globe fa-users');
-	hostsType = hostsType === 'all' ? 'active' : 'all';
+	hostsType = hostsType === 'active' ? 'all' : 'active';
 	update();
 });
 
