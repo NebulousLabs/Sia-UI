@@ -5,6 +5,10 @@ const path = require('path');
 const os = require('os');
 
 
+// Up and down arrow history
+var terminalHistory = [];
+var historyPosition = -1;
+
 // Dir where siac will be
 var siaDir = path.join(__dirname, '../..', 'Sia');
 
@@ -16,15 +20,18 @@ var terminal = document.getElementById("terminal-log");
 // Command handling function
 function siacCommand(command){
 	// Check os type to choose to look for exe or not
+	var osCommand;
 	switch(os.type()){
 		case 'Windows_NT':
 			// Switch to Sia dir and run siac.exe
-			var osCommand = 'siac.exe';
+			osCommand = 'siac.exe';
+			break;
 		case 'Linux':
 		case 'Darwin':
-			var osCommand = 'siac';
+			osCommand = 'siac';
+			break;
 		default:
-			var osCommand = 'siac';
+			osCommand = 'siac';
 	}
 	// Execute the command, siac.exe + the command
 	child_process.exec("cd " + siaDir + " & " + osCommand + " " + command,function(err,stdout){
@@ -67,11 +74,16 @@ siacCommand("help");
 /////////////////////////////////
 // History for up down arrow keys
 
-var terminalHistory = [];
-var historyPosition = -1;
-
 // Form command input
 var input = document.getElementById("terminal-command");
+
+// Arrow key reponse handler
+function inputHistory(){
+	if(terminalHistory[historyPosition]){
+		// Reverse the array and set the new value of the input
+		input.value = terminalHistory.reverse()[historyPosition];
+	}
+}
 
 // Bind the onkeyup event
 input.onkeyup = function(evt){
@@ -97,11 +109,3 @@ input.onkeyup = function(evt){
 		return;
 	}
 };
-
-// Arrow key reponse handler
-function inputHistory(){
-	if(terminalHistory[historyPosition]){
-		// Reverse the array and set the new value of the input
-		input.value = terminalHistory.reverse()[historyPosition];
-	}
-}
