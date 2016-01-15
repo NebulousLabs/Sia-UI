@@ -45,7 +45,7 @@ function makeAddress(address, number) {
 
 // Fill address page with search results or addresses
 function updateAddressPage() {
-	// TODO: Merge this into Transaction's filter criteria and make an overall
+	// TODO: Merge itemsPerPage into Transaction's filter criteria and make an overall
 	// settings object, perhaps just as a member of the `wallet` object
 	var itemsPerPage = 25;
 	$('#address-list').empty();
@@ -94,8 +94,8 @@ $('#view-all-addresses').click(function() {
 function filterAdresses(searchstr) {
 	// Filter
 	searchedAddresses = addresses.map(address => ({address: address}));
-	searchedAddresses = searchedAddresses.filter(function(addressObject) {
-		return (addressObject.address.indexOf(searchstr) > -1);
+	searchedAddresses = addresses.filter(function(addressObject) {
+		return (addressObject.address.includes(searchstr));
 	});
 }
 

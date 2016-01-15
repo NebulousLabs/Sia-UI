@@ -7,20 +7,24 @@
  */
 
 // Node modules
+const electron = require('electron');
+const clipboard = electron.clipboard;
 const fs = require('fs');
 const path = require('path');
 const $ = require('jquery');
 const siad = require('sia.js');
 const tools = require('./uiTools');
 const fileElement = require('./fileElement');
-const loader = require('./loader');
 const folderElement = require('./folderElement');
+const loader = require('./loader');
 
 // Root folder object to hold all other file and folder objects
 var rootFolder = require('./folderFactory')('');
 var currentFolder = rootFolder;
 // Point of reference for shift-click multi-select
 var anchor;
+// Keeps track of if there is content in the search bar
+var searching = '';
 
 // Get rid of an anchor
 function deselectAnchor() {
@@ -41,81 +45,126 @@ function selectAnchor(el) {
 	el.addClass('selected');
 }
 
-// Returns selected elements from current file list
-function getSelectedElements() {
-	// Get array of selected element's names (same as their ids)
-	var list = $('#file-list');
-	var selected = list.find('.selected.file').get();
-	return selected.map(el => el.id);
+// Show action buttons iff there are selected files
+function checkActionButtons() {
+	var someSelected = $('.selected').length;
+	var buttonsAreVisible = $('.controls .button').is(':visible');
+	if (someSelected && !buttonsAreVisible) {
+		$('.controls .button').fadeIn('fast');
+	} else if (!someSelected && buttonsAreVisible) {
+		$('.controls .button').fadeOut('fast');
+	}
 }
 
 // Returns selected files/folders from currentFolder
 function getSelectedFiles() {
-	return getSelectedElements().map(el => currentFolder.contents[el.id]);
+	var selected = $('.selected.file');
+	var nameFields = selected.map((i, el) => $(el).find('.name')).get();
+	var names = nameFields.map(field => field.text());
+	return names.map(name => currentFolder.files[name]);
 }
 
 // Refresh the file list according to the currentFolder
 // TODO: folders before files, sort alphabetically
 function updateList(navigateTo) {
-	var list = $('#file-list');
-
-	// Refresh the list
-	list.empty();
-	currentFolder.contentsArray.forEach(content => {
-		var el;
-		if (content.type === 'file') {
-			// Make and display a file element
-			el = fileElement(content);
-		} else if (content.type === 'folder') {
-			// Make and display a folder element
-			el = folderElement(content, navigateTo);
-		} else {
-			console.error('Unknown file type: ' + content.type, content);
+	// Get rid of all elements that don't belong
+	var files = currentFolder.filesArray;
+	var hashes = files.map(file => file.hashedPath);
+	$('.file:not(.label)').each(function() {
+		if (!hashes.includes(this.id)) {
+			$(this).remove();
 		}
-		list.append(el);
 	});
 
-	// Reselect all those that were selected
-	var selected = getSelectedElements().forEach(el => {
-		$(el).addClass('selected');
+	// Refresh the list
+	files.forEach(file => {
+		if (file.type === 'file') {
+			// Make and display a file element
+			fileElement(file);
+		} else if (file.type === 'folder') {
+			// Make and display a folder element
+			folderElement(file, navigateTo);
+		} else {
+			console.error('Unknown file type: ' + file.type, file);
+		}
 	});
 }
 
 // Update file from api result
-function updateFile(result) {
-	var fileFolders = result.nickname.split('/');
+function updateFile(file) {
+	var fileFolders = file.siapath.split('/');
 	var fileName = fileFolders.pop();
 
 	// Make any needed folders
 	var folderIterator = rootFolder;
 	fileFolders.forEach(function(folderName) {
 		// Continue to next folder or make folder if it doesn't already exist
-		folderIterator = folderIterator.contents[folderName] ? folderIterator.contents[folderName] : folderIterator.addFolder(folderName);
+		folderIterator = folderIterator.files[folderName] ? folderIterator.files[folderName] : folderIterator.addFolder(folderName);
 	});
 
 	// Make file if needed
-	if (!folderIterator.contents[fileName]) {
-		folderIterator.addFile(result);
+	if (!folderIterator.files[fileName]) {
+		return folderIterator.addFile(file);
 	} else {
 		// Update the stats on the file object
-		folderIterator.contents[fileName].update(result);
+		return folderIterator.files[fileName].update(file);
 	}
+}
+
+// Update file from api files
+function updateFiles(fileObjects) {
+	// Update or add each file
+	fileObjects.forEach(function(file) {
+		var f = updateFile(file);
+	});
+
+	// Track files to find old files
+	var paths = fileObjects.map(fo => fo.siapath);
+	var allFiles = rootFolder.filesArrayDeep;
+	var oldFiles = allFiles.filter(f => !paths.includes(f.path));
+
+	// Remove elements of and pointers to nonexistent files
+	oldFiles.forEach(f => {
+		// Unless it's an empty folder
+		if (f.type === 'folder' && f.isEmpty()) {
+			return;
+		}
+		$('#' + f.hashedPath).remove();
+		delete f.parentFolder.files[f.name];
+	});
 }
 
 // Refresh the folder list representing the current working directory
 function updateCWD(navigateTo) {
 	var cwd = $('#cwd');
+	var oldPath = cwd.children().last().attr('id');
+	if (oldPath === currentFolder.path) {
+		return;
+	}
 	cwd.empty();
 	var folders = currentFolder.parentFolders;
 	folders.push(currentFolder);
 
 	// Add a directory element per folder
-	folders.forEach(function(f) {
+	folders.forEach(function(f, i) {
 		var el = $(`
-			<span class='button directory' id='dir-${f.path}'>
-				${f.name}/
+			<span class='button directory' id='${f.path}'>
 			</span>
 		`);
+		// Root folder
+		if (f.path === '') {
+			el.html('<i class=\'fa fa-folder\'></i>');
+		} else {
+			// Middle folders
+			el.html(f.name);
+		}
+
+		// Last folder
+		if (i === folders.length - 1) {
+			el.append(' <i class=\'fa fa-caret-down\'></i>');
+		} else {
+			el.append('/');
+		}
 
 		// Clicking the element navigates to that folder
 		el.click(function() {
@@ -124,9 +173,6 @@ function updateCWD(navigateTo) {
 
 		// Append and add icon for root folder
 		cwd.append(el);
-		if (f.path === '') {
-			el.prepend('<i class=\'fa fa-folder\'></i>');
-		}
 	});
 
 	// Sum up widths to move dropdown right as directory is deeper
@@ -137,7 +183,7 @@ function updateCWD(navigateTo) {
 	});
 
 	// New file/folder button appears below last folder
-	cwd.children().last().click(function() {
+	cwd.children().last().off('click').click(function() {
 		var dropdown = $('.hidden.dropdown');
 		dropdown.css('left', cwdLength + 'px');
 		dropdown.toggle('fast');
@@ -146,6 +192,24 @@ function updateCWD(navigateTo) {
 
 // The browser object
 var browser = {
+	// Update files in the browser
+	update (callback) {
+		searching = $('#search-bar').val();
+		siad.apiCall('/renter/files', function(results) {
+			// Update the current working directory
+			updateCWD(browser.navigateTo);
+			if (!searching) {
+				// Add or update each file from a `renter/files/list` call
+				updateFiles(results.files);
+				// Update the file list
+				updateList(browser.navigateTo);
+			}
+			if (typeof callback === 'function') {
+				callback();
+			}
+		});
+	},
+
 	// Expose these, mostly for debugging purposes
 	get currentFolder () {
 		return currentFolder;
@@ -157,6 +221,7 @@ var browser = {
 	// Select an item in the current folder
 	select (el) {
 		selectAnchor(el);
+		checkActionButtons();
 	},
 	toggle (el) {
 		deselectAnchor();
@@ -164,6 +229,7 @@ var browser = {
 		if (el.hasClass('selected')) {
 			selectAnchor(el);
 		}
+		checkActionButtons();
 	},
 
 	// Select items from the last selected file to the one passed in
@@ -180,25 +246,29 @@ var browser = {
 				el.nextUntil(anchor).addClass('selected');
 			}
 		}
+		checkActionButtons();
 	},
 
 	// Select all items in the current folder
 	selectAll () {
 		deselectAnchor();
 		$('#file-list .file').addClass('selected');
+		checkActionButtons();
 	},
 
 	// Deselect all items in the current folder
-	deselectAll () {
-		deselectAnchor();
-		$('#file-list .file').removeClass('selected');
+	deselectAll (exception) {
+		if (exception !== anchor) {
+			deselectAnchor();
+		}
+		$('#file-list .file').not(exception).removeClass('selected');
+		checkActionButtons();
 	},
 
 	// Deletes selected files
 	deleteSelected () {
 		var files = getSelectedFiles();
 		var itemCount = files.length;
-		var totalCount = files.reduce((a, b) => a + b.count, 0);
 		var label;
 
 		// Check for any selected files, and make messages singular or plural 
@@ -208,6 +278,13 @@ var browser = {
 		} else if (itemCount === 1) {
 			label = files[0].name;
 		} else {
+			let totalCount = files.reduce(function(a, b) {
+				if (b.type === 'folder') {
+					return a + b.count;
+				} else {
+					return ++a;
+				}
+			}, 0);
 			label = totalCount + ' files';
 		}
 
@@ -226,33 +303,115 @@ var browser = {
 		// Delete files and file elements
 		files.forEach(function(file) {
 			file.delete(function() {
-				$('#' + file.name).remove();
+				$('#' + file.hashedPath).remove();
 			});
 		});
+	},
+
+	// Prompts user for Ascii or .sia method of sharing
+	shareSelected () {
+		var files = getSelectedFiles();
+		var itemCount = files.length;
+		var label;
+		var paths;
+
+		// Check for any selected files, and make messages singular or plural
+		// Also get paths of selected files, including files several layers
+		// inside a folder, in a one dimensional array
+		if (itemCount === 0) {
+			tools.tooltip('No selected files', $('.controls .share').get(0));
+			return;
+		} else if (itemCount === 1) {
+			let file = files[0];
+			label = file.name;
+			paths = file.type === 'folder' ? file.paths : [file.path];
+		} else {
+			// Reduce array of files to array of all file paths
+			paths = files.reduce(function(a, b) {
+				if (b.type === 'folder') {
+					return a.concat(b.paths);
+				} else {
+					a.push(b.path);
+					return a;
+				}
+			}, []);
+			label = paths.length + ' files';
+		}
+
+		// Present option between .Sia or ASCII method of sharing
+		var option = tools.dialog('message', {
+			type:    'question',
+			title:   'Share ' + label,
+			message: 'Share via .sia file or ASCII text?',
+			detail:  'Choose to download .sia file or copy ASCII text to clipboard.',
+			buttons: ['.Sia file', 'ASCII text', 'Cancel'],
+		});
+
+		// Choose a location to download the .sia file to
+		if (option === 0) {
+			let dialogOptions = {
+				title:       'Share .sia for ' + label,
+				filters:     [{ name: 'Sia file', extensions: ['sia'] }],
+			};
+			if (itemCount === 1) {
+				dialogOptions.defaultPath = label;
+			}
+			var destination = tools.dialog('save', dialogOptions);
+
+			// Ensure destination exists
+			if (!destination) {
+				return;
+			}
+
+			// Place siafile to location
+			tools.notify(`Sharing ${label} to ${destination}`, 'siafile');
+			loader.shareDotSia(paths, destination, function() {
+				tools.notify(`Put ${label}'s .sia files at ${destination}`, 'success');
+			});
+		} else if (option === 1) {
+			// Get the ascii share string
+			tools.notify(`Getting ascii for ${label}`, 'asciifile');
+			loader.shareAscii(paths, function(result) {
+				// Write it to system clipboard
+				clipboard.writeText(result.asciisia);
+				tools.notify(`Copied ascii for ${label} to clipboard!`, 'asciifile');
+			});
+		}
 	},
 
 	// Prompts user for destination and downloads selected files to it
 	downloadSelected () {
 		var files = getSelectedFiles();
 		var itemCount = files.length;
-		var totalCount = files.reduce((a, b) => a + b.count, 0);
 		var label;
+		var destination;
 
 		// Check for any selected files, and make messages singular or plural 
 		if (itemCount === 0) {
 			tools.tooltip('No selected files', $('.controls .download').get(0));
 			return;
 		} else if (itemCount === 1) {
+			// Save file/folder into specific place
 			label = files[0].name;
+			destination = tools.dialog('save', {
+				title: 'Download ' + label,
+				defaultPath: label,
+			});
 		} else {
+			let totalCount = files.reduce(function(a, b) {
+				if (b.type === 'folder') {
+					return a + b.count;
+				} else {
+					return ++a;
+				}
+			}, 0);
+			// Save files/folders into directory
 			label = totalCount + ' files';
+			destination = tools.dialog('open', {
+				title: 'Download ' + label,
+				properties: ['openDirectory', 'createDirectory'],
+			});
 		}
-
-		// Save file/folder into specific place
-		var destination = tools.dialog('save', {
-			title:       'Download ' + label,
-			defaultPath: label,
-		});
 
 		// Ensure destination exists
 		if (!destination) {
@@ -261,38 +420,30 @@ var browser = {
 
 		// Setup async calls to each file to download them
 		tools.notify(`Downloading ${label} to ${destination}`, 'download');
-		var functs = files.map(file => file.download);
-		tools.waterfall(functs, destination, function() {
-			tools.notify(`Downloaded {label} to ${destination}`, 'success');
-		});
-	},
-
-	// Update files in the browser
-	update () {
-		// TODO: This call doesn't always include a file added right before the
-		// call to this function. Waiting 100ms provides a not-noticeable delay and
-		// allows siad time to provide an up to date list, but is flawed
-		setTimeout(function() {
-			siad.apiCall('/renter/files', function(results) {
-				// Update the current working directory
-				updateCWD(browser.navigateTo);
-				// Add or update each file from a `renter/files/list` call
-				results.files.forEach(updateFile);
-				// Update the file list
-				updateList(browser.navigateTo);
+			let functs = files.map(file => file.download.bind(file));
+			let destinations = files.map(file => `${destination}/${file.name}`);
+			tools.waterfall(functs, destinations, function() {
+				tools.notify(`Downloaded ${label} to ${destination}`, 'success');
 			});
-		}, 100);
 	},
 
 	// Filter file list by search string
-	// TODO: only searches the current folder for now
 	filter (searchstr) {
-		$('#file-list').children().each(function(entry) {
-			if ($(this).find('.name').html().indexOf(searchstr) > -1) {
-				entry.show();
-			} else {
-				entry.hide();
-			}
+		searching = searchstr;
+		if (!searchstr) {
+			return;
+		}
+		// Clear file list
+		$('#file-list').empty();
+
+		// Match files and make the elements
+		var files = currentFolder.filesArrayDeep;
+		files = files.filter(file => file.path.includes(searchstr));
+		var eles = files.map(file => fileElement(file));
+
+		// Show full path for the entry when searching
+		eles.forEach(function(el, i) {
+			el.find('.name').text(files[i].path);
 		});
 	},
 
@@ -304,12 +455,12 @@ var browser = {
 	},
 
 	// Makes a new folder element temporarily
-	makeFolder () {
+	makeFolder (userInput, callback) {
 		var name = 'New Folder';
 		// Ensure unique name
-		if (currentFolder.contents[name]) {
+		if (currentFolder.files[name]) {
 			var n = 0;
-			while (currentFolder.contents[`${name}_${n}`]) {
+			while (currentFolder.files[`${name}_${n}`]) {
 				n++;
 			}
 			name = `${name}_${n}`;
@@ -317,6 +468,9 @@ var browser = {
 		var folder = currentFolder.addFolder(name);
 		var element = folderElement(folder, browser.navigateTo);
 		$('#file-list').append(element);
+		if (callback) {
+			callback();
+		}
 	},
 };
 
@@ -324,15 +478,27 @@ var browser = {
 browser['Make Folder'] = browser.makeFolder;
 browser['Upload File'] = function uploadFiles(filePaths, callback) {
 	// Files upload to currentFolder.path/name by default
-	tools.waterfall(loader.uploadFile, filePaths, currentFolder.path, callback);
+	tools.notify(`Uploading ${filePaths.length} file(s)!`, 'upload');
+	tools.waterfall(loader.uploadFile, filePaths, currentFolder.path, function() {
+		tools.notify(`Upload for ${filePaths.length} file(s) completed!`, 'success');
+		callback();
+	});
 };
 browser['Upload Folder'] = function uploadFolders(dirPaths, callback) {
 	// Uploads to currentFolder.path/name, keeping their original structure
-	tools.waterfall(loader.uploadFolder, dirPaths, currentFolder.path, callback);
+	tools.notify(`Uploading ${dirPaths.length} folder(s)!`, 'upload');
+	tools.waterfall(loader.uploadFolder, dirPaths, currentFolder.path, function() {
+		tools.notify(`Upload for ${dirPaths.length} folder(s) completed!`, 'success');
+		callback();
+	});
 };
 browser['Load .Sia File'] = function loadDotSias(filePaths, callback) {
-	tools.waterfall(loader.loadDotSia, filePaths, callback);
+	tools.notify(`Loading ${filePaths.length} .sia file(s)!`, 'siafile');
+	tools.waterfall(loader.loadDotSia, filePaths, function() {
+		tools.notify(`Loaded ${filePaths.length} .sia(s) file(s)!`, 'success');
+		callback();
+	});
 };
-browser['Load ASCII File'] = browser.loadAscii;
+browser['Load ASCII File'] = loader.loadAscii;
 
 module.exports = browser;

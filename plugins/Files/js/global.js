@@ -36,14 +36,21 @@ siad.apiCall = function(callObj, callback) {
 	});
 };
 
+// Ensure browser updates once initially
+browser.update();
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Buttons ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Home folder button
 $('#home-folder').click(browser.navigateTo);
 
 // File list search
-$('#search-bar').keypress(function() {
+$('#search-bar').keyup(function() {
 	tools.tooltip('Searching...', this);
-	browser.filter(this.value);
+	if (this.value) {
+		browser.filter(this.value);
+	} else {
+		browser.update();
+	}
 });
 
 // Dropdown below the new button
@@ -111,51 +118,55 @@ $('#paste-ascii input').keypress(function(e) {
 	}
 });
 
-// Clicking within the file-list affects what elements are selected
-$('#file-browser').click(function(e) {
-	e.preventDefault();
-	var el = $(e.target);
-	var file = el.closest('.file');
-
-	// Don't react to button clicks
-	var buttonClicked = el.closest('.button').length;
-	if (buttonClicked) {
-		return;
-	}
-
-	// Clicking affects selected items
-	if (e.shiftKey) {
-		browser.selectTo(file);
-	} else if (e.ctrlKey) {
-		browser.toggle(file);
-	} else {
-		browser.deselectAll();
-		browser.select(file);
-	}
-});
-
-
 // Clicking controls buttons affects selected elements
+// TODO: Needs testing
 $('.controls .delete').click(browser.deleteSelected);
+// TODO: Need to make browser.shareSelected
 $('.controls .share').click(browser.shareSelected);
 $('.controls .download').click(browser.downloadSelected);
+// Hide buttons to start, they're shown when files are selected
+$('.controls .button').fadeOut();
 
 // Clicking the general document closes popups, deselects files,
 // and stops file name editing
 $(document).on('click', function(event) {
 	var el = $(event.target);
+	// Clicking minimizes the dropdown
 	var dropdownClicked = el.closest('.dropdown').length;
-	var lastDirectoryClicked = el.closest('#cwd').length && el.is(':last-child');
+	var lastDirectoryClicked = el.closest('#cwd').length && el.closest('.directory').is(':last-child');
 	if (!dropdownClicked && !lastDirectoryClicked) {
 		$('.dropdown').hide('fast');
 	}
-	var fileClicked = el.closest('.file').length;
+	// Clicking cancels file name editing
+	var fileNameClicked = el.closest('.name').length;
+	var fileNameButtonClicked = el.prev('.name').length;
+	if (!fileNameClicked && !fileNameButtonClicked) {
+		let edited = $('.name[contentEditable=true]');
+		let name = edited.attr('id');
+		edited.text(name).attr('contentEditable', false);
+	}
+	// Don't react to button clicks past this
+	var buttonClicked = el.closest('.button').length;
+	if (buttonClicked) {
+		browser.deselectAll();
+		return;
+	}
+	// Clicking affects what elements are selected
+	var file = el.closest('.file:not(.label)');
+	var fileClicked = file.length;
 	if (!fileClicked) {
 		browser.deselectAll();
-	}
-	var fileNameClicked = el.closest('.name.button').length;
-	if (!fileNameClicked) {
-		let edited = $('.name.button[contentEditable=true]');
-		edited.text(edited.attr('id')).attr('contentEditable', false);
+	} else {
+		// Clicking affects selected items
+		if (event.shiftKey) {
+			browser.selectTo(file);
+		} else if (event.ctrlKey) {
+			browser.toggle(file);
+		} else {
+			if (fileClicked) {
+				browser.select(file);
+			}
+			browser.deselectAll(file);
+		}
 	}
 });

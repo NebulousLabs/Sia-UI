@@ -10,28 +10,50 @@
 const path = require('path');
 const $ = require('jquery');
 const siad = require('sia.js');
+const tools = require('./uiTools');
 
 var file = {
-	type:     'file',
-	path:     '',
+	// Properties every file should have
+	type:         'file',
+	path:         '',
+	parentFolder: null,
 
 	// Update/record file stats
 	update (stats) {
+		if (tools.notType(stats, 'object')) {
+			return;
+		}
 		Object.assign(this, stats);
-		this.path = stats.nickname;
+		this.path = stats.siapath;
+		return this;
 	},
 
-	// Changes file's nickname with siad call
+	// Get array of folder objects that contain this particular file
+	get parentFolders () {
+		// path of 'foo/bar/baz' would return folder objects whose paths are
+		// 'foo' and 'foo/bar' respectively
+		var parentFolders = [];
+		// iterate through parentFolder links to populate parentFolders
+		for (let i = this.parentFolder; i; i = i.parentFolder) {
+			parentFolders.push(i);
+		}
+		return parentFolders.reverse();
+	},
+
+	// The below are just function forms of the renter calls a file can enact
+	// on itself, see the API.md
+	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
+
+	// Changes file's siapath with siad call
 	setPath (newPath, callback) {
-		if (typeof newPath !== 'string') {
-			console.error('Improper argument!', newPath);
+		if (tools.notType(newPath, 'string')) {
 			return;
 		}
 		siad.apiCall({
 			url: '/renter/rename/' + this.path ,
 			method: 'POST',
 			qs: {
-				newname: newPath,
+				newsiapath: newPath,
 			},
 		}, () => {
 			this.path = newPath;
@@ -40,22 +62,17 @@ var file = {
 			}
 		});
 	},
-
-	// The below are just function forms of the renter calls a file can enact
-	// on itself, see the API.md
-	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
 	delete (callback) {
 		siad.apiCall({
 			url: '/renter/delete/' + this.path,
 			method: 'POST',
 		}, result => {
-			delete this.parentFolder.contents[this.name];
+			delete this.parentFolder.files[this.name];
 			callback(result);
 		});
 	},
 	download (destination, callback) {
-		if (typeof destination !== 'string') {
-			console.error('Improper argument!', destination);
+		if (tools.notType(destination, 'string')) {
 			return;
 		}
 		siad.apiCall({
@@ -66,47 +83,49 @@ var file = {
 		}, callback);
 	},
 	share (destination, callback) {
-		if (typeof destination !== 'string' || destination.slice(-4) !== '.sia') {
-			console.error('Improper argument!', destination);
+		if (tools.notType(destination, 'string')) {
+			return;
+		} else if (destination.slice(-4) !== '.sia') {
+			console.error('Share path needs end in ".sia"!', destination);
 			return;
 		}
 		siad.apiCall({
-			url: '/renter/share/' + this.path,
+			url: '/renter/share',
 			qs: {
+				siapaths: [this.path],
 				destination: destination,
 			},
 		}, callback);
 	},
 	shareASCII (callback) {
 		siad.apiCall({
-			url: '/renter/shareascii/' + this.path,
+			url: '/renter/shareascii',
+			qs: {
+				siapaths: [this.path],
+			},
 		}, callback);
 	},
 
-	// Common functions
+	// Path related functions
 	get name () {
 		// path of 'foo/bar/baz' would return 'baz'
-		return path.basename(this.path);
+		if (this.path.slice(-1) === '/') {
+			return '';
+		} else {
+			return path.basename(this.path);
+		}
+	},
+	get pathArray () {
+		// path of 'foo/bar/baz' would return ['foo', 'bar', 'baz]
+		return this.path.split('/');
 	},
 	get directory () {
 		// path of 'foo/bar/baz' would return 'foo/bar'
-		var directory = path.dirname(this.path);
-		// Prevent path.dirname from returning '.'
-		return (directory === '.' ? '' : directory);
+		return this.pathArray.slice(0, -1).join('/');
 	},
 	get folderNames () {
 		// path of 'foo/bar/baz' would return ['foo', 'bar']
 		return this.directory.split('/');
-	},
-	get parentFolders () {
-		// path of 'foo/bar/baz' would return folder objects whose paths are
-		// ['foo', 'foo/bar'] respectively
-		var parentFolders = [];
-		// iterate through parentFolder links to populate parentFolders
-		for (let i = this.parentFolder; i; i = i.parentFolder) {
-			parentFolders.push(i);
-		}
-		return parentFolders.reverse();
 	},
 	get extension () {
 		return path.extname(this.path);
@@ -114,24 +133,36 @@ var file = {
 	get nameNoExtension () {
 		return path.basename(this.path, this.extension);
 	},
-	get size () {
-		return this.filesize;
-	},
-	get count () {
-		return 1;
+	// Since spaces, chinese characters, etc. are allowable in file names but
+	// not in html ids, hashedPath() gets a unique representations of files that
+	// is html id friendly
+	get hashedPath() {
+		return require('crypto').createHash('md5').update(this.path).digest('hex');
 	},
 
 	// These can't use set syntax because they're necessarily asynchronous
 	setName (newName, cb) {
-		var newPath = `${this.directory}/${newName}`;
+		if (tools.notType(newName, 'string')) {
+			return;
+		}
+		var d = this.directory;
+		var newPath = d === '' ? newName : `${d}/${newName}`;
 		this.setPath(newPath, cb);
 	},
 	setDirectory (newDirectory, cb) {
-		var newPath = `${newDirectory}/${this.name}`;
+		if (tools.notType(newDirectory, 'string')) {
+			return;
+		}
+		var newPath = newDirectory === '' ? this.name : `${newDirectory}/${this.name}`;
 		this.setPath(newPath, cb);
 	},
 	setExtension (newExtension, cb) {
-		var newPath = `${this.directory}/${this.nameNoExtension}${newExtension}`;
+		if (tools.notType(newExtension, 'string')) {
+			return;
+		}
+		var d = this.directory;
+		var newPath = d === '' ? '' : d + '/';
+		newPath = newPath + this.nameNoExtension + newExtension;
 		this.setPath(newPath, cb);
 	},
 };

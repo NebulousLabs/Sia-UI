@@ -36,7 +36,14 @@ input {
 
 /* Current Directory Path */
 .directory {
+	border: 1px solid #F5F5F5;
 	vertical-align: middle;
+	-webkit-animation: fadein 0.3s;
+}
+.directory:hover {
+	border: 1px solid #DDDDDD;
+	-webkit-box-shadow: inset 0 0 3px #ECECEC;
+	-webkit-animation: fadein 0.3s;
 }
 .button {
 	display: inline-block;
@@ -129,17 +136,23 @@ hr {
 }
 .file .name {
 	text-align: left;
-	width: calc(100% - 250px);
-	overflow: hidden;
+	max-width: calc(100% - 210px);
 	white-space: nowrap;
+}
+.file .info {
+	float: right;
+}
+.file .info > * {
+	display: inline-block;
 }
 .file .size {
 	text-align: right;
-	width: 75px;
+	width: 60px;
+	margin-right: 10px;
 }
-.file .time {
-	text-align: center;
-	width: 150px;
+.file .detail {
+	text-align: left;
+	width: 120px;
 }
 .cssTooltip {
 	display: inline;
