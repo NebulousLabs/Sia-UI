@@ -18,6 +18,11 @@ body{
 	font-family: 'Roboto Mono';
 	font-weight:400;
 }
+.terminal form{
+	background:#333;
+	display:flex;
+	padding:20px 40px;
+}
 .terminal input{
 	background:transparent;
 	border:none;
@@ -50,10 +55,4 @@ body{
 .terminal button:active, .terminal button:hover{
 	background: rgba(255,255,255,0.2);
 	transition: all o.3s ease;
-}
-
-.terminal form{
-	background:#333;
-	display:flex;
-	padding:20px 40px;
 }
