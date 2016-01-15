@@ -93,7 +93,7 @@ select:hover {
 	padding: 8px;
 	padding-left: 16px;
 	padding-right: 16px;
-	border-right: 1px solid #00CBA0;
+	border-left: 1px solid #00CBA0;
 	color: #f5f5f5;
 }
 .capsule .pod.button:hover {
@@ -102,7 +102,7 @@ select:hover {
 .capsule .pod * {
 	display: inline-block;
 }
-.capsule .pod:last-child {
+.capsule .pod:first-child {
 	border: none;
 }
 

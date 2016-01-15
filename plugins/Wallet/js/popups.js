@@ -2,40 +2,29 @@
 
 // Save password to the UI's config.json
 function savePassword(pw) {
-	IPCRenderer.sendSync('config', 'walletPassword', pw);
+	var settings = IPCRenderer.sendSync('config', 'wallet');
+	settings.password = pw;
+	IPCRenderer.sendSync('config', 'wallet', settings);
 }
 
-// Make a basic popup 
-function popup() {
+// Make a popup with a password prompt
+function passwordPopup(callback) {
 	var el = $(`
-			<div class='popup m-font'>
-				<div class='row'>
-					<div class='title l-font'>TITLE</div>
-					<div class='button close'>
-						<i class='fa fa-times'></i>
-					</div>
-				</div>
-				<div class='button enter'>
-					<i class='fa fa-check-circle'></i>
+		<div class='popup m-font'>
+			<div class='row'>
+				<div class='title l-font'>Enter your password</div>
+				<div class='button close'>
+					<i class='fa fa-times'></i>
 				</div>
 			</div>
-	`);
-
-	// Exit popup
-	el.find('.close').click(function() {
-		el.remove();
-	});
-
-	return el;
-}
-
-// Edit a password input onto a popup
-function makePasswordPopup(el) {
-	el.find('.row').after(`
-		<input type='checkbox' class='save-password'>Save password <br/>
-		<div class='hidden warning s-font'>Warning: This is equivalent to having an
-			unencrypted wallet and poses a security risk!</div>
-		<input type='password' placeholder='Wallet password'>
+			<input type='checkbox' class='save-password'>Save password <br/>
+			<div class='hidden warning s-font'>Warning: This is equivalent to having an
+				unencrypted wallet and poses a security risk!</div>
+			<input type='password' placeholder='Wallet password'>
+			<div class='button enter'>
+				<i class='fa fa-check-circle'></i>
+			</div>
+		</div>
 	`);
 	
 	// An 'Enter' keypress in the input field will submit it.
@@ -56,30 +45,10 @@ function makePasswordPopup(el) {
 		}
 	});
 
-	return el;
-}
-
-// Edit a seed input onto a popup
-function makeSeedPopup(el) {
-	el.find('.row').after(`
-		<input type='text' placeholder='Seed'>
-	`);
-	
-	// An 'Enter' keypress in the input field will submit it.
-	el.find('input:text').keydown(function(e) {
-		e = e || window.event;
-		if (e.keyCode === 13) {
-			el.find('.enter').click();
-		}
+	// Exit popup
+	el.find('.close').click(function() {
+		el.remove();
 	});
-
-	return el;
-}
-
-// Make a popup with a password prompt
-function passwordPopup(callback) {
-	var el = makePasswordPopup(popup());
-	el.find('.title').text('Enter your password');
 
 	// Entering the password calls the callback with it
 	el.find('.enter').click(function() {
@@ -97,47 +66,20 @@ function passwordPopup(callback) {
 	// Show the popup
 	$('#wallet').append(el);
 	el.find('input:password').focus();
+	return el;
 }
 
-// Make a popup with an input field for seeds
-function seedPopup(callback) {
-	var el = makeSeedPopup(popup());
-	el.find('.title').text('Enter your seed');
-
-	// Entering the seed calls the callback with it passed
-	el.find('.enter').click(function() {
-		// Destroy popup and call the callback
-		var seed = el.find('input:text').val();
-		callback(seed);
-		el.remove();
-	});
-
-	// Show the popup
-	$('#wallet').append(el);
-	el.find('input:text').focus();
-}
-
-// Make a popup with an input field for seeds
-function passwordSeedPopup(callback) {
-	var el = makeSeedPopup(makePasswordPopup(popup()));
-	el.find('.title').text('Enter your password and seed');
-
-	// Entering the seed calls the callback with it passed
-	el.find('.enter').click(function() {
-		// Destroy popup and call the callback
-		var pw = el.find('input:password').val();
-		var seed = el.find('input:text').val();
-		callback(pw, seed);
-		el.remove();
-	});
-
-	// Show the popup
-	$('#wallet').append(el);
-	el.find('input:password').focus();
+// Get and use password from the UI's config.json or have user enter one
+function getPassword(callback) {
+	var settings = IPCRenderer.sendSync('config', 'wallet');
+	if (settings && settings.password) {
+		callback(settings.password);
+	} else {
+		passwordPopup(callback);
+	}
 }
 
 module.exports = {
-	password: passwordPopup,
-	seed: seedPopup,
-	passwordSeed: passwordSeedPopup,
+	savePassword: savePassword,
+	getPassword: getPassword,
 };

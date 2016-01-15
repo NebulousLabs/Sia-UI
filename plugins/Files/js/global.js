@@ -90,7 +90,7 @@ $('.dropdown .button').click(function() {
 			userInput = $('#paste-ascii input').val();
 			$('.dropdown li').show('fast');
 			$('#paste-ascii').hide('fast');
-			$('#paste-ascii input').empty();
+			$('#paste-ascii input').val('');
 			break;
 		default:
 			console.error('Unknown button!', this);

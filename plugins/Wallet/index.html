@@ -14,17 +14,41 @@
 		<div class='frame' id='wallet'>
 			<!-- Header -->
 			<div class='header'>
-				<div class='title button' id='load'>
-					<i class='fa fa-cloud'></i>
+				<div class='title'>
 					Wallet
 				</div>
 				<div class='capsule'>
 					<div class='pod' id='confirmed'></div>
 					<div class='pod' id='unconfirmed'></div>
-					<div class='pod button' id='lock-pod'>
-						<i class='fa'></i>
+					<div class='pod button' id='status'>
+						<i class='fa fa-cogs'></i>
 						<span>Status unknown</span>
 					</div>
+					<ul class='dropdown hidden'>
+						<li class='button' id='lock'>
+							<i class='fa'></i>
+							<span>Status unknown</span>
+						</li>
+						<li class='button'>
+							<i class='fa fa-key'></i>
+							Load Siag Key
+						</li>
+						<li class='button'>
+							<i class='fa fa-clipboard'></i>
+							Paste Seed
+						</li>
+						<li class='button'>
+							<i class='fa fa-folder-open'></i>
+							Load Legacy Wallet
+						</li>
+						<div class='hidden' id='paste-seed'>
+							<input placeholder='Paste your seed'></input>
+							<div class='button hidden'>
+								<i class='fa fa-tint'></i>
+								Load Seed
+							</div>
+						</div>
+					</ul>
 				</div>
 			</div>
 

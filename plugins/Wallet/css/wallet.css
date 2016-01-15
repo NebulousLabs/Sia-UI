@@ -11,6 +11,7 @@
  *    Neon-Green: #00CBA0
  */
 
+/* General */
 .s-font {
 	font-size: 11px;
 }
@@ -19,6 +20,27 @@
 }
 .l-font {
 	font-size: 24px;
+}
+.capsule {
+	overflow: visible;
+}
+.capsule .dropdown {
+	position: absolute;
+	z-index: 1;
+
+	border: 1px solid #00CBA0;
+	margin: 0;
+	padding: 0;
+	right: -1px;
+
+	white-space: nowrap;
+	background: white;
+	list-style: none;
+}
+.capsule .dropdown .button {
+	background-color: #4A4A4A;
+	padding: 8px;
+	display: block;
 }
 
 /* Password box */
@@ -94,7 +116,7 @@
 	display: inline-block;
 	padding: 4px;
 }
-.header .title.button:hover {
+.header .button:hover {
 	color: #00CBA0;
 }
 .title .button:first-child {
