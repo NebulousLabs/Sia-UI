@@ -36,7 +36,7 @@ function siacCommand(command){
 		case 'Darwin':
 			var osCommand = 'cd resources/app/Sia & siac ';
 		default:
-			var osCommand = 'cd resources/app/Sia & siac ';*/
+			var osCommand = 'cd resources/app/Sia & siac ';
 	}
 	// Execute the command, siac.exe + the command
 	child_process.exec(osCommand + command,function(err,stdout){
