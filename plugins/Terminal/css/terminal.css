@@ -1,0 +1,58 @@
+body{
+	margin:0;
+}
+.terminal{
+	color: #eee;
+	display:flex;
+	flex-direction: column;
+	max-height:100%;
+}
+.terminal #terminal-title{
+	background:#333;
+	padding:20px;
+}
+#terminal-log{
+	background:#212121;
+	overflow-y:auto;
+	padding:20px;
+	font-family: 'Roboto Mono';
+	font-weight:400;
+}
+.terminal form{
+	background:#333;
+	display:flex;
+	padding:20px 40px;
+}
+.terminal input{
+	background:transparent;
+	border:none;
+	border-bottom:2px solid #aaa;
+	padding:3px 0;
+	border-radius:0;
+	color:#fff;
+	width:100%;
+}
+.terminal input:focus{
+	outline:none;
+	box-shadow: none;
+	border-bottom:2px solid #fff;
+}
+
+.terminal button{
+	background:transparent;
+	color:#fff;
+	padding:12px 34px;
+	outline:none;
+	cursor: pointer;
+	border:0;
+	border-radius:2px;
+	font-family: 'Roboto Condensed', sans-serif;
+	font-weight:bold;
+	font-size:14px;
+	text-transform: uppercase;
+	margin-left:20px;
+}
+.terminal button:active, .terminal button:hover{
+	background: rgba(255,255,255,0.2);
+	transition: all o.3s ease;
+}
