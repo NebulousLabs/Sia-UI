@@ -78,7 +78,8 @@ html,body {
 .update-button{
 	color:#eee;
 	font-family: "Roboto", sans-serif;
-	padding-left:10px;
+	padding-left:20px;
+	margin-top:10px;
 }
 
 /* Sidebar */
@@ -224,7 +225,7 @@ html,body {
 	color: #333;
 	line-height:40px;
 	padding-left:10px;
-	max-width:240px;
+	max-width:280px;
 }
 .notification.hoverable:hover {
 	cursor: pointer;

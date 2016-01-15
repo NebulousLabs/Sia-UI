@@ -25,9 +25,9 @@
 			</div>
 
 			<!-- Popups -->
-			<div class='popup m-font hidden' id='request-password'>
+			<div class='popup hidden' id='request-password'>
 				<div class='row'>
-					<div class='title'> Enter your password </div>
+					<h3 class='title'> Enter your password </h3>
 					<div class='button close'>
 						<i class='fa fa-times'></i>
 					</div>
@@ -41,7 +41,7 @@
 				</div>
 			</div>
 
-			<div class='popup m-font hidden' id='show-password'>
+			<div class='popup hidden' id='show-password'>
 				<div class='row'>
 					<div class='title'> Welcome to your Sia Wallet!  </div>
 					<div class='button close'>
@@ -68,17 +68,17 @@
 			<!-- Transactions Box -->
 			<div class='box' id='transaction-box'>
 				<div class='row'>
-					<div class='title button l-font' id='view-all-transactions'>
+					<div class='title button' id='view-all-transactions'>
 						<i class='fa fa-refresh'></i>
 						Transactions
 					</div>
-					<div class='controls m-font'>
-						<input type='number' class='page m-font' id='transaction-page' value='1'><span>/MAX_PAGE</span>
+					<div class='controls'>
+						<input type='number' class='page' id='transaction-page' value='1'><span>/MAX_PAGE</span>
 					</div>
 				</div>
 				<div class='list' id='transaction-list'>
 				</div>
-				<div class='floating button l-font' id='create-transaction'>
+				<div class='floating button' id='create-transaction'>
 					<i class='fa fa-plus'></i>
 				</div>
 			</div>
@@ -86,22 +86,22 @@
 			<!-- Addresses Box -->
 			<div class='box' id='address-box'>
 				<div class='row'>
-					<div class='title button l-font' id='view-all-addresses'>
+					<div class='title button' id='view-all-addresses'>
 						<i class='fa fa-refresh'></i>
 						Addresses
 					</div>
-					<div class='controls m-font'>
+					<div class='controls'>
 						<input type='search' id='search-bar' placeholder='Search addresses'></input>
 						<!--div class='button' id='load-legacy-wallet'>
 							<i class='fa fa-folder-open-o'></i>
 							Load Legacy Wallet
 						</div-->
-						<input type='number' class='page m-font' id='address-page' value='1'><span>/MAX_PAGE</span>
+						<input type='number' class='page' id='address-page' value='1'><span>/MAX_PAGE</span>
 					</div>
 				</div>
 				<div class='list' id='address-list'>
 				</div>
-				<div class='floating button l-font' id='create-address'>
+				<div class='floating button' id='create-address'>
 					<i class='fa fa-plus'></i>
 				</div>
 			</div>
@@ -120,8 +120,8 @@
 				<div class='row'>
 					<div class='centered'>
 						<div> Total Balance: </div>
-						<input type='number' class='l-font' readonly id='total' min='0'>
-						<select class='l-font' id='transaction-unit'>
+						<input type='number' class='' readonly id='total' min='0'>
+						<select id='transaction-unit'>
 							<option value='1e30'>MS</option>
 							<option value='1e27'>kS</option>
 							<option value='1e24'selected='selected'>S</option>
@@ -134,8 +134,8 @@
 				<div class='row'>
 					<div class='centered'>
 						<div> Amount To Send: </div>
-						<input type='number' class='l-font' id='transaction-value' min='0'>
-						<select class='l-font'>
+						<input type='number' id='transaction-value' min='0'>
+						<select>
 							<option value='1e30'>MS</option>
 							<option value='1e27'>kS</option>
 							<option value='1e24'selected='selected'>S</option>

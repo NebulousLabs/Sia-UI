@@ -129,3 +129,17 @@ input{
 	color: #4a4a4a;
 	cursor: pointer;
 }
+
+/* nicer scrollbars */
+::-webkit-scrollbar {
+	width: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background:transparent;
+	border-left:1px solid #444;
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba(255,255,255,0.4)
+}

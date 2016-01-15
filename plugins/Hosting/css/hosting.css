@@ -17,10 +17,12 @@
 
 /* Box */
 .row {
-	background: #f5f5f5;
+	border-top:1px solid #555;
+	background: #333;
 	display: block;
-	border: 1px;
-	padding: 15px;
+	height: 40px;
+	padding: 10px;
+	width: calc(100% - 20px);
 }
 .row .title {
 	display: inline-block;
@@ -44,8 +46,7 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 	-webkit-animation: fadein 0.5s;
-
-	background-color: #ffffff;
+	
 	z-index: 2;
 
 	border: solid 1px #c5c5c5;
@@ -75,7 +76,7 @@
 	display: inline-block;
 }
 .controls .button:hover {
-	color: #4a4a4a;
+	color: #fff;
 	cursor: pointer;
 }
 
