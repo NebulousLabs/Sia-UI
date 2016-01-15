@@ -17,6 +17,6 @@ The following explains some aspects of how I, [Ming
 Luo](https://github.com/Mingling94), develop Sia-UI and my general workflow
 
 * [Development Flow](DevelopmentFlow.md)
-* [Plugins](PluginTutorial.md)
+* [Plugins](Plugins.md)
 * [Debugging](Debugging.md)
 
