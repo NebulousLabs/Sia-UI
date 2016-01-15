@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../css/roboto.css">
+		<link rel="stylesheet" href="css/terminal.css">
+	</head>
+	<body>
+
+		<div class="terminal">
+			<div id="terminal-title">
+				<h3>Terminal</h3>
+			</div>
+			<div id="terminal-log"></div>
+			<form id="terminal-form">
+				<input placeholder="Command" id="terminal-command" type="text" />
+				<button type="submit">Go</button>
+			</form>
+		</div>
+
+
+		<script>
+			'use strict';
+			// Library for communicating with Sia-UI
+			const IPCRenderer = require("electron").ipcRenderer;
+
+			IPCRenderer.sendToHost('devtools');
+		</script>
+		<script src="js/terminal.js"></script>
+	</body>
+</html>
