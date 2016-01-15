@@ -43,7 +43,6 @@ $('.dropdown .button').click(function(e) {
 	var choice = el.closest('.button').text().trim();
 	switch (choice) {
 		case 'Load Siag Key':
-			// TODO:
 			loaders.siagKey();
 			break;
 		case 'Paste Seed':
@@ -63,7 +62,7 @@ $('.dropdown .button').click(function(e) {
 			break;
 		default:
 			// Assumed to be a lock action
-			break;
+			return; // Don't close dropdown
 	}
 	$('.dropdown').hide('fast');
 });
@@ -71,12 +70,15 @@ $('.dropdown .button').click(function(e) {
 // Lock or unlock the wallet
 $('#lock').click(function() {
 	var state = $('#status span').html();
-	if (!wallet.unlocked && state === 'No Wallet') {
+	if (!wallet.unlocked && state === 'New Wallet') {
 		encrypt();
 	} else if (wallet.unlocked && state === 'Unlocked') {
 		lock();
 	} else if (!wallet.unlocked && state === 'Locked') {
 		popups.getPassword(unlock);
+	} else if (!wallet.unlocked && state === 'Unlocking') {
+		tooltip('Initial unlock takes some time', this);
+		return;
 	} else {
 		console.error('Lock status disagrees with wallet variable!', wallet.unlocked, state);
 	}

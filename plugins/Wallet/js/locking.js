@@ -19,10 +19,10 @@ function setUnlocked() {
 	setLockIcon('Unlocked', 'Lock Wallet', 'fa-unlock');
 }
 function setUnlocking() {
-	setLockIcon('Locked', 'Unlocking', 'fa-cog fa-spin');
+	setLockIcon('Unlocking', 'Unlocking', 'fa-cog fa-spin');
 }
 function setUnencrypted() {
-	setLockIcon('No Wallet', 'Create Wallet', 'fa-plus');
+	setLockIcon('New Wallet', 'Create Wallet', 'fa-plus');
 }
 
 // Update wallet summary in header capsule
