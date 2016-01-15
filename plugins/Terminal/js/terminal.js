@@ -1,4 +1,6 @@
 'use strict';
+const IPCRenderer = require("electron").ipcRenderer;
+//IPCRenderer.sendToHost('devtools');
 
 const child_process = require('child_process');
 const path = require('path');
