@@ -2,13 +2,14 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="../../css/roboto.css">
+		<link rel="stylesheet" href="../../css/plugin-standard.css">
 		<link rel="stylesheet" href="css/terminal.css">
 	</head>
 	<body>
 
 		<div class="terminal">
-			<div id="terminal-title">
-				<h3>Terminal</h3>
+			<div class="header">
+				<h3 class="title">Terminal</h3>
 			</div>
 			<div id="terminal-log"></div>
 			<div class="form-wrapper">
@@ -25,7 +26,7 @@
 			// Library for communicating with Sia-UI
 			const IPCRenderer = require("electron").ipcRenderer;
 
-			IPCRenderer.sendToHost('devtools');
+			//IPCRenderer.sendToHost('devtools');
 		</script>
 		<script src="js/terminal.js"></script>
 	</body>

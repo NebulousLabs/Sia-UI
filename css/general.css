@@ -25,15 +25,15 @@ html,body {
 	height: 100%;
 	width: 100%;
 
-	font-family: 'Roboto Condensed', sans-serif;
+	font-family: 'Roboto', sans-serif;
 	font-weight: 300;
 	font-size: 18px;
 
 	-webkit-user-select: none;
 }
 .pure-g [class*="pure-u"] {
-	font-family: 'Roboto Condensed', sans-serif;
-	font-weight: 300;
+	font-family: inherit;
+	font-weight: inherit;
 }
 ::-webkit-scrollbar { 
 	display: none; 
@@ -41,7 +41,8 @@ html,body {
 .body {
 	position: relative;
 
-	height: -webkit-calc(100% - 80px);
+	/*height: -webkit-calc(100% - 80px);*/
+	height:100%;
 	-webkit-box-sizing:border-box;
 }
 
@@ -50,8 +51,7 @@ html,body {
 	height: 80px;
 	width: 100%;
 
-	background-color: #313133;
-	background: linear-gradient(to left, #313133 15%, #0b0e16 85%);
+	background-color: #212121;
 }
 .logo {
 	padding-left: 20px;
@@ -63,6 +63,7 @@ html,body {
 }
 
 /* Header Buttons */
+/*
 .header-button {
 	float: right;
 	display: none;
@@ -73,14 +74,19 @@ html,body {
 .header-button:hover {
 	color: #00CBA0;
 	cursor: pointer;
+}*/
+.update-button{
+	color:#eee;
+	font-family: "Roboto", sans-serif;
+	padding-left:10px;
 }
 
 /* Sidebar */
 #sidebar {
 	position: relative;
 
-	background-color: #D5D3D5;
-	width: 160px;
+	background-color: #444;
+	width: 200px;
 	z-index: 1000;
 	height: 100%;
 
@@ -99,12 +105,17 @@ html,body {
 	-webkit-animation: fadein .4s;
 	-webkit-box-sizing:border-box;
 
-	color: #4A4A4A;
+	color: #ddd;
+}
+.pure-g .button {
+	font-family: 'Roboto Mono';
+	font-weight:500;
+	text-transform: uppercase;
 }
 .button:hover {
 	cursor: pointer;
-	background-color: #C5C3C5;
 	color: #F5F5F5;
+	background-color: rgba(255,255,255,0.1);
 }
 .button:active {
 	background-color: ;
@@ -112,10 +123,9 @@ html,body {
 .button.current {
 	transition: all .25s;
 	cursor: default;
-	background-color: #00CBA0;
-	color: #F5F5F5;
+	color: #00CBA0;
 }
-.button.current .icon, .button:hover .icon {
+.button .icon{
 	-webkit-filter: invert(100%);
 }
 @keyframes fadeout {
@@ -150,7 +160,7 @@ html,body {
 .webview {
 	position: absolute;
 	height: 100%;
-	min-width: calc(100% - 160px);
+	min-width: calc(100% - 200px);
 	right: 0;
 	opacity: 0;
 	z-index: -1;
@@ -189,49 +199,40 @@ html,body {
 /* Notifications */
 .notification-container {
 	position: fixed;
-	right: 40px;
-	bottom: 40px;
+	right: 20px;
+	bottom: 20px;
 }
 .notification {
-	border-radius: 4px;
+	border-radius: 2px;
 	background-color: #fff;
-	border: 1px solid #bdbdbd;
-	margin-top: 20px;
-	box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.25);
-	overflow-x: hidden;
-	overflow-y: hidden;
-	-webkit-transition: box-shadow 2s;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 	transition: box-shadow 0.5s;
+	padding:5px 10px;
+	margin-bottom:10px;
 }
 .notification .icon {
 	display: inline-block;
-	height: 80px;
-	width: 80px;
-	line-height: 80px;
-	font-size: 48px;
+	line-height: 40px;
+	font-size: 24px;
 	text-align: center;
 	color: #00CBA0;
-	background-color: #f5f5f5;
-	border-right: 1px solid #eeeeee;
 }
 .notification .content {
 	display: inline-block;
-	padding: 14px;
 	vertical-align: top;
-	width: 300px;
-	height: 52px;
 	font-size: 18px;
-	color: #757575;
+	color: #333;
+	line-height:40px;
+	padding-left:10px;
+	max-width:240px;
 }
 .notification.hoverable:hover {
 	cursor: pointer;
-	box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.4);
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 .notification.type-error .icon, .notification.type-exit .icon {
 	color: #E57373;
-	background-color: #FFCDD2;
 }
 .notification.type-success .icon {
 	color: #81C784;
-	background-color: #C8E6C9;
 }

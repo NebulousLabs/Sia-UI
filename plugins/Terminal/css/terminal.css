@@ -11,6 +11,7 @@ html,body{
 .terminal #terminal-title{
 	background:#333;
 	padding:20px;
+	font-family: 'Roboto Mono';
 }
 #terminal-log{
 	background:#212121;

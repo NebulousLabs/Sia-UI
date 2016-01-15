@@ -1,11 +1,47 @@
+'use strict';
+
 const child_process = require('child_process');
 const path = require('path');
 const os = require('os');
+
+
+// Dir where siac will be
+var siaDir = path.join(__dirname, '../..', 'Sia');
 
 // Form
 var form = document.getElementById("terminal-form");
 // Terminal results div
 var terminal = document.getElementById("terminal-log");
+
+// Command handling function
+function siacCommand(command){
+	// Check os type to choose to look for exe or not
+	switch(os.type()){
+		case 'Windows_NT':
+			// Switch to Sia dir and run siac.exe
+			var osCommand = 'siac.exe';
+		case 'Linux':
+		case 'Darwin':
+			var osCommand = 'siac';
+		default:
+			var osCommand = 'siac';
+	}
+	// Execute the command, siac.exe + the command
+	child_process.exec("cd " + siaDir + " & " + osCommand + " " + command,function(err,stdout){
+		if(err){
+			terminal.innerHTML = terminal.innerHTML + '<p class="error">' + err + "</p>";
+		}
+		// Replace new lines with <br> for html
+		stdout = stdout.replace(/(?:\r\n|\r|\n)/g, '<br>');
+
+		// Insert the response into the terminal log
+		terminal.innerHTML = terminal.innerHTML + "<p>" + stdout + "</p>";
+
+		// Scroll the the bottom or the terminal div
+		terminal.scrollTop = terminal.scrollHeight;
+	});
+}
+
 
 // Event listener for the form's submit
 form.addEventListener("submit", function(e){
@@ -24,35 +60,6 @@ form.addEventListener("submit", function(e){
 	// Empty the input
 	inputCommand.value = "";
 });
-
-// Command handling function
-function siacCommand(command){
-	// Check os type to choose to look for exe or not
-	switch(os.type()){
-		case 'Windows_NT':
-			// Switch to Sia dir and run siac.exe
-			var osCommand = 'cd resources/app/Sia & siac.exe ';
-		case 'Linux':
-		case 'Darwin':
-			var osCommand = 'cd resources/app/Sia & siac ';
-		default:
-			var osCommand = 'cd resources/app/Sia & siac ';
-	}
-	// Execute the command, siac.exe + the command
-	child_process.exec(osCommand + command,function(err,stdout){
-		if(err){
-			terminal.innerHTML = terminal.innerHTML + '<p class="error">' + err + "</p>";
-		}
-		// Replace new lines with <br> for html
-		stdout = stdout.replace(/(?:\r\n|\r|\n)/g, '<br>');
-		
-		// Insert the response into the terminal log
-		terminal.innerHTML = terminal.innerHTML + "<p>" + stdout + "</p>";
-		
-		// Scroll the the bottom or the terminal div
-		terminal.scrollTop = terminal.scrollHeight;
-	});
-}
 
 // Run help command on launch
 siacCommand("help");

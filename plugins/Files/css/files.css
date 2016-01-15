@@ -26,10 +26,10 @@ input {
 	height: 100%;
 }
 .row {
-	background: #f5f5f5;
+	border-top:1px solid #555;
+	background: #333;
 	display: block;
-	height: 24px;
-	font-size: 20px;
+	height: 40px;
 	padding: 10px;
 	width: calc(100% - 20px);
 }
@@ -46,7 +46,7 @@ input {
 }
 #cwd {
 	display: inline-block;
-	width: calc(100% - 231px);
+	width: auto;
 	white-space: nowrap;
 	overflow-x: auto;
 }
@@ -58,7 +58,7 @@ input {
 }
 .controls input {
 	text-align: left;
-	width: 140px;
+	width: 200px;
 }
 .controls .button {
 	font-size: 10px;
@@ -67,8 +67,6 @@ input {
 .dropdown {
 	position: absolute;
 	z-index: 1;
-
-	border: 1px solid #dddddd;
 	border-radius: 0 6px 6px 6px;
 	margin: 0;
 	padding: 0;
@@ -88,12 +86,12 @@ hr {
 
 /* File list */
 #file-list {
-	background-color: #fafafa;
+	background-color: transparent;
 	height: calc(100% - 60px);
 	overflow-y: auto;
 }
 .file.label {
-	background-color: #ddd;
+	background-color: rgba(255,255,255,0.15);
 }
 .file.label:hover {
 	cursor: default;
@@ -107,15 +105,14 @@ hr {
 	color: #757575;
 	font-size: 12px;
 	background-color: #fff;
-	border-bottom: 1px solid #eeeeee;
 	white-space: nowrap;
     -webkit-user-select: none;
 }
 .file.selected {
-	background-color: #ddd;
+	background-color: rgba(255,255,255,0.25);
 }
 .file.anchor {
-	border: 1px solid #00CBA0;
+	border: 0px solid #00CBA0;
 }
 .file:hover {
 	cursor: pointer;
