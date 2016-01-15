@@ -38,7 +38,7 @@ App.on('ready', function() {
 		mainWindow = null;
 	});
 	
-	mainWindow.openDevTools();
+	//mainWindow.openDevTools();
 
 	// Load siad
 	require('./js/mainjs/initSiad.js')(config, mainWindow);
