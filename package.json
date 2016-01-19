@@ -21,7 +21,7 @@
     "jquery": "^2.1.4",
     "mkdirp": "^0.5.1",
     "request": "^2.67.0",
-    "sia.js": "^0.1.6"
+    "sia.js": "^0.1.7"
   },
   "scripts": {
     "start": "electron .",
