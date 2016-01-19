@@ -8,8 +8,8 @@ starting the application is as easy as running: `npm install && npm start`
 The following documents explains the environment that Sia-UI runs in.
 
 * [Technologies](Technologies.md)
+* [Testing](Testing.md)
 * [Structure](Structure.md)
-* [Execution Flow](ExecutionFlow.md)
 
 ## Development
 
@@ -17,6 +17,5 @@ The following explains some aspects of how I, [Ming
 Luo](https://github.com/Mingling94), develop Sia-UI and my general workflow
 
 * [Development Flow](DevelopmentFlow.md)
-* [Plugins](PluginTutorial.md)
-* [Debugging](Debugging.md)
+* [Plugins](Plugins.md)
 
