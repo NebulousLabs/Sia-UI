@@ -5,23 +5,24 @@ var wallet = {};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Lock Icon  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Helper function for the lock-icon to make sure its classes are cleared
-function setLockIcon(lockStatus, iconClass) {
-	$('#lock-pod span').text(lockStatus);
-	$('#lock-pod .fa').get(0).className = 'fa ' + iconClass;
+function setLockIcon(lockStatus, lockAction, iconClass) {
+	$('#status span').text(lockStatus);
+	$('#lock.button span').text(lockAction);
+	$('#lock.button .fa').get(0).className = 'fa ' + iconClass;
 }
 
 // Markup changes to reflect state
 function setLocked() {
-	setLockIcon('Unlock Wallet', 'fa-lock');
+	setLockIcon('Locked', 'Unlock Wallet', 'fa-lock');
 }
 function setUnlocked() {
-	setLockIcon('Lock Wallet', 'fa-unlock');
+	setLockIcon('Unlocked', 'Lock Wallet', 'fa-unlock');
 }
 function setUnlocking() {
-	setLockIcon('Unlocking', 'fa-cog fa-spin');
+	setLockIcon('Unlocking', 'Unlocking', 'fa-cog fa-spin');
 }
 function setUnencrypted() {
-	setLockIcon('Create Wallet', 'fa-plus');
+	setLockIcon('New Wallet', 'Create Wallet', 'fa-plus');
 }
 
 // Update wallet summary in header capsule
@@ -41,11 +42,15 @@ function updateStatus(result) {
 	var bal = convertSiacoin(wallet.confirmedsiacoinbalance);
 	var pend = convertSiacoin(wallet.unconfirmedincomingsiacoins).sub(convertSiacoin(wallet.unconfirmedoutgoingsiacoins));
 	if (wallet.unlocked && wallet.encrypted) {
+		// TODO: Janky fix for graphical difficulty where a 2px border line appears when 1px is expected
+		$('#status.pod').css('border-left', '1px solid #00CBA0');
 		$('#confirmed').show();
 		$('#unconfirmed').show();
 		$('#confirmed').html('Balance: ' + bal + ' S');
 		$('#unconfirmed').html('Pending: ' + pend + ' S');
 	} else {
+		// TODO: Janky fix for graphical difficulty where a 2px border line appears when 1px is expected
+		$('#status.pod').css('border-left', 'none');
 		$('#confirmed').hide();
 		$('#unconfirmed').hide();
 	}
