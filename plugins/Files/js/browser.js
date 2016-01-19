@@ -88,6 +88,15 @@ function updateList(navigateTo) {
 			console.error('Unknown file type: ' + file.type, file);
 		}
 	});
+
+	// Sort files to be folder first and then alphabetical
+	$('#file-list .file').sort(function(a, b) {
+		if (a.className === b.className) {
+			return $(a).find('.name').text() < $(b).find('.name').text() ? -1 : 1;
+		} else {
+			return $(a).hasClass('folder') ? -1 : 1;
+		}
+	}).appendTo('#file-list');
 }
 
 // Update file from api result
