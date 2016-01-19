@@ -10,7 +10,6 @@ The following documents explains the environment that Sia-UI runs in.
 * [Technologies](Technologies.md)
 * [Testing](Testing.md)
 * [Structure](Structure.md)
-* [Execution Flow](ExecutionFlow.md)
 
 ## Development
 
@@ -19,5 +18,4 @@ Luo](https://github.com/Mingling94), develop Sia-UI and my general workflow
 
 * [Development Flow](DevelopmentFlow.md)
 * [Plugins](Plugins.md)
-* [Debugging](Debugging.md)
 
