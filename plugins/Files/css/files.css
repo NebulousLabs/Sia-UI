@@ -173,3 +173,6 @@ hr {
 	white-space: nowrap;
 	z-index: 9999998;
 }
+.file .fa-folder {
+	font-size: 16px;
+}
