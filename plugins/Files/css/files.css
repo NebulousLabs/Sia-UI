@@ -96,7 +96,7 @@ hr {
 /* File list */
 #file-list {
 	background-color: #fafafa;
-	height: calc(100% - 60px);
+	height: calc(100% - 150px);
 	overflow-y: auto;
 }
 .file.label {
@@ -112,7 +112,7 @@ hr {
 .file {
 	padding: 6px;
 	color: #757575;
-	font-size: 12px;
+	font-size: 14px;
 	background-color: #fff;
 	border-bottom: 1px solid #eeeeee;
 	white-space: nowrap;
@@ -153,6 +153,7 @@ hr {
 .file .detail {
 	text-align: left;
 	width: 120px;
+	margin-right: 10px;
 }
 .cssTooltip {
 	display: inline;
