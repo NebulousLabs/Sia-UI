@@ -51,9 +51,14 @@ function updateStatus(result) {
 
 // Regularly update the file library and status
 function update() {
-	browser.update();
-	siad.apiCall('/renter/hosts/' + hostsType, updateStatus);
-	
+	// don't update if a file is being renamed
+	var renaming = $('#file-list .file').find('[contenteditable=true]').length !== 0;
+
+	if (!renaming) {
+		browser.update();
+		siad.apiCall('/renter/hosts/' + hostsType, updateStatus);
+	}
+
 	updating = setTimeout(update, 15000);
 }
 

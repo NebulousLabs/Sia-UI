@@ -489,7 +489,7 @@ browser['Upload File'] = function uploadFiles(filePaths, callback) {
 	// Files upload to currentFolder.path/name by default
 	tools.notify(`Uploading ${filePaths.length} file(s)!`, 'upload');
 	tools.waterfall(loader.uploadFile, filePaths, currentFolder.path, function() {
-		tools.notify(`Upload for ${filePaths.length} file(s) completed!`, 'success');
+		// tools.notify(`Upload for ${filePaths.length} file(s) completed!`, 'success');
 		callback();
 	});
 };
@@ -497,7 +497,7 @@ browser['Upload Folder'] = function uploadFolders(dirPaths, callback) {
 	// Uploads to currentFolder.path/name, keeping their original structure
 	tools.notify(`Uploading ${dirPaths.length} folder(s)!`, 'upload');
 	tools.waterfall(loader.uploadFolder, dirPaths, currentFolder.path, function() {
-		tools.notify(`Upload for ${dirPaths.length} folder(s) completed!`, 'success');
+		// tools.notify(`Upload for ${dirPaths.length} folder(s) completed!`, 'success');
 		callback();
 	});
 };
