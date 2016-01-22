@@ -22,6 +22,7 @@ function updateFolderElement(f, el) {
 	} else {
 		el.find('.detail').text(f.count + ' items');
 	}
+	el.find('.type').text('Folder');
 
 	return el;
 }

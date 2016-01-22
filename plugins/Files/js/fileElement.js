@@ -42,6 +42,9 @@ function updateFileElement(f, el) {
 	var sizeText = tools.formatByte(f.filesize);
 	el.find('.size').text(sizeText);
 
+	// Set type
+	el.find('.type').text('File');
+
 	return el;
 }
 
@@ -54,6 +57,7 @@ function makeFileElement(f) {
 			<i class='button fa fa-pencil'></i>
 			<div class='info'>
 				<div class='size'></div>
+				<div class='type'></div>
 				<div class='detail'></div>
 			</div>
 		</div>
@@ -101,8 +105,8 @@ function makeFileElement(f) {
 		// Allow user to rename the file
 		var name = $(this).prev();
 		name.attr('contentEditable', true);
-		name.focus();
-	});
+		name.focus()
+;	});
 	
 	// Add and return the new element
 	// TODO: Implement right click actions on these files
