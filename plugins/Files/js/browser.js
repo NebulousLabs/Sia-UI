@@ -162,7 +162,7 @@ function updateCWD(navigateTo) {
 		`);
 		// Root folder
 		if (f.path === '') {
-			el.html('<i class=\'fa fa-folder\'></i>');
+			el.html('<i class=\'fa fa-folder\'></i> ');
 		} else {
 			// Middle folders
 			el.html(f.name);

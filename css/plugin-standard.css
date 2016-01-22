@@ -63,6 +63,7 @@ select:hover {
 	padding-top: 10px;
 	padding-left: 20px;
 	background-color: #4a4a4a;
+	background: linear-gradient(to top, #5A5A5A 15%, #4A4A4A 85%);
 	color: #fff;
 	height: 50px;
 	vertical-align: top;
@@ -110,7 +111,7 @@ select:hover {
 .frame {
 	height: 100%;
 	overflow: hidden;
-	color: #999999;
+	color: #606060;
 	font-size: 26px;
 	position: relative;
 	width: 100%;

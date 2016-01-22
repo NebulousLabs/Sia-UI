@@ -8,6 +8,7 @@
  *		Grey:       #C5C5C5
  * 		Grey-Black: #4A4A4A
  * 		Black:      #000000
+ *      Neon-Green: #00CBA0
  */
 
 /* General */
@@ -41,9 +42,7 @@ input {
 	-webkit-animation: fadein 0.3s;
 }
 .directory:hover {
-	border: 1px solid #DDDDDD;
-	-webkit-box-shadow: inset 0 0 3px #ECECEC;
-	-webkit-animation: fadein 0.3s;
+	color: #00CBA0;
 }
 .button {
 	display: inline-block;
@@ -73,21 +72,39 @@ input {
 }
 .dropdown {
 	position: absolute;
-	z-index: 1;
-
-	border: 1px solid #dddddd;
-	border-radius: 0 6px 6px 6px;
-	margin: 0;
+	z-index: 2;
+	border: 1px solid #bdbdbd;
+	border-radius: 4px;
+	margin: 0 0 0 10px;
 	padding: 0;
-
 	white-space: nowrap;
 	background: white;
 	list-style: none;
+	overflow-x: auto;
+	width: 180px;
+
+
+	box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.25);
+
 }
 .dropdown .button {
 	display: block;
 	font-size: 12px;
-	margin: 4px;
+	padding: 6px 8px 6px 8px;
+	height: 25px;
+}
+.dropdown .button:hover {
+	background-color: #ECECEC;
+}
+.dropdown .button .icon {
+	width: 30px;
+	color: #00CBA0;
+}
+.dropdown .button .label {
+	font-size: 14px;
+	position: absolute;
+	left: 45px;
+	line-height: 25px;
 }
 hr {
 	margin: 0;
@@ -111,7 +128,7 @@ hr {
 }
 .file {
 	padding: 6px;
-	color: #757575;
+	color: #606060;
 	font-size: 14px;
 	background-color: #fff;
 	border-bottom: 1px solid #eeeeee;
@@ -121,8 +138,10 @@ hr {
 .file.selected {
 	background-color: #ddd;
 }
+.file:hover {
+	background-color: #ECECEC;
+}
 .file.anchor {
-	border: 1px solid #00CBA0;
 }
 .file:hover {
 	cursor: pointer;
@@ -173,7 +192,16 @@ hr {
 	text-shadow: 0 1px 0 #000;
 	white-space: nowrap;
 	z-index: 9999998;
+	font-size: 14px;
 }
 .file .fa-folder {
 	font-size: 16px;
+	color: #00CBA0;
+	padding-right: 3px;
+}
+.file .fa-file {
+	padding: 0 4px 0 1px;
+}
+.file .fa-refresh {
+	margin: 0 4px 0 1px;	
 }
