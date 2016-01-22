@@ -406,6 +406,13 @@ var browser = {
 				title: 'Download ' + label,
 				defaultPath: label,
 			});
+			if (!destination) {
+				return;
+			}
+			// Download the file
+			files[0].download(destination, function() {
+				tools.notify(`Downloaded ${label} to ${destination}`, 'success');
+			});
 		} else {
 			let totalCount = files.reduce(function(a, b) {
 				if (b.type === 'folder') {
@@ -420,20 +427,17 @@ var browser = {
 				title: 'Download ' + label,
 				properties: ['openDirectory', 'createDirectory'],
 			});
+			if (!destination) {
+				return;
+			}
+			// Download each of the files
+			tools.notify(`Downloading ${label} to ${destination}`, 'download');
+				let functs = files.map(file => file.download.bind(file));
+				let destinations = files.map(file => path.join(destination, file.name));
+				tools.waterfall(functs, destinations, function() {
+					tools.notify(`Downloaded ${label} to ${destination}`, 'success');
+				});
 		}
-
-		// Ensure destination exists
-		if (!destination) {
-			return;
-		}
-
-		// Setup async calls to each file to download them
-		tools.notify(`Downloading ${label} to ${destination}`, 'download');
-			let functs = files.map(file => file.download.bind(file));
-			let destinations = files.map(file => `${destination}/${file.name}`);
-			tools.waterfall(functs, destinations, function() {
-				tools.notify(`Downloaded ${label} to ${destination}`, 'success');
-			});
 	},
 
 	// Filter file list by search string
