@@ -400,40 +400,46 @@ var browser = {
 			tools.tooltip('No selected files', $('.controls .download').get(0));
 			return;
 		} else if (itemCount === 1) {
-			// Save file/folder into specific place
+			if (files[0].type === 'folder') {
+				tools.notify('No support for downloading folders (yet)', 'error');
+				return;
+			}
 			label = files[0].name;
 			destination = tools.dialog('save', {
 				title: 'Download ' + label,
 				defaultPath: label,
 			});
+			if (!destination) {
+				return;
+			}
+			// Download the file
+			files[0].download(destination, function() {
+				tools.notify(`Downloaded ${label} to ${destination}`, 'success');
+			});
 		} else {
-			let totalCount = files.reduce(function(a, b) {
-				if (b.type === 'folder') {
-					return a + b.count;
-				} else {
-					return ++a;
+			for (let file of files) {
+				if (file.type === 'folder') {
+					tools.notify('No support for downloading folders (yet)', 'error');
+					return;
 				}
-			}, 0);
-			// Save files/folders into directory
-			label = totalCount + ' files';
+			}
+			// Save files into directory
+			label = itemCount + ' files';
 			destination = tools.dialog('open', {
 				title: 'Download ' + label,
 				properties: ['openDirectory', 'createDirectory'],
 			});
-		}
-
-		// Ensure destination exists
-		if (!destination) {
-			return;
-		}
-
-		// Setup async calls to each file to download them
-		tools.notify(`Downloading ${label} to ${destination}`, 'download');
+			if (!destination) {
+				return;
+			}
+			// Download each of the files
+			tools.notify(`Downloading ${label} to ${destination}`, 'download');
 			let functs = files.map(file => file.download.bind(file));
-			let destinations = files.map(file => `${destination}/${file.name}`);
+			let destinations = files.map(file => path.join(destination, file.name));
 			tools.waterfall(functs, destinations, function() {
 				tools.notify(`Downloaded ${label} to ${destination}`, 'success');
 			});
+		}
 	},
 
 	// Filter file list by search string

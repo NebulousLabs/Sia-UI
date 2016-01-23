@@ -55,7 +55,7 @@ $('#search-bar').keyup(function() {
 
 // Dropdown below the new button
 $('.dropdown .button').click(function() {
-	var userInput;
+	var userInput = true; // ok by default; will be set to undefined if user input fails
 	var option = this.textContent.trim();
 
 	// Dialog window options common to any button case that uses it
@@ -85,7 +85,7 @@ $('.dropdown .button').click(function() {
 			$('.dropdown li').hide('fast');
 			$('#paste-ascii').show('fast');
 			$('#paste-ascii input').focus();
-			return; // Don't close dropdown
+			break;
 		case 'Load ASCII File':
 			userInput = $('#paste-ascii input').val();
 			$('.dropdown li').show('fast');
@@ -94,20 +94,17 @@ $('.dropdown .button').click(function() {
 			break;
 		default:
 			console.error('Unknown button!', this);
-			return; // Don't close dropdown
-	}
-
-	// Detect flawed userInput from actions that require it, hide if fine
-	if (!userInput && option !== 'Make Folder') {
-		tools.tooltip('Invalid action!', this);
-		return; // Don't close dropdown
+			break;
 	}
 
 	// Close dropdown
 	$('.dropdown').hide('fast');
 
-	// Call the function that corresponds to the selected option
-	browser[option](userInput, browser.update);
+	// If the input was valid, call the function that corresponds to the
+	// selected option
+	if (userInput) {
+		browser[option](userInput, browser.update);
+	}
 });
 
 // Show add-ascii-file button when input box has content

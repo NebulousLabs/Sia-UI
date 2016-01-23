@@ -72,7 +72,7 @@ function uploadFolder(dirPath, siapath, callback) {
 		// Process the appropriate function per file
 		var functs = filePaths.map(filePath =>
 			fs.statSync(filePath).isFile() ? uploadFile : uploadFolder);
-		tools.waterfall(functs, siapath, callback);
+		tools.waterfall(functs, filePaths, siapath, callback);
 	});
 }
 

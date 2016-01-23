@@ -30,8 +30,6 @@ function updateFolderElement(f, el) {
 function makeFolderElement(f, navigateTo) {
 	var el = fileElement(f);
 	el.addClass('folder');
-	// add a / to distinguish folders
-	el.find('.name').text(f.name + '/');
 
 	// Populate its fields and graphics
 	updateFolderElement(f, el);
