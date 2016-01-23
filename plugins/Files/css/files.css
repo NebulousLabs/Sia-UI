@@ -52,7 +52,7 @@ input {
 }
 #cwd {
 	display: inline-block;
-	width: calc(100% - 231px);
+	width: calc(100% - 300px);
 	white-space: nowrap;
 	overflow-x: auto;
 }
@@ -64,7 +64,7 @@ input {
 }
 .controls input {
 	text-align: left;
-	width: 140px;
+	width: 180px;
 }
 .controls .button {
 	font-size: 10px;
@@ -72,7 +72,7 @@ input {
 }
 .dropdown {
 	position: absolute;
-	z-index: 2;
+	z-index: 1;
 	border: 1px solid #bdbdbd;
 	border-radius: 4px;
 	margin: 0 0 0 10px;
@@ -82,10 +82,7 @@ input {
 	list-style: none;
 	overflow-x: auto;
 	width: 180px;
-
-
 	box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.25);
-
 }
 .dropdown .button {
 	display: block;
@@ -137,10 +134,9 @@ hr {
     -webkit-user-select: none;
 }
 .file.selected {
-	background-color: #ddd;
+	background: linear-gradient(to top, #00CBA0 25%, #10DBB0 85%);
 }
 .file:hover {
-	background-color: #EEEEEE;
 }
 .file.anchor {
 }
@@ -167,12 +163,7 @@ hr {
 }
 .file .size {
 	text-align: right;
-	width: 50px;
-	margin-right: 10px;
-}
-.file .type {
-	text-align: left;
-	width: 50px;
+	width: 60px;
 	margin-right: 10px;
 }
 .file .detail {
@@ -204,7 +195,7 @@ hr {
 	font-size: 16px;
 	padding-right: 3px;
 }
-.file .fa-file {
+.file .fa-file-o {
 	padding: 0 4px 0 1px;
 }
 .file .fa-refresh {

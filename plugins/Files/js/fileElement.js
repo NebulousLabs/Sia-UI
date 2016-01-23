@@ -42,19 +42,19 @@ function updateFileElement(f, el) {
 	var sizeText = tools.formatByte(f.filesize);
 	el.find('.size').text(sizeText);
 
-	// Set type
-	el.find('.type').text('File');
-
 	return el;
 }
 
 // Make file element with jquery
 function makeFileElement(f) {
+	var type = 'file-o'
+	if (f.type === 'folder')
+		type = 'folder';
+	// TODO: Spaces in IDs is not valid HTML5. Use an alternative to f.name (which may contain spaces)
 	var el = $(`
 		<div class='file' id='${f.hashedPath}'>
-			<i class='fa fa-${f.type}'></i>
+			<i class='fa fa-${type}'></i>
 			<div class='name' id='${f.name}'>${f.name}</div>
-			<i class='button fa fa-pencil'></i>
 			<div class='info'>
 				<div class='size'></div>
 				<div class='type'></div>
@@ -101,13 +101,7 @@ function makeFileElement(f) {
 			$(this).text(f.name).attr('contentEditable', false);
 		}
 	});
-	el.find('.fa-pencil.button').click(function() {
-		// Allow user to rename the file
-		var name = $(this).prev();
-		name.attr('contentEditable', true);
-		name.focus()
-;	});
-	
+
 	// Add and return the new element
 	// TODO: Implement right click actions on these files
 	$('#file-list').append(el);
