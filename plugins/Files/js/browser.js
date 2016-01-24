@@ -329,7 +329,7 @@ var browser = {
 			tools.tooltip('No selected files', $('.controls .rename').get(0));
 			return;
 		} else if (itemCount === 1) {
-			var el = $("div[id='" + files[0].siapath + "']");
+			var el = $("div[id='" + files[0].name + "']");
 			// Use timeout to prevent loss of focus
 			setTimeout(function() {
 				el.prop('contentEditable', true);
