@@ -9,6 +9,25 @@
 const $ = require('jquery');
 const tools = require('./uiTools');
 
+// File icons by extension
+const fileIcons = {
+	'pdf':'file-pdf-o',
+	'jpg':'file-image-o',
+	'txt':'file-text-o',
+	'ppt':'file-powerpoint-o',
+	'js':'file-code-o',
+	'c':'file-code-o',
+	'php':'file-code-o',
+	'css':'file-code-o',
+	'html':'file-code-o',
+	'zip':'file-archive-o',
+	'gz':'file-archive-o',
+	'tar':'file-archive-o',
+	'mpg':'file-video-o',
+	'mp4':'file-sound-o',
+	'xls':'file-excel-o'
+};
+
 // Update file element with jquery
 function updateFileElement(f, el) {
 	el = el || $('#' + f.hashedPath);
@@ -47,14 +66,22 @@ function updateFileElement(f, el) {
 
 // Make file element with jquery
 function makeFileElement(f) {
+	// Get extension from name
+	var re = /(?:\.([^.]+))?$/;
+	var ext = re.exec(f.name)[1]; 
 	var type = 'file-o';
+	if (ext in fileIcons) {
+		type = fileIcons[ext];
+	}
+	var subClass = 'fileicon';
 	if (f.type === 'folder') {
 		type = 'folder';
+		var subClass = 'foldericon';
 	}
 	// TODO: Spaces in IDs is not valid HTML5. Use an alternative to f.name (which may contain spaces)
 	var el = $(`
 		<div class='file' id='${f.hashedPath}'>
-			<i class='fa fa-${type}'></i>
+			<i class='fa fa-${type} ${subClass}'></i>
 			<div class='name' id='${f.name}'>${f.name}</div>
 			<div class='info'>
 				<div class='size'></div>
