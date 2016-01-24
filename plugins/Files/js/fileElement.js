@@ -13,8 +13,13 @@ const tools = require('./uiTools');
 const fileIcons = {
 	'pdf':'file-pdf-o',
 	'jpg':'file-image-o',
+	'bmp':'file-image-o',
+	'png':'file-image-o',
+	'tiff':'file-image-o',
+	'tif':'file-image-o',
 	'txt':'file-text-o',
 	'ppt':'file-powerpoint-o',
+	'pptx':'file-powerpoint-o',
 	'js':'file-code-o',
 	'c':'file-code-o',
 	'php':'file-code-o',
@@ -24,8 +29,14 @@ const fileIcons = {
 	'gz':'file-archive-o',
 	'tar':'file-archive-o',
 	'mpg':'file-video-o',
-	'mp4':'file-sound-o',
-	'xls':'file-excel-o'
+	'wmv':'file-video-o',
+	'mp4':'file-video-o',
+	'mov':'file-video-o',
+	'mp3':'file-sound-o',
+	'wav':'file-sound-o',
+	'xls':'file-excel-o',
+	'doc':'file-word-o',
+	'docx':'file-word-o',
 };
 
 // Update file element with jquery
