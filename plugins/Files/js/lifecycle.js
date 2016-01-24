@@ -33,7 +33,7 @@ function updateStatus(result) {
 		var avg = prices.reduce((a, b) => a.plus(b))
 									.div(count)
 									.div(MONTHLY_DATA_COST);
-		priceDisplay = `Price: ${avg.round(3)} S/GB/Month`;
+		priceDisplay = `Price: ${avg.round(2)} S/GB/Month`;
 
 		hostsDisplay = result.hosts.length + hostsDisplay;
 		// Singular label for only 1 host

@@ -45,7 +45,7 @@ function selectAnchor(el) {
 	el.addClass('selected');
 }
 
-// Show action buttons iff there are selected files
+// Show action buttons if there are selected files
 function checkActionButtons() {
 	var someSelected = $('.selected').length;
 	var buttonsAreVisible = $('.controls .button').is(':visible');
@@ -97,6 +97,7 @@ function updateList(navigateTo) {
 			return $(a).hasClass('folder') ? -1 : 1;
 		}
 	}).appendTo('#file-list');
+	checkActionButtons();
 }
 
 // Update file from api result
@@ -162,7 +163,7 @@ function updateCWD(navigateTo) {
 		`);
 		// Root folder
 		if (f.path === '') {
-			el.html('<i class=\'fa fa-folder\'></i>');
+			el.html('<i class=\'fa fa-folder\'></i> ');
 		} else {
 			// Middle folders
 			el.html(f.name);
@@ -315,6 +316,28 @@ var browser = {
 				$('#' + file.hashedPath).remove();
 			});
 		});
+	},
+
+	// Renames a selected file
+	renameSelected () {
+		var files = getSelectedFiles();
+		var itemCount = files.length;
+		var label;
+
+		// Check for any selected files, and make messages singular or plural 
+		if (itemCount === 0) {
+			tools.tooltip('No selected files', $('.controls .rename').get(0));
+			return;
+		} else if (itemCount === 1) {
+			var el = $("div[id='" + files[0].name + "']");
+			// Use timeout to prevent loss of focus
+			setTimeout(function() {
+				el.prop('contentEditable', true);
+				el.focus();
+				el.parent().addClass('selected');
+			}, 100);
+		}
+		return;
 	},
 
 	// Prompts user for Ascii or .sia method of sharing

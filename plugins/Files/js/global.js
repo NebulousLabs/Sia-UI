@@ -121,6 +121,7 @@ $('.controls .delete').click(browser.deleteSelected);
 // TODO: Need to make browser.shareSelected
 $('.controls .share').click(browser.shareSelected);
 $('.controls .download').click(browser.downloadSelected);
+$('.controls .rename').click(browser.renameSelected);
 // Hide buttons to start, they're shown when files are selected
 $('.controls .button').fadeOut();
 
