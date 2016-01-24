@@ -47,9 +47,10 @@ function updateFileElement(f, el) {
 
 // Make file element with jquery
 function makeFileElement(f) {
-	var type = 'file-o'
-	if (f.type === 'folder')
+	var type = 'file-o';
+	if (f.type === 'folder') {
 		type = 'folder';
+	}
 	// TODO: Spaces in IDs is not valid HTML5. Use an alternative to f.name (which may contain spaces)
 	var el = $(`
 		<div class='file' id='${f.hashedPath}'>
