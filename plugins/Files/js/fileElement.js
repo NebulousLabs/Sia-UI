@@ -87,7 +87,7 @@ function makeFileElement(f) {
 	var subClass = 'fileicon';
 	if (f.type === 'folder') {
 		type = 'folder';
-		var subClass = 'foldericon';
+		subClass = 'foldericon';
 	}
 	// TODO: Spaces in IDs is not valid HTML5. Use an alternative to f.name (which may contain spaces)
 	var el = $(`
