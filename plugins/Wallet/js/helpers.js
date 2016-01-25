@@ -13,8 +13,8 @@ function convertSiacoin(hastings) {
 	var number = new BigNumber(hastings);
 	var ConversionFactor = new BigNumber(10).pow(24);
 
-	return number.gt(1) ? number.dividedBy(ConversionFactor).round(2)
-						 : number.dividedBy(ConversionFactor).toPrecision(1);
+	return number.gt(1) ? number.dividedBy(ConversionFactor).round(2).toNumber()
+						: number.dividedBy(ConversionFactor).toPrecision(1);
 }
 
 // Notification shortcut
