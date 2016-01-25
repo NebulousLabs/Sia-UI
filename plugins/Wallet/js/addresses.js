@@ -29,7 +29,7 @@ function makeAddress(address, number) {
 	// Make clicking this address show relevant transactions
 	element.find('.address').click(function(event) {
 		updateTransactionCriteria({
-			address: event.target.id,
+			address: address,
 		});
 	});
 
