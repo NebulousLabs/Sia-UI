@@ -79,8 +79,8 @@ describe('renderer process', function() {
 			return client.waitForVisible('.overlay', true);
 		});
 
-		/* TODO: disabled due to loading screen
-		it('loads 5 plugins', function() {
+		// TODO: broken due to loading screen
+		it.skip('loads 5 plugins', function() {
 			return client
 				.waitUntilNWindows(1)
 				.waitUntilNWindows(2)
@@ -90,8 +90,8 @@ describe('renderer process', function() {
 				.waitUntilNWindows(6);
 		});
 
-		// Clicks all sidebar icons and ensures plugins are visible
-		it('navigates correctly', function() {
+		// TODO: broken due to loading screen
+		it.skip('navigates correctly', function() {
 			return client
 				.waitForExist('.current')
 				.showPlugin('About')
@@ -100,6 +100,5 @@ describe('renderer process', function() {
 				.showPlugin('Files')
 				.showPlugin('Overview');
 		});
-		*/
 	});
 });
