@@ -10,7 +10,10 @@ const Siad = require('sia.js');
 var settings = ipcRenderer.sendSync('config', 'siad');
 Siad.configure(settings);
 
-// Update version shown
+// Set UI version via package.json.
+document.getElementById('uiversion').innerHTML = require('process').env.npm_package_version;
+
+// Set daemon version via API call.
 Siad.call('/daemon/version', function(err, result) {
 	if (err) {
 		ipcRenderer.sendToHost('notification', err.toString(), 'error');
@@ -19,6 +22,7 @@ Siad.call('/daemon/version', function(err, result) {
 	}
 });
 
+// Make FAQ button launch the FAQ webpage.
 document.getElementById('faq').onclick = function() {
 	electron.shell.openExternal('http://sia.tech/faq');
 };
