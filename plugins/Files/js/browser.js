@@ -91,10 +91,10 @@ function updateList(navigateTo) {
 
 	// Sort files to be folder first and then alphabetical
 	$('#file-list .file').sort(function(a, b) {
-		if (a.className === b.className) {
-			return $(a).find('.name').text() < $(b).find('.name').text() ? -1 : 1;
-		} else {
+		if ($(a).hasClass('folder') !== $(b).hasClass('folder')) {
 			return $(a).hasClass('folder') ? -1 : 1;
+		} else {
+			return $(a).find('.name').text().localeCompare($(b).find('.name').text());
 		}
 	}).appendTo('#file-list');
 	checkActionButtons();
