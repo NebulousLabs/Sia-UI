@@ -65,7 +65,7 @@ function updateFileElement(f, el) {
 	} else if (f.uploadprogress < 100) {
 		detailText = f.uploadprogress.toFixed(0) + '%'; 
 	} else if (f.renewing) {
-		detailText = 'Renewing';
+		detailText = '';
 	} else {
 		detailText = 'Expires on block ' + f.expiration;
 	}
