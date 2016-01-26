@@ -29,8 +29,8 @@ function validateTransaction(caller, callback) {
 	// TODO: Sending siafunds is momentous. Should make the whole wallet have a
 	// 'Siafund' mode. Add this option to the wallet settings page
 	// TODO: Add a wallet settings page
-	var bal = unit === '1' ? wallet.confirmedsiacoinbalance : wallet.siafundbalance;
-	if (bal < total) {
+	var bal = unit === '1' ? new BigNumber(wallet.siafundbalance) : new BigNumber(wallet.confirmedsiacoinbalance);
+	if (bal.lt(total)) {
 		tooltip('Balance too low!', caller);
 		return;
 	} 
