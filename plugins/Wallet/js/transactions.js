@@ -9,7 +9,7 @@ var criteria = {
 	endHeight:               1000000,
 	startTime:               null,
 	endTime:                 null,
-	minValue:                null,
+	minValue:                0.0000000001,
 	maxValue:                null,
 	currency: [
 		'siacoin',
@@ -33,8 +33,8 @@ function checkCriteria(txn) {
 	// Failing one check returns false but passing all checks returns true
 	return (criteria.endTime   === null || txn.confirmationtimestamp <= criteria.endTime)   &&
 	       (criteria.startTime === null || txn.confirmationtimestamp >= criteria.startTime) &&
-	       (criteria.maxValue  === null || txn.value                 <= criteria.maxValue)  &&
-	       (criteria.minValue  === null || txn.value                 >= criteria.minValue)  &&
+	       (criteria.maxValue  === null || Math.abs(txn.value)       <= criteria.maxValue)  &&
+	       (criteria.minValue  === null || Math.abs(txn.value)       >= criteria.minValue)  &&
 	       (criteria.currency  === null || criteria.currency.includes(txn.currency))        &&
 	       (criteria.inputs    === true || txn.value                 >= 0)                  &&
 	       (criteria.outputs   === true || txn.value                 <= 0);
@@ -90,7 +90,7 @@ function makeTransaction(txn) {
 	element.find('.time').html(time);
 
 	// Set transaction positive or negative
-	if (txn.value.isNegative()) {
+	if (txn.value < 0) {
 		element.find('.currency').addClass('negative');
 	} else {
 		element.find('.currency').addClass('positive');
@@ -119,7 +119,15 @@ function updateTransactionPage() {
 		min: 1,
 		max: maxPage,
 	});
-	$('#transaction-page').next().text('/' + maxPage);
+	$('#transaction-page').next().text(' / ' + maxPage);
+
+	// Enforce page limits
+	if ($('#transaction-page').val() > maxPage) {
+		$('#transaction-page').val(maxPage);
+	}
+	if ($('#transaction-page').val() < 1	) {
+		$('#transaction-page').val(1);
+	}
 
 	// Make elements for this page
 	var n = (($('#transaction-page').val() - 1) * criteria.itemsPerPage);

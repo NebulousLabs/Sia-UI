@@ -29,7 +29,7 @@ function makeAddress(address, number) {
 	// Make clicking this address show relevant transactions
 	element.find('.address').click(function(event) {
 		updateTransactionCriteria({
-			address: event.target.id,
+			address: address,
 		});
 	});
 
@@ -51,13 +51,21 @@ function updateAddressPage() {
 	$('#address-list').empty();
 
 	// Determine if search or normal page 
-	var array = $('#search-bar').val() ? searchedAddresses : addresses;
+	var array = $('#address-search-bar').val() ? searchedAddresses : addresses;
 	var maxPage = array.length === 0 ? 1 : Math.ceil(array.length / itemsPerPage);
 	$('#address-page').attr({
 		min: 1,
 		max: maxPage,
 	});
-	$('#address-page').next().text('/' + maxPage);
+	$('#address-page').next().text(' / ' + maxPage);
+
+	// Enforce page limits
+	if ($('#address-page').val() > maxPage) {
+		$('#address-page').val(maxPage);
+	}
+	if ($('#address-page').val() < 1	) {
+		$('#address-page').val(1);
+	}
 
 	// Make elements for this page
 	var n = (($('#address-page').val() - 1) * itemsPerPage);
@@ -85,7 +93,7 @@ $('#address-page').on('input', updateAddressPage);
 
 // Refresh button
 $('#view-all-addresses').click(function() {
-	$('#search-bar').val('');
+	$('#address-search-bar').val('');
 	getAddresses();
 });
 
@@ -95,13 +103,13 @@ function filterAdresses(searchstr) {
 	// Filter
 	searchedAddresses = addresses.map(address => ({address: address}));
 	searchedAddresses = addresses.filter(function(addressObject) {
-		return (addressObject.address.includes(searchstr));
+		return (addressObject.includes(searchstr));
 	});
 }
 
 // Show addresses based on search bar string
 function performSearch() {
-	var searchString = $('#search-bar').val();
+	var searchString = $('#address-search-bar').val();
 
 	// Don't search an empty string
 	if (searchString.length !== 0) {
@@ -114,7 +122,7 @@ function performSearch() {
 }
 
 // Start search when typing in Search field
-$('#search-bar').on('input', function() {
+$('#address-search-bar').on('input', function() {
 	tooltip('Searching...', this);
 	performSearch();
 });
@@ -151,7 +159,7 @@ $('#create-address').click(function() {
 		addAddress(result.address);
 		
 		// Display only the created address
-		$('#search-bar').val(result.address);
+		$('#address-search-bar').val(result.address);
 		performSearch();
 	});
 });

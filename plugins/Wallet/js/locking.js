@@ -40,7 +40,7 @@ function updateStatus(result) {
 
 	// Update balance confirmed and uncomfirmed
 	var bal = convertSiacoin(wallet.confirmedsiacoinbalance);
-	var pend = convertSiacoin(wallet.unconfirmedincomingsiacoins).sub(convertSiacoin(wallet.unconfirmedoutgoingsiacoins));
+	var pend = convertSiacoin(wallet.unconfirmedincomingsiacoins) - convertSiacoin(wallet.unconfirmedoutgoingsiacoins);
 	if (wallet.unlocked && wallet.encrypted) {
 		// TODO: Janky fix for graphical difficulty where a 2px border line appears when 1px is expected
 		$('#status.pod').css('border-left', '1px solid #00CBA0');
