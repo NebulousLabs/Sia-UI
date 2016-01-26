@@ -135,7 +135,7 @@ function reset() {
 
 // Return ip address 
 function address() {
-	return props.ipaddress.value;
+	return props.netaddress.value;
 }
 
 // Requiring this file gives an object with the following functions
