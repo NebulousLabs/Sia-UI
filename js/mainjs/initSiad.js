@@ -6,72 +6,43 @@ const Dialog = Electron.dialog;
 // Node libraries
 const Path = require('path');
 const Fs = require('fs');
-const Siad = require('sia.js');
+var Siad = require('sia.js');
 
 // Reference to commonly used variables
 var config;
 var mainWindow;
 
-// Send to UI notification system
-function notify(msg, type) {
+// Send to UI through IPC
+function signal(arg0, arg1, arg2) {
+	if (!mainWindow) {
+		return;
+	}
 	var wc = mainWindow.webContents;
 	if (wc.isLoading()) {
 		wc.on('did-finish-load', function() {
-			wc.send('notification', msg, type);
+			wc.send('siad', arg0, arg1, arg2);
 		});
 	} else {
-		wc.send('notification', msg, type);
+		wc.send('siad', arg0, arg1, arg2);
 	}
 }
 
 // Start siad
 function startSiad() {
-	// Keep notifying of siad loading the blockchain until it's started
+	// Keep signalling of siad loading the blockchain until it's started
 	var starting = setInterval(function() {
-		notify('siad: loading...', 'loading');
-	}, 500);
+		signal('loading');
+	}, 100);
 	Siad.start(function(err) {
-		if (err) {
-			console.error(err);
-			mainWindow.close();
-		}
-		notify('siad: started!', 'success');
 		clearInterval(starting);
-	});
-}
-
-// Download siad to config.siad.path
-function downloadSiad() {
-	// Keep notifying of siad downloading
-	var downloading = setInterval(function() {
-		notify('siad: downloading...', 'loading');
-	}, 500);
-	Siad.download(function(err) {
+		// If failed to start, signal the UI's loading screen
 		if (err) {
+			signal('failure', err);
 			console.error(err);
-			mainWindow.close();
 			return;
 		}
-		notify('siad: downloaded to ' + config.siad.path, 'success');
-		clearInterval(downloading);
-		startSiad();
+		signal('started');
 	});
-}
-
-// Download siad to a selected path
-function downloadSiadDialog() {
-	var siadPath = Dialog.showOpenDialog(mainWindow, {
-		title: 'Download siad to directory',
-		properties: ['openDirectory'],
-		defaultPath: config.siad.path,
-		filters: [{ name: 'Siad', extensions: ['*'] }],
-	});
-	if (siadPath) {
-		// Path returned from showOpenDialog() in array
-		siadPath = siadPath[0];
-		siadPath = Path.join(siadPath, 'Sia');
-	}
-	return siadPath;
 }
 
 // Get directory of siad and parse file name
@@ -89,16 +60,16 @@ function openSiadDialog() {
 	return siadPath;
 }
 
-// Ask user to open or download siad with an electron dialog message
+// Ask user to open siad with an electron dialog message
 function missingSiadDialog() {
 	var iconPath = Path.join(__dirname, '../..', 'assets', 'icon.png');
 	return Dialog.showMessageBox(mainWindow, {
 		title:   'Missing siad!',
 		message: 'Sia-UI requires siad to function.',
-		detail:  'Would you like to open it or download a copy?',
+		detail:  'Please open it to proceed',
 		icon:    iconPath,
-		type:    'question',
-		buttons: ['Open', 'Download', 'Cancel'],
+		type:    'info',
+		buttons: ['Open', 'Cancel'],
 	});
 }
 
@@ -111,16 +82,13 @@ function checkSiadPath() {
 			return;
 		}
 
-		// If it isn't found, use dialogs to find or download it
+		// If it isn't found, use dialogs to find
 		var selected = missingSiadDialog();
 		var siadPath;
 
 		// 'Open' selected
 		if (selected === 0) {
 			siadPath = openSiadDialog();
-		} else if (selected === 1) {
-			// 'Download' selected
-			siadPath = downloadSiadDialog();
 		} else {
 			// 'Cancel' selected
 			mainWindow.close();
@@ -130,14 +98,10 @@ function checkSiadPath() {
 		// Verify chosen path
 		if (!siadPath) {
 			checkSiadPath();
-		} else if (selected === 0) {
+		} else {
 			config.siad.fileName = Path.basename(siadPath);
 			config.siad.path = Path.dirname(siadPath);
 			Siad.configure(config.siad, checkSiadPath);
-		} else if (selected === 1) {
-			config.siad.path = siadPath;
-			// Begin download and start siad after
-			Siad.configure(config.siad, downloadSiad);
 		}
 	});
 }
@@ -147,11 +111,11 @@ module.exports = function initSiad(cnfg, mW) {
 	config = cnfg;
 	mainWindow = mW;
 
-	// Pipe siad events to UI notification system through IPC
-	var allCPEvents = ['close', 'disconnect', 'error', 'exit', 'message'];
-	allCPEvents.forEach(function(ev) {
-		Siad.on(ev, function(msg) {
-			notify('siad ' + ev + ': ' + msg, ev);
+	// Pipe siad events to UI 
+	var siadEvents = ['close', 'disconnect', 'error', 'exit', 'message'];
+	siadEvents.forEach(function(ev) {
+		Siad.on(ev, function(arg0, arg1) {
+			signal(ev, arg0, arg1);
 		});
 	});
 
@@ -162,6 +126,7 @@ module.exports = function initSiad(cnfg, mW) {
 		if (!config.siad.detached) {
 			Siad.stop();
 		}
+		Siad = null;
 	});
 
 	// Set config for Siad to work off of configure() doesn't update
@@ -170,7 +135,7 @@ module.exports = function initSiad(cnfg, mW) {
 	Siad.configure(config.siad, function() {
 		// Let user know if siad is running or check siad's location
 		if (Siad.isRunning()) {
-			notify('siad: running!', 'success');
+			signal('running');
 		} else {
 			checkSiadPath();
 		}

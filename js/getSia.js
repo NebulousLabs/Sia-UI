@@ -1,7 +1,8 @@
 'use strict';
 
 // This script, much like how the name says, downloads a Sia release into the
-// UI's root directory.
+// UI's root directory. This should only be used by TravisCI since siad is
+// included in UI releases
 const SiadWrapper = require('sia.js');
 const Path = require('path');
 const Fs = require('fs');

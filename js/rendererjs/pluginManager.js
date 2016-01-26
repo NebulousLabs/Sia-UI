@@ -139,6 +139,7 @@ function initPlugins() {
 	});
 }
 
+// Retrieve the home plugin and then initialize other plugins
 plugins.Home = require('electron').ipcRenderer.sendSync('config', 'homePlugin');
 initPlugins();
 
