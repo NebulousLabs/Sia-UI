@@ -11,7 +11,7 @@ var settings = ipcRenderer.sendSync('config', 'siad');
 Siad.configure(settings);
 
 // Set UI version via package.json.
-document.getElementById('uiversion').innerHTML = require('process').env.npm_package_version;
+document.getElementById('uiversion').innerHTML = require('../../package.json').version;
 
 // Set daemon version via API call.
 Siad.call('/daemon/version', function(err, result) {
