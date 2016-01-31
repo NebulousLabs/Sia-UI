@@ -1,6 +1,6 @@
 {
   "name": "Sia-UI-beta",
-  "version": "v0.4.8-beta",
+  "version": "v0.5.1-beta",
   "main": "index.js",
   "author": "NebulousLabs",
   "description": "A UI application for interfacing with Sia",
@@ -21,7 +21,7 @@
     "jquery": "^2.1.4",
     "mkdirp": "^0.5.1",
     "request": "^2.67.0",
-    "sia.js": "^0.1.6"
+    "sia.js": "^0.1.7"
   },
   "scripts": {
     "start": "electron .",
@@ -32,11 +32,10 @@
     "doc": "jsdoc -c .jsdocrc",
     "sia-repo": "go get -u github.com/NebulousLabs/Sia/...",
     "sia-import": "(test -d Sia || mkdir -p Sia) && (cp $GOPATH/bin/siad Sia & cp $GOPATH/bin/siac Sia)",
-    "sia-download": "node js/getSia.js",
-    "postinstall": "npm run sia-download",
+    "postinstall": "node js/getSia.js",
     "sia-kill": "killall siad; while pgrep siad; do sleep .5; done;",
     "sia-refresh": "npm run sia-kill && rm -rf Sia && npm run sia-import",
-    "release-args": "electron-packager . Sia-UI --app-version=0.4.8-beta --version=0.36.3 --overwrite --prune --ignore='(release|config.json|errors.log)' --out=release/v0.4.8-beta --icon=assets/icon",
+    "release-args": "electron-packager . Sia-UI --app-version=0.5.1-beta --version=0.36.3 --overwrite --prune --ignore='(release|config.json|errors.log)' --out=release/v0.5.1-beta --icon=assets/icon",
     "release": "npm run release-args -- --all && ./.finalizeRelease.sh all",
     "release-lin64": "npm run release-args -- --platform=linux --arch=x64 && ./.finalizeRelease.sh linux-x64",
     "release-lin32": "npm run release-args -- --platform=linux --arch=ia32 && ./.finalizeRelease.sh linux-ia32",

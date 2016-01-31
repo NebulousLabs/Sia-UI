@@ -8,6 +8,7 @@
  *		Grey:       #C5C5C5
  * 		Grey-Black: #4A4A4A
  * 		Black:      #000000
+ *      Neon-Green: #00CBA0
  */
 
 /* General */
@@ -36,7 +37,12 @@ input {
 
 /* Current Directory Path */
 .directory {
+	border: 1px solid #F5F5F5;
 	vertical-align: middle;
+	-webkit-animation: fadein 0.3s;
+}
+.directory:hover {
+	color: #00CBA0;
 }
 .button {
 	display: inline-block;
@@ -46,7 +52,11 @@ input {
 }
 #cwd {
 	display: inline-block;
+<<<<<<< HEAD
 	width: auto;
+=======
+	width: calc(100% - 300px);
+>>>>>>> refs/remotes/NebulousLabs/master
 	white-space: nowrap;
 	overflow-x: auto;
 }
@@ -58,7 +68,11 @@ input {
 }
 .controls input {
 	text-align: left;
+<<<<<<< HEAD
 	width: 200px;
+=======
+	width: 180px;
+>>>>>>> refs/remotes/NebulousLabs/master
 }
 .controls .button {
 	font-size: 10px;
@@ -67,27 +81,56 @@ input {
 .dropdown {
 	position: absolute;
 	z-index: 1;
+<<<<<<< HEAD
 	border-radius: 0 6px 6px 6px;
 	margin: 0;
+=======
+	border: 1px solid #bdbdbd;
+	border-radius: 4px;
+	margin: 0 0 0 10px;
+>>>>>>> refs/remotes/NebulousLabs/master
 	padding: 0;
-
 	white-space: nowrap;
 	background: white;
 	list-style: none;
+	overflow-x: auto;
+	width: 180px;
+	box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.25);
 }
 .dropdown .button {
 	display: block;
 	font-size: 12px;
-	margin: 4px;
+	padding: 6px 8px 6px 8px;
+	height: 25px;
+}
+.dropdown .button:hover {
+	background-color: #ECECEC;
+}
+.dropdown .button .icon {
+	width: 30px;
+	color: #00CBA0;
+}
+.dropdown .button .label {
+	font-size: 14px;
+	position: absolute;
+	left: 45px;
+	line-height: 25px;
 }
 hr {
 	margin: 0;
+	border: none;
+	border-bottom: 1px solid #eeeeee;
 }
 
 /* File list */
 #file-list {
+<<<<<<< HEAD
 	background-color: transparent;
 	height: calc(100% - 60px);
+=======
+	background-color: #fafafa;
+	height: calc(100% - 150px);
+>>>>>>> refs/remotes/NebulousLabs/master
 	overflow-y: auto;
 }
 .file.label {
@@ -102,17 +145,25 @@ hr {
 }
 .file {
 	padding: 6px;
-	color: #757575;
-	font-size: 12px;
+	color: #606060;
+	font-size: 14px;
 	background-color: #fff;
 	white-space: nowrap;
     -webkit-user-select: none;
 }
 .file.selected {
+<<<<<<< HEAD
 	background-color: rgba(255,255,255,0.25);
 }
 .file.anchor {
 	border: 0px solid #00CBA0;
+=======
+	background: linear-gradient(to top, #00CBA0 25%, #10DBB0 85%);
+}
+.file:hover {
+}
+.file.anchor {
+>>>>>>> refs/remotes/NebulousLabs/master
 }
 .file:hover {
 	cursor: pointer;
@@ -126,17 +177,24 @@ hr {
 }
 .file .name {
 	text-align: left;
-	width: calc(100% - 250px);
-	overflow: hidden;
+	max-width: calc(100% - 210px);
 	white-space: nowrap;
+}
+.file .info {
+	float: right;
+}
+.file .info > * {
+	display: inline-block;
 }
 .file .size {
 	text-align: right;
-	width: 75px;
+	width: 60px;
+	margin-right: 10px;
 }
-.file .time {
-	text-align: center;
-	width: 150px;
+.file .detail {
+	text-align: left;
+	width: 120px;
+	margin-right: 10px;
 }
 .cssTooltip {
 	display: inline;
@@ -156,4 +214,15 @@ hr {
 	text-shadow: 0 1px 0 #000;
 	white-space: nowrap;
 	z-index: 9999998;
+	font-size: 14px;
+}
+.file .fa-folder {
+	font-size: 16px;
+	padding-right: 3px;
+}
+.file .fileicon {
+	padding: 0 4px 0 1px;
+}
+.file .fa-refresh {
+	margin: 0 4px 0 1px;
 }

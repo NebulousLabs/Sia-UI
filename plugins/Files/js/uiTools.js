@@ -34,18 +34,25 @@ module.exports = {
 	
 	// Config shortcut
 	config (key, value) {
-		value = value || undefined;
-		return ipcRenderer.sendSync('config', key);
+		if (value === undefined) {
+			return ipcRenderer.sendSync('config', key);
+		} else {
+			return ipcRenderer.sendSync('config', key, value);
+		}
 	},
 	
 	// Dialog shortcut
 	dialog (type, options) {
 		return ipcRenderer.sendSync('dialog', type, options);
 	},
-	
-	// Checks whether a path starts with or contains a hidden file or a folder.
-	isUnixHiddenPath (path) {
-		return (/(^|\/)\.[^\/\.]/g).test(path);
+
+	// Logs an error to output for non-string arguments
+	notType (str, type) {
+		if (typeof str !== type) {
+			console.error('Improper argument!', str);
+			return true;
+		}
+		return false;
 	},
 	
 	// Format to data size representation with 3 or less digits
@@ -96,9 +103,9 @@ module.exports = {
 
 		// Call funct per array item
 		array.forEach(function(item) {
-			var specificParams = params.slice(0);
-			specificParams.unshift(item);
-			funct.apply(null, specificParams);
+			var singleParam = params.slice(0);
+			singleParam.unshift(item);
+			funct.apply(null, singleParam);
 		});
 	},
 
@@ -110,7 +117,7 @@ module.exports = {
 
 		// Any amount of optional parameters
 		var params = [];
-		for (let i = 2; i < arguments.length - 1; i++) {
+		for (let i = 1; i < arguments.length - 1; i++) {
 			let arg = arguments[i];
 			params.push(arg);
 		}
@@ -139,8 +146,8 @@ module.exports = {
 
     	// Call per function with params (Array or single param allowed)
 		functs.forEach(function(funct, index) {
-			var specificParams = params.map(param => Array.isArray(param) ? param[index] : param);
-			funct.apply(null, specificParams);
+			var singleParams = params.map(param => Array.isArray(param) ? param[index] : param);
+			funct.apply(null, singleParams);
 		});
 	},
 	

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -o errexit # Exit on error
-readonly VERSION="v0.4.8-beta"
+readonly VERSION="v0.5.1-beta"
 declare -a Electron_Archs=("linux-x64" "linux-ia32" "win32-x64" "win32-ia32" "darwin-x64")
 declare -a Sia_Archs=("linux-amd64" "linux-386" "windows-amd64" "windows-386" "darwin-amd64")
 
@@ -35,7 +35,7 @@ package() {
 		rm -rf "$resources/default_app"
 
 		# Extract and rename Sia release
-		unzip -quo "$sia_archive" -d "$resources/app"
+		unzip -qo "$sia_archive" -d "$resources/app"
 		mv "$resources/app/$sia_folder" "$resources/app/Sia"
 
 		# Create archive
@@ -45,7 +45,7 @@ package() {
 		rm -rf "$ui/resources/default_app"
 
 		# Extract and rename Sia release
-		unzip -quo "$sia_archive" -d "$ui/resources/app"
+		unzip -qo "$sia_archive" -d "$ui/resources/app"
 		mv "$ui/resources/app/$sia_folder" "$ui/resources/app/Sia"
 
 		# Create archive

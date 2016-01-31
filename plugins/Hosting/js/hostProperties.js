@@ -28,14 +28,20 @@ const MONTHLY_DATA_COST = H_per_S.div(B_per_GB).div(BLOCKS_per_MONTH);
 
 // Exports organized information about all the host status properties
 var props = {
+	anticipatedrevenue: {
+		descr: 'Revenue to be Earned',
+		unit: 'S',
+		conversion: H_per_S,
+	},
 	collateral: {
 		descr: 'Collateral',
 		unit: 'S/GB/month',
 		conversion: MONTHLY_DATA_COST,
 	},
-	ipaddress: {
-		descr: 'Network Address',
-		unit: 'IP Address',
+	lostrevenue: {
+		descr: 'Revenue Lost',
+		unit: 'S',
+		conversion: H_per_S,
 	},
 	maxduration: {
 		descr: 'Maximum Duration',
@@ -47,10 +53,28 @@ var props = {
 		unit: 'Days',
 		conversion: BLOCKS_per_DAY,
 	},
+	netaddress: {
+		descr: 'Network Address',
+		unit: 'IP Address',
+	},
+	numcontracts: {
+		descr: 'Number of File Contracts',
+		unit: 'Contracts',
+	},
 	price: {
 		descr: 'Price',
 		unit: 'S/GB/month',
 		conversion: MONTHLY_DATA_COST,
+	},
+	revenue: {
+		descr: 'Revenue Earned',
+		unit: 'S',
+		conversion: H_per_S,
+	},
+	storageremaining: {
+		descr: 'Total Storage',
+		unit: 'GB',
+		conversion: B_per_GB,
 	},
 	totalstorage: {
 		descr: 'Total Storage',
@@ -65,25 +89,6 @@ var props = {
 		descr: 'Time Window for Storage Proof',
 		unit: 'Hours',
 		conversion: BLOCKS_per_HOUR,
-	},
-	numcontracts: {
-		descr: 'Number of File Contracts',
-		unit: 'Contracts',
-	},
-	revenue: {
-		descr: 'Revenue Earned',
-		unit: 'S',
-		conversion: H_per_S,
-	},
-	storageremaining: {
-		descr: 'Total Storage',
-		unit: 'GB',
-		conversion: B_per_GB,
-	},
-	upcomingrevenue: {
-		descr: 'Revenue to be Earned',
-		unit: 'S',
-		conversion: H_per_S,
 	},
 };
 

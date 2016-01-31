@@ -11,6 +11,41 @@
  *    Neon-Green: #00CBA0
  */
 
+<<<<<<< HEAD
+=======
+/* General */
+.s-font {
+	font-size: 12px;
+}
+.m-font {
+	font-size: 16px;
+}
+.l-font {
+	font-size: 24px;
+}
+.capsule {
+	overflow: visible;
+}
+.capsule .dropdown {
+	position: absolute;
+	z-index: 1;
+
+	border: 1px solid #00CBA0;
+	margin: 0;
+	padding: 0;
+	right: -1px;
+
+	white-space: nowrap;
+	background: white;
+	list-style: none;
+}
+.capsule .dropdown .button {
+	background-color: #4A4A4A;
+	padding: 8px;
+	display: block;
+}
+
+>>>>>>> refs/remotes/NebulousLabs/master
 /* Password box */
 .popup {
 	position: absolute;
@@ -81,6 +116,9 @@
 .button {
 	display: inline-block;
 	padding: 4px;
+}
+.header .button:hover {
+	color: #00CBA0;
 }
 .title .button:first-child {
 	padding-right: 0;
@@ -170,4 +208,14 @@ input[type=number] {
 .transparent:hover {
 	cursor: default;
 }
-
+#address-page {
+	width: 3em;
+}
+#max-page {
+	float: right;
+	text-align: left;
+	padding-left: 5px;
+	width: 2em;
+	font-size: 20px;
+	padding-top: 2px;
+}

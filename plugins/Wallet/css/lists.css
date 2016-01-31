@@ -21,7 +21,11 @@
 }
 .entry {
 	padding: 8px;
+<<<<<<< HEAD
 	height:12px;
+=======
+	height: 12px;
+>>>>>>> refs/remotes/NebulousLabs/master
 	background-color: #fff;
 	border-bottom: 1px solid #777;
 }
@@ -40,10 +44,10 @@
 	overflow: hidden;
 }
 .currency.positive {
-	color: #77ff77;
+	color: #55DD55;
 }
 .currency.negative {
-	color: #ff7777;
+	color: #DD5555;
 }
 .value {
 	width: 100px;
@@ -65,7 +69,7 @@
 	padding: 0;
 	display: inline-block;
 	text-align: left;
-    width: calc(90% - 13px);
+    width: calc(90% - 16px);
 }
 .address.button .fa {
 	margin-right: 4px;
@@ -89,13 +93,15 @@
 	white-space: nowrap;
 	z-index: 9999998;
 }
-
 .copy-address {
 	display: inline-block;
 	padding: 0;
 	width: 5%;
 }
-#search-bar {
+#address-search-bar {
+	width: 200px;
+}
+#address-search-bar:focus {
 	width: 300px;
 }
 

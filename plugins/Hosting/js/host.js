@@ -46,6 +46,10 @@ function buildProps(hostInfo) {
 function updateStatus(hostInfo, callback) {
 	// Store hostInfo results property data
 	$.each(hostInfo, function(name, value) {
+		// TODO: Don't care about rpc stats yet
+		if (name.includes('rpc')) {
+			return;
+		}
 		// Try-catch statement to be fault-tolerant. If just one name from the
 		// api call result, hostInfo, isn't in hostProperties or has a
 		// different name, such as with an unexpected siad version, other
@@ -54,22 +58,28 @@ function updateStatus(hostInfo, callback) {
 			props[name].value = value;
 		} catch (e) {
 			console.error(e);
-			console.log('Error updating host properties object:');
+			console.log(`Error updating host property ${name}:`);
 			console.log(hostInfo, props);
 		}
 	});
 
-	// Process host info
-	var totalStorage = math.formatByte(props.totalstorage.value);
-	var usedStorage = math.formatByte(props.totalstorage.value - props.storageremaining.value);
-	var revenue = math.formatSiacoin(props.revenue.value);
-	var upcomingRevenue = math.formatSiacoin(props.upcomingrevenue.value);
+	// Process host info while being fault-tolerant
+	var totalStorage, usedStorage, revenue, anticipatedRevenue;
+	try {
+		totalStorage = math.formatByte(props.totalstorage.value);
+		usedStorage = math.formatByte(props.totalstorage.value - props.storageremaining.value);
+		revenue = math.formatSiacoin(props.revenue.value);
+		anticipatedRevenue = math.formatSiacoin(props.anticipatedrevenue.value);
+	} catch (e) {
+		console.error(e);
+		console.log('Error updating capsule from host property!');
+	}
 
 	// Update host info
 	$('#numcontracts').text(math.formatProperty(props.numcontracts));
 	$('#storage').text(usedStorage + '/' + totalStorage + ' in use');
 	$('#revenue').text(revenue + ' earned');
-	$('#upcomingrevenue').text(upcomingRevenue + ' to be earned');
+	$('#anticipatedrevenue').text(anticipatedRevenue + ' to be earned');
 
 	// If configurable property elements haven't been made, make them
 	if (!propsMade) {
@@ -125,7 +135,7 @@ function reset() {
 
 // Return ip address 
 function address() {
-	return props.ipaddress.value;
+	return props.netaddress.value;
 }
 
 // Requiring this file gives an object with the following functions

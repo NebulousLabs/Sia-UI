@@ -15,15 +15,13 @@ const browser = require('./browser');
 
 // Keeps track of if the view is shown
 var updating;
-// 'all' or 'active'
-var hostsType = 'all';
 // Hastings per Siacoin (1e24) / B per GB (1e9) / Blocks per 30-day month (4320)
 const MONTHLY_DATA_COST = new BigNumber('1e+24').div('1e+9').div('4320');
 
 // Update capsule values with renter status
 function updateStatus(result) {
 	var priceDisplay;
-    var hostsDisplay = hostsType === 'all' ? ' Hosts' : ' Active Hosts';
+    var hostsDisplay;
 
 	// Determine capsule display values
 	if (result.hosts) {
@@ -33,16 +31,17 @@ function updateStatus(result) {
 		var avg = prices.reduce((a, b) => a.plus(b))
 									.div(count)
 									.div(MONTHLY_DATA_COST);
-		priceDisplay = `Price: ${avg.round(3)} S/GB/Month`;
+		priceDisplay = `Price: ${avg.round(2)} S/GB/Month`;
 
-		hostsDisplay = result.hosts.length + hostsDisplay;
 		// Singular label for only 1 host
 		if (count === 1) {
-			hostsDisplay = hostsDisplay.slice(0, -1);
+			hostsDisplay = '1 Active Host';
+		} else {
+			hostsDisplay = `${count} Active Hosts`;
 		}
 	} else {
 		priceDisplay = 'Unknown Storage Price';
-		hostsDisplay = 'No' + hostsDisplay;
+		hostsDisplay = 'No Active Hosts';
 	}
 	$('#price.pod').text(priceDisplay);
 	// TODO: Could make pod clickable for expanded host information
@@ -51,18 +50,16 @@ function updateStatus(result) {
 
 // Regularly update the file library and status
 function update() {
-	browser.update();
-	siad.apiCall('/renter/hosts/' + hostsType, updateStatus);
-	
+	// don't update if a file is being renamed
+	var renaming = $('#file-list .file').find('[contenteditable=true]').length !== 0;
+
+	if (!renaming) {
+		browser.update();
+		siad.apiCall('/renter/hosts/active', updateStatus);
+	}
+
 	updating = setTimeout(update, 15000);
 }
-
-// Clicking the host pod toggles it between all hosts and active hosts
-$('#host-count.pod').click(function() {
-	$('#host-count.pod .fa').toggleClass('fa-globe fa-users');
-	hostsType = hostsType === 'all' ? 'active' : 'all';
-	update();
-});
 
 // Called upon showing
 ipcRenderer.on('shown', update);

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<title>Files</title>
 		<!-- CSS -->
 		<link rel='stylesheet' href='../../css/roboto.css'>
 		<link rel='stylesheet' href='../../css/font-awesome.min.css'>
@@ -14,8 +15,8 @@
 			<div class='header'>
 				<h3 class='title'>Files</h3>
 				<div class='capsule'>
-					<div class='pod button' id='host-count'>
-						<i class='fa fa-globe'></i>
+					<div class='pod' id='host-count'>
+						<i class='fa fa-users'></i>
 						<span></span>
 					</div>
 					<div class='pod' id='price'></div>
@@ -29,45 +30,58 @@
 					</span>
 					<ul class='dropdown hidden'>
 						<li class='button'>
-							<span class='fa-stack'>
-								<i class='fa fa-folder-o fa-stack-2x'></i>
-								<i class='fa fa-plus fa-stack-1x'></i>
+							<span class="icon">
+								<span class='fa-stack'>
+									<i class='fa fa-folder-o fa-stack-2x'></i>
+									<i class='fa fa-plus fa-stack-1x'></i>
+								</span>
 							</span>
-							Make Folder
+							<span class="label">Make Folder</span>
 						</li>
 						<hr>
 						<li class='button'>
-							<span class='fa-stack'>
-								<i class='fa fa-file-o fa-stack-2x'></i>
-								<i class='fa fa-arrow-up fa-stack-1x'></i>
+							<span class="icon">
+								<span class='fa-stack'>
+									<i class='fa fa-file-o fa-stack-2x'></i>
+									<i class='fa fa-arrow-up fa-stack-1x'></i>
+								</span>
 							</span>
-							Upload File
+							<span class="label">Upload File</span>
 						</li>
 						<li class='button'>
-							<span class='fa-stack'>
-								<i class='fa fa-folder-o fa-stack-2x'></i>
-								<i class='fa fa-arrow-up fa-stack-1x'></i>
+							<span class="icon">
+								<span class='fa-stack'>
+									<i class='fa fa-folder-o fa-stack-2x'></i>
+									<i class='fa fa-arrow-up fa-stack-1x'></i>
+								</span>
 							</span>
-							Upload Folder
+							<span class="label">Upload Folder</span>
 						</li>
 						<hr>
 						<li class='button'>
-							<i class='fa fa-file-text-o fa-2x'></i>
-							Load .Sia File
+							<span class="icon">
+								<i class='fa fa-file-text-o fa-2x'></i>
+							</span>
+							<span class="label">Load .Sia File</span>
 						</li>
 						<li class='button'>
-							<i class='fa fa-clipboard fa-2x'></i>
-							Paste ASCII File
+							<span class="icon">
+								<i class='fa fa-clipboard fa-2x'></i>
+							</span>
+							<span class="label">Paste ASCII File</span>
 						</li>
 						<div class='hidden' id='paste-ascii'>
 							<input placeholder='Paste your .sia ASCII'></input>
 							<div class='button hidden'>
 								<i class='fa fa-check fa-2x'></i>
-								Load ASCII File
+								<span class="label">Load ASCII File</span>
 							</div>
 						</div>
 					</ul>
 					<span class='controls'>
+						<div class='button rename cssTooltip' tooltip-content="Rename selected">
+							<i class='fa fa-pencil fa-2x'></i>
+						</div>
 						<div class='button download cssTooltip' tooltip-content="Download selected">
 							<i class='fa fa-download fa-2x'></i>
 						</div>
@@ -83,12 +97,11 @@
 
 				<!-- File list for current folder -->
 				<div class='file label'>
-					<div class='graphic'>
-						<i class='fa'></i>
-					</div>
 					<div class='name'>Name</div>
-					<div class='size'>Size</div>
-					<div class='time'>Time</div>
+					<div class='info'>
+						<div class='size'>Size</div>
+						<div class='detail'>Detail</div>
+					</div>
 				</div>
 				<div id='file-list'>
 				</div>

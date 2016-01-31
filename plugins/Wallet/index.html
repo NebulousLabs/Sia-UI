@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<title>Wallet</title>
 		<!-- CSS -->
 		<link rel='stylesheet' href='../../css/roboto.css'>
 		<link rel='stylesheet' href='../../css/font-awesome.min.css'>
@@ -13,18 +14,50 @@
 		<div class='frame' id='wallet'>
 			<!-- Header -->
 			<div class='header'>
+<<<<<<< HEAD
 				<h3 class='title'>Wallet</h3>
+=======
+				<div class='title'>
+					Wallet
+				</div>
+>>>>>>> refs/remotes/NebulousLabs/master
 				<div class='capsule'>
 					<div class='pod' id='confirmed'></div>
 					<div class='pod' id='unconfirmed'></div>
-					<div class='pod button' id='lock-pod'>
-						<i class='fa'></i>
+					<div class='pod button' id='status'>
+						<i class='fa fa-cogs'></i>
 						<span>Status unknown</span>
 					</div>
+					<ul class='dropdown hidden'>
+						<li class='button' id='lock'>
+							<i class='fa'></i>
+							<span>Status unknown</span>
+						</li>
+						<li class='button'>
+							<i class='fa fa-key'></i>
+							Load Siag Key
+						</li>
+						<li class='button'>
+							<i class='fa fa-clipboard'></i>
+							Paste Seed
+						</li>
+						<li class='button'>
+							<i class='fa fa-folder-open'></i>
+							Load Legacy Wallet
+						</li>
+						<div class='hidden' id='paste-seed'>
+							<input placeholder='Paste your seed'></input>
+							<div class='button hidden'>
+								<i class='fa fa-tint'></i>
+								Load Seed
+							</div>
+						</div>
+					</ul>
 				</div>
 			</div>
 
 			<!-- Popups -->
+<<<<<<< HEAD
 			<div class='popup hidden' id='request-password'>
 				<div class='row'>
 					<h3 class='title'> Enter your password </h3>
@@ -42,8 +75,11 @@
 			</div>
 
 			<div class='popup hidden' id='show-password'>
+=======
+			<div class='popup m-font hidden' id='show-password'>
+>>>>>>> refs/remotes/NebulousLabs/master
 				<div class='row'>
-					<div class='title'> Welcome to your Sia Wallet!  </div>
+					<div class='title'>Welcome to your Sia Wallet!</div>
 					<div class='button close'>
 						<i class='fa fa-times'></i>
 					</div>
@@ -72,8 +108,13 @@
 						<i class='fa fa-refresh'></i>
 						Transactions
 					</div>
+<<<<<<< HEAD
 					<div class='controls'>
 						<input type='number' class='page' id='transaction-page' value='1'><span>/MAX_PAGE</span>
+=======
+					<div class='controls m-font'>
+						<input type='number' id='transaction-page' value='1'><div id="max-page"> / MAX_PAGE</div>
+>>>>>>> refs/remotes/NebulousLabs/master
 					</div>
 				</div>
 				<div class='list' id='transaction-list'>
@@ -90,6 +131,7 @@
 						<i class='fa fa-refresh'></i>
 						Addresses
 					</div>
+<<<<<<< HEAD
 					<div class='controls'>
 						<input type='search' id='search-bar' placeholder='Search addresses'></input>
 						<!--div class='button' id='load-legacy-wallet'>
@@ -97,6 +139,11 @@
 							Load Legacy Wallet
 						</div-->
 						<input type='number' class='page' id='address-page' value='1'><span>/MAX_PAGE</span>
+=======
+					<div class='controls m-font'>
+						<input type='search' id='address-search-bar' placeholder='Search addresses'></input>
+						<input type='number' id='address-page' value='1'><div id="max-page"> / MAX_PAGE</div>
+>>>>>>> refs/remotes/NebulousLabs/master
 					</div>
 				</div>
 				<div class='list' id='address-list'>
@@ -110,10 +157,10 @@
 		<!-- Make Transaction Frame-->
 		<div class='frame hidden' id='make-transaction'>
 			<div class='header'>
-				<div class='back button'>
+				<div class='back title button'>
 					<i class='fa fa-chevron-left'></i>
+					Make Transaction
 				</div>
-				<div class='title'> Make Transaction </div>
 			</div>
 
 			<div class='halfpage'>

@@ -64,8 +64,15 @@ input{
 
 /* Plugin header */
 .header {
+<<<<<<< HEAD
 	padding: 20px 20px 10px 20px;
 	background-color: #333;
+=======
+	padding-top: 10px;
+	padding-left: 20px;
+	background-color: #4a4a4a;
+	background: linear-gradient(to top, #5A5A5A 15%, #4A4A4A 85%);
+>>>>>>> refs/remotes/NebulousLabs/master
 	color: #fff;
 	height: 50px;
 	vertical-align: top;
@@ -99,7 +106,7 @@ input{
 	padding: 8px;
 	padding-left: 16px;
 	padding-right: 16px;
-	border-right: 1px solid #00CBA0;
+	border-left: 1px solid #00CBA0;
 	color: #f5f5f5;
 }
 .capsule .pod.button:hover {
@@ -108,7 +115,7 @@ input{
 .capsule .pod * {
 	display: inline-block;
 }
-.capsule .pod:last-child {
+.capsule .pod:first-child {
 	border: none;
 }
 
@@ -116,7 +123,7 @@ input{
 .frame {
 	height: 100%;
 	overflow: hidden;
-	color: #999999;
+	color: #606060;
 	font-size: 26px;
 	position: relative;
 	width: 100%;

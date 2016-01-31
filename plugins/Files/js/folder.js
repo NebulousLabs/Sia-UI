@@ -10,24 +10,32 @@
 // Node modules
 const siad = require('sia.js');
 const mkdirp = require('mkdirp');
-const file = require('./file');
+const fileClass = require('./file');
 const fileFactory = require('./fileFactory');
 const tools = require('./uiTools');
 
-var folder = Object.assign(Object.create(file), {
+var folder = Object.assign(Object.create(fileClass), {
 	type: 'folder',
-	contents: {},
+	files: {},
 
-	// Changes folder's and its contents' paths with siad call
+	// The below are just function forms of the renter calls a function can
+	// enact on itself, see the API.md
+	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
+
+	// Changes folder's and its files' paths with siad call
+	// TODO: Verify if works
 	setPath (newPath, callback) {
-		var names = this.contentsNames;
+		if (tools.notType(newPath, 'string')) {
+			return;
+		}
 
-		// Make array of each content's setPath function
-		var functs = names.map(key => this.contents[key].setPath);
+		// Make array of each file's setPath function with its `this` variable
+		// set to prevent waterfall from changing it
+		var functs = this.filesArray.map(file => file.setPath.bind(file));
 
-		// Make array of new paths per folder's content, ensuring that no name
+		// Make array of new paths per folder's file, ensuring that no name
 		// starts with '/' if newPath is '' for the rootFolder
-		var paths = newPath !== '' ? names.map(name => `${newPath}/${name}`) : names;
+		var paths = newPath !== '' ? this.fileNames.map(name => `${newPath}/${name}`) : this.fileNames;
 
 		// Call callback only if all operations succeed
 		tools.waterfall(functs, paths, () => {
@@ -36,11 +44,77 @@ var folder = Object.assign(Object.create(file), {
 		});
 	},
 
+	// Recursively delete folder and its files
+	delete (callback) {
+		// Make array of each file's delete function with its `this` variable
+		// set to prevent waterfall from changing it
+		var functs = this.filesArray.map(file => file.delete.bind(file));
+
+		// Call callback only if all operations succeed
+		tools.waterfall(functs, () => {
+			// Delete parent folder's reference to this folder
+			delete this.parentFolder.files[this.name];
+			callback();
+		});
+	},
+
+	// Download files in folder at destination with same structure
+	download (destination, callback) {
+		if (tools.notType(destination, 'string')) {
+			return;
+		}
+
+		// Make folder at destination
+		mkdirp.sync(destination);
+
+		// Make array of each file's download function with its `this` variable
+		// set to prevent waterfall from changing it
+		var functs = this.filesArray.map(file => file.download.bind(file));
+
+		// Make corresponding array of destination paths
+		var names = this.fileNames.map(name => `${destination}/${name}`);
+
+		// Call callback iff all operations succeed
+		tools.waterfall(functs, names, callback);
+	},
+
+	// Share .sia files of all files in this folder and subfolders to destination
+	share (destination, callback) {
+		if (tools.notType(destination, 'string')) {
+			return;
+		} else if (destination.slice(-4) !== '.sia') {
+			console.error('Share path needs end in ".sia"!', destination);
+			return;
+		}
+		siad.apiCall({
+			url: '/renter/share',
+			qs: {
+				siapaths: this.paths,
+				destination: destination,
+			},
+		}, callback);
+	},
+
+	// Share ascii of all files in this folder and subfolders
+	shareascii (callback) {
+		siad.apiCall({
+			url: '/renter/shareascii',
+			qs: {
+				siapaths: this.paths,
+			},
+		}, callback);
+	},
+
+	// Misc. functions
 	// Add a file
+	// TODO: Verify if works
 	addFile (fileObject) {
+		if (tools.notType(fileObject, 'object')) {
+			return;
+		}
 		// TODO: verify that the fileObject belongs in this folder
 		var f = fileFactory(fileObject);
-		this.contents[f.name] = f;
+		this.files[f.name] = f;
 		f.parentFolder = this;
 		return f;
 	},
@@ -48,103 +122,130 @@ var folder = Object.assign(Object.create(file), {
 	// Add a folder, defined after folderFactory() to use it without breaking
 	// strict convention
 	addFolder (name) {
+		if (tools.notType(name, 'string')) {
+			return;
+		}
 		// Copy this folder and erase its state to 'create' a new folder
 		// TODO: This seems like an imperfect way to add a new Folder. Can't
 		// use folderFactory function down below because using the folder
 		// factory again seems to return the same folder. Example:
 		//   rootFolder.addFolder('foo') returns a rootFolder with a path of
-		//   'foo' but all the same contents, resulting in circular pointers
-		//   Thus rootFolder.contents === rootFolder.contents.foo.contents
+		//   'foo' but all the same files, resulting in circular pointers
+		//   Thus rootFolder.files === rootFolder.files.foo.files
 		var f = Object.create(this);
 		f.path = this.path !== '' ? `${this.path}/${name}` : name;
-		f.contents = {};
-		f.selected = false;
+		f.files = {};
 	
 		// Link new folder to this one and vice versa
 		f.parentFolder = this;
-		this.contents[name] = f;
+		this.files[name] = f;
 		return f;
 	},
 
 	// Return if it's an empty folder
 	isEmpty () {
-		return this.contentsNames.length === 0;
+		return this.fileNames.length === 0;
 	},
 
-	// The below are just function forms of the renter calls a function can
-	// enact on itself, see the API.md
-	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
-	
-	// Recursively delete folder and its contents
-	delete (callback) {
-		// Make array of each content's delete function
-		var functs = this.contentsArray.map(content => content.delete);
+	// Return if a file belongs in this folder
+	contains (f) {
+		var folderNames;
+		// File passed in is a file object
+		if (typeof f === 'object') {
+			folderNames = f.folderNames;
+		} else if (typeof f === 'string') {
+			// File passed in is a file path
+			folderNames = f.split('/');
+			folderNames.pop();
+		}
 
-		// Call callback only if all operations succeed
-		tools.waterfall(functs, () => {
-			// Delete parent folder's reference to this folder
-			delete this.parentFolder.contents[this.name];
-			callback();
-		});
+		// Verify
+		var index = folderNames.indexOf(this.name);
+		var thisFoldersNames = this.folderNames;
+
+		// Root folder contains all
+		if (this.path === '') {
+			return true;
+		} else {
+			// Test if all of this folder's names are included in the passed in
+			// file's path
+			return thisFoldersNames.every(function(fName, i) {
+    			return fName === folderNames[i]; 
+			});		
+		}
 	},
 
-	// Download files in folder at destination with same structure
-	download (destination, callback) {
-		var names = this.contentsNames;
+	// Return the name a file would show up as in this folder. If the file
+	// doesn't belong in this folder, return -1
+	innerNameOf (f) {
+		if (!this.contains(f)) {
+			return -1;
+		}
 
-		// Make folder at destination
-		mkdirp.sync(destination);
+		var pathArray;
+		// File passed in is a file object
+		if (typeof f === 'object') {
+			pathArray = f.pathArray;
+		} else if (typeof f === 'string') {
+			// File passed in is a file path
+			pathArray = f.split('/');
+		}
 
-		// Make array of each content's download function
-		var functs = names.map(key => this.contents[key].download);
-
-		// Make corresponding array of destination paths
-		names = names.map(name => `${destination}/${name}`);
-
-		// Call callback iff all operations succeed
-		tools.waterfall(functs, names, callback);
-	},
-
-	// Share .sia files into folder at destination with same structure
-	share (destination, callback) {
-		var names = this.contentNames;
-
-		// Make folder at destination
-		mkdirp.sync(destination);
-
-		// Make array of each content's share function
-		var functs = names.map(key => this.contents[key].share);
-
-		// Make corresponding array of file paths
-		names = names.map(name => `${destination}/${name}`);
-
-		// Call callback iff all operations succeed
-		tools.waterfall(functs, names, callback);
-	},
+		var index = pathArray.indexOf(this.name);
+		return pathArray[index + 1];
+	}
 });
 
 // TODO: How to place a getter in the object definition without it being
 // evaluated and misconstrued upon Object.assign?
-// Return the names of the contents
-Object.defineProperty(folder, 'contentsNames', {
+function addGetter(name, getter) {
+	Object.defineProperty(folder, name, {
+		get: getter,
+	});
+}
+
+// Return the names of the files
+Object.defineProperty(folder, 'fileNames', {
 	get: function () {
-		return Object.keys(this.contents);
+		return Object.keys(this.files);
 	},
 });
 
 // Return the files object as an array instead
-Object.defineProperty(folder, 'contentsArray', {
+Object.defineProperty(folder, 'filesArray', {
 	get: function () {
-		return this.contentsNames.map(name => this.contents[name]);
+		return this.fileNames.map(name => this.files[name]);
+	},
+});
+
+var typeError = 'type is neither folder nor file!';
+
+// The below getters follow the same structure of recursively (bfs) getting
+// data of all files within a folder
+
+// Return one-dimensional array of all files in this folder
+Object.defineProperty(folder, 'filesArrayDeep', {
+	get: function () {
+		var files = [];
+		this.filesArray.forEach(file => {
+			if (file.type === 'folder') {
+				files = files.concat(file.filesArrayDeep);
+			} else if (file.type === 'file') {
+				files.push(file);
+			} else {
+				console.error(typeError, file);
+			}
+		});
+		return files;
 	},
 });
 
 // Calculate sum of file sizes
-Object.defineProperty(folder, 'size', {
+Object.defineProperty(folder, 'filesize', {
 	get: function () {
 		var sum = 0;
-		this.contentsArray.forEach(content => {
-			sum += content.size;
+		this.filesArray.forEach(file => {
+			sum += file.filesize;
 		});
 		return sum;
 	},
@@ -153,11 +254,15 @@ Object.defineProperty(folder, 'size', {
 // Count the number of files
 Object.defineProperty(folder, 'count', {
 	get: function () {
-		var sum = 0;
-		this.contentsArray.forEach(content => {
-			sum += content.count;
-		});
-		return sum;
+		return this.filesArrayDeep.length;
+	},
+});
+
+// Return one-dimensional array of all siapaths in this folder, used primarily
+// for share and shareascii
+Object.defineProperty(folder, 'paths', {
+	get: function () {
+		return this.filesArrayDeep.map(file => file.path);
 	},
 });
 

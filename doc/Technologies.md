@@ -5,7 +5,7 @@ Javascript -> Node/NPM -> Electron.
 
 ### Javascript
 
-This should be familiar to most devs. We mostly adhere to [certain style
+This should be familiar to most webdevs. We mostly adhere to [certain style
 conventions](http://javascript.crockford.com/code.html)
 
 ### [NPM](https://www.npmjs.com/)

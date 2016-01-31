@@ -51,13 +51,17 @@ describe('main process', function() {
 	// Test basic startup properties
 	describe('on startup', function() {
 		it('opens a window', function() {
+<<<<<<< HEAD
 			// TODO: Sometimes the window count includes plugin webviews
 			return client.getWindowCount().should.eventually.be.within(1, 7);
+=======
+			return client.getWindowCount().should.eventually.be.within(1, 6);
+>>>>>>> refs/remotes/NebulousLabs/master
 		});
 		it('isn\'t minimized', function() {
 			return client.isWindowMinimized().should.eventually.be.false;
 		});
-		it('has devtools line commented out', function() {
+		it('doesn\'t open devtools', function() {
 			return client.isWindowDevToolsOpened().should.eventually.be.false;
 		});
 		it('is visible', function() {
