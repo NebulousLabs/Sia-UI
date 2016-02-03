@@ -85,7 +85,7 @@ $('.dropdown .button').click(function() {
 			$('.dropdown li').hide('fast');
 			$('#paste-ascii').show('fast');
 			$('#paste-ascii input').focus();
-			break;
+			return; // Don't close the dropdown
 		case 'Load ASCII File':
 			userInput = $('#paste-ascii input').val();
 			$('.dropdown li').show('fast');

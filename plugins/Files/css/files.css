@@ -13,7 +13,8 @@
 
 /* General */
 input {
-	width: 100%;
+	width: 97%;
+	left: 1%;
 	display: inline-block;
 	text-align: center;
 	box-shadow: none;
