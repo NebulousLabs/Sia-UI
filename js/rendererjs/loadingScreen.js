@@ -12,7 +12,7 @@ var overlay = $('.overlay');
 // from siad for too long
 var crashClock;
 function crash(err) {
-	var crashText = err.toString() || 'Siad has stopped responding :(';
+	var crashText = 'Siad has stopped responding: ' + err;
 	overlay.find('.centered').text(crashText);
 	IPCRenderer.removeAllListeners('siad');
 }
