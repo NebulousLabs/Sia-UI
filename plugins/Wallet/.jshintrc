@@ -120,6 +120,8 @@
 		"tooltip": true,
 		"encrypt": true,
 		"lock": true,
+		"savePassword": true,
+		"getPassword": true,
 		"unlock": true,
 		"update": true,
 		"getStatus": true,

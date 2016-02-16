@@ -1,5 +1,8 @@
 'use strict';
 
+// Loader prompting functions
+const popup = require('./js/popup');
+
 // Keeps track of wallet status results
 var wallet = {};
 
@@ -74,6 +77,23 @@ function lock() {
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Unlocking ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Save password to the UI's config.json
+function savePassword(pw) {
+	var settings = IPCRenderer.sendSync('config', 'wallet');
+	settings.password = pw;
+	IPCRenderer.sendSync('config', 'wallet', settings);
+}
+
+// Get and use password from the UI's config.json or have user enter one
+function getPassword(callback) {
+	var settings = IPCRenderer.sendSync('config', 'wallet');
+	if (settings && settings.password) {
+		callback(settings.password);
+	} else {
+		popup(callback);
+	}
+}
+
 // Unlock the wallet
 function unlock(password) {
 	// Password attempted, show responsive processing icon
@@ -86,8 +106,16 @@ function unlock(password) {
 		},
 	}, function(err, result) {
 		if (err) {
+			setLocked();
 			notify('Wrong password', 'error');
-			$('#request-password').show();
+
+			// Nullify the saved password
+			let settings = IPCRenderer.sendSync('config', 'wallet');
+			settings.password = null;
+			IPCRenderer.sendSync('config', 'wallet', settings);
+
+			// Prompt for new password
+			getPassword(unlock);
 		} else {
 			notify('Wallet unlocked', 'unlocked');
 		}
