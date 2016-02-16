@@ -1,12 +1,5 @@
 'use strict';
 
-// Save password to the UI's config.json
-function savePassword(pw) {
-	var settings = IPCRenderer.sendSync('config', 'wallet');
-	settings.password = pw;
-	IPCRenderer.sendSync('config', 'wallet', settings);
-}
-
 // Make a popup with a password prompt
 function passwordPopup(callback) {
 	var el = $(`
@@ -69,17 +62,4 @@ function passwordPopup(callback) {
 	return el;
 }
 
-// Get and use password from the UI's config.json or have user enter one
-function getPassword(callback) {
-	var settings = IPCRenderer.sendSync('config', 'wallet');
-	if (settings && settings.password) {
-		callback(settings.password);
-	} else {
-		passwordPopup(callback);
-	}
-}
-
-module.exports = {
-	savePassword: savePassword,
-	getPassword: getPassword,
-};
+module.exports = passwordPopup;

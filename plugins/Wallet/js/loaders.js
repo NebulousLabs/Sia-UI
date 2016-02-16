@@ -1,8 +1,5 @@
 'use strict';
 
-// Module to manage password saving and retrieval
-const popups = require('./popups');
-
 // ~~~~~~~~~~~~~~~~~~~~~~~~~ Load Functions/Prompts ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Load a siag key
 function siagKey(pw, keyfiles) {
@@ -28,7 +25,7 @@ function siagKeyPrompt() {
 		properties: ['openFile', 'multiSelections'],
 	});
 	if (loadPath && loadPath.length > 0) {
-		popups.getPassword(function(pw) {
+		getPassword(function(pw) {
 			siagKey(pw, loadPath.join(','));
 		});
 	}
@@ -52,7 +49,7 @@ function loadSeed(pw, seed) {
 // Get data from user input to load a seed
 function seedPrompt(seed) {
 	// Password not stored, ask for it along with seed
-	popups.getPassword(function(pw) {
+	getPassword(function(pw) {
 		loadSeed(pw, seed);
 	});
 }
@@ -81,7 +78,7 @@ function legacyWalletPrompt() {
 		properties: ['openFile'],
 	});
 	if (loadPath && loadPath.length > 0) {
-		popups.getPassword(function(pw) {
+		getPassword(function(pw) {
 			loadLegacyWallet(pw, loadPath[0]);
 		});
 	}

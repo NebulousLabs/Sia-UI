@@ -1,8 +1,6 @@
 'use strict';
 
-// Popup creating functions
-const popups = require('./js/popups');
-// Popup creating functions
+// Loader prompting functions
 const loaders = require('./js/loaders');
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Capsule ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -11,7 +9,7 @@ $('#confirm-password').click(function() {
 	// Save password if checked
 	var pw = $('#generated-password').text();
 	if ($(this).siblings('.save-password').get(0).checked) {
-		popups.savePassword(pw);
+		savePassword(pw);
 	}
 
 	// Hide popup and start the plugin
@@ -75,7 +73,7 @@ $('#lock').click(function() {
 	} else if (wallet.unlocked && state === 'Unlocked') {
 		lock();
 	} else if (!wallet.unlocked && state === 'Locked') {
-		popups.getPassword(unlock);
+		getPassword(unlock);
 	} else if (!wallet.unlocked && state === 'Unlocking') {
 		tooltip('Initial unlock takes some time', this);
 		return;
