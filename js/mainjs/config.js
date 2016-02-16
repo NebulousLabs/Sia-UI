@@ -5,7 +5,7 @@ const defaultConfig = {
 	homePlugin:  'Overview',
 	siad: {
     	path: require('path').join(__dirname, '../..', 'Sia'),
-		detached: false,
+		detached: true,
 	},
 	width:       800,
 	height:      600,
