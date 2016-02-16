@@ -56,12 +56,10 @@
 
 		<!-- Javascript -->
 		<script> 
-			// UI or uiManager is the only module exposed to the global
+			// ui or uiManager is the only module exposed to the global
 			// namespace, allowing other modules to use its functions
 			// It initiates all other functionality, directly or indirectly
-			var UI = require('./js/rendererjs/uiManager.js');
-			// Need this for devtools to work
-			var Plugins = require('./js/rendererjs/pluginManager.js');
+			var ui = require('./js/rendererjs/uiManager.js');
 		</script>
 	</body>
 </html>

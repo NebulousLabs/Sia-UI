@@ -29,15 +29,15 @@ function setOrder(pluginNames) {
 	}
 
 	// Detect if home plugin is installed
-	var homeIndex = pluginNames.indexOf(plugins.Home);
+	var homeIndex = pluginNames.indexOf(plugins.home);
 	if (homeIndex !== -1) {
 		// Swap it to be first
 		pluginNames[homeIndex] = pluginNames[0];
-		pluginNames[0] = plugins.Home;
+		pluginNames[0] = plugins.home;
 		return;
 	}
 	// No home plugin installed
-	plugins.Home = pluginNames[0];
+	plugins.home = pluginNames[0];
 }
 
 /**
@@ -52,7 +52,7 @@ function addListeners(plugin) {
 	 */
 	plugin.transition(function() {
 		// Don't do anything if already on this plugin
-		if (plugins.Current === plugin || plugins.Current.isLoading()) {
+		if (plugins.current === plugin || plugins.current.isLoading()) {
 			return;
 		}
 
@@ -64,9 +64,9 @@ function addListeners(plugin) {
 		}, 170);
 
 		// Switch plugins
-		plugins.Current.hide();
-		plugins.Current = plugin;
-		plugins.Current.show();
+		plugins.current.hide();
+		plugins.current = plugin;
+		plugins.current.show();
 	});
 	
 	// Handle any ipc messages from the plugin
@@ -74,20 +74,20 @@ function addListeners(plugin) {
 		switch(event.channel) {
 			case 'notification':
 				// Use UI notification system
-				UI.notify.apply(null, event.args);
+				ui.notify.apply(null, event.args);
 				break;
 			case 'tooltip':
 				// Use UI tooltip system
 				event.args[1].top += $('.header').height();
 				event.args[1].left += $('#sidebar').width();
-				UI.tooltip.apply(null, event.args);
+				ui.tooltip.apply(null, event.args);
 				break;
 			case 'devtools':
 				// Plugin called for its own devtools, toggle it
 				plugin.toggleDevTools();
 				break;
 			default:
-				UI.notify('Unknown ipc message: ' + event.channel, 'error');
+				ui.notify('Unknown ipc message: ' + event.channel, 'error');
 		}
 	});
 
@@ -108,10 +108,10 @@ function addPlugin(name) {
 	var plugin = new Plugin(plugPath, name);
 
 	// Start with the home plugin as current
-	if (name === plugins.Home) {
-		plugins.Home = plugin;
-		plugins.Current = plugin;
-		plugin.on('dom-ready', plugins.Current.show);
+	if (name === plugins.home) {
+		plugins.home = plugin;
+		plugins.current = plugin;
+		plugin.on('dom-ready', plugins.current.show);
 	}
 
 	// addListeners deals with any webview related async tasks
@@ -128,7 +128,7 @@ function addPlugin(name) {
 function initPlugins() {
 	Fs.readdir(plugPath, function(err, pluginNames) {
 		if (err) {
-			UI.notify('Couldn\'t read plugins folder: ' + err, 'error');
+			ui.notify('Couldn\'t read plugins folder: ' + err, 'error');
 		}
 
 		// Determine default plugin
@@ -140,7 +140,7 @@ function initPlugins() {
 }
 
 // Retrieve the home plugin and then initialize other plugins
-plugins.Home = require('electron').ipcRenderer.sendSync('config', 'homePlugin');
+plugins.home = require('electron').ipcRenderer.sendSync('config', 'homePlugin');
 initPlugins();
 
 // Return plugins
