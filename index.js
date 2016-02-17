@@ -39,17 +39,21 @@ App.on('ready', function() {
 		e.preventDefault();
 		mainWindow.minimize();
 	});
-	// Upon exiting, dereference the window object so that the GC cleans up.
+	// Load siad
+	var Siad = require('./js/mainjs/initSiad.js')(config, mainWindow);
+	// mainwindow.closed() can only be called when the user quits from the tray.
+	// If the config.siad.detached flag is not set, call siad.stop and quit from the callback.
 	mainWindow.on('closed', function() {
+		if (!config.siad.detached) {
+			Siad.stop(function() {
+				App.quit();
+			});
+		} else {
+			App.quit();
+		}
+		// Dereference mainWindow and Siad to clean up.
+		Siad = null;
 		mainWindow = null;
 	});
-	// Load siad
-	require('./js/mainjs/initSiad.js')(config, mainWindow);
-});
-
-// Quit when the main UI window has been closed.
-App.on('window-all-closed', function() {
-	config.save();
-	App.quit();
 });
 
