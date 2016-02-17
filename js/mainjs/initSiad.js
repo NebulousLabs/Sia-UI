@@ -119,8 +119,9 @@ module.exports = function initSiad(cnfg, mW) {
 		});
 	});
 
+	// Stop siad on exit if config.siad.detached isn't set.
 	// Closed is called after the main window has been closed.
-	// This can only happen if the user quits from the taskbar.
+	// This can only happen if the user quits from the taskbar and mainWindow.destroy() is called.
 	mainWindow.on('closed', function() {
 		if (!config.siad.detached) {
 			Siad.stop();
