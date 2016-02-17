@@ -31,7 +31,7 @@ module.exports = function(config) {
 
 	// Load the window's size and position
 	mainWindow.setBounds(config);
-	
+
 	// Emitted when the window is closed.
 	mainWindow.on('close', function() {
 		// Save the window's size and position
@@ -41,8 +41,9 @@ module.exports = function(config) {
 				config[k] = bounds[k];
 			}
 		}
-
-		// Unregister all shortcuts.
+	});
+	// Unregister all shortcuts when mainWindow is closed.
+	mainWindow.on('closed', function() {
 		GlobalShortcut.unregisterAll();
 	});
 
@@ -57,4 +58,3 @@ module.exports = function(config) {
 	}
 	return mainWindow;
 };
-
