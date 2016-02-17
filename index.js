@@ -36,8 +36,10 @@ App.on('ready', function() {
 
 	// Catch mainWindow's close event and minimize instead.
 	mainWindow.on('close', function(e) {
-		e.preventDefault();
-		mainWindow.minimize();
+		if (!mainWindow.wantsQuit) {
+			e.preventDefault();
+			mainWindow.minimize();
+		}
 	});
 	// Load siad
 	var Siad = require('./js/mainjs/initSiad.js')(config, mainWindow);
@@ -56,4 +58,3 @@ App.on('ready', function() {
 		mainWindow = null;
 	});
 });
-

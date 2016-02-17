@@ -18,10 +18,12 @@ module.exports = function (window) {
 		{ type: 'separator' },
 		{
 			label: 'Quit Sia',
-			click: function() { window.destroy(); }
+			click: function() {
+				window['wantsQuit'] = true;
+				window.close();
+			}
 		}
 	];
 
 	return Menu.buildFromTemplate(menutemplate);
 };
-
