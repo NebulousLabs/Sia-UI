@@ -26,7 +26,6 @@ App.on('ready', function() {
 	// Load mainWindow
 	mainWindow = require('./js/mainjs/initWindow.js')(config);
 	// Load tray icon
-	// OSX has a maximum tray icon height of 18px.
 	var iconPath = Path.join(__dirname, 'assets', 'tray.png');
 	appIcon = new Tray(iconPath);
 	appIcon.setToolTip('Sia - The Collaborative Cloud.');
