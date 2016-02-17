@@ -34,18 +34,22 @@ App.on('ready', function() {
 	// Add IPCMain listeners
 	require('./js/mainjs/addIPCListeners.js')(config, mainWindow);
 
-	// Catch mainWindow's close event and minimize instead.
-	mainWindow.on('close', function(e) {
-		if (!mainWindow.wantsQuit) {
-			e.preventDefault();
-			mainWindow.minimize();
-		}
-	});
+	// If config.persistInTray is set, catch mainWindow's close event and minimize instead.
+	if (config.persistInTray) {
+		mainWindow.on('close', function(e) {
+			if (!mainWindow.wantsQuit) {
+				e.preventDefault();
+				mainWindow.minimize();
+			}
+		});
+	}
 	// Load siad
 	var Siad = require('./js/mainjs/initSiad.js')(config, mainWindow);
 	// mainwindow.closed() can only be called when the user quits from the tray.
 	// If the config.siad.detached flag is not set, call siad.stop and quit from the callback.
 	mainWindow.on('closed', function() {
+		// save the config on exit
+		config.save();
 		if (!config.siad.detached) {
 			Siad.stop(function() {
 				App.quit();

@@ -12,7 +12,7 @@ const Siad = require('sia.js');
 const $ = require('jquery');
 // Notification System
 const notification = require('./notificationManager.js');
-// Loading Screen 
+// Loading Screen
 const loadingScreen = require('./loadingScreen');
 
 // Object to export

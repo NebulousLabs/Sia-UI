@@ -1,12 +1,13 @@
 'use strict';
 
-// The default settings 
+// The default settings
 const defaultConfig = {
 	homePlugin:  'Overview',
 	siad: {
     	path: require('path').join(__dirname, '../..', 'Sia'),
 		detached: false,
 	},
+	persistInTray: true,
 	width:       800,
 	height:      600,
 	x:           0,
@@ -16,7 +17,7 @@ const defaultConfig = {
 var config;
 
 /**
- * Holds all config.json related logic 
+ * Holds all config.json related logic
  * @module configManager
  */
 function configManager(path) {
