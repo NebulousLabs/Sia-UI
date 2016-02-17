@@ -19,7 +19,7 @@ module.exports = function (window) {
 		{
 			label: 'Quit Sia',
 			click: function() {
-				window['wantsQuit'] = true;
+				window.wantsQuit = true;
 				window.close();
 			}
 		}
