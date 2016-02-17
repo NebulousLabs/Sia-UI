@@ -2,14 +2,13 @@
 
 // Electron main process libraries
 const Electron = require('electron');
+const Menu = Electron.Menu;
 const BrowserWindow = Electron.BrowserWindow;
 const GlobalShortcut = Electron.globalShortcut;
-const Menu = Electron.Menu;
+const AppMenu = require('./appMenu.js');
 // Node libraries
 const Path = require('path');
 // Main process logic partitioned to other files
-const AppMenu = Menu.buildFromTemplate(require('./appMenu.js'));
-
 // Creates the window and loads index.html
 module.exports = function(config) {
 	// Create the browser
@@ -49,13 +48,12 @@ module.exports = function(config) {
 
 	// Load the index.html of the app.
 	mainWindow.loadURL('file://' + __dirname + '/../../index.html');
-
 	// Choose not to show the menubar
 	if (process.platform !== 'darwin') {
 		mainWindow.setMenuBarVisibility(false);
 	} else {
 		// Create the Application's main menu - OSX version might feel weird without a menubar
-		Menu.setApplicationMenu(AppMenu);
+		Menu.setApplicationMenu(new AppMenu(mainWindow));
 	}
 	return mainWindow;
 };
