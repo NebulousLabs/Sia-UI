@@ -8,13 +8,18 @@ module.exports = function (window) {
 	var menutemplate = [
 		{
 			label: 'Show Sia',
-			click: function () { window.show(); }
+			click: function () { window.restore(); }
 		},
 		{ type: 'separator' },
 		{
 			label: 'Hide Sia',
-			click: function () { window.hide(); }
+			click: function () { window.minimize(); }
 		},
+		{ type: 'separator' },
+		{
+			label: 'Quit Sia',
+			click: function() { window.destroy(); }
+		}
 	];
 
 	return Menu.buildFromTemplate(menutemplate);

@@ -119,15 +119,14 @@ module.exports = function initSiad(cnfg, mW) {
 		});
 	});
 
-	// Stop siad upon the main window being closed. Else it continues as a
-	// child process of electron, forcing electron to keep running until siad
-	// has stopped
-	mainWindow.on('close', function() {
+	// Closed is called after the main window has been closed.
+	// This can only happen if the user quits from the taskbar.
+	mainWindow.on('closed', function() {
 		if (!config.siad.detached) {
 			Siad.stop();
 		}
 		Siad = null;
-	});
+	}); 
 
 	// Set config for Siad to work off of configure() doesn't update
 	// `running` for sia.js:0.1.1 but it should soon from a pending pull
