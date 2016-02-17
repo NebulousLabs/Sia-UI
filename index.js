@@ -4,7 +4,7 @@
 const Electron = require('electron');
 const App = Electron.app;
 const Tray = Electron.Tray;
-const Menu = Electron.Menu;
+const AppTray = require('./js/mainjs/trayMenu.js');
 // Node libraries
 const Path = require('path');
 
@@ -23,16 +23,14 @@ var config = require('./js/mainjs/config.js')(Path.join(__dirname, 'config.json'
 
 // When Electron loading has finished, start the daemon then the UI
 App.on('ready', function() {
+	// Load mainWindow
+	mainWindow = require('./js/mainjs/initWindow.js')(config);
 	// Load tray icon
 	// OSX has a maximum tray icon height of 18px.
 	var iconPath = Path.join(__dirname, 'assets', 'tray.png');
 	appIcon = new Tray(iconPath);
 	appIcon.setToolTip('Sia - The Collaborative Cloud.');
-	// set context menu
-	var contextMenu = Menu.buildFromTemplate([{label:'Test', type: 'radio'}]);
-	appIcon.setContextMenu(contextMenu);
-	// Load mainWindow
-	mainWindow = require('./js/mainjs/initWindow.js')(config);
+	appIcon.setContextMenu(new AppTray(mainWindow));
 
 	// Add IPCMain listeners
 	require('./js/mainjs/addIPCListeners.js')(config, mainWindow);
