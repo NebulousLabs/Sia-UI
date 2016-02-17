@@ -4,6 +4,7 @@
 const Electron = require('electron');
 const App = Electron.app;
 const Tray = Electron.Tray;
+const appTray = require('./js/mainjs/trayMenu.js');
 // Node libraries
 const Path = require('path');
 
@@ -22,13 +23,13 @@ var config = require('./js/mainjs/config.js')(Path.join(__dirname, 'config.json'
 
 // When Electron loading has finished, start the daemon then the UI
 App.on('ready', function() {
-	// Load tray icon
-	var iconPath = Path.join(__dirname, 'assets', 'icon.png');
-	appIcon = new Tray(iconPath);
-	appIcon.setToolTip('Sia - The Collaborative Cloud.');
-	
 	// Load mainWindow
 	mainWindow = require('./js/mainjs/initWindow.js')(config);
+	// Load tray icon
+	var iconPath = Path.join(__dirname, 'assets', 'tray.png');
+	appIcon = new Tray(iconPath);
+	appIcon.setToolTip('Sia - The Collaborative Cloud.');
+	appIcon.setContextMenu(appTray(mainWindow));
 
 	// Add IPCMain listeners
 	require('./js/mainjs/addIPCListeners.js')(config, mainWindow);
