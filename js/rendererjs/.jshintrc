@@ -81,8 +81,7 @@
 	"maxerr"        : 100,      // Maximum errors before stopping.
 	"globals"       : {         // Extra globals.
 		/* UI globals */
-		"UI": true,
-		"Plugins": true
+		"ui": true
 	},
 	"indent"        : 4         // Specify indentation spacing
 }

@@ -63,7 +63,7 @@ var template = [
 				})(),
 				click: function(item, focusedWindow) {
 					if (focusedWindow) {
-						focusedWindow.webContents.executeJavaScript('Plugins.Current.toggleDevTools();');
+						focusedWindow.webContents.executeJavaScript('ui.plugins.current.toggleDevTools();');
 					}
 				}
 			},

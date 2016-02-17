@@ -15,6 +15,8 @@ const notification = require('./notificationManager.js');
 // Loading Screen 
 const loadingScreen = require('./loadingScreen');
 
+// Object to export
+var ui = {};
 // Variable to track error log
 var errorLog;
 // Shows tooltip with content on given element
@@ -33,7 +35,7 @@ $('.logo-container').click(function() {
  * @param {function} clickAction The function to call upon the user
  * clicking the notification
  */
-function notify(message, type, clickAction) {
+ui.notify = function(message, type, clickAction) {
 	// Record errors for reference in `errors.log`
 	if (type === 'error') {
 		if (!errorLog) {
@@ -46,7 +48,7 @@ function notify(message, type, clickAction) {
 		}
 	}
 	notification(message, type, clickAction);
-}
+};
 
 /**
  * Shows tooltip with content at given offset location
@@ -55,7 +57,7 @@ function notify(message, type, clickAction) {
  * @param {Object} offset The dimensions of the element to display over
  * TODO: separate out tooltip management from this file
  */
-function tooltip(content, offset) {
+ui.tooltip = function(content, offset) {
 	var eTooltip = $('#tooltip');
 	offset = offset || {
 		top: 0,
@@ -97,7 +99,7 @@ function tooltip(content, offset) {
 			eTooltip.hide();
 		});
 	}, 1400);
-}
+};
 
 // Checks if there is an update available
 function checkUpdate() {
@@ -115,12 +117,12 @@ function checkUpdate() {
 				Electron.shell.openExternal('https://github.com/NebulousLabs/Sia-UI/releases');
 			};
 			$('#update-ui').show().click(updatePage);
-			notify('Update available for UI', 'update', updatePage);
+			ui.notify('Update available for UI', 'update', updatePage);
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			// jqXHR is the XmlHttpRequest that jquery returns back on error
 			var errCode = textStatus + ' ' + jqXHR.status + ' ' + errorThrown + ' ' + jqXHR.responseText;
-			notify('Update check failed: ' + errCode, 'error');
+			ui.notify('Update check failed: ' + errCode, 'error');
 		},
 	});
 }
@@ -131,7 +133,7 @@ function checkUpdate() {
 */
 function init() {
 	// Initialize plugins
-	require('./pluginManager.js');
+	ui.plugins = require('./pluginManager.js');
 	checkUpdate();
 }
 
@@ -158,7 +160,4 @@ window.addEventListener('contextmenu', function (e) {
 	IPCRenderer.send('context-menu');
 }, false);
 
-module.exports = {
-	tooltip: tooltip,
-	notify: notify,
-};
+module.exports = ui;

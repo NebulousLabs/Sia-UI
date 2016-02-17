@@ -27,7 +27,7 @@ module.exports = function(config) {
 		shortcut = 'Ctrl+Shift+P';
 	}
 	GlobalShortcut.register(shortcut, function() {
-		mainWindow.webContents.executeJavaScript('Plugins.Current.toggleDevTools();');
+		mainWindow.webContents.executeJavaScript('ui.plugins.current.toggleDevTools();');
 	});
 
 	// Load the window's size and position

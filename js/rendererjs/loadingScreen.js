@@ -58,7 +58,7 @@ module.exports = function(initUI) {
 			default:
 				// For piped child process events, notify
 				var eventmsg = `siad ${signal}: ${arg0 || ''} ${arg1 || ''}`;
-				UI.notify(eventmsg, signal);
+				ui.notify(eventmsg, signal);
 		}
 	});
 };
