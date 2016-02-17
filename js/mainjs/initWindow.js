@@ -5,7 +5,7 @@ const Electron = require('electron');
 const Menu = Electron.Menu;
 const BrowserWindow = Electron.BrowserWindow;
 const GlobalShortcut = Electron.globalShortcut;
-const AppMenu = require('./appMenu.js');
+const appMenu = require('./appMenu.js');
 // Node libraries
 const Path = require('path');
 // Main process logic partitioned to other files
@@ -53,7 +53,7 @@ module.exports = function(config) {
 		mainWindow.setMenuBarVisibility(false);
 	} else {
 		// Create the Application's main menu - OSX version might feel weird without a menubar
-		Menu.setApplicationMenu(new AppMenu(mainWindow));
+		Menu.setApplicationMenu(appMenu(mainWindow));
 	}
 	return mainWindow;
 };

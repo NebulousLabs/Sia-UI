@@ -4,7 +4,7 @@
 const Electron = require('electron');
 const App = Electron.app;
 const Tray = Electron.Tray;
-const AppTray = require('./js/mainjs/trayMenu.js');
+const appTray = require('./js/mainjs/trayMenu.js');
 // Node libraries
 const Path = require('path');
 
@@ -29,7 +29,7 @@ App.on('ready', function() {
 	var iconPath = Path.join(__dirname, 'assets', 'tray.png');
 	appIcon = new Tray(iconPath);
 	appIcon.setToolTip('Sia - The Collaborative Cloud.');
-	appIcon.setContextMenu(new AppTray(mainWindow));
+	appIcon.setContextMenu(appTray(mainWindow));
 
 	// Add IPCMain listeners
 	require('./js/mainjs/addIPCListeners.js')(config, mainWindow);
