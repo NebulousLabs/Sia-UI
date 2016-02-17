@@ -23,35 +23,39 @@ select, input, html, body {
 	margin: 0;
 	padding: 0;
 	border-spacing: 0;
-	font-family: 'Roboto Condensed', sans-serif;
-	font-weight: 300;
-	font-size: 18px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
 }
 html, body {
 	height: 100%;
 	min-width: 100%;
+	font-family: "Roboto",sans-serif;
+	background:#212121;
 }
 select, input {
 	position: relative;
-
 	box-shadow: none;
-	color:#4a4a4a;
-
-	border: solid 1px #dddddd;
-	transition: box-shadow 0.3s, border 0.3s;
-	box-sizing: content-box;
-	border-radius: 4px;
+	border: none;
+	border-radius: none;
+	background: transparent;
+	font-size:16px;
+	border-bottom:  1px solid #eee;
 }
 select {
-	background:#ffffff;
+	background:#fff;
 }
 select:focus, input:focus {
 	outline: none;
-	border: solid 1px #4a4a4a;
-	box-shadow: 0 0 5px 1px #c5c5c5;
+	border-bottom:  1px solid #fff;
 }
 select:hover {
 	cursor: pointer;
+}
+input{
+	padding:6px 0;
+	font-size: 16px;
+	color:#eee;
+	margin-left:5px;
 }
 
 .hidden {
@@ -60,18 +64,26 @@ select:hover {
 
 /* Plugin header */
 .header {
+<<<<<<< HEAD
+	padding: 20px 20px 10px 20px;
+	background-color: #333;
+=======
 	padding-top: 10px;
 	padding-left: 20px;
 	background-color: #4a4a4a;
 	background: linear-gradient(to top, #5A5A5A 15%, #4A4A4A 85%);
+>>>>>>> refs/remotes/NebulousLabs/master
 	color: #fff;
 	height: 50px;
 	vertical-align: top;
 }
-.header .title {
+.header h3.title {
 	display: inline-block;
-	font-size: 30px;
-	color: #fff;
+	font-size:24px;
+	color: #eee;
+	font-family:"Roboto Mono";
+	margin:0;
+	margin-top:4px;
 }
 .header .capsule {
 	white-space: nowrap;
@@ -123,4 +135,18 @@ select:hover {
 .button:hover {
 	color: #4a4a4a;
 	cursor: pointer;
+}
+
+/* nicer scrollbars */
+::-webkit-scrollbar {
+	width: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background:transparent;
+	border-left:1px solid #444;
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba(255,255,255,0.4)
 }

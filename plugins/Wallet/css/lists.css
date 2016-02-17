@@ -13,7 +13,7 @@
 
 /* Both lists */
 .list {
-	background-color: #fafafa;
+	background-color: transparent;
 	height: calc(100% - 60px);
 	width: 100%;
 	padding: 0;
@@ -21,9 +21,13 @@
 }
 .entry {
 	padding: 8px;
+<<<<<<< HEAD
+	height:12px;
+=======
 	height: 12px;
+>>>>>>> refs/remotes/NebulousLabs/master
 	background-color: #fff;
-	border-bottom: 1px solid #eeeeee;
+	border-bottom: 1px solid #777;
 }
 .entry > * {
 	display: inline-block;
