@@ -15,7 +15,7 @@ const $ = require('jquery');
 const notification = require('./notificationManager.js');
 // Loading Screen
 const loadingScreen = require('./loadingScreen');
-const config = require('../mainjs/config.js')(Path.join(__dirname, 'config.json'));
+const config = require('../mainjs/config.js')(Path.join('../../', __dirname, 'config.json'));
 
 // Object to export
 var ui = {};
