@@ -17,7 +17,6 @@ const Path = require('path');
 // garbage collection
 var mainWindow;
 var appIcon;
-var siad;
 
 // config.json manager
 var config = require('./js/mainjs/config.js')(Path.join(__dirname, 'config.json'));
@@ -37,16 +36,16 @@ App.on('ready', function () {
 	require('./js/mainjs/addIPCListeners.js')(config, mainWindow);
 
 	// Load siad
-	siad = require('./js/mainjs/initSiad.js')(config, mainWindow);
+	require('./js/mainjs/initSiad.js')(config, mainWindow);
+
+	// Upon exiting, dereference the window object so that the GC cleans up.
+	mainWindow.on('closed', function () {
+		mainWindow = null;
+	});
 });
+
 // Quit once all windows have been closed.
-// If the config.siad.detached flag is not set, call siad.stop and quit from the callback.
 App.on('window-all-closed', function () {
 	config.save();
-	if (!config.siad.detached) {
-		siad.stop();
-	} 
 	App.quit();
-	mainWindow = null;
-	siad = null;
 });

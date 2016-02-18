@@ -2,6 +2,7 @@
 
 // Imported Electron modules
 const Electron = require('electron');
+const App = Electron.remote.app;
 const IPCRenderer = Electron.ipcRenderer;
 const mainWindow = Electron.remote.getCurrentWindow();
 // Imported Node modules
@@ -139,7 +140,7 @@ function init() {
 }
 
 /**
-* Called at mainWindow.closed(), closes the errorLog
+* Called at app.will-quit, closes the errorLog
 * @function UIManager#kill
 */
 function closeLog() {
@@ -148,7 +149,7 @@ function closeLog() {
 		errorLog.end();
 	}
 }
-mainWindow.on('closed', closeLog);
+App.on('will-quit', closeLog);
 
 // If config.persistInTray is set, hide the window instead of closing the window.
 if (config.persistInTray) {
