@@ -8,20 +8,17 @@ module.exports = function (window) {
 	var menutemplate = [
 		{
 			label: 'Show Sia',
-			click: function () { window.restore(); }
+			click: function () { window.show(); }
 		},
 		{ type: 'separator' },
 		{
 			label: 'Hide Sia',
-			click: function () { window.minimize(); }
+			click: function () { window.hide(); }
 		},
 		{ type: 'separator' },
 		{
 			label: 'Quit Sia',
-			click: function() {
-				window.wantsQuit = true;
-				window.close();
-			}
+			click: function() { window.destroy(); }
 		}
 	];
 

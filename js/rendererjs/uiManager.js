@@ -14,6 +14,7 @@ const $ = require('jquery');
 const notification = require('./notificationManager.js');
 // Loading Screen
 const loadingScreen = require('./loadingScreen');
+const config = require('../mainjs/config.js')(Path.join(__dirname, 'config.json'));
 
 // Object to export
 var ui = {};
@@ -138,7 +139,7 @@ function init() {
 }
 
 /**
-* Called at window.beforeunload, closes the errorLog
+* Called at mainWindow.closed(), closes the errorLog
 * @function UIManager#kill
 */
 function closeLog() {
@@ -147,12 +148,20 @@ function closeLog() {
 		errorLog.end();
 	}
 }
+mainWindow.on('closed', closeLog);
+
+// If config.persistInTray is set, hide the window instead of closing the window.
+if (config.persistInTray) {
+	window.onbeforeunload = function () {
+		mainWindow.hide();
+		return false;
+	};
+}
 
 // Set up responses upon the window loading and closing
 window.onload = function() {
 	loadingScreen(init);
 };
-window.onbeforeunload = closeLog;
 
 // Right-click brings up a context menu without blocking the UI
 window.addEventListener('contextmenu', function (e) {

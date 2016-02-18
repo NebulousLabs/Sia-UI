@@ -17,14 +17,16 @@ const Path = require('path');
 // garbage collection
 var mainWindow;
 var appIcon;
+var siad;
 
 // config.json manager
 var config = require('./js/mainjs/config.js')(Path.join(__dirname, 'config.json'));
 
 // When Electron loading has finished, start the daemon then the UI
-App.on('ready', function() {
+App.on('ready', function () {
 	// Load mainWindow
 	mainWindow = require('./js/mainjs/initWindow.js')(config);
+
 	// Load tray icon and menu
 	var iconPath = Path.join(__dirname, 'assets', 'tray.png');
 	appIcon = new Tray(iconPath);
@@ -34,31 +36,17 @@ App.on('ready', function() {
 	// Add IPCMain listeners
 	require('./js/mainjs/addIPCListeners.js')(config, mainWindow);
 
-	// If config.persistInTray is set, catch mainWindow's close event and minimize instead.
-	if (config.persistInTray) {
-		mainWindow.on('close', function(e) {
-			if (!mainWindow.wantsQuit) {
-				e.preventDefault();
-				mainWindow.minimize();
-			}
-		});
-	}
 	// Load siad
-	var Siad = require('./js/mainjs/initSiad.js')(config, mainWindow);
-	// mainwindow.closed() can only be called when the user quits from the tray.
-	// If the config.siad.detached flag is not set, call siad.stop and quit from the callback.
-	mainWindow.on('closed', function() {
-		// save the config on exit
-		config.save();
-		if (!config.siad.detached) {
-			Siad.stop(function() {
-				App.quit();
-			});
-		} else {
-			App.quit();
-		}
-		// Dereference mainWindow and Siad to clean up.
-		Siad = null;
-		mainWindow = null;
-	});
+	siad = require('./js/mainjs/initSiad.js')(config, mainWindow);
+});
+// Quit once all windows have been closed.
+// If the config.siad.detached flag is not set, call siad.stop and quit from the callback.
+App.on('window-all-closed', function () {
+	config.save();
+	if (!config.siad.detached) {
+		siad.stop();
+	} 
+	App.quit();
+	mainWindow = null;
+	siad = null;
 });
