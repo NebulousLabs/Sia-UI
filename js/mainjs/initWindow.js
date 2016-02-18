@@ -17,6 +17,9 @@ module.exports = function(config) {
 		icon:   iconPath,
 		title:  'Sia-UI-beta',
 	});
+	// Set mainWindow's persistInTray flag from config.
+	// This should be used in the renderer to cancel close() events using window.onbeforeunload
+	mainWindow.persistInTray = config.persistInTray;
 
 	// Add hotkey shortcut to view plugin devtools
 	var shortcut;

@@ -15,7 +15,6 @@ const $ = require('jquery');
 const notification = require('./notificationManager.js');
 // Loading Screen
 const loadingScreen = require('./loadingScreen');
-const config = require('../mainjs/config.js')(Path.join('../../', __dirname, 'config.json'));
 
 // Object to export
 var ui = {};
@@ -151,8 +150,8 @@ function closeLog() {
 }
 App.on('will-quit', closeLog);
 
-// If config.persistInTray is set, hide the window instead of closing the window.
-if (config.persistInTray) {
+// If persistInTray is set, hide the window and cancel the close.
+if (mainWindow.persistInTray) {
 	window.onbeforeunload = function () {
 		mainWindow.hide();
 		return false;
