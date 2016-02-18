@@ -142,7 +142,5 @@ module.exports = function initSiad(cnfg, mW) {
 			checkSiadPath();
 		}
 	});
-
-	return Siad;
 };
 
