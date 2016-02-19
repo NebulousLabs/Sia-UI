@@ -35,7 +35,7 @@ module.exports = function(config) {
 	// Load the window's size and position
 	mainWindow.setBounds(config);
 
-	// Emitted when the window is closed.
+	// Emitted when the window is closing.
 	mainWindow.on('close', function() {
 		// Save the window's size and position
 		var bounds = mainWindow.getBounds();
