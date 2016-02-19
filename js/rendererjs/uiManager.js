@@ -152,7 +152,7 @@ App.on('will-quit', closeLog);
 
 // If persistInTray is set, hide the window and cancel the close.
 if (mainWindow.persistInTray) {
-	window.onbeforeunload = function () {
+	window.onbeforeunload = function() {
 		mainWindow.hide();
 		return false;
 	};

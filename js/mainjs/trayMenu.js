@@ -8,12 +8,12 @@ module.exports = function (window) {
 	var menutemplate = [
 		{
 			label: 'Show Sia',
-			click: function () { window.show(); }
+			click: function() { window.show(); }
 		},
 		{ type: 'separator' },
 		{
 			label: 'Hide Sia',
-			click: function () { window.hide(); }
+			click: function() { window.hide(); }
 		},
 		{ type: 'separator' },
 		{

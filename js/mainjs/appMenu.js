@@ -14,7 +14,7 @@ module.exports = function (window) {
 				{ type: 'separator' },
 				{ label: 'Hide Sia', accelerator: 'CmdOrCtrl+H', selector: 'hide:'},
 				{ type: 'separator' },
-				{ label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: function () { window.destroy(); }},
+				{ label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: function() { window.destroy(); }},
 			]
 		},
 		{
