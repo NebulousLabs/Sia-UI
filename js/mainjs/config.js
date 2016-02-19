@@ -7,7 +7,7 @@ const defaultConfig = {
     	path: require('path').join(__dirname, '../..', 'Sia'),
 		detached: false,
 	},
-	persistInTray: true,
+	closeToTray: process.platform === 'win32' || process.platform === 'darwin' ? true : false,
 	width:       800,
 	height:      600,
 	x:           0,
