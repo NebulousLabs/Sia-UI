@@ -164,7 +164,7 @@ window.onload = function() {
 };
 
 // Right-click brings up a context menu without blocking the UI
-window.addEventListener('contextmenu', function (e) {
+window.addEventListener('contextmenu', function(e) {
 	e.preventDefault();
 	IPCRenderer.send('context-menu');
 }, false);

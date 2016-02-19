@@ -3,7 +3,7 @@
 const Electron = require('electron');
 const Menu = Electron.Menu;
 
-module.exports = function (window) {
+module.exports = function(window) {
 	// Template for Sia-UI tray menu.
 	var menutemplate = [
 		{

@@ -75,7 +75,7 @@ function missingSiadDialog() {
 
 // Siad is not running, check if siad doesn't exist at siad.path
 function checkSiadPath() {
-	Fs.stat(config.siad.path, function (err) {
+	Fs.stat(config.siad.path, function(err) {
 		if (!err) {
 			// It's found, start siad
 			startSiad();
@@ -94,7 +94,7 @@ function checkSiadPath() {
 			mainWindow.close();
 			return;
 		}
-		
+
 		// Verify chosen path
 		if (!siadPath) {
 			checkSiadPath();
@@ -111,7 +111,7 @@ module.exports = function initSiad(cnfg, mW) {
 	config = cnfg;
 	mainWindow = mW;
 
-	// Pipe siad events to UI 
+	// Pipe siad events to UI
 	var siadEvents = ['close', 'disconnect', 'error', 'exit', 'message'];
 	siadEvents.forEach(function(ev) {
 		Siad.on(ev, function(arg0, arg1) {
@@ -143,4 +143,3 @@ module.exports = function initSiad(cnfg, mW) {
 		}
 	});
 };
-
