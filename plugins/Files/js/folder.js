@@ -206,14 +206,14 @@ function addGetter(name, getter) {
 
 // Return the names of the files
 Object.defineProperty(folder, 'fileNames', {
-	get: function () {
+	get: function() {
 		return Object.keys(this.files);
 	},
 });
 
 // Return the files object as an array instead
 Object.defineProperty(folder, 'filesArray', {
-	get: function () {
+	get: function() {
 		return this.fileNames.map(name => this.files[name]);
 	},
 });
@@ -225,7 +225,7 @@ var typeError = 'type is neither folder nor file!';
 
 // Return one-dimensional array of all files in this folder
 Object.defineProperty(folder, 'filesArrayDeep', {
-	get: function () {
+	get: function() {
 		var files = [];
 		this.filesArray.forEach(file => {
 			if (file.type === 'folder') {
@@ -242,7 +242,7 @@ Object.defineProperty(folder, 'filesArrayDeep', {
 
 // Calculate sum of file sizes
 Object.defineProperty(folder, 'filesize', {
-	get: function () {
+	get: function() {
 		var sum = 0;
 		this.filesArray.forEach(file => {
 			sum += file.filesize;
@@ -253,7 +253,7 @@ Object.defineProperty(folder, 'filesize', {
 
 // Count the number of files
 Object.defineProperty(folder, 'count', {
-	get: function () {
+	get: function() {
 		return this.filesArrayDeep.length;
 	},
 });
@@ -261,7 +261,7 @@ Object.defineProperty(folder, 'count', {
 // Return one-dimensional array of all siapaths in this folder, used primarily
 // for share and shareascii
 Object.defineProperty(folder, 'paths', {
-	get: function () {
+	get: function() {
 		return this.filesArrayDeep.map(file => file.path);
 	},
 });

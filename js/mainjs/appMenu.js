@@ -3,7 +3,7 @@
 const Electron = require('electron');
 const Menu = Electron.Menu;
 
-module.exports = function (window) {
+module.exports = function(window) {
 	// Template for OSX app menu commands
 	// Selectors call the main app's NSApplication methods.
 	var menutemplate = [
@@ -14,7 +14,7 @@ module.exports = function (window) {
 				{ type: 'separator' },
 				{ label: 'Hide Sia', accelerator: 'CmdOrCtrl+H', selector: 'hide:'},
 				{ type: 'separator' },
-				{ label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: function () { window.close(); }},
+				{ label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: function() { window.destroy(); }},
 			]
 		},
 		{
@@ -33,4 +33,3 @@ module.exports = function (window) {
 
 	return Menu.buildFromTemplate(menutemplate);
 };
-

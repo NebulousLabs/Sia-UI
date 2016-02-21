@@ -2,6 +2,7 @@
 
 // Imported Electron modules
 const Electron = require('electron');
+const App = Electron.remote.app;
 const IPCRenderer = Electron.ipcRenderer;
 const mainWindow = Electron.remote.getCurrentWindow();
 // Imported Node modules
@@ -12,7 +13,7 @@ const Siad = require('sia.js');
 const $ = require('jquery');
 // Notification System
 const notification = require('./notificationManager.js');
-// Loading Screen 
+// Loading Screen
 const loadingScreen = require('./loadingScreen');
 
 // Object to export
@@ -138,7 +139,7 @@ function init() {
 }
 
 /**
-* Called at window.beforeunload, closes the errorLog
+* Called at app.will-quit, closes the errorLog
 * @function UIManager#kill
 */
 function closeLog() {
@@ -147,15 +148,23 @@ function closeLog() {
 		errorLog.end();
 	}
 }
+App.on('will-quit', closeLog);
+
+// If closeToTray is set, hide the window and cancel the close.
+if (mainWindow.closeToTray) {
+	window.onbeforeunload = function() {
+		mainWindow.hide();
+		return false;
+	};
+}
 
 // Set up responses upon the window loading and closing
 window.onload = function() {
 	loadingScreen(init);
 };
-window.onbeforeunload = closeLog;
 
 // Right-click brings up a context menu without blocking the UI
-window.addEventListener('contextmenu', function (e) {
+window.addEventListener('contextmenu', function(e) {
 	e.preventDefault();
 	IPCRenderer.send('context-menu');
 }, false);

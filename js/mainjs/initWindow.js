@@ -17,6 +17,9 @@ module.exports = function(config) {
 		icon:   iconPath,
 		title:  'Sia-UI-beta',
 	});
+	// Set mainWindow's closeToTray flag from config.
+	// This should be used in the renderer to cancel close() events using window.onbeforeunload
+	mainWindow.closeToTray = config.closeToTray;
 
 	// Add hotkey shortcut to view plugin devtools
 	var shortcut;
@@ -31,8 +34,8 @@ module.exports = function(config) {
 
 	// Load the window's size and position
 	mainWindow.setBounds(config);
-	
-	// Emitted when the window is closed.
+
+	// Emitted when the window is closing.
 	mainWindow.on('close', function() {
 		// Save the window's size and position
 		var bounds = mainWindow.getBounds();
@@ -41,8 +44,9 @@ module.exports = function(config) {
 				config[k] = bounds[k];
 			}
 		}
-
-		// Unregister all shortcuts.
+	});
+	// Unregister all shortcuts when mainWindow is closed.
+	mainWindow.on('closed', function() {
 		GlobalShortcut.unregisterAll();
 	});
 
@@ -57,4 +61,3 @@ module.exports = function(config) {
 	}
 	return mainWindow;
 };
-

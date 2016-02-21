@@ -90,7 +90,7 @@ module.exports = {
 		var callback = lastParam;
 
 		// Callback iff all calls finished
-		params.push(function () {
+		params.push(function() {
 			if (--count === 0 && callback) {
 				callback();
 			}
@@ -132,7 +132,7 @@ module.exports = {
 		var callback = lastParam;
 
 		// Callback iff all calls finished
-		params.push(function () {
+		params.push(function() {
 			if (--count === 0 && callback) {
 				callback();
 			}

@@ -25,7 +25,8 @@ var config = require('./js/mainjs/config.js')(Path.join(__dirname, 'config.json'
 App.on('ready', function() {
 	// Load mainWindow
 	mainWindow = require('./js/mainjs/initWindow.js')(config);
-	// Load tray icon
+
+	// Load tray icon and menu
 	var iconPath = Path.join(__dirname, 'assets', 'tray.png');
 	appIcon = new Tray(iconPath);
 	appIcon.setToolTip('Sia - The Collaborative Cloud.');
@@ -34,18 +35,17 @@ App.on('ready', function() {
 	// Add IPCMain listeners
 	require('./js/mainjs/addIPCListeners.js')(config, mainWindow);
 
-	// Upon exiting, dereference the window object so that the GC cleans up.
-	mainWindow.on('close', function() {
-		mainWindow = null;
-	});
-
 	// Load siad
 	require('./js/mainjs/initSiad.js')(config, mainWindow);
+
+	// Upon exiting, dereference the window object so that the GC cleans up.
+	mainWindow.on('closed', function() {
+		mainWindow = null;
+	});
 });
 
-// Quit when UI window closing
+// Quit once all windows have been closed.
 App.on('window-all-closed', function() {
 	config.save();
 	App.quit();
 });
-
