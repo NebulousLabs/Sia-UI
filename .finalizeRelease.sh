@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -o errexit # Exit on error
-readonly VERSION="v0.5.1-beta"
+readonly VERSION="v0.5.2-beta"
 declare -a Electron_Archs=("linux-x64" "linux-ia32" "win32-x64" "win32-ia32" "darwin-x64")
 declare -a Sia_Archs=("linux-amd64" "linux-386" "windows-amd64" "windows-386" "darwin-amd64")
 
