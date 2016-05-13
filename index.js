@@ -36,7 +36,7 @@ App.on('ready', function() {
 	require('./js/mainjs/addIPCListeners.js')(config, mainWindow);
 
 	// Load siad
-	require('./js/mainjs/initSiad.js')(config, mainWindow);
+	//require('./js/mainjs/initSiad.js')(config, mainWindow);
 
 	// Upon exiting, dereference the window object so that the GC cleans up.
 	mainWindow.on('closed', function() {
