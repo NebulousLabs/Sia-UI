@@ -7,7 +7,7 @@
 const remote = require('electron').remote;
 const Siad = require('sia.js');
 const Path = require('path');
-var config = remote.require('./js/mainjs/config.js')(Path.resolve('config.json'));
+const config = remote.require('./js/mainjs/config.js')(Path.resolve('config.json'));
 config.path = Path.resolve('Sia');
 const overlay = document.getElementsByClassName('overlay')[0];
 const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByTagName('p')[0];
