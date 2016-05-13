@@ -17,7 +17,7 @@ const showError = function(error) {
 };
 
 // startUI starts a Sia UI instance using the given welcome message.
-// calls initUI() on after displaying a welcome message
+// calls initUI() after displaying a welcome message.
 const startUI = function(welcomemsg, initUI) {
 	// Display a welcome message, then initialize the ui
 	overlayText.innerHTML = welcomemsg;
