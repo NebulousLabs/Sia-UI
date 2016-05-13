@@ -11,9 +11,9 @@ var config = remote.require('./js/mainjs/config.js')(Path.resolve('../../config.
 config.path = Path.resolve('Sia');
 const overlay = document.getElementsByClassName('overlay')[0];
 const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByTagName('p')[0];
-console.log(overlayText);
-// These constants determine the behaviour of the overlay's fadeout animation.
-const fadetime = 500.0; // 500 ms
+
+// fadetime determins how long the welcome splash message is displayed
+const fadetime = 500.0 // 500ms;
 
 overlay.showError = function(error) {
 	overlayText.textContent = 'A Sia-UI error has occured: ' + error;
@@ -26,7 +26,7 @@ const startUI = function(welcomemsg, initUI) {
 	// Initialize the Sia UI and display a welcome message
 	overlayText.innerHTML = welcomemsg;
 
-	// Fade out the welcome message
+	// Display the welcome message for 500ms, then hide the overlay
 	window.setTimeout(function() {
 		overlay.style.display = 'none';
 	}, fadetime)
