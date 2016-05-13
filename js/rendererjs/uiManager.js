@@ -148,14 +148,16 @@ function closeLog() {
 		errorLog.end();
 	}
 }
-App.on('will-quit', closeLog);
+App.on('will-quit', function() {
+	closeLog();
+});
 
 // If closeToTray is set, hide the window and cancel the close.
 if (mainWindow.closeToTray) {
-	window.onbeforeunload = function() {
+	window.addEventListener('beforeunload', function() {
 		mainWindow.hide();
 		return false;
-	};
+	});
 }
 
 // Set up responses upon the window loading and closing
@@ -168,5 +170,6 @@ window.addEventListener('contextmenu', function(e) {
 	e.preventDefault();
 	IPCRenderer.send('context-menu');
 }, false);
+
 
 module.exports = ui;

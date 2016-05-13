@@ -34,7 +34,6 @@ const startSiad = function(callback) {
 			overlay.showError(error);
 		} else {
 			Siad.start(callback);
-
 		}
 	});
 };
