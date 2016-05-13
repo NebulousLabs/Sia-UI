@@ -4,42 +4,60 @@
 // if an available daemon is not running on the host,
 // launch an instance of siad using config.js.
 
-const Electron = require('electron');
-const IPCRenderer = Electron.ipcRenderer;
+const remote = require('electron').remote;
 const Siad = require('sia.js');
-const config = require('config.js');
-const overlay = document.getElementsByClassName('overlay centered');
+const Path = require('path');
+var config = remote.require('./js/mainjs/config.js')(Path.resolve('../../config.json'));
+config.path = Path.resolve('Sia');
+const overlay = document.getElementsByClassName('overlay')[0];
+const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByTagName('p')[0];
+console.log(overlayText);
+// These constants determine the behaviour of the overlay's fadeout animation.
+const fadetime = 500.0; // 500 ms
 
-overlay.fadeOut = function(fadetime, interval, elapsed) {
-	overlay.style.opacity = elapsed / fadetime;
-	elapsed += interval;
-
-	if (elapsed <== fadetime) {
-		setTimeout(fadetime, interval, elapsed);
-	} else {
-		overlay.style.visibility = "hidden";
-	}
+overlay.showError = function(error) {
+	overlayText.textContent = 'A Sia-UI error has occured: ' + error;
 }
 
-module.exports = function(initUI) {
-	// These constants determine the behaviour of the overlay's fadeout animation.
-	const fadetime = 300; // 300 ms
-	const interval = 30; // 30 ms
+// startUI starts a Sia UI instance using the given welcome message.
+// calls initUI() on start.
+const startUI = function(welcomemsg, initUI) {
+	initUI();
+	// Initialize the Sia UI and display a welcome message
+	overlayText.innerHTML = welcomemsg;
 
+	// Fade out the welcome message
+	window.setTimeout(function() {
+		overlay.style.display = 'none';
+	}, fadetime)
+};
+
+// startSiad configures and starts a Siad instance.
+// callback is called on successful start.
+const startSiad = function(callback) {
+	Siad.configure(config, function(error) {
+		if (error) {
+			console.error(error);
+			overlay.showError(error);
+		} else {
+			Siad.start(callback);
+		}
+	});
+};
+
+module.exports = function(initUI) {
 	// Check if Siad is already running on this host.
 	// If it is, start the UI and display a welcome message to the user.
 	// Otherwise, start a new instance of Siad using config.js.
-	Siad.ifRunning(startUI('Welcome back!'), startSiad());
-
-	const startUI = function(welcomemsg) {
-		// Initialize the Sia UI and display a welcome message
-		initUI();
-		document.getElementsByClassName('overlay centered').textContent = welcomemsg;
-
-		// Fade out the welcome message over a period of 300ms, updating the opacity every 20 ms.
-		overlay.fadeOut(fadetime, interval);
-	};
-
-	const startSiad = function() {
-	};
+	Siad.ifRunning(function() {
+		startUI('Welcome back!', initUI);
+	}, function() {
+		startSiad(function(error) {
+			if (error) {
+				console.error(error);
+			} else {
+				startUI('Welcome to Sia!', initUI)
+			};
+		})
+	});
 };

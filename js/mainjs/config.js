@@ -1,14 +1,12 @@
 'use strict';
-
-const ipcHost = require('electron').remote;
-const fs = remote.require('fs');
-const Path = remote.require('path');
+const fs = require('fs');
+const Path = require('path');
 
 // The default settings
 const defaultConfig = {
 	homePlugin:  'Overview',
 	siad: {
-    	path: Path.join(__dirname, '../..', 'Sia'),
+    	path: Path.join(__dirname, '../../', 'Sia'),
 		detached: false,
 	},
 	closeToTray: process.platform === 'win32' || process.platform === 'darwin' ? true : false,
@@ -64,7 +62,6 @@ function configManager(filepath) {
 
 	// Save to disk immediately when loaded
 	config.save();
-
 	// Return the config object with the above 3 member functions
 	return config;
 }

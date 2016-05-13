@@ -31,7 +31,7 @@ App.on('ready', function() {
 	appIcon = new Tray(iconPath);
 	appIcon.setToolTip('Sia - The Collaborative Cloud.');
 	appIcon.setContextMenu(appTray(mainWindow));
-
+	mainWindow.toggleDevTools();
 	// Add IPCMain listeners
 	require('./js/mainjs/addIPCListeners.js')(config, mainWindow);
 
