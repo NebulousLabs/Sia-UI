@@ -12,24 +12,17 @@ config.path = Path.resolve('Sia');
 const overlay = document.getElementsByClassName('overlay')[0];
 const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByTagName('p')[0];
 
-// fadetime determins how long the welcome splash message is displayed
-const fadetime = 500.0 // 500ms;
-
-overlay.showError = function(error) {
+const showError = function(error) {
 	overlayText.textContent = 'A Sia-UI error has occured: ' + error;
-}
+};
 
 // startUI starts a Sia UI instance using the given welcome message.
-// calls initUI() on start.
+// calls initUI() on after displaying a welcome message
 const startUI = function(welcomemsg, initUI) {
-	initUI();
-	// Initialize the Sia UI and display a welcome message
+	// Display a welcome message, then initialize the ui
 	overlayText.innerHTML = welcomemsg;
-
-	// Display the welcome message for 500ms, then hide the overlay
-	window.setTimeout(function() {
-		overlay.style.display = 'none';
-	}, fadetime)
+	initUI();
+	overlay.style.display = 'none';
 };
 
 // startSiad configures and starts a Siad instance.
@@ -41,6 +34,7 @@ const startSiad = function(callback) {
 			overlay.showError(error);
 		} else {
 			Siad.start(callback);
+
 		}
 	});
 };
@@ -50,14 +44,14 @@ module.exports = function(initUI) {
 	// If it is, start the UI and display a welcome message to the user.
 	// Otherwise, start a new instance of Siad using config.js.
 	Siad.ifRunning(function() {
-		startUI('Welcome back!', initUI);
+		startUI('Welcome back', initUI);
 	}, function() {
 		startSiad(function(error) {
 			if (error) {
 				console.error(error);
 			} else {
-				startUI('Welcome to Sia!', initUI)
-			};
-		})
+				startUI('Welcome to Sia', initUI);
+			}
+		});
 	});
 };
