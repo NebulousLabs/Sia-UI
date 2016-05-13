@@ -7,7 +7,7 @@
 const remote = require('electron').remote;
 const Siad = require('sia.js');
 const Path = require('path');
-var config = remote.require('./js/mainjs/config.js')(Path.resolve('../../config.json'));
+var config = remote.require('./js/mainjs/config.js')(Path.resolve('config.json'));
 config.path = Path.resolve('Sia');
 const overlay = document.getElementsByClassName('overlay')[0];
 const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByTagName('p')[0];
@@ -39,10 +39,10 @@ const startSiad = function(callback) {
 	});
 };
 
+// Check if Siad is already running on this host.
+// If it is, start the UI and display a welcome message to the user.
+// Otherwise, start a new instance of Siad using config.js.
 module.exports = function(initUI) {
-	// Check if Siad is already running on this host.
-	// If it is, start the UI and display a welcome message to the user.
-	// Otherwise, start a new instance of Siad using config.js.
 	Siad.ifRunning(function() {
 		config.siad.detached = true;
 		Siad.configure(config);

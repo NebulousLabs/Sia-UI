@@ -51,7 +51,7 @@ module.exports = function(config) {
 	// Stop Siad if it is not running detached.
 	mainWindow.on('closed', function() {
 		GlobalShortcut.unregisterAll();
-		const config = require('./config.js')(Path.resolve('../../config.json'));
+		const config = require('./config.js')(Path.resolve('config.json'));
 		if (!config.siad.detached) {
 			Siad.stop();
 		}
