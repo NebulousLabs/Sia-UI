@@ -3,8 +3,8 @@
 // Node modules
 const Electron = require('electron');
 const IPCRenderer = Electron.ipcRenderer;
-const $ = require('jquery');
 const Siad = require('sia.js');
+const config = require('config.js');
 
 // Hide the UI with an overlay to ensure siad is running first
 const overlay = document.getElementsByClassName('overlay centered');
@@ -14,6 +14,7 @@ module.exports = function(initUI) {
 
 	// Start the Sia UI and display a welcome message
 	const startUI = function(welcomemsg) {
+		const config = require('config.js');
 		initUI();
 		document.getElementsByClassName('overlay centered').textContent = welcomemsg;
 	};
