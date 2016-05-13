@@ -11,7 +11,7 @@ var config = remote.require('./js/mainjs/config.js')(Path.resolve('config.json')
 config.path = Path.resolve('Sia');
 const overlay = document.getElementsByClassName('overlay')[0];
 const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByTagName('p')[0];
-
+overlayText.textContent = 'Loading Sia...';
 const showError = function(error) {
 	overlayText.textContent = 'A Sia-UI error has occured: ' + error;
 };
