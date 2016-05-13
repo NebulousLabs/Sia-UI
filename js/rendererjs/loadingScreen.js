@@ -44,6 +44,8 @@ module.exports = function(initUI) {
 	// If it is, start the UI and display a welcome message to the user.
 	// Otherwise, start a new instance of Siad using config.js.
 	Siad.ifRunning(function() {
+		config.siad.detached = true;
+		Siad.configure(config);
 		startUI('Welcome back', initUI);
 	}, function() {
 		startSiad(function(error) {

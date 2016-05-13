@@ -8,6 +8,7 @@ const GlobalShortcut = Electron.globalShortcut;
 const appMenu = require('./appMenu.js');
 // Node libraries
 const Path = require('path');
+const Siad = require('sia.js');
 // Main process logic partitioned to other files
 // Creates the window and loads index.html
 module.exports = function(config) {
@@ -47,8 +48,13 @@ module.exports = function(config) {
 		}
 	});
 	// Unregister all shortcuts when mainWindow is closed.
+	// Stop Siad if it is not running detached.
 	mainWindow.on('closed', function() {
 		GlobalShortcut.unregisterAll();
+		const config = require('./config.js')(Path.resolve('../../config.json'));
+		if (!config.siad.detached) {
+			Siad.stop();
+		}
 	});
 
 	// Load the index.html of the app.
