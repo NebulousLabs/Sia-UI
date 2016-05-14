@@ -21,7 +21,7 @@ var config;
 
 /**
  * Holds all config.json related logic
- * @module session
+ * @module configManager
  */
 function configManager(filepath) {
 	try {
