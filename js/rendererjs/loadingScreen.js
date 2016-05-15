@@ -1,14 +1,13 @@
 'use strict';
 
-// loadingScreen.js: display a loading screen and launch the Siad API
+// loadingScreen.js: display a loading screen until communication with Siad has been established.
 // if an available daemon is not running on the host,
 // launch an instance of siad using config.js.
 
 const remote = require('electron').remote;
+const IPCRenderer = require('electron').ipcRenderer;
 const Siad = require('sia.js');
-const Path = require('path');
-const config = remote.require('./js/mainjs/config.js')(Path.resolve('config.json'));
-config.path = Path.resolve('Sia');
+const config = IPCRenderer.sendSync('config', 'siad');
 const overlay = document.getElementsByClassName('overlay')[0];
 const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByTagName('p')[0];
 overlayText.textContent = 'Loading Sia...';
