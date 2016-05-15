@@ -43,7 +43,8 @@ const startSiad = function(callback) {
 // Otherwise, start a new instance of Siad using config.js.
 module.exports = function(initUI) {
 	Siad.ifRunning(function() {
-		config.siad.detached = true;
+		config.detached = true;
+		IPCRenderer.sendSync('config', 'siad', config);
 		Siad.configure(config);
 		startUI('Welcome back', initUI);
 	}, function() {
