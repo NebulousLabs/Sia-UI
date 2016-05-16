@@ -48,6 +48,8 @@ module.exports = function(initUI) {
 		Siad.configure(config);
 		startUI('Welcome back', initUI);
 	}, function() {
+		config.detached = false;
+		IPCRenderer.sendSync('config', 'siad', config);
 		startSiad(function(error) {
 			if (error) {
 				console.error(error);
