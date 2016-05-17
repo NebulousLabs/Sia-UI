@@ -25,7 +25,7 @@ const showError = (error) => {
 // returns a promise that is resolved if the path is a valid directory
 const checkSiaPath = () => new Promise((resolve, reject) => {
 	fs.stat(config.path, (err, stats) => {
-		if (!err && stats.isDirectory()) {
+		if (!err) {
 			resolve();
 		} else {
 			reject();
@@ -60,6 +60,13 @@ const startSiad = (callback) => {
 // If it is, start the UI and display a welcome message to the user.
 // Otherwise, start a new instance of Siad using config.js.
 module.exports = function(initUI) {
+	// Create the Sia data directory if it does not exist
+	try {
+		fs.statSync(config.datadir);
+	} catch (e) {
+		fs.mkdirSync(config.datadir);
+	}
+
 	checkSiaPath().then(() => {
 		Siad.ifRunning(() => {
 			config.detached = true;
@@ -84,7 +91,7 @@ module.exports = function(initUI) {
 			defaultPath: Path.join('../', config.path),
 			filters: [{ name: 'siad', extensions: ['*'] }],
 		});
-		config.path = Path.join(siadPath[0], '../');
+		config.path = siadPath[0];
 		startSiad((error) => {
 			if (error) {
 				showError(error);
