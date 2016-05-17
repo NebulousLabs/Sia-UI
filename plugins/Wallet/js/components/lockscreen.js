@@ -1,7 +1,8 @@
 import React, { propTypes } from 'react';
 
-const LockScreen = () => (
-	<div className="lockscreen">
+const LockScreen = ({unlocked}) => (
+	<div className={unlocked ? "lockscreen unlocked" : "lockscreen locked"}>
+		test
 	</div>
 );
 
