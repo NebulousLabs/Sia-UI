@@ -6,7 +6,6 @@ const initialState = Map({
 });
 
 export default function walletReducer(state = initialState, action) {
-	console.log(state.get('unlocked'));
 	switch (action.type) {
 	case LOCK_WALLET:
 		return state.set('unlocked', false);
