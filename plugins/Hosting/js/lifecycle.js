@@ -9,8 +9,6 @@
 const IPCRenderer = require('electron').ipcRenderer;
 // Host settings manager
 const Host = require('./host.js');
-// Siad wrapper/manager
-const Siad = require('sia.js');
 
 // Tracks if the view is shown
 var updating;

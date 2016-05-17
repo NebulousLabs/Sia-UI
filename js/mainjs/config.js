@@ -1,10 +1,12 @@
 'use strict';
+const fs = require('fs');
+const Path = require('path');
 
 // The default settings
 const defaultConfig = {
 	homePlugin:  'Overview',
 	siad: {
-    	path: require('path').join(__dirname, '../..', 'Sia'),
+    	path: Path.join(__dirname, '../../', 'Sia'),
 		detached: false,
 	},
 	closeToTray: process.platform === 'win32' || process.platform === 'darwin' ? true : false,
@@ -13,6 +15,7 @@ const defaultConfig = {
 	x:           0,
 	y:           0,
 };
+
 // Variable to hold the current configuration in memory
 var config;
 
@@ -20,9 +23,9 @@ var config;
  * Holds all config.json related logic
  * @module configManager
  */
-function configManager(path) {
+function configManager(filepath) {
 	try {
-		config = require(path);
+		config = require(filepath);
 	} catch (err) {
 		config = defaultConfig;
 	}
@@ -47,19 +50,18 @@ function configManager(path) {
 	 * @param {string} path - UI's defaultConfigPath
 	 */
 	config.save = function() {
-		require('fs').writeFileSync(path, JSON.stringify(config, null, '\t'));
+		fs.writeFileSync(filepath, JSON.stringify(config, null, '\t'));
 	};
 
 	/**
 	 * Sets config to what it was on disk
 	 */
 	config.reset = function() {
-		config = configManager(path);
+		config = configManager(filepath);
 	};
 
 	// Save to disk immediately when loaded
 	config.save();
-
 	// Return the config object with the above 3 member functions
 	return config;
 }

@@ -8,6 +8,7 @@ const GlobalShortcut = Electron.globalShortcut;
 const appMenu = require('./appMenu.js');
 // Node libraries
 const Path = require('path');
+const Siad = require('sia.js');
 // Main process logic partitioned to other files
 // Creates the window and loads index.html
 module.exports = function(config) {
@@ -28,6 +29,7 @@ module.exports = function(config) {
 	} else {
 		shortcut = 'Ctrl+Shift+P';
 	}
+
 	GlobalShortcut.register(shortcut, function() {
 		mainWindow.webContents.executeJavaScript('ui.plugins.current.toggleDevTools();');
 	});
@@ -46,8 +48,12 @@ module.exports = function(config) {
 		}
 	});
 	// Unregister all shortcuts when mainWindow is closed.
+	// Stop Siad if it is not running detached.
 	mainWindow.on('closed', function() {
 		GlobalShortcut.unregisterAll();
+		if (!config.siad.detached) {
+			Siad.stop();
+		}
 	});
 
 	// Load the index.html of the app.
