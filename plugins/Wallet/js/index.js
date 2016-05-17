@@ -18,5 +18,5 @@ const rootElement = (
 		<LockScreen />
 	</Provider>
 );
-console.log(rootElement);
+
 ReactDOM.render(rootElement, document.getElementById('react-root'));
