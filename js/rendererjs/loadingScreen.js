@@ -34,9 +34,9 @@ const checkSiaPath = () => new Promise((resolve, reject) => {
 });
 // startUI starts a Sia UI instance using the given welcome message.
 // calls initUI() after displaying a welcome message.
-const startUI = (welcomemsg, initUI) => {
+const startUI = (welcomeMsg, initUI) => {
 	// Display a welcome message, then initialize the ui
-	overlayText.innerHTML = welcomemsg;
+	overlayText.innerHTML = welcomeMsg;
 	initUI();
 	overlay.style.display = 'none';
 };
