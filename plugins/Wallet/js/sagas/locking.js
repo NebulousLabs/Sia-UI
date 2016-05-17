@@ -1,8 +1,9 @@
-import { takeLatest } from 'redux-saga'
-import { call, put } from 'redux-saga/effects'
-import { getSiadWallet } from './helpers.js'
-import * as actions from '../actions/locking.js'
-import * as constants from '../constants/locking.js'
+import { takeLatest } from 'redux-saga';
+import { call, put } from 'redux-saga/effects';
+import { getSiadWallet } from './helpers.js';
+import * as actions from '../actions/locking.js';
+import * as constants from '../constants/locking.js';
+import { siadError } from '../actions/error.js';
 import Siad from 'sia.js'
 const IPC = require('electron').ipcRenderer;
 
@@ -19,7 +20,7 @@ function *getLockStatus(action) {
 			yield put(actions.unlockWallet());
 		}
 	} catch (e) {
-		yield put(actions.walletError(e));
+		yield put(siadError(e));
 	}
 }
 // Consume any GET_LOCK_STATUS actions
