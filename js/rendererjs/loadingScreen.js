@@ -8,6 +8,8 @@ const remote = require('electron').remote;
 const IPCRenderer = require('electron').ipcRenderer;
 const Siad = require('sia.js');
 const config = IPCRenderer.sendSync('config', 'siad');
+Siad.configure(config);
+
 const overlay = document.getElementsByClassName('overlay')[0];
 const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByTagName('p')[0];
 overlayText.textContent = 'Loading Sia...';
