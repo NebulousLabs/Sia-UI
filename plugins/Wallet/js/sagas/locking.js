@@ -13,6 +13,7 @@ function *getLockStatus(action) {
 		// Sync up Siad config with the main UI.
 		const config = yield call(IPC.sendSync, 'config', 'siad');
 		yield Siad.configure(config);
+		// Request /wallet from the Siad API.
 		const response = yield getSiadWallet(Siad);
 		if (!response.unlocked) {
 			yield put(actions.lockWallet());
@@ -20,6 +21,7 @@ function *getLockStatus(action) {
 			yield put(actions.unlockWallet());
 		}
 	} catch (e) {
+		// The only function that throws in this saga is getSiadWallet, so yield a siadError if an error is thrown.
 		yield put(siadError(e));
 	}
 }
