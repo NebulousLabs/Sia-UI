@@ -25,19 +25,7 @@ function *getLockStatus(action) {
 		yield put(siadError(e));
 	}
 }
-function *passwordPrompt(action) {
-	try {
-		const { password } = yield take(constants.UNLOCK_WALLET);
-
-	} catch (e) {
-
-	}
-}
 // Consume any GET_LOCK_STATUS action
 export function* watchGetLockStatus() {
 	yield *takeEvery(constants.GET_LOCK_STATUS, getLockStatus);
-}
-// Consume the latest START_PASSWORD_PROMPT action
-export function* watchStartPasswordPrompt() {
-	yield *takeLatest(constants.START_PASSWORD_PROMPT, passwordPrompt);
 }
