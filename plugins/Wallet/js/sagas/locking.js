@@ -16,9 +16,9 @@ function *getLockStatus(action) {
 		// Request /wallet from the Siad API.
 		const response = yield getSiadWallet(Siad);
 		if (!response.unlocked) {
-			yield put(actions.lockWallet());
+			yield put(actions.setLocked());
 		} else {
-			yield put(actions.unlockWallet());
+			yield put(actions.setUnlocked());
 		}
 	} catch (e) {
 		// The only function that throws in this saga is getSiadWallet, so yield a siadError if an error is thrown.
