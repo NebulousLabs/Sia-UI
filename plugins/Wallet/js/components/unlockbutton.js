@@ -1,4 +1,4 @@
-import React, { propTypes } from 'react';
+import React from 'react';
 
 const UnlockButton = ({actions}) => (
 	<div className="unlock-button">
