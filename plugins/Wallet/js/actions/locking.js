@@ -4,9 +4,13 @@ import * as constants from '../constants/locking.js';
 export const getLockStatus = () => ({
 	type: constants.GET_LOCK_STATUS,
 });
-export const lockWallet = () => ({
-	type: constants.LOCK_WALLET,
+export const setLocked = () => ({
+	type: constants.SET_LOCKED,
 });
-export const unlockWallet = () => ({
+export const setUnlocked = () => ({
+	type: constants.SET_UNLOCKED,
+});
+export const unlockWallet = (password) => ({
 	type: constants.UNLOCK_WALLET,
-});
+	password,
+})

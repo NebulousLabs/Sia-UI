@@ -22,6 +22,12 @@
 	background-color: #4A4A4A;
 	opacity: .5;
 }
-.lockscreen .unlocked {
+.lockscreen i {
+	background-color: rgba(102, 102, 102, 0.5);
+}
+.lockscreen i:hover {
+	background-color: rgba(102, 102, 102, 1.0);
+}
+.unlocked {
 	visibility: hidden;
 }
