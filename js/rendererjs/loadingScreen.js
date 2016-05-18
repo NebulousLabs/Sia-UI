@@ -88,7 +88,7 @@ module.exports = function(initUI) {
 		const siadPath = dialog.showOpenDialog({
 			title: 'Please locate siad.',
 			properties: ['openFile'],
-			defaultPath: Path.join('../', config.path),
+			defaultPath: Path.join('..', config.path),
 			filters: [{ name: 'siad', extensions: ['*'] }],
 		});
 		config.path = siadPath[0];
