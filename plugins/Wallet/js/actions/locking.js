@@ -10,7 +10,10 @@ export const setLocked = () => ({
 export const setUnlocked = () => ({
 	type: constants.SET_UNLOCKED,
 });
+export const showPasswordPrompt = () => ({
+	type: constants.SHOW_PASSWORD_PROMPT,
+});
 export const unlockWallet = (password) => ({
 	type: constants.UNLOCK_WALLET,
 	password,
-})
+});

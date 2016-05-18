@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { LOCK_WALLET, UNLOCK_WALLET } from '../constants/locking.js';
+import { SET_LOCKED, SET_UNLOCKED } from '../constants/locking.js';
 
 const initialState = Map({
 	unlocked: false,
