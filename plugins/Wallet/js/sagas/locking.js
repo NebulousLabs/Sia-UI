@@ -1,5 +1,5 @@
 import { takeLatest, takeEvery } from 'redux-saga';
-import { call, put } from 'redux-saga/effects';
+import { call, put, take } from 'redux-saga/effects';
 import { getSiadWallet } from './helpers.js';
 import * as actions from '../actions/locking.js';
 import * as constants from '../constants/locking.js';
@@ -27,6 +27,7 @@ function *getLockStatus(action) {
 }
 function *passwordPrompt(action) {
 	try {
+		const { password } = yield take(constants.UNLOCK_WALLET);
 
 	} catch (e) {
 
