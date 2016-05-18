@@ -1,31 +1,46 @@
 import { takeLatest, takeEvery } from 'redux-saga';
 import { call, put, take } from 'redux-saga/effects';
-import { getSiadWallet } from './helpers.js';
+import { siadCall } from './helpers.js';
 import * as actions from '../actions/locking.js';
 import * as constants from '../constants/locking.js';
-import { siadError } from '../actions/error.js';
+import { siadError, walletUnlockError } from '../actions/error.js';
 import Siad from 'sia.js'
 const IPC = require('electron').ipcRenderer;
+Siad.configure(IPC.sendSynd('config', 'siad'));
 
 // Asynchronously get Siad's wallet status, and elegantly handle any side effects
 function *getLockStatus(action) {
 	try {
-		// Sync up Siad config with the main UI.
-		const config = yield call(IPC.sendSync, 'config', 'siad');
-		yield Siad.configure(config);
 		// Request /wallet from the Siad API.
-		const response = yield getSiadWallet(Siad);
+		const response = yield siadCall(Siad, '/wallet');
 		if (!response.unlocked) {
 			yield put(actions.setLocked());
 		} else {
 			yield put(actions.setUnlocked());
 		}
 	} catch (e) {
-		// The only function that throws in this saga is getSiadWallet, so yield a siadError if an error is thrown.
 		yield put(siadError(e));
 	}
 }
-// Consume any GET_LOCK_STATUS action
+function *walletUnlock(action) {
+	try {
+		const response = yield siadCall(Siad, {
+			url: '/wallet/unlock',
+			method: 'POST',
+			qs: {
+				encryptionpassword: action.password,
+			}
+		});
+		yield put(actions.setUnlocked());
+	} catch (e) {
+		yield put(walletUnlockError(e));
+	}
+}
+// Consume any GET_LOCK_STATUS actions
 export function* watchGetLockStatus() {
 	yield *takeEvery(constants.GET_LOCK_STATUS, getLockStatus);
+}
+// Consume any UNLOCK_WALLET actions
+export function* watchUnlockWallet() {
+	yield *takeEvery(constants.UNLOCK_WALLET, walletUnlock);
 }

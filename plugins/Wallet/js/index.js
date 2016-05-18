@@ -11,6 +11,7 @@ import rootReducer from './js/reducers/index.js';
 import { watchGetLockStatus } from './js/sagas/locking.js'
 import { getLockStatus } from './js/actions/locking.js';
 import LockScreen from './js/containers/lockscreen.js';
+import PasswordPrompt from './js/containers/passwordprompt.js';
 
 // Set up saga middleware system
 const sagaMiddleware = createSagaMiddleware();
@@ -25,6 +26,7 @@ sagaMiddleware.run(watchGetLockStatus)
 const rootElement = (
 	<Provider store={store}>
 		<LockScreen />
+		<PasswordPrompt />
 	</Provider>
 );
 
