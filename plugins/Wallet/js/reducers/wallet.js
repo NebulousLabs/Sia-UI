@@ -1,8 +1,9 @@
 import { Map } from 'immutable';
-import { SET_LOCKED, SET_UNLOCKED } from '../constants/locking.js';
+import { SET_LOCKED, SET_UNLOCKED, SET_ENCRYPTED, SET_UNENCRYPTED } from '../constants/locking.js';
 
 const initialState = Map({
 	unlocked: false,
+	encrypted: false,
 });
 
 export default function walletReducer(state = initialState, action) {
