@@ -5,7 +5,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => ({
+	visible: state.passwordprompt.get('visible'),
 	password: state.passwordprompt.get('password'),
+	error: state.passwordprompt.get('error'),
 });
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ handlePasswordChange, unlockWallet }, dispatch),

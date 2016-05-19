@@ -6,7 +6,7 @@ import * as constants from '../constants/locking.js';
 import { siadError, walletUnlockError } from '../actions/error.js';
 import Siad from 'sia.js'
 const IPC = require('electron').ipcRenderer;
-Siad.configure(IPC.sendSynd('config', 'siad'));
+Siad.configure(IPC.sendSync('config', 'siad'));
 
 // Asynchronously get Siad's wallet status, and elegantly handle any side effects
 function *getLockStatus(action) {
