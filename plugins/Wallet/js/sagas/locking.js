@@ -28,6 +28,7 @@ function *getLockStatus(action) {
 		yield put(siadError(e));
 	}
 }
+
 function *walletUnlock(action) {
 	try {
 		const response = yield siadCall(Siad, {
@@ -37,10 +38,32 @@ function *walletUnlock(action) {
 				encryptionpassword: action.password,
 			}
 		});
+		yield put(actions.setEncrypted());
 		yield put(actions.setUnlocked());
 	} catch (e) {
 		yield put(walletUnlockError(e));
 	}
+}
+
+function *createWallet(action) {
+	try {
+		const response = yield siadCall(Siad, {
+			url: '/wallet/init',
+			method: 'POST',
+			qs: {
+				dictionary: 'english',
+			},
+		});
+		yield put(actions.showNewWalletDialog(response.primaryseed, response.primaryseed));
+		yield take(constants.DISMISS_NEW_WALLET_DIALOG);
+		yield put(actions.unlockWallet(response.primaryseed));
+	} catch (e) {
+		yield put(siadError(e));
+	}
+}
+// Consume any CREATE_NEW_WALLET actions
+export function* watchCreateNewWallet() {
+	yield *takeEvery(constants.CREATE_NEW_WALLET, createWallet);
 }
 // Consume any GET_LOCK_STATUS actions
 export function* watchGetLockStatus() {

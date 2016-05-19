@@ -19,6 +19,14 @@ export const setUnencrypted = () => ({
 export const startPasswordPrompt = () => ({
 	type: constants.START_PASSWORD_PROMPT,
 });
+export const dismissNewWalletDialog = () => ({
+	type: constants.DISMISS_NEW_WALLET_DIALOG,
+});
+export const showNewWalletDialog = (password, seed) => ({
+	type: constants.SHOW_NEW_WALLET_DIALOG,
+	password,
+	seed
+});
 export const unlockWallet = (password) => ({
 	type: constants.UNLOCK_WALLET,
 	password,
