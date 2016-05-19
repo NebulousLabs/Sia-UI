@@ -1,5 +1,5 @@
 import NewWalletButtonView from '../components/newwalletbutton.js';
-import { createNewWallet } from '../actions/locking.js';
+import { createNewWallet } from '../actions/wallet.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 

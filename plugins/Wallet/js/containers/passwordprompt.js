@@ -1,6 +1,6 @@
 import PasswordPromptView from '../components/passwordprompt.js';
 import { handlePasswordChange } from '../actions/passwordprompt.js';
-import { unlockWallet } from '../actions/locking.js';
+import { unlockWallet } from '../actions/wallet.js';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 

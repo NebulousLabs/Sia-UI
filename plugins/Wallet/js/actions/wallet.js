@@ -1,5 +1,5 @@
 // locking.js: wallet locking actions
-import * as constants from '../constants/locking.js';
+import * as constants from '../constants/wallet.js';
 
 export const getLockStatus = () => ({
 	type: constants.GET_LOCK_STATUS,
@@ -11,7 +11,7 @@ export const setUnlocked = () => ({
 	type: constants.SET_UNLOCKED,
 });
 export const setEncrypted = () => ({
-	type: constnats.SET_ENCRYPTED,
+	type: constants.SET_ENCRYPTED,
 });
 export const setUnencrypted = () => ({
 	type: constants.SET_UNENCRYPTED,

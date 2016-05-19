@@ -9,7 +9,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import rootReducer from './js/reducers/index.js';
 import { watchGetLockStatus, watchUnlockWallet } from './js/sagas/locking.js'
-import { getLockStatus } from './js/actions/locking.js';
+import { getLockStatus } from './js/actions/wallet.js';
 import WalletApp from './js/components/app.js';
 
 // Set up saga middleware system

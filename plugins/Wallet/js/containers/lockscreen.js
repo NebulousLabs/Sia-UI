@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => ({
 	unlocked: state.wallet.get('unlocked'),
-	encrypted: state.wallet.get('encrypted')
+	encrypted: state.wallet.get('encrypted'),
 });
 
 const LockScreen = connect(mapStateToProps)(LockScreenView)

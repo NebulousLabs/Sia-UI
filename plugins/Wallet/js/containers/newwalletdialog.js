@@ -1,5 +1,5 @@
 import NewWalletDialogView from '../components/newwalletdialog.js';
-import { dismissNewWalletDialog } from '../actions/locking.js';
+import { dismissNewWalletDialog } from '../actions/wallet.js';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 

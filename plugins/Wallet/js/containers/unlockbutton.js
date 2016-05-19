@@ -1,6 +1,6 @@
 // unlockbutton.js: Wallet plugin unlock button.
 import UnlockButtonView from '../components/unlockbutton.js';
-import { startPasswordPrompt } from '../actions/locking.js';
+import { startPasswordPrompt } from '../actions/wallet.js';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
