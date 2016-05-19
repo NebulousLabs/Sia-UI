@@ -15,11 +15,14 @@ export const setEncrypted = () => ({
 });
 export const setUnencrypted = () => ({
 	type: constants.SET_UNENCRYPTED,
-})
+});
 export const startPasswordPrompt = () => ({
 	type: constants.START_PASSWORD_PROMPT,
 });
 export const unlockWallet = (password) => ({
 	type: constants.UNLOCK_WALLET,
 	password,
+});
+export const createNewWallet = () => ({
+	type: constants.CREATE_NEW_WALLET,
 });

@@ -18,6 +18,11 @@ function *getLockStatus(action) {
 		} else {
 			yield put(actions.setUnlocked());
 		}
+		if (response.encrypted) {
+			yield put(actions.setEncrypted());
+		} else {
+			yield put(actions.setUnencrypted());
+		}
 	} catch (e) {
 		yield put(siadError(e));
 	}
