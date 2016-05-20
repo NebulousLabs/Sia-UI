@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { SET_LOCKED, SET_UNLOCKED, SET_ENCRYPTED, SET_UNENCRYPTED } from '../constants/wallet.js';
+import { SET_LOCKED, SET_BALANCE, SET_UNLOCKED, SET_ENCRYPTED, SET_UNENCRYPTED } from '../constants/wallet.js';
 import { SIAD_ERROR } from '../constants/error.js';
 
 const initialState = Map({
