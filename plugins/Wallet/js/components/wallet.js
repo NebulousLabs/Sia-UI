@@ -4,10 +4,10 @@ const Wallet = ({confirmedbalance, unconfirmedbalance, }) => (
 	<div className="wallet">
 		<div className="balance-info">
 			<div className="confirmed-balance">
-				{confirmedbalance}
+				Confirmed Balance: {confirmedbalance} SC
 			</div>
 			<div className="unconfirmed-balance">
-				{unconfirmedbalance}
+				Unconfirmed Balance: {unconfirmedbalance} SC
 			</div>
 		</div>
 		<div className="address-list">
@@ -18,8 +18,8 @@ const Wallet = ({confirmedbalance, unconfirmedbalance, }) => (
 );
 
 Wallet.propTypes = {
-	confirmedbalance: PropTypes.string.isRequired,
-	unconfirmedbalance: PropTypes.string.isRequired
+	confirmedbalance: PropTypes.number.isRequired,
+	unconfirmedbalance: PropTypes.number.isRequired
 };
 
 export default Wallet;

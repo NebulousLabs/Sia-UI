@@ -1,6 +1,6 @@
 import { takeLatest, takeEvery } from 'redux-saga';
 import { call, put, take } from 'redux-saga/effects';
-import { siadCall } from './helpers.js';
+import { siadCall, hastingsToSiacoin } from './helpers.js';
 import * as actions from '../actions/wallet.js';
 import * as constants from '../constants/wallet.js';
 import { siadError, walletUnlockError } from '../actions/error.js';
@@ -65,8 +65,9 @@ function *createWallet(action) {
 function *getBalance(action) {
 	try {
 		const response = yield siadCall(Siad, '/wallet');
-		yield put(actions.setBalance(response.confirmedsiacoinbalance, response.unconfirmedincomingsiacoins));
+		yield put(actions.setBalance(hastingsToSiacoin(response.confirmedsiacoinbalance), hastingsToSiacoin(response.unconfirmedincomingsiacoins)));
 	} catch (e) {
+		console.error(e);
 		yield put(siadError(e));
 	}
 }
