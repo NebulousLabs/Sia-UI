@@ -34,3 +34,6 @@ export const unlockWallet = (password) => ({
 export const createNewWallet = () => ({
 	type: constants.CREATE_NEW_WALLET,
 });
+export const getBalance = () => ({
+	type: constants.GET_BALANCE,
+});

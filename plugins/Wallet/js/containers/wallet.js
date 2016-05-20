@@ -1,7 +1,7 @@
 import WalletView from '../components/wallet.js'l;
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state) =< ({
+const mapStateToProps = (state) => ({
 
 });
 

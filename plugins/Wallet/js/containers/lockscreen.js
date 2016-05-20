@@ -8,4 +8,4 @@ const mapStateToProps = (state) => ({
 });
 
 const LockScreen = connect(mapStateToProps)(LockScreenView);
-export default LockScreen
+export default LockScreen;
