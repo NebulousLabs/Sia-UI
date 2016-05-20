@@ -8,7 +8,7 @@ import createSagaMiddleware from 'redux-saga';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import rootReducer from './js/reducers/index.js';
-import { watchGetLockStatus, watchUnlockWallet, watchCreateNewWallet } from './js/sagas/wallet.js'
+import { watchGetLockStatus, watchUnlockWallet, watchCreateNewWallet, watchGetBalance } from './js/sagas/wallet.js'
 import { getLockStatus, getBalance } from './js/actions/wallet.js';
 import WalletApp from './js/components/app.js';
 
@@ -21,6 +21,7 @@ const store = createStore(
 sagaMiddleware.run(watchGetLockStatus);
 sagaMiddleware.run(watchUnlockWallet);
 sagaMiddleware.run(watchCreateNewWallet);
+sagaMiddleware.run(watchGetBalance);
 
 // Render the wallet plugin
 const rootElement = (

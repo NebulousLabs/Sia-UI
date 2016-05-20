@@ -61,6 +61,15 @@ function *createWallet(action) {
 		yield put(siadError(e));
 	}
 }
+
+function *getBalance(action) {
+	try {
+		const response = yield siadCall(Siad, '/wallet');
+		yield put(actions.setBalance(response.confirmedsiacoinbalance, response.unconfirmedincomingsiacoins));
+	} catch (e) {
+		yield put(siadError(e));
+	}
+}
 // Consume any CREATE_NEW_WALLET actions
 export function* watchCreateNewWallet() {
 	yield *takeEvery(constants.CREATE_NEW_WALLET, createWallet);
@@ -72,4 +81,8 @@ export function* watchGetLockStatus() {
 // Consume any UNLOCK_WALLET actions
 export function* watchUnlockWallet() {
 	yield *takeEvery(constants.UNLOCK_WALLET, walletUnlock);
+}
+// Consume any GET_BALANCE actions
+export function* watchGetBalance() {
+	yield *takeEvery(constants.GET_BALANCE, getBalance);
 }
