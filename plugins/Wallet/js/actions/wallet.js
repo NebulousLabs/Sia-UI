@@ -42,3 +42,10 @@ export const setBalance = (confirmed, unconfirmed) => ({
 	confirmed,
 	unconfirmed,
 });
+export const getAddresses = () => ({
+	type: constants.GET_ADDRESSES,
+});
+export const setAddresses = (addresses) => ({
+	type: constants.SET_ADDRESSES,
+	addresses,
+});
