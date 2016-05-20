@@ -7,5 +7,5 @@ const mapStateToProps = (state) => ({
 	encrypted: state.wallet.get('encrypted'),
 });
 
-const LockScreen = connect(mapStateToProps)(LockScreenView)
+const LockScreen = connect(mapStateToProps)(LockScreenView);
 export default LockScreen
