@@ -1,5 +1,5 @@
-import { Map } from 'immutable';
-import { SET_LOCKED, SET_BALANCE, SET_UNLOCKED, SET_ENCRYPTED, SET_UNENCRYPTED } from '../constants/wallet.js';
+import { Map, List} from 'immutable';
+import * as constants from '../constants/wallet.js';
 import { SIAD_ERROR } from '../constants/error.js';
 
 const initialState = Map({
@@ -7,21 +7,24 @@ const initialState = Map({
 	encrypted: false,
 	confirmedbalance: 0.0,
 	unconfirmedbalance: 0.0,
+	addresses: List(),
 });
 
 export default function walletReducer(state = initialState, action) {
 	switch (action.type) {
-	case SET_LOCKED:
+	case constants.SET_LOCKED:
 		return state.set('unlocked', false);
-	case SET_UNLOCKED:
+	case constants.SET_UNLOCKED:
 		return state.set('unlocked', true);
-	case SET_ENCRYPTED:
+	case constants.SET_ENCRYPTED:
 		return state.set('encrypted', true);
-	case SET_UNENCRYPTED:
+	case constants.SET_UNENCRYPTED:
 		return state.set('encrypted', false);
-	case SET_BALANCE:
+	case constants.SET_BALANCE:
 		return state.set('confirmedbalance', action.confirmed)
 								.set('unconfirmedbalance', action.unconfirmed);
+	case constants.SET_ADDRESSES:
+		return state.set('addresses', List(action.addresses));
 	default:
 		return state;
 	}

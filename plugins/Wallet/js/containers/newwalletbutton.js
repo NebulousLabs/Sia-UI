@@ -10,4 +10,4 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const NewWalletButton = connect(mapStateToProps, mapDispatchToProps)(NewWalletButtonView)
-export default NewWalletButton
+export default NewWalletButton;

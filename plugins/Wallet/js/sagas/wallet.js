@@ -71,6 +71,16 @@ function *getBalance(action) {
 		yield put(siadError(e));
 	}
 }
+
+function *getAddresses(action) {
+	try {
+		const response = yield siadCall(Siad, '/wallet/addresses');
+		yield put(actions.setAddresses(response.addresses));
+	} catch (e) {
+		yield put(siadError(e));
+	}
+}
+
 // Consume any CREATE_NEW_WALLET actions
 export function* watchCreateNewWallet() {
 	yield *takeEvery(constants.CREATE_NEW_WALLET, createWallet);
@@ -86,4 +96,8 @@ export function* watchUnlockWallet() {
 // Consume any GET_BALANCE actions
 export function* watchGetBalance() {
 	yield *takeEvery(constants.GET_BALANCE, getBalance);
+}
+// Consume any GET_ADDRESSES actions
+export function* watchGetAddresses() {
+	yield *takeEvery(constants.GET_ADDRESSES, getAddresses);
 }
