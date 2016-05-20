@@ -5,6 +5,8 @@ import { SIAD_ERROR } from '../constants/error.js';
 const initialState = Map({
 	unlocked: false,
 	encrypted: false,
+	confirmedbalance: '0 SC',
+	unconfirmedbalance: '0 SC',
 });
 
 export default function walletReducer(state = initialState, action) {
@@ -17,6 +19,9 @@ export default function walletReducer(state = initialState, action) {
 		return state.set('encrypted', true);
 	case SET_UNENCRYPTED:
 		return state.set('encrypted', false);
+	case SET_BALANCE:
+		return state.set('confirmedbalance', action.confirmed)
+								.set('unconfirmedbalance', action.unconfirmed);
 	default:
 		return state;
 	}

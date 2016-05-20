@@ -41,4 +41,4 @@ export const setBalance = (confirmed, unconfirmed) => ({
 	type: constants.SET_BALANCE,
 	confirmed,
 	unconfirmed,
-})
+});
