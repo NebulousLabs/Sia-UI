@@ -9,7 +9,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import rootReducer from './js/reducers/index.js';
 import { watchGetLockStatus, watchUnlockWallet, watchCreateNewWallet } from './js/sagas/wallet.js'
-import { getLockStatus } from './js/actions/wallet.js';
+import { getLockStatus, getBalance } from './js/actions/wallet.js';
 import WalletApp from './js/components/app.js';
 
 // Set up saga middleware system
@@ -30,4 +30,12 @@ const rootElement = (
 );
 
 ReactDOM.render(rootElement, document.getElementById('react-root'));
+
+// Dispatch getLockStatus and getBalance to set the initial state of the wallet plugin
 store.dispatch(getLockStatus());
+store.dispatch(getBalance());
+
+// Update balance every second.
+setInterval(() => {
+	store.dispatch(getBalance())
+}, 1000);
