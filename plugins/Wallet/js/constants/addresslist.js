@@ -1,0 +1,2 @@
+export const GET_ADDRESSES = 'GET_ADDRESSES';
+export const SET_ADDRESSES = 'SET_ADDRESSES';
