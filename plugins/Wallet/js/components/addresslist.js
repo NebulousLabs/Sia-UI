@@ -3,14 +3,14 @@ import { List } from 'immutable';
 
 const AddressList = ({addresses}) => {
 	const addressComponents = addresses.map((address) => (
-		<div className="wallet-address">
+		<li className="wallet-address">
 			{address}
-		</div>
+		</li>
 	));
 	return (
-		<div className="address-list">
+		<ul className="address-list">
 			{addresses}
-		</div>
+		</ul>
 	);
 }
 
