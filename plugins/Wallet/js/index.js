@@ -33,12 +33,9 @@ const rootElement = (
 
 ReactDOM.render(rootElement, document.getElementById('react-root'));
 
-// Dispatch getLockStatus and getBalance to set the initial state of the wallet plugin
-store.dispatch(getLockStatus());
-store.dispatch(getBalance());
-store.dispatch(getAddresses());
-
-// Update balance every second.
+// Poll Siad for state changes.
 setInterval(() => {
-	store.dispatch(getBalance())
+	store.dispatch(getLockStatus());
+	store.dispatch(getBalance());
+	store.dispatch(getAddresses());
 }, 1000);
