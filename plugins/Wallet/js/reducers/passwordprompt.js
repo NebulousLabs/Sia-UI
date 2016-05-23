@@ -9,7 +9,6 @@ const initialState = Map({
 });
 
 export default function passwordpromptReducer(state = initialState, action) {
-	console.log(action.type);
 	switch (action.type) {
 	case PASSWORD_PROMPT_SUCCESS:
 		return state.set('visible', false);

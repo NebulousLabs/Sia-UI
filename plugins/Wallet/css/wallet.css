@@ -26,3 +26,11 @@
 .unlocked {
 	visibility: hidden;
 }
+.wallet-address {
+	display: inline-block;
+	height: 20px;
+	margin-bottom: 6px;
+}
+.address-list {
+	height: 200px;
+}

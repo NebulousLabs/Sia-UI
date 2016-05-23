@@ -75,8 +75,9 @@ function *getBalance(action) {
 function *getAddresses(action) {
 	try {
 		const response = yield siadCall(Siad, '/wallet/addresses');
-		yield put(actions.setAddresses(response.addresses));
+		yield put(actions.setAddresses(response.addresses.slice(1,30)));
 	} catch (e) {
+		console.error(e);
 		yield put(siadError(e));
 	}
 }
