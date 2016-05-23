@@ -75,9 +75,20 @@ function *getBalance(action) {
 function *getAddresses(action) {
 	try {
 		const response = yield siadCall(Siad, '/wallet/addresses');
+		// TODO: pagination
 		yield put(actions.setAddresses(response.addresses.slice(1,30)));
 	} catch (e) {
 		console.error(e);
+		yield put(siadError(e));
+	}
+}
+
+function *getTransactions(action) {
+	try {
+		const response = yield siadCall(Siad, '/wallet/transactions?startheight=0&endheight=10000000');
+		// TODO: pagination
+		yield put(actions.setTransactions(response.transactions.slice(1,30)));
+	} catch (e) {
 		yield put(siadError(e));
 	}
 }
@@ -101,4 +112,7 @@ export function* watchGetBalance() {
 // Consume any GET_ADDRESSES actions
 export function* watchGetAddresses() {
 	yield *takeEvery(constants.GET_ADDRESSES, getAddresses);
+}
+export function* watchGetTransactions() {
+	yield *takeEvery(constants.GET_TRANSACTIONS, getTransactions);
 }

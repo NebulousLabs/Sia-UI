@@ -50,3 +50,10 @@ export const setAddresses = (addresses) => ({
 	type: constants.SET_ADDRESSES,
 	addresses,
 });
+export const getTransactions = () => ({
+	type: constants.GET_TRANSACTIONS,
+});
+export const setTransactions = (transactions) => ({
+	type: constants.SET_TRANSACTIONS,
+	transactions,
+});
