@@ -129,13 +129,20 @@ function checkUpdate() {
 }
 
 /**
-* Called at window.onload, waits for siad to finish loading to show the UI
+* Called at window.onload, waits for siad and the plugin system to finish loading to show the UI
 * @function UIManager#init
 */
-function init() {
+function init(callback) {
 	// Initialize plugins
 	ui.plugins = require('./pluginManager.js');
-	checkUpdate();
+	// Wait for the plugin system to load, then call callback
+	const loadInterval = setInterval(() => {
+		if (ui.plugins.home.isLoading() === false) {
+			clearInterval(loadInterval);
+			checkUpdate();
+			callback();
+		}
+	}, 500);
 }
 
 /**
