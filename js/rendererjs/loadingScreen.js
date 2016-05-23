@@ -37,8 +37,9 @@ const checkSiaPath = () => new Promise((resolve, reject) => {
 const startUI = (welcomeMsg, initUI) => {
 	// Display a welcome message, then initialize the ui
 	overlayText.innerHTML = welcomeMsg;
-	initUI();
-	overlay.style.display = 'none';
+	initUI(() => {
+		overlay.style.display = 'none';
+	});
 };
 
 // startSiad configures and starts a Siad instance.
