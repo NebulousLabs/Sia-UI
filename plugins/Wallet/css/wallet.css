@@ -33,4 +33,9 @@
 }
 .address-list {
 	height: 200px;
+	overflow: scroll;
+}
+.transaction-list {
+	height: 200px;
+	overflow: scroll;
 }
