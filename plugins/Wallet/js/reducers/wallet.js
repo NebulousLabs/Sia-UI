@@ -4,7 +4,7 @@ import { SIAD_ERROR } from '../constants/error.js';
 
 const initialState = Map({
 	unlocked: false,
-	encrypted: false,
+	encrypted: true,
 	confirmedbalance: 0.0,
 	unconfirmedbalance: 0.0,
 	addresses: List(),
