@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react';
 import { List } from 'immutable';
 
-const TransactionHistory = ({transactions}) => {
+const TransactionList = ({transactions}) => {
 	const transactionComponents = transactions.map((transaction, key) => (
 		<div key={key} className="transaction">
-			<div className="currency"{transaction.currency}></div>
+			<div className="currency">{transaction.currency}</div>
 			<div className="value">{transaction.value}</div>
-			<div className="txnid">{transaction.id}</div>
-			<div className="time">{transaction.time}</div>
+			<div className="txnid">{transaction.transactionid}</div>
+			<div className="time">{transaction.confirmationtimestamp}</div>
 		</div>
 	));
 	return (
@@ -17,8 +17,8 @@ const TransactionHistory = ({transactions}) => {
 	);
 }
 
-TransactionHistory.propTypes = {
+TransactionList.propTypes = {
 	transactions: PropTypes.instanceOf(List),
 };
 
-export default TransactionHistory;
+export default TransactionList;

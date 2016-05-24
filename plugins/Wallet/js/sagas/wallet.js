@@ -1,6 +1,6 @@
 import { takeLatest, takeEvery } from 'redux-saga';
 import { call, put, take } from 'redux-saga/effects';
-import { siadCall, hastingsToSiacoin } from './helpers.js';
+import { siadCall, hastingsToSiacoin, parseRawTransactions } from './helpers.js';
 import * as actions from '../actions/wallet.js';
 import * as constants from '../constants/wallet.js';
 import { siadError, walletUnlockError } from '../actions/error.js';
@@ -87,8 +87,10 @@ function *getTransactions(action) {
 	try {
 		const response = yield siadCall(Siad, '/wallet/transactions?startheight=0&endheight=10000000');
 		// TODO: pagination
-		yield put(actions.setTransactions(response.transactions.slice(1,30)));
+		const transactions = parseRawTransactions(response);
+		yield put(actions.setTransactions(transactions));
 	} catch (e) {
+		console.error(e);
 		yield put(siadError(e));
 	}
 }

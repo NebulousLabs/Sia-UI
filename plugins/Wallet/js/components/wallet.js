@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import TransactionHistory from '../containers/transactionhistory.js';
+import TransactionList from '../containers/transactionlist.js';
 import AddressList from '../containers/addresslist.js';
 
 const Wallet = ({confirmedbalance, unconfirmedbalance, }) => (
@@ -13,7 +13,7 @@ const Wallet = ({confirmedbalance, unconfirmedbalance, }) => (
 			</div>
 		</div>
 		<AddressList />
-		<TransactionHistory />
+		<TransactionList />
 	</div>
 );
 
