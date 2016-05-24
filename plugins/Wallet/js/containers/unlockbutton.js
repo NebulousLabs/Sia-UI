@@ -11,4 +11,4 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const UnlockButton = connect(mapStateToProps, mapDispatchToProps)(UnlockButtonView)
-export default UnlockButton
+export default UnlockButton;

@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import TransactionList from '../containers/transactionlist.js';
 import AddressList from '../containers/addresslist.js';
+import SendButton from '../containers/sendbutton.js';
+import SendPrompt from '../containers/sendprompt.js';
 
 const Wallet = ({confirmedbalance, unconfirmedbalance, }) => (
 	<div className="wallet">
@@ -12,6 +14,8 @@ const Wallet = ({confirmedbalance, unconfirmedbalance, }) => (
 				Unconfirmed Balance: {unconfirmedbalance} SC
 			</div>
 		</div>
+		<SendButton />
+		<SendPrompt />
 		<div className="transactionlist-title">Transactions</div>
 		<TransactionList />
 		<div className="addresslist-title">Addresses</div>

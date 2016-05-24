@@ -14,4 +14,4 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const PasswordPrompt = connect(mapStateToProps, mapDispatchToProps)(PasswordPromptView)
-export default PasswordPrompt
+export default PasswordPrompt;
