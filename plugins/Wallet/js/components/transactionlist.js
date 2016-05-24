@@ -4,10 +4,10 @@ import { List } from 'immutable';
 const TransactionList = ({transactions}) => {
 	const transactionComponents = transactions.map((transaction, key) => (
 		<div key={key} className="transaction">
-			<div className="currency">{transaction.currency}</div>
-			<div className="value">{transaction.value}</div>
-			<div className="txnid">{transaction.transactionid}</div>
-			<div className="time">{transaction.confirmationtimestamp}</div>
+			<div className="currency">Currency Type: {transaction.currency}</div>
+			<div className="value">Net Value: {transaction.value}</div>
+			<div className="txnid">Transaction ID: {transaction.transactionid}</div>
+			<div className="time">Timestamp: {transaction.confirmationtimestamp}</div>
 		</div>
 	));
 	return (

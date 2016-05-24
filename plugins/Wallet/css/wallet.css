@@ -10,8 +10,25 @@
  *    Black:      #000000
  *    Neon-Green: #00CBA0
  */
+ .app {
+ 	position: absolute;
+ 	top: 0;
+ 	bottom: 0;
+ 	left: 0;
+ 	right: 0;
+ }
+.wallet {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+.balance-info {
+	flex: 1;
+}
 .lockscreen {
-	display: inline-flex;
+	display: flex;
 	align-items: center;
 	justify-content: center;
 	position: absolute;
@@ -23,6 +40,16 @@
 .lockscreen i:hover {
 	background-color: rgba(102, 102, 102, 1.0);
 }
+.address-list {
+	flex: 5;
+	overflow: scroll;
+	overflow-y: auto;
+}
+.transaction-list {
+	flex: 5;
+	overflow: scroll;
+	overflow-y: auto;
+}
 .unlocked {
 	visibility: hidden;
 }
@@ -30,12 +57,4 @@
 	display: inline-block;
 	height: 20px;
 	margin-bottom: 6px;
-}
-.address-list {
-	height: 200px;
-	overflow: scroll;
-}
-.transaction-list {
-	height: 200px;
-	overflow: scroll;
 }

@@ -3,7 +3,7 @@ import LockScreen from'../containers/lockscreen.js';
 import Wallet from '../containers/wallet.js';
 
 const WalletApp = () => (
-	<div>
+	<div className="app">
 		<LockScreen />
 		<Wallet />
 	</div>

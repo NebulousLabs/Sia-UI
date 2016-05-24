@@ -12,8 +12,10 @@ const Wallet = ({confirmedbalance, unconfirmedbalance, }) => (
 				Unconfirmed Balance: {unconfirmedbalance} SC
 			</div>
 		</div>
-		<AddressList />
+		<div className="transactionlist-title">Transactions</div>
 		<TransactionList />
+		<div className="addresslist-title">Addresses</div>
+		<AddressList />
 	</div>
 );
 
