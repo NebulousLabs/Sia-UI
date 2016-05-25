@@ -41,12 +41,10 @@
 	background-color: rgba(102, 102, 102, 1.0);
 }
 .address-list {
-	flex: 5;
 	overflow: scroll;
 	overflow-y: auto;
 }
 .transaction-list {
-	flex: 5;
 	overflow: scroll;
 	overflow-y: auto;
 }
@@ -57,4 +55,33 @@
 	display: inline-block;
 	height: 20px;
 	margin-bottom: 6px;
+}
+.receive-prompt {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgb(200, 200, 200);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+.wallet-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.send-button, .receive-button {
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	width: 100px;
+}
+.send-button span, .receive-button span {
+	display: block;
+	padding: 0;
+	margin-top: 2px;
+	font-size: 12px;
 }

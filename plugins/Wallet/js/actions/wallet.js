@@ -68,3 +68,9 @@ export const setSendAmount = (amount) => ({
 	type: constants.SET_SEND_AMOUNT,
 	amount,
 });
+export const showReceivePrompt = () => ({
+	type: constants.SHOW_RECEIVE_PROMPT,
+});
+export const hideReceivePrompt = () => ({
+	type: constants.HIDE_RECEIVE_PROMPT,
+});

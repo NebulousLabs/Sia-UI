@@ -2,7 +2,8 @@ import React from 'react';
 
 const SendButton = ({actions}) => (
 	<div onClick={actions.startSendPrompt} className="send-button">
-		Send Siacoin
+		<i className="fa fa-paper-plane fa-4x"></i>
+		<span>Send Siacoin</span>
 	</div>
 );
 export default SendButton

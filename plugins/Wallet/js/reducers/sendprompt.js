@@ -6,7 +6,7 @@ const initialState = Map({
 	sendaddress: '',
 	sendamount: '',
 });
-export default function sendpromptReducer(state = initialState, action) {
+export default function sendPromptReducer(state = initialState, action) {
 	switch (action.type) {
 	case START_SEND_PROMPT:
 		return state.set('visible', true);
