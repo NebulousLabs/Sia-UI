@@ -12,13 +12,14 @@ const SendPrompt = ({visible, sendAddress, sendAmount, actions}) => {
 	return (
 		<div className="sendprompt">
 			<div className="sendamount">
-				Send
+				<span>Send Amount (SC): </span>
 				<input onChange={onSendAmountChange}></input>
-				SC
 			</div>
 			<div className="sendaddress">
-				To <input onChange={onSendAddressChange}></input>
+				<span>To Address:</span>
+				<input onChange={onSendAddressChange}></input>
 			</div>
+			<button className="send-button" onClick={actions.sendSiacoins}>Send</button>
 		</div>
 	);
 }
