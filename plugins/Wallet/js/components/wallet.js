@@ -12,7 +12,7 @@ const Wallet = ({confirmedbalance, unconfirmedbalance }) => (
 		<div className="wallet-toolbar">
 			<div className="balance-info">
 				<span>Confirmed Balance: {confirmedbalance} SC </span>
-				<span>Unconfirmed Balance: {unconfirmedbalance} SC </span>
+				<span>Unconfirmed Delta: {unconfirmedbalance} SC </span>
 			</div>
 			<SendButton />
 			<ReceiveButton />

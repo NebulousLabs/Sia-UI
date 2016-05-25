@@ -65,7 +65,11 @@ function *createWalletSaga(action) {
 function *getBalanceSaga(action) {
 	try {
 		const response = yield siadCall(Siad, '/wallet');
-		yield put(actions.setBalance(Siad.hastingsToSiacoins(response.confirmedsiacoinbalance).round(2).toString(), Siad.hastingsToSiacoins(response.unconfirmedincomingsiacoins).round(2).toString()));
+		const confirmed = Siad.hastingsToSiacoins(response.confirmedsiacoinbalance);
+		const unconfirmedIncoming = Siad.hastingsToSiacoins(response.unconfirmedincomingsiacoins);
+		const unconfirmedOutgoing = Siad.hastingsToSiacoins(response.unconfirmedoutgoingsiacoins);
+		const unconfirmed = unconfirmedIncoming.minus(unconfirmedOutgoing);
+		yield put(actions.setBalance(confirmed.round(2).toString(), unconfirmed.round(2).toString()));
 	} catch (e) {
 		console.error(e);
 		yield put(siadError(e));
@@ -106,6 +110,7 @@ function *sendSiacoinSaga(action) {
 			}
 		});
 		yield put(actions.closeSendPrompt());
+		yield put(actions.getBalance());
 	} catch(e) {
 		console.error(e);
 		yield put(siadError(e));
