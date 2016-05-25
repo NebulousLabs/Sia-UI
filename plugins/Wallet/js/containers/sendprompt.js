@@ -1,5 +1,5 @@
 import SendPromptView from '../components/sendprompt.js';
-import { setSendAddress, setSendAmount } from '../actions/wallet.js';
+import { setSendAddress, setSendAmount, sendSiacoin } from '../actions/wallet.js';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -9,7 +9,7 @@ const mapStateToProps = (state) => ({
 	sendAmount: state.sendprompt.get('sendamount'),
 });
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ setSendAddress, setSendAmount }, dispatch),
+	actions: bindActionCreators({ setSendAddress, setSendAmount, sendSiacoin }, dispatch),
 });
 
 const SendPrompt = connect(mapStateToProps, mapDispatchToProps)(SendPromptView);

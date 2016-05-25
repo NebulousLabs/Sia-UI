@@ -1,6 +1,7 @@
 // Helper functions for the wallet plugin.  Mostly used in sagas.
 import BigNumber from 'bignumber.js';
 import { List } from 'immutable';
+import Siad from 'sia.js';
 const uint64max = Math.pow(2, 64);
 
 // siadCall: promisify Siad API calls.  Resolve the promise with `response` if the call was successful,
@@ -14,22 +15,6 @@ export const siadCall = (Siad, uri) => new Promise((resolve, reject) => {
 		}
 	})
 })
-
-// Ensure precision for hastings -> siacoin conversion
-BigNumber.config({ DECIMAL_PLACES: 30 });
-BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
-
-// Convert from hastings to siacoin
-// TODO: Enable commas for large numbers
-export const hastingsToSiacoin = (hastings) => {
-	// TODO: JS automatically loses precision when taking numbers from the API.
-	// This deals with that imperfectly
-	var number = new BigNumber(hastings);
-	var ConversionFactor = new BigNumber(10).pow(24);
-
-	return number.gt(1) ? number.dividedBy(ConversionFactor).round(2).toNumber()
-						: number.dividedBy(ConversionFactor).toPrecision(1);
-}
 
 // Compute the net value and currency type of a transaction.
 const computeSum = (txn) => {
@@ -58,7 +43,7 @@ const computeSum = (txn) => {
 		}
 	}
 	return {
-		value: hastingsToSiacoin(value),
+		value: Siad.hastingsToSiacoins(value).toString(),
 		currency,
 	};
 }
@@ -95,5 +80,12 @@ export const parseRawTransactions = (response) => {
 			confirmationtimestamp: rawTransactions[i].confirmationtimestamp,
 		})
 	}
-	return parsedTransactions;
+	// Return the transactions, sorted by timestamp.
+	// See https://facebook.github.io/immutable-js/docs/#/Iterable/sort for more on how this works.
+	return parsedTransactions.sort((t1, t2) => {
+		if (t1.confirmationtimestamp > t2.confirmationtimestamp) {
+			return -1;
+		}
+		return 1;
+	});
 }

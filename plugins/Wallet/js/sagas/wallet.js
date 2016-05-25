@@ -1,6 +1,6 @@
 import { takeLatest, takeEvery } from 'redux-saga';
 import { call, put, take } from 'redux-saga/effects';
-import { siadCall, hastingsToSiacoin, parseRawTransactions } from './helpers.js';
+import { siadCall, parseRawTransactions } from './helpers.js';
 import * as actions from '../actions/wallet.js';
 import * as constants from '../constants/wallet.js';
 import { siadError, walletUnlockError } from '../actions/error.js';
@@ -65,7 +65,7 @@ function *createWallet(action) {
 function *getBalance(action) {
 	try {
 		const response = yield siadCall(Siad, '/wallet');
-		yield put(actions.setBalance(hastingsToSiacoin(response.confirmedsiacoinbalance), hastingsToSiacoin(response.unconfirmedincomingsiacoins)));
+		yield put(actions.setBalance(Siad.hastingsToSiacoins(response.confirmedsiacoinbalance).round(2).toString(), Siad.hastingsToSiacoins(response.unconfirmedincomingsiacoins).round(2).toString()));
 	} catch (e) {
 		console.error(e);
 		yield put(siadError(e));
@@ -94,6 +94,23 @@ function *getNewReceiveAddress(action) {
 		yield put(siadError(e));
 	}
 }
+
+function *sendSiacoin(action) {
+	try {
+		const response = yield siadCall(Siad, {
+			url: '/wallet/siacoins',
+			method: 'POST',
+			qs: {
+				destination: action.destination,
+				amount: Siad.siacoinsToHastings(action.amount).toString(),
+			}
+		});
+		yield put(actions.closeSendPrompt());
+	} catch(e) {
+		console.error(e);
+		yield put(siadError(e));
+	}
+}
 // Consume any CREATE_NEW_WALLET actions
 export function* watchCreateNewWallet() {
 	yield *takeEvery(constants.CREATE_NEW_WALLET, createWallet);
@@ -115,4 +132,7 @@ export function* watchGetTransactions() {
 }
 export function* watchGetNewReceiveAddress() {
 	yield *takeEvery(constants.GET_NEW_RECEIVE_ADDRESS, getNewReceiveAddress);
+}
+export function* watchSendSiacoin() {
+	yield *takeEvery(constants.SEND_SIACOIN, sendSiacoin);
 }

@@ -53,6 +53,9 @@ export const setTransactions = (transactions) => ({
 export const startSendPrompt = () => ({
 	type: constants.START_SEND_PROMPT,
 });
+export const closeSendPrompt = () => ({
+	type: constants.CLOSE_SEND_PROMPT,
+});
 export const setSendAddress = (address) => ({
 	type: constants.SET_SEND_ADDRESS,
 	address,
@@ -73,4 +76,9 @@ export const getNewReceiveAddress = () => ({
 export const setReceiveAddress = (address) => ({
 	type: constants.SET_RECEIVE_ADDRESS,
 	address,
+});
+export const sendSiacoin = (destination, amount) => ({
+	type: constants.SEND_SIACOIN,
+	destination,
+	amount,
 });

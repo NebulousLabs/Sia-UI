@@ -25,8 +25,8 @@ const Wallet = ({confirmedbalance, unconfirmedbalance, }) => (
 );
 
 Wallet.propTypes = {
-	confirmedbalance: PropTypes.number.isRequired,
-	unconfirmedbalance: PropTypes.number.isRequired
+	confirmedbalance: PropTypes.string.isRequired,
+	unconfirmedbalance: PropTypes.string.isRequired
 };
 
 export default Wallet;

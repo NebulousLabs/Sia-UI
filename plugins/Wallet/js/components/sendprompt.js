@@ -1,8 +1,10 @@
 import React, { PropTypes } from 'react';
 
+// SendPrompt defines the component for sending siacoins to an address.
 const SendPrompt = ({visible, sendAddress, sendAmount, actions}) => {
 	const onSendAddressChange = (e) => actions.setSendAddress(e.target.value);
 	const onSendAmountChange = (e) => actions.setSendAmount(e.target.value);
+	const onSendClick = () => actions.sendSiacoin(sendAddress, sendAmount);
 
 	if (!visible) {
 		return (
@@ -19,7 +21,7 @@ const SendPrompt = ({visible, sendAddress, sendAmount, actions}) => {
 				<span>To Address:</span>
 				<input onChange={onSendAddressChange}></input>
 			</div>
-			<button className="send-button" onClick={actions.sendSiacoins}>Send</button>
+			<button className="send-siacoin-button" onClick={onSendClick}>Send</button>
 		</div>
 	);
 }
