@@ -21,7 +21,10 @@ const SendPrompt = ({visible, sendAddress, sendAmount, actions}) => {
 				<span>To Address:</span>
 				<input onChange={onSendAddressChange}></input>
 			</div>
-			<button className="send-siacoin-button" onClick={onSendClick}>Send</button>
+			<div className="send-prompt-buttons">
+				<button className="cancel-send-button" onClick={actions.closeSendPrompt}>Cancel</button>
+				<button className="send-siacoin-button" onClick={onSendClick}>Send</button>
+			</div>
 		</div>
 	);
 }
