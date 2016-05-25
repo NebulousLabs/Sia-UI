@@ -52,9 +52,11 @@
 	visibility: hidden;
 }
 .wallet-address {
-	display: inline-block;
+	display: block;
 	height: 20px;
 	margin-bottom: 6px;
+	user-select: text;
+	font-size: 11px;
 }
 .receive-prompt {
 	position: absolute;

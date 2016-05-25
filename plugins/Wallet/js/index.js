@@ -24,6 +24,7 @@ sagaMiddleware.run(sagas.watchCreateNewWallet);
 sagaMiddleware.run(sagas.watchGetBalance);
 sagaMiddleware.run(sagas.watchGetAddresses);
 sagaMiddleware.run(sagas.watchGetTransactions);
+sagaMiddleware.run(sagas.watchGetNewReceiveAddress);
 
 // Render the wallet plugin
 const rootElement = (

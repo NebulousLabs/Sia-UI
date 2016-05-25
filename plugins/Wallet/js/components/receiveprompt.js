@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react'
-import AddressList from '../containers/addresslist.js';
 
-const ReceivePrompt = ({visible, actions}) => {
+const ReceivePrompt = ({address, visible, actions}) => {
 	if (!visible) {
 		return (
 			<div></div>
@@ -9,8 +8,8 @@ const ReceivePrompt = ({visible, actions}) => {
 	}
 	return (
 		<div className="receive-prompt">
-			You can receive Siacoins using any of the following addresses:
-			<AddressList />
+			You can receive Siacoins using the following address:
+			<div className="wallet-address">{ address }</div>
 			<button className="receiveprompt-dismissbtn" onClick={actions.hideReceivePrompt}>OK</button>
 		</div>
 	)

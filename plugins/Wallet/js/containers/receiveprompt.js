@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 
 const mapStateToProps = (state) => ({
 	visible: state.receiveprompt.get('visible'),
+	address: state.receiveprompt.get('address'),
 });
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ hideReceivePrompt }, dispatch),

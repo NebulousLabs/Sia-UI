@@ -95,6 +95,16 @@ function *getTransactions(action) {
 	}
 }
 
+function *getNewReceiveAddress(action) {
+	try {
+		const response = yield siadCall(Siad, '/wallet/address');
+		yield put(actions.setReceiveAddress(response.address));
+		yield put(actions.showReceivePrompt());
+	} catch(e) {
+		console.error(e);
+		yield put(siadError(e));
+	}
+}
 // Consume any CREATE_NEW_WALLET actions
 export function* watchCreateNewWallet() {
 	yield *takeEvery(constants.CREATE_NEW_WALLET, createWallet);
@@ -117,4 +127,7 @@ export function* watchGetAddresses() {
 }
 export function* watchGetTransactions() {
 	yield *takeEvery(constants.GET_TRANSACTIONS, getTransactions);
+}
+export function* watchGetNewReceiveAddress() {
+	yield *takeEvery(constants.GET_NEW_RECEIVE_ADDRESS, getNewReceiveAddress);
 }

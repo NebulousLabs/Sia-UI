@@ -74,3 +74,10 @@ export const showReceivePrompt = () => ({
 export const hideReceivePrompt = () => ({
 	type: constants.HIDE_RECEIVE_PROMPT,
 });
+export const getNewReceiveAddress = () => ({
+	type: constants.GET_NEW_RECEIVE_ADDRESS,
+});
+export const setReceiveAddress = (address) => ({
+	type: constants.SET_RECEIVE_ADDRESS,
+	address,
+});
