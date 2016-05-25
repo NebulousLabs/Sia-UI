@@ -111,6 +111,7 @@ function *sendSiacoinSaga(action) {
 		});
 		yield put(actions.closeSendPrompt());
 		yield put(actions.getBalance());
+		yield put(actions.getTransactions());
 	} catch(e) {
 		console.error(e);
 		yield put(siadError(e));
