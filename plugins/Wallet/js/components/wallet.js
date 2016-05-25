@@ -8,18 +8,15 @@ import ReceivePrompt from '../containers/receiveprompt.js';
 const Wallet = ({confirmedbalance, unconfirmedbalance, }) => (
 	<div className="wallet">
 		<div className="wallet-toolbar">
-			<div className="confirmed-balance">
-				Confirmed Balance: {confirmedbalance} SC
-			</div>
-			<div className="unconfirmed-balance">
-				Unconfirmed Balance: {unconfirmedbalance} SC
+			<div className="balance-info">
+				<span>Confirmed Balance: {confirmedbalance} SC </span>
+				<span>Unconfirmed Balance: {unconfirmedbalance} SC </span>
 			</div>
 			<SendButton />
 			<ReceiveButton />
 		</div>
 		<SendPrompt />
 		<ReceivePrompt />
-		<span>Transactions</span>
 		<TransactionList />
 	</div>
 );

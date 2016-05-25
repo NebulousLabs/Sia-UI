@@ -12,6 +12,7 @@ const TransactionList = ({transactions}) => {
 	));
 	return (
 		<div className="transaction-list">
+			<span>Transactions</span>
 			{transactionComponents}
 		</div>
 	);
