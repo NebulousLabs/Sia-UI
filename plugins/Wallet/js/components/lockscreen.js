@@ -9,6 +9,7 @@ const LockScreen = ({unlocked, encrypted}) => {
 	if (!unlocked && encrypted) {
 		return (
 			<div className="lockscreen">
+				<span> Enter your wallet unlock password to continue. </span>
 				<UnlockButton />
 				<PasswordPrompt />
 			</div>
@@ -17,7 +18,7 @@ const LockScreen = ({unlocked, encrypted}) => {
 	if (unlocked && encrypted) {
 		// Wallet is unlocked and encrypted, return an empty lock screen.
 		return (
-			<div className="lockscreen unlocked"></div>
+			<div></div>
 		)
 	}
 	if (!encrypted) {
