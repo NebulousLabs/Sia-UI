@@ -43,7 +43,7 @@ const computeSum = (txn) => {
 		}
 	}
 	return {
-		value: Siad.hastingsToSiacoins(value).toString(),
+		value: Siad.hastingsToSiacoins(value),
 		currency,
 	};
 }
@@ -74,8 +74,8 @@ export const parseRawTransactions = (response) => {
 		}
 		parsedTransactions = parsedTransactions.push({
 			confirmed,
-			value,
 			currency,
+			value: value.round(4).toString(),
 			transactionid: rawTransactions[i].transactionid,
 			confirmationtimestamp: rawTransactions[i].confirmationtimestamp,
 		})

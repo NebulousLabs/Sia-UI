@@ -80,7 +80,7 @@ function *getTransactionsSaga(action) {
 	try {
 		const response = yield siadCall(Siad, '/wallet/transactions?startheight=0&endheight=10000000');
 		// TODO: pagination
-		const transactions = parseRawTransactions(response).slice(1, 30);
+		const transactions = parseRawTransactions(response).take(50);
 		yield put(actions.setTransactions(transactions));
 	} catch (e) {
 		console.error(e);
