@@ -3,16 +3,29 @@ import { List } from 'immutable';
 
 const TransactionList = ({transactions}) => {
 	const transactionComponents = transactions.map((transaction, key) => (
-		<div key={key} className="transaction">
-			<div className="confirmed">{transaction.confirmed ? "Confirmed" : "Unconfirmed" }</div>
-			<div className="value">{transaction.value}</div>
-			<div className="txnid">{transaction.transactionid}</div>
-		</div>
+		<tr key={key}>
+			<td><i className="fa fa-bank fa-2x"></i></td>
+			<td>{transaction.confirmed ? "Confirmed" : "Unconfirmed" }</td>
+			<td>{transaction.value} SC</td>
+			<td>{transaction.transactionid}</td>
+		</tr>
 	));
 	return (
 		<div className="transaction-list">
-			<span>Recent Transactions</span>
-			{transactionComponents}
+			<h2> Recent Transactions </h2>
+			<table>
+				<thead>
+				<tr>
+				<th></th>
+				<th>Confirmation Status</th>
+				<th>Net Value</th>
+				<th>Transaction ID</th>
+				</tr>
+				</thead>
+				<tbody>
+				{transactionComponents}
+				</tbody>
+			</table>
 		</div>
 	);
 }

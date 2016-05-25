@@ -56,13 +56,16 @@
 	width: 50%;
 	margin-bottom: 5px;
 }
-.address-list {
-	overflow: scroll;
-	overflow-y: auto;
+.transaction-list, .transaction-list table {
+	width: 100%;
+	text-align: center;
+	overflow-y: scroll;
 }
-.transaction-list {
-	overflow: scroll;
-	overflow-y: auto;
+.transaction-list table td {
+	font-size: 11px;
+}
+.transaction-list i {
+	color: #00CBA0;
 }
 .wallet-address {
 	display: block;
