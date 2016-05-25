@@ -34,10 +34,14 @@ const rootElement = (
 );
 
 ReactDOM.render(rootElement, document.getElementById('react-root'));
+// Get initial UI state
+store.dispatch(getLockStatus());
+store.dispatch(getBalance());
+store.dispatch(getTransactions());
 
 // Poll Siad for state changes.
 setInterval(() => {
 	store.dispatch(getLockStatus());
 	store.dispatch(getBalance());
 	store.dispatch(getTransactions());
-}, 1000);
+}, 15000);

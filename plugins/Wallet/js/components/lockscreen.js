@@ -2,10 +2,8 @@ import React, { PropTypes } from 'react';
 import UnlockButton from '../containers/unlockbutton.js';
 import PasswordPrompt from '../containers/passwordprompt.js';
 import NewWalletButton from '../containers/newwalletbutton.js';
-import NewWalletDialog from '../containers/newwalletdialog.js';
 
 const LockScreen = ({unlocked, encrypted}) => {
-	var lockScreen;
 	if (!unlocked && encrypted) {
 		return (
 			<div className="lockscreen">
@@ -26,7 +24,6 @@ const LockScreen = ({unlocked, encrypted}) => {
 		return (
 			<div className="lockscreen">
 				<NewWalletButton />
-				<NewWalletDialog />
 			</div>
 		)
 	}

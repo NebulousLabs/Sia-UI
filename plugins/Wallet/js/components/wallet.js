@@ -4,9 +4,11 @@ import SendButton from '../containers/sendbutton.js';
 import SendPrompt from '../containers/sendprompt.js';
 import ReceiveButton from '../containers/receivebutton.js';
 import ReceivePrompt from '../containers/receiveprompt.js';
+import NewWalletDialog from '../containers/newwalletdialog.js';
 
-const Wallet = ({confirmedbalance, unconfirmedbalance, }) => (
+const Wallet = ({confirmedbalance, unconfirmedbalance }) => (
 	<div className="wallet">
+		<NewWalletDialog />
 		<div className="wallet-toolbar">
 			<div className="balance-info">
 				<span>Confirmed Balance: {confirmedbalance} SC </span>

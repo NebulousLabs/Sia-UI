@@ -9,9 +9,8 @@ const IPC = require('electron').ipcRenderer;
 Siad.configure(IPC.sendSync('config', 'siad'));
 
 // Asynchronously get Siad's wallet status, and elegantly handle any side effects
-function *getLockStatus(action) {
+function *getLockStatusSaga(action) {
 	try {
-		// Request /wallet from the Siad API.
 		const response = yield siadCall(Siad, '/wallet');
 		if (!response.unlocked) {
 			yield put(actions.setLocked());
@@ -29,7 +28,8 @@ function *getLockStatus(action) {
 	}
 }
 
-function *walletUnlock(action) {
+
+function *walletUnlockSaga(action) {
 	try {
 		const response = yield siadCall(Siad, {
 			url: '/wallet/unlock',
@@ -45,7 +45,7 @@ function *walletUnlock(action) {
 	}
 }
 
-function *createWallet(action) {
+function *createWalletSaga(action) {
 	try {
 		const response = yield siadCall(Siad, {
 			url: '/wallet/init',
@@ -62,7 +62,7 @@ function *createWallet(action) {
 	}
 }
 
-function *getBalance(action) {
+function *getBalanceSaga(action) {
 	try {
 		const response = yield siadCall(Siad, '/wallet');
 		yield put(actions.setBalance(Siad.hastingsToSiacoins(response.confirmedsiacoinbalance).round(2).toString(), Siad.hastingsToSiacoins(response.unconfirmedincomingsiacoins).round(2).toString()));
@@ -72,7 +72,7 @@ function *getBalance(action) {
 	}
 }
 
-function *getTransactions(action) {
+function *getTransactionsSaga(action) {
 	try {
 		const response = yield siadCall(Siad, '/wallet/transactions?startheight=0&endheight=10000000');
 		// TODO: pagination
@@ -84,7 +84,7 @@ function *getTransactions(action) {
 	}
 }
 
-function *getNewReceiveAddress(action) {
+function *getNewReceiveAddressSaga(action) {
 	try {
 		const response = yield siadCall(Siad, '/wallet/address');
 		yield put(actions.setReceiveAddress(response.address));
@@ -95,7 +95,7 @@ function *getNewReceiveAddress(action) {
 	}
 }
 
-function *sendSiacoin(action) {
+function *sendSiacoinSaga(action) {
 	try {
 		const response = yield siadCall(Siad, {
 			url: '/wallet/siacoins',
@@ -111,28 +111,29 @@ function *sendSiacoin(action) {
 		yield put(siadError(e));
 	}
 }
+
 // Consume any CREATE_NEW_WALLET actions
 export function* watchCreateNewWallet() {
-	yield *takeEvery(constants.CREATE_NEW_WALLET, createWallet);
+	yield *takeEvery(constants.CREATE_NEW_WALLET, createWalletSaga);
 }
 // Consume any GET_LOCK_STATUS actions
 export function* watchGetLockStatus() {
-	yield *takeEvery(constants.GET_LOCK_STATUS, getLockStatus);
+	yield *takeEvery(constants.GET_LOCK_STATUS, getLockStatusSaga);
 }
 // Consume any UNLOCK_WALLET actions
 export function* watchUnlockWallet() {
-	yield *takeEvery(constants.UNLOCK_WALLET, walletUnlock);
+	yield *takeEvery(constants.UNLOCK_WALLET, walletUnlockSaga);
 }
 // Consume any GET_BALANCE actions
 export function* watchGetBalance() {
-	yield *takeEvery(constants.GET_BALANCE, getBalance);
+	yield *takeEvery(constants.GET_BALANCE, getBalanceSaga);
 }
 export function* watchGetTransactions() {
-	yield *takeEvery(constants.GET_TRANSACTIONS, getTransactions);
+	yield *takeEvery(constants.GET_TRANSACTIONS, getTransactionsSaga);
 }
 export function* watchGetNewReceiveAddress() {
-	yield *takeEvery(constants.GET_NEW_RECEIVE_ADDRESS, getNewReceiveAddress);
+	yield *takeEvery(constants.GET_NEW_RECEIVE_ADDRESS, getNewReceiveAddressSaga);
 }
 export function* watchSendSiacoin() {
-	yield *takeEvery(constants.SEND_SIACOIN, sendSiacoin);
+	yield *takeEvery(constants.SEND_SIACOIN, sendSiacoinSaga);
 }
