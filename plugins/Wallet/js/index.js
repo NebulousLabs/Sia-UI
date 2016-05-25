@@ -9,7 +9,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import rootReducer from './js/reducers/index.js';
 import * as sagas from './js/sagas/wallet.js'
-import { getLockStatus, getBalance, getAddresses, getTransactions } from './js/actions/wallet.js';
+import { getLockStatus, getBalance, getTransactions } from './js/actions/wallet.js';
 import WalletApp from './js/components/app.js';
 
 // Set up saga middleware system
@@ -22,7 +22,6 @@ sagaMiddleware.run(sagas.watchGetLockStatus);
 sagaMiddleware.run(sagas.watchUnlockWallet);
 sagaMiddleware.run(sagas.watchCreateNewWallet);
 sagaMiddleware.run(sagas.watchGetBalance);
-sagaMiddleware.run(sagas.watchGetAddresses);
 sagaMiddleware.run(sagas.watchGetTransactions);
 sagaMiddleware.run(sagas.watchGetNewReceiveAddress);
 
@@ -39,6 +38,5 @@ ReactDOM.render(rootElement, document.getElementById('react-root'));
 setInterval(() => {
 	store.dispatch(getLockStatus());
 	store.dispatch(getBalance());
-	store.dispatch(getAddresses());
 	store.dispatch(getTransactions());
 }, 1000);

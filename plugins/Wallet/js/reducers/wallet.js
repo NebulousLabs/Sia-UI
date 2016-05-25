@@ -7,7 +7,6 @@ const initialState = Map({
 	encrypted: true,
 	confirmedbalance: 0.0,
 	unconfirmedbalance: 0.0,
-	addresses: List(),
 	transactions: List(),
 });
 
@@ -24,8 +23,6 @@ export default function walletReducer(state = initialState, action) {
 	case constants.SET_BALANCE:
 		return state.set('confirmedbalance', action.confirmed)
 								.set('unconfirmedbalance', action.unconfirmed);
-	case constants.SET_ADDRESSES:
-		return state.set('addresses', List(action.addresses));
 	case constants.SET_TRANSACTIONS:
 		return state.set('transactions', action.transactions);
 	default:

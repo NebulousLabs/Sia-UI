@@ -72,17 +72,6 @@ function *getBalance(action) {
 	}
 }
 
-function *getAddresses(action) {
-	try {
-		const response = yield siadCall(Siad, '/wallet/addresses');
-		// TODO: pagination
-		yield put(actions.setAddresses(response.addresses.slice(1,30)));
-	} catch (e) {
-		console.error(e);
-		yield put(siadError(e));
-	}
-}
-
 function *getTransactions(action) {
 	try {
 		const response = yield siadCall(Siad, '/wallet/transactions?startheight=0&endheight=10000000');
@@ -120,10 +109,6 @@ export function* watchUnlockWallet() {
 // Consume any GET_BALANCE actions
 export function* watchGetBalance() {
 	yield *takeEvery(constants.GET_BALANCE, getBalance);
-}
-// Consume any GET_ADDRESSES actions
-export function* watchGetAddresses() {
-	yield *takeEvery(constants.GET_ADDRESSES, getAddresses);
 }
 export function* watchGetTransactions() {
 	yield *takeEvery(constants.GET_TRANSACTIONS, getTransactions);
