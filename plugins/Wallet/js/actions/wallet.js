@@ -17,9 +17,6 @@ export const setEncrypted = () => ({
 export const setUnencrypted = () => ({
 	type: constants.SET_UNENCRYPTED,
 });
-export const startPasswordPrompt = () => ({
-	type: constants.START_PASSWORD_PROMPT,
-});
 export const dismissNewWalletDialog = () => ({
 	type: constants.DISMISS_NEW_WALLET_DIALOG,
 });
@@ -82,3 +79,11 @@ export const sendSiacoin = (destination, amount) => ({
 	destination,
 	amount,
 });
+export const closePasswordPrompt = () => ({
+	type: constants.CLOSE_PASSWORD_PROMPT,
+});
+export const handlePasswordChange = (password) => ({
+	type: constants.HANDLE_PASSWORD_CHANGE,
+	password,
+});
+

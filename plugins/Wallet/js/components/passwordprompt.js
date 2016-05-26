@@ -10,6 +10,7 @@ const PasswordPrompt = ({visible, password, error, actions}) => {
 	const onUnlockClick = () => actions.unlockWallet(password);
 	return (
 		<div className="password-prompt">
+			<i className="fa fa-lock fa-4x"></i>
 			<input value={password} className="password-input" onChange={onPasswordChange} />
 			<button onClick={onUnlockClick}>Unlock</button>
 			<div className="password-prompt-error">{error}</div>
