@@ -44,7 +44,7 @@
 	margin-top: 5px;
 	margin-bottom: 8px;
 }
-.unlock-button i {
+.password-prompt i {
 	color: #00CBA0;
 }
 .password-prompt {
@@ -204,6 +204,9 @@
 }
 .new-wallet-button i {
 	color: #00CBA0;
+}
+.new-wallet-button i:hover {
+	color: #00A785;
 }
 .new-wallet-button {
 	display: flex;

@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import PasswordPrompt from '../containers/passwordprompt.js';
 import NewWalletButton from '../containers/newwalletbutton.js';
+import NewWalletDialog from '../containers/newwalletdialog.js';
 
 const LockScreen = ({unlocked, unlocking, encrypted}) => {
 	if (!unlocked && encrypted && !unlocking) {

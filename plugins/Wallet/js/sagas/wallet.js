@@ -8,7 +8,14 @@ import Siad from 'sia.js'
 const IPC = require('electron').ipcRenderer;
 Siad.configure(IPC.sendSync('config', 'siad'));
 
-// Asynchronously get Siad's wallet status, and elegantly handle any side effects
+// Send an error notification over IPC.
+const sendError = (e) => {
+	IPC.sendSync('dialog', 'error', {
+		title: 'Sia-UI Wallet Error',
+		content: e.toString(),
+	});
+}
+
 function *getLockStatusSaga(action) {
 	try {
 		const response = yield siadCall(Siad, '/wallet');
@@ -23,8 +30,7 @@ function *getLockStatusSaga(action) {
 			yield put(actions.setUnencrypted());
 		}
 	} catch (e) {
-		console.error(e);
-		yield put(siadError(e));
+		yield sendError(e);
 	}
 }
 
@@ -58,7 +64,7 @@ function *createWalletSaga(action) {
 		yield take(constants.DISMISS_NEW_WALLET_DIALOG);
 		yield put(actions.unlockWallet(response.primaryseed));
 	} catch (e) {
-		yield put(siadError(e));
+		yield sendError(e);
 	}
 }
 
@@ -71,8 +77,7 @@ function *getBalanceSaga(action) {
 		const unconfirmed = unconfirmedIncoming.minus(unconfirmedOutgoing);
 		yield put(actions.setBalance(confirmed.round(2).toString(), unconfirmed.round(2).toString()));
 	} catch (e) {
-		console.error(e);
-		yield put(siadError(e));
+		yield sendError(e);
 	}
 }
 
@@ -83,8 +88,7 @@ function *getTransactionsSaga(action) {
 		const transactions = parseRawTransactions(response).take(50);
 		yield put(actions.setTransactions(transactions));
 	} catch (e) {
-		console.error(e);
-		yield put(siadError(e));
+		yield sendError(e);
 	}
 }
 
@@ -94,8 +98,7 @@ function *getNewReceiveAddressSaga(action) {
 		yield put(actions.setReceiveAddress(response.address));
 		yield put(actions.showReceivePrompt());
 	} catch(e) {
-		console.error(e);
-		yield put(siadError(e));
+		yield sendError(e);
 	}
 }
 
@@ -113,8 +116,7 @@ function *sendSiacoinSaga(action) {
 		yield put(actions.getBalance());
 		yield put(actions.getTransactions());
 	} catch(e) {
-		console.error(e);
-		yield put(siadError(e));
+		yield sendError(e);
 	}
 }
 
