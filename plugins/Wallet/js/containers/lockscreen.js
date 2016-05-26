@@ -1,4 +1,3 @@
-// lockscreen.js: Wallet plugin lock-screen container.
 import LockScreenView from '../components/lockscreen.js';
 import { connect } from 'react-redux';
 

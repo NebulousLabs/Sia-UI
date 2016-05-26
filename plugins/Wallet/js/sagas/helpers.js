@@ -1,4 +1,5 @@
 // Helper functions for the wallet plugin.  Mostly used in sagas.
+
 import BigNumber from 'bignumber.js';
 import { List } from 'immutable';
 import Siad from 'sia.js';

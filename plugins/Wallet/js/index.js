@@ -1,7 +1,5 @@
 // index.js: main entrypoint for the Sia-UI wallet plugin.
 
-'use strict'
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import createSagaMiddleware from 'redux-saga';
@@ -34,6 +32,7 @@ const rootElement = (
 );
 
 ReactDOM.render(rootElement, document.getElementById('react-root'));
+
 // Get initial UI state
 store.dispatch(getLockStatus());
 store.dispatch(getBalance());

@@ -3,7 +3,7 @@ import { call, put, take } from 'redux-saga/effects';
 import { siadCall, parseRawTransactions } from './helpers.js';
 import * as actions from '../actions/wallet.js';
 import * as constants from '../constants/wallet.js';
-import { siadError, walletUnlockError } from '../actions/error.js';
+import { walletUnlockError } from '../actions/error.js';
 import Siad from 'sia.js'
 const IPC = require('electron').ipcRenderer;
 Siad.configure(IPC.sendSync('config', 'siad'));
@@ -16,6 +16,12 @@ const sendError = (e) => {
 	});
 }
 
+// Wallet plugin sagas
+// Sagas are an elegant way of handling asynchronous side effects.
+// All side effects logic is contained entirely in this file.
+// See https://github.com/yelouafi/redux-saga to read more about redux-saga.
+
+//  Call /wallet and dispatch the appropriate actions from the returned JSON.
 function *getLockStatusSaga(action) {
 	try {
 		const response = yield siadCall(Siad, '/wallet');
@@ -34,7 +40,9 @@ function *getLockStatusSaga(action) {
 	}
 }
 
-
+// Call /wallet/unlock and dispatch setEncrypted and setUnlocked.
+// Since siadCall is a promise which rejects on error, API errors will be caught.
+// Dispatch any API errors as a walletUnlockError action.
 function *walletUnlockSaga(action) {
 	try {
 		const response = yield siadCall(Siad, {
@@ -51,6 +59,8 @@ function *walletUnlockSaga(action) {
 	}
 }
 
+// Call /wallet/init to create a new wallet, show the user the newWalletDialog,
+// Wait for the user to close the dialog, then unlock the wallet using the primary seed.
 function *createWalletSaga(action) {
 	try {
 		const response = yield siadCall(Siad, {
@@ -68,6 +78,7 @@ function *createWalletSaga(action) {
 	}
 }
 
+// call /wallet and compute the confirmed balance as well as the unconfirmed delta.
 function *getBalanceSaga(action) {
 	try {
 		const response = yield siadCall(Siad, '/wallet');
@@ -81,17 +92,19 @@ function *getBalanceSaga(action) {
 	}
 }
 
+// Get all the transactions from /wallet transactions, parse them, and dispatch setTransactions()
 function *getTransactionsSaga(action) {
 	try {
-		const response = yield siadCall(Siad, '/wallet/transactions?startheight=0&endheight=10000000');
-		// TODO: pagination
+		const response = yield siadCall(Siad, '/wallet/transactions?startheight=0&endheight=-1');
+		// For now, display the latest 50 transacitons in the table.
+		// It may be useful to have pagination here.
 		const transactions = parseRawTransactions(response).take(50);
 		yield put(actions.setTransactions(transactions));
 	} catch (e) {
 		yield sendError(e);
 	}
 }
-
+// Call /wallet/address, set the receive address, and show the receive prompt.
 function *getNewReceiveAddressSaga(action) {
 	try {
 		const response = yield siadCall(Siad, '/wallet/address');
@@ -101,7 +114,7 @@ function *getNewReceiveAddressSaga(action) {
 		yield sendError(e);
 	}
 }
-
+// POST to /wallet/siacoins, close the send prompt, then update the balance and transaction list.
 function *sendSiacoinSaga(action) {
 	try {
 		const response = yield siadCall(Siad, {
@@ -120,19 +133,16 @@ function *sendSiacoinSaga(action) {
 	}
 }
 
-// Consume any CREATE_NEW_WALLET actions
+// These functions are run by the redux-saga middleware.
 export function* watchCreateNewWallet() {
 	yield *takeEvery(constants.CREATE_NEW_WALLET, createWalletSaga);
 }
-// Consume any GET_LOCK_STATUS actions
 export function* watchGetLockStatus() {
 	yield *takeEvery(constants.GET_LOCK_STATUS, getLockStatusSaga);
 }
-// Consume any UNLOCK_WALLET actions
 export function* watchUnlockWallet() {
 	yield *takeEvery(constants.UNLOCK_WALLET, walletUnlockSaga);
 }
-// Consume any GET_BALANCE actions
 export function* watchGetBalance() {
 	yield *takeEvery(constants.GET_BALANCE, getBalanceSaga);
 }

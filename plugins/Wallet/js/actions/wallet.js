@@ -1,5 +1,3 @@
-// wallet.js: Actions dispatched to the wallet redux store.
-
 import * as constants from '../constants/wallet.js';
 
 export const getLockStatus = () => ({

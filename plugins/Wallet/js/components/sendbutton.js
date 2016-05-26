@@ -6,4 +6,5 @@ const SendButton = ({actions}) => (
 		<span>Send Siacoin</span>
 	</div>
 );
+
 export default SendButton
