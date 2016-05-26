@@ -8,7 +8,6 @@ import NewWalletDialog from '../containers/newwalletdialog.js';
 
 const Wallet = ({confirmedbalance, unconfirmedbalance }) => (
 	<div className="wallet">
-		<NewWalletDialog />
 		<div className="wallet-toolbar">
 			<div className="balance-info">
 				<span>Confirmed Balance: {confirmedbalance} SC </span>
@@ -17,6 +16,7 @@ const Wallet = ({confirmedbalance, unconfirmedbalance }) => (
 			<SendButton />
 			<ReceiveButton />
 		</div>
+		<NewWalletDialog />
 		<SendPrompt />
 		<ReceivePrompt />
 		<TransactionList />

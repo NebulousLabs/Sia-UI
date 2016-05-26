@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => ({
 	visible: state.passwordprompt.get('visible'),
-	unlocking: state.passwordprompt.get('unlocking'),
 	password: state.passwordprompt.get('password'),
 	error: state.passwordprompt.get('error'),
 });

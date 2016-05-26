@@ -4,7 +4,6 @@ import { WALLET_UNLOCK_ERROR } from '../constants/error.js';
 
 const initialState = Map({
 	visible: true,
-	unlocking: false,
 	password: '',
 	error: '',
 });
@@ -16,8 +15,7 @@ export default function passwordpromptReducer(state = initialState, action) {
 	case constants.SET_LOCKED:
 		return state.set('visible', true);
 	case constants.SET_UNLOCKED:
-		return state.set('visible', false)
-								.set('unlocking', false);
+		return state.set('visible', false);
 	case constants.SET_UNENCRYPTED:
 		return state.set('visible', false);
 	case constants.PASSWORD_PROMPT_SUCCESS:
@@ -27,8 +25,7 @@ export default function passwordpromptReducer(state = initialState, action) {
 	case constants.HANDLE_PASSWORD_CHANGE:
 		return state.set('password', action.password);
 	case WALLET_UNLOCK_ERROR:
-		return state.set('error', action.err)
-								.set('unlocking', false);
+		return state.set('error', action.err);
 	default:
 		return state;
 	}

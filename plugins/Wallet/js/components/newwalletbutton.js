@@ -5,6 +5,6 @@ const NewWalletButton = ({actions}) => (
 		<h3>Create a new Sia Wallet</h3>
 		<i className="fa fa-asterisk fa-4x"></i>
 	</div>
-);
+)
 
 export default NewWalletButton
