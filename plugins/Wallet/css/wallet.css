@@ -70,21 +70,18 @@
 .wallet-address {
 	display: block;
 	height: 20px;
-	margin-bottom: 6px;
-	user-select: text;
+	margin-bottom: 10px;
+	margin-top: 10px;
 	font-size: 11px;
 }
 .receive-prompt {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background-color: rgb(200, 200, 200);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
+	width: 70%;
+	height: 25%;
+	background-color: #ECECEC;
 }
 .wallet-toolbar {
 	width: 100%;
@@ -105,18 +102,42 @@
 	font-size: 15px;
 	margin-bottom: 3px;
 }
+.modal {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 .sendprompt {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
 	background-color: #ECECEC;
+	width: 50%;
+	height: 50%;
 }
+.sendamount, .sendaddress { 
+	text-align: center;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.sendamount h3, .sendaddress h3 {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.sendamount input {
+	width: 100px;
+}
+.sendaddress input {
+	width: 250px;
+}
+
 .send-button, .receive-button {
 	padding-top: 5px;
 	padding-left: 10px;

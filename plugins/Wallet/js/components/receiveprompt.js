@@ -7,10 +7,12 @@ const ReceivePrompt = ({address, visible, actions}) => {
 		);
 	}
 	return (
-		<div className="receive-prompt">
-			You can receive Siacoins using the following address:
-			<div className="wallet-address">{ address }</div>
-			<button className="receiveprompt-dismissbtn" onClick={actions.hideReceivePrompt}>OK</button>
+		<div className="modal">
+			<div className="receive-prompt">
+				You can receive Siacoins using the following address:
+				<div className="wallet-address">{ address }</div>
+				<button className="receiveprompt-dismissbtn" onClick={actions.hideReceivePrompt}>OK</button>
+			</div>
 		</div>
 	)
 }
