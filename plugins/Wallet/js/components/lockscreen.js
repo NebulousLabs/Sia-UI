@@ -3,41 +3,34 @@ import PasswordPrompt from '../containers/passwordprompt.js';
 import NewWalletButton from '../containers/newwalletbutton.js';
 
 const LockScreen = ({unlocked, unlocking, encrypted}) => {
-	if (!unlocked && encrypted && !unlocking) {
-		return (
-			<div className="modal">
-				<div className="lockscreen">
-					<span> Enter your wallet unlock password to continue. </span>
-					<PasswordPrompt />
-				</div>
-			</div>
-		);
-	}
 	if (unlocked && encrypted && !unlocking) {
 		// Wallet is unlocked and encrypted, return an empty lock screen.
 		return (
 			<div></div>
-		);
+		)
 	}
-	if (!encrypted && !unlocking) {
+	var lockscreenContents;
+	if (!unlocked && encrypted && !unlocking) {
+		lockscreenContents = (
+			<PasswordPrompt />
+		);
+	} else  if (!encrypted && !unlocking) {
 		// Wallet is not encrypted, return a lockScreen that initializes a new wallet.
-		return (
-			<div className="modal">
-				<div className="lockscreen">
-					<NewWalletButton />
-				</div>
-			</div>
+		lockscreenContents = (
+			<NewWalletButton />
+		);
+	} else if (unlocking) {
+		lockscreenContents = (
+			<span> Unlocking your wallet... </span>
 		);
 	}
-	if (unlocking) {
-		return (
-			<div className="modal">
-				<div className="lockscreen">
-					<span> Unlocking your wallet... </span>
-				</div>
+	return (
+		<div className="modal">
+			<div className="lockscreen">
+				{ lockscreenContents }
 			</div>
-		);
-	}
+		</div>
+	);
 }
 LockScreen.propTypes = {
 	unlocked: PropTypes.bool,
