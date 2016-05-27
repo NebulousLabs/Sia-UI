@@ -13,11 +13,11 @@ const NewWalletDialog = ({password, seed, actions}) => (
 		</span>
 		<button className="newwallet-dismiss" onClick={actions.dismissNewWalletDialog}> I have written these down in a safe place </button>
 	</div>
-)
+);
 
 NewWalletDialog.propTypes = {
 	password: PropTypes.string,
 	seed: PropTypes.string,
-}
+};
 
 export default NewWalletDialog;

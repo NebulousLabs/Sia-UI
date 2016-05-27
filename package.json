@@ -13,8 +13,7 @@
     "electron-prebuilt-compile": "^0.36.7",
     "ink-docstrap": "^1.0.3",
     "jsdoc": "^3.4.0",
-    "jshint": "^2.9.1-rc1",
-    "spectron": "^0.36.0"
+    "jshint": "^2.9.1-rc1"
   },
   "dependencies": {
     "bignumber.js": "^2.1.3",
@@ -32,7 +31,7 @@
     "start": "electron .",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
-    "test": "npm run lint --silent && electron-mocha",
+    "test": "npm run lint --silent",
     "lint": "jshint . --verbose --exclude-path=.jshintignore",
     "doc": "jsdoc -c .jsdocrc",
     "sia-repo": "go get -u github.com/NebulousLabs/Sia/...",
