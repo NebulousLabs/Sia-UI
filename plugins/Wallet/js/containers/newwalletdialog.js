@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => ({
-	visible: state.newwalletdialog.get('visible'),
 	password: state.newwalletdialog.get('password'),
 	seed: state.newwalletdialog.get('seed'),
 });

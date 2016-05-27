@@ -9,8 +9,8 @@
     "chai": "^3.4.1",
     "chai-as-promised": "^5.1.0",
     "electron-mocha": "^0.7.0",
-    "electron-packager": "^5.2.0",
-    "electron-prebuilt-compile": "^0.36.7",
+    "electron-packager": "^7.0.2",
+    "electron-prebuilt-compile": "^1.2.0",
     "ink-docstrap": "^1.0.3",
     "jsdoc": "^3.4.0",
     "jshint": "^2.9.1-rc1"

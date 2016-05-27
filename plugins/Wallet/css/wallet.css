@@ -106,6 +106,7 @@
 	background-color: #4A4A4A;
 	padding-top: 10px;
 	padding-bottom: 10px;
+	min-height: 60px;
 }
 .balance-info {
 	padding-left: 10px;
