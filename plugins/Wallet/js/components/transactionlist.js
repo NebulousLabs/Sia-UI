@@ -11,7 +11,7 @@ const TransactionList = ({transactions}) => {
 	}
 	const transactionComponents = transactions.map((transaction, key) => (
 		<tr key={key}>
-			<td>{transaction.value} SC</td>
+			<td>{transaction.transactionsums.totalSiacoin.toString()} SC</td>
 			<td>{transaction.transactionid}</td>
 			<td>{transaction.confirmed ? <i className="fa fa-check-square confirmed-icon"> Confirmed </i> : <i className="fa fa-clock-o unconfirmed-icon"> Unconfirmed </i> }</td>
 		</tr>

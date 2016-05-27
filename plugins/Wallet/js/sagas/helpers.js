@@ -17,35 +17,38 @@ export const siadCall = (Siad, uri) => new Promise((resolve, reject) => {
 	})
 })
 
+// Compute the sum of all currencies of type currency in txns
+const sumCurrency = (txns, currency) => txns.reduce((sum, txn) => {
+	if (txn.fundtype.indexOf(currency) > -1) {
+		return sum.add(new BigNumber(txn.value));
+	}
+	return sum;
+}, new BigNumber(0));
+
 // Compute the net value and currency type of a transaction.
-const computeSum = (txn) => {
-	var value = new BigNumber(0);
-	var currency;
+const computeTransactionSum = (txn) => {
+	var totalSiacoinInput, totalSiafundInput, totalMinerInput;
+	var totalSiacoinOutput, totalSiafundOutput, totalMinerOutput;
+	totalSiacoinInput = totalSiafundInput = totalMinerInput = new BigNumber(0);
+	totalSiacoinOutput = totalSiafundOutput = totalMinerOutput = new BigNumber(0);
+
 	if (txn.inputs) {
-		for (let i = 0; i < txn.inputs.length; i++) {
-			const input = txn.inputs[i];
-			if (input.walletaddress) {
-				value = value.sub(input.value);
-			}
-			// TODO: Imperfect way to go about determining currency of
-			// transaction from 'miner', 'siacoin', or 'siafund'
-			currency = input.fundtype.split(' ')[0];
-		}
+		const walletInputs = txn.inputs.filter((txn) => txn.walletaddress && txn.value);
+		totalSiacoinInput = sumCurrency(walletInputs, 'siacoin');
+		totalSiafundInput = sumCurrency(walletInputs, 'siafund');
+		totalMinerInput = sumCurrency(walletInputs, 'miner');
 	}
 	if (txn.outputs) {
-		for (let i = 0; i < txn.outputs.length; i++) {
-			const output = txn.outputs[i];
-			if (output.walletaddress) {
-				value = value.add(output.value);
-			}
-			// TODO: Imperfect way to go about determining currency of
-			// transaction from 'miner', 'siacoin', or 'siafund'
-			currency = output.fundtype.split(' ')[0];
-		}
+		const walletOutputs = txn.outputs.filter((txn) => txn.walletaddress && txn.value);
+		totalSiacoinOutput = sumCurrency(walletOutputs, 'siacoin');
+		totalSiafundOutput = sumCurrency(walletOutputs, 'siafund');
+		totalMinerOutput = sumCurrency(walletOutputs, 'miner');
 	}
+
 	return {
-		value: Siad.hastingsToSiacoins(value),
-		currency,
+		totalSiacoin: Siad.hastingsToSiacoins(totalSiacoinInput.minus(totalSiacoinOutput)),
+		totalSiafund: Siad.hastingsToSiacoins(totalSiafundInput.minus(totalSiafundOutput)),
+		totalMiner:   Siad.hastingsToSiacoins(totalMinerInput.minus(totalMinerOutput)),
 	};
 }
 
@@ -67,12 +70,11 @@ export const parseRawTransactions = (response) => {
 	}
 	const rawTransactions = response.unconfirmedtransactions.concat(response.confirmedtransactions);
 	let parsedTransactions = List(rawTransactions.map((txn) => {
-		const { value, currency } = computeSum(txn);
+		const transactionsums = computeTransactionSum(txn);
 		let confirmed = (txn.confirmationtimestamp !== uint64max);
 		return {
 			confirmed,
-			currency,
-			value: value.round(4).toString(),
+			transactionsums,
 			transactionid: txn.transactionid,
 			confirmationtimestamp: txn.confirmationtimestamp,
 		};
