@@ -59,7 +59,6 @@ const computeSum = (txn) => {
 //   confirmationtimestamp:  The time at which this transaction occurred
 // }
 export const parseRawTransactions = (response) => {
-	var parsedTransactions = List();
 	if (!response.unconfirmedtransactions) {
 		response.unconfirmedtransactions = [];
 	}
@@ -67,20 +66,17 @@ export const parseRawTransactions = (response) => {
 		response.confirmedtransactions = [];
 	}
 	const rawTransactions = response.unconfirmedtransactions.concat(response.confirmedtransactions);
-	for (let i = 0; i < rawTransactions.length; i++ ) {
-		const { value, currency } = computeSum(rawTransactions[i]);
-		let confirmed = true;
-		if (rawTransactions[i].confirmationtimestamp === uint64max) {
-			confirmed = false;
-		}
-		parsedTransactions = parsedTransactions.push({
+	let parsedTransactions = List(rawTransactions.map((txn) => {
+		const { value, currency } = computeSum(txn);
+		let confirmed = (txn.confirmationtimestamp !== uint64max);
+		return {
 			confirmed,
 			currency,
 			value: value.round(4).toString(),
-			transactionid: rawTransactions[i].transactionid,
-			confirmationtimestamp: rawTransactions[i].confirmationtimestamp,
-		})
-	}
+			transactionid: txn.transactionid,
+			confirmationtimestamp: txn.confirmationtimestamp,
+		};
+	}));
 	// Return the transactions, sorted by timestamp.
 	return parsedTransactions.sortBy(txn => -txn.confirmationtimestamp);
 }
