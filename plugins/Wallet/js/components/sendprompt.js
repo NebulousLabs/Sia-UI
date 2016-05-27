@@ -1,15 +1,9 @@
 import React, { PropTypes } from 'react';
 
-const SendPrompt = ({visible, sendAddress, sendAmount, actions}) => {
+const SendPrompt = ({sendAddress, sendAmount, actions}) => {
 	const onSendAddressChange = (e) => actions.setSendAddress(e.target.value);
 	const onSendAmountChange = (e) => actions.setSendAmount(e.target.value);
 	const onSendClick = () => actions.sendSiacoin(sendAddress, sendAmount);
-
-	if (!visible) {
-		return (
-			<div></div>
-		);
-	}
 	return (
 		<div className="modal">
 			<div className="sendprompt">
@@ -29,4 +23,9 @@ const SendPrompt = ({visible, sendAddress, sendAmount, actions}) => {
 		</div>
 	);
 }
+SendPrompt.propTypes = {
+	sendAddress: PropTypes.string,
+	sendAmount: PropTypes.string,
+};
+
 export default SendPrompt;

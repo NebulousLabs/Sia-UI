@@ -10,10 +10,25 @@ const initialState = Map({
 	confirmedbalance: '',
 	unconfirmedbalance: '',
 	transactions: List(),
+	showSendPrompt: false,
+	showReceivePrompt: false,
+	showNewWalletDialog: false,
 });
 
 export default function walletReducer(state = initialState, action) {
 	switch (action.type) {
+	case constants.SHOW_NEW_WALLET_DIALOG:
+		return state.set('showNewWalletDialog', true);
+	case constants.DISMISS_NEW_WALLET_DIALOG:
+		return state.set('showNewWalletDialog', false);
+	case constants.SHOW_RECEIVE_PROMPT:
+		return state.set('showReceivePrompt', true);
+	case constants.HIDE_RECEIVE_PROMPT:
+		return state.set('showReceivePrompt', false);
+	case constants.START_SEND_PROMPT:
+		return state.set('showSendPrompt', true);
+	case constants.CLOSE_SEND_PROMPT:
+		return state.set('showSendPrompt', false);
 	case constants.UNLOCK_WALLET:
 		return state.set('unlocking', true);
 	case WALLET_UNLOCK_ERROR:

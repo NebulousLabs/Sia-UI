@@ -1,11 +1,6 @@
 import React, { PropTypes } from 'react';
 
-const PasswordPrompt = ({visible, password, error, actions}) => {
-	if (!visible) {
-		return (
-			<div></div>
-		);
-	}
+const PasswordPrompt = ({password, error, actions}) => {
 	const onPasswordChange = (e) => actions.handlePasswordChange(e.target.value);
 	const onUnlockClick = () => actions.unlockWallet(password);
 	return (
@@ -19,7 +14,6 @@ const PasswordPrompt = ({visible, password, error, actions}) => {
 	);
 }
 PasswordPrompt.propTypes = {
-	visible: PropTypes.bool.isRequired,
 	password: PropTypes.string.isRequired,
 	error: PropTypes.string,
 }

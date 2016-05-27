@@ -6,7 +6,7 @@ import ReceiveButton from '../containers/receivebutton.js';
 import ReceivePrompt from '../containers/receiveprompt.js';
 import NewWalletDialog from '../containers/newwalletdialog.js';
 
-const Wallet = ({confirmedbalance, unconfirmedbalance }) => (
+const Wallet = ({confirmedbalance, unconfirmedbalance, showReceivePrompt, showSendPrompt, showNewWalletDialog }) => (
 	<div className="wallet">
 		<div className="wallet-toolbar">
 			<div className="balance-info">
@@ -16,16 +16,19 @@ const Wallet = ({confirmedbalance, unconfirmedbalance }) => (
 			<SendButton />
 			<ReceiveButton />
 		</div>
-		<NewWalletDialog />
-		<SendPrompt />
-		<ReceivePrompt />
+		{ showNewWalletDialog ? <NewWalletDialog /> : null }
+		{ showSendPrompt ? <SendPrompt /> : null }
+		{ showReceivePrompt ? <ReceivePrompt /> : null }
 		<TransactionList />
 	</div>
 );
 
 Wallet.propTypes = {
 	confirmedbalance: PropTypes.string.isRequired,
-	unconfirmedbalance: PropTypes.string.isRequired
+	unconfirmedbalance: PropTypes.string.isRequired,
+	showNewWalletDialog: PropTypes.bool,
+	showSendPrompt: PropTypes.bool,
+	showReceivePrompt: PropTypes.bool,
 };
 
 export default Wallet;
