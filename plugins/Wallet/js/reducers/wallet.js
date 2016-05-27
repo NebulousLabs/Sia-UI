@@ -35,17 +35,17 @@ export default function walletReducer(state = initialState, action) {
 		return state.set('unlocking', false);
 	case constants.SET_LOCKED:
 		return state.set('unlocked', false)
-								.set('unlocking', false);
+                .set('unlocking', false);
 	case constants.SET_UNLOCKED:
 		return state.set('unlocked', true)
-								.set('unlocking', false);
+                .set('unlocking', false);
 	case constants.SET_ENCRYPTED:
 		return state.set('encrypted', true);
 	case constants.SET_UNENCRYPTED:
 		return state.set('encrypted', false);
 	case constants.SET_BALANCE:
 		return state.set('confirmedbalance', action.confirmed)
-								.set('unconfirmedbalance', action.unconfirmed);
+                .set('unconfirmedbalance', action.unconfirmed);
 	case constants.SET_TRANSACTIONS:
 		return state.set('transactions', action.transactions);
 	default:
