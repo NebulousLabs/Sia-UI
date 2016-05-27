@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => ({
-	visible: state.sendprompt.get('visible'),
 	sendAddress: state.sendprompt.get('sendaddress'),
 	sendAmount: state.sendprompt.get('sendamount'),
 });

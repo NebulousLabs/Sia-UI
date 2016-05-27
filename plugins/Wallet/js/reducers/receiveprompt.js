@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { SHOW_RECEIVE_PROMPT, HIDE_RECEIVE_PROMPT, SET_RECEIVE_ADDRESS } from '../constants/wallet.js';
+import { SET_RECEIVE_ADDRESS } from '../constants/wallet.js';
 
 const initialState = Map({
 	address: '',
