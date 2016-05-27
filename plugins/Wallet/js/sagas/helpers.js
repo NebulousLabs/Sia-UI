@@ -82,11 +82,5 @@ export const parseRawTransactions = (response) => {
 		})
 	}
 	// Return the transactions, sorted by timestamp.
-	// See https://facebook.github.io/immutable-js/docs/#/Iterable/sort for more on how this works.
-	return parsedTransactions.sort((t1, t2) => {
-		if (t1.confirmationtimestamp > t2.confirmationtimestamp) {
-			return -1;
-		}
-		return 1;
-	});
+	return parsedTransactions.sortBy(txn => -txn.confirmationtimestamp);
 }
