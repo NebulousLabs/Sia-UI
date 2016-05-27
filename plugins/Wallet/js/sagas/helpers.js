@@ -11,7 +11,7 @@ export const siadCall = (Siad, uri) => new Promise((resolve, reject) => {
 	Siad.call(uri, (err, response) => {
 		if (err) {
 			reject(err);
-		} else { 
+		} else {
 			resolve(response);
 		}
 	})
@@ -27,10 +27,13 @@ const sumCurrency = (txns, currency) => txns.reduce((sum, txn) => {
 
 // Compute the net value and currency type of a transaction.
 const computeTransactionSum = (txn) => {
-	var totalSiacoinInput, totalSiafundInput, totalMinerInput;
-	var totalSiacoinOutput, totalSiafundOutput, totalMinerOutput;
-	totalSiacoinInput = totalSiafundInput = totalMinerInput = new BigNumber(0);
-	totalSiacoinOutput = totalSiafundOutput = totalMinerOutput = new BigNumber(0);
+	var totalSiacoinInput = new BigNumber(0),
+      totalSiafundInput = new BigNumber(0),
+      totalMinerInput = new BigNumber(0);
+
+	var totalSiacoinOutput = new BigNumber(0),
+      totalSiafundOutput = new BigNumber(0),
+      totalMinerOutput = new BigNumber(0);
 
 	if (txn.inputs) {
 		const walletInputs = txn.inputs.filter((txn) => txn.walletaddress && txn.value);
@@ -44,11 +47,10 @@ const computeTransactionSum = (txn) => {
 		totalSiafundOutput = sumCurrency(walletOutputs, 'siafund');
 		totalMinerOutput = sumCurrency(walletOutputs, 'miner');
 	}
-
 	return {
-		totalSiacoin: Siad.hastingsToSiacoins(totalSiacoinInput.minus(totalSiacoinOutput)),
-		totalSiafund: Siad.hastingsToSiacoins(totalSiafundInput.minus(totalSiafundOutput)),
-		totalMiner:   Siad.hastingsToSiacoins(totalMinerInput.minus(totalMinerOutput)),
+		totalSiacoin: Siad.hastingsToSiacoins(totalSiacoinOutput.minus(totalSiacoinInput)),
+		totalSiafund: Siad.hastingsToSiacoins(totalSiafundOutput.minus(totalSiafundInput)),
+		totalMiner:   Siad.hastingsToSiacoins(totalMinerOutput.minus(totalMinerInput)),
 	};
 }
 
@@ -80,5 +82,5 @@ export const parseRawTransactions = (response) => {
 		};
 	}));
 	// Return the transactions, sorted by timestamp.
-	return parsedTransactions.sortBy(txn => -txn.confirmationtimestamp);
+	return parsedTransactions.sortBy((txn) => -txn.confirmationtimestamp);
 }

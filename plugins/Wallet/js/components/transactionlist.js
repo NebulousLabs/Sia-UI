@@ -9,13 +9,25 @@ const TransactionList = ({transactions}) => {
 			</div>
 		);
 	}
-	const transactionComponents = transactions.map((transaction, key) => (
-		<tr key={key}>
-			<td>{transaction.transactionsums.totalSiacoin.toString()} SC</td>
-			<td>{transaction.transactionid}</td>
-			<td>{transaction.confirmed ? <i className="fa fa-check-square confirmed-icon"> Confirmed </i> : <i className="fa fa-clock-o unconfirmed-icon"> Unconfirmed </i> }</td>
-		</tr>
-	));
+	const transactionComponents = transactions.map((txn, key) => {
+		let valueData = '0 SC ';
+		if (txn.transactionsums.totalSiacoin.abs().gt(0)) {
+			valueData = txn.transactionsums.totalSiacoin.round(4).toString() + ' SC ';
+		}
+		if (txn.transactionsums.totalSiafund.abs().gt(0)) {
+			valueData += txn.transactionsums.totalSiafund.round(4).toString() + ' SF ';
+		}
+		if (txn.transactionsums.totalMiner.abs().gt(0)) {
+			valueData += txn.transactionsums.totalMiner.round(4).toString() + ' SC (miner) ';
+		}
+		return (
+			<tr key={key}>
+				<td>{valueData}</td>
+				<td>{txn.transactionid}</td>
+				<td>{txn.confirmed ? <i className="fa fa-check-square confirmed-icon"> Confirmed </i> : <i className="fa fa-clock-o unconfirmed-icon"> Unconfirmed </i> }</td>
+			</tr>
+		);
+	});
 	return (
 		<div className="transaction-list">
 			<h2> Recent Transactions </h2>
