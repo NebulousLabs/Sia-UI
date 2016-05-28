@@ -1,10 +1,10 @@
-import React, { PropTypes } from 'react';
-import TransactionList from '../containers/transactionlist.js';
-import SendButton from '../containers/sendbutton.js';
-import SendPrompt from '../containers/sendprompt.js';
-import ReceiveButton from '../containers/receivebutton.js';
-import ReceivePrompt from '../containers/receiveprompt.js';
-import NewWalletDialog from '../containers/newwalletdialog.js';
+import React, { PropTypes } from 'react'
+import TransactionList from '../containers/transactionlist.js'
+import SendButton from '../containers/sendbutton.js'
+import SendPrompt from '../containers/sendprompt.js'
+import ReceiveButton from '../containers/receivebutton.js'
+import ReceivePrompt from '../containers/receiveprompt.js'
+import NewWalletDialog from '../containers/newwalletdialog.js'
 
 const Wallet = ({confirmedbalance, unconfirmedbalance, showReceivePrompt, showSendPrompt, showNewWalletDialog }) => (
 	<div className="wallet">
@@ -16,12 +16,12 @@ const Wallet = ({confirmedbalance, unconfirmedbalance, showReceivePrompt, showSe
 			<SendButton />
 			<ReceiveButton />
 		</div>
-		{ showNewWalletDialog ? <NewWalletDialog /> : null }
-		{ showSendPrompt ? <SendPrompt /> : null }
-		{ showReceivePrompt ? <ReceivePrompt /> : null }
+		{showNewWalletDialog ? <NewWalletDialog /> : null}
+		{showSendPrompt ? <SendPrompt /> : null}
+		{showReceivePrompt ? <ReceivePrompt /> : null}
 		<TransactionList />
 	</div>
-);
+)
 
 Wallet.propTypes = {
 	confirmedbalance: PropTypes.string.isRequired,
@@ -29,6 +29,6 @@ Wallet.propTypes = {
 	showNewWalletDialog: PropTypes.bool,
 	showSendPrompt: PropTypes.bool,
 	showReceivePrompt: PropTypes.bool,
-};
+}
 
-export default Wallet;
+export default Wallet

@@ -1,10 +1,10 @@
-import { Map } from 'immutable';
-import { SHOW_NEW_WALLET_DIALOG } from '../constants/wallet.js';
+import { Map } from 'immutable'
+import { SHOW_NEW_WALLET_DIALOG } from '../constants/wallet.js'
 
 const initialState = Map({
 	password: '',
 	seed: '',
-});
+})
 
 export default function newwalletdialog(state = initialState, action) {
 	switch (action.type) {
@@ -12,6 +12,6 @@ export default function newwalletdialog(state = initialState, action) {
 		return state.set('password', action.password)
                 .set('seed', action.seed)
 	default:
-		return state;
+		return state
 	}
 }

@@ -1,31 +1,32 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes } from 'react'
 
 const SendPrompt = ({sendAddress, sendAmount, actions}) => {
-	const onSendAddressChange = (e) => actions.setSendAddress(e.target.value);
-	const onSendAmountChange = (e) => actions.setSendAmount(e.target.value);
-	const onSendClick = () => actions.sendSiacoin(sendAddress, sendAmount);
+	const handleSendAddressChange = (e) => actions.setSendAddress(e.target.value)
+	const handleSendAmountChange = (e) => actions.setSendAmount(e.target.value)
+	const handleSendClick = () => actions.sendSiacoin(sendAddress, sendAmount)
+	const handleCancelClick = () => actions.closeSendPrompt()
 	return (
 		<div className="modal">
 			<div className="sendprompt">
 				<div className="sendamount">
 					<h3>Send Amount (SC) </h3>
-					<input onChange={onSendAmountChange}></input>
+					<input onChange={handleSendAmountChange}></input>
 				</div>
 				<div className="sendaddress">
 					<h3> To Address </h3>
-					<input onChange={onSendAddressChange}></input>
+					<input onChange={handleSendAddressChange}></input>
 				</div>
 				<div className="send-prompt-buttons">
-					<button className="cancel-send-button" onClick={actions.closeSendPrompt}>Cancel</button>
-					<button className="send-siacoin-button" onClick={onSendClick}>Send</button>
+					<button className="cancel-send-button" onClick={handleCancelClick}>Cancel</button>
+					<button className="send-siacoin-button" onClick={handleSendClick}>Send</button>
 				</div>
 			</div>
 		</div>
-	);
+	)
 }
 SendPrompt.propTypes = {
 	sendAddress: PropTypes.string,
 	sendAmount: PropTypes.string,
-};
+}
 
-export default SendPrompt;
+export default SendPrompt

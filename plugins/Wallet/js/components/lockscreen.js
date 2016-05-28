@@ -1,6 +1,6 @@
-import React, { PropTypes } from 'react';
-import PasswordPrompt from '../containers/passwordprompt.js';
-import NewWalletButton from '../containers/newwalletbutton.js';
+import React, { PropTypes } from 'react'
+import PasswordPrompt from '../containers/passwordprompt.js'
+import NewWalletButton from '../containers/newwalletbutton.js'
 
 const LockScreen = ({unlocked, unlocking, encrypted}) => {
 	if (unlocked && encrypted && !unlocking) {
@@ -9,33 +9,33 @@ const LockScreen = ({unlocked, unlocking, encrypted}) => {
 			<div></div>
 		)
 	}
-	var lockscreenContents;
+	var lockscreenContents
 	if (!unlocked && encrypted && !unlocking) {
 		lockscreenContents = (
 			<PasswordPrompt />
-		);
+		)
 	} else  if (!encrypted && !unlocking) {
 		// Wallet is not encrypted, return a lockScreen that initializes a new wallet.
 		lockscreenContents = (
 			<NewWalletButton />
-		);
+		)
 	} else if (unlocking) {
 		lockscreenContents = (
 			<span> Unlocking your wallet... </span>
-		);
+		)
 	}
 	return (
 		<div className="modal">
 			<div className="lockscreen">
-				{ lockscreenContents }
+				{lockscreenContents}
 			</div>
 		</div>
-	);
+	)
 }
 LockScreen.propTypes = {
 	unlocked: PropTypes.bool,
 	unlocking: PropTypes.bool,
 	encrypted: PropTypes.bool,
-};
+}
 
-export default LockScreen;
+export default LockScreen
