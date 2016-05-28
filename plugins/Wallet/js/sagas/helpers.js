@@ -1,18 +1,18 @@
 // Helper functions for the wallet plugin.  Mostly used in sagas.
 
-import BigNumber from 'bignumber.js';
-import { List } from 'immutable';
-import Siad from 'sia.js';
-const uint64max = Math.pow(2, 64);
+import BigNumber from 'bignumber.js'
+import { List } from 'immutable'
+import Siad from 'sia.js'
+const uint64max = Math.pow(2, 64)
 
 // siadCall: promisify Siad API calls.  Resolve the promise with `response` if the call was successful,
 // otherwise reject the promise with `err`.
 export const siadCall = (daemon, uri) => new Promise((resolve, reject) => {
 	daemon.call(uri, (err, response) => {
 		if (err) {
-			reject(err);
+			reject(err)
 		} else {
-			resolve(response);
+			resolve(response)
 		}
 	})
 })
@@ -20,20 +20,20 @@ export const siadCall = (daemon, uri) => new Promise((resolve, reject) => {
 // Compute the sum of all currencies of type currency in txns
 const sumCurrency = (txns, currency) => txns.reduce((sum, txn) => {
 	if (txn.fundtype.indexOf(currency) > -1) {
-		return sum.add(new BigNumber(txn.value));
+		return sum.add(new BigNumber(txn.value))
 	}
-	return sum;
-}, new BigNumber(0));
+	return sum
+}, new BigNumber(0))
 
 // Compute the net value and currency type of a transaction.
 const computeTransactionSum = (txn) => {
-	var totalSiacoinInput = new BigNumber(0),
-      totalSiafundInput = new BigNumber(0),
-      totalMinerInput = new BigNumber(0);
+	let totalSiacoinInput = new BigNumber(0)
+	let totalSiafundInput = new BigNumber(0)
+	let totalMinerInput = new BigNumber(0)
 
-	var totalSiacoinOutput = new BigNumber(0),
-      totalSiafundOutput = new BigNumber(0),
-      totalMinerOutput = new BigNumber(0);
+	let totalSiacoinOutput = new BigNumber(0)
+	let totalSiafundOutput = new BigNumber(0)
+	let totalMinerOutput = new BigNumber(0)
 
 	if (txn.inputs) {
 		walletInputs = txn.inputs.filter((input) => input.walletaddress && input.value)
@@ -51,7 +51,7 @@ const computeTransactionSum = (txn) => {
 		totalSiacoin: Siad.hastingsToSiacoins(totalSiacoinOutput.minus(totalSiacoinInput)),
 		totalSiafund: Siad.hastingsToSiacoins(totalSiafundOutput.minus(totalSiafundInput)),
 		totalMiner:   Siad.hastingsToSiacoins(totalMinerOutput.minus(totalMinerInput)),
-	};
+	}
 }
 
 // Parse data from /wallet/transactions and return a immutable List of transaction objects.
@@ -64,29 +64,22 @@ const computeTransactionSum = (txn) => {
 // }
 export const parseRawTransactions = (response) => {
 	if (!response.unconfirmedtransactions) {
-		response.unconfirmedtransactions = [];
+		response.unconfirmedtransactions = []
 	}
 	if (!response.confirmedtransactions) {
-		response.confirmedtransactions = [];
+		response.confirmedtransactions = []
 	}
-<<<<<<< HEAD
-	const rawTransactions = response.unconfirmedtransactions.concat(response.confirmedtransactions);
-	let parsedTransactions = List(rawTransactions.map((txn) => {
-		const transactionsums = computeTransactionSum(txn);
-		let confirmed = (txn.confirmationtimestamp !== uint64max);
-=======
 	const rawTransactions = response.unconfirmedtransactions.concat(response.confirmedtransactions)
 	const parsedTransactions = List(rawTransactions.map((txn) => {
 		const transactionsums = computeTransactionSum(txn)
 		const confirmed = (txn.confirmationtimestamp !== uint64max)
->>>>>>> 7e751b4... lint wallet plugin
 		return {
 			confirmed,
 			transactionsums,
 			transactionid: txn.transactionid,
 			confirmationtimestamp: txn.confirmationtimestamp,
-		};
-	}));
+		}
+	}))
 	// Return the transactions, sorted by timestamp.
-	return parsedTransactions.sortBy((txn) => -txn.confirmationtimestamp);
+	return parsedTransactions.sortBy((txn) => -txn.confirmationtimestamp)
 }

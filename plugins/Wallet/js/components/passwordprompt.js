@@ -1,8 +1,8 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes } from 'react'
 
 const PasswordPrompt = ({password, error, actions}) => {
-	const onPasswordChange = (e) => actions.handlePasswordChange(e.target.value);
-	const onUnlockClick = () => actions.unlockWallet(password);
+	const onPasswordChange = (e) => actions.handlePasswordChange(e.target.value)
+	const onUnlockClick = () => actions.unlockWallet(password)
 	return (
 		<div className="password-prompt">
 			<span> Please enter your wallet unlock password to continue. </span>
@@ -11,11 +11,11 @@ const PasswordPrompt = ({password, error, actions}) => {
 			<button onClick={onUnlockClick}>Unlock</button>
 			<div className="password-prompt-error">{error}</div>
 		</div>
-	);
+	)
 }
 PasswordPrompt.propTypes = {
 	password: PropTypes.string.isRequired,
 	error: PropTypes.string,
 }
 
-export default PasswordPrompt;
+export default PasswordPrompt

@@ -1,9 +1,13 @@
-import React from 'react';
+import React from 'react'
 
-const ReceiveButton = ({actions}) => (
-	<div className="receive-button" onClick={actions.getNewReceiveAddress}>
-		<i className="fa fa-download fa-2x"></i>
-		<span>Receive Siacoin</span>
-	</div>
-);
-export default ReceiveButton;
+const ReceiveButton = ({actions}) => {
+	const handleReceiveButtonClick = () => actions.getNewReceiveAddress()
+	return (
+		<div className="receive-button" onClick={handleReceiveButtonClick}>
+			<i className="fa fa-download fa-2x"></i>
+			<span>Receive Siacoin</span>
+		</div>
+	)
+}
+
+export default ReceiveButton
