@@ -33,14 +33,14 @@ const TransactionList = ({transactions}) => {
 			<h2> Recent Transactions </h2>
 			<table className="pure-table">
 				<thead>
-				<tr>
-				<th>Net Value</th>
-				<th>Transaction ID</th>
-				<th>Confirmation Status</th>
-				</tr>
+					<tr>
+						<th>Net Value</th>
+						<th>Transaction ID</th>
+						<th>Confirmation Status</th>
+					</tr>
 				</thead>
 				<tbody>
-				{transactionComponents}
+					{transactionComponents}
 				</tbody>
 			</table>
 		</div>

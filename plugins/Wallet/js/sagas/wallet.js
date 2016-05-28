@@ -22,7 +22,7 @@ const sendError = (e) => {
 // See https://github.com/yelouafi/redux-saga to read more about redux-saga.
 
 //  Call /wallet and dispatch the appropriate actions from the returned JSON.
-function *getLockStatusSaga(action) {
+function *getLockStatusSaga() {
 	try {
 		const response = yield siadCall(Siad, '/wallet');
 		if (!response.unlocked) {
@@ -45,7 +45,7 @@ function *getLockStatusSaga(action) {
 // Dispatch any API errors as a walletUnlockError action.
 function *walletUnlockSaga(action) {
 	try {
-		const response = yield siadCall(Siad, {
+		yield siadCall(Siad, {
 			url: '/wallet/unlock',
 			method: 'POST',
 			qs: {
@@ -61,7 +61,7 @@ function *walletUnlockSaga(action) {
 
 // Call /wallet/init to create a new wallet, show the user the newWalletDialog,
 // Wait for the user to close the dialog, then unlock the wallet using the primary seed.
-function *createWalletSaga(action) {
+function *createWalletSaga() {
 	try {
 		const response = yield siadCall(Siad, {
 			url: '/wallet/init',
@@ -79,7 +79,7 @@ function *createWalletSaga(action) {
 }
 
 // call /wallet and compute the confirmed balance as well as the unconfirmed delta.
-function *getBalanceSaga(action) {
+function *getBalanceSaga() {
 	try {
 		const response = yield siadCall(Siad, '/wallet');
 		const confirmed = Siad.hastingsToSiacoins(response.confirmedsiacoinbalance);
@@ -93,7 +93,7 @@ function *getBalanceSaga(action) {
 }
 
 // Get all the transactions from /wallet transactions, parse them, and dispatch setTransactions()
-function *getTransactionsSaga(action) {
+function *getTransactionsSaga() {
 	try {
 		const response = yield siadCall(Siad, '/wallet/transactions?startheight=0&endheight=-1');
 		// For now, display the latest 50 transacitons in the table.
@@ -105,7 +105,7 @@ function *getTransactionsSaga(action) {
 	}
 }
 // Call /wallet/address, set the receive address, and show the receive prompt.
-function *getNewReceiveAddressSaga(action) {
+function *getNewReceiveAddressSaga() {
 	try {
 		const response = yield siadCall(Siad, '/wallet/address');
 		yield put(actions.setReceiveAddress(response.address));
@@ -117,7 +117,7 @@ function *getNewReceiveAddressSaga(action) {
 // POST to /wallet/siacoins, close the send prompt, then update the balance and transaction list.
 function *sendSiacoinSaga(action) {
 	try {
-		const response = yield siadCall(Siad, {
+		yield siadCall(Siad, {
 			url: '/wallet/siacoins',
 			method: 'POST',
 			qs: {

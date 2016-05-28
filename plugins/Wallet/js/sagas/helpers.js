@@ -7,8 +7,8 @@ const uint64max = Math.pow(2, 64);
 
 // siadCall: promisify Siad API calls.  Resolve the promise with `response` if the call was successful,
 // otherwise reject the promise with `err`.
-export const siadCall = (Siad, uri) => new Promise((resolve, reject) => {
-	Siad.call(uri, (err, response) => {
+export const siadCall = (daemon, uri) => new Promise((resolve, reject) => {
+	daemon.call(uri, (err, response) => {
 		if (err) {
 			reject(err);
 		} else {
@@ -36,16 +36,16 @@ const computeTransactionSum = (txn) => {
       totalMinerOutput = new BigNumber(0);
 
 	if (txn.inputs) {
-		const walletInputs = txn.inputs.filter((txn) => txn.walletaddress && txn.value);
-		totalSiacoinInput = sumCurrency(walletInputs, 'siacoin');
-		totalSiafundInput = sumCurrency(walletInputs, 'siafund');
-		totalMinerInput = sumCurrency(walletInputs, 'miner');
+		walletInputs = txn.inputs.filter((input) => input.walletaddress && input.value)
+		totalSiacoinInput = sumCurrency(walletInputs, 'siacoin')
+		totalSiafundInput = sumCurrency(walletInputs, 'siafund')
+		totalMinerInput = sumCurrency(walletInputs, 'miner')
 	}
 	if (txn.outputs) {
-		const walletOutputs = txn.outputs.filter((txn) => txn.walletaddress && txn.value);
-		totalSiacoinOutput = sumCurrency(walletOutputs, 'siacoin');
-		totalSiafundOutput = sumCurrency(walletOutputs, 'siafund');
-		totalMinerOutput = sumCurrency(walletOutputs, 'miner');
+		const walletOutputs = txn.outputs.filter((input) => input.walletaddress && input.value)
+		totalSiacoinOutput = sumCurrency(walletOutputs, 'siacoin')
+		totalSiafundOutput = sumCurrency(walletOutputs, 'siafund')
+		totalMinerOutput = sumCurrency(walletOutputs, 'miner')
 	}
 	return {
 		totalSiacoin: Siad.hastingsToSiacoins(totalSiacoinOutput.minus(totalSiacoinInput)),
@@ -58,8 +58,7 @@ const computeTransactionSum = (txn) => {
 // The transaction objects contain the following values:
 // {
 //   confirmed (boolean): whether this transaction has been confirmed by the network
-//   currency: The type of Sia currency ('siafund' or 'siacoin')
-//   value: The total value of this transaction
+//	 transactionsums: the net siacoin, siafund, and miner values
 //   transactionid: The transaction ID
 //   confirmationtimestamp:  The time at which this transaction occurred
 // }
@@ -70,10 +69,17 @@ export const parseRawTransactions = (response) => {
 	if (!response.confirmedtransactions) {
 		response.confirmedtransactions = [];
 	}
+<<<<<<< HEAD
 	const rawTransactions = response.unconfirmedtransactions.concat(response.confirmedtransactions);
 	let parsedTransactions = List(rawTransactions.map((txn) => {
 		const transactionsums = computeTransactionSum(txn);
 		let confirmed = (txn.confirmationtimestamp !== uint64max);
+=======
+	const rawTransactions = response.unconfirmedtransactions.concat(response.confirmedtransactions)
+	const parsedTransactions = List(rawTransactions.map((txn) => {
+		const transactionsums = computeTransactionSum(txn)
+		const confirmed = (txn.confirmationtimestamp !== uint64max)
+>>>>>>> 7e751b4... lint wallet plugin
 		return {
 			confirmed,
 			transactionsums,

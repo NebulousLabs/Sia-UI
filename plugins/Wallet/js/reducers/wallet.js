@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 import { Map, List} from 'immutable';
 import * as constants from '../constants/wallet.js';
 import { WALLET_UNLOCK_ERROR } from '../constants/error.js';
 import { SIAD_ERROR } from '../constants/error.js';
+=======
+import { Map, List} from 'immutable'
+import * as constants from '../constants/wallet.js'
+import { WALLET_UNLOCK_ERROR } from '../constants/error.js'
+>>>>>>> 7e751b4... lint wallet plugin
 
 const initialState = Map({
 	unlocked: false,
