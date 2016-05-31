@@ -1,47 +1,30 @@
-'use strict';
+import { app, Tray } from 'electron'
+import appTray from './js/mainjs/trayMenu.js'
+import Path from 'path'
+import loadConfig from './js/mainjs/config.js'
+import initWindow from './js/mainjs/initWindow.js'
+import addIPCListeners from './js/mainjs/addIPCListeners.js'
 
-// Electron main process libraries
-const Electron = require('electron');
-const App = Electron.app;
-const Tray = Electron.Tray;
-const appTray = require('./js/mainjs/trayMenu.js');
-// Node libraries
-const Path = require('path');
+// load config.json manager
+const config = loadConfig(Path.join(__dirname, 'config.json'))
 
-// Uncomment to visit localhost:9222 to see devtools remotely
-// App.commandLine.appendSwitch('remote-debugging-port', '9222');
-// TODO: This seems to not let WebDriverIO tests run so it's commented out,
-// though I'm not sure why.
-
-// Global references so these won't be deleted automatically upon execution and
-// garbage collection
-var mainWindow;
-var appIcon;
-
-// config.json manager
-var config = require('./js/mainjs/config.js')(Path.join(__dirname, 'config.json'));
-
-// When Electron loading has finished, start the daemon then the UI
-App.on('ready', function() {
+// When Electron loading has finished, start Sia-UI.
+app.on('ready', () => {
 	// Load mainWindow
-	mainWindow = require('./js/mainjs/initWindow.js')(config);
+	const mainWindow = initWindow(config)
 
 	// Load tray icon and menu
-	var iconPath = Path.join(__dirname, 'assets', 'tray.png');
-	appIcon = new Tray(iconPath);
-	appIcon.setToolTip('Sia - The Collaborative Cloud.');
-	appIcon.setContextMenu(appTray(mainWindow));
-	// Add IPCMain listeners
-	require('./js/mainjs/addIPCListeners.js')(config, mainWindow);
+	const appIcon = new Tray(Path.join(__dirname, 'assets', 'tray.png'))
+	appIcon.setToolTip('Sia - The Collaborative Cloud.')
+	appIcon.setContextMenu(appTray(mainWindow))
 
-	// Upon exiting, dereference the window object so that the GC cleans up.
-	mainWindow.on('closed', function() {
-		mainWindow = null;
-	});
-});
+	// Add IPCMain listeners
+	addIPCListeners(config, mainWindow)
+})
 
 // Quit once all windows have been closed.
-App.on('window-all-closed', function() {
-	config.save();
-	App.quit();
-});
+app.on('window-all-closed', () => {
+	config.save()
+	app.quit()
+})
+
