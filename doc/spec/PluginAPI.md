@@ -6,21 +6,13 @@ This specification outlines the functionality that Sia-UI's plugin API exposes t
 
 ## Desired Functionality
 
-The plugin API should be simple to use.  It should expose functionality which has been explicitly defined by the main UI.  This functionality should encompass most of what can be done with the Sia API.  State should be contained within the main UI and flow unidirectionally to the plugins.  Plugins will be assigned a `SiaAPI` global when they are created by the main UI.  This `SiaAPI` global includes functions which dispatch actions, such as
+The plugin API should expose a simple interface for making API calls to siad, creating file dialogs, displaying notifications, and displaying error messages.  This functionality will be wrapped in an object, `SiaAPI`, which is set as a global inside every plugin.  This object will expose an interface to the running, configured, instance of `sia.js` to plugin authors.  It will wrap file dialogs and popup messages with the appropriate IPC calls, so plugin authors do not need to communicate to the main UI directly over ipc.
 
-* `SiaAPI.getWalletStatus()`
-* `SiaAPI.getTransactions()`
+I envision `SiaAPI` having the following available functions:
 
-`SiaAPI` will expose an `EventEmitter` through which plugins can receive state updates.  Here are some examples of how I envision this API working: 
-
-### Sending (from the main UI, likely in a Saga.  Plugin devs don't need to worry about this)
-- `SiaAPI.emit(constants.RECEIVE_BALANCE, '1337 SC')`
-
-### Receiving (this is what plugin developers will use to update their plugin's state):
-- `SiaAPI.on(constants.RECEIVE_BALANCE, (balance) => jquery/react/redux/whateverjs.setBalance(balance))`
-
-
-## Proposed Implementation
-
-- Plugins should stay as iframes.  This gives the loosest coupling, giving any web developer the ability to at least create plugins that will load into the UI statically.  Plugins should be constructed as they are now, as WebViews, and assigned the `SiaAPI` global.  The main UI should be built around handling actions from `SiaAPI` and dispatching state changes through `SiaAPI`, using Redux.
+- `SiaAPI.call()`, a wrapper to the configured `sia.js`'s `.apiCall` function.
+- `SiaAPI.openFile(options)`, a wrapper which calls Electron.dialog.showOpenDialog with `options`.
+- `SiaAPI.saveFile(options)`, a wrapper which calls Electron.dialog.showSaveDialog with `options`.
+- `SiaAPI.message(options)`, a wrapper which calls Electron.showMessageBox with `options`.
+- `SiaAPI.error(options)`, a wrapper which calls Electron.showErrorBox with `options`.
 
