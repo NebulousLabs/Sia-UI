@@ -36,7 +36,7 @@ const computeTransactionSum = (txn) => {
 	let totalMinerOutput = new BigNumber(0)
 
 	if (txn.inputs) {
-		walletInputs = txn.inputs.filter((input) => input.walletaddress && input.value)
+		const walletInputs = txn.inputs.filter((input) => input.walletaddress && input.value)
 		totalSiacoinInput = sumCurrency(walletInputs, 'siacoin')
 		totalSiafundInput = sumCurrency(walletInputs, 'siafund')
 		totalMinerInput = sumCurrency(walletInputs, 'miner')
