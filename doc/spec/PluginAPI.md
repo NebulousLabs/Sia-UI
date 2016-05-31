@@ -6,10 +6,21 @@ This specification outlines the functionality that Sia-UI's plugin API exposes t
 
 ## Desired Functionality
 
-The plugin API should provide an importable javascript module that provides all of the following features:
+The plugin API should be simple to use.  It should expose functionality which has been explicitly defined by the main UI.  This functionality should encompass most of what can be done with the Sia API.  State should be contained within the main UI and flow unidirectionally to the plugins.  Plugins will be assigned a `SiaAPI` global when they are created by the main UI.  This `SiaAPI` global includes functions which dispatch actions, such as
 
-- A function which registers a plugin with Sia-UI.
-- Access to the running, configured, `sia.js` wrapper.
-- Functions to open and save files on the main UI process.
+* `SiaAPI.getWalletStatus()`
+* `SiaAPI.getTransactions()`
 
-The plugin API should be framework and architecture agnostic.  It should not lock developers into any particular code structure, style, or framework.
+`SiaAPI` will expose an `EventEmitter` through which plugins can receive state updates.  Here are some examples of how I envision this API working: 
+
+### Sending (from the main UI, likely in a Saga.  Plugin devs don't need to worry about this)
+- `SiaAPI.emit(constants.RECEIVE_BALANCE, '1337 SC')`
+
+### Receiving (this is what plugin developers will use to update their plugin's state):
+- `SiaAPI.on(constants.RECEIVE_BALANCE, (balance) => jquery/react/redux/whateverjs.setBalance(balance))`
+
+
+## Proposed Implementation
+
+- Plugins should stay as iframes.  This gives the loosest coupling, giving any web developer the ability to at least create plugins that will load into the UI statically.  Plugins should be constructed as they are now, as WebViews, and assigned the `SiaAPI` global.  The main UI should be built around handling actions from `SiaAPI` and dispatching state changes through `SiaAPI`, using Redux.
+
