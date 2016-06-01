@@ -1,9 +1,6 @@
-'use strict';
+import { Menu } from 'electron'
 
-const Electron = require('electron');
-const Menu = Electron.Menu;
-
-module.exports = function(window) {
+export default function(window) {
 	// Template for OSX app menu commands
 	// Selectors call the main app's NSApplication methods.
 	var menutemplate = [
@@ -14,8 +11,8 @@ module.exports = function(window) {
 				{ type: 'separator' },
 				{ label: 'Hide Sia', accelerator: 'CmdOrCtrl+H', selector: 'hide:'},
 				{ type: 'separator' },
-				{ label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: function() { window.destroy(); }},
-			]
+				{ label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: () => window.destroy() },
+			],
 		},
 		{
 			label: 'Edit',
@@ -27,9 +24,10 @@ module.exports = function(window) {
 				{ label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
 				{ label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
 				{ label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' },
-			]
+			],
 		},
-	];
+	]
 
-	return Menu.buildFromTemplate(menutemplate);
-};
+	return Menu.buildFromTemplate(menutemplate)
+
+}
