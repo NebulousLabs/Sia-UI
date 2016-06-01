@@ -117,6 +117,9 @@ function *getNewReceiveAddressSaga() {
 // POST to /wallet/siacoins, close the send prompt, then update the balance and transaction list.
 function *sendSiacoinSaga(action) {
 	try {
+		if (action.amount === undefined || action.destination === undefined || action.amount === '' || action.destination === '') {
+			throw 'You must specify an amount and a destination to send Siacoin!'
+		}
 		yield siadCall(Siad, {
 			url: '/wallet/siacoins',
 			method: 'POST',
@@ -128,11 +131,12 @@ function *sendSiacoinSaga(action) {
 		yield put(actions.closeSendPrompt())
 		yield put(actions.getBalance())
 		yield put(actions.getTransactions())
+		yield put(actions.setSendAmount(''))
+		yield put(actions.setSendAddress(''))
 	} catch (e) {
 		yield sendError(e)
 	}
 }
-
 // These functions are run by the redux-saga middleware.
 export function* watchCreateNewWallet() {
 	yield *takeEvery(constants.CREATE_NEW_WALLET, createWalletSaga)
