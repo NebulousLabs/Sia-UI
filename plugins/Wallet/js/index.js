@@ -1,12 +1,11 @@
 // index.js: main entrypoint for the Sia-UI wallet plugin.
-
 import React from 'react'
 import ReactDOM from 'react-dom'
 import createSagaMiddleware from 'redux-saga'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import rootReducer from './js/reducers/index.js'
-import * as sagas from './js/sagas/wallet.js'
+import rootSaga from './js/sagas/index.js'
 import { getLockStatus, getBalance, getTransactions } from './js/actions/wallet.js'
 import WalletApp from './js/components/app.js'
 
@@ -16,13 +15,7 @@ const store = createStore(
 	rootReducer,
 	applyMiddleware(sagaMiddleware)
 )
-sagaMiddleware.run(sagas.watchGetLockStatus)
-sagaMiddleware.run(sagas.watchUnlockWallet)
-sagaMiddleware.run(sagas.watchCreateNewWallet)
-sagaMiddleware.run(sagas.watchGetBalance)
-sagaMiddleware.run(sagas.watchGetTransactions)
-sagaMiddleware.run(sagas.watchGetNewReceiveAddress)
-sagaMiddleware.run(sagas.watchSendSiacoin)
+sagaMiddleware.run(rootSaga)
 
 // Render the wallet plugin
 const rootElement = (
