@@ -35,7 +35,6 @@
     "lint-fix": "eslint --fix --ignore-path .eslintignore ./plugins ./js ./test",
     "sia-repo": "go get -u github.com/NebulousLabs/Sia/...",
     "sia-import": "(test -d Sia || mkdir -p Sia) && (cp $GOPATH/bin/siad Sia & cp $GOPATH/bin/siac Sia)",
-    "postinstall": "node js/getSia.js",
     "sia-kill": "killall siad; while pgrep siad; do sleep .5; done;",
     "sia-refresh": "npm run sia-kill && rm -rf Sia && npm run sia-import",
     "release-args": "electron-packager . Sia-UI --app-version=0.5.2-beta --version=0.36.3 --overwrite --prune --ignore='(release|config.json|errors.log)' --out=release/v0.5.2-beta --icon=assets/icon",
