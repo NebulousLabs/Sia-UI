@@ -1,5 +1,4 @@
-'use strict';
-
+import { webFrame } from 'electron'
 /**
  * Creates the image element for a button
  * @param {string} path - The path to the icon.
@@ -7,10 +6,10 @@
  * @returns {Object} - The button image element
  */
 function icon(path) {
-	var i = document.createElement('img');
-	i.src = path;
-	i.className = 'pure-u icon';
-	return i;
+	var i = document.createElement('img')
+	i.src = path
+	i.className = 'pure-u icon'
+	return i
 }
 
 /**
@@ -20,10 +19,10 @@ function icon(path) {
  * @returns {Object} - The button text element
  */
 function text(name) {
-	var t = document.createElement('div');
-	t.innerText = name;
-	t.className = 'pure-u text';
-	return t;
+	var t = document.createElement('div')
+	t.innerText = name
+	t.className = 'pure-u text'
+	return t
 }
 
 /**
@@ -39,23 +38,23 @@ module.exports = {
 	 */
 	view: function view(markupPath, name) {
 		// Make webview element
-		var v = document.createElement('webview');
-		v.id = name + '-view';
-		v.className = 'webview';
-		v.src = markupPath;
+		var v = document.createElement('webview')
+		v.id = name + '-view'
+		v.className = 'webview'
+		v.src = markupPath
 
 		// Turn nodeintegration on so plugins can use electron & node libraries
-		v.nodeintegration = 'on';
+		v.nodeintegration = 'on'
 
 		// Have all plugins displaying UI's zoom by default
-		v.addEventListener('dom-ready', function() {
-			var zoomCode = 'require("electron").webFrame.setZoomFactor(' + require('electron').webFrame.getZoomFactor() + ');';
-			v.executeJavaScript(zoomCode);
-		});
+		v.addEventListener('dom-ready', () => {
+			var zoomCode = 'require("electron").webFrame.setZoomFactor(' + webFrame.getZoomFactor() + ');'
+			v.executeJavaScript(zoomCode)
+		})
 
 		// Start loading the view to the mainbar
-		document.getElementById('mainbar').appendChild(v);
-		return v;
+		document.getElementById('mainbar').appendChild(v)
+		return v
 	},
 	/**
 	 * Creates the button to be put on the sidebar
@@ -65,16 +64,16 @@ module.exports = {
 	 */
 	button: function button(iconPath, name) {
 		// Make button elements and combine
-		var b = document.createElement('div');
-		b.appendChild(icon(iconPath));
-		b.appendChild(text(name));
+		var b = document.createElement('div')
+		b.appendChild(icon(iconPath))
+		b.appendChild(text(name))
 
 		// Set inner values
-		b.id = name + '-button';
-		b.className = 'pure-u-1-1 button';
+		b.id = name + '-button'
+		b.className = 'pure-u-1-1 button'
 
 		// Add the button to the sidebar
-		document.getElementById('sidebar').appendChild(b);
-		return b;
+		document.getElementById('sidebar').appendChild(b)
+		return b
 	},
-};
+}

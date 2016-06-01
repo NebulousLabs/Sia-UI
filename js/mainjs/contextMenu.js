@@ -1,6 +1,6 @@
 // Template for context menu commands
 import { shell, app } from 'electron'
-export default template = [
+const template = [
 	{
 		label: 'Edit',
 		submenu: [
@@ -107,3 +107,4 @@ if (process.platform ==='darwin') {
 	)
 }
 
+export default template

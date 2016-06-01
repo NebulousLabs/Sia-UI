@@ -9,7 +9,7 @@ const ContextMenu = Menu.buildFromTemplate(contextMenuTemplate)
 // native GUI resources
 export default function(config, mainWindow) {
 	// Listen for if the renderer process wants to produce a dialog message
-	IPCMain.on('dialog', (event, type, options) => {
+	ipcMain.on('dialog', (event, type, options) => {
 		var response
 		switch (type) {
 		case 'open':

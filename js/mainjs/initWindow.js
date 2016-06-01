@@ -44,7 +44,7 @@ export default function(config) {
 	// Unregister all shortcuts when mainWindow is closed.
 	// Stop Siad if it is not running detached.
 	mainWindow.on('closed', () => {
-		GlobalShortcut.unregisterAll()
+		globalShortcut.unregisterAll()
 		if (!config.siad.detached) {
 			Siad.stop()
 		}

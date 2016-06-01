@@ -1,32 +1,28 @@
-'use strict';
 
 // Imported Electron modules
-const Electron = require('electron');
-const App = Electron.remote.app;
-const IPCRenderer = Electron.ipcRenderer;
-const mainWindow = Electron.remote.getCurrentWindow();
-// Imported Node modules
-const Path = require('path');
-const Fs = require('fs');
-// Imported Other modules
-const Siad = require('sia.js');
-const $ = require('jquery');
-// Notification System
-const notification = require('./notificationManager.js');
-// Loading Screen
-const loadingScreen = require('./loadingScreen');
+import Path from 'path'
+import Fs from 'fs'
+import plugins from './pluginManager.js'
+import notification from './notificationManager.js'
+import loadingScreen from './loadingscreen.js'
+const packageinfo = require('../../package.json')
+const Electron = require('electron')
+const App = Electron.remote.app
+const IPCRenderer = Electron.ipcRenderer
+const mainWindow = Electron.remote.getCurrentWindow()
+const $ = require('jquery')
 
 // Object to export
-var ui = {};
+var ui = {}
 // Variable to track error log
-var errorLog;
+var errorLog
 // Shows tooltip with content on given element
-var tooltipTimeout, tooltipVisible;
+var tooltipTimeout, tooltipVisible
 
 // Clicking the logo links to sia.tech
-$('.logo-container').click(function() {
-	Electron.shell.openExternal('http://sia.tech');
-});
+$('.logo-container').click(() => {
+	Electron.shell.openExternal('http://sia.tech')
+})
 
 /**
  * Shows notification in lower right of UI window
@@ -40,16 +36,16 @@ ui.notify = function(message, type, clickAction) {
 	// Record errors for reference in `errors.log`
 	if (type === 'error') {
 		if (!errorLog) {
-			errorLog = Fs.createWriteStream(Path.join(__dirname, '../..', 'errors.log'));
+			errorLog = Fs.createWriteStream(Path.join(__dirname, '../..', 'errors.log'))
 		}
 		try {
-			errorLog.write(message + '\n');
+			errorLog.write(message + '\n')
 		} catch (e) {
-			errorLog.write(e.toString() + '\n');
+			errorLog.write(e.toString() + '\n')
 		}
 	}
-	notification(message, type, clickAction);
-};
+	notification(message, type, clickAction)
+}
 
 /**
  * Shows tooltip with content at given offset location
@@ -58,74 +54,74 @@ ui.notify = function(message, type, clickAction) {
  * @param {Object} offset The dimensions of the element to display over
  * TODO: separate out tooltip management from this file
  */
-ui.tooltip = function(content, offset) {
-	var eTooltip = $('#tooltip');
-	offset = offset || {
+ui.tooltip = function(content, requestedOffset) {
+	var eTooltip = $('#tooltip')
+	offset = requestedOffset || {
 		top: 0,
 		left: 0,
-	};
+	}
 
 	// Show the tooltip at the proper location
-	eTooltip.show();
-	eTooltip.html(content);
-	var middleX = offset.left - (eTooltip.width()/2) + (offset.width/2);
-	var topY = offset.top - (eTooltip.height()) - (offset.height/2);
+	eTooltip.show()
+	eTooltip.html(content)
+	var middleX = offset.left - (eTooltip.width()/2) + (offset.width/2)
+	var topY = offset.top - (eTooltip.height()) - (offset.height/2)
 	eTooltip.offset({
 		top: topY,
 		left: middleX,
-	});
+	})
 
 	// Fade the toolip from 0 to 1
 	if (!tooltipVisible) {
-		eTooltip.stop();
-		eTooltip.css({'opacity':0});
-		tooltipVisible = true;
+		eTooltip.stop()
+		eTooltip.css({'opacity':0})
+		tooltipVisible = true
 		eTooltip.animate({
-			'opacity':1
-		}, 400);
+			'opacity':1,
+		}, 400)
 	} else {
-		eTooltip.stop();
-		eTooltip.show();
-		eTooltip.css({'opacity':1});
+		eTooltip.stop()
+		eTooltip.show()
+		eTooltip.css({'opacity':1})
 	}
 
 	// Hide the tooltip after 1.4 seconds
-	clearTimeout(tooltipTimeout);
-	tooltipTimeout = setTimeout(function() {
+	clearTimeout(tooltipTimeout)
+	tooltipTimeout = setTimeout(() => {
 		// eTooltip.hide();
 		eTooltip.animate({
-			'opacity':'0'
-		}, 400, function() {
-			tooltipVisible = false;
-			eTooltip.hide();
-		});
-	}, 1400);
-};
+			'opacity':'0',
+		}, 400, () => {
+			tooltipVisible = false
+			eTooltip.hide()
+		})
+	}, 1400)
+}
 
 // Checks if there is an update available
 function checkUpdate() {
 	$.ajax({
 		url: 'https://api.github.com/repos/NebulousLabs/Sia-UI/releases',
 		type: 'GET',
-		success: function(responseData, textStatus, jqXHR) {
+		success: function(responseData) {
 			// If version matches latest release version, do nothing
-			if (responseData[0].tag_name === require('../../package.json').version) {
-				return;
+			if (responseData[0].tag_name === packageinfo.version) {
+				return
 			}
 
 			// If not, provide links to UI release page
 			var updatePage = function() {
-				Electron.shell.openExternal('https://github.com/NebulousLabs/Sia-UI/releases');
-			};
-			$('#update-ui').show().click(updatePage);
-			ui.notify('Update available for UI', 'update', updatePage);
+				Electron.shell.openExternal('https://github.com/NebulousLabs/Sia-UI/releases')
+			}
+			$('#update-ui').show().click(updatePage)
+			ui.notify('Update available for UI', 'update', updatePage)
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			// jqXHR is the XmlHttpRequest that jquery returns back on error
-			var errCode = textStatus + ' ' + jqXHR.status + ' ' + errorThrown + ' ' + jqXHR.responseText;
-			ui.notify('Update check failed: ' + errCode, 'error');
+			var errCode = textStatus + ' ' + jqXHR.status + ' ' + errorThrown + ' ' + jqXHR.responseText
+			ui.notify('Update check failed: ' + errCode, 'error')
 		},
-	});
+	})
 }
 
 /**
@@ -134,15 +130,15 @@ function checkUpdate() {
 */
 function init(callback) {
 	// Initialize plugins
-	ui.plugins = require('./pluginManager.js');
+	ui.plugins = plugins
 	// Wait for the plugin system to load, then call callback
 	const loadInterval = setInterval(() => {
 		if (ui.plugins.home.isLoading() === false) {
-			clearInterval(loadInterval);
-			checkUpdate();
-			callback();
+			clearInterval(loadInterval)
+			checkUpdate()
+			callback()
 		}
-	}, 500);
+	}, 500)
 }
 
 /**
@@ -152,28 +148,28 @@ function init(callback) {
 function closeLog() {
 	// Close the error write stream
 	if (errorLog) {
-		errorLog.end();
+		errorLog.end()
 	}
 }
-App.on('will-quit', closeLog);
+App.on('will-quit', closeLog)
 
 // If closeToTray is set, hide the window and cancel the close.
 if (mainWindow.closeToTray) {
 	window.onbeforeunload = function() {
-		mainWindow.hide();
-		return false;
-	};
+		mainWindow.hide()
+		return false
+	}
 }
 
 // Set up responses upon the window loading and closing
 window.onload = function() {
-	loadingScreen(init);
-};
+	loadingScreen(init)
+}
 
 // Right-click brings up a context menu without blocking the UI
-window.addEventListener('contextmenu', function(e) {
-	e.preventDefault();
-	IPCRenderer.send('context-menu');
-}, false);
+window.addEventListener('contextmenu', (e) => {
+	e.preventDefault()
+	IPCRenderer.send('context-menu')
+}, false)
 
-module.exports = ui;
+module.exports = ui
