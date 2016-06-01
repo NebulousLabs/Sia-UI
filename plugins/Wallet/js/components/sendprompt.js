@@ -10,11 +10,11 @@ const SendPrompt = ({sendAddress, sendAmount, actions}) => {
 			<div className="sendprompt">
 				<div className="sendamount">
 					<h3>Send Amount (SC) </h3>
-					<input onChange={handleSendAmountChange}></input>
+					<input onChange={handleSendAmountChange} value={sendAmount}></input>
 				</div>
 				<div className="sendaddress">
 					<h3> To Address </h3>
-					<input onChange={handleSendAddressChange}></input>
+					<input onChange={handleSendAddressChange} value={sendAddress}></input>
 				</div>
 				<div className="send-prompt-buttons">
 					<button className="cancel-send-button" onClick={handleCancelClick}>Cancel</button>
