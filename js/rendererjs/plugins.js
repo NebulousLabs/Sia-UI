@@ -1,7 +1,6 @@
 // This module handles the construction of Sia-UI plugins.
 import { List } from 'immutable'
 import Path from 'path'
-import loadAPI from './pluginapi.js'
 const remote = require('electron').remote
 const fs = remote.require('fs')
 
@@ -23,7 +22,7 @@ const createButtonTextElement = (name) => {
 
 // Construct a plugin view element from a plugin path and title
 const createPluginElement = (markupPath, title) => {
-	let elem = document.createElement('webview')
+	const elem = document.createElement('webview')
 	elem.id = title + '-view'
 	elem.className = 'webview'
 	elem.src = markupPath
@@ -36,7 +35,7 @@ const createPluginElement = (markupPath, title) => {
 // Set a plugin as the visible plugin
 export const setCurrentPlugin = (pluginName) => {
 	const currentElements = document.querySelectorAll('.current')
-	for (let elem in currentElements) {
+	for (const elem in currentElements) {
 		if (typeof currentElements[elem].classList !== 'undefined') {
 			currentElements[elem].classList.remove('current')
 		}
@@ -53,7 +52,7 @@ export const setCurrentPlugin = (pluginName) => {
 
 // Construct a plugin button element from an icon path and title
 const createPluginButtonElement = (iconPath, title) => {
-	let elem = document.createElement('div')
+	const elem = document.createElement('div')
 	elem.id = title + '-button'
 	elem.className = 'pure-u-1-1 button'
 	elem.appendChild(createButtonIconElement(iconPath))

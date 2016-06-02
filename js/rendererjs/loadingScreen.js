@@ -78,7 +78,7 @@ export default function loadingScreen(initUI) {
 					startUI('Welcome to Sia', initUI)
 				}
 			})
-		}).catch((e) => {
+		}).catch(() => {
 			// config.path doesn't exist.  Prompt the user for siad's location
 			dialog.showErrorBox('Siad not found', 'Sia-UI couldn\'t locate siad.  Please navigate to siad.')
 			const siadPath = dialog.showOpenDialog({

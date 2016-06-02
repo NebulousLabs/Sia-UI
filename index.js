@@ -17,7 +17,6 @@ app.on('ready', () => {
 	const appIcon = new Tray(Path.join(__dirname, 'assets', 'tray.png'))
 	appIcon.setToolTip('Sia - The Collaborative Cloud.')
 	appIcon.setContextMenu(appTray(mainWindow))
-	mainWindow.toggleDevTools()
 
 	// Add IPCMain listeners
 	addIPCListeners(config, mainWindow)
