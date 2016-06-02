@@ -1,111 +1,80 @@
-'use strict'
+// This module handles the construction of Sia-UI plugins.
+import { List } from 'immutable'
+import Path from 'path'
+const remote = require('electron').remote
+const fs = remote.require('fs')
 
-// Plugin Factory namespace to hold plugin creation logic
-const Factory = require('./pluginFactory')
-// Node module
-const Path = require('path')
+// Scan a folder at `path` for plugins.
+// Return a list of folder paths that have a valid plugin structure.
+export const scanFolder = (path) => {
+	let pluginFolders = List()
+	const unsanitizedFolders = fs.readdirSync(path)
+	for (const p in unsanitizedFolders) {
+		const pluginPath = Path.join(path, unsanitizedFolders[p])
+		try {
+			fs.statSync(Path.join(pluginPath, '/index.html'))
+		} catch (e) {
+			console.error(e)
+			continue
+		}
+		pluginFolders = pluginFolders.push(pluginPath)
+	}
+	return pluginFolders
+}
 
-/**
- * Constructs the webview and button from a plugin folder
- * @class Plugin
- * @param {string} plugPath - The directory of this plugin
- * @param {string} name - The name of the plugin.
- */
-function Plugin(plugPath, name) {
-	// Html element for the webview
-	var view = new Factory.view(Path.join(plugPath, name, 'index.html'), name)
-	// Html element for the sidebar button
-	var button = new Factory.button(Path.join(plugPath, name, 'assets', 'button.png'), name)
+// Create an icon element for a plugin button.
+const createButtonIconElement = (path) => {
+	const i = document.createElement('img')
+	i.src = path
+	i.className = 'pure-u icon'
+	return i
+}
+// Create a text element for a plugin button.
+const createButtonTextElement = (name) => {
+	const t = document.createElement('div')
+	t.innerText = name
+	t.className = 'pure-u text'
+	return t
+}
+
+// Construct a plugin view element from a plugin path and title
+const createPluginElement = (markupPath, title) => {
+	const elem = document.createElement('webview')
+	elem.id = title + '-view'
+	elem.className = 'webview'
+	elem.src = markupPath
+	return elem
+}
+// Construct a plugin button element from an icon path and title
+const createPluginButtonElement = (iconPath, title) => {
+	const elem = document.createElement('div')
+	elem.id = title + '-button'
+	elem.className = 'pure-u-1-1 button'
+	elem.appendChild(createButtonIconElement(iconPath))
+	elem.appendChild(createButtonTextElement(title))
+}
+
+const showElement = (element) => element.classList.add('current')
+const hideElement = (element) => element.classList.remove('current')
+
+export const loadPlugin = (pluginPath) => {
+	const name = pluginPath.substring(lastIndexOf('/') + 1)
+	const markupPath = Path.join(pluginPath, 'index.html')
+	const iconPath = Path.join(pluginPath, 'asset', 'button.png')
+
+	const viewElement = createPluginElement(markupPath, name)
+	const buttonElement = createPluginButtonElement(iconPath, name)
 
 	return {
-		/**
-		 * Name of the Plugin
-		 * @member {string} Plugin#name
-		 */
-		name: name,
-		/**
-		 * Function executed upon the sidebar button being clicked
-		 * @member {transition} Plugin#transition
-		 */
-		transition: function(transition) {
-			button.onclick = transition
+		show: () => {
+			showElement(viewElement)
+			showElement(buttonElement)
 		},
-
-		/**
-		 * Used to interact with the view element in an easy manner.
-		 * @function Plugin#on
-		 * @param {string} event - webview event to listen for
-		 * @param {Object} listener - function to execute upon the event firing
-		 */
-		on: function(event, listener) {
-			view.addEventListener(event, listener)
-		},
-
-		/**
-		 * Shows the plugin's view
-		 * @function Plugin#show
-		 */
-		show: function() {
-			button.classList.add('current')
-			view.send('shown')
-			setTimeout(() => {
-				view.classList.add('current')
-			}, 170)
-		},
-
-		/**
-		 * Hides the plugin's view
-		 * @function Plugin#hide
-		 */
-		hide: function() {
-			button.classList.remove('current')
-			view.send('hidden')
-			setTimeout(() => {
-				view.classList.remove('current')
-			}, 170)
-		},
-
-		/**
-		 * For communicating ipc messages with the plugin's webview, while still
-		 * keeping it private to plugin
-		 * @function Plugin#sendToView
-		 * @param {string} channel - ipc channel to communicate over
-		 * @param {...*} messages - ipc messages sent over channel to view
-		 */
-		sendToView: function() {
-			view.send(...arguments)
-		},
-
-		/**
-		 * Opens or closes the webviews devtools for detailed output viewing
-		 * @function Plugin#toggleDevTools
-		 */
-		toggleDevTools: function() {
-			if (view.isDevToolsOpened()) {
-				view.closeDevTools()
-			} else {
-				view.openDevTools()
-			}
-		},
-
-		/**
-		 * Return if the webview is loading
-		 * @function Plugin#isLoading
-		 */
-		isLoading: function() {
-			return view.isLoading()
-		},
-
-		/**
-		 * Execute javascript in webview page (mostly for testing purposes)
-		 * Can only send string javascript
-		 * @param {function} fun - function to be executed in view context
-		 */
-		execute: function(fun) {
-			process.nextTick(() => {
-				view.executeJavaScript(fun)
-			})
+		hide: () => {
+			hideElement(viewElement)
+			hideElement(buttonElement)
 		},
 	}
 }
-module.exports = Plugin
+
+
