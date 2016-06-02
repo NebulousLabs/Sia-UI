@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
 // Plugin Factory namespace to hold plugin creation logic
-const Factory = require('./pluginFactory');
+const Factory = require('./pluginFactory')
 // Node module
-const Path = require('path');
+const Path = require('path')
 
 /**
  * Constructs the webview and button from a plugin folder
@@ -13,9 +13,9 @@ const Path = require('path');
  */
 function Plugin(plugPath, name) {
 	// Html element for the webview
-	var view = new Factory.view(Path.join(plugPath, name, 'index.html'), name);
+	var view = new Factory.view(Path.join(plugPath, name, 'index.html'), name)
 	// Html element for the sidebar button
-	var button = new Factory.button(Path.join(plugPath, name, 'assets', 'button.png'), name);
+	var button = new Factory.button(Path.join(plugPath, name, 'assets', 'button.png'), name)
 
 	return {
 		/**
@@ -28,7 +28,7 @@ function Plugin(plugPath, name) {
 		 * @member {transition} Plugin#transition
 		 */
 		transition: function(transition) {
-			button.onclick = transition;
+			button.onclick = transition
 		},
 
 		/**
@@ -38,31 +38,31 @@ function Plugin(plugPath, name) {
 		 * @param {Object} listener - function to execute upon the event firing
 		 */
 		on: function(event, listener) {
-			view.addEventListener(event, listener);
+			view.addEventListener(event, listener)
 		},
 
-		/** 
+		/**
 		 * Shows the plugin's view
 		 * @function Plugin#show
 		 */
 		show: function() {
-			button.classList.add('current');
-			view.send('shown');
-			setTimeout(function() {
-				view.classList.add('current');
-			}, 170);
+			button.classList.add('current')
+			view.send('shown')
+			setTimeout(() => {
+				view.classList.add('current')
+			}, 170)
 		},
 
-		/** 
+		/**
 		 * Hides the plugin's view
 		 * @function Plugin#hide
 		 */
 		hide: function() {
-			button.classList.remove('current');
-			view.send('hidden');
-			setTimeout(function() {
-				view.classList.remove('current');
-			}, 170);
+			button.classList.remove('current')
+			view.send('hidden')
+			setTimeout(() => {
+				view.classList.remove('current')
+			}, 170)
 		},
 
 		/**
@@ -73,7 +73,7 @@ function Plugin(plugPath, name) {
 		 * @param {...*} messages - ipc messages sent over channel to view
 		 */
 		sendToView: function() {
-			view.send.apply(view, arguments);
+			view.send(...arguments)
 		},
 
 		/**
@@ -82,9 +82,9 @@ function Plugin(plugPath, name) {
 		 */
 		toggleDevTools: function() {
 			if (view.isDevToolsOpened()) {
-				view.closeDevTools();
+				view.closeDevTools()
 			} else {
-				view.openDevTools();
+				view.openDevTools()
 			}
 		},
 
@@ -93,7 +93,7 @@ function Plugin(plugPath, name) {
 		 * @function Plugin#isLoading
 		 */
 		isLoading: function() {
-			return view.isLoading();
+			return view.isLoading()
 		},
 
 		/**
@@ -102,10 +102,10 @@ function Plugin(plugPath, name) {
 		 * @param {function} fun - function to be executed in view context
 		 */
 		execute: function(fun) {
-			process.nextTick(function() {
-				view.executeJavaScript(fun);
-			});
+			process.nextTick(() => {
+				view.executeJavaScript(fun)
+			})
 		},
-	};
+	}
 }
-module.exports = Plugin;
+module.exports = Plugin

@@ -1,2 +1,4 @@
 **/*.js
 !plugins/Wallet/*
+!index.js
+!js/*

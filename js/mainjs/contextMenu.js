@@ -1,7 +1,6 @@
-'use strict';
-
 // Template for context menu commands
-var template = [
+import { shell, app } from 'electron'
+const template = [
 	{
 		label: 'Edit',
 		submenu: [
@@ -12,7 +11,7 @@ var template = [
 			{ label: 'Copy', accelerator: 'CmdOrCtrl+C', role: 'copy' },
 			{ label: 'Paste', accelerator: 'CmdOrCtrl+V', role: 'paste' },
 			{ label: 'Select All', accelerator: 'CmdOrCtrl+A', role: 'selectall' },
-		]
+		],
 	}, {
 		label: 'View',
 		submenu: [
@@ -21,71 +20,71 @@ var template = [
 				accelerator: 'CmdOrCtrl+R',
 				click: function(item, focusedWindow) {
 					if (focusedWindow) {
-						focusedWindow.reload();
+						focusedWindow.reload()
 					}
-				}
+				},
 			}, {
 				label: 'Toggle Full Screen',
 				accelerator: (function() {
 					if (process.platform ==='darwin') {
-						return 'Ctrl+Command+F';
+						return 'Ctrl+Command+F'
 					} else {
-						return 'F11';
+						return 'F11'
 					}
 				})(),
 				click: function(item, focusedWindow) {
 					if (focusedWindow) {
-						focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+						focusedWindow.setFullScreen(!focusedWindow.isFullScreen())
 					}
-				}
+				},
 			}, {
 				label: 'Toggle Developer Tools',
 				accelerator: (function() {
 					if (process.platform ==='darwin') {
-						return 'Alt+Command+I';
+						return 'Alt+Command+I'
 					} else {
-						return 'Ctrl+Shift+I';
+						return 'Ctrl+Shift+I'
 					}
 				})(),
 				click: function(item, focusedWindow) {
 					if (focusedWindow) {
-						focusedWindow.webContents.toggleDevTools();
+						focusedWindow.webContents.toggleDevTools()
 					}
-				}
+				},
 			}, {
 				label: 'Toggle Plugin Developer Tools',
 				accelerator: (function() {
 					if (process.platform ==='darwin') {
-						return 'Alt+Command+P';
+						return 'Alt+Command+P'
 					} else {
-						return 'Ctrl+Shift+P';
+						return 'Ctrl+Shift+P'
 					}
 				})(),
 				click: function(item, focusedWindow) {
 					if (focusedWindow) {
-						focusedWindow.webContents.executeJavaScript('ui.plugins.current.toggleDevTools();');
+						focusedWindow.webContents.executeJavaScript('ui.plugins.current.toggleDevTools()')
 					}
-				}
+				},
 			},
-		]
+		],
 	}, {
 		label: 'Window',
 		role: 'window',
 		submenu: [
 			{ label: 'Minimize', accelerator: 'CmdOrCtrl+M', role: 'minimize' },
 			{ label: 'Close', accelerator: 'CmdOrCtrl+W', role: 'close' },
-		]
+		],
 	}, {
 		label: 'Help',
 		role: 'help',
 		submenu: [
-			{ label: 'Learn More', click: function() { require('electron').shell.openExternal('http://sia.tech/'); } },
-		]
+			{ label: 'Learn More', click: () => shell.openExternal('http://sia.tech/') },
+		],
 	},
-];
+]
 
 if (process.platform ==='darwin') {
-	var appName = 'Sia-UI';
+	var appName = 'Sia-UI'
 	template.unshift({
 		label: appName,
 		submenu: [
@@ -97,16 +96,15 @@ if (process.platform ==='darwin') {
 			{ label: 'Hide Others', accelerator: 'Command+Shift+H', role: 'hideothers' },
 			{ label: 'Show All', role: 'unhide' },
 			{ type:  'separator' },
-			{ label: 'Quit', accelerator: 'Command+Q', click: function() { require('electron').app.quit(); } },
-		]
-	});
+			{ label: 'Quit', accelerator: 'Command+Q', click: () => app.quit() },
+		],
+	})
 
 	// Window menu.
 	template[3].submenu.push(
 		{ type: 'separator' },
 		{ label: 'Bring All to Front', role: 'front' }
-	);
+	)
 }
 
-// Exports the created menu
-module.exports = template;
+export default template

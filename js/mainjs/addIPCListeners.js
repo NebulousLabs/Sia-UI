@@ -1,56 +1,53 @@
-'use strict';
-
 // Electron main process libraries
-const Electron = require('electron');
-const Dialog = Electron.dialog;
-const IPCMain = Electron.ipcMain;
-const Menu = Electron.Menu;
+import { dialog, ipcMain, Menu } from 'electron'
+import Path from 'path'
+import contextMenuTemplate from './contextMenu.js'
 // Context Menu template
-const ContextMenu = Menu.buildFromTemplate(require('./contextMenu.js'));
+const ContextMenu = Menu.buildFromTemplate(contextMenuTemplate)
 
 // Adds IPCMain listeners that the UI and plugins can access for config and OS
 // native GUI resources
-module.exports = function(config, mainWindow) {
+export default function(config, mainWindow) {
 	// Listen for if the renderer process wants to produce a dialog message
-	IPCMain.on('dialog', function(event, type, options) {
-		var response;
+	ipcMain.on('dialog', (event, type, options) => {
+		var response
 		switch (type) {
-			case 'open':
-				response = Dialog.showOpenDialog(mainWindow, options);
-				break;
-			case 'save':
-				response = Dialog.showSaveDialog(mainWindow, options);
-				break;
-			case 'message':
+		case 'open':
+			response = dialog.showOpenDialog(mainWindow, options)
+			break
+		case 'save':
+			response = dialog.showSaveDialog(mainWindow, options)
+			break
+		case 'message':
 				// Give all message boxes the sia icon by default
-				if (!options.icon) {
-					options.icon = require('path').join(__dirname, '../..', 'assets', 'icon.png');
-				}
-				response = Dialog.showMessageBox(mainWindow, options);
-				break;
-			case 'error':
-				Dialog.showErrorBox(options.title, options.content);
-				break;
-			default:
-				console.error('Unknown dialog ipc');
+			if (!options.icon) {
+				options.icon = Path.join(__dirname, '../..', 'assets', 'icon.png')
+			}
+			response = dialog.showMessageBox(mainWindow, options)
+			break
+		case 'error':
+			dialog.showErrorBox(options.title, options.content)
+			break
+		default:
+			console.error('Unknown dialog ipc')
 		}
 		// Can't return an `undefined` from synchronous ipc because it will
 		// keep the renderer waiting for a response, thus blocking it
 		if (response === undefined) {
-			response = null;
+			response = null
 		}
 		// TODO: Make async and adapt plugins
-		event.returnValue = response;
-	});
+		event.returnValue = response
+	})
 
 	// Enable right-click context menu from renderer process event
-	IPCMain.on('context-menu', function(event, template) {
-		ContextMenu.popup(mainWindow);
-	});
+	ipcMain.on('context-menu', () => {
+		ContextMenu.popup(mainWindow)
+	})
 
 	// Allow any process to interact with the configManager
-	IPCMain.on('config', function(event, key, value) {
-		event.returnValue = config.attr(key, value);
-	});
-};
+	ipcMain.on('config', (event, key, value) => {
+		event.returnValue = config.attr(key, value)
+	})
+}
 

@@ -1,26 +1,23 @@
-'use strict';
+import { Menu } from 'electron'
 
-const Electron = require('electron');
-const Menu = Electron.Menu;
-
-module.exports = function(window) {
+export default function(window) {
 	// Template for Sia-UI tray menu.
 	var menutemplate = [
 		{
 			label: 'Show Sia',
-			click: function() { window.show(); }
+			click: () => window.show(),
 		},
 		{ type: 'separator' },
 		{
 			label: 'Hide Sia',
-			click: function() { window.hide(); }
+			click: () => window.hide(),
 		},
 		{ type: 'separator' },
 		{
 			label: 'Quit Sia',
-			click: function() { window.destroy(); }
-		}
-	];
+			click: () => window.destroy(),
+		},
+	]
 
-	return Menu.buildFromTemplate(menutemplate);
-};
+	return Menu.buildFromTemplate(menutemplate)
+}

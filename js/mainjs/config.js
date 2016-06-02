@@ -1,6 +1,5 @@
-'use strict';
-const fs = require('fs');
-const Path = require('path');
+import fs from 'fs'
+import Path from 'path'
 
 // The default settings
 const defaultConfig = {
@@ -15,20 +14,22 @@ const defaultConfig = {
 	height:      600,
 	x:           0,
 	y:           0,
-};
-
-// Variable to hold the current configuration in memory
-var config;
+}
 
 /**
  * Holds all config.json related logic
  * @module configManager
  */
-function configManager(filepath) {
+export default function configManager(filepath) {
+	let config
+
 	try {
-		config = require(filepath);
+		// TODO: write load() function instead of global require
+		/* eslint-disable global-require */
+		config = require(filepath)
+		/* eslint-enable global-require */
 	} catch (err) {
-		config = defaultConfig;
+		config = defaultConfig
 	}
 
 	/**
@@ -38,33 +39,32 @@ function configManager(filepath) {
 	 */
 	config.attr = function(key, value) {
 		if (value !== undefined) {
-			config[key] = value;
+			config[key] = value
 		}
 		if (config[key] === undefined) {
-			config[key] = null;
+			config[key] = null
 		}
-		return config[key];
-	};
+		return config[key]
+	}
 
 	/**
 	 * Writes the current config to defaultConfigPath
 	 * @param {string} path - UI's defaultConfigPath
 	 */
 	config.save = function() {
-		fs.writeFileSync(filepath, JSON.stringify(config, null, '\t'));
-	};
+		fs.writeFileSync(filepath, JSON.stringify(config, null, '\t'))
+	}
 
 	/**
 	 * Sets config to what it was on disk
 	 */
 	config.reset = function() {
-		config = configManager(filepath);
-	};
+		config = configManager(filepath)
+	}
 
 	// Save to disk immediately when loaded
-	config.save();
+	config.save()
 	// Return the config object with the above 3 member functions
-	return config;
+	return config
 }
 
-module.exports = configManager;
