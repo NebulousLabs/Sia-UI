@@ -1,6 +1,7 @@
 // This module handles the construction of Sia-UI plugins.
 import { List } from 'immutable'
 import Path from 'path'
+import loadAPI from './pluginapi.js'
 const remote = require('electron').remote
 const fs = remote.require('fs')
 
@@ -26,9 +27,9 @@ const createPluginElement = (markupPath, title) => {
 	elem.id = title + '-view'
 	elem.className = 'webview'
 	elem.src = markupPath
-	elem.preload = './pluginapi.js'
 	// This is enabled for legacy plugin support.
 	elem.nodeintegration = true
+	elem.preload = Path.join('file://', Path.resolve('js/rendererjs/pluginapi.js'))
 	return elem
 }
 
@@ -59,7 +60,7 @@ const createPluginButtonElement = (iconPath, title) => {
 export const loadPlugin = (pluginPath) => {
 	const name = pluginPath.substring(pluginPath.lastIndexOf('/') + 1)
 	const markupPath = Path.join(pluginPath, 'index.html')
-	const iconPath = Path.join(pluginPath, 'asset', 'button.png')
+	const iconPath = Path.join(pluginPath, 'assets', 'button.png')
 
 	const viewElement = createPluginElement(markupPath, name)
 	const buttonElement = createPluginButtonElement(iconPath, name)

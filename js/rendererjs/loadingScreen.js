@@ -24,7 +24,7 @@ const checkSiaPath = () => new Promise((resolve, reject) => {
 		if (!err) {
 			resolve()
 		} else {
-			reject()
+			reject(err)
 		}
 	})
 })
@@ -64,13 +64,13 @@ export default function loadingScreen(initUI) {
 		fs.mkdirSync(config.datadir)
 	}
 
-	checkSiaPath().then(() => {
-		Siad.ifRunning(() => {
-			config.detached = true
-			ipcRenderer.sendSync('config', 'siad', config)
-			Siad.configure(config)
-			startUI('Welcome back', initUI)
-		}, () => {
+	Siad.ifRunning(() => {
+		config.detached = true
+		ipcRenderer.sendSync('config', 'siad', config)
+		Siad.configure(config)
+		startUI('Welcome back', initUI)
+	}, () => {
+		checkSiaPath().then(() => {
 			startSiad((error) => {
 				if (error) {
 					showError(error)
@@ -78,23 +78,23 @@ export default function loadingScreen(initUI) {
 					startUI('Welcome to Sia', initUI)
 				}
 			})
-		})
-	}).catch(() => {
-		// config.path doesn't exist.  Prompt the user for siad's location
-		dialog.showErrorBox('Siad not found', 'Sia-UI couldn\'t locate siad.  Please navigate to siad.')
-		const siadPath = dialog.showOpenDialog({
-			title: 'Please locate siad.',
-			properties: ['openFile'],
-			defaultPath: Path.join('..', config.path),
-			filters: [{ name: 'siad', extensions: ['*'] }],
-		})
-		config.path = siadPath[0]
-		startSiad((error) => {
-			if (error) {
-				showError(error)
-			} else {
-				startUI('Welcome to Sia', initUI)
-			}
+		}).catch((e) => {
+			// config.path doesn't exist.  Prompt the user for siad's location
+			dialog.showErrorBox('Siad not found', 'Sia-UI couldn\'t locate siad.  Please navigate to siad.')
+			const siadPath = dialog.showOpenDialog({
+				title: 'Please locate siad.',
+				properties: ['openFile'],
+				defaultPath: Path.join('..', config.path),
+				filters: [{ name: 'siad', extensions: ['*'] }],
+			})
+			config.path = siadPath[0]
+			startSiad((error) => {
+				if (error) {
+					showError(error)
+				} else {
+					startUI('Welcome to Sia', initUI)
+				}
+			})
 		})
 	})
 };
