@@ -4,7 +4,7 @@ import Path from 'path'
 import Fs from 'fs'
 import notification from './notificationManager.js'
 import loadingScreen from './loadingscreen.js'
-import { scanFolder, loadPlugin } from './plugin.js'
+import { scanFolder, loadPlugin } from './plugins.js'
 const defaultPluginDirectory = Path.resolve('plugins')
 const packageinfo = require('../../package.json')
 const Electron = require('electron')
