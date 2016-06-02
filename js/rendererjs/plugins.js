@@ -66,6 +66,7 @@ const createPluginButtonElement = (iconPath, title) => {
 // loadPlugin constructs plugin view and plugin button elements
 // and adds these elements to the main UI's mainbar/sidebar.
 // inject the SiaAPI into the plugin.
+// Returns the plugin's main view element.
 export const loadPlugin = (pluginPath) => {
 	const name = pluginPath.substring(pluginPath.lastIndexOf('/') + 1)
 	const markupPath = Path.join(pluginPath, 'index.html')
@@ -76,6 +77,8 @@ export const loadPlugin = (pluginPath) => {
 
 	document.getElementById('sidebar').appendChild(buttonElement)
 	document.getElementById('mainbar').appendChild(viewElement)
+
+	return viewElement
 }
 
 // Scan a folder at `path` for plugins.

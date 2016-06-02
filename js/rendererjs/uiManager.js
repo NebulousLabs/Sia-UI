@@ -138,9 +138,16 @@ function init(callback) {
 	for (let i = 0; i < plugins.size; i++) {
 		loadPlugin(plugins.get(i))
 	}
-	setCurrentPlugin(defaultHomePlugin)
-	checkUpdate()
-	callback()
+	// wait for the home plugin to load before calling back
+	const loadInterval = setInterval(() => {
+		const homePluginView = document.getElementById(defaultHomePlugin + '-view')
+		if (homePluginView !== null && !homePluginView.isLoading()) {
+			clearInterval(loadInterval)
+			setCurrentPlugin(defaultHomePlugin)
+			checkUpdate()
+			callback()
+		}
+	}, 1000)
 }
 
 /**
