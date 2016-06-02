@@ -4,24 +4,6 @@ import Path from 'path'
 const remote = require('electron').remote
 const fs = remote.require('fs')
 
-// Scan a folder at `path` for plugins.
-// Return a list of folder paths that have a valid plugin structure.
-export const scanFolder = (path) => {
-	let pluginFolders = List()
-	const unsanitizedFolders = fs.readdirSync(path)
-	for (const p in unsanitizedFolders) {
-		const pluginPath = Path.join(path, unsanitizedFolders[p])
-		try {
-			fs.statSync(Path.join(pluginPath, '/index.html'))
-		} catch (e) {
-			console.error(e)
-			continue
-		}
-		pluginFolders = pluginFolders.push(pluginPath)
-	}
-	return pluginFolders
-}
-
 // Create an icon element for a plugin button.
 const createButtonIconElement = (path) => {
 	const i = document.createElement('img')
@@ -43,6 +25,9 @@ const createPluginElement = (markupPath, title) => {
 	elem.id = title + '-view'
 	elem.className = 'webview'
 	elem.src = markupPath
+	elem.preload = './pluginapi.js'
+	// This is enabled for legacy plugin support.
+	elem.nodeintegration = true
 	return elem
 }
 // Construct a plugin button element from an icon path and title
@@ -53,12 +38,12 @@ const createPluginButtonElement = (iconPath, title) => {
 	elem.appendChild(createButtonIconElement(iconPath))
 	elem.appendChild(createButtonTextElement(title))
 }
-
 const showElement = (element) => element.classList.add('current')
 const hideElement = (element) => element.classList.remove('current')
 
 // loadPlugin constructs plugin view and plugin button elements
 // and adds these elements to the main UI's mainbar/sidebar.
+// inject the SiaAPI into the plugin.
 export const loadPlugin = (pluginPath) => {
 	const name = pluginPath.substring(lastIndexOf('/') + 1)
 	const markupPath = Path.join(pluginPath, 'index.html')
@@ -80,4 +65,20 @@ export const loadPlugin = (pluginPath) => {
 		},
 	}
 }
-
+// Scan a folder at `path` for plugins.
+// Return a list of folder paths that have a valid plugin structure.
+export const scanFolder = (path) => {
+	let pluginFolders = List()
+	const unsanitizedFolders = fs.readdirSync(path)
+	for (const p in unsanitizedFolders) {
+		const pluginPath = Path.join(path, unsanitizedFolders[p])
+		try {
+			fs.statSync(Path.join(pluginPath, '/index.html'))
+		} catch (e) {
+			console.error(e)
+			continue
+		}
+		pluginFolders = pluginFolders.push(pluginPath)
+	}
+	return pluginFolders
+}
