@@ -5,7 +5,7 @@ import Fs from 'fs'
 import notification from './notificationManager.js'
 import loadingScreen from './loadingscreen.js'
 
-import { scanFolder, loadPlugin, setCurrentPlugin } from './plugins.js'
+import { scanFolder, loadPlugin, setCurrentPlugin, getPluginName } from './plugins.js'
 const defaultPluginDirectory = Path.resolve('plugins')
 const defaultHomePlugin = 'Overview'
 
@@ -129,12 +129,28 @@ function checkUpdate() {
 }
 
 /**
-* Called at window.onload, waits for siad and the plugin system to finish loading to show the UI
+* Called at window.onload.
+* Waits for siad to load, then loads the plugin system.
 * @function UIManager#init
 */
 function init(callback) {
 	// Initialize plugins
-	const plugins = scanFolder(defaultPluginDirectory)
+	let plugins = scanFolder(defaultPluginDirectory)
+
+	// The home plugin should be first in the sidebar.
+	// We probably want a priority system for this instead.
+	plugins = plugins.sort((p1, p2) => {
+		if (getPluginName(p2) === defaultHomePlugin) {
+			return 1
+		}
+		// Sort the rest alphabetically
+		if (p2 > p1) {
+			return -1
+		}
+		return 0
+	})
+
+	// Load each plugin element into the UI
 	for (let i = 0; i < plugins.size; i++) {
 		loadPlugin(plugins.get(i))
 	}

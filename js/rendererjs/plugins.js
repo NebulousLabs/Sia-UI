@@ -62,12 +62,15 @@ const createPluginButtonElement = (iconPath, title) => {
 	return elem
 }
 
+// Get the name of a plugin from its path.
+export const getPluginName = (pluginPath) => pluginPath.substring(pluginPath.lastIndexOf('/') + 1)
+
 // loadPlugin constructs plugin view and plugin button elements
 // and adds these elements to the main UI's mainbar/sidebar.
 // inject the SiaAPI into the plugin.
 // Returns the plugin's main view element.
 export const loadPlugin = (pluginPath) => {
-	const name = pluginPath.substring(pluginPath.lastIndexOf('/') + 1)
+	const name = getPluginName(pluginPath)
 	const markupPath = Path.join(pluginPath, 'index.html')
 	const iconPath = Path.join(pluginPath, 'assets', 'button.png')
 
