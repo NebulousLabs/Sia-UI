@@ -57,6 +57,8 @@ const createPluginButtonElement = (iconPath, title) => {
 const showElement = (element) => element.classList.add('current')
 const hideElement = (element) => element.classList.remove('current')
 
+// loadPlugin constructs plugin view and plugin button elements
+// and adds these elements to the main UI's mainbar/sidebar.
 export const loadPlugin = (pluginPath) => {
 	const name = pluginPath.substring(lastIndexOf('/') + 1)
 	const markupPath = Path.join(pluginPath, 'index.html')
@@ -65,6 +67,8 @@ export const loadPlugin = (pluginPath) => {
 	const viewElement = createPluginElement(markupPath, name)
 	const buttonElement = createPluginButtonElement(iconPath, name)
 
+	document.getElementById('sidebar').appendChild(buttonElement)
+	document.getElementById('mainbar').appendChild(viewElement)
 	return {
 		show: () => {
 			showElement(viewElement)
@@ -76,5 +80,4 @@ export const loadPlugin = (pluginPath) => {
 		},
 	}
 }
-
 
