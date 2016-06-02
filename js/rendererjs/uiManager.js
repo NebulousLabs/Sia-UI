@@ -2,9 +2,10 @@
 // Imported Electron modules
 import Path from 'path'
 import Fs from 'fs'
-import plugins from './pluginManager.js'
 import notification from './notificationManager.js'
 import loadingScreen from './loadingscreen.js'
+import { scanFolder, loadPlugin } from './plugin.js'
+const defaultPluginDirectory = Path.resolve('plugins')
 const packageinfo = require('../../package.json')
 const Electron = require('electron')
 const App = Electron.remote.app
@@ -130,15 +131,10 @@ function checkUpdate() {
 */
 function init(callback) {
 	// Initialize plugins
-	ui.plugins = plugins
-	// Wait for the plugin system to load, then call callback
-	const loadInterval = setInterval(() => {
-		if (ui.plugins.home.isLoading() === false) {
-			clearInterval(loadInterval)
-			checkUpdate()
-			callback()
-		}
-	}, 500)
+	const plugins = scanFolder(defaultPluginDirectory)
+	plugins.forEach((plugin) => loadPlugin(plugin))
+	checkUpdate()
+	callback()
 }
 
 /**

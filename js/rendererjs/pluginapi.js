@@ -2,13 +2,15 @@
 // This is injected into every plugin's global namespace.
 import Siad from 'sia.js'
 import { ipcRenderer, remote } from 'electron'
-const { BrowserWindow, dialog } = remote
+const { dialog } = remote
+const mainWindow = remote.getCurrentWindow()
+
 Siad.configure(ipcRenderer.sendSync('config', 'siad'))
 
 export default SiaAPI = {
 	call: Siad.apiCall,
-	openFile: (options) => dialog.showOpenDialog(BrowserWindow, options),
-	saveFile: (options) => dialog.showSaveDialog(BrowserWindow, options),
-	message: (options) => dialog.showMessageBox(BrowserWindow, options),
+	openFile: (options) => dialog.showOpenDialog(mainWindow, options),
+	saveFile: (options) => dialog.showSaveDialog(mainWindow, options),
+	message: (options) => dialog.showMessageBox(mainWindow, options),
 	error: (options) => dialog.showErrorBox(options.title, options.content),
 }

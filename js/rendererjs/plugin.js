@@ -11,6 +11,7 @@ const createButtonIconElement = (path) => {
 	i.className = 'pure-u icon'
 	return i
 }
+
 // Create a text element for a plugin button.
 const createButtonTextElement = (name) => {
 	const t = document.createElement('div')
@@ -21,7 +22,7 @@ const createButtonTextElement = (name) => {
 
 // Construct a plugin view element from a plugin path and title
 const createPluginElement = (markupPath, title) => {
-	const elem = document.createElement('webview')
+	let elem = document.createElement('webview')
 	elem.id = title + '-view'
 	elem.className = 'webview'
 	elem.src = markupPath
@@ -30,22 +31,33 @@ const createPluginElement = (markupPath, title) => {
 	elem.nodeintegration = true
 	return elem
 }
+
 // Construct a plugin button element from an icon path and title
 const createPluginButtonElement = (iconPath, title) => {
-	const elem = document.createElement('div')
+	let elem = document.createElement('div')
 	elem.id = title + '-button'
 	elem.className = 'pure-u-1-1 button'
 	elem.appendChild(createButtonIconElement(iconPath))
 	elem.appendChild(createButtonTextElement(title))
+	// On click, set all other buttons and plugins to non-current except this one.
+	elem.onclick = () => {
+		const currentElements = document.querySelectorAll('.current')
+		for (let elem in currentElements) {
+			if (typeof currentElements[elem].classList !== 'undefined') {
+				currentElements[elem].classList.remove('current')
+			}
+		}
+		document.getElementById(title + '-view').classList.add('current')
+		elem.classList.add('current')
+	}
+	return elem
 }
-const showElement = (element) => element.classList.add('current')
-const hideElement = (element) => element.classList.remove('current')
 
 // loadPlugin constructs plugin view and plugin button elements
 // and adds these elements to the main UI's mainbar/sidebar.
 // inject the SiaAPI into the plugin.
 export const loadPlugin = (pluginPath) => {
-	const name = pluginPath.substring(lastIndexOf('/') + 1)
+	const name = pluginPath.substring(pluginPath.lastIndexOf('/') + 1)
 	const markupPath = Path.join(pluginPath, 'index.html')
 	const iconPath = Path.join(pluginPath, 'asset', 'button.png')
 
@@ -54,17 +66,8 @@ export const loadPlugin = (pluginPath) => {
 
 	document.getElementById('sidebar').appendChild(buttonElement)
 	document.getElementById('mainbar').appendChild(viewElement)
-	return {
-		show: () => {
-			showElement(viewElement)
-			showElement(buttonElement)
-		},
-		hide: () => {
-			hideElement(viewElement)
-			hideElement(buttonElement)
-		},
-	}
 }
+
 // Scan a folder at `path` for plugins.
 // Return a list of folder paths that have a valid plugin structure.
 export const scanFolder = (path) => {
