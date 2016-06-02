@@ -4,8 +4,11 @@ import Path from 'path'
 import Fs from 'fs'
 import notification from './notificationManager.js'
 import loadingScreen from './loadingscreen.js'
-import { scanFolder, loadPlugin } from './plugins.js'
+
+import { scanFolder, loadPlugin, setCurrentPlugin } from './plugins.js'
 const defaultPluginDirectory = Path.resolve('plugins')
+const defaultHomePlugin = 'Overview'
+
 const packageinfo = require('../../package.json')
 const Electron = require('electron')
 const App = Electron.remote.app
@@ -132,7 +135,10 @@ function checkUpdate() {
 function init(callback) {
 	// Initialize plugins
 	const plugins = scanFolder(defaultPluginDirectory)
-	plugins.forEach((plugin) => loadPlugin(plugin))
+	for (let i = 0; i < plugins.size; i++) {
+		loadPlugin(plugins.get(i))
+	}
+	setCurrentPlugin(defaultHomePlugin)
 	checkUpdate()
 	callback()
 }

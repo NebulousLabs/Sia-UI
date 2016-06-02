@@ -33,6 +33,24 @@ const createPluginElement = (markupPath, title) => {
 	return elem
 }
 
+// Set a plugin as the visible plugin
+export const setCurrentPlugin = (pluginName) => {
+	const currentElements = document.querySelectorAll('.current')
+	for (let elem in currentElements) {
+		if (typeof currentElements[elem].classList !== 'undefined') {
+			currentElements[elem].classList.remove('current')
+		}
+	}
+	const viewElem = document.getElementById(pluginName + '-view')
+	if (viewElem !== null) {
+		viewElem.classList.add('current')
+	}
+	const buttonElem = document.getElementById(pluginName + '-button')
+	if (buttonElem !== null) {
+		buttonElem.classList.add('current')
+	}
+}
+
 // Construct a plugin button element from an icon path and title
 const createPluginButtonElement = (iconPath, title) => {
 	let elem = document.createElement('div')
@@ -41,16 +59,7 @@ const createPluginButtonElement = (iconPath, title) => {
 	elem.appendChild(createButtonIconElement(iconPath))
 	elem.appendChild(createButtonTextElement(title))
 	// On click, set all other buttons and plugins to non-current except this one.
-	elem.onclick = () => {
-		const currentElements = document.querySelectorAll('.current')
-		for (let elem in currentElements) {
-			if (typeof currentElements[elem].classList !== 'undefined') {
-				currentElements[elem].classList.remove('current')
-			}
-		}
-		document.getElementById(title + '-view').classList.add('current')
-		elem.classList.add('current')
-	}
+	elem.onclick = () => setCurrentPlugin(title)
 	return elem
 }
 
