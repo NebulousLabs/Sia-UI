@@ -12,7 +12,6 @@ const clipboard = electron.clipboard;
 const fs = require('fs');
 const path = require('path');
 const $ = require('jquery');
-const siad = require('sia.js');
 const tools = require('./uiTools');
 const fileElement = require('./fileElement');
 const folderElement = require('./folderElement');
@@ -205,7 +204,7 @@ var browser = {
 	// Update files in the browser
 	update (callback) {
 		searching = $('#search-bar').val();
-		siad.apiCall('/renter/files', function(results) {
+		SiaAPI.call('/renter/files', function(results) {
 			// Update the current working directory
 			updateCWD(browser.navigateTo);
 			if (!searching) {

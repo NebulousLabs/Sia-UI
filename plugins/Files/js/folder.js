@@ -8,7 +8,6 @@
  */
 
 // Node modules
-const siad = require('sia.js');
 const mkdirp = require('mkdirp');
 const fileClass = require('./file');
 const fileFactory = require('./fileFactory');
@@ -22,7 +21,7 @@ var folder = Object.assign(Object.create(fileClass), {
 	// enact on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
 
-	// Changes folder's and its files' paths with siad call
+	// Changes folder's and its files' paths with SiaAPI call
 	// TODO: Verify if works
 	setPath (newPath, callback) {
 		if (tools.notType(newPath, 'string')) {
@@ -86,7 +85,7 @@ var folder = Object.assign(Object.create(fileClass), {
 			console.error('Share path needs end in ".sia"!', destination);
 			return;
 		}
-		siad.apiCall({
+		SiaAPI.call({
 			url: '/renter/share',
 			qs: {
 				siapaths: this.paths,
@@ -97,7 +96,7 @@ var folder = Object.assign(Object.create(fileClass), {
 
 	// Share ascii of all files in this folder and subfolders
 	shareascii (callback) {
-		siad.apiCall({
+		SiaAPI.call({
 			url: '/renter/shareascii',
 			qs: {
 				siapaths: this.paths,

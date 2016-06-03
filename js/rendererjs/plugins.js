@@ -21,6 +21,7 @@ const createButtonTextElement = (name) => {
 }
 
 // Construct a plugin view element from a plugin path and title
+// use webview.preload to inject SiaAPI into the plugin's global namespace.
 const createPluginElement = (markupPath, title) => {
 	const elem = document.createElement('webview')
 	elem.id = title + '-view'
@@ -67,7 +68,6 @@ export const getPluginName = (pluginPath) => pluginPath.substring(pluginPath.las
 
 // loadPlugin constructs plugin view and plugin button elements
 // and adds these elements to the main UI's mainbar/sidebar.
-// inject the SiaAPI into the plugin.
 // Returns the plugin's main view element.
 export const loadPlugin = (pluginPath) => {
 	const name = getPluginName(pluginPath)

@@ -9,7 +9,6 @@
 // Node modules
 const path = require('path');
 const $ = require('jquery');
-const siad = require('sia.js');
 const tools = require('./uiTools');
 
 var file = {
@@ -44,12 +43,12 @@ var file = {
 	// on itself, see the API.md
 	// https://github.com/NebulousLabs/Sia/blob/master/doc/API.md#renter
 
-	// Changes file's siapath with siad call
+	// Changes file's siapath with SiaAPI call
 	setPath (newPath, callback) {
 		if (tools.notType(newPath, 'string')) {
 			return;
 		}
-		siad.apiCall({
+		SiaAPI.call({
 			url: '/renter/rename/' + this.path ,
 			method: 'POST',
 			qs: {
@@ -63,7 +62,7 @@ var file = {
 		});
 	},
 	delete (callback) {
-		siad.apiCall({
+		SiaAPI.call({
 			url: '/renter/delete/' + this.path,
 			method: 'POST',
 		}, result => {
@@ -75,7 +74,7 @@ var file = {
 		if (tools.notType(destination, 'string')) {
 			return;
 		}
-		siad.apiCall({
+		SiaAPI.call({
 			url: '/renter/download/' + this.path,
 			qs: {
 				destination: destination,
@@ -89,7 +88,7 @@ var file = {
 			console.error('Share path needs end in ".sia"!', destination);
 			return;
 		}
-		siad.apiCall({
+		SiaAPI.call({
 			url: '/renter/share',
 			qs: {
 				siapaths: [this.path],
@@ -98,7 +97,7 @@ var file = {
 		}, callback);
 	},
 	shareASCII (callback) {
-		siad.apiCall({
+		SiaAPI.call({
 			url: '/renter/shareascii',
 			qs: {
 				siapaths: [this.path],

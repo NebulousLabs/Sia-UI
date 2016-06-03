@@ -1,4 +1,3 @@
-
 // Imported Electron modules
 import Path from 'path'
 import Fs from 'fs'

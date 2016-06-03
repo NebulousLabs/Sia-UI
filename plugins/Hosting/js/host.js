@@ -2,14 +2,11 @@
 
 /*
  * host instance module:
- *   Tracks hosting properties between the DOM and Siad
+ *   Tracks hosting properties between the DOM and SiaAPI
  */
 
 // Jquery
 const $ = require('jquery');
-// Siad wrapper/manager
-const Siad = require('sia.js');
-
 // Tracks details about the various hosting properties
 var props = require('./hostProperties.js');
 // Hold Sia math logic 
@@ -52,7 +49,7 @@ function updateStatus(hostInfo, callback) {
 		}
 		// Try-catch statement to be fault-tolerant. If just one name from the
 		// api call result, hostInfo, isn't in hostProperties or has a
-		// different name, such as with an unexpected siad version, other
+		// different name, such as with an unexpected SiaAPI version, other
 		// properties will still update.
 		try {
 			props[name].value = value;
@@ -95,7 +92,7 @@ function updateStatus(hostInfo, callback) {
 
 // Retrieve host status information
 function getStatus(callback) {
-	Siad.apiCall('/host', function(result) {
+	SiaAPI.call('/host', function(result) {
 		updateStatus(result, callback);
 	});
 }
@@ -103,7 +100,7 @@ function getStatus(callback) {
 // Announce host on the network
 function announce(settings, callback) {
 	settings = settings || null;
-	Siad.apiCall({
+	SiaAPI.call({
 		url: '/host/announce',
 		method: 'POST',
 		qs: settings,
@@ -117,7 +114,7 @@ function save(settings, callback) {
 		settings[name] = math.revertToBaseUnit(value, props[name].conversion);
 	});
 	// Send configuration call
-	Siad.apiCall({
+	SiaAPI.call({
 		url: '/host',
 		method: 'POST',
 		qs: settings,

@@ -1,11 +1,13 @@
 // pluginapi.js: Sia-UI plugin API interface exposed to all plugins.
 // This is injected into every plugin's global namespace.
 const Siad = require('sia.js')
-const ipcRenderer = require('electron').ipcRenderer
+const Path = require('path')
 const remote = require('electron').remote
 const dialog = remote.dialog
 const mainWindow = remote.getCurrentWindow()
-Siad.configure(ipcRenderer.sendSync('config', 'siad'))
+const configLoader = remote.require(Path.resolve('js/mainjs/config.js')).default
+const config = configLoader(Path.resolve('config.json')).siad
+Siad.configure(config)
 
 window.SiaAPI = {
 	call: Siad.call,
