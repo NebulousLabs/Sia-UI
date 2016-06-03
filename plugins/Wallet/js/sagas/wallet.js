@@ -5,9 +5,8 @@ import * as actions from '../actions/wallet.js'
 import * as constants from '../constants/wallet.js'
 import { walletUnlockError } from '../actions/error.js'
 
-// Send an error notification over IPC.
+// Send an error notification.
 const sendError = (e) => {
-	console.error(e)
 	SiaAPI.showError({
 		title: 'Sia-UI Wallet Error',
 		content: e.toString(),

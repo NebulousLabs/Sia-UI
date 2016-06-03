@@ -16,11 +16,10 @@ var updating;
 // Returns if API call has an error or null result
 function errored(err, result) {
 	if (err) {
-		console.error(err);
-		IPCRenderer.sendToHost('notification', err.toString(), 'error');
+		SiaAPI.showError({title: 'Error', content: err.toString()})
 		return true;
 	} else if (!result) {
-		IPCRenderer.sendToHost('notification', 'API result not found!', 'error');
+		SiaAPI.showError({title: 'Error', content: err.toString()})
 		return true;
 	}
 	return false;
