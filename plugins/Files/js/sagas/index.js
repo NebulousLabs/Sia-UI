@@ -4,5 +4,8 @@ import { fork } from 'redux-saga/effects'
 export default function* rootSaga() {
 	yield [
 		fork(sagas.watchGetWalletLockstate),
+		fork(sagas.watchGetAllowance),
+		fork(sagas.watchGetFiles),
+		fork(sagas.watchSetAllowance),
 	]
 }
