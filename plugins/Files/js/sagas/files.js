@@ -22,6 +22,8 @@ const siadCall = (uri) => new Promise((resolve, reject) => {
 	})
 })
 
+// Query siad for the state of the wallet.
+// dispatch `unlocked` in receiveWalletLockstate
 function* getWalletLockstateSaga() {
 	try {
 		const response = yield siadCall('/wallet')
@@ -31,6 +33,7 @@ function* getWalletLockstateSaga() {
 	}
 }
 
+// Query siad for the user's files.
 function* getFilesSaga() {
 	try {
 		const response = yield siadCall('/renter/files')
@@ -40,6 +43,7 @@ function* getFilesSaga() {
 	}
 }
 
+// Query siad for the user's allowance.
 function* getAllowanceSaga() {
 	try {
 		const allowance = yield siadCall('/renter/allowance')
@@ -49,6 +53,7 @@ function* getAllowanceSaga() {
 	}
 }
 
+// Set the user's renter allowance.
 function* setAllowanceSaga(action) {
 	try {
 		yield siadCall({
