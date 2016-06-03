@@ -86,17 +86,16 @@ export const loadPlugin = (pluginPath) => {
 // Scan a folder at `path` for plugins.
 // Return a list of folder paths that have a valid plugin structure.
 export const scanFolder = (path) => {
-	let pluginFolders = List()
-	const unsanitizedFolders = fs.readdirSync(path)
-	for (const p in unsanitizedFolders) {
-		const pluginPath = Path.join(path, unsanitizedFolders[p])
+	let pluginFolders = List(fs.readdirSync(path))
+	pluginFolders = pluginFolders.map((folder) => {
+		const pluginPath = Path.join(path, folder)
+		const markupPath = Path.join(pluginPath, 'index.html')
 		try {
-			fs.statSync(Path.join(pluginPath, '/index.html'))
+			fs.statSync(markupPath)
+			return pluginPath
 		} catch (e) {
-			console.error(e)
-			continue
+			console.error('plugin ' + folder + ' has an invalid plugin structure')
 		}
-		pluginFolders = pluginFolders.push(pluginPath)
-	}
+	})
 	return pluginFolders
 }
