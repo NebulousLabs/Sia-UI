@@ -12,4 +12,5 @@ export const getFiles = () => ({
 })
 export const setFiles = (files) => ({
 	type: constants.SET_FILES,
+	files,
 })

@@ -22,7 +22,7 @@ const siadCall = (uri) => new Promise((resolve, reject) => {
 	})
 })
 
-function *getWalletLockstateSaga(action) {
+function* getWalletLockstateSaga() {
 	try {
 		const response = yield siadCall('/wallet')
 		yield put(actions.setWalletLockstate(response.unlocked))
@@ -31,6 +31,18 @@ function *getWalletLockstateSaga(action) {
 	}
 }
 
+function* getFilesSaga() {
+	try {
+		const response = yield siadCall('/renter/files')
+		yield put(actions.setFiles(response.files))
+	} catch (e) {
+		sendError(e)
+	}
+}
+
 export function* watchGetWalletLockstate() {
 	yield *takeEvery(constants.GET_WALLET_LOCKSTATE, getWalletLockstateSaga)
+}
+export function* watchGetFiles() {
+	yield *takeEvery(constants.GET_FILES, getFilesSaga)
 }
