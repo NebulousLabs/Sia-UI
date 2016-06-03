@@ -1,9 +1,9 @@
 import * as constants from '../constants/files.js'
 
-export const getWalletLocked = () => ({
-	type: constants.GET_WALLET_LOCKED,
+export const getWalletLockstate = () => ({
+	type: constants.GET_WALLET_LOCKSTATE,
 })
-export const setWalletLocked = (locked) => ({
-	type: constants.SET_WALLET_LOCKED,
+export const setWalletlockstate = (locked) => ({
+	type: constants.SET_WALLET_LOCKSTATE,
 	locked,
 })
