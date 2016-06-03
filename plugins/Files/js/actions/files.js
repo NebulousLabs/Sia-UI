@@ -3,15 +3,15 @@ import * as constants from '../constants/files.js'
 export const getWalletLockstate = () => ({
 	type: constants.GET_WALLET_LOCKSTATE,
 })
-export const setWalletLockstate = (unlocked) => ({
-	type: constants.SET_WALLET_LOCKSTATE,
+export const receiveWalletLockstate = (unlocked) => ({
+	type: constants.RECEIVE_WALLET_LOCKSTATE,
 	unlocked,
 })
 export const getFiles = () => ({
 	type: constants.GET_FILES,
 })
-export const setFiles = (files) => ({
-	type: constants.SET_FILES,
+export const receiveFiles = (files) => ({
+	type: constants.RECEIVE_FILES,
 	files,
 })
 export const getAllowance = () => ({
