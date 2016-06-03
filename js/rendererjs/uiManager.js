@@ -11,7 +11,6 @@ const defaultHomePlugin = 'Overview'
 const packageinfo = require('../../package.json')
 const Electron = require('electron')
 const App = Electron.remote.app
-const IPCRenderer = Electron.ipcRenderer
 const mainWindow = Electron.remote.getCurrentWindow()
 const $ = require('jquery')
 
@@ -189,11 +188,5 @@ if (mainWindow.closeToTray) {
 window.onload = function() {
 	loadingScreen(init)
 }
-
-// Right-click brings up a context menu without blocking the UI
-window.addEventListener('contextmenu', (e) => {
-	e.preventDefault()
-	IPCRenderer.send('context-menu')
-}, false)
 
 module.exports = ui
