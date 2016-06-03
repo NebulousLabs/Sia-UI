@@ -96,6 +96,7 @@ export const scanFolder = (path) => {
 		} catch (e) {
 			console.error('plugin ' + folder + ' has an invalid plugin structure')
 		}
+		return null
 	})
 	return pluginFolders
 }
