@@ -5,7 +5,7 @@ import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import rootReducer from './js/reducers/index.js'
 import rootSaga from './js/sagas/index.js'
-import FilesApp from './js/components/app.js'
+import App from './js/containers/app.js'
 
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(
@@ -16,8 +16,9 @@ sagaMiddleware.run(rootSaga)
 
 const rootElement = (
 	<Provider store={store}>
-		<FilesApp />
+		<App />
 	</Provider>
 )
 
 ReactDOM.render(rootElement, document.getElementById('react-root'))
+

@@ -1,4 +1,3 @@
-// index.js: main entrypoint for the Sia-UI wallet plugin.
 import React from 'react'
 import ReactDOM from 'react-dom'
 import createSagaMiddleware from 'redux-saga'

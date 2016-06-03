@@ -9,5 +9,7 @@ export default function walletReducer(state = initialState, action) {
 	switch (action.type) {
 	case constants.SET_WALLET_LOCKSTATE:
 		return state.set('unlocked', action.unlocked)
+	default:
+		return state
 	}
 }

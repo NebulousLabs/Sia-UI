@@ -84,6 +84,9 @@ export const loadPlugin = (pluginPath) => {
 
 	const viewElement = createPluginElement(markupPath, name)
 	const buttonElement = createPluginButtonElement(iconPath, name)
+	viewElement.addEventListener('console-message', (msg) => {
+		console.log(msg)
+	})
 
 	document.getElementById('sidebar').appendChild(buttonElement)
 	document.getElementById('mainbar').appendChild(viewElement)
