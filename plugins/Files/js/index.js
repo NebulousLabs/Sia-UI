@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import rootReducer from './js/reducers/index.js'
 import rootSaga from './js/sagas/index.js'
 import App from './js/containers/app.js'
+import { getWalletLockstate } from './js/actions/files.js'
 
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(
@@ -22,3 +23,4 @@ const rootElement = (
 
 ReactDOM.render(rootElement, document.getElementById('react-root'))
 
+store.dispatch(getWalletLockstate())
