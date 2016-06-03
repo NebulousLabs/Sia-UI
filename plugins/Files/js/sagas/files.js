@@ -49,6 +49,26 @@ function* getAllowanceSaga() {
 	}
 }
 
+function* setAllowanceSaga(action) {
+	try {
+		yield siadCall({
+			url: '/renter/allowance',
+			method: 'POST',
+			qs: {
+				funds: action.allowance.funds,
+				hosts: action.allowance.hosts,
+				period: action.allowance.period,
+				renewwindow: action.allowance.renewwindow,
+			},
+		})
+		yield put(actions.receiveAllowance(action.allowance))
+	} catch (e) {
+		sendError(e)
+	}
+}
+export function* watchSetAllowance() {
+	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
+}
 export function* watchGetWalletLockstate() {
 	yield *takeEvery(constants.GET_WALLET_LOCKSTATE, getWalletLockstateSaga)
 }
