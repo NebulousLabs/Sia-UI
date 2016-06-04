@@ -1,14 +1,16 @@
-
 // Imported Electron modules
 import Path from 'path'
 import Fs from 'fs'
-import plugins from './pluginManager.js'
 import notification from './notificationManager.js'
 import loadingScreen from './loadingscreen.js'
+
+import { scanFolder, loadPlugin, setCurrentPlugin, getPluginName } from './plugins.js'
+const defaultPluginDirectory = Path.resolve('plugins')
+const defaultHomePlugin = 'Overview'
+
 const packageinfo = require('../../package.json')
 const Electron = require('electron')
 const App = Electron.remote.app
-const IPCRenderer = Electron.ipcRenderer
 const mainWindow = Electron.remote.getCurrentWindow()
 const $ = require('jquery')
 
@@ -125,20 +127,41 @@ function checkUpdate() {
 }
 
 /**
-* Called at window.onload, waits for siad and the plugin system to finish loading to show the UI
+* Called at window.onload.
+* Waits for siad to load, then loads the plugin system.
 * @function UIManager#init
 */
 function init(callback) {
 	// Initialize plugins
-	ui.plugins = plugins
-	// Wait for the plugin system to load, then call callback
+	let plugins = scanFolder(defaultPluginDirectory)
+
+	// The home plugin should be first in the sidebar.
+	// We probably want a priority system for this instead.
+	plugins = plugins.sort((p1, p2) => {
+		if (getPluginName(p2) === defaultHomePlugin) {
+			return 1
+		}
+		// Sort the rest alphabetically
+		if (p2 > p1) {
+			return -1
+		}
+		return 0
+	})
+
+	// Load each plugin element into the UI
+	for (let i = 0; i < plugins.size; i++) {
+		loadPlugin(plugins.get(i))
+	}
+	// wait for the home plugin to load before calling back
 	const loadInterval = setInterval(() => {
-		if (ui.plugins.home.isLoading() === false) {
+		const homePluginView = document.getElementById(defaultHomePlugin + '-view')
+		if (homePluginView !== null && !homePluginView.isLoading()) {
 			clearInterval(loadInterval)
+			setCurrentPlugin(defaultHomePlugin)
 			checkUpdate()
 			callback()
 		}
-	}, 500)
+	}, 1000)
 }
 
 /**
@@ -165,11 +188,5 @@ if (mainWindow.closeToTray) {
 window.onload = function() {
 	loadingScreen(init)
 }
-
-// Right-click brings up a context menu without blocking the UI
-window.addEventListener('contextmenu', (e) => {
-	e.preventDefault()
-	IPCRenderer.send('context-menu')
-}, false)
 
 module.exports = ui

@@ -4,13 +4,10 @@ import { siadCall, parseRawTransactions } from './helpers.js'
 import * as actions from '../actions/wallet.js'
 import * as constants from '../constants/wallet.js'
 import { walletUnlockError } from '../actions/error.js'
-import Siad from 'sia.js'
-const IPC = require('electron').ipcRenderer
-Siad.configure(IPC.sendSync('config', 'siad'))
 
-// Send an error notification over IPC.
+// Send an error notification.
 const sendError = (e) => {
-	IPC.sendSync('dialog', 'error', {
+	SiaAPI.showError({
 		title: 'Sia-UI Wallet Error',
 		content: e.toString(),
 	})
@@ -24,7 +21,7 @@ const sendError = (e) => {
 //  Call /wallet and dispatch the appropriate actions from the returned JSON.
 function *getLockStatusSaga() {
 	try {
-		const response = yield siadCall(Siad, '/wallet')
+		const response = yield siadCall('/wallet')
 		if (!response.unlocked) {
 			yield put(actions.setLocked())
 		} else {
@@ -45,7 +42,7 @@ function *getLockStatusSaga() {
 // Dispatch any API errors as a walletUnlockError action.
 function *walletUnlockSaga(action) {
 	try {
-		yield siadCall(Siad, {
+		yield siadCall({
 			url: '/wallet/unlock',
 			method: 'POST',
 			qs: {
@@ -63,7 +60,7 @@ function *walletUnlockSaga(action) {
 // Wait for the user to close the dialog, then unlock the wallet using the primary seed.
 function *createWalletSaga() {
 	try {
-		const response = yield siadCall(Siad, {
+		const response = yield siadCall({
 			url: '/wallet/init',
 			method: 'POST',
 			qs: {
@@ -81,10 +78,10 @@ function *createWalletSaga() {
 // call /wallet and compute the confirmed balance as well as the unconfirmed delta.
 function *getBalanceSaga() {
 	try {
-		const response = yield siadCall(Siad, '/wallet')
-		const confirmed = Siad.hastingsToSiacoins(response.confirmedsiacoinbalance)
-		const unconfirmedIncoming = Siad.hastingsToSiacoins(response.unconfirmedincomingsiacoins)
-		const unconfirmedOutgoing = Siad.hastingsToSiacoins(response.unconfirmedoutgoingsiacoins)
+		const response = yield siadCall('/wallet')
+		const confirmed = SiaAPI.hastingsToSiacoins(response.confirmedsiacoinbalance)
+		const unconfirmedIncoming = SiaAPI.hastingsToSiacoins(response.unconfirmedincomingsiacoins)
+		const unconfirmedOutgoing = SiaAPI.hastingsToSiacoins(response.unconfirmedoutgoingsiacoins)
 		const unconfirmed = unconfirmedIncoming.minus(unconfirmedOutgoing)
 		yield put(actions.setBalance(confirmed.round(2).toString(), unconfirmed.round(2).toString()))
 	} catch (e) {
@@ -95,7 +92,7 @@ function *getBalanceSaga() {
 // Get all the transactions from /wallet transactions, parse them, and dispatch setTransactions()
 function *getTransactionsSaga() {
 	try {
-		const response = yield siadCall(Siad, '/wallet/transactions?startheight=0&endheight=-1')
+		const response = yield siadCall('/wallet/transactions?startheight=0&endheight=-1')
 		// For now, display the latest 50 transacitons in the table.
 		// It may be useful to have pagination here.
 		const transactions = parseRawTransactions(response).take(50)
@@ -107,7 +104,7 @@ function *getTransactionsSaga() {
 // Call /wallet/address, set the receive address, and show the receive prompt.
 function *getNewReceiveAddressSaga() {
 	try {
-		const response = yield siadCall(Siad, '/wallet/address')
+		const response = yield siadCall('/wallet/address')
 		yield put(actions.setReceiveAddress(response.address))
 		yield put(actions.showReceivePrompt())
 	} catch (e) {
@@ -120,12 +117,12 @@ function *sendSiacoinSaga(action) {
 		if (action.amount === undefined || action.destination === undefined || action.amount === '' || action.destination === '') {
 			throw 'You must specify an amount and a destination to send Siacoin!'
 		}
-		yield siadCall(Siad, {
+		yield siadCall({
 			url: '/wallet/siacoins',
 			method: 'POST',
 			qs: {
 				destination: action.destination,
-				amount: Siad.siacoinsToHastings(action.amount).toString(),
+				amount: SiaAPI.siacoinsToHastings(action.amount).toString(),
 			},
 		})
 		yield put(actions.closeSendPrompt())

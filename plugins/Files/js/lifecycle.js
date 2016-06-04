@@ -9,7 +9,6 @@
 const electron = require('electron');
 const ipcRenderer = electron.ipcRenderer;
 const BigNumber = require('bignumber.js');
-const siad = require('sia.js');
 const $ = require('jquery');
 const browser = require('./browser');
 
@@ -55,7 +54,7 @@ function update() {
 
 	if (!renaming) {
 		browser.update();
-		siad.apiCall('/renter/hosts/active', updateStatus);
+		SiaAPI.call('/renter/hosts/active', updateStatus);
 	}
 
 	updating = setTimeout(update, 15000);

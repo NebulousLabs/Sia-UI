@@ -9,7 +9,6 @@
 const fs = require('fs');
 const path = require('path');
 const tools = require('./uiTools');
-const siad = require('sia.js');
 
 // Whether to upload files with autorenew feature or some block duration
 // Default behavior is to renew automatically
@@ -40,7 +39,7 @@ function uploadFile(source, siapath, callback) {
 	}
 
 	// Upload the file
-	siad.apiCall({
+	SiaAPI.call({
 		url: '/renter/upload/' + siapath,
 		method: 'POST',
 		qs: {
@@ -78,7 +77,7 @@ function uploadFolder(dirPath, siapath, callback) {
 
 // Loads a .sia file into the library
 function loadDotSia(source, callback) {
-	siad.apiCall({
+	SiaAPI.call({
 		url: '/renter/load',
 		method: 'POST',
 		qs: {
@@ -89,7 +88,7 @@ function loadDotSia(source, callback) {
 
 // Loads an ascii represenation of a .sia file into the library
 function loadAscii(ascii, callback) {
-	siad.apiCall({
+	SiaAPI.call({
 		url: '/renter/loadascii',
 		method: 'POST',
 		qs: {
@@ -100,7 +99,7 @@ function loadAscii(ascii, callback) {
 
 // Place one .sia file to destination for potentially many file paths
 function shareDotSia(paths, destination, callback) {
-	siad.apiCall({
+	SiaAPI.call({
 		url: '/renter/share',
 		qs: {
 			siapaths: paths.join(','),
@@ -111,7 +110,7 @@ function shareDotSia(paths, destination, callback) {
 
 // Share one .sia ascii for potentially many file paths
 function shareAscii(paths, callback) {
-	siad.apiCall({
+	SiaAPI.call({
 		url: '/renter/shareascii',
 		qs: {
 			siapaths: paths.join(','),

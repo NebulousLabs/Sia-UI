@@ -11,8 +11,6 @@
 const IPCRenderer = require('electron').ipcRenderer;
 // Jquery
 const $ = require('jquery');
-// Siad wrapper/manager
-const Siad = require('sia.js');
 // Host settings manager
 const Host = require('./js/host.js');
 // Lifecycle manager
@@ -22,21 +20,6 @@ const Lifecycle = require('./js/lifecycle.js');
 IPCRenderer.on('shown', Lifecycle.update);
 // Called upon transitioning away from this view
 IPCRenderer.on('hidden', Lifecycle.stop);
-
-// Make sure Siad settings are in sync with the rest of the UI's
-Siad.configure(IPCRenderer.sendSync('config', 'siad'));
-
-// Slight modification to Siad wrapper for standard error handling
-Siad.apiCall = function(callObj, callback) {
-	Siad.call(callObj, function(err, result) {
-		if (err) {
-			console.error(err);
-			Lifecycle.notify(err.toString(), 'error');
-		} else {
-			callback(result);
-		}
-	});
-};
 
 // Announce button
 $('#announce.button').click(function() {

@@ -11,7 +11,6 @@
 const electron = require('electron');
 const path = require('path');
 const BigNumber = require('bignumber.js');
-const siad = require('sia.js');
 const $ = require('jquery');
 const tools = require('./js/uiTools');
 const browser = require('./js/browser');
@@ -21,20 +20,6 @@ const lifecycle = require('./js/lifecycle');
 // Ensure precision
 BigNumber.config({ DECIMAL_PLACES: 24 });
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 });
-
-// Make sure siad settings are in sync with the rest of the UI's
-siad.configure(tools.config('siad'));
-// Slight modification to siad wrapper for standard error handling
-siad.apiCall = function(callObj, callback) {
-	siad.call(callObj, function(err, result) {
-		if (err) {
-			console.error(err);
-			tools.notify(err.toString(), 'error');
-		} else if (callback) {
-			callback(result);
-		}
-	});
-};
 
 // Ensure browser updates once initially
 browser.update();

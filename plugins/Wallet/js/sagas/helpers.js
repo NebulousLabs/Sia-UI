@@ -2,13 +2,12 @@
 
 import BigNumber from 'bignumber.js'
 import { List } from 'immutable'
-import Siad from 'sia.js'
 const uint64max = Math.pow(2, 64)
 
 // siadCall: promisify Siad API calls.  Resolve the promise with `response` if the call was successful,
 // otherwise reject the promise with `err`.
-export const siadCall = (daemon, uri) => new Promise((resolve, reject) => {
-	daemon.call(uri, (err, response) => {
+export const siadCall = (uri) => new Promise((resolve, reject) => {
+	SiaAPI.call(uri, (err, response) => {
 		if (err) {
 			reject(err)
 		} else {
@@ -48,9 +47,9 @@ const computeTransactionSum = (txn) => {
 		totalMinerOutput = sumCurrency(walletOutputs, 'miner')
 	}
 	return {
-		totalSiacoin: Siad.hastingsToSiacoins(totalSiacoinOutput.minus(totalSiacoinInput)),
-		totalSiafund: Siad.hastingsToSiacoins(totalSiafundOutput.minus(totalSiafundInput)),
-		totalMiner:   Siad.hastingsToSiacoins(totalMinerOutput.minus(totalMinerInput)),
+		totalSiacoin: SiaAPI.hastingsToSiacoins(totalSiacoinOutput.minus(totalSiacoinInput)),
+		totalSiafund: SiaAPI.hastingsToSiacoins(totalSiafundOutput.minus(totalSiafundInput)),
+		totalMiner:   SiaAPI.hastingsToSiacoins(totalMinerOutput.minus(totalMinerInput)),
 	}
 }
 

@@ -2,20 +2,14 @@
 
 // Library for communicating with Sia-UI
 const electron = require('electron');
-const ipcRenderer = require('electron').ipcRenderer;
-// Siad wrapper
-const Siad = require('sia.js');
-
-// Make sure Siad settings are in sync with the rest of the UI's
-var settings = ipcRenderer.sendSync('config', 'siad');
-Siad.configure(settings);
 
 // Set UI version via package.json.
 document.getElementById('uiversion').innerHTML = require('../../package.json').version;
 
 // Set daemon version via API call.
-Siad.call('/daemon/version', function(err, result) {
+SiaAPI.call('/daemon/version', function(err, result) {
 	if (err) {
+		SiaAPI.showError('Error', err.toString())
 		ipcRenderer.sendToHost('notification', err.toString(), 'error');
 	} else {
 		document.getElementById('siaversion').innerHTML = result.version;

@@ -3,7 +3,6 @@ import appTray from './js/mainjs/trayMenu.js'
 import Path from 'path'
 import loadConfig from './js/mainjs/config.js'
 import initWindow from './js/mainjs/initWindow.js'
-import addIPCListeners from './js/mainjs/addIPCListeners.js'
 
 // load config.json manager
 const config = loadConfig(Path.join(__dirname, 'config.json'))
@@ -17,9 +16,6 @@ app.on('ready', () => {
 	const appIcon = new Tray(Path.join(__dirname, 'assets', 'tray.png'))
 	appIcon.setToolTip('Sia - The Collaborative Cloud.')
 	appIcon.setContextMenu(appTray(mainWindow))
-
-	// Add IPCMain listeners
-	addIPCListeners(config, mainWindow)
 })
 
 // Quit once all windows have been closed.
