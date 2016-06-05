@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import FileBrowser from '../containers/filebrowser.js'
 
 const FilesApp = ({unlocked}) => {
 	let filesContent
@@ -7,6 +8,10 @@ const FilesApp = ({unlocked}) => {
 			<div className="unlock-dialog">
 				You must unlock your wallet you can upload files!
 			</div>
+		)
+	} else {
+		fileContent = (
+			<FileBrowser />
 		)
 	}
 	return (
