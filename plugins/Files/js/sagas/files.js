@@ -71,6 +71,15 @@ function* setAllowanceSaga(action) {
 		sendError(e)
 	}
 }
+// Query siad for renter metrics.
+function* getMetricsSaga() {
+	try {
+		yield siadCall('/renter')
+		yield put(actions.receiveMetrics(action.financialmetrics))
+	} catch (e) {
+		sendError(e)
+	}
+}
 
 export function* watchSetAllowance() {
 	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
@@ -83,4 +92,7 @@ export function* watchGetFiles() {
 }
 export function* watchGetAllowance() {
 	yield *takeEvery(constants.GET_ALLOWANCE, getAllowanceSaga)
+}
+export function* watchGetMetrics() {
+	yield *takeEvery(constnats.GET_METRICS, getMetricsSaga)
 }
