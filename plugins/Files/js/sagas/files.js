@@ -3,6 +3,7 @@ import { put } from 'redux-saga/effects'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import BigNumber from 'bignumber.js'
+import { List } from 'immutable'
 
 const sendError = (e) => {
 	SiaAPI.showError({
@@ -34,11 +35,21 @@ function* getWalletLockstateSaga() {
 	}
 }
 
+// Parse the response from `/renter/files`
+const parseFiles = (files) => {
+	const fileList = List(files)
+	return fileList.map((file) => ({
+		size: file.filesize,
+		name: file.siapath,
+		available: file.available,
+	}))
+}
+
 // Query siad for the user's files.
 function* getFilesSaga() {
 	try {
 		const response = yield siadCall('/renter/files')
-		yield put(actions.receiveFiles(response.files))
+		yield put(actions.receiveFiles(parseFiles(response.files)))
 	} catch (e) {
 		sendError(e)
 	}
