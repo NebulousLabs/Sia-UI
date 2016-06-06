@@ -1,13 +1,13 @@
 import CommandInputView from '../components/commandinput.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-//import { startSendPrompt } from '../actions/wallet.js'
+import { addCommand } from '../actions/commandline.js'
 
 const mapStateToProps = () => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-	//actions: bindActionCreators({ startSendPrompt }, dispatch),
+	actions: bindActionCreators({ addCommand }, dispatch)
 })
 
 const CommandInput = connect(mapStateToProps, mapDispatchToProps)(CommandInputView)

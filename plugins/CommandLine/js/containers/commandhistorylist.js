@@ -9,9 +9,13 @@ var localCHistory = List([
 ])
 
 
-const mapStateToProps = (state) => ({
-	commandHistory: localCHistory,
+const mapStateToProps = (state) => {
+    console.log(JSON.stringify(state.commandLineReducer.get("commandHistory")))
+    return ({
+	commandHistory: state.commandLineReducer.get("commandHistory"),
 })
+
+}
 
 const CommandHistoryList = connect(mapStateToProps)(CommandHistoryListView)
 export default CommandHistoryList
