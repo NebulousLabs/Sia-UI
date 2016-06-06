@@ -8,7 +8,7 @@ const AllowanceDialog = ({storageSize, storageCost, actions}) => {
 			<div className="allowance-dialog">
 				<h3> How many gigabytes of storage do you want per month? </h3>
 				<input value={storageSize} onChange={onStorageSizeChange}></input> GB
-				<span className="storage-cost">{storageCost}</span>
+				<div className="storage-cost">Storage Cost: {storageCost} SC</div>
 				<div className="allowance-buttons">
 					<button onClick={onCancelClick} className="allowance-button-cancel">Cancel</button>
 				</div>

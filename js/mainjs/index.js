@@ -15,7 +15,6 @@ app.on('ready', () => {
 	appIcon = new Tray(Path.join(app.getAppPath(), 'assets', 'tray.png'))
 	appIcon.setToolTip('Sia - The Collaborative Cloud.')
 	appIcon.setContextMenu(appTray(mainWindow))
-	mainWindow.toggleDevTools()
 })
 
 // Quit once all windows have been closed.

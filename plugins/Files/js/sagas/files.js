@@ -82,6 +82,9 @@ function* getWalletBalanceSaga() {
 	}
 }
 
+// NAIVE HARDCODED STORAGE COST CALCULATION FOR TESTING
+// pending david's actual cost calculation algorithm
+
 const scPerTBPerMo = new BigNumber(10000)
 const GBperTB = new BigNumber(1000)
 
@@ -93,7 +96,7 @@ function* calculateStorageCostSaga(action) {
 		const cost = sizeTB.times(scPerTBPerMo).round(2).toString()
 		yield put(actions.setStorageCost(cost))
 	} catch (e) {
-		sendError(e)
+		yield put(actions.setStorageCost(''))
 	}
 }
 
