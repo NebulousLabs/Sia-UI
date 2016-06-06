@@ -46,3 +46,7 @@ export const showAllowanceDialog = () => ({
 export const closeAllowanceDialog = () => ({
 	type: constants.CLOSE_ALLOWANCE_DIALOG,
 })
+export const handleStorageSizeChange = (size) => ({
+	type: constants.HANDLE_STORAGE_SIZE_CHANGE,
+	size,
+})
