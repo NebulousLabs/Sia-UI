@@ -33,3 +33,10 @@ export const receiveMetrics = (activespending, allocatedspending) => ({
 	activespending,
 	allocatedspending,
 })
+export const getWalletBalance = () => ({
+	type: constants.GET_WALLET_BALANCE,
+})
+export const receiveWalletBalance = (balance) => ({
+	type: cosntants.RECEIVE_WALLET_BALANCE,
+	balance,
+})

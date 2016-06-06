@@ -58,15 +58,25 @@ function* setAllowanceSaga(action) {
 // Query siad for renter metrics.
 function* getMetricsSaga() {
 	try {
-		const metrics = yield siadCall('/renter')
-		const downloadspending = new BigNumber(metrics.financialmetrics.downloadspending)
-		const uploadspending = new BigNumber(metrics.financialmetrics.uploadspending)
-		const storagespending = new BigNumber(metrics.financialmetrics.storagespending)
+		const response = yield siadCall('/renter')
+		const downloadspending = new BigNumber(response.financialmetrics.downloadspending)
+		const uploadspending = new BigNumber(response.financialmetrics.uploadspending)
+		const storagespending = new BigNumber(response.financialmetrics.storagespending)
 
-		const allocatedspending = SiaAPI.hastingsToSiacoins(metrics.financialmetrics.contractspending).round(2).toString()
+		const allocatedspending = SiaAPI.hastingsToSiacoins(response.financialmetrics.contractspending).round(2).toString()
 		const activespending = SiaAPI.hastingsToSiacoins(downloadspending.plus(uploadspending).plus(storagespending)).round(2).toString()
 
 		yield put(actions.receiveMetrics(activespending, allocatedspending))
+	} catch (e) {
+		sendError(e)
+	}
+}
+// Query Siad for the current wallet balance.
+function* getWalletBalanceSaga() {
+	try {
+		const response = yield siadCall('/wallet')
+		const confirmedBalance = SiaAPI.hastingsToSiacoins(response.confirmedsiacoinbalance).round(2).toString()
+		yield put(actions.receiveWalletBalance(confirmedBalance))
 	} catch (e) {
 		sendError(e)
 	}
@@ -86,4 +96,7 @@ export function* watchGetAllowance() {
 }
 export function* watchGetMetrics() {
 	yield *takeEvery(constants.GET_METRICS, getMetricsSaga)
+}
+export function* watchGetWalletBalance() {
+	yield *takeEvery(constants.GET_WALLET_BALANCE, getWalletBalanceSaga)
 }
