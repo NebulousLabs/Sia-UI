@@ -2,7 +2,10 @@
 import { List } from 'immutable'
 import Path from 'path'
 const remote = require('electron').remote
+const globalShortcut = remote.require('electron').globalShortcut
 const fs = remote.require('fs')
+
+const devtoolsShortcut = 'Ctrl+Shift+P'
 
 // Create an icon element for a plugin button.
 const createButtonIconElement = (path) => {
@@ -45,10 +48,15 @@ export const setCurrentPlugin = (pluginName) => {
 	if (viewElem !== null) {
 		viewElem.classList.add('current')
 	}
+
 	const buttonElem = document.getElementById(pluginName + '-button')
 	if (buttonElem !== null) {
 		buttonElem.classList.add('current')
 	}
+	globalShortcut.unregister(devtoolsShortcut)
+	globalShortcut.register(devtoolsShortcut, () => {
+		viewElem.openDevTools()
+	})
 }
 
 // Construct a plugin button element from an icon path and title
