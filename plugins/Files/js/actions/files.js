@@ -40,3 +40,9 @@ export const receiveWalletBalance = (balance) => ({
 	type: cosntants.RECEIVE_WALLET_BALANCE,
 	balance,
 })
+export const showAllowanceDialog = () => ({
+	type: constants.SHOW_ALLOWANCE_DIALOG,
+})
+export const closeAllowanceDialog = () => ({
+	type: constants.CLOSE_ALLOWANCE_DIALOG,
+})
