@@ -7,5 +7,6 @@ export default function* rootSaga() {
 		fork(sagas.watchGetAllowance),
 		fork(sagas.watchGetFiles),
 		fork(sagas.watchSetAllowance),
+		fork(sagas.watchGetMetrics),
 	]
 }

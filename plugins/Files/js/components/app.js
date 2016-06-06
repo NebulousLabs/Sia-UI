@@ -10,7 +10,7 @@ const FilesApp = ({unlocked}) => {
 			</div>
 		)
 	} else {
-		fileContent = (
+		filesContent = (
 			<FileBrowser />
 		)
 	}
