@@ -1,4 +1,4 @@
-import { Menu, BrowserWindow, globalShortcut } from 'electron'
+import { Menu, BrowserWindow } from 'electron'
 import appMenu from './appMenu.js'
 import Path from 'path'
 import Siad from 'sia.js'
@@ -16,18 +16,6 @@ export default function(config) {
 	// This should be used in the renderer to cancel close() events using window.onbeforeunload
 	mainWindow.closeToTray = config.closeToTray
 
-	// Add hotkey shortcut to view plugin devtools
-	let shortcut
-	if (process.platform ==='darwin') {
-		shortcut = 'Alt+Command+P'
-	} else {
-		shortcut = 'Ctrl+Shift+P'
-	}
-
-	globalShortcut.register(shortcut, () => {
-		mainWindow.webContents.executeJavaScript('ui.plugins.current.toggleDevTools()')
-	})
-
 	// Load the window's size and position
 	mainWindow.setBounds(config)
 
@@ -44,7 +32,6 @@ export default function(config) {
 	// Unregister all shortcuts when mainWindow is closed.
 	// Stop Siad if it is not running detached.
 	mainWindow.on('closed', () => {
-		globalShortcut.unregisterAll()
 		if (!config.siad.detached) {
 			Siad.stop()
 		}
