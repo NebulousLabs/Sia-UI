@@ -135,33 +135,36 @@ function init(callback) {
 	// Initialize plugins
 	let plugins = scanFolder(defaultPluginDirectory)
 
-	// The home plugin should be first in the sidebar.
+	// The home plugin should be first in the sidebar, and about should be last.
 	// We probably want a priority system for this instead.
-	plugins = plugins.sort((p1, p2) => {
-		if (getPluginName(p2) === defaultHomePlugin) {
+	plugins = plugins.sort((p1) => {
+		if (getPluginName(p1) === 'About') {
 			return 1
-		}
-		// Sort the rest alphabetically
-		if (p2 > p1) {
-			return -1
 		}
 		return 0
 	})
 
+	plugins = plugins.sort((p1, p2) => {
+		if (getPluginName(p2) === defaultHomePlugin) {
+			return 1
+		}
+		return 0
+	})
+
+	let homePluginView
 	// Load each plugin element into the UI
 	for (let i = 0; i < plugins.size; i++) {
-		loadPlugin(plugins.get(i))
+		const plugin = loadPlugin(plugins.get(i))
+		if (getPluginName(plugins.get(i)) === defaultHomePlugin) {
+			homePluginView = plugin
+		}
 	}
 	// wait for the home plugin to load before calling back
-	const loadInterval = setInterval(() => {
-		const homePluginView = document.getElementById(defaultHomePlugin + '-view')
-		if (homePluginView !== null && !homePluginView.isLoading()) {
-			clearInterval(loadInterval)
-			setCurrentPlugin(defaultHomePlugin)
-			checkUpdate()
-			callback()
-		}
-	}, 1000)
+	homePluginView.addEventListener('dom-ready', () => {
+		setCurrentPlugin(defaultHomePlugin)
+		checkUpdate()
+		callback()
+	})
 }
 
 /**
