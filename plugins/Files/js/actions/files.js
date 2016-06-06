@@ -50,3 +50,7 @@ export const handleStorageSizeChange = (size) => ({
 	type: constants.HANDLE_STORAGE_SIZE_CHANGE,
 	size,
 })
+export const setStorageCost = (cost) => ({
+	type: constants.SET_STORAGE_COST,
+	cost,
+})

@@ -82,6 +82,21 @@ function* getWalletBalanceSaga() {
 	}
 }
 
+const scPerTBPerMo = new BigNumber(10000)
+const GBperTB = new BigNumber(1000)
+
+// Calculate monthly storage cost from a requested monthly storage amount
+function* calculateStorageCostSaga(action) {
+	try {
+		const sizeGB = new BigNumber(action.size)
+		const sizeTB = sizeGB.dividedBy(GBperTB)
+		const cost = sizeTB.times(scPerTBPerMo).round(2).toString()
+		yield put(actions.setStorageCost(cost))
+	} catch (e) {
+		sendError(e)
+	}
+}
+
 export function* watchSetAllowance() {
 	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
 }
@@ -99,4 +114,7 @@ export function* watchGetMetrics() {
 }
 export function* watchGetWalletBalance() {
 	yield *takeEvery(constants.GET_WALLET_BALANCE, getWalletBalanceSaga)
+}
+export function* watchStorageSizeChange() {
+	yield *takeEvery(constants.HANDLE_STORAGE_SIZE_CHANGE, calculateStorageCostSaga)
 }
