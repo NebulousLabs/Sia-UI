@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import FileList from '../containers/filelist.js'
 
 const FileBrowser = ({activespending, allocatedspending}) => (
 	<div className="file-browser">
