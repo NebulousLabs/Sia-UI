@@ -11,6 +11,8 @@
  *    Neon-Green: #00CBA0
  */
  .app {
+    font-family: 'Roboto Mono', sans-serif;
+    font-weight: 100;
  	position: absolute;
  	top: 0;
  	bottom: 0;
@@ -43,6 +45,7 @@
 .command-history-list table td{
     white-space: pre;
     vertical-align: top;
+    letter-spacing: -1.2px;
 }
 
 #command-input{
