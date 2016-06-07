@@ -1,1 +1,2 @@
 export const ADD_COMMAND = 'ADD_COMMAND'
+export const UPDATE_COMMAND = 'UPDATE_COMMAND'
