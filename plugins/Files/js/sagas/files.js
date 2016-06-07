@@ -5,6 +5,11 @@ import * as constants from '../constants/files.js'
 import BigNumber from 'bignumber.js'
 import { sendError, siadCall, parseFiles, estimatedStoragePriceGBSC } from './helpers.js'
 
+const allowanceHosts = 24
+const blockMonth = 4382
+const allowanceMonths = 3
+const allowancePeriod = blockMonth*allowanceMonths
+
 // Query siad for the state of the wallet.
 // dispatch `unlocked` in receiveWalletLockstate
 function* getWalletLockstateSaga() {
@@ -35,11 +40,6 @@ function* getAllowanceSaga() {
 		sendError(e)
 	}
 }
-
-const allowanceHosts = 24
-const blockMonth = 4382
-const allowanceMonths = 3
-const allowancePeriod = blockMonth*allowanceMonths
 
 // Set the user's renter allowance.
 function* setAllowanceSaga(action) {
@@ -100,12 +100,6 @@ function* getWalletBalanceSaga() {
 		sendError(e)
 	}
 }
-
-// NAIVE HARDCODED STORAGE COST CALCULATION FOR TESTING
-// pending david's actual cost calculation algorithm
-
-const scPerTBPerMo = new BigNumber(10000)
-const GBperTB = new BigNumber(1000)
 
 export function* watchSetAllowance() {
 	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)

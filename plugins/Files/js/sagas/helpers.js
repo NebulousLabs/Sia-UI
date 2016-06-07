@@ -55,6 +55,6 @@ export const estimatedStoragePriceGBSC = (hosts, size, duration) => {
 	const averagePricePerByteBlockH = storagePrices.reduce((sum, price) => sum.add(price), new BigNumber(0)).dividedBy(4)
 	const averagePricePerGBBlockH = averagePricePerByteBlockH.times(bytesPerGB)
 	const averagePricePerGBBlockSC = SiaAPI.hastingsToSiacoins(averagePricePerGBBlockH)
-	
-	return averagePricePerGBBlockSC.times(size).times(duration)		
+
+	return averagePricePerGBBlockSC.times(size).times(duration)
 }
