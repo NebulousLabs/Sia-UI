@@ -7,14 +7,19 @@ console.log(child_process)
 var siacLocation = "/Users/John/Downloads/Sia-v0.6.0-beta-darwin-amd64/"
 //var siacLocation = "/Users/John/Library/Developer/Xcode/DerivedData/siac-dgxqgvcofulitlgypgxsqvulfzuh/Build/Products/Debug/"
 
-const CommandInput = ({actions}) => {
+const CommandInput = ({commandHistory, currentCommand, actions}) => {
+    const handleTextInput = (e) => {
+        actions.setCurrentCommand(e.target.value)
+    }
+
 	const handleKeyboardPress = (e) => {
+
+        //Enter button.
         if (e.keyCode === 13) {
 
             //Create new command object. Id doesn't need to be unique, just can't be the same for adjacent commands.
             var newCommand = Map({ command: e.target.value, result: "", id: Math.floor(Math.random()*1000000) })
             actions.addCommand(newCommand)
-            e.target.value = "" //Clear input bar.
 
             var siac = child_process.spawn("./siac", newCommand.get("command").split(" "), { cwd: siacLocation })
 
@@ -40,9 +45,20 @@ const CommandInput = ({actions}) => {
             siac.on("error", function (code){ console.log(`\tPROGRAM ERRORED`); streamClosed(code) })
             siac.on("close", function (code){ console.log(`\tPROGRAM CLOSED`); streamClosed(code) })
         }
+
+        //Up arrow.
+        else if (e.keyCode == 38){
+            actions.loadPrevCommand(e.target);
+        }
+
+        //Down arrow.
+        else if (e.keyCode == 40){
+            actions.loadNextCommand(e.target);
+        }
     }
+
 	return (
-        <input id="command-input" onKeyDown={handleKeyboardPress} type="text"></input>
+        <input id="command-input" onChange = {handleTextInput} onKeyDown={handleKeyboardPress} type="text" value={ currentCommand }></input>
 	)
 }
 
