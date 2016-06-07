@@ -17,13 +17,12 @@ export default function commandLineReducer(state = initialState, action) {
             //Updates output of command given by command name and id.
             var newCommandHistory = state.get("commandHistory")
             var [commandIdx, newCommand] = newCommandHistory.findLastEntry(
-                (val) => (val.command == action.command && val.id == action.id)
-            )
+                (val) => (val.get("command") == action.command && val.get("id") == action.id)
+            ) //TODO If val isn't found?
     
             newCommand = newCommand.set('result', newCommand.get('result') + action.dataChunk)
-            //console.log(newCommand)
+            console.log(newCommand)
             newCommandHistory = newCommandHistory.set(commandIdx, newCommand)
-            console.log(`Updated Command History: ${JSON.stringify(newCommandHistory)}`)
             return state.set("commandHistory", newCommandHistory)
     
     	default:

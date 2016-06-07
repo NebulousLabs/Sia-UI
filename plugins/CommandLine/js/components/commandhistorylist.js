@@ -11,11 +11,12 @@ const CommandHistoryList = ({commandHistory}) => {
     }
 
     render: {
+        console.log('Re-rendering.')
        	const CommandHistoryComponents = commandHistory.map((command, key) => {
     		return (
     			<tr key={key}>
-    				<td>{command.command}</td>
-    				<td>{command.result}</td>
+    				<td>{command.get('command')}</td>
+    				<td>{command.get('result')}</td>
     			</tr>
     		)
     	})
