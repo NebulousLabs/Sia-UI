@@ -17,7 +17,7 @@ const FilesApp = ({unlocked, showAllowanceDialog}) => {
 	}
 	return (
 		<div className="app">
-			{showAllowanceDialog ? <AllowanceDialog /> : null }
+			{showAllowanceDialog ? <AllowanceDialog /> : null}
 			{fileBrowserContent}
 		</div>
 	)

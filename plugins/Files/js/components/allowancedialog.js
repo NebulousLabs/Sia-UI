@@ -9,12 +9,11 @@ const AllowanceDialog = ({storageSize, storageCost, actions}) => {
 	const onStorageSizeChange = (e) => actions.handleStorageSizeChange(e.target.value)
 	const onCancelClick = () => actions.closeAllowanceDialog()
 	const onAcceptClick = () => {
-		const allowance = {
+		actions.setAllowance({
 			funds: SiaAPI.siacoinsToHastings(storageCost).toString(),
 			hosts: allowanceHosts,
-			period: oneMonthPeriod,
-		}
-		actions.setAllowance(allowance)
+			period: blockMonth * allowanceMonths,
+		})
 	}
 	return (
 		<div className="modal">
@@ -23,7 +22,7 @@ const AllowanceDialog = ({storageSize, storageCost, actions}) => {
 				<input type="number" value={storageSize} onChange={onStorageSizeChange}></input> GB
 				<div className="storage-cost">
 					<div>Cost per month: {new BigNumber(storageCost).dividedBy(allowanceMonths).round(2).toString()} SC</div>
-					<div>Prepaid Months: {allowanceMonths}</div>
+					<div>Months: {allowanceMonths}</div>
 					<div>Total: {storageCost}</div>
 				</div>
 				<div className="allowance-buttons">
