@@ -54,3 +54,7 @@ export const setStorageCost = (cost) => ({
 	type: constants.SET_STORAGE_COST,
 	cost,
 })
+export const setStorageSize = (size) => ({
+	type: constants.SET_STORAGE_SIZE,
+	size,
+})

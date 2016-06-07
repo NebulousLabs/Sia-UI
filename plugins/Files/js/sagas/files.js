@@ -46,10 +46,10 @@ function* setAllowanceSaga(action) {
 				funds: action.allowance.funds,
 				hosts: action.allowance.hosts,
 				period: action.allowance.period,
-				renewwindow: action.allowance.renewwindow,
 			},
 		})
 		yield put(actions.receiveAllowance(action.allowance))
+		yield put(actions.getMetrics())
 	} catch (e) {
 		sendError(e)
 	}
@@ -93,10 +93,12 @@ function* calculateStorageCostSaga(action) {
 	try {
 		const sizeGB = new BigNumber(action.size)
 		const sizeTB = sizeGB.dividedBy(GBperTB)
-		const cost = sizeTB.times(scPerTBPerMo).round(2).toString()
+		const cost = sizeTB.times(scPerTBPerMo).times(3).round(2).toString()
 		yield put(actions.setStorageCost(cost))
+		yield put(actions.setStorageSize(action.size))
 	} catch (e) {
-		yield put(actions.setStorageCost(''))
+		yield put(actions.setStorageSize(''))
+		yield put(actions.setStorageCost('0'))
 	}
 }
 
