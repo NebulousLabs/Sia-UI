@@ -1,20 +1,12 @@
 import React, { PropTypes } from 'react'
 import BigNumber from 'bignumber.js'
 
-const allowanceHosts = 24
-const blockMonth = 4382
 const allowanceMonths = 3
 
 const AllowanceDialog = ({storageSize, storageCost, actions}) => {
 	const onStorageSizeChange = (e) => actions.handleStorageSizeChange(e.target.value)
 	const onCancelClick = () => actions.closeAllowanceDialog()
-	const onAcceptClick = () => {
-		actions.setAllowance({
-			funds: SiaAPI.siacoinsToHastings(storageCost).toString(),
-			hosts: allowanceHosts,
-			period: blockMonth * allowanceMonths,
-		})
-	}
+	const onAcceptClick = () => actions.setAllowance(storageCost)
 	return (
 		<div className="modal">
 			<div className="allowance-dialog">

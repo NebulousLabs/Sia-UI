@@ -21,9 +21,9 @@ export const receiveAllowance = (allowance) => ({
 	type: constants.RECEIVE_ALLOWANCE,
 	allowance,
 })
-export const setAllowance = (allowance) => ({
+export const setAllowance = (funds) => ({
 	type: constants.SET_ALLOWANCE,
-	allowance,
+	funds,
 })
 export const getMetrics = () => ({
 	type: constants.GET_METRICS,

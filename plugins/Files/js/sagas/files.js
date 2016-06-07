@@ -3,7 +3,7 @@ import { put } from 'redux-saga/effects'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import BigNumber from 'bignumber.js'
-import { sendError, siadCall, parseFiles } from './helpers.js'
+import { sendError, siadCall, parseFiles, estimatedStoragePriceGBSC } from './helpers.js'
 
 // Query siad for the state of the wallet.
 // dispatch `unlocked` in receiveWalletLockstate
@@ -36,6 +36,11 @@ function* getAllowanceSaga() {
 	}
 }
 
+const allowanceHosts = 24
+const blockMonth = 4382
+const allowanceMonths = 3
+const allowancePeriod = blockMonth*allowanceMonths
+
 // Set the user's renter allowance.
 function* setAllowanceSaga(action) {
 	try {
@@ -43,17 +48,31 @@ function* setAllowanceSaga(action) {
 			url: '/renter/allowance',
 			method: 'POST',
 			qs: {
-				funds: action.allowance.funds,
-				hosts: action.allowance.hosts,
-				period: action.allowance.period,
+				funds: SiaAPI.siacoinsToHastings(action.funds).toString(),
+				hosts: allowanceHosts,
+				period: allowancePeriod,
 			},
 		})
-		yield put(actions.receiveAllowance(action.allowance))
 		yield put(actions.getMetrics())
 	} catch (e) {
 		sendError(e)
 	}
 }
+
+// Calculate monthly storage cost from a requested monthly storage amount
+function* calculateStorageCostSaga(action) {
+	try {
+		const response = yield siadCall('/renter/hosts/active')
+		const cost = estimatedStoragePriceGBSC(response.hosts, action.size, allowancePeriod)
+		yield put(actions.setStorageCost(cost.round(3).toString()))
+		yield put(actions.setStorageSize(action.size))
+	} catch (e) {
+		console.error(e)
+		yield put(actions.setStorageSize(''))
+		yield put(actions.setStorageCost('0'))
+	}
+}
+
 
 // Query siad for renter metrics.
 function* getMetricsSaga() {
@@ -87,20 +106,6 @@ function* getWalletBalanceSaga() {
 
 const scPerTBPerMo = new BigNumber(10000)
 const GBperTB = new BigNumber(1000)
-
-// Calculate monthly storage cost from a requested monthly storage amount
-function* calculateStorageCostSaga(action) {
-	try {
-		const sizeGB = new BigNumber(action.size)
-		const sizeTB = sizeGB.dividedBy(GBperTB)
-		const cost = sizeTB.times(scPerTBPerMo).times(3).round(2).toString()
-		yield put(actions.setStorageCost(cost))
-		yield put(actions.setStorageSize(action.size))
-	} catch (e) {
-		yield put(actions.setStorageSize(''))
-		yield put(actions.setStorageCost('0'))
-	}
-}
 
 export function* watchSetAllowance() {
 	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
