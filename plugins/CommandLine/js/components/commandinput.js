@@ -3,8 +3,8 @@ import { Map } from 'immutable'
 const child_process = require('child_process')
 console.log(child_process)
 
-window.siacLocation = "/Users/John/Downloads/Sia-v0.6.0-beta-darwin-amd64/"
-const specialCommands = [ ["wallet", "unlock"] ]
+//window.siacLocation = "/Users/John/Downloads/Sia-v0.6.0-beta-darwin-amd64/"
+const specialCommands = [ ["wallet", "unlock"], ["wallet", "load", "seed"] ]
 
 const CommandInput = ({commandHistory, currentCommand, actions}) => {
 
@@ -34,7 +34,7 @@ const CommandInput = ({commandHistory, currentCommand, actions}) => {
                     var newCommand = Map({ command: e.target.value, result: "", id: Math.floor(Math.random()*1000000) })
                     actions.addCommand(newCommand)
         
-                    var siac = child_process.spawn("./siac", newCommand.get("command").split(" "), { cwd: siacLocation })
+                    var siac = child_process.spawn("./siac", newCommand.get("command").split(" "), { cwd: SiaAPI.config.siac.path })
         
                     //Update the UI when the process receives new ouput.
                     siac.stdout.on("data", function (chunk){

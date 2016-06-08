@@ -17,7 +17,7 @@ const WalletPasswordPrompt = ({ showWalletPrompt, currentCommand, actions }) => 
                 var newCommand = Map({ command: currentCommand, result: "", id: Math.floor(Math.random()*1000000) })
                 actions.addCommand(newCommand)
     
-                var siac = child_process.spawn("./siac", newCommand.get("command").split(" "), { cwd: siacLocation })
+                var siac = child_process.spawn("./siac", newCommand.get("command").split(" "), { cwd: SiaAPI.config.siac.path })
                 siac.stdin.write( e.target.value )
                 siac.stdin.end()
 
