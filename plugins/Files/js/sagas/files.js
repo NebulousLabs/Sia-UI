@@ -44,7 +44,7 @@ function* getAllowanceSaga() {
 // Set the user's renter allowance.
 function* setAllowanceSaga(action) {
 	try {
-		yield siadCall({
+		const response = yield siadCall({
 			url: '/renter/allowance',
 			method: 'POST',
 			qs: {
@@ -53,6 +53,8 @@ function* setAllowanceSaga(action) {
 				period: allowancePeriod,
 			},
 		})
+		console.log(response)
+		yield put(actions.receiveAllowance())
 		yield put(actions.getMetrics())
 	} catch (e) {
 		sendError(e)
