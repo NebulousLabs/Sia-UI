@@ -1,6 +1,5 @@
 import React from 'react'
 import { Map } from 'immutable'
-import { remote } from 'electron'
 const child_process = require('child_process')
 console.log(child_process)
 

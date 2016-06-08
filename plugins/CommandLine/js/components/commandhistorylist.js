@@ -14,26 +14,19 @@ const CommandHistoryList = ({commandHistory}) => {
         console.log('Re-rendering.')
        	const CommandHistoryComponents = commandHistory.map((command, key) => {
     		return (
-    			<tr key={key}>
-    				<td>{command.get('command')}</td>
-    				<td>{command.get('result')}</td>
-    			</tr>
+    			<li key={key}>
+    				<h3>{command.get('command')}</h3>
+    				<p>{command.get('result')}</p>
+    			</li>
     		)
     	})
+
     	return (
     		<div className="command-history-list">
     			<h2> Commands </h2>
-    			<table className="pure-table">
-    				<thead>
-    					<tr>
-    						<th>Command</th>
-    						<th>Result</th>
-    					</tr>
-    				</thead>
-    				<tbody>
-    					{CommandHistoryComponents}
-    				</tbody>
-    			</table>
+    			<ul>
+                    {CommandHistoryComponents}
+    			</ul>
     		</div>
     	)
     }
