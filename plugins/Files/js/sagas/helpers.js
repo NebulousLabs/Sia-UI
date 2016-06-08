@@ -21,14 +21,26 @@ export const siadCall = (uri) => new Promise((resolve, reject) => {
 	})
 })
 
-// Parse the response from `/renter/files`
-export const parseFiles = (files) => {
+// Parse the response from `/renter/files`.
+// Return a List of files and directories in the current `path`.
+export const parseFiles = (files, path) => {
 	const fileList = List(files)
-	return fileList.map((file) => ({
-		size: file.filesize,
-		name: file.siapath,
-		available: file.available,
-	}))
+	return fileList.map((file) => {
+		let filename = file.siapath
+		let type = 'file'
+
+		const firstPathIndex = path.indexOf('/')
+		if (firstPathIndex !== -1) {
+			type = 'directory'
+			filename = path.split('/')[0]
+		}
+
+		return {
+			size: file.filesize,
+			name: filename,
+			type,
+		}
+	})
 }
 
 const bytesPerGB = new BigNumber('1000000000')

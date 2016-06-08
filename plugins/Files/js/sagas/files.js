@@ -22,10 +22,10 @@ function* getWalletLockstateSaga() {
 }
 
 // Query siad for the user's files.
-function* getFilesSaga() {
+function* getFilesSaga(action) {
 	try {
 		const response = yield siadCall('/renter/files')
-		yield put(actions.receiveFiles(parseFiles(response.files)))
+		yield put(actions.receiveFiles(parseFiles(response.files, action.path)))
 	} catch (e) {
 		sendError(e)
 	}
@@ -34,7 +34,6 @@ function* getFilesSaga() {
 // Set the user's renter allowance.
 function* setAllowanceSaga(action) {
 	try {
-		console.log(SiaAPI.siacoinsToHastings(action.funds).toString())
 		yield siadCall({
 			url: '/renter/allowance',
 			method: 'POST',
@@ -83,6 +82,7 @@ function* getMetricsSaga() {
 		sendError(e)
 	}
 }
+
 // Query Siad for the current wallet balance.
 function* getWalletBalanceSaga() {
 	try {
@@ -96,7 +96,7 @@ function* getWalletBalanceSaga() {
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-function* setAllowanceProgressBarSaga(action) {
+function* setAllowanceProgressBarSaga() {
 	try {
 		let response = yield siadCall('/renter/contracts')
 		const initialContracts = response.contracts.length
@@ -118,6 +118,7 @@ function* setAllowanceProgressBarSaga(action) {
 export function* watchSetAllowance() {
 	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
 }
+
 export function* watchSetAllowanceProgress() {
 	while (yield take(constants.SET_ALLOWANCE)) {
 		const progressTask = yield fork(setAllowanceProgressBarSaga)
@@ -125,6 +126,7 @@ export function* watchSetAllowanceProgress() {
 		yield cancel(progressTask)
 	}
 }
+
 export function* watchGetWalletLockstate() {
 	yield *takeEvery(constants.GET_WALLET_LOCKSTATE, getWalletLockstateSaga)
 }

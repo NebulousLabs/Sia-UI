@@ -6,8 +6,8 @@ const FileBrowser = ({activespending, allocatedspending}) => (
 	<div className="file-browser">
 		<div className="files-toolbar">
 			<div className="allowance-info">
-				<span>Active Storage Spending: {activespending}</span>
-				<span>Available Storage Spending: {allocatedspending}</span>
+				<div>Active Storage Spending: {activespending}</div>
+				<div>Available Storage Spending: {allocatedspending}</div>
 			</div>
 			<SetAllowanceButton />
 		</div>
