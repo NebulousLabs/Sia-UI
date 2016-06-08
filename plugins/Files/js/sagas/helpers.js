@@ -1,5 +1,5 @@
 // Helper functions for the Files sagas.
-import { List } from 'immutable'
+import { List, Map } from 'immutable'
 import BigNumber from 'bignumber.js'
 
 export const sendError = (e) => {
@@ -22,24 +22,26 @@ export const siadCall = (uri) => new Promise((resolve, reject) => {
 })
 
 // Parse the response from `/renter/files`.
-// Return a List of files and directories in the current `path`.
+// Return a Set of files and directories in the current `path`.
 export const parseFiles = (files, path) => {
-	let fileList = List(files)
-	fileList = fileList.filter((file) => file.siapath.indexOf(path) !== -1)
-	return fileList.map((file) => {
-		const relativePath = file.siapath.substring(path.length, file.siapath.length)
+	const fileList = List(files).filter((file) => file.siapath.indexOf(path) !== -1)
+	let parsedFiles = Map()
+	fileList.forEach((file) => {
 		let type = 'file'
+		const relativePath = file.siapath.substring(path.length, file.siapath.length)
 		let filename = relativePath.substring(relativePath.lastIndexOf('/') + 1, relativePath.length)
 		if (relativePath.indexOf('/') !== -1) {
 			type = 'directory'
 			filename = relativePath.split('/')[0]
 		}
-		return {
+		parsedFiles = parsedFiles.set(filename, {
 			size: file.filesize,
 			name: filename,
 			type,
-		}
+		})
 	})
+
+	return parsedFiles.toList().sortBy((file) => file.size)
 }
 
 const bytesPerGB = new BigNumber('1000000000')
