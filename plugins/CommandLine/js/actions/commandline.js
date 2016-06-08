@@ -2,7 +2,7 @@ import * as constants from '../constants/commandline.js'
 
 export const addCommand = (command) => ({
 	type: constants.ADD_COMMAND,
-	command,
+	command
 })
 
 export const updateCommand = (command, id, dataChunk) => ({
@@ -12,14 +12,22 @@ export const updateCommand = (command, id, dataChunk) => ({
 })
 
 export const loadPrevCommand = () => ({
-	type: constants.LOAD_PREV_COMMAND,
+	type: constants.LOAD_PREV_COMMAND
 })
 
 export const loadNextCommand = () => ({
-	type: constants.LOAD_NEXT_COMMAND,
+	type: constants.LOAD_NEXT_COMMAND
 })
 
 export const setCurrentCommand = (commandText) => ({
     type: constants.SET_CURRENT_COMMAND,
     command: commandText
+})
+
+export const showWalletPrompt = () => ({
+    type: constants.SHOW_WALLET_PROMPT
+})
+
+export const hideWalletPrompt = () => ({
+    type: constants.HIDE_WALLET_PROMPT
 })

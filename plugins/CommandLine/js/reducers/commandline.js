@@ -4,7 +4,8 @@ import * as constants from '../constants/commandline.js'
 const initialState = Map({
     commandHistory: List([]),
     currentCommand: "",
-    commandIndex: 0
+    commandIndex: 0,
+    showWalletPrompt: false
 })
 
 export default function commandLineReducer(state = initialState, action) {
@@ -40,7 +41,11 @@ export default function commandLineReducer(state = initialState, action) {
                 newCommandIndex = state.get("commandHistory").size
             }
             var newState = state.set("commandIndex", newCommandIndex)
-            return newState.set("currentCommand", state.get("commandHistory").get(state.get("commandHistory").size-newCommandIndex).get("command"));
+            var returnvalue = state;
+            if ( state.get("commandHistory").size-newCommandIndex < state.get("commandHistory").size ){
+                returnvalue = newState.set("currentCommand", state.get("commandHistory").get(state.get("commandHistory").size-newCommandIndex).get("command"))
+            }
+            return returnvalue;
 
 
         case constants.LOAD_NEXT_COMMAND:
@@ -63,6 +68,13 @@ export default function commandLineReducer(state = initialState, action) {
 
         case constants.SET_CURRENT_COMMAND:
             return state.set("currentCommand", action.command)
+
+
+        case constants.SHOW_WALLET_PROMPT:
+            return state.set("showWalletPrompt", true)
+
+        case constants.HIDE_WALLET_PROMPT:
+            return state.set("showWalletPrompt", false)
 
  
     	default:

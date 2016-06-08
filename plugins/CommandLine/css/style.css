@@ -74,10 +74,48 @@ footer{
     width: 100%;
 }
 
+input {
+    font-size: 1.2em;
+    padding: .1em;
+    width: 100%;
+}
+
 #command-input{
     position: relative;
     width: calc( 100% - 1.2em - 2px );
-    padding: .1em;
     margin: .5em;
-    font-size: 1.2em;
+}
+
+
+.modal {
+    font-family: 'Roboto Condensed', sans-serif;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.modal .modal-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 40%;
+    height: 40%;
+    background-color: #ECECEC;
+    padding: 5%;
+}
+
+.modal .modal-message h3 {
+    margin: 0px;
+}
+
+.modal .modal-message p {
+    padding-bottom: 1em;
+    text-align: center;
 }
