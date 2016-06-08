@@ -14,52 +14,70 @@
     font-family: 'Roboto Mono', sans-serif;
     font-weight: 100;
  	position: absolute;
- 	top: 0;
+ 	top: 60px;
  	bottom: 0;
  	left: 0;
  	right: 0;
+    height: calc( 100% - 60px )
  }
 
 .command-history {
     position: relative;
-    top: 0px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: flex-start;
-	height: calc(100% - 2em - 1.5em);
-    width: calc(100% - 2em);
-    padding: 1em 1em 0em;
-    overflow-x: hidden;
+	height: 100%;
 }
 
 .command-history-list {
     width: 100%;
-    max-height: calc( 100% - 2em );
+    height: calc( 100% - 2.4em - 10px ); /* 2.6em = footer height */
+    overflow-y: scroll;
 }
 
-.command-history-list table{
-    width: 100%;
+.command-overview {
+    background: #f5f5f5;
+    display: block;
+    border: 1px;
+    padding: 22px 4em 23px;
+    margin-top: 0px;
+    white-space: pre-wrap;
 }
 
-.command-history-list table td{
-    white-space: pre;
-    vertical-align: top;
-    letter-spacing: -1.2px;
+.command-overview h3 {
+    padding: 0px;
+    margin-top: 0px;
+    margin-bottom: .5em;
 }
 
-#command-input{
-    position: relative;
-    width: 100%;
+.command-overview p{
+    padding: 0px 0em 0em 2em;
+    margin-bottom: 0;
+}
+
+
+
+.command-history-list ul {
+    list-style: none;
+    padding: 0em 1em 0em;
+    border: 0px;
+}
+
+.command-history-list ul p {
+    white-space: pre-wrap;
+    padding-left: 1em;
+    padding-bottom: 2em;
+}
+.command-history-list ul li:last-of-type p {
+    padding-bottom: 1em;
 }
 
 footer{ 
     background-color: #00CBA0;
-    position: fixed;
-    bottom: 0px;
-    width: calc( 100% - 1em );
-    margin-left: calc( -1em );
-    height: 1.5em;
-    bottom: 0px;
-    padding: .5em;
+    width: 100%;
+}
+
+#command-input{
+    position: relative;
+    width: calc( 100% - 1.2em - 2px );
+    padding: .1em;
+    margin: .5em;
+    font-size: 1.2em;
 }

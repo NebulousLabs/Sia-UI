@@ -54,9 +54,9 @@ export default function commandLineReducer(state = initialState, action) {
                     state.get("commandHistory").get(
                         state.get("commandHistory").size-newCommandIndex
                     ).get("command")
-                );
-
-            }            
+                )
+            }     
+            else { newState = newState.set("currentCommand", "") }       
 
             return newState
 
