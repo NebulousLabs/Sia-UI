@@ -4,6 +4,7 @@ import * as constants from '../constants/files.js'
 const initialState = Map({
 	storageSize: '',
 	storageCost: '0',
+	allowanceProgress: '0',
 	settingAllowance: false,
 })
 
@@ -15,8 +16,10 @@ export default function allowanceDialogReducer(state = initialState, action) {
 		return state.set('storageCost', action.cost)
 	case constants.SET_ALLOWANCE:
 		return state.set('settingAllowance', true)
-	case constants.RECEIVE_ALLOWANCE:
+	case constants.SET_ALLOWANCE_COMPLETED:
 		return state.set('settingAllowance', false)
+	case constants.SET_ALLOWANCE_PROGRESS:
+		return state.set('allowanceProgress', action.progress)
 	default:
 		return state
 	}

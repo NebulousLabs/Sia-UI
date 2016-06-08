@@ -6,6 +6,7 @@ import { closeAllowanceDialog, handleStorageSizeChange, setAllowance } from '../
 const mapStateToProps = (state) => ({
 	storageSize: state.allowancedialog.get('storageSize'),
 	storageCost: state.allowancedialog.get('storageCost'),
+	allowanceProgress: state.allowancedialog.get('allowanceProgress'),
 	settingAllowance: state.allowancedialog.get('settingAllowance'),
 })
 const mapDispatchToProps = (dispatch) => ({

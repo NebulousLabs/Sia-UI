@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 
 const allowanceMonths = 3
 
-const AllowanceDialog = ({storageSize, storageCost, settingAllowance, actions}) => {
+const AllowanceDialog = ({storageSize, storageCost, settingAllowance, allowanceProgress, actions}) => {
 	const onStorageSizeChange = (e) => actions.handleStorageSizeChange(e.target.value)
 	const onCancelClick = () => actions.closeAllowanceDialog()
 	const onAcceptClick = () => actions.setAllowance(storageCost)
@@ -13,6 +13,7 @@ const AllowanceDialog = ({storageSize, storageCost, settingAllowance, actions}) 
 		dialogContents = (
 			<div className="allowance-dialog">
 				<h2> Buying {storageSize} GB of storage for a total of {storageCost} SC... </h2>
+				<h3> {allowanceProgress}% complete... </h3>
 			</div>
 		)
 	} else {
@@ -42,6 +43,7 @@ const AllowanceDialog = ({storageSize, storageCost, settingAllowance, actions}) 
 AllowanceDialog.propTypes = {
 	storageSize: PropTypes.string.isRequired,
 	storageCost: PropTypes.string.isRequired,
+	allowanceProgress: PropTypes.string,
 	settingAllowance: PropTypes.bool.isRequired,
 }
 

@@ -17,9 +17,8 @@ export const receiveFiles = (files) => ({
 export const getAllowance = () => ({
 	type: constants.GET_ALLOWANCE,
 })
-export const receiveAllowance = (allowance) => ({
-	type: constants.RECEIVE_ALLOWANCE,
-	allowance,
+export const setAllowanceCompleted = () => ({
+	type: constants.SET_ALLOWANCE_COMPLETED,
 })
 export const setAllowance = (funds) => ({
 	type: constants.SET_ALLOWANCE,
@@ -58,3 +57,8 @@ export const setStorageSize = (size) => ({
 	type: constants.SET_STORAGE_SIZE,
 	size,
 })
+export const setAllowanceProgress = (progress) => ({
+	type: constants.SET_ALLOWANCE_PROGRESS,
+	progress,
+})
+

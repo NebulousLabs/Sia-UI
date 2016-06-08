@@ -1,5 +1,5 @@
 import { takeEvery } from 'redux-saga'
-import { put } from 'redux-saga/effects'
+import { put, take, fork, cancel } from 'redux-saga/effects'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import BigNumber from 'bignumber.js'
@@ -31,20 +31,11 @@ function* getFilesSaga() {
 	}
 }
 
-// Query siad for the user's allowance.
-function* getAllowanceSaga() {
-	try {
-		const allowance = yield siadCall('/renter/allowance')
-		yield put(actions.receiveAllowance(allowance))
-	} catch (e) {
-		sendError(e)
-	}
-}
-
 // Set the user's renter allowance.
 function* setAllowanceSaga(action) {
 	try {
-		const response = yield siadCall({
+		console.log(SiaAPI.siacoinsToHastings(action.funds).toString())
+		yield siadCall({
 			url: '/renter/allowance',
 			method: 'POST',
 			qs: {
@@ -53,9 +44,9 @@ function* setAllowanceSaga(action) {
 				period: allowancePeriod,
 			},
 		})
-		console.log(response)
-		yield put(actions.receiveAllowance())
+		yield put(actions.setAllowanceCompleted())
 		yield put(actions.getMetrics())
+		yield put(actions.closeAllowanceDialog())
 	} catch (e) {
 		sendError(e)
 	}
@@ -103,17 +94,42 @@ function* getWalletBalanceSaga() {
 	}
 }
 
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+function* setAllowanceProgressBarSaga(action) {
+	try {
+		let response = yield siadCall('/renter/contracts')
+		const initialContracts = response.contracts.length
+		while (true) {
+			response = yield siadCall('/renter/contracts')
+			const deltaContracts = response.contracts.length - initialContracts
+			if (deltaContracts === allowanceHosts) {
+				break
+			}
+			const progress = Math.floor((deltaContracts / allowanceHosts) * 100)
+			yield put(actions.setAllowanceProgress(progress.toString()))
+			yield delay(500)
+		}
+	} catch (e) {
+		sendError(e)
+	}
+}
+
 export function* watchSetAllowance() {
 	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
+}
+export function* watchSetAllowanceProgress() {
+	while (yield take(constants.SET_ALLOWANCE)) {
+		const progressTask = yield fork(setAllowanceProgressBarSaga)
+		yield take(constants.SET_ALLOWANCE_COMPLETED)
+		yield cancel(progressTask)
+	}
 }
 export function* watchGetWalletLockstate() {
 	yield *takeEvery(constants.GET_WALLET_LOCKSTATE, getWalletLockstateSaga)
 }
 export function* watchGetFiles() {
 	yield *takeEvery(constants.GET_FILES, getFilesSaga)
-}
-export function* watchGetAllowance() {
-	yield *takeEvery(constants.GET_ALLOWANCE, getAllowanceSaga)
 }
 export function* watchGetMetrics() {
 	yield *takeEvery(constants.GET_METRICS, getMetricsSaga)
