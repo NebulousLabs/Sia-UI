@@ -5,11 +5,12 @@ const initialState = Map({
 	activespending: '',
 	allocatedspending: '',
 	files: List(),
+	path: '',
 	showAllowanceDialog: false,
 })
 
 export default function filesReducer(state = initialState, action) {
-	console.log(action.type)
+	console.log(action)
 	switch (action.type) {
 	case constants.RECEIVE_METRICS:
 		return state.set('activespending', action.activespending)
@@ -20,6 +21,8 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('showAllowanceDialog', true)
 	case constants.CLOSE_ALLOWANCE_DIALOG:
 		return state.set('showAllowanceDialog', false)
+	case constants.SET_PATH:
+		return state.set('path', action.path)
 	default:
 		return state
 	}

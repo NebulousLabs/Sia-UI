@@ -62,4 +62,8 @@ export const setAllowanceProgress = (progress) => ({
 	type: constants.SET_ALLOWANCE_PROGRESS,
 	progress,
 })
+export const setPath = (path) => ({
+	type: constants.SET_PATH,
+	path,
+})
 

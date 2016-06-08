@@ -24,17 +24,16 @@ export const siadCall = (uri) => new Promise((resolve, reject) => {
 // Parse the response from `/renter/files`.
 // Return a List of files and directories in the current `path`.
 export const parseFiles = (files, path) => {
-	const fileList = List(files)
+	let fileList = List(files)
+	fileList = fileList.filter((file) => file.siapath.indexOf(path) !== -1)
 	return fileList.map((file) => {
-		let filename = file.siapath
+		const relativePath = file.siapath.substring(path.length, file.siapath.length)
 		let type = 'file'
-
-		const firstPathIndex = path.indexOf('/')
-		if (firstPathIndex !== -1) {
+		let filename = relativePath.substring(relativePath.lastIndexOf('/') + 1, relativePath.length)
+		if (relativePath.indexOf('/') !== -1) {
 			type = 'directory'
-			filename = path.split('/')[0]
+			filename = relativePath.split('/')[0]
 		}
-
 		return {
 			size: file.filesize,
 			name: filename,

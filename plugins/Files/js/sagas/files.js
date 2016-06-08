@@ -115,10 +115,17 @@ function* setAllowanceProgressBarSaga() {
 	}
 }
 
+function* setPathSaga(action) {
+	try {
+		yield put(actions.getFiles(action.path))
+	} catch (e) {
+		sendError(e)
+	}
+}
+
 export function* watchSetAllowance() {
 	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
 }
-
 export function* watchSetAllowanceProgress() {
 	while (yield take(constants.SET_ALLOWANCE)) {
 		const progressTask = yield fork(setAllowanceProgressBarSaga)
@@ -126,7 +133,6 @@ export function* watchSetAllowanceProgress() {
 		yield cancel(progressTask)
 	}
 }
-
 export function* watchGetWalletLockstate() {
 	yield *takeEvery(constants.GET_WALLET_LOCKSTATE, getWalletLockstateSaga)
 }
@@ -141,4 +147,7 @@ export function* watchGetWalletBalance() {
 }
 export function* watchStorageSizeChange() {
 	yield *takeEvery(constants.HANDLE_STORAGE_SIZE_CHANGE, calculateStorageCostSaga)
+}
+export function* watchSetPath() {
+	yield *takeEvery(constants.SET_PATH, setPathSaga)
 }
