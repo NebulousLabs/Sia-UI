@@ -4,7 +4,7 @@ import { List, Map } from 'immutable'
 const CommandHistoryList = ({commandHistory}) => {
 
     componentDidUpdate: {
-        var ch = document.getElementsByClassName("command-history")[0]
+        var ch = document.getElementsByClassName("command-history-list")[0]
         if (ch)
             //Give the DOM time to process the DOM changes.
             setTimeout( function(){ ch.scrollTop = ch.scrollHeight; }, 0)
@@ -23,8 +23,21 @@ const CommandHistoryList = ({commandHistory}) => {
 
     	return (
     		<div className="command-history-list">
-    			<h2> Commands </h2>
-    			<ul>
+                <div className = "command-overview">
+                    <h3>Available Commands:</h3>
+                    <p className="command-overview">
+                        version     Print version information<br />
+                        stop        Stop the Sia daemon<br />
+                        host        Perform host actions<br />
+                        hostdb      View or modify the host database<br />
+                        miner       Perform miner actions<br />
+                        wallet      Perform wallet actions<br />
+                        renter      Perform renter actions<br />
+                        gateway     Perform gateway actions<br />
+                        consensus   Print the current state of consensus<br />
+                    </p>
+                </div>
+                <ul>
                     {CommandHistoryComponents}
     			</ul>
     		</div>
