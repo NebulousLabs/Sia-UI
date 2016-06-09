@@ -11,5 +11,6 @@ export default function* rootSaga() {
 		fork(sagas.watchStorageSizeChange),
 		fork(sagas.watchSetAllowanceProgress),
 		fork(sagas.watchSetPath),
+		fork(sagas.watchSetSearchText),
 	]
 }

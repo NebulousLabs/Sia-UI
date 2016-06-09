@@ -23,6 +23,7 @@ export const siadCall = (uri) => new Promise((resolve, reject) => {
 
 // Parse the response from `/renter/files`.
 // Return a Set of files and directories in the current `path`.
+// This works similarly to `ls`.
 export const parseFiles = (files, path) => {
 	const fileList = List(files).filter((file) => file.siapath.indexOf(path) !== -1)
 	let parsedFiles = Map()
@@ -42,6 +43,11 @@ export const parseFiles = (files, path) => {
 	})
 
 	return parsedFiles.toList().sortBy((file) => file.size)
+}
+
+export const searchFiles = (files, text) => {
+	const matchingFiles = List(files).filter((file) => file.siapath.indexOf(text) !== -1)
+	return matchingFiles.map((file) => ({size: file.filesize, name: file.siapath, type: 'file'}))
 }
 
 const bytesPerGB = new BigNumber('1000000000')
