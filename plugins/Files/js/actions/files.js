@@ -74,7 +74,21 @@ export const setSearchText = (text, path) => ({
 export const toggleSearchField = () => ({
 	type: constants.TOGGLE_SEARCH_FIELD,
 })
-export const uploadFile = (filepath) => ({
+export const uploadFile = (source, path) => ({
 	type: constants.UPLOAD_FILE,
-	filepath,
+	source,
+	path,
+})
+export const setDragging = () => ({
+	type: constants.SET_DRAGGING,
+})
+export const setNotDragging = () => ({
+	type: constants.SET_NOT_DRAGGING,
+})
+export const showUploadDialog = (source) => ({
+	type: constants.SHOW_UPLOAD_DIALOG,
+	source,
+})
+export const hideUploadDialog = () => ({
+	type: constants.HIDE_UPLOAD_DIALOG,
 })

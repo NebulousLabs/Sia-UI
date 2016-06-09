@@ -4,11 +4,13 @@ import Path from 'path'
 import SearchField from '../containers/searchfield.js'
 
 const FileList = ({files, path, showSearchField, actions}) => {
+
 	const onFileClick = (file) => () => {
 		if (file.type === 'directory') {
 			actions.setPath(path + file.name + '/')
 		}
 	}
+
 	const onBackClick = () => {
 		if (path === '') {
 			return
@@ -37,6 +39,7 @@ const FileList = ({files, path, showSearchField, actions}) => {
 			</li>
 		)
 	})
+
 	return (
 		<div className="file-list">
 			{showSearchField ? <SearchField /> : null}
@@ -51,6 +54,7 @@ const FileList = ({files, path, showSearchField, actions}) => {
 FileList.propTypes = {
 	files: PropTypes.instanceOf(List),
 	path: PropTypes.string.isRequired,
+	showSearchField: PropTypes.bool.isRequired,
 }
 
 export default FileList

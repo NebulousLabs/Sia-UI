@@ -7,8 +7,11 @@ const initialState = Map({
 	files: List(),
 	path: '',
 	searchText: '',
+	uploadSource: '',
 	showAllowanceDialog: false,
+	showUploadDialog: false,
 	showSearchField: false,
+	dragging: false,
 })
 
 export default function filesReducer(state = initialState, action) {
@@ -29,6 +32,15 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('searchText', action.text)
 	case constants.TOGGLE_SEARCH_FIELD:
 		return state.set('showSearchField', !state.get('showSearchField'))
+	case constants.SET_DRAGGING:
+		return state.set('dragging', true)
+	case constants.SET_NOT_DRAGGING:
+		return state.set('dragging', false)
+	case constants.SHOW_UPLOAD_DIALOG:
+		return state.set('showUploadDialog', true)
+		            .set('uploadSource', action.source)
+	case constants.HIDE_UPLOAD_DIALOG:
+		return state.set('showUploadDialog', false)
 	default:
 		return state
 	}

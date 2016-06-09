@@ -25,8 +25,3 @@ ReactDOM.render(rootElement, document.getElementById('react-root'))
 store.dispatch(getWalletLockstate())
 store.dispatch(getMetrics())
 store.dispatch(getFiles(''))
-
-setInterval(() => {
-	store.dispatch(getWalletLockstate())
-	store.dispatch(getMetrics())
-}, 1500)

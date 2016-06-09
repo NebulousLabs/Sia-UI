@@ -136,6 +136,24 @@ function* setSearchTextSaga(action) {
 	}
 }
 
+function* uploadFileSaga(action) {
+	try {
+		const filename = action.source.substring(action.source.lastIndexOf('/') + 1, action.source.length)
+		const destpath = action.path + filename
+		yield siadCall({
+			url: '/renter/upload/',
+			method: 'POST',
+			qs: {
+				siapath: destpath,
+				source: action.source,
+			},
+		})
+		yield put(actions.getFiles(action.path))
+	} catch (e) {
+		sendError(e)
+	}
+}
+
 export function* watchSetAllowance() {
 	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
 }
@@ -166,4 +184,7 @@ export function* watchStorageSizeChange() {
 }
 export function* watchSetPath() {
 	yield *takeEvery(constants.SET_PATH, setPathSaga)
+}
+export function* watchUploadFile() {
+	yield *takeEvery(constants.UPLOAD_FILE, uploadFileSaga)
 }
