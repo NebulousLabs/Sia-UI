@@ -5,6 +5,7 @@ const SearchField = ({searchText, path, actions}) => {
 	return (
 		<div className="search-field">
 			<input value={searchText} onChange={onSearchChange}></input>
+			<i className="fa fa-search"></i>
 		</div>
 	)
 }

@@ -3,7 +3,7 @@ import { List } from 'immutable'
 import Path from 'path'
 import SearchField from '../containers/searchfield.js'
 
-const FileList = ({files, path, actions}) => {
+const FileList = ({files, path, showSearchField, actions}) => {
 	const onFileClick = (file) => () => {
 		if (file.type === 'directory') {
 			actions.setPath(path + file.name + '/')
@@ -39,10 +39,9 @@ const FileList = ({files, path, actions}) => {
 	})
 	return (
 		<div className="file-list">
-			<h3> Files </h3>
-			<button className="file-back-button" onClick={onBackClick}>Back</button>
-			<SearchField />
+			{showSearchField ? <SearchField /> : null}
 			<ul>
+				{path !== '' ? <li onClick={onBackClick}><div><i className="fa fa-backward"></i>Back</div></li> : null}
 				{fileElements}
 			</ul>
 		</div>

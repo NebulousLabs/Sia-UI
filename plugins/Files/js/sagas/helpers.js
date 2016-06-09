@@ -46,7 +46,7 @@ export const parseFiles = (files, path) => {
 }
 
 export const searchFiles = (files, text, path) => {
-	let matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1 && file.siapath.indexOf(text) !== -1)
+	const matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1 && file.siapath.indexOf(text) !== -1)
 	return matchingFiles.map((file) => ({size: file.filesize, name: file.siapath, type: 'file'}))
 }
 

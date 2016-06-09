@@ -71,5 +71,6 @@ export const setSearchText = (text, path) => ({
 	text,
 	path,
 })
-
-
+export const toggleSearchField = () => ({
+	type: constants.TOGGLE_SEARCH_FIELD,
+})

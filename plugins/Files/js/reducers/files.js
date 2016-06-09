@@ -8,6 +8,7 @@ const initialState = Map({
 	path: '',
 	searchText: '',
 	showAllowanceDialog: false,
+	showSearchField: false,
 })
 
 export default function filesReducer(state = initialState, action) {
@@ -26,6 +27,8 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('path', action.path)
 	case constants.SET_SEARCH_TEXT:
 		return state.set('searchText', action.text)
+	case constants.TOGGLE_SEARCH_FIELD:
+		return state.set('showSearchField', !state.get('showSearchField'))
 	default:
 		return state
 	}
