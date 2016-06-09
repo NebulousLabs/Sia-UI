@@ -74,3 +74,7 @@ export const setSearchText = (text, path) => ({
 export const toggleSearchField = () => ({
 	type: constants.TOGGLE_SEARCH_FIELD,
 })
+export const uploadFile = (filepath) => ({
+	type: constants.UPLOAD_FILE,
+	filepath,
+})
