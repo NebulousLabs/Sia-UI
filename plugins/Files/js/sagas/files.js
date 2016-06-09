@@ -126,11 +126,11 @@ function* setPathSaga(action) {
 function* setSearchTextSaga(action) {
 	try {
 		if (action.text === '') {
-			yield put(actions.setPath(''))
+			yield put(actions.setPath(action.path))
 			return
 		}
 		const response = yield siadCall('/renter/files')
-		yield put(actions.receiveFiles(searchFiles(response.files, action.text)))
+		yield put(actions.receiveFiles(searchFiles(response.files, action.text, action.path)))
 	} catch (e) {
 		sendError(e)
 	}

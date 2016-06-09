@@ -5,6 +5,7 @@ import { setSearchText } from '../actions/files.js'
 
 const mapStateToProps = (state) => ({
 	searchText: state.files.get('searchText'),
+	path: state.files.get('path'),
 })
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ setSearchText }, dispatch),

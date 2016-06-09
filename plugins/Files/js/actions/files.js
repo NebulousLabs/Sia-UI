@@ -66,9 +66,10 @@ export const setPath = (path) => ({
 	type: constants.SET_PATH,
 	path,
 })
-export const setSearchText = (text) => ({
+export const setSearchText = (text, path) => ({
 	type: constants.SET_SEARCH_TEXT,
 	text,
+	path,
 })
 
 
