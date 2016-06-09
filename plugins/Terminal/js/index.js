@@ -40,16 +40,26 @@ const store = createStore(rootReducer)
 const spawnCommand = function (commandString, actions){
     //Create new command object. Id doesn't need to be unique, just can't be the same for adjacent commands.
 
-    //Remove surrounding whitespace and leading siac command.
+    //We set the command first so the user sees exactly what they type. (Minus leading and trailing spaces.)
     commandString = commandString.trim()
+    var newCommand = Map({ command: commandString, result: '', id: Math.floor(Math.random()*1000000) })
+
+    //Remove surrounding whitespace and leading siac command.
     if (commandString.startsWith('siac')){
         commandString = commandString.slice(4).trim()
     }
+    else if (commandString.startsWith('./siac')){
+        commandString = commandString.slice(6).trim()
+    }
 
-    var newCommand = Map({ command: commandString, result: '', id: Math.floor(Math.random()*1000000) })
     actions.addCommand(newCommand)
 
-    var siac = child_process.spawn('./siac', newCommand.get('command').split(' '), { cwd: SiaAPI.config.attr('siac').path })
+    var oldargs = commandString.split(' ')
+    var args = oldargs;
+    if (oldargs.indexOf("-a") !== -1 && oldargs.indexOf("--address") !== -1 && SiaAPI.config.attr("address")){
+        args = [ '-a', SiaAPI.config.attr("address") ].concat(oldargs)
+    }
+    var siac = child_process.spawn('./siac', args, { cwd: SiaAPI.config.attr('siac').path })
 
     var consumeChunk = function (chunk){
         console.log('Data chunk ' + chunk)

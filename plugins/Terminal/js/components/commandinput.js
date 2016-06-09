@@ -22,13 +22,13 @@ const CommandInput = ({commandHistory, currentCommand, showCommandOverview, acti
 
             //Enter button.
             if (e.keyCode === 13) {
-                var args = e.target.value.split(" ")
+                var args = e.target.value.trim().split(" ")
                 if ( specialCommands.reduce( (isSpecial, command, j) =>
                     isSpecial || command.reduce(
                         (matches, argument, i) => (matches && argument === args[i])
                     , true ),
                 false) ){ 
-                    if (args[0] === "help"){ 
+                    if (args[0].trim() === "help"){ 
                         if (showCommandOverview){ actions.hideCommandOverview() }
                         else { actions.showCommandOverview() }
                         var newCommand = Map({ command: "help", result: '', id: Math.floor(Math.random()*1000000) })
