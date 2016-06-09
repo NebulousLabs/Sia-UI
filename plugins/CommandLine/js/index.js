@@ -6,9 +6,10 @@ import { Provider } from 'react-redux'
 import rootReducer from './js/reducers/index.js'
 import CommandLine from './js/components/app.js'
 import Path from 'path'
+const fs = require('fs')
 
 const checkSiaPath = () => new Promise((resolve, reject) => {
-    fs.stat(SiaAPI.config.siac.path, (err) => {
+    fs.stat(Path.resolve(SiaAPI.config.attr('siac').path, './siac'), (err) => {
          if (!err) {
               resolve()
          } else {
@@ -17,17 +18,17 @@ const checkSiaPath = () => new Promise((resolve, reject) => {
     })
 })
 
-checkSiaPath().catch(() => {
+checkSiaPath().catch((err) => {
     // config.path doesn't exist.  Prompt the user for siad's location
-    if (!SiaAPI.config.siac){ SiaAPI.config.siac = { path: "" } }
-    SiaAPI.showError({ title: 'Siac not found', content: 'Sia-UI couldn\'t locate siac.  Please navigate to siac.' })
+    if (!SiaAPI.config.attr('siac')){ SiaAPI.config.attr('siac', { path: '' }) }
+    SiaAPI.showError({ title: 'Siac not found', content: 'Sia-UI couldn\'t locate siac. Please navigate to siac.' })
     const siacPath = SiaAPI.openFile({
         title: 'Please locate siac.',
         properties: ['openFile'],
-        defaultPath: Path.join('..', SiaAPI.config.siac.path || "./" ),
+        defaultPath: Path.join('..', SiaAPI.config.attr('siac').path || './' ),
         filters: [{ name: 'siac', extensions: ['*'] }],
     })
-    SiaAPI.config.siac.path = Path.dirname(siacPath[0])
+    SiaAPI.config.attr('siac', { path: Path.dirname(siacPath[0]) })
     SiaAPI.config.save()
 })
 
