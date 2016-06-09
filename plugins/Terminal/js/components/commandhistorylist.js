@@ -12,7 +12,8 @@ const CommandHistoryList = ({commandHistory}) => {
 
     render: {
         console.log('Re-rendering.')
-       	const CommandHistoryComponents = commandHistory.map((command, key) => {
+       	const CommandHistoryComponents = commandHistory.filterNot(
+            (command) => command.get('command') === 'help').map((command, key) => {
     		return (
     			<li key={key}>
     				<h3>{command.get('command')}</h3>

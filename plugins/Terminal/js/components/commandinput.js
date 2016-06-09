@@ -1,9 +1,10 @@
 import React from 'react'
+import { Map } from 'immutable'
 
 //These commands need a password prompt.
-const specialCommands = [ ["wallet", "unlock"], ["wallet", "load", "seed"] ]
+const specialCommands = [ ["wallet", "unlock"], ["wallet", "load", "seed"], ["help"] ]
 
-const CommandInput = ({commandHistory, currentCommand, actions}) => {
+const CommandInput = ({commandHistory, currentCommand, showCommandOverview, actions}) => {
 
     componentDidUpdate: {
         setTimeout(function (){
@@ -22,11 +23,19 @@ const CommandInput = ({commandHistory, currentCommand, actions}) => {
             //Enter button.
             if (e.keyCode === 13) {
                 var args = e.target.value.split(" ")
-                if ( specialCommands.reduce( (isSpecial, command) =>
+                if ( specialCommands.reduce( (isSpecial, command, j) =>
                     isSpecial || command.reduce(
                         (matches, argument, i) => (matches && argument === args[i])
                     , true ),
-                false) ){ actions.showWalletPrompt() }
+                false) ){ 
+                    if (args[0] === "help"){ 
+                        if (showCommandOverview){ actions.hideCommandOverview() }
+                        else { actions.showCommandOverview() }
+                        var newCommand = Map({ command: "help", result: '', id: Math.floor(Math.random()*1000000) })
+                        actions.addCommand(newCommand)
+                    }
+                    else { actions.showWalletPrompt() }
+                }
     
                 else {
                     //Spawn command defined in index.js.

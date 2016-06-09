@@ -72,6 +72,11 @@ const spawnCommand = function (commandString, actions){
     siac.on('error', function (code){ console.log(`\tPROGRAM ERRORED`); streamClosed(code) })
     siac.on('close', function (code){ console.log(`\tPROGRAM CLOSED`); streamClosed(code) })
 
+    //If window is small auto close command overview so we can see the return value.
+    if (document.getElementsByClassName("command-history-list")[0].offsetHeight < 100){
+        actions.hideCommandOverview()
+    }
+
     return siac
 }
 

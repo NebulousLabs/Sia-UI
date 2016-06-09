@@ -28,7 +28,8 @@ const CommandLine = ({showCommandOverview, actions}) => {
                         wallet      Perform wallet actions<br />
                         renter      Perform renter actions<br />
                         gateway     Perform gateway actions<br />
-                        consensus   Print the current state of consensus<br />
+                        consensus   Print the current state of consensus<br /><br />
+                        Use "[command] --help" for more information about a command.<br />
                     </p>
                 </div>
             </div>

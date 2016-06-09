@@ -34,7 +34,7 @@
     transition: all 1s;
 }
 .overview .command-history-list {
-    max-height: calc( 100% - 2.4em - 10px - 305px);
+    max-height: calc( 100% - 2.4em - 10px - 386px);
     transition: all 1s .5s;
 }
 
@@ -70,6 +70,7 @@ footer{
     display: block;
     border: 1px;
     padding: 0px 4em;
+    height: 387px;
     width: calc( 100% - 8em );
     margin-top: 0px;
     white-space: pre-wrap;
@@ -77,7 +78,7 @@ footer{
     transition: all 1s;
 }
 .command-overview.expanded {
-    max-height: 350px;
+    max-height: 386px;
     transition: all 1s .5s;
 }
 
@@ -117,7 +118,7 @@ footer{
 }
 
 .command-overview p{
-    padding: 0px 0em 23px 2vw;
+    padding: 0px 0em 23px 0em;
     margin-bottom: 0;
 }
 
