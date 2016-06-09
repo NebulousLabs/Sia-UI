@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import { List } from 'immutable'
 import Path from 'path'
+import SearchField from '../containers/searchfield.js'
 
 const FileList = ({files, path, actions}) => {
 	const onFileClick = (file) => () => {
@@ -9,7 +10,7 @@ const FileList = ({files, path, actions}) => {
 		}
 	}
 	const onBackClick = () => {
-		if (path === '' || path === '../') {
+		if (path === '') {
 			return
 		}
 		let newpath = Path.join(path, '../')
@@ -28,16 +29,19 @@ const FileList = ({files, path, actions}) => {
 		}
 		return (
 			<li key={key} onClick={onFileClick(file)}>
-				{fileIcon}
-				<span className="filename">{file.name}</span>
+				<div>
+					{fileIcon}
+					<span className="filename">{file.name}</span>
+				</div>
 				<span className="filesize">{file.size}</span>
 			</li>
 		)
 	})
 	return (
 		<div className="file-list">
-			<h2> Files </h2>
+			<h3> Files </h3>
 			<button className="file-back-button" onClick={onBackClick}>Back</button>
+			<SearchField />
 			<ul>
 				{fileElements}
 			</ul>

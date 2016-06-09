@@ -6,6 +6,7 @@ const initialState = Map({
 	allocatedspending: '',
 	files: List(),
 	path: '',
+	searchText: '',
 	showAllowanceDialog: false,
 })
 
@@ -23,6 +24,8 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('showAllowanceDialog', false)
 	case constants.SET_PATH:
 		return state.set('path', action.path)
+	case constants.SET_SEARCH_TEXT:
+		return state.set('searchText', action.text)
 	default:
 		return state
 	}
