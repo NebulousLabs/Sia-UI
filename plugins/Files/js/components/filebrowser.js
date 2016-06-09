@@ -3,6 +3,7 @@ import FileList from '../containers/filelist.js'
 import SetAllowanceButton from '../containers/setallowancebutton.js'
 import SearchButton from '../containers/searchbutton.js'
 import UploadDialog from '../containers/uploaddialog.js'
+import UploadButton from '../containers/uploadbutton.js'
 import DragOverlay from './dragoverlay.js'
 
 const FileBrowser = ({activespending, allocatedspending, dragging, showUploadDialog, actions}) => {
@@ -13,7 +14,7 @@ const FileBrowser = ({activespending, allocatedspending, dragging, showUploadDia
 	const onDrop = (e) => {
 		e.preventDefault()
 		actions.setNotDragging()
-		actions.showUploadDialog(e.dataTransfer.files[0].name)
+		actions.showUploadDialog(e.dataTransfer.files[0].path)
 	}
 	return (
 		<div className="file-browser" onDragOver={onDragOver} onDrop={onDrop}>
@@ -26,6 +27,7 @@ const FileBrowser = ({activespending, allocatedspending, dragging, showUploadDia
 				</div>
 				<div className="buttons">
 					<SearchButton />
+					<UploadButton />
 					<SetAllowanceButton />
 				</div>
 			</div>

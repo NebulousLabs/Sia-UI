@@ -141,10 +141,9 @@ function* uploadFileSaga(action) {
 		const filename = action.source.substring(action.source.lastIndexOf('/') + 1, action.source.length)
 		const destpath = action.path + filename
 		yield siadCall({
-			url: '/renter/upload/',
+			url: '/renter/upload/' + destpath,
 			method: 'POST',
 			qs: {
-				siapath: destpath,
 				source: action.source,
 			},
 		})
