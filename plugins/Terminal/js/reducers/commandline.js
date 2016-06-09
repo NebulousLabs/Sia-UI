@@ -5,7 +5,9 @@ const initialState = Map({
     commandHistory: List([]),
     currentCommand: "",
     commandIndex: 0,
-    showWalletPrompt: false
+    showWalletPrompt: false,
+    showSeedPrompt: false,
+    showCommandOverview: true
 })
 
 export default function commandLineReducer(state = initialState, action) {
@@ -76,7 +78,21 @@ export default function commandLineReducer(state = initialState, action) {
         case constants.HIDE_WALLET_PROMPT:
             return state.set("showWalletPrompt", false)
 
+        case constants.SHOW_SEED_PROMPT:
+            return state.set("showSeedPrompt", true)
+
+        case constants.HIDE_SEED_PROMPT:
+            return state.set("showSeedPrompt", false)
  
+
+        case constants.SHOW_COMMAND_OVERVIEW:
+            return state.set("showCommandOverview", true)
+
+        case constants.HIDE_COMMAND_OVERVIEW:
+            return state.set("showCommandOverview", false)
+
+
+
     	default:
     		return state
 	}

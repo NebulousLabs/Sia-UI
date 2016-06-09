@@ -19,13 +19,13 @@ const WalletPasswordPrompt = ({ showWalletPrompt, currentCommand, actions }) => 
         const handleKeyboardPress = (e) => {
             if (e.keyCode == 13){
 
-                var args = e.target.value.split(" ")
+                var args = currentCommand.split(" ")
                 if ( moreSpecialCommands.reduce( (isSpecial, command) =>
                     isSpecial || command.reduce(
                         (matches, argument, i) => (matches && argument === args[i])
                     , true ),
                     false) ){
-                    actions.showSeedPrompt( e.target.value )
+                    actions.showSeedPrompt()
                 }
 
                 else {

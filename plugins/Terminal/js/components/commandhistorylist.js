@@ -23,21 +23,7 @@ const CommandHistoryList = ({commandHistory}) => {
 
     	return (
     		<div className="command-history-list">
-                <div className = "command-overview">
-                    <h3>Available Commands:</h3>
-                    <p className="command-overview">
-                        version     Print version information<br />
-                        stop        Stop the Sia daemon<br />
-                        host        Perform host actions<br />
-                        hostdb      View or modify the host database<br />
-                        miner       Perform miner actions<br />
-                        wallet      Perform wallet actions<br />
-                        renter      Perform renter actions<br />
-                        gateway     Perform gateway actions<br />
-                        consensus   Print the current state of consensus<br />
-                    </p>
-                </div>
-                <ul>
+               <ul>
                     {CommandHistoryComponents}
     			</ul>
     		</div>

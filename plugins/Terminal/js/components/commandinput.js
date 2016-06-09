@@ -54,7 +54,7 @@ const CommandInput = ({commandHistory, currentCommand, actions}) => {
         }
     
     	return (
-            <input id="command-input" onChange={handleTextInput} onKeyDown={handleKeyboardPress} type="text" value={ currentCommand } autofocus></input>
+            <input id="command-input" onChange={handleTextInput} onKeyDown={handleKeyboardPress} type="text" value={ currentCommand } autocomplete="on"></input>
     	)
     }
 }

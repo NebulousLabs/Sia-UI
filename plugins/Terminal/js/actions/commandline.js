@@ -31,3 +31,21 @@ export const showWalletPrompt = () => ({
 export const hideWalletPrompt = () => ({
     type: constants.HIDE_WALLET_PROMPT
 })
+
+
+export const showSeedPrompt = () => ({
+    type: constants.SHOW_SEED_PROMPT
+})
+
+export const hideSeedPrompt = () => ({
+    type: constants.HIDE_SEED_PROMPT
+})
+
+
+export const showCommandOverview = () => ({
+    type: constants.SHOW_COMMAND_OVERVIEW
+})
+
+export const hideCommandOverview = () => ({
+    type: constants.HIDE_COMMAND_OVERVIEW
+})

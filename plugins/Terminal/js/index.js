@@ -39,14 +39,15 @@ const store = createStore(rootReducer)
 
 const spawnCommand = function (commandString, actions){
     //Create new command object. Id doesn't need to be unique, just can't be the same for adjacent commands.
-    var newCommand = Map({ command: commandString, result: '', id: Math.floor(Math.random()*1000000) })
-    actions.addCommand(newCommand)
 
     //Remove surrounding whitespace and leading siac command.
     commandString = commandString.trim()
     if (commandString.startsWith('siac')){
-        commandString = commandString.slice(4)
+        commandString = commandString.slice(4).trim()
     }
+
+    var newCommand = Map({ command: commandString, result: '', id: Math.floor(Math.random()*1000000) })
+    actions.addCommand(newCommand)
 
     var siac = child_process.spawn('./siac', newCommand.get('command').split(' '), { cwd: SiaAPI.config.attr('siac').path })
 
