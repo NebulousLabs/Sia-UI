@@ -125,6 +125,7 @@
 }
 .search-field {
 	margin-top: 15px;
+	margin-bottom: 15px;
 	width: 80%;
 	display: flex;
 	align-items: center;

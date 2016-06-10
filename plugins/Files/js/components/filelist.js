@@ -8,6 +8,8 @@ const FileList = ({files, path, showSearchField, actions}) => {
 	const onFileClick = (file) => () => {
 		if (file.type === 'directory') {
 			actions.setPath(path + file.name + '/')
+		} else {
+			actions.showFileView(file)
 		}
 	}
 

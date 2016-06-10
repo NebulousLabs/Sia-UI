@@ -38,6 +38,8 @@ export const parseFiles = (files, path) => {
 		parsedFiles = parsedFiles.set(filename, {
 			size: file.filesize,
 			name: filename,
+			siapath: file.siapath,
+			available: file.available,
 			type,
 		})
 	})
@@ -45,8 +47,9 @@ export const parseFiles = (files, path) => {
 }
 
 export const searchFiles = (files, text, path) => {
-	const matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1 && file.siapath.toLowerCase().indexOf(text.toLowerCase()) !== -1)
-	return matchingFiles.map((file) => ({size: file.filesize, name: file.siapath, type: 'file'}))
+	let matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1)
+	matchingFiles = matchingFiles.filter((file) => file.siapath.toLowerCase().indexOf(text.toLowerCase()) !== -1)
+	return matchingFiles.map((file) => ({size: file.filesize, name: file.siapath, siapath: file.siapath, available: file.available, type: 'file'}))
 }
 
 const bytesPerGB = new BigNumber('1000000000')

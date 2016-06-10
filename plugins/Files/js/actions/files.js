@@ -93,3 +93,15 @@ export const showUploadDialog = (source) => ({
 export const hideUploadDialog = () => ({
 	type: constants.HIDE_UPLOAD_DIALOG,
 })
+export const downloadFile = (siapath, downloadpath) => ({
+	type: constants.UPLOAD_FILE,
+	siapath,
+	downloadpath,
+})
+export const showFileView = (file) => ({
+	type: constants.SHOW_FILE_VIEW,
+	file,
+})
+export const hideFileView = () => ({
+	type: constants.HIDE_FILE_VIEW,
+})
