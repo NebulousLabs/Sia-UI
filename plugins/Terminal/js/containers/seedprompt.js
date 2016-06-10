@@ -4,8 +4,8 @@ import { bindActionCreators } from 'redux'
 import { addCommand, updateCommand, hideSeedPrompt, hideCommandOverview } from '../actions/commandline.js'
 
 const mapStateToProps = (state) => ({
-    showSeedPrompt: state.commandLineReducer.get("showSeedPrompt"),
-    currentCommand: state.commandLineReducer.get("currentCommand")
+    showSeedPrompt: state.commandLineReducer.get('showSeedPrompt'),
+    currentCommand: state.commandLineReducer.get('currentCommand')
 })
 
 const mapDispatchToProps = (dispatch) => ({

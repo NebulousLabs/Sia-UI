@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 
 
 const mapStateToProps = (state) => {
-    console.log(`Command History: ${JSON.stringify(state.commandLineReducer.get("commandHistory"))}`)
+    console.log(`Command History: ${JSON.stringify(state.commandLineReducer.get('commandHistory'))}`)
     return ({
-	    commandHistory: state.commandLineReducer.get("commandHistory"),
+	    commandHistory: state.commandLineReducer.get('commandHistory'),
     })
 }
 

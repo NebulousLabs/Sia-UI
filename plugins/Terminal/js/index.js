@@ -40,8 +40,8 @@ const store = createStore(rootReducer)
 const spawnCommand = function (commandString, actions){
     //Create new command object. Id doesn't need to be unique, just can't be the same for adjacent commands.
 
-    //We set the command first so the user sees exactly what they type. (Minus leading and trailing spaces.)
-    commandString = commandString.trim()
+    //We set the command first so the user sees exactly what they type. (Minus leading and trailing spaces, double spaces, etc.)
+    commandString = commandString.replace(/\s*\s/g, ' ').trim()
     var newCommand = Map({ command: commandString, result: '', id: Math.floor(Math.random()*1000000) })
 
     //Remove surrounding whitespace and leading siac command.
@@ -54,16 +54,16 @@ const spawnCommand = function (commandString, actions){
 
     actions.addCommand(newCommand)
 
-    var oldargs = commandString.split(' ')
-    var args = oldargs;
-    if (oldargs.indexOf("-a") !== -1 && oldargs.indexOf("--address") !== -1 && SiaAPI.config.attr("address")){
-        args = [ '-a', SiaAPI.config.attr("address") ].concat(oldargs)
+    //Add address flag to siac.
+    var args = commandString.split(' ')
+    if (args.indexOf('-a') !== -1 && args.indexOf('--address') !== -1 && SiaAPI.config.attr('address')){
+        args = args.concat([ '-a', SiaAPI.config.attr('address') ])
     }
     var siac = child_process.spawn('./siac', args, { cwd: SiaAPI.config.attr('siac').path })
 
     var consumeChunk = function (chunk){
         console.log('Data chunk ' + chunk)
-        chunk = chunk.toString().replace(/stty: stdin isn't a terminal\n/g, "")
+        chunk = chunk.toString().replace(/stty: stdin isn't a terminal\n/g, '')
         actions.updateCommand(newCommand.get('command'), newCommand.get('id'), chunk)
     }
 
@@ -83,7 +83,7 @@ const spawnCommand = function (commandString, actions){
     siac.on('close', function (code){ console.log(`\tPROGRAM CLOSED`); streamClosed(code) })
 
     //If window is small auto close command overview so we can see the return value.
-    if (document.getElementsByClassName("command-history-list")[0].offsetHeight < 100){
+    if (document.getElementsByClassName('command-history-list')[0].offsetHeight < 180){
         actions.hideCommandOverview()
     }
 

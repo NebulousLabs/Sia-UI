@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { showCommandOverview, hideCommandOverview } from '../actions/commandline.js'
 
 const mapStateToProps = (state) => ({
-    showCommandOverview: state.commandLineReducer.get("showCommandOverview"),
+    showCommandOverview: state.commandLineReducer.get('showCommandOverview'),
 })
 
 const mapDispatchToProps = (dispatch) => ({

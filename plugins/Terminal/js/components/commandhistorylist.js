@@ -4,7 +4,7 @@ import { List, Map } from 'immutable'
 const CommandHistoryList = ({commandHistory}) => {
 
     componentDidUpdate: {
-        var ch = document.getElementsByClassName("command-history-list")[0]
+        var ch = document.getElementsByClassName('command-history-list')[0]
         if (ch)
             //Give the DOM time to process the DOM changes.
             setTimeout( function(){ ch.scrollTop = ch.scrollHeight; }, 0)
@@ -23,7 +23,7 @@ const CommandHistoryList = ({commandHistory}) => {
     	})
 
     	return (
-    		<div className="command-history-list">
+    		<div className='command-history-list'>
                <ul>
                     {CommandHistoryComponents}
     			</ul>

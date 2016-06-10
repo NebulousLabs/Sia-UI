@@ -13,12 +13,13 @@
  .app {
     font-family: 'Roboto Mono', sans-serif;
     font-weight: 100;
+    font-size: 12pt;
  	position: absolute;
  	top: 60px;
  	bottom: 0;
  	left: 0;
  	right: 0;
-    height: calc( 100% - 60px )
+    height: calc( 100% - 60px );
  }
 
 .command-history {
@@ -28,13 +29,15 @@
 
 .command-history-list {
     width: 100%;
-    height: calc( 100% - 2.4em - 10px ); /* 2.6em = footer height */
-    max-height: calc( 100% - 2.4em - 10px );
+    /* Size of main section minus footer. */
+    height: calc( 100% - 2.4em - 9px );
+    max-height: calc( 100% - 2.4em - 9px );
     overflow-y: scroll;
     transition: all 1s;
 }
 .overview .command-history-list {
-    max-height: calc( 100% - 2.4em - 10px - 386px);
+    /* When overview is openned make this the size of the screen minus footer minus size of overview pane. */
+    max-height: calc( 100% - 2.4em - 9px - (438px - 2.8em - 2px) );
     transition: all 1s .5s;
 }
 
@@ -70,7 +73,7 @@ footer{
     display: block;
     border: 1px;
     padding: 0px 4em;
-    height: 387px;
+    height: calc( 438px - 2.8em - 2px ); /* 438px is the size of the command section using the default window size of 800x600px */
     width: calc( 100% - 8em );
     margin-top: 0px;
     white-space: pre-wrap;
@@ -78,7 +81,7 @@ footer{
     transition: all 1s;
 }
 .command-overview.expanded {
-    max-height: 386px;
+    max-height: calc( 438px - 2.8em - 2px );
     transition: all 1s .5s;
 }
 

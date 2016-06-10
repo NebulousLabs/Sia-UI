@@ -12,12 +12,12 @@ const CommandLine = ({showCommandOverview, actions}) => {
     }
 
     return (
-	<div className={ "command-history " + (showCommandOverview ? "overview" : "") }>
+	<div className={ 'command-history ' + (showCommandOverview ? 'overview' : '') }>
         <CommandHistoryList />
-        <footer className="commandFooter">
-             <div className ={ "command-overview " + (showCommandOverview ? "expanded" : "")  } >
-                <div className="help-button" onClick={toggleCommandOverview}>?</div>
-                <div className="command-overview-inner">
+        <footer className='commandFooter'>
+             <div className ={ 'command-overview ' + (showCommandOverview ? 'expanded' : '')  } >
+                <div className='help-button' onClick={toggleCommandOverview}>?</div>
+                <div className='command-overview-inner'>
                     <h3>Available Commands:</h3>
                     <p>
                         version     Print version information<br />
@@ -29,7 +29,7 @@ const CommandLine = ({showCommandOverview, actions}) => {
                         renter      Perform renter actions<br />
                         gateway     Perform gateway actions<br />
                         consensus   Print the current state of consensus<br /><br />
-                        Use "[command] --help" for more information about a command.<br />
+                        Use '[command] --help' for more information about a command.<br />
                     </p>
                 </div>
             </div>
