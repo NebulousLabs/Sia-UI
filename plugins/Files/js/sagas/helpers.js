@@ -41,7 +41,6 @@ export const parseFiles = (files, path) => {
 			type,
 		})
 	})
-
 	return parsedFiles.toList().sortBy((file) => file.size)
 }
 

@@ -25,7 +25,7 @@ function* getWalletLockstateSaga() {
 function* getFilesSaga(action) {
 	try {
 		const response = yield siadCall('/renter/files')
-		yield put(actions.receiveFiles(parseFiles(response.files, action.path)))
+		yield put(actions.receiveFiles(parseFiles(response.files, action.path), action.path))
 	} catch (e) {
 		sendError(e)
 	}
@@ -130,7 +130,7 @@ function* setSearchTextSaga(action) {
 			return
 		}
 		const response = yield siadCall('/renter/files')
-		yield put(actions.receiveFiles(searchFiles(response.files, action.text, action.path)))
+		yield put(actions.receiveFiles(searchFiles(response.files, action.text, action.path), action.path))
 	} catch (e) {
 		sendError(e)
 	}

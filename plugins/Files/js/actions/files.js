@@ -11,9 +11,10 @@ export const getFiles = (path) => ({
 	type: constants.GET_FILES,
 	path,
 })
-export const receiveFiles = (files) => ({
+export const receiveFiles = (files, path) => ({
 	type: constants.RECEIVE_FILES,
 	files,
+	path,
 })
 export const getAllowance = () => ({
 	type: constants.GET_ALLOWANCE,
