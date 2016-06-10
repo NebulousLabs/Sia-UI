@@ -5,6 +5,7 @@ const initialState = Map({
 	activespending: '',
 	allocatedspending: '',
 	files: List(),
+	transfers: List(),
 	path: '',
 	searchText: '',
 	uploadSource: '',
@@ -45,6 +46,8 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('showFileView', true)
 	case constants.HIDE_FILE_VIEW:
 		return state.set('showFileView', false)
+	case constants.RECEIVE_FILE_TRANSFERS:
+		return state.set('transfers', action.transfers)
 	default:
 		return state
 	}
