@@ -26,10 +26,16 @@ export default function commandLineReducer(state = initialState, action) {
         case constants.UPDATE_COMMAND:
             //Updates output of command given by command name and id.
             var newCommandHistory = state.get('commandHistory')
-            var [commandIdx, newCommand] = newCommandHistory.findLastEntry(
+            var commandArray = newCommandHistory.findLastEntry(
                 (val) => (val.get('command') == action.command && val.get('id') == action.id)
-            ) //TODO If val isn't found?
+            )
+
+            if (!commandArray){
+                console.log(`Error did not find command: { command: ${action.command}, id: ${action.id} } in command history: ${JSON.stringify(newCommandHistory)}`)
+                return state
+            }
     
+            var [commandIdx, newCommand] = commandArray
             newCommand = newCommand.set('result', newCommand.get('result') + action.dataChunk)
             console.log(newCommand)
             newCommandHistory = newCommandHistory.set(commandIdx, newCommand)

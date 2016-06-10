@@ -33,12 +33,12 @@
     height: calc( 100% - 2.4em - 9px );
     max-height: calc( 100% - 2.4em - 9px );
     overflow-y: scroll;
-    transition: all 1s;
+    transition: all .5s;
 }
 .overview .command-history-list {
     /* When overview is openned make this the size of the screen minus footer minus size of overview pane. */
     max-height: calc( 100% - 2.4em - 9px - (438px - 2.8em - 2px) );
-    transition: all 1s .5s;
+    transition: all .5s .25s;
 }
 
 
@@ -78,11 +78,11 @@ footer{
     margin-top: 0px;
     white-space: pre-wrap;
     max-height: 0px;
-    transition: all 1s;
+    transition: all .5s;
 }
 .command-overview.expanded {
     max-height: calc( 438px - 2.8em - 2px );
-    transition: all 1s .5s;
+    transition: all .5s .25s;
 }
 
 .command-overview-inner {
@@ -105,13 +105,13 @@ footer{
     width: 1.4em;
     border-bottom-left-radius: 0px;
     border-top-left-radius: 4px;
-    transition: all .5s 1.2s;
+    transition: all .5s .75s;
 }
 .command-overview.expanded .help-button {
     border-top-left-radius: 0px;
     border-bottom-left-radius: 4px;
     margin: 0px;
-    transition: all .5s;
+    transition: all .25s;
 }
 
 .command-overview h3 {

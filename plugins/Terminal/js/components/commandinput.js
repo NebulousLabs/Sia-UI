@@ -5,7 +5,6 @@ import { Map } from 'immutable'
 const specialCommands = [ ['wallet', 'unlock'], ['wallet', 'load', 'seed'], ['help'] ]
 
 const CommandInput = ({commandHistory, currentCommand, showCommandOverview, actions}) => {
-
     componentDidUpdate: {
         setTimeout(function (){
             var commandinput = document.getElementById('command-input')
@@ -65,7 +64,7 @@ const CommandInput = ({commandHistory, currentCommand, showCommandOverview, acti
         }
     
     	return (
-            <input id='command-input' onChange={handleTextInput} onKeyDown={handleKeyboardPress} type='text' value={ currentCommand } autocomplete='on'></input>
+            <input id='command-input' onChange={handleTextInput} onKeyDown={handleKeyboardPress} type='text' value={ currentCommand } autoComplete='on' autoFocus='true'></input>
     	)
     }
 }
