@@ -1,6 +1,6 @@
 import React from 'react'
 
-const UploadButton = ({path, actions}) => {
+const UploadButton = ({actions}) => {
 	const onUploadClick = () => {
 		const filepath = SiaAPI.openFile({
 			title: 'Choose a file to upload',
