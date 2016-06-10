@@ -36,7 +36,15 @@ export default function commandLineReducer(state = initialState, action) {
             }
     
             var [commandIdx, newCommand] = commandArray
-            newCommand = newCommand.set('result', newCommand.get('result') + action.dataChunk)
+
+            if (action.dataChunk){
+                newCommand = newCommand.set('result', newCommand.get('result') + action.dataChunk)
+            }
+
+            if (action.stat){
+                newCommand = newCommand.set('stat', action.stat)
+            }
+
             console.log(newCommand)
             newCommandHistory = newCommandHistory.set(commandIdx, newCommand)
             return state.set('commandHistory', newCommandHistory)

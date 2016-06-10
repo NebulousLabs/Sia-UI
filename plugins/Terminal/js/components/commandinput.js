@@ -2,7 +2,7 @@ import React from 'react'
 import { Map } from 'immutable'
 
 //These commands need a password prompt.
-const specialCommands = [ ['wallet', 'unlock'], ['wallet', 'load', 'seed'], ['help'] ]
+const specialCommands = [ ['wallet', 'unlock'], ['wallet', 'load', 'seed'], ['help'], ['?'] ]
 
 const CommandInput = ({commandHistory, currentCommand, showCommandOverview, actions}) => {
     componentDidUpdate: {
@@ -34,11 +34,14 @@ const CommandInput = ({commandHistory, currentCommand, showCommandOverview, acti
                         break;
 
                     case 2: //help
+                        var text = 'help'
+                    case 3: //?
+                        var newText = text || '?'
                         if (showCommandOverview){ actions.hideCommandOverview() }
                         else { actions.showCommandOverview() }
 
                         //The command history won't actually show a help command so it is fine to add the command.
-                        var newCommand = Map({ command: 'help', result: '', id: Math.floor(Math.random()*1000000) })
+                        var newCommand = Map({ command: newText, result: '', id: Math.floor(Math.random()*1000000) })
                         actions.addCommand(newCommand)
                         break;
                 }

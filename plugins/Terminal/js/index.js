@@ -54,7 +54,7 @@ const spawnCommand = function (commandString, actions){
 
     //We set the command first so the user sees exactly what they type. (Minus leading and trailing spaces, double spaces, etc.)
     commandString = commandString.replace(/\s*\s/g, ' ').trim()
-    var newCommand = Map({ command: commandString, result: '', id: Math.floor(Math.random()*1000000) })
+    var newCommand = Map({ command: commandString, result: '', id: Math.floor(Math.random()*1000000), stat: 'running' })
     actions.addCommand(newCommand)
 
     //Remove surrounding whitespace and leading siac command.
@@ -67,7 +67,7 @@ const spawnCommand = function (commandString, actions){
 
     //Add address flag to siac.
     var args = commandString.split(' ')
-    if (args.indexOf('-a') !== -1 && args.indexOf('--address') !== -1 && SiaAPI.config.attr('address')){
+    if (args.indexOf('-a') === -1 && args.indexOf('--address') === -1 && SiaAPI.config.attr('address')){
         args = args.concat([ '-a', SiaAPI.config.attr('address') ])
     }
 
@@ -81,6 +81,18 @@ const spawnCommand = function (commandString, actions){
     }
     siac.stdout.on('data', consumeChunk)
     siac.stderr.on('data', consumeChunk)
+
+    var closed = false
+    var streamClosed =  function (code){
+        if (!closed){
+            actions.updateCommand(newCommand.get('command'), newCommand.get('id'), undefined, 'done')
+            closed = true
+        }
+    }
+
+    siac.on('error', function (code){ console.log(`\tPROGRAM ERRORED`); streamClosed(code) })
+    siac.on('close', function (code){ console.log(`\tPROGRAM CLOSED`); streamClosed(code) })
+
 
     //If window is small auto close command overview so we can see the return value.
     if (document.getElementsByClassName('command-history-list')[0].offsetHeight < 180){

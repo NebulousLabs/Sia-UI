@@ -47,7 +47,13 @@
     padding: 0em 1em 0em;
     border: 0px;
 }
-
+.command-history-list ul i{
+    margin-left: .5em;
+}
+.command-history-list ul i.hide{
+    opacity: 0;
+    transition: all .5s;
+}
 .command-history-list ul p {
     white-space: pre-wrap;
     padding-left: 1em;
