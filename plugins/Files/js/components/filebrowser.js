@@ -16,8 +16,12 @@ const FileBrowser = ({activespending, allocatedspending, dragging, showUploadDia
 		actions.setNotDragging()
 		actions.showUploadDialog(e.dataTransfer.files[0].path)
 	}
+	const onDragLeave = (e) => {
+		e.preventDefault()
+		actions.setNotDragging()
+	}
 	return (
-		<div className="file-browser" onDragOver={onDragOver} onDrop={onDrop}>
+		<div className="file-browser" onDragOver={onDragOver} onMouseLeave={onDragLeave} onDrop={onDrop}>
 			{showUploadDialog ? <UploadDialog /> : null}
 			{dragging ? <DragOverlay /> : null}
 			<div className="files-toolbar">

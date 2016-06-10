@@ -152,6 +152,12 @@
 	align-items: center;
 	justify-content: center;
 }
+.drag-overlay i {
+	color: #00CBA0;
+}
+.drag-overlay span {
+	color: #FFFFFF;
+}
 .upload-dialog {
 	padding-left: 15px;
 	padding-right: 15px;
