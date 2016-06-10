@@ -41,11 +41,11 @@ export const parseFiles = (files, path) => {
 			type,
 		})
 	})
-	return parsedFiles.toList().sortBy((file) => file.size)
+	return parsedFiles.toList().sortBy((file) => file.name)
 }
 
 export const searchFiles = (files, text, path) => {
-	const matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1 && file.siapath.indexOf(text) !== -1)
+	const matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1 && file.siapath.toLowerCase().indexOf(text.toLowerCase()) !== -1)
 	return matchingFiles.map((file) => ({size: file.filesize, name: file.siapath, type: 'file'}))
 }
 
