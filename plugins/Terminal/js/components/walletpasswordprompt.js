@@ -17,26 +17,20 @@ const WalletPasswordPrompt = ({ showWalletPrompt, currentCommand, actions }) => 
 
     render: {
         const handleKeyboardPress = (e) => {
-            if (e.keyCode == 13){
+            if (e.keyCode === 13){
+                switch ( isCommandSpecial(currentCommand, moreSpecialCommands) ){
+                    case 0:
+                        actions.showSeedPrompt()
+                        break;
 
-                var args = currentCommand.replace(/\s*\s/g, ' ').trim().split(' ')
-                if (args[0] == './siac' || args[0] == 'siac'){ args.shift() }
-                if ( moreSpecialCommands.reduce( (isSpecial, command) =>
-                    isSpecial || command.reduce(
-                        (matches, argument, i) => (matches && argument === args[i])
-                    , true ),
-                    false) ){
-                    actions.showSeedPrompt()
+                    default:
+                        //Grab input, spawn process, and pipe text field to stdin.
+                        console.log('SPECIAL COMMAND: ' + currentCommand)
+                        var siac = spawnCommand(currentCommand, actions)                
+                        siac.stdin.write( e.target.value )
+                        siac.stdin.end()
+                        break;
                 }
-
-                else {
-                    //Grab input, spawn process, and pipe text field to stdin.
-                    console.log('SPECIAL COMMAND: ' + currentCommand)
-                    var siac = spawnCommand(currentCommand, actions)                
-                    siac.stdin.write( e.target.value )
-                    siac.stdin.end()
-                }
-
                 actions.hideWalletPrompt()
             }
         }

@@ -14,7 +14,7 @@ const WalletSeedPrompt = ({ showSeedPrompt, currentCommand, actions }) => {
 
     render: {
         const handleKeyboardPress = (e) => {
-            if (e.keyCode == 13){
+            if (e.keyCode === 13){
                 //Grab input, spawn process, and pipe text field to stdin.
                 console.log('SPECIAL COMMAND: ' + currentCommand)
                 var siac = spawnCommand(currentCommand, actions)                

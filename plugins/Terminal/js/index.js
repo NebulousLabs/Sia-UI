@@ -36,6 +36,18 @@ checkSiaPath().catch(() => {
 
 const store = createStore(rootReducer)
 
+const isCommandSpecial = function (commandString, specialArray){
+    //Cleans string and sees if any subarray in array starts with the string when split.
+    var args = commandString.replace(/\s*\s/g, ' ').trim().split(' ')
+    if (args[0] == './siac' || args[0] == 'siac'){ args.shift() }
+
+    //Can't do a simple match because commands can be passed additional arguments.
+    return specialArray.findIndex( (command) => 
+        command.reduce((matches, argument, i) =>
+            (matches && argument === args[i]),
+        true)
+    )
+}
 
 const spawnCommand = function (commandString, actions){
     //Create new command object. Id doesn't need to be unique, just can't be the same for adjacent commands.
@@ -43,6 +55,7 @@ const spawnCommand = function (commandString, actions){
     //We set the command first so the user sees exactly what they type. (Minus leading and trailing spaces, double spaces, etc.)
     commandString = commandString.replace(/\s*\s/g, ' ').trim()
     var newCommand = Map({ command: commandString, result: '', id: Math.floor(Math.random()*1000000) })
+    actions.addCommand(newCommand)
 
     //Remove surrounding whitespace and leading siac command.
     if (commandString.startsWith('siac')){
@@ -52,35 +65,22 @@ const spawnCommand = function (commandString, actions){
         commandString = commandString.slice(6).trim()
     }
 
-    actions.addCommand(newCommand)
-
     //Add address flag to siac.
     var args = commandString.split(' ')
     if (args.indexOf('-a') !== -1 && args.indexOf('--address') !== -1 && SiaAPI.config.attr('address')){
         args = args.concat([ '-a', SiaAPI.config.attr('address') ])
     }
+
     var siac = child_process.spawn('./siac', args, { cwd: SiaAPI.config.attr('siac').path })
 
+    //Update the UI when the process receives new ouput.
     var consumeChunk = function (chunk){
         console.log('Data chunk ' + chunk)
         chunk = chunk.toString().replace(/stty: stdin isn't a terminal\n/g, '')
         actions.updateCommand(newCommand.get('command'), newCommand.get('id'), chunk)
     }
-
-    //Update the UI when the process receives new ouput.
     siac.stdout.on('data', consumeChunk)
     siac.stderr.on('data', consumeChunk)
-
-    var closed = false
-    var streamClosed =  function (code){
-        if (!closed){
-            //actions.updateCommand(newCommand.get('command'), newCommand.get('id'), `\nReturn code: ${code}`)
-            closed = true
-        }
-    }
-
-    siac.on('error', function (code){ console.log(`\tPROGRAM ERRORED`); streamClosed(code) })
-    siac.on('close', function (code){ console.log(`\tPROGRAM CLOSED`); streamClosed(code) })
 
     //If window is small auto close command overview so we can see the return value.
     if (document.getElementsByClassName('command-history-list')[0].offsetHeight < 180){
