@@ -13,5 +13,6 @@ export default function* rootSaga() {
 		fork(sagas.watchSetPath),
 		fork(sagas.watchSetSearchText),
 		fork(sagas.watchUploadFile),
+		fork(sagas.watchGetFileTransfers),
 	]
 }
