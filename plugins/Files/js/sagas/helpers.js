@@ -55,6 +55,7 @@ export const parseUploads = (files) => files.map((file) => {
 	const name = file.siapath.substring(file.siapath.lastIndexOf('/') + 1, file.siapath.length)
 	const progress = file.uploadprogress
 	return {
+		type: 'upload',
 		name,
 		progress,
 		completed,
@@ -67,6 +68,7 @@ export const parseDownloads = (downloads) => downloads.map((download) => {
 	const name = download.siapath.substring(download.siapath.lastIndexOf('/') + 1, download.siapath.length)
 	const progress = download.received / download.filesize
 	return {
+		type: 'download',
 		completed,
 		name,
 		progress,
