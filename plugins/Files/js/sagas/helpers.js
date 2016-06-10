@@ -45,7 +45,33 @@ export const parseFiles = (files, path) => {
 	})
 	return parsedFiles.toList().sortBy((file) => file.name)
 }
-
+// Parse a response from `/renter/files`
+// return a list of transfers
+export const parseUploads = (files) => files.map((file) => {
+	let completed = false
+	if (file.uploadprogress === 100) {
+		completed = true
+	}
+	const name = file.siapath.substring(file.siapath.lastIndexOf('/') + 1, file.siapath.length)
+	const progress = file.uploadprogress
+	return {
+		name,
+		progress,
+		completed,
+	}
+})
+// Parse a response from `/renter/downloads`
+// return a list of files transfers
+export const parseDownloads = (downloads) => downloads.map((download) => {
+	const completed = false
+	const name = download.siapath.substring(download.siapath.lastIndexOf('/') + 1, download.siapath.length)
+	const progress = download.received / download.filesize
+	return {
+		completed,
+		name,
+		progress,
+	}
+})
 export const searchFiles = (files, text, path) => {
 	let matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1)
 	matchingFiles = matchingFiles.filter((file) => file.siapath.toLowerCase().indexOf(text.toLowerCase()) !== -1)

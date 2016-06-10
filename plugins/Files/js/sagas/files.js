@@ -3,7 +3,7 @@ import { put, take, fork, cancel } from 'redux-saga/effects'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import BigNumber from 'bignumber.js'
-import { sendError, siadCall, parseFiles, searchFiles, estimatedStoragePriceGBSC } from './helpers.js'
+import { sendError, siadCall, parseFiles, parseUploads, parseDownloads, searchFiles, estimatedStoragePriceGBSC } from './helpers.js'
 
 const allowanceHosts = 24
 const blockMonth = 4382
@@ -153,6 +153,18 @@ function* uploadFileSaga(action) {
 	}
 }
 
+function* getFileTransfersSaga() {
+	try {
+		let response = yield siadCall('/renter/files')
+		const uploads = parseUploads(response.files)
+		response = yield siadCall('/renter/downloads')
+		const downloads = parseDownloads(response.downloads)
+		yield put(actions.receiveFileTransfers(downloads.concat(uploads)))
+	} catch (e) {
+		sendError(e)
+	}
+}
+
 export function* watchSetAllowance() {
 	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
 }
@@ -162,6 +174,9 @@ export function* watchSetAllowanceProgress() {
 		yield take(constants.SET_ALLOWANCE_COMPLETED)
 		yield cancel(progressTask)
 	}
+}
+export function* watchGetFileTransfers() {
+	yield *takeEvery(constants.GET_FILE_TRANSFERS, getFileTransfersSaga)
 }
 export function* watchSetSearchText() {
 	yield *takeEvery(constants.SET_SEARCH_TEXT, setSearchTextSaga)
