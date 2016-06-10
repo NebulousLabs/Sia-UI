@@ -8,8 +8,12 @@ const File = ({filename, siapath, filesize, available, actions}) => {
 		})
 		actions.downloadFile(siapath, downloadpath)
 	}
+	const onCloseClick = () => actions.hideFileView()
 	return (
 		<div className="file-view">
+			<div className="close-button" onClick={onCloseClick}>
+				<i className="fa fa-close fa-2x"></i>
+			</div>
 			<div className="file-view-icon">
 				<i className="fa fa-file fa-4x"></i>
 			</div>

@@ -44,7 +44,7 @@ export default function filesReducer(state = initialState, action) {
 	case constants.SHOW_FILE_VIEW:
 		return state.set('showFileView', true)
 	case constants.HIDE_FILE_VIEW:
-		return state.set('hideFileView', false)
+		return state.set('showFileView', false)
 	default:
 		return state
 	}
