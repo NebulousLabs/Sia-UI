@@ -1,5 +1,6 @@
 import { takeEvery } from 'redux-saga'
 import { put, take, fork, cancel } from 'redux-saga/effects'
+import Path from 'path'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import BigNumber from 'bignumber.js'
@@ -138,7 +139,7 @@ function* setSearchTextSaga(action) {
 
 function* uploadFileSaga(action) {
 	try {
-		const filename = action.source.substring(action.source.lastIndexOf('/') + 1, action.source.length)
+		const filename = Path.basename(action.source)
 		const destpath = action.path + filename
 		yield siadCall({
 			url: '/renter/upload/' + destpath,
@@ -149,6 +150,22 @@ function* uploadFileSaga(action) {
 		})
 		yield put(actions.getFiles(action.path))
 	} catch (e) {
+		sendError(e)
+	}
+}
+
+function* downloadFileSaga(action) {
+	try {
+		yield siadCall({
+			url: '/renter/download/' + action.siapath,
+			method: 'GET',
+			qs: {
+				destination: action.downloadpath,
+			},
+		})
+		yield put(actions.getDownloads())
+	} catch (e) {
+		console.error(e)
 		sendError(e)
 	}
 }
@@ -199,4 +216,7 @@ export function* watchSetPath() {
 }
 export function* watchUploadFile() {
 	yield *takeEvery(constants.UPLOAD_FILE, uploadFileSaga)
+}
+export function* watchDownloadFile() {
+	yield *takeEvery(constants.DOWNLOAD_FILE, downloadFileSaga)
 }

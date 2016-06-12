@@ -1,6 +1,7 @@
 // Helper functions for the Files sagas.
 import { List, Map } from 'immutable'
 import BigNumber from 'bignumber.js'
+import Path from 'path'
 
 export const sendError = (e) => {
 	SiaAPI.showError({
@@ -30,7 +31,7 @@ export const parseFiles = (files, path) => {
 	fileList.forEach((file) => {
 		let type = 'file'
 		const relativePath = file.siapath.substring(path.length, file.siapath.length)
-		let filename = relativePath.substring(relativePath.lastIndexOf('/') + 1, relativePath.length)
+		let filename = Path.basename(relativePath)
 		if (relativePath.indexOf('/') !== -1) {
 			type = 'directory'
 			filename = relativePath.split('/')[0]
@@ -52,7 +53,7 @@ export const parseUploads = (files) => files.map((file) => {
 	if (file.uploadprogress === 100) {
 		completed = true
 	}
-	const name = file.siapath.substring(file.siapath.lastIndexOf('/') + 1, file.siapath.length)
+	const name = Path.basename(file.siapath)
 	const progress = Math.floor(file.uploadprogress)
 	return {
 		type: 'upload',
@@ -65,7 +66,7 @@ export const parseUploads = (files) => files.map((file) => {
 // return a list of files transfers
 export const parseDownloads = (downloads) => downloads.map((download) => {
 	const completed = false
-	const name = download.siapath.substring(download.siapath.lastIndexOf('/') + 1, download.siapath.length)
+	const name = Path.basename(download.siapath)
 	const progress = Math.floor((download.received / download.filesize) * 100)
 	return {
 		type: 'download',

@@ -1,7 +1,7 @@
 import FileView from '../components/file.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { uploadFile, hideFileView } from '../actions/files.js'
+import { downloadFile, hideFileView } from '../actions/files.js'
 
 const mapStateToProps = (state) => ({
 	filename: state.fileview.get('filename'),
@@ -10,7 +10,7 @@ const mapStateToProps = (state) => ({
 	available: state.fileview.get('available'),
 })
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ uploadFile, hideFileView }, dispatch),
+	actions: bindActionCreators({ downloadFile, hideFileView }, dispatch),
 })
 
 const File = connect(mapStateToProps, mapDispatchToProps)(FileView)

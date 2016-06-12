@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import Path from 'path'
 
 const File = ({filename, siapath, filesize, available, actions}) => {
 	const onDownloadClick = () => {
@@ -6,7 +7,7 @@ const File = ({filename, siapath, filesize, available, actions}) => {
 			title: 'Where should we download this file?',
 			properties: ['openDirectory', 'createDirectories'],
 		})
-		actions.downloadFile(siapath, downloadpath)
+		actions.downloadFile(siapath, Path.join(downloadpath[0], Path.basename(siapath)))
 	}
 	const onCloseClick = () => actions.hideFileView()
 	return (
