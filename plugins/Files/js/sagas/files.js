@@ -153,13 +153,11 @@ function* uploadFileSaga(action) {
 	}
 }
 
-function* getFileTransfersSaga() {
+function* getDownloadsSaga() {
 	try {
-		let response = yield siadCall('/renter/files')
-		const uploads = parseUploads(response.files)
-		response = yield siadCall('/renter/downloads')
+		const response = yield siadCall('/renter/downloads')
 		const downloads = parseDownloads(response.downloads)
-		yield put(actions.receiveFileTransfers(downloads.concat(uploads)))
+		yield put(actions.receiveDownloads(downloads))
 	} catch (e) {
 		sendError(e)
 	}
@@ -175,8 +173,8 @@ export function* watchSetAllowanceProgress() {
 		yield cancel(progressTask)
 	}
 }
-export function* watchGetFileTransfers() {
-	yield *takeEvery(constants.GET_FILE_TRANSFERS, getFileTransfersSaga)
+export function* watchGetDownloads() {
+	yield *takeEvery(constants.GET_DOWNLOADS, getDownloadsSaga)
 }
 export function* watchSetSearchText() {
 	yield *takeEvery(constants.SET_SEARCH_TEXT, setSearchTextSaga)

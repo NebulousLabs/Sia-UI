@@ -53,7 +53,7 @@ export const parseUploads = (files) => files.map((file) => {
 		completed = true
 	}
 	const name = file.siapath.substring(file.siapath.lastIndexOf('/') + 1, file.siapath.length)
-	const progress = file.uploadprogress
+	const progress = Math.floor(file.uploadprogress)
 	return {
 		type: 'upload',
 		name,
@@ -66,7 +66,7 @@ export const parseUploads = (files) => files.map((file) => {
 export const parseDownloads = (downloads) => downloads.map((download) => {
 	const completed = false
 	const name = download.siapath.substring(download.siapath.lastIndexOf('/') + 1, download.siapath.length)
-	const progress = download.received / download.filesize
+	const progress = Math.floor((download.received / download.filesize) * 100)
 	return {
 		type: 'download',
 		completed,

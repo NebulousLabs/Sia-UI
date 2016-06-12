@@ -105,10 +105,13 @@ export const showFileView = (file) => ({
 export const hideFileView = () => ({
 	type: constants.HIDE_FILE_VIEW,
 })
-export const getFileTransfers = () => ({
-	type: constants.GET_FILE_TRANSFERS,
+export const getDownloads = () => ({
+	type: constants.GET_DOWNLOADS,
 })
-export const receiveFileTransfers = (transfers) => ({
-	type: constants.RECEIVE_FILE_TRANSFERS,
-	transfers,
+export const receiveDownloads = (downloads) => ({
+	type: constants.RECEIVE_DOWNLOADS,
+	downloads,
+})
+export const toggleDownloadList = () => ({
+	type: constants.TOGGLE_DOWNLOADS_LIST,
 })

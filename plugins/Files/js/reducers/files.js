@@ -5,7 +5,7 @@ const initialState = Map({
 	activespending: '',
 	allocatedspending: '',
 	files: List(),
-	transfers: List(),
+	downloads: List(),
 	path: '',
 	searchText: '',
 	uploadSource: '',
@@ -13,6 +13,7 @@ const initialState = Map({
 	showUploadDialog: false,
 	showSearchField: false,
 	showFileView: false,
+	showDownloadList: false,
 	dragging: false,
 })
 
@@ -46,8 +47,10 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('showFileView', true)
 	case constants.HIDE_FILE_VIEW:
 		return state.set('showFileView', false)
-	case constants.RECEIVE_FILE_TRANSFERS:
-		return state.set('transfers', action.transfers)
+	case constants.RECEIVE_DOWNLOADS:
+		return state.set('downloads', List(action.downloads))
+	case constants.TOGGLE_DOWNLOADS_LIST:
+		return state.set('showDownloadList', !state.get('showDownloadList'))
 	default:
 		return state
 	}

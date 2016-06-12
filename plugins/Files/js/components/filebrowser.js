@@ -4,10 +4,12 @@ import SetAllowanceButton from '../containers/setallowancebutton.js'
 import SearchButton from '../containers/searchbutton.js'
 import UploadDialog from '../containers/uploaddialog.js'
 import UploadButton from '../containers/uploadbutton.js'
+import DownloadsButton from '../containers/downloadsbutton.js'
+import DownloadList from '../containers/downloadlist.js'
 import File from '../containers/file.js'
 import DragOverlay from './dragoverlay.js'
 
-const FileBrowser = ({activespending, allocatedspending, dragging, showUploadDialog, showFileView, actions}) => {
+const FileBrowser = ({activespending, allocatedspending, dragging, showUploadDialog, showFileView, showDownloadList, actions}) => {
 	const onDragOver = (e) => {
 		e.preventDefault()
 		actions.setDragging()
@@ -31,11 +33,13 @@ const FileBrowser = ({activespending, allocatedspending, dragging, showUploadDia
 					<div>Available Storage Spending: {allocatedspending} SC</div>
 				</div>
 				<div className="buttons">
+					<DownloadsButton />
 					<SearchButton />
 					<UploadButton />
 					<SetAllowanceButton />
 				</div>
 			</div>
+			{showDownloadList ? <DownloadList /> : null}
 			{showFileView ? <File /> : <FileList />}
 		</div>
 	)
@@ -47,6 +51,7 @@ FileBrowser.propTypes = {
 	dragging: PropTypes.bool.isRequired,
 	showUploadDialog: PropTypes.bool.isRequired,
 	showFileView: PropTypes.bool.isRequired,
+	showDownloadList: PropTypes.bool.isRequired,
 }
 
 export default FileBrowser

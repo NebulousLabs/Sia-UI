@@ -9,6 +9,7 @@ const mapStateToProps = (state) => ({
 	dragging: state.files.get('dragging'),
 	showUploadDialog: state.files.get('showUploadDialog'),
 	showFileView: state.files.get('showFileView'),
+	showDownloadList: state.files.get('showDownloadList'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
