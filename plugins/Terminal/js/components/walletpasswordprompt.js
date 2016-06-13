@@ -1,4 +1,5 @@
 import React from 'react'
+const querystring = require("querystring")
 
 //This command needs a second prompt.
 const moreSpecialCommands= [ ['wallet', 'load', 'seed'] ]
@@ -26,9 +27,9 @@ const WalletPasswordPrompt = ({ showWalletPrompt, currentCommand, actions }) => 
                     default:
                         //Grab input, spawn process, and pipe text field to stdin.
                         console.log('SPECIAL COMMAND: ' + currentCommand)
-                        var siac = spawnCommand(currentCommand, actions)                
-                        siac.stdin.write( e.target.value )
-                        siac.stdin.end()
+                        var siac = httpCommand(currentCommand, actions) 
+                        siac.write(querystring.stringify({ "encryptionpassword": e.target.value }))
+                        siac.end()
                         break;
                 }
                 actions.hideWalletPrompt()

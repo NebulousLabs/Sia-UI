@@ -1,4 +1,5 @@
 import React from 'react'
+const querystring = require("querystring")
 
 const WalletSeedPrompt = ({ showSeedPrompt, currentCommand, actions }) => {
     componentDidUpdate: {
@@ -17,11 +18,14 @@ const WalletSeedPrompt = ({ showSeedPrompt, currentCommand, actions }) => {
             if (e.keyCode === 13){
                 //Grab input, spawn process, and pipe text field to stdin.
                 console.log('SPECIAL COMMAND: ' + currentCommand)
-                var siac = spawnCommand(currentCommand, actions)                
-                siac.stdin.write( document.getElementById('wallet-passwd').value )
-                siac.stdin.write('\n')
-                siac.stdin.write( e.target.value )
-                siac.stdin.end()
+                var siac = httpCommand(currentCommand, actions)
+
+                siac.write(querystring.stringify({
+                    "encryptionpassword": document.getElementById("wallet-passwd").value,
+                    "seed": e.target.value,
+                    "dictionary": "english"
+                }))
+                siac.end()
                 actions.hideSeedPrompt()
             }
         }
