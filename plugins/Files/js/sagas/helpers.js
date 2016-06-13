@@ -46,22 +46,6 @@ export const parseFiles = (files, path) => {
 	})
 	return parsedFiles.toList().sortBy((file) => file.name)
 }
-// Parse a response from `/renter/files`
-// return a list of transfers
-export const parseUploads = (files) => files.map((file) => {
-	let completed = false
-	if (file.uploadprogress === 100) {
-		completed = true
-	}
-	const name = Path.basename(file.siapath)
-	const progress = Math.floor(file.uploadprogress)
-	return {
-		type: 'upload',
-		name,
-		progress,
-		completed,
-	}
-})
 // Parse a response from `/renter/downloads`
 // return a list of files transfers
 export const parseDownloads = (since, downloads) => {

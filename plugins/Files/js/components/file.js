@@ -29,7 +29,7 @@ const File = ({filename, siapath, filesize, available, actions}) => {
 				</div>
 			</div>
 		</div>
-	)	
+	)
 }
 
 File.propTypes = {

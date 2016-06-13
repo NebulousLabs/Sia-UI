@@ -4,7 +4,7 @@ import Path from 'path'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import BigNumber from 'bignumber.js'
-import { sendError, siadCall, parseFiles, parseUploads, parseDownloads, searchFiles, estimatedStoragePriceGBSC } from './helpers.js'
+import { sendError, siadCall, parseFiles, parseDownloads, searchFiles, estimatedStoragePriceGBSC } from './helpers.js'
 
 const allowanceHosts = 24
 const blockMonth = 4382

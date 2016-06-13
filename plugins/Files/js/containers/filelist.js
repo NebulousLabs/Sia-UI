@@ -7,7 +7,7 @@ const mapStateToProps = (state) => ({
 	files: state.files.get('files'),
 	path: state.files.get('path'),
 	showSearchField: state.files.get('showSearchField'),
-}) 
+})
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ setPath, showFileView }, dispatch),
 })

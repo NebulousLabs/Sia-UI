@@ -116,16 +116,6 @@ export const removeDownload = (siapath) => ({
 	type: constants.REMOVE_DOWNLOAD,
 	siapath,
 })
-export const setDownloadState = (siapath, state) => ({
-	type: constants.SET_DOWNLOAD_STATE,
-	siapath,
-	state,
-})
-export const setDownloadProgress = (siapath, progress) => ({
-	type: constants.SET_DOWNLOAD_PROGRESS,
-	siapath,
-	progress,
-})
 export const toggleDownloadList = () => ({
 	type: constants.TOGGLE_DOWNLOADS_LIST,
 })
