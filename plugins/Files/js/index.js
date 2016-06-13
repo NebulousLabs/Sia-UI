@@ -28,4 +28,4 @@ store.dispatch(getFiles(''))
 
 setInterval(() => {
 	store.dispatch(getDownloads())
-}, 1500)
+}, 1000)

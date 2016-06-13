@@ -65,12 +65,10 @@ export const parseUploads = (files) => files.map((file) => {
 // Parse a response from `/renter/downloads`
 // return a list of files transfers
 export const parseDownloads = (downloads) => downloads.map((download) => {
-	const completed = false
 	const name = Path.basename(download.siapath)
 	const progress = Math.floor((download.received / download.filesize) * 100)
 	return {
 		type: 'download',
-		completed,
 		name,
 		progress,
 	}

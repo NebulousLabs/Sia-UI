@@ -4,7 +4,6 @@ import { List } from 'immutable'
 const DownloadsList = ({downloads}) => {
 	const downloadsComponents = downloads.map((download, key) => (
 		<li key={key}>
-			<div className="completed">{download.completed}</div>
 			<div className="filename">{download.name}</div>
 			<div className="progress">{download.progress}%</div>
 		</li>
