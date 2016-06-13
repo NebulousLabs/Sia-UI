@@ -72,7 +72,7 @@ const createPluginButtonElement = (iconPath, title) => {
 }
 
 // Get the name of a plugin from its path.
-export const getPluginName = (pluginPath) => pluginPath.substring(pluginPath.lastIndexOf('/') + 1)
+export const getPluginName = (pluginPath) => Path.basename(pluginPath)
 
 // loadPlugin constructs plugin view and plugin button elements
 // and adds these elements to the main UI's mainbar/sidebar.
