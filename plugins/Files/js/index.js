@@ -26,6 +26,8 @@ store.dispatch(getWalletLockstate())
 store.dispatch(getMetrics())
 store.dispatch(getFiles(''))
 
+const downloadStart = Date.now()
+
 setInterval(() => {
-	store.dispatch(getDownloads())
+	store.dispatch(getDownloads(downloadStart))
 }, 1000)

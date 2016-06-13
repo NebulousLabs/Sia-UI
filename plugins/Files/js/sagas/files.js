@@ -155,7 +155,16 @@ function* uploadFileSaga(action) {
 }
 
 function* downloadFileSaga(action) {
+	const name = Path.basename(action.siapath)
+	const download = {
+		name,
+		siapath: action.siapath,
+		downloadpath: action.downloadpath,
+		progress: 0,
+		state: 'init',
+	}
 	try {
+		yield put(actions.addDownload(download))
 		yield siadCall({
 			url: '/renter/download/' + action.siapath,
 			method: 'GET',
@@ -163,18 +172,20 @@ function* downloadFileSaga(action) {
 				destination: action.downloadpath,
 			},
 		})
-		yield put(actions.getDownloads())
 	} catch (e) {
-		console.error(e)
+		download.state = 'failed'
+		yield put(actions.addDownload(download))
 		sendError(e)
 	}
 }
 
-function* getDownloadsSaga() {
+function* getDownloadsSaga(action) {
 	try {
 		const response = yield siadCall('/renter/downloads')
-		const downloads = parseDownloads(response.downloads)
-		yield put(actions.receiveDownloads(downloads))
+		const downloads = parseDownloads(action.since, response.downloads)
+		for (let i = 0; i < downloads.size; i++) {
+			yield put(actions.addDownload(downloads.get(i)))
+		}
 	} catch (e) {
 		sendError(e)
 	}

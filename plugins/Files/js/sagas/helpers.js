@@ -64,15 +64,20 @@ export const parseUploads = (files) => files.map((file) => {
 })
 // Parse a response from `/renter/downloads`
 // return a list of files transfers
-export const parseDownloads = (downloads) => downloads.map((download) => {
-	const name = Path.basename(download.siapath)
-	const progress = Math.floor((download.received / download.filesize) * 100)
-	return {
-		type: 'download',
-		name,
-		progress,
-	}
-})
+export const parseDownloads = (since, downloads) => {
+	const parsedDownloads = List(downloads).filter((download) => Date.parse(download.starttime) > since)
+	return parsedDownloads.map((download) => {
+		const name = Path.basename(download.siapath)
+		const progress = Math.floor((download.received / download.filesize) * 100)
+		return {
+			siapath: download.siapath,
+			name,
+			progress,
+			destination: download.destination,
+			state: 'downloading',
+		}
+	})
+}
 export const searchFiles = (files, text, path) => {
 	let matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1)
 	matchingFiles = matchingFiles.filter((file) => file.siapath.toLowerCase().indexOf(text.toLowerCase()) !== -1)

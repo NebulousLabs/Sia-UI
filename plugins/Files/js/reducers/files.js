@@ -1,12 +1,10 @@
 import { Map, List } from 'immutable'
 import * as constants from '../constants/files.js'
-import Path from 'path'
 
 const initialState = Map({
 	activespending: '',
 	allocatedspending: '',
 	files: List(),
-	downloads: List(),
 	path: '',
 	searchText: '',
 	uploadSource: '',
@@ -48,17 +46,6 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('showFileView', true)
 	case constants.HIDE_FILE_VIEW:
 		return state.set('showFileView', false)
-	case constants.DOWNLOAD_FILE:
-		return state.set('downloads', state.get('downloads').unshift({name: Path.basename(action.siapath), progress: 0}))
-	case constants.RECEIVE_DOWNLOADS:
-		// Downloads are added to the `downloads` list immediately when they are requested.
-		// As such, the list from receive_downloads may not be up to date.
-		const newDownloadList = List(action.downloads)
-		const currentDownloadList = state.get('downloads')
-		if (newDownloadList.size >= currentDownloadList.size) {
-			return state.set('downloads', newDownloadList)
-		}
-		return state.set('downloads', newDownloadList.merge(currentDownloadList))
 	case constants.TOGGLE_DOWNLOADS_LIST:
 		return state.set('showDownloadList', !state.get('showDownloadList'))
 	default:

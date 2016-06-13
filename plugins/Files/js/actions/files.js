@@ -93,6 +93,10 @@ export const downloadFile = (siapath, downloadpath) => ({
 	siapath,
 	downloadpath,
 })
+export const addFileToDownloads = (file) => ({
+	type: constants.ADD_FILE_TO_DOWNLOADS,
+	file,
+})
 export const showFileView = (file) => ({
 	type: constants.SHOW_FILE_VIEW,
 	file,
@@ -100,12 +104,27 @@ export const showFileView = (file) => ({
 export const hideFileView = () => ({
 	type: constants.HIDE_FILE_VIEW,
 })
-export const getDownloads = () => ({
+export const getDownloads = (since) => ({
 	type: constants.GET_DOWNLOADS,
+	since,
 })
-export const receiveDownloads = (downloads) => ({
-	type: constants.RECEIVE_DOWNLOADS,
-	downloads,
+export const addDownload = (download) => ({
+	type: constants.ADD_DOWNLOAD,
+	download,
+})
+export const removeDownload = (siapath) => ({
+	type: constants.REMOVE_DOWNLOAD,
+	siapath,
+})
+export const setDownloadState = (siapath, state) => ({
+	type: constants.SET_DOWNLOAD_STATE,
+	siapath,
+	state,
+})
+export const setDownloadProgress = (siapath, progress) => ({
+	type: constants.SET_DOWNLOAD_PROGRESS,
+	siapath,
+	progress,
 })
 export const toggleDownloadList = () => ({
 	type: constants.TOGGLE_DOWNLOADS_LIST,
