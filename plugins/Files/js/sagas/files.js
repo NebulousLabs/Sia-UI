@@ -219,8 +219,8 @@ export function* watchGetMetrics() {
 export function* watchGetWalletBalance() {
 	yield *takeEvery(constants.GET_WALLET_BALANCE, getWalletBalanceSaga)
 }
-export function* watchStorageSizeChange() {
-	yield *takeEvery(constants.HANDLE_STORAGE_SIZE_CHANGE, calculateStorageCostSaga)
+export function* watchCalculateStorageCost() {
+	yield *takeEvery(constants.CALCULATE_STORAGE_COST, calculateStorageCostSaga)
 }
 export function* watchSetPath() {
 	yield *takeEvery(constants.SET_PATH, setPathSaga)

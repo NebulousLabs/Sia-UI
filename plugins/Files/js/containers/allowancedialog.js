@@ -1,7 +1,7 @@
 import AllowanceDialogView from '../components/allowancedialog.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { closeAllowanceDialog, handleStorageSizeChange, setAllowance } from '../actions/files.js'
+import { closeAllowanceDialog, calculateStorageCost, setAllowance } from '../actions/files.js'
 
 const mapStateToProps = (state) => ({
 	storageSize: state.allowancedialog.get('storageSize'),
@@ -10,7 +10,7 @@ const mapStateToProps = (state) => ({
 	settingAllowance: state.allowancedialog.get('settingAllowance'),
 })
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ closeAllowanceDialog, handleStorageSizeChange, setAllowance }, dispatch),
+	actions: bindActionCreators({ closeAllowanceDialog, calculateStorageCost, setAllowance }, dispatch),
 })
 
 const AllowanceDialog = connect(mapStateToProps, mapDispatchToProps)(AllowanceDialogView)

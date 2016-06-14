@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react'
+import StoragePlan from './storageplan.js'
 import BigNumber from 'bignumber.js'
 
 const allowanceMonths = 3
 
 const AllowanceDialog = ({storageSize, storageCost, settingAllowance, allowanceProgress, actions}) => {
-	const onStorageSizeChange = (e) => actions.handleStorageSizeChange(e.target.value)
+	const setStorageSize = (size) => actions.calculateStorageCost(size)
 	const onCancelClick = () => actions.closeAllowanceDialog()
 	const onAcceptClick = () => actions.setAllowance(storageCost)
 
@@ -20,12 +21,12 @@ const AllowanceDialog = ({storageSize, storageCost, settingAllowance, allowanceP
 		dialogContents = (
 			<div className="allowance-dialog">
 				<h3> How many gigabytes of storage do you want per month? </h3>
-				<input type="number" value={storageSize} onChange={onStorageSizeChange}></input> GB
-				<div className="storage-cost">
-					<div>Cost per month: {new BigNumber(storageCost).dividedBy(allowanceMonths).round(2).toString()} SC</div>
-					<div>Months: {allowanceMonths}</div>
-					<div>Total: {storageCost} SC</div>
+				<div className="storage-plans">
+					<StoragePlan storageSize={'10'} setStorageSize={setStorageSize} />
+					<StoragePlan storageSize={'100'} setStorageSize={setStorageSize} />
+					<StoragePlan storageSize={'250'} setStorageSize={setStorageSize} />
 				</div>
+				<p> Estimated monthly cost: {Math.floor(storageCost/3)} SC </p>
 				<div className="allowance-buttons">
 					<button onClick={onCancelClick} className="allowance-button-cancel">Cancel</button>
 					<button onClick={onAcceptClick} className="allowance-buttons">Accept</button>
