@@ -156,15 +156,25 @@ function* uploadFileSaga(action) {
 	}
 }
 
-const readdir = (path) => new Promise((resolve, reject) => {
-	fs.readdir(path, (err, files) => {
-		if (err) {
-			reject(err)
+// recursively version of readdir
+const readdirRecursive = (path, files) => {
+	const dirfiles = fs.readdirSync(path)
+	let filelist
+	if (typeof files === 'undefined') {
+		filelist = List()
+	} else {
+		filelist = files
+	}
+	dirfiles.forEach((file) => {
+		const filepath = Path.join(path, file)
+		if (fs.statSync(filepath).isDirectory()) {
+			filelist = readdirRecursive(filepath, filelist)
 		} else {
-			resolve(files)
+			filelist = filelist.push(filepath)
 		}
 	})
-})
+	return filelist
+}
 
 // Recursively upload the folder at the directory `source`
 function *uploadFolderSaga(action) {
