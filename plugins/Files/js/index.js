@@ -31,4 +31,4 @@ const downloadStart = Date.now()
 setInterval(() => {
 	store.dispatch(getDownloads(downloadStart))
 	store.dispatch(getWalletLockstate())
-}, 1000)
+}, 3000)

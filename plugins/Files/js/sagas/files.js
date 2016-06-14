@@ -4,6 +4,7 @@ import Path from 'path'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import BigNumber from 'bignumber.js'
+import { List } from 'immutable'
 import fs from 'fs'
 import { sendError, siadCall, parseFiles, parseDownloads, searchFiles, estimatedStoragePriceGBSC } from './helpers.js'
 
@@ -167,9 +168,10 @@ const readdirRecursive = (path, files) => {
 	}
 	dirfiles.forEach((file) => {
 		const filepath = Path.join(path, file)
-		if (fs.statSync(filepath).isDirectory()) {
+		const stat = fs.statSync(filepath)
+		if (stat.isDirectory()) {
 			filelist = readdirRecursive(filepath, filelist)
-		} else {
+		} else if (stat.isFile()) {
 			filelist = filelist.push(filepath)
 		}
 	})
@@ -179,14 +181,17 @@ const readdirRecursive = (path, files) => {
 // Recursively upload the folder at the directory `source`
 function *uploadFolderSaga(action) {
 	try {
-		const files = yield readdir(action.source)
+		const files = readdirRecursive(action.source)
 		const folderName = Path.basename(action.source)
-		const siafiles = files.map((file) => ({
-			siapath: Path.join(action.siapath, folderName, file),
-			source: Path.join(action.source, file),
-		}))
-		for (let i = 0; i < siafiles.length; i++) {
-			yield put(actions.uploadFile(siafiles[i].siapath, siafiles[i].source))
+		const siafiles = files.map((file) => {
+			const relativePath = file.substring(file.lastIndexOf(folderName) + 1, file.length)
+			return {
+				siapath: Path.join(action.siapath, relativePath),
+				source: file,
+			}
+		})
+		for (let i = 0; i < siafiles.size; i++) {
+			yield put(actions.uploadFile(siafiles.get(i).siapath, siafiles.get(i).source))
 		}
 	} catch (e) {
 		sendError(e)
