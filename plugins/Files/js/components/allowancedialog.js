@@ -20,13 +20,14 @@ const AllowanceDialog = ({storageSize, storageCost, settingAllowance, allowanceP
 	} else {
 		dialogContents = (
 			<div className="allowance-dialog">
-				<h3> How many gigabytes of storage do you want per month? </h3>
+				<h3> Buy storage on the Sia Decentralized Network</h3>
 				<div className="storage-plans">
-					<StoragePlan storageSize={'10'} setStorageSize={setStorageSize} />
-					<StoragePlan storageSize={'100'} setStorageSize={setStorageSize} />
-					<StoragePlan storageSize={'250'} setStorageSize={setStorageSize} />
+					<StoragePlan storageSize={'10'} currentStorageSize={storageSize} setStorageSize={setStorageSize} />
+					<StoragePlan storageSize={'100'} currentStorageSize={storageSize} setStorageSize={setStorageSize} />
+					<StoragePlan storageSize={'250'} currentStorageSize={storageSize} setStorageSize={setStorageSize} />
 				</div>
-				<p> Estimated monthly cost: {Math.floor(storageCost/3)} SC </p>
+				<p> Estimated 3-month cost: {Math.floor(storageCost)} SC </p>
+				<p className="allowance-warning">Any unused funds will be refunded.</p>
 				<div className="allowance-buttons">
 					<button onClick={onCancelClick} className="allowance-button-cancel">Cancel</button>
 					<button onClick={onAcceptClick} className="allowance-buttons">Accept</button>

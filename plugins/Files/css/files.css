@@ -73,17 +73,6 @@
 .buttons div i {
 	color: #00CBA0;
 }
-.allowance-dialog {
-	padding-left: 15px;
-	padding-right: 15px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	background-color: #ECECEC;
-	width: 50%;
-	height: 50%;
-}
 .file-browser {
 	width: 100%;
 	height: 100%;
@@ -169,4 +158,51 @@
 	background-color: #ECECEC;
 	width: 50%;
 	height: 50%;
+}
+.storage-plans {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+	padding-top: 10px;
+}
+.plan {
+	margin: 5px 5px 5px 5px;
+	width: 100px;
+	height: 80px;
+	text-align: center;
+}
+.selected {
+	padding-bottom: 6px;
+	border-bottom: 3px solid #00CBA0;
+}
+.allowance-dialog h3 {
+	padding: 0;
+	margin: 0;
+	margin-top: 30px;
+	margin-bottom: 10px;
+}
+.allowance-dialog p {
+	margin-top: 10px;
+	text-align: center;
+}
+.allowance-warning {
+	color: #A71A18;
+}
+.allowance-buttons {
+	margin-bottom: 15px;
+}
+.allowance-dialog {
+	margin-left: 15px;
+	margin-right: 15px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	background-color: #ECECEC;
+	width: 80%;
+	height: 70%;
 }
