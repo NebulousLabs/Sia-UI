@@ -9,14 +9,12 @@ const File = ({filename, siapath, filesize, available, actions}) => {
 		})
 		actions.downloadFile(siapath, Path.join(downloadpath[0], Path.basename(siapath)))
 	}
-	const onCloseClick = () => actions.hideFileView()
+	const onBackClick = () => actions.hideFileView()
 	return (
 		<div className="file-view">
-			<div className="close-button" onClick={onCloseClick}>
-				<i className="fa fa-close fa-2x"></i>
-			</div>
-			<div className="file-view-icon">
-				<i className="fa fa-file fa-4x"></i>
+			<div className="back-bar" onClick={onBackClick}>
+				<i className="fa fa-backward"></i>
+				<span>Back</span>
 			</div>
 			<div className="file-view-info">
 				<h3> {filename} </h3>
