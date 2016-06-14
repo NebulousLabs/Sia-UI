@@ -1,6 +1,6 @@
 import React from 'react'
 import { Map } from 'immutable'
-
+import { spawnCommand, isCommandSpecial } from '../utils/helpers.js'
 //These commands need a password prompt.
 const specialCommands = [ ['wallet', 'unlock'], ['wallet', 'load', 'seed'], ['help'], ['?'] ]
 
@@ -15,7 +15,7 @@ const CommandInput = ({currentCommand, showCommandOverview, actions}) => {
 		}
 
 		const handleKeyboardPress = (e) => {
-
+			let eventTarget = e.target
 			//Enter button.
 			if (e.keyCode === 13) {
 
@@ -31,9 +31,9 @@ const CommandInput = ({currentCommand, showCommandOverview, actions}) => {
 					break
 
 				case 2: //help
-					var text = 'help'
+					let text = 'help'
 				case 3: //?
-					var newText = text || '?'
+					let newText = text || '?'
 					if (showCommandOverview) {
 						actions.hideCommandOverview()
 					} else {
@@ -41,7 +41,7 @@ const CommandInput = ({currentCommand, showCommandOverview, actions}) => {
 					}
 
 					//The command history won't actually show a help command so it is fine to add the command.
-					var newCommand = Map({ command: newText, result: '', id: Math.floor(Math.random()*1000000) })
+					let newCommand = Map({ command: newText, result: '', id: Math.floor(Math.random()*1000000) })
 					actions.addCommand(newCommand)
 					break
 
@@ -51,17 +51,15 @@ const CommandInput = ({currentCommand, showCommandOverview, actions}) => {
 				}
 			 } else if (e.keyCode === 38) {
 				//Up arrow.
-				actions.loadPrevCommand(e.target)
+				actions.loadPrevCommand(eventTarget.value)
 				setTimeout( () => {
-					var commandinput = document.getElementById('command-input')
-					commandinput.setSelectionRange(commandinput.value.length, commandinput.value.length)
+					eventTarget.setSelectionRange(eventTarget.value.length, eventTarget.value.length)
 				}, 0)
 			} else if (e.keyCode === 40) {
 				//Down arrow.
-				actions.loadNextCommand(e.target)
+				actions.loadNextCommand(eventTarget.value)
 				setTimeout(() => {
-					var commandinput = document.getElementById('command-input')
-					commandinput.setSelectionRange(commandinput.value.length, commandinput.value.length)
+					eventTarget.setSelectionRange(eventTarget.value.length, eventTarget.value.length)
 				}, 0)
 			}
 		}

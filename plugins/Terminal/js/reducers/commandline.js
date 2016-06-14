@@ -14,19 +14,15 @@ export default function commandLineReducer(state = initialState, action) {
 	switch (action.type) {
 
 	case constants.ADD_COMMAND:
-			//Add command to the command history.
+		//Add command to the command history.
 		console.log('NEW COMMAND!')
-		var newCommandHistory = state.get('commandHistory').push(action.command)
-		var newState = state.set('commandHistory', newCommandHistory)
-		newState = newState.set('commandIndex', 0)
-		newState = newState.set('currentCommand', '')
-		return newState
+		return state.set('commandHistory', state.get('commandHistory').push(action.command))
+			.set('commandIndex', 0).set('currentCommand', '')
 
 
 	case constants.UPDATE_COMMAND:
-			//Updates output of command given by command name and id.
-		var newCommandHistory = state.get('commandHistory')
-		var commandArray = newCommandHistory.findLastEntry(
+		//Updates output of command given by command name and id.
+		let commandArray = state.get('commandHistory').findLastEntry(
 				(val) => (val.get('command') === action.command && val.get('id') === action.id)
 			)
 
@@ -35,7 +31,7 @@ export default function commandLineReducer(state = initialState, action) {
 			return state
 		}
 
-		var [commandIdx, newCommand] = commandArray
+		let [commandIdx, newCommand] = commandArray
 
 		if (action.dataChunk) {
 			newCommand = newCommand.set('result', newCommand.get('result') + action.dataChunk)
@@ -46,43 +42,26 @@ export default function commandLineReducer(state = initialState, action) {
 		}
 
 		console.log(newCommand)
-		newCommandHistory = newCommandHistory.set(commandIdx, newCommand)
-		return state.set('commandHistory', newCommandHistory)
-
+		return state.set('commandHistory', state.get('commandHistory').set(commandIdx, newCommand))
 
 	case constants.LOAD_PREV_COMMAND:
-		var newCommandIndex = state.get('commandIndex')
-		newCommandIndex++ //How many commands back do we load.
-		if (newCommandIndex > state.get('commandHistory').size) {
-			newCommandIndex = state.get('commandHistory').size
-		}
-		var newState = state.set('commandIndex', newCommandIndex)
-		var returnvalue = state
-		if ( state.get('commandHistory').size-newCommandIndex < state.get('commandHistory').size ) {
-			returnvalue = newState.set('currentCommand', state.get('commandHistory').get(state.get('commandHistory').size-newCommandIndex).get('command'))
-		}
-		return returnvalue
-
+		let newCommandIndex = Math.min(state.get('commandIndex')+1, state.get('commandHistory').size)
+		return state.set('commandIndex', newCommandIndex).set('currentCommand',
+			state.get('commandHistory').get(
+				Math.min( state.get('commandHistory').size-newCommandIndex, state.get('commandHistory').size-1)
+			).get('command'))
 
 	case constants.LOAD_NEXT_COMMAND:
-		var newCommandIndex = state.get('commandIndex')
-		newCommandIndex--
-		if (newCommandIndex < 0) {
-			newCommandIndex = 0
-		}
-		var newState = state.set('commandIndex', newCommandIndex)
-
+		newCommandIndex = Math.max(state.get('commandIndex')-1, 0)
 		if (newCommandIndex) {
-			newState = newState.set('currentCommand',
+			return state.set('commandIndex', newCommandIndex).set('currentCommand',
 					state.get('commandHistory').get(
 						state.get('commandHistory').size-newCommandIndex
 					).get('command')
 				)
 		} else {
-			newState = newState.set('currentCommand', '')
+			return state.set('commandIndex', newCommandIndex).set('currentCommand', '')
 		}
-
-		return newState
 
 	case constants.SET_CURRENT_COMMAND:
 		return state.set('currentCommand', action.command)

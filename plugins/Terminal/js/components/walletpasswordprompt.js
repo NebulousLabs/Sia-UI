@@ -1,5 +1,6 @@
 import React from 'react'
-const querystring = require('querystring')
+import querystring from 'querystring'
+import { spawnCommand, httpCommand, isCommandSpecial } from '../utils/helpers.js'
 
 //This command needs a second prompt.
 const moreSpecialCommands= [ ['wallet', 'load', 'seed'] ]
@@ -9,7 +10,7 @@ const WalletPasswordPrompt = ({ showWalletPrompt, currentCommand, actions }) => 
 		//Give DOM time to register the update.
 		if (showWalletPrompt) {
 			setTimeout(() => {
-				var walletpasswd = document.getElementById('wallet-passwd')
+				let walletpasswd = document.getElementById('wallet-passwd')
 				walletpasswd.focus()
 				walletpasswd.setSelectionRange(0, walletpasswd.value.length)
 			}, 1)
@@ -27,7 +28,7 @@ const WalletPasswordPrompt = ({ showWalletPrompt, currentCommand, actions }) => 
 				default:
 						//Grab input, spawn process, and pipe text field to stdin.
 					console.log('SPECIAL COMMAND: ' + currentCommand)
-					var siac = httpCommand(currentCommand, actions)
+					let siac = httpCommand(currentCommand, actions)
 					siac.write(querystring.stringify({ 'encryptionpassword': e.target.value }))
 					siac.end()
 					break
