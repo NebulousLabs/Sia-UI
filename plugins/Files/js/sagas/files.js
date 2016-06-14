@@ -35,11 +35,13 @@ function* getFilesSaga(action) {
 // Set the user's renter allowance.
 function* setAllowanceSaga(action) {
 	try {
+		const response = yield siadCall('/renter/allowance')
+		const newAllowance = SiaAPI.siacoinsToHastings(action.funds).add(response.funds)
 		yield siadCall({
 			url: '/renter/allowance',
 			method: 'POST',
 			qs: {
-				funds: SiaAPI.siacoinsToHastings(action.funds).toString(),
+				funds: newAllowance.toString(),
 				hosts: allowanceHosts,
 				period: allowancePeriod,
 			},

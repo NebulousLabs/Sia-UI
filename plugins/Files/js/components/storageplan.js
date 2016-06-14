@@ -1,10 +1,9 @@
 import React, { PropTypes } from 'react'
-import { estimatedStoragePriceGBSC } from '../sagas/helpers.js'
 
 const StoragePlan = ({storageSize, currentStorageSize, setStorageSize}) => {
 	const onPlanClick = () => setStorageSize(storageSize)
 	return (
-		<div className={storageSize === currentStorageSize ? "plan selected" : "plan"} onClick={onPlanClick}>
+		<div className={storageSize === currentStorageSize ? 'plan selected' : 'plan'} onClick={onPlanClick}>
 			<i className="fa fa-hdd-o fa-3x"></i>
 			<p> {storageSize} GB </p>
 		</div>

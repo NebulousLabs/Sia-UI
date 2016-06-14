@@ -1,8 +1,5 @@
 import React, { PropTypes } from 'react'
 import StoragePlan from './storageplan.js'
-import BigNumber from 'bignumber.js'
-
-const allowanceMonths = 3
 
 const AllowanceDialog = ({storageSize, storageCost, settingAllowance, allowanceProgress, actions}) => {
 	const setStorageSize = (size) => actions.calculateStorageCost(size)
