@@ -1,8 +1,13 @@
 import React, { PropTypes } from 'react'
+import fs from 'fs'
 
 const UploadDialog = ({source, path, actions}) => {
 	const onUploadClick = () => {
-		actions.uploadFile(source, path)
+		if (fs.statSync(source).isDirectory()) {
+			actions.uploadFolder(path, source)
+		} else {
+			actions.uploadFile(path, source)
+		}
 		actions.hideUploadDialog()
 	}
 	const onCancelClick = () => actions.hideUploadDialog()

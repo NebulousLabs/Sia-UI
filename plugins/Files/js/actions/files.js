@@ -93,6 +93,16 @@ export const downloadFile = (siapath, downloadpath) => ({
 	siapath,
 	downloadpath,
 })
+export const uploadFile = (siapath, source) => ({
+	type: constants.UPLOAD_FILE,
+	siapath,
+	source,
+})
+export const uploadFolder = (siapath, source) => ({
+	type: constants.UPLOAD_FOLDER,
+	siapath,
+	source,
+})
 export const addFileToDownloads = (file) => ({
 	type: constants.ADD_FILE_TO_DOWNLOADS,
 	file,

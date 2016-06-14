@@ -4,6 +4,7 @@ const UploadButton = ({actions}) => {
 	const onUploadClick = () => {
 		const filepath = SiaAPI.openFile({
 			title: 'Choose a file to upload',
+			properties: ['openFile', 'openDirectory'],
 		})[0]
 		actions.showUploadDialog(filepath)
 	}

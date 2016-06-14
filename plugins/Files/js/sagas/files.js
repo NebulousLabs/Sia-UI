@@ -4,6 +4,7 @@ import Path from 'path'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import BigNumber from 'bignumber.js'
+import fs from 'fs'
 import { sendError, siadCall, parseFiles, parseDownloads, searchFiles, estimatedStoragePriceGBSC } from './helpers.js'
 
 const allowanceHosts = 24
@@ -142,7 +143,7 @@ function* setSearchTextSaga(action) {
 function* uploadFileSaga(action) {
 	try {
 		const filename = Path.basename(action.source)
-		const destpath = action.path + filename
+		const destpath = action.siapath + filename
 		yield siadCall({
 			url: '/renter/upload/' + destpath,
 			method: 'POST',
@@ -150,7 +151,33 @@ function* uploadFileSaga(action) {
 				source: action.source,
 			},
 		})
-		yield put(actions.getFiles(action.path))
+	} catch (e) {
+		sendError(e)
+	}
+}
+
+const readdir = (path) => new Promise((resolve, reject) => {
+	fs.readdir(path, (err, files) => {
+		if (err) {
+			reject(err)
+		} else {
+			resolve(files)
+		}
+	})
+})
+
+// Recursively upload the folder at the directory `source`
+function *uploadFolderSaga(action) {
+	try {
+		const files = yield readdir(action.source)
+		const folderName = Path.basename(action.source)
+		const siafiles = files.map((file) => ({
+			siapath: Path.join(action.siapath, folderName, file),
+			source: Path.join(action.source, file),
+		}))
+		for (let i = 0; i < siafiles.length; i++) {
+			yield put(actions.uploadFile(siafiles[i].siapath, siafiles[i].source))
+		}
 	} catch (e) {
 		sendError(e)
 	}
@@ -220,6 +247,9 @@ export function* watchGetMetrics() {
 }
 export function* watchGetWalletBalance() {
 	yield *takeEvery(constants.GET_WALLET_BALANCE, getWalletBalanceSaga)
+}
+export function* watchUploadFolder() {
+	yield *takeEvery(constants.UPLOAD_FOLDER, uploadFolderSaga)
 }
 export function* watchCalculateStorageCost() {
 	yield *takeEvery(constants.CALCULATE_STORAGE_COST, calculateStorageCostSaga)
