@@ -106,7 +106,7 @@ export const spawnCommand = function(commandStr, actions, newid) {
 }
 
 export const httpCommand = function(commandStr, actions, newid) {
-	const commandString = commandStr
+	let commandString = commandStr
 	const originalCommand = commandStr.replace(/\s*\s/g, ' ').trim()
 
 	//Remove surrounding whitespace and leading siac command.

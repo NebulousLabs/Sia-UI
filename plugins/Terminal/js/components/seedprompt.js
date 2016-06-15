@@ -2,15 +2,15 @@ import React from 'react'
 import { httpCommand } from '../utils/helpers.js'
 import querystring from 'querystring'
 
-const WalletSeedPrompt = React.createClass({
-	componentDidUpdate: function() {
+export default class WalletSeedPrompt extends React.Component {
+	componentDidUpdate() {
 		//Give DOM time to register the update.
 		if (this.props.showSeedPrompt) {
 			this._seedPasswd.focus()
 		}
-	},
+	}
 
-	render: function() {
+	render() {
 		const handleKeyboardPress = (e) => {
 			if (e.keyCode === 13) {
 				//Grab input, spawn process, and pipe text field to stdin.
@@ -36,7 +36,5 @@ const WalletSeedPrompt = React.createClass({
 				</div>
 			</div>
 		)
-	},
-})
-
-export default WalletSeedPrompt
+	}
+}

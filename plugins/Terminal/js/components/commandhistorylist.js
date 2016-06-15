@@ -1,16 +1,12 @@
 import React, { PropTypes } from 'react'
 import { List } from 'immutable'
 
-const CommandHistoryList = React.createClass({
-	propTypes: {
-		commandHistory: PropTypes.instanceOf(List),
-	},
-
-	componentDidUpdate: function() {
+export default class CommandHistoryList extends React.Component {
+	componentDidUpdate() {
 		this._commandHistoryList.scrollTop = this._commandHistoryList.scrollHeight
-	},
+	}
 
-	render: function() {
+	render() {
 		console.log('Re-rendering.')
 		const CommandHistoryComponents = this.props.commandHistory.filterNot(
 			(command) => command.get('command') === 'help' || command.get('command') === '?'
@@ -30,7 +26,7 @@ const CommandHistoryList = React.createClass({
 				</ul>
 			</div>
 		)
-	},
-})
+	}
+}
 
-export default CommandHistoryList
+CommandHistoryList.propTypes = { commandHistory: PropTypes.instanceOf(List) }

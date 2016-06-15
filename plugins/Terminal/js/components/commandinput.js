@@ -1,15 +1,15 @@
 import React from 'react'
 import { commandInputHelper } from '../utils/helpers.js'
 
-const CommandInput = React.createClass({
-	componentDidUpdate: function() {
+export default class CommandInput extends React.Component {
+	componentDidUpdate() {
 		//Give DOM time to register the update.
 		if (!this.props.showWalletPrompt && !this.props.showSeedPrompt) {
 			this._input.focus()
 		}
-	},
+	}
 
-	render: function() {
+	render() {
 		const handleTextInput = (e) => this.props.actions.setCurrentCommand(e.target.value)
 		const handleKeyboardPress = (e) => commandInputHelper(e, this.props.actions, this.props.currentCommand,
 			this.props.showCommandOverview, this.props.commandHistory.size)
@@ -19,7 +19,5 @@ const CommandInput = React.createClass({
 				ref={(c) => this._input = c}
    ></input>
 		)
-	},
-})
-
-export default CommandInput
+	}
+}

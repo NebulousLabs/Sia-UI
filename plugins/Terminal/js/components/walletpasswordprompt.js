@@ -5,16 +5,15 @@ import * as constants from '../constants/helper.js'
 
 //This command needs a second prompt.
 const moreSpecialCommands = [ ['wallet', 'load', 'seed'] ]
-
-const WalletPasswordPrompt = React.createClass({
-	componentDidUpdate: function() {
+export default class WalletPasswordPrompt extends React.Component {
+	componentDidUpdate() {
 		//Give DOM time to register the update.
 		if (this.props.showWalletPrompt) {
 			this._walletPasswd.focus()
 		}
-	},
+	}
 
-	render: function() {
+	render() {
 		const handleTextInput = (e) => this.props.actions.setWalletPassword(e.target.value)
 		const handleKeyboardPress = (e) => {
 			if (e.keyCode === 13) {
@@ -41,11 +40,10 @@ const WalletPasswordPrompt = React.createClass({
 					<h3>Wallet Password</h3>
 					<p>Please type your wallet password and press enter to continue.</p>
 					<input onChange={handleTextInput} onKeyDown={handleKeyboardPress} type="password"
-						id="wallet-passwd" ref={(c) => this._walletPasswd = c} value={this.props.walletPassword}></input>
+						id="wallet-passwd" ref={(c) => this._walletPasswd = c} value={this.props.walletPassword}>
+					</input>
 				</div>
 			</div>
 		)
-	},
-})
-
-export default WalletPasswordPrompt
+	}
+}
