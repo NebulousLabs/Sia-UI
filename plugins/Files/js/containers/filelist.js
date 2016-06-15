@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { setPath, showFileView } from '../actions/files.js'
 
 const mapStateToProps = (state) => ({
-	files: state.files.get('files'),
+	files: state.files.get('workingDirectoryFiles'),
 	path: state.files.get('path'),
 	showSearchField: state.files.get('showSearchField'),
 })

@@ -22,11 +22,10 @@ export const siadCall = (uri) => new Promise((resolve, reject) => {
 	})
 })
 
-// Parse the response from `/renter/files`.
-// Return a Set of files and directories in the current `path`.
-// This works similarly to `ls`.
-export const parseFiles = (files, path) => {
-	const fileList = List(files).filter((file) => file.siapath.indexOf(path) !== -1)
+// return a list of files filtered with path.
+// ... it's ls.
+export const ls = (files, path) => {
+	const fileList = files.filter((file => file.siapath.indexOf(path) !== -1))
 	let parsedFiles = Map()
 	fileList.forEach((file) => {
 		let type = 'file'

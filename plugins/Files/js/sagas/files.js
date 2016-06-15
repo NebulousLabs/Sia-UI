@@ -6,7 +6,7 @@ import * as constants from '../constants/files.js'
 import BigNumber from 'bignumber.js'
 import { List } from 'immutable'
 import fs from 'fs'
-import { sendError, siadCall, parseFiles, parseDownloads, searchFiles, estimatedStoragePriceGBSC } from './helpers.js'
+import { sendError, siadCall, parseDownloads, searchFiles, estimatedStoragePriceGBSC } from './helpers.js'
 
 const allowanceHosts = 24
 const blockMonth = 4382
@@ -28,7 +28,7 @@ function* getWalletLockstateSaga() {
 function* getFilesSaga(action) {
 	try {
 		const response = yield siadCall('/renter/files')
-		yield put(actions.receiveFiles(parseFiles(response.files, action.path), action.path))
+		yield put(actions.receiveFiles(List(response.files)))
 	} catch (e) {
 		sendError(e)
 	}
@@ -115,14 +115,6 @@ function* setAllowanceProgressBarSaga() {
 			yield put(actions.setAllowanceProgress(progress.toString()))
 			yield delay(500)
 		}
-	} catch (e) {
-		sendError(e)
-	}
-}
-
-function* setPathSaga(action) {
-	try {
-		yield put(actions.getFiles(action.path))
 	} catch (e) {
 		sendError(e)
 	}
@@ -280,9 +272,6 @@ export function* watchUploadFolder() {
 }
 export function* watchCalculateStorageCost() {
 	yield *takeEvery(constants.CALCULATE_STORAGE_COST, calculateStorageCostSaga)
-}
-export function* watchSetPath() {
-	yield *takeEvery(constants.SET_PATH, setPathSaga)
 }
 export function* watchUploadFile() {
 	yield *takeEvery(constants.UPLOAD_FILE, uploadFileSaga)
