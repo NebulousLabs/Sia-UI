@@ -2,24 +2,13 @@ import React from 'react'
 import { httpCommand } from '../utils/helpers.js'
 import querystring from 'querystring'
 
-const WalletSeedPrompt = ({ showSeedPrompt, currentCommand, actions }) => {
-	componentDidUpdate: {
-		//Give DOM time to register the update.
-		if (showSeedPrompt) {
-			setTimeout(() => {
-				let seedpasswd = document.getElementById('seed-passwd')
-				seedpasswd.focus()
-				seedpasswd.setSelectionRange(0, seedpasswd.value.length)
-			}, 1)
-		}
-	}
-
+const WalletSeedPrompt = ({ showSeedPrompt, currentCommand, commandHistory, actions }) => {
 	render: {
 		const handleKeyboardPress = (e) => {
 			if (e.keyCode === 13) {
 				//Grab input, spawn process, and pipe text field to stdin.
 				console.log('SPECIAL COMMAND: ' + currentCommand)
-				let siac = httpCommand(currentCommand, actions)
+				let siac = httpCommand(currentCommand, actions, commandHistory.size)
 
 				siac.write(querystring.stringify({
 					'encryptionpassword': document.getElementById('wallet-passwd').value,

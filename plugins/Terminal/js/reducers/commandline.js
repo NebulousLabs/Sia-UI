@@ -8,6 +8,7 @@ const initialState = Map({
 	showWalletPrompt: false,
 	showSeedPrompt: false,
 	showCommandOverview: true,
+	commandRunning: false,
 })
 
 export default function commandLineReducer(state = initialState, action) {
@@ -17,7 +18,7 @@ export default function commandLineReducer(state = initialState, action) {
 		//Add command to the command history.
 		console.log('NEW COMMAND!')
 		return state.set('commandHistory', state.get('commandHistory').push(action.command))
-			.set('commandIndex', 0).set('currentCommand', '')
+			.set('commandIndex', 0).set('currentCommand', '').set('commandRunning', true)
 
 
 	case constants.UPDATE_COMMAND:
@@ -27,22 +28,29 @@ export default function commandLineReducer(state = initialState, action) {
 			)
 
 		if (!commandArray) {
-			console.log(`Error did not find command: { command: ${action.command}, id: ${action.id} } in command history: ${JSON.stringify(newCommandHistory)}`)
+			console.log(`Error did not find command: { command: ${action.command}, id: ${action.id} } in command history: ${JSON.stringify(commandHistory)}`)
 			return state
 		}
 
 		let [commandIdx, newCommand] = commandArray
-
-		if (action.dataChunk) {
-			newCommand = newCommand.set('result', newCommand.get('result') + action.dataChunk)
-		}
-
-		if (action.stat) {
-			newCommand = newCommand.set('stat', action.stat)
-		}
-
+		newCommand = newCommand.set('result', newCommand.get('result') + action.dataChunk)
 		console.log(newCommand)
 		return state.set('commandHistory', state.get('commandHistory').set(commandIdx, newCommand))
+
+	case constants.END_COMMAND:
+		commandArray = state.get('commandHistory').findLastEntry(
+				(val) => (val.get('command') === action.command && val.get('id') === action.id)
+			)
+
+		if (!commandArray) {
+			console.log(`Error did not find command: { command: ${action.command}, id: ${action.id} } in command history: ${JSON.stringify(commandHistory)}`)
+			return state
+		}
+
+		[commandIdx, newCommand] = commandArray
+		newCommand = newCommand.set('stat', 'done')
+		console.log(newCommand)
+		return state.set('commandHistory', state.get('commandHistory').set(commandIdx, newCommand)).set('commandRunning', false)
 
 	case constants.LOAD_PREV_COMMAND:
 		let newCommandIndex = Math.min(state.get('commandIndex')+1, state.get('commandHistory').size)

@@ -4,6 +4,7 @@ import child_process from 'child_process'
 import { Map } from 'immutable'
 import http from 'http'
 import url from 'url'
+import * as constants from '../constants/helper.js'
 
 export const checkSiaPath = () => new Promise((resolve, reject) => {
 	fs.stat(Path.resolve(SiaAPI.config.attr('siac').path, './siac'), (err) => {
@@ -31,7 +32,7 @@ export const initPlugin = () => checkSiaPath().catch(() => {
 	SiaAPI.config.save()
 })
 
-export const isCommandSpecial = function(commandString, specialArray) {
+export const commandType = function(commandString, specialArray) {
 	//Cleans string and sees if any subarray in array starts with the string when split.
 	let args = commandString.replace(/\s*\s/g, ' ').trim().split(' ')
 	if (args[0] === './siac' || args[0] === 'siac') {
@@ -47,12 +48,12 @@ export const isCommandSpecial = function(commandString, specialArray) {
 	)
 }
 
-export const spawnCommand = function(commandStr, actions) {
+export const spawnCommand = function(commandStr, actions, newid) {
 	//Create new command object. Id doesn't need to be unique, just can't be the same for adjacent commands.
 
 	//We set the command first so the user sees exactly what they type. (Minus leading and trailing spaces, double spaces, etc.)
 	let commandString = commandStr.replace(/\s*\s/g, ' ').trim()
-	let newCommand = Map({ command: commandString, result: '', id: Math.floor(Math.random()*1000000), stat: 'running' })
+	let newCommand = Map({ command: commandString, result: '', id: newid, stat: 'running' })
 	actions.addCommand(newCommand)
 
 	//Remove surrounding whitespace and leading siac command.
@@ -82,7 +83,7 @@ export const spawnCommand = function(commandStr, actions) {
 	let closed = false
 	let streamClosed = function() {
 		if (!closed) {
-			actions.updateCommand(newCommand.get('command'), newCommand.get('id'), undefined, 'done')
+			actions.endCommand(newCommand.get('command'), newCommand.get('id'))
 			closed = true
 		}
 	}
@@ -104,8 +105,7 @@ export const spawnCommand = function(commandStr, actions) {
 	return siac
 }
 
-
-export const httpCommand = function(commandStr, actions) {
+export const httpCommand = function(commandStr, actions, newid) {
 	let commandString = commandStr
 	const originalCommand = commandStr.replace(/\s*\s/g, ' ').trim()
 
@@ -157,7 +157,7 @@ export const httpCommand = function(commandStr, actions) {
 	}
 
 	//Spawn new command if we are good to go.
-	let newCommand = Map({ command: originalCommand, result: '', id: Math.floor(Math.random()*1000000), stat: 'running' })
+	let newCommand = Map({ command: originalCommand, result: '', id: newid, stat: 'running' })
 	actions.addCommand(newCommand)
 
 	//Update the UI when the process receives new ouput.
@@ -173,7 +173,7 @@ export const httpCommand = function(commandStr, actions) {
 	let closed = false
 	let streamClosed = function() {
 		if (!closed) {
-			actions.updateCommand(newCommand.get('command'), newCommand.get('id'), undefined, 'done')
+			actions.endCommand(newCommand.get('command'), newCommand.get('id'))
 			closed = true
 		}
 	}
@@ -205,3 +205,56 @@ export const httpCommand = function(commandStr, actions) {
 	return req
 }
 
+export const commandInputHelper = function(e, actions, currentCommand, showCommandOverview, newid){
+	//These commands need a password prompt.
+	const specialCommands = [ ['wallet', 'load', 'seed'], ['wallet', 'unlock'], ['help'], ['?'] ]
+
+	let eventTarget = e.target
+	//Enter button.
+	if (e.keyCode === 13) {
+
+		//Check if command is special.
+		switch ( commandType(currentCommand, specialCommands) ) {
+		case constants.REGULAR_COMMAND: //Regular command.
+			spawnCommand(currentCommand, actions, newid) //Spawn command defined in index.js.
+			break
+
+		case constants.WALLET_UNLOCK: //wallet unlock
+		case constants.WALLET_SEED: //wallet load seed
+			actions.showWalletPrompt()
+			break
+
+		case constants.HELP: //help
+			let text = 'help'
+		case constants.HELP_QMARK: //?
+			let newText = text || '?'
+			if (showCommandOverview) {
+				actions.hideCommandOverview()
+			} else {
+				actions.showCommandOverview()
+			}
+
+			//The command log won't actually show a help command but we still want to be able to select it in the command history.
+			let newCommand = Map({ command: newText, result: '', id: newid })
+			actions.addCommand(newCommand)
+			actions.endCommand(newCommand.get('command'), newCommand.get('id'))
+			break
+
+		default:
+			console.log(`Command input error: ${currentCommand}`)
+			break
+		}
+	 } else if (e.keyCode === 38) {
+		//Up arrow.
+		actions.loadPrevCommand(eventTarget.value)
+		setTimeout( () => {
+			eventTarget.setSelectionRange(eventTarget.value.length, eventTarget.value.length)
+		}, 0)
+	} else if (e.keyCode === 40) {
+		//Down arrow.
+		actions.loadNextCommand(eventTarget.value)
+		setTimeout(() => {
+			eventTarget.setSelectionRange(eventTarget.value.length, eventTarget.value.length)
+		}, 0)
+	}
+}

@@ -4,10 +4,13 @@ export const addCommand = (command) => ({
 	type: constants.ADD_COMMAND,
 	command,
 })
-export const updateCommand = (command, id, dataChunk, stat) => ({
+export const updateCommand = (command, id, dataChunk) => ({
 	type: constants.UPDATE_COMMAND,
-	command, id, stat,
-	dataChunk,
+	command, id, dataChunk,
+})
+export const endCommand = (command, id) => ({
+	type: constants.END_COMMAND,
+	command, id,
 })
 
 

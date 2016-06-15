@@ -4,7 +4,7 @@ import { List } from 'immutable'
 const CommandHistoryList = ({commandHistory}) => {
 
 	componentDidUpdate: {
-		let ch = document.getElementsByClassName('command-history-list')[0]
+		var ch = document.getElementsByClassName('command-history-list')[0]
 		if (ch) {
 			//Give the DOM time to process the DOM changes.
 			setTimeout( () => ch.scrollTop = ch.scrollHeight, 0)
