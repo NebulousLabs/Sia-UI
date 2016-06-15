@@ -41,6 +41,7 @@ export const parseFiles = (files, path) => {
 			name: filename,
 			siapath: file.siapath,
 			available: file.available,
+			uploadprogress: Math.floor(file.uploadprogress),
 			type,
 		})
 	})

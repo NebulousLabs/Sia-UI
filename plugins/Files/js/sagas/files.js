@@ -183,17 +183,15 @@ function *uploadFolderSaga(action) {
 	try {
 		const files = readdirRecursive(action.source)
 		const folderName = Path.basename(action.source)
-		const siafiles = files.map((file) => {
-			const relativePath = file.substring(file.lastIndexOf(folderName) + 1, file.length)
-			return {
-				siapath: Path.join(action.siapath, relativePath),
-				source: file,
-			}
-		})
+		const siafiles = files.map((file) => ({
+			siapath: file.substring(file.indexOf(folderName), file.lastIndexOf(Path.basename(file))),
+			source: file,
+		}))
 		for (let i = 0; i < siafiles.size; i++) {
 			yield put(actions.uploadFile(siafiles.get(i).siapath, siafiles.get(i).source))
 		}
 	} catch (e) {
+		console.error(e)
 		sendError(e)
 	}
 }

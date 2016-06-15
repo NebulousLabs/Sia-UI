@@ -37,7 +37,7 @@ const FileList = ({files, path, showSearchField, actions}) => {
 					{fileIcon}
 					<span className="filename">{file.name}</span>
 				</div>
-				<span className="filesize">{file.size}</span>
+				<span className="uploadprogress">{file.uploadprogress}% Uploaded</span>
 			</li>
 		)
 	})
