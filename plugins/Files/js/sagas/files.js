@@ -6,7 +6,7 @@ import * as constants from '../constants/files.js'
 import BigNumber from 'bignumber.js'
 import { List } from 'immutable'
 import fs from 'fs'
-import { sendError, siadCall, parseDownloads, estimatedStoragePriceGBSC } from './helpers.js'
+import { sendError, siadCall, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
 
 const allowanceHosts = 24
 const blockMonth = 4382
@@ -185,7 +185,6 @@ function* downloadFileSaga(action) {
 		state: 'init',
 	}
 	try {
-		yield put(actions.addDownload(download))
 		yield siadCall({
 			url: '/renter/download/' + action.siapath,
 			method: 'GET',
@@ -194,8 +193,6 @@ function* downloadFileSaga(action) {
 			},
 		})
 	} catch (e) {
-		download.state = 'failed'
-		yield put(actions.addDownload(download))
 		sendError(e)
 	}
 }
@@ -204,9 +201,17 @@ function* getDownloadsSaga(action) {
 	try {
 		const response = yield siadCall('/renter/downloads')
 		const downloads = parseDownloads(action.since, response.downloads)
-		for (let i = 0; i < downloads.size; i++) {
-			yield put(actions.addDownload(downloads.get(i)))
-		}
+		yield put(actions.receiveDownloads(downloads))
+	} catch (e) {
+		sendError(e)
+	}
+}
+
+function* getUploadsSaga() {
+	try {
+		const response = yield siadCall('/renter/files')
+		const uploads = parseUploads(response.files)
+		yield put(actions.receiveUploads(uploads))
 	} catch (e) {
 		sendError(e)
 	}
@@ -235,6 +240,9 @@ export function* watchSetAllowanceProgress() {
 }
 export function* watchGetDownloads() {
 	yield *takeEvery(constants.GET_DOWNLOADS, getDownloadsSaga)
+}
+export function* watchGetUploads() {
+	yield *takeEvery(constants.GET_UPLOADS, getUploadsSaga)
 }
 export function* watchGetWalletLockstate() {
 	yield *takeEvery(constants.GET_WALLET_LOCKSTATE, getWalletLockstateSaga)

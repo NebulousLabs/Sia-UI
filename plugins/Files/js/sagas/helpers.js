@@ -25,7 +25,8 @@ export const siadCall = (uri) => new Promise((resolve, reject) => {
 // return a list of files filtered with path.
 // ... it's ls.
 export const ls = (files, path) => {
-	const fileList = files.filter((file) => file.siapath.indexOf(path) !== -1)
+	let fileList = files.filter((file) => file.uploadprogress >= 100)
+	fileList = fileList.filter((file) => file.siapath.indexOf(path) !== -1)
 	let parsedFiles = Map()
 	fileList.forEach((file) => {
 		let type = 'file'
@@ -49,20 +50,30 @@ export const ls = (files, path) => {
 	return parsedFiles.toList().sortBy((file) => file.name)
 }
 // Parse a response from `/renter/downloads`
-// return a list of files transfers
+// return a list of file downloads
 export const parseDownloads = (since, downloads) => {
-	const parsedDownloads = List(downloads).filter((download) => Date.parse(download.starttime) > since)
-	return parsedDownloads.map((download) => {
-		const name = Path.basename(download.siapath)
-		const progress = Math.floor((download.received / download.filesize) * 100)
-		return {
-			siapath: download.siapath,
-			name,
-			progress,
-			destination: download.destination,
-			state: 'downloading',
-		}
-	})
+	let parsedDownloads = List(downloads).filter((download) => Date.parse(download.starttime) > since)
+	parsedDownloads = parsedDownloads.map((download) => ({
+		siapath: download.siapath,
+		name: Path.basename(download.siapath),
+		progress: Math.floor((download.received / download.filesize) * 100),
+		destination: download.destination,
+		state: 'downloading',
+		starttime: download.starttime,
+	}))
+	return parsedDownloads.sortBy((download) => -downloads.starttime)
+}
+// Parse a a set of files from `/renter/files`
+// return a list of file uploads
+export const parseUploads = (files) => {
+	let parsedUploads = List(files).filter((file) => file.uploadprogress < 100)
+	parsedUploads = parsedUploads.map((upload) => ({
+		siapath: upload.siapath,
+		name: Path.basename(upload.siapath),
+		progress: Math.floor(upload.uploadprogress),
+		state: 'uploading',
+	}))
+	return parsedUploads.sortBy((upload) => upload.name).sortBy((upload) => -upload.progress)
 }
 export const searchFiles = (files, text, path) => {
 	let matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1)

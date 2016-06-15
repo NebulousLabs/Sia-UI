@@ -51,7 +51,7 @@ FileBrowser.propTypes = {
 	dragging: PropTypes.bool.isRequired,
 	showUploadDialog: PropTypes.bool.isRequired,
 	showFileView: PropTypes.bool.isRequired,
-	showDownloadList: PropTypes.bool.isRequired,
+	showFileTransfers: PropTypes.bool.isRequired,
 }
 
 export default FileBrowser

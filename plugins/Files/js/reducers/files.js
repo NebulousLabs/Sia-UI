@@ -8,6 +8,8 @@ const initialState = Map({
 	files: List(),
 	workingDirectoryFiles: List(),
 	searchResults: List(),
+	uploading: List(),
+	downloading: List(),
 	path: '',
 	searchText: '',
 	uploadSource: '',
@@ -49,6 +51,10 @@ export default function filesReducer(state = initialState, action) {
 		            .set('uploadSource', action.source)
 	case constants.HIDE_UPLOAD_DIALOG:
 		return state.set('showUploadDialog', false)
+	case constants.RECEIVE_UPLOADS:
+		return state.set('uploading', action.uploads)
+	case constants.RECEIVE_DOWNLOADS:
+		return state.set('downloading', action.downloads)
 	case constants.SHOW_FILE_VIEW:
 		return state.set('showFileView', true)
 	case constants.HIDE_FILE_VIEW:

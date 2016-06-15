@@ -105,10 +105,6 @@ export const uploadFolder = (siapath, source) => ({
 	siapath,
 	source,
 })
-export const addFileToDownloads = (file) => ({
-	type: constants.ADD_FILE_TO_DOWNLOADS,
-	file,
-})
 export const showFileView = (file) => ({
 	type: constants.SHOW_FILE_VIEW,
 	file,
@@ -120,16 +116,16 @@ export const getDownloads = (since) => ({
 	type: constants.GET_DOWNLOADS,
 	since,
 })
-export const addDownload = (download) => ({
-	type: constants.ADD_DOWNLOAD,
-	download,
+export const getUploads = () => ({
+	type: constants.GET_UPLOADS,
 })
-export const removeDownload = (siapath) => ({
-	type: constants.REMOVE_DOWNLOAD,
-	siapath,
+export const receiveUploads = (uploads) => ({
+	type: constants.RECEIVE_UPLOADS,
+	uploads,
 })
-export const toggleDownloadList = () => ({
-	type: constants.TOGGLE_DOWNLOADS_LIST,
+export const receiveDownloads = (downloads) => ({
+	type: constants.RECEIVE_DOWNLOADS,
+	downloads,
 })
 export const showFileTransfers = () => ({
 	type: constants.SHOW_FILE_TRANSFERS,
