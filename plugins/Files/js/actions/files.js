@@ -133,3 +133,6 @@ export const showFileTransfers = () => ({
 export const hideFileTransfers = () => ({
 	type: constants.HIDE_FILE_TRANSFERS,
 })
+export const toggleFileTransfers = () => ({
+	type: constants.TOGGLE_FILE_TRANSFERS,
+})

@@ -24,23 +24,25 @@ const FileBrowser = ({activespending, allocatedspending, dragging, showUploadDia
 		actions.setNotDragging()
 	}
 	return (
-		<div className="file-browser" onDragOver={onDragOver} onMouseLeave={onDragLeave} onDrop={onDrop}>
-			{showUploadDialog ? <UploadDialog /> : null}
-			{dragging ? <DragOverlay /> : null}
-			<div className="files-toolbar">
-				<div className="allowance-info">
-					<div>Active Storage Spending: {activespending} SC</div>
-					<div>Available Storage Spending: {allocatedspending} SC</div>
+		<div className="file-browser-container">
+			<div className="file-browser" onDragOver={onDragOver} onMouseLeave={onDragLeave} onDrop={onDrop}>
+				{showUploadDialog ? <UploadDialog /> : null}
+				{dragging ? <DragOverlay /> : null}
+				<div className="files-toolbar">
+					<div className="allowance-info">
+						<div>Active Storage Spending: {activespending} SC</div>
+						<div>Available Storage Spending: {allocatedspending} SC</div>
+					</div>
+					<div className="buttons">
+						<SetAllowanceButton />
+						<SearchButton />
+						<UploadButton />
+						<TransfersButton />
+					</div>
 				</div>
-				<div className="buttons">
-					<TransfersButton />
-					<SearchButton />
-					<UploadButton />
-					<SetAllowanceButton />
-				</div>
+				{showFileView ? <File /> : <FileList />}
 			</div>
 			{showFileTransfers ? <FileTransfers /> : null}
-			{showFileView ? <File /> : <FileList />}
 		</div>
 	)
 }

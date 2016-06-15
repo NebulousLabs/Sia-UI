@@ -1,20 +1,20 @@
 import React, { PropTypes } from 'react'
+import ProgressBar from './progressbar.js'
 import { List } from 'immutable'
 
 const TransferList = ({transfers}) => {
 	const transferComponents = transfers.map((transfer, key) => (
 		<li key={key}>
-			<div className="filename">{transfer.name}</div>
-			<div className="transfer-state">{transfer.state}</div>
-			<div className="progress">{transfer.progress}%</div>
+			<div className="transfer-info">
+				<div className="transfername">{transfer.name}</div>
+				<ProgressBar progress={transfer.progress} />
+			</div>
 		</li>
 	))
 	return (
-		<div className="transfer-list">
-			<ul>
-				{transferComponents}
-			</ul>
-		</div>
+		<ul className="transfer-list">
+			{transferComponents}
+		</ul>
 	)
 }
 

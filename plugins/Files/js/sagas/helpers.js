@@ -50,6 +50,7 @@ export const ls = (files, path) => {
 	})
 	return parsedFiles.toList().sortBy((file) => file.name)
 }
+
 // recursively version of readdir
 const readdirRecursive = (path, files) => {
 	const dirfiles = fs.readdirSync(path)
@@ -70,6 +71,7 @@ const readdirRecursive = (path, files) => {
 	})
 	return filelist
 }
+
 // Parse a response from `/renter/downloads`
 // return a list of file downloads
 export const parseDownloads = (since, downloads) => {
@@ -79,12 +81,13 @@ export const parseDownloads = (since, downloads) => {
 		name: Path.basename(download.siapath),
 		progress: Math.floor((download.received / download.filesize) * 100),
 		destination: download.destination,
-		state: 'downloading',
+		type: 'download',
 		starttime: download.starttime,
 	}))
 	return parsedDownloads.sortBy((download) => -download.starttime)
 }
-// Parse a a set of files from `/renter/files`
+
+// Parse a list of files from `/renter/files`
 // return a list of file uploads
 export const parseUploads = (files) => {
 	let parsedUploads = List(files).filter((file) => file.uploadprogress < 100)
@@ -92,12 +95,15 @@ export const parseUploads = (files) => {
 		siapath: upload.siapath,
 		name: Path.basename(upload.siapath),
 		progress: Math.floor(upload.uploadprogress),
-		state: 'uploading',
+		type: 'upload',
 	}))
 	return parsedUploads.sortBy((upload) => upload.name).sortBy((upload) => -upload.progress)
 }
+
+// Search `files` for `text`, excluding directories not in `path`
 export const searchFiles = (files, text, path) => {
 	let matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1)
+	matchingFiles = matchingFiles.filter((file) => file.uploadprogress >= 100)
 	matchingFiles = matchingFiles.filter((file) => file.siapath.toLowerCase().indexOf(text.toLowerCase()) !== -1)
 	return matchingFiles.map((file) => ({
 		size: file.filesize,

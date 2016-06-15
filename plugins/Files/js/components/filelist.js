@@ -44,7 +44,6 @@ const FileList = ({files, searchResults, path, showSearchField, actions}) => {
 					{fileIcon}
 					<span className="filename">{file.name}</span>
 				</div>
-				{file.type === 'file' ? <span className="uploadprogress">{file.uploadprogress}% Uploaded</span> : null}
 			</li>
 		)
 	})

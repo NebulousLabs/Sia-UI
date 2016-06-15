@@ -63,6 +63,8 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('showFileTransfers', true)
 	case constants.HIDE_FILE_TRANSFERS:
 		return state.set('showFileTransfers', false)
+	case constants.TOGGLE_FILE_TRANSFERS:
+		return state.set('showFileTransfers', !state.get('showFileTransfers'))
 	default:
 		return state
 	}
