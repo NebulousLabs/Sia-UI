@@ -1,12 +1,13 @@
 import { Map, List } from 'immutable'
 import * as constants from '../constants/files.js'
-import { ls } from '../sagas/helpers.js'
+import { ls, searchFiles } from '../sagas/helpers.js'
 
 const initialState = Map({
 	activespending: '',
 	allocatedspending: '',
 	files: List(),
 	workingDirectoryFiles: List(),
+	searchResults: List(),
 	path: '',
 	searchText: '',
 	uploadSource: '',
@@ -27,6 +28,9 @@ export default function filesReducer(state = initialState, action) {
 	case constants.RECEIVE_FILES:
 		return state.set('files', action.files)
                 .set('workingDirectoryFiles', ls(action.files, state.get('path')))
+	case constants.SET_SEARCH_TEXT:
+		return state.set('searchResults', searchFiles(state.get('files'), action.text, state.get('path')))
+                .set('searchText', action.text)
 	case constants.SET_PATH:
 		return state.set('path', action.path)
                 .set('workingDirectoryFiles', ls(state.get('files'), action.path))
@@ -34,8 +38,6 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('showAllowanceDialog', true)
 	case constants.CLOSE_ALLOWANCE_DIALOG:
 		return state.set('showAllowanceDialog', false)
-	case constants.SET_SEARCH_TEXT:
-		return state.set('searchText', action.text)
 	case constants.TOGGLE_SEARCH_FIELD:
 		return state.set('showSearchField', !state.get('showSearchField'))
 	case constants.SET_DRAGGING:

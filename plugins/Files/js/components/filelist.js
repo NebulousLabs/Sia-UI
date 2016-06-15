@@ -3,7 +3,7 @@ import { List } from 'immutable'
 import Path from 'path'
 import SearchField from '../containers/searchfield.js'
 
-const FileList = ({files, path, showSearchField, actions}) => {
+const FileList = ({files, searchResults, path, showSearchField, actions}) => {
 
 	const onFileClick = (file) => () => {
 		if (file.type === 'directory') {
@@ -24,7 +24,14 @@ const FileList = ({files, path, showSearchField, actions}) => {
 		actions.setPath(newpath)
 	}
 
-	const fileElements = files.map((file, key) => {
+	let filelistFiles
+	if (showSearchField) {
+		filelistFiles = searchResults
+	} else {
+		filelistFiles = files
+	}
+
+	const fileElements = filelistFiles.map((file, key) => {
 		let fileIcon
 		if (file.type === 'directory') {
 			fileIcon = <i className="fa fa-folder"></i>
@@ -37,7 +44,7 @@ const FileList = ({files, path, showSearchField, actions}) => {
 					{fileIcon}
 					<span className="filename">{file.name}</span>
 				</div>
-				<span className="uploadprogress">{file.uploadprogress}% Uploaded</span>
+				{file.type === 'file' ? <span className="uploadprogress">{file.uploadprogress}% Uploaded</span> : null}
 			</li>
 		)
 	})
@@ -55,6 +62,7 @@ const FileList = ({files, path, showSearchField, actions}) => {
 
 FileList.propTypes = {
 	files: PropTypes.instanceOf(List),
+	searchResults: PropTypes.instanceOf(List),
 	path: PropTypes.string.isRequired,
 	showSearchField: PropTypes.bool.isRequired,
 }

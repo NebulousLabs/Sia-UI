@@ -4,7 +4,7 @@ const SearchField = ({searchText, path, actions}) => {
 	const onSearchChange = (e) => actions.setSearchText(e.target.value, path)
 	return (
 		<div className="search-field">
-			<input value={searchText} onChange={onSearchChange}></input>
+			<input value={searchText} autoFocus={true} onChange={onSearchChange}></input>
 			<i className="fa fa-search"></i>
 		</div>
 	)

@@ -31,16 +31,18 @@ export const ls = (files, path) => {
 		let type = 'file'
 		const relativePath = file.siapath.substring(path.length, file.siapath.length)
 		let filename = Path.basename(relativePath)
+		let uploadprogress = Math.floor(file.uploadprogress)
 		if (relativePath.indexOf('/') !== -1) {
 			type = 'directory'
 			filename = relativePath.split('/')[0]
+			uploadprogress = ''
 		}
 		parsedFiles = parsedFiles.set(filename, {
 			size: file.filesize,
 			name: filename,
 			siapath: file.siapath,
 			available: file.available,
-			uploadprogress: Math.floor(file.uploadprogress),
+			uploadprogress: uploadprogress,
 			type,
 		})
 	})
@@ -65,7 +67,14 @@ export const parseDownloads = (since, downloads) => {
 export const searchFiles = (files, text, path) => {
 	let matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1)
 	matchingFiles = matchingFiles.filter((file) => file.siapath.toLowerCase().indexOf(text.toLowerCase()) !== -1)
-	return matchingFiles.map((file) => ({size: file.filesize, name: file.siapath, siapath: file.siapath, available: file.available, type: 'file'}))
+	return matchingFiles.map((file) => ({
+		size: file.filesize, 
+		name: Path.basename(file.siapath), 
+		siapath: file.siapath, 
+		available: file.available, 
+		type: 'file',
+		uploadprogress: Math.floor(file.uploadprogress).toString(),
+	}))
 }
 
 const bytesPerGB = new BigNumber('1000000000')

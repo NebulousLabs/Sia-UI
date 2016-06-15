@@ -120,19 +120,6 @@ function* setAllowanceProgressBarSaga() {
 	}
 }
 
-function* setSearchTextSaga(action) {
-	try {
-		if (action.text === '') {
-			yield put(actions.setPath(action.path))
-			return
-		}
-		const response = yield siadCall('/renter/files')
-		yield put(actions.receiveFiles(searchFiles(response.files, action.text, action.path), action.path))
-	} catch (e) {
-		sendError(e)
-	}
-}
-
 function* uploadFileSaga(action) {
 	try {
 		const filename = Path.basename(action.source)
@@ -248,9 +235,6 @@ export function* watchSetAllowanceProgress() {
 }
 export function* watchGetDownloads() {
 	yield *takeEvery(constants.GET_DOWNLOADS, getDownloadsSaga)
-}
-export function* watchSetSearchText() {
-	yield *takeEvery(constants.SET_SEARCH_TEXT, setSearchTextSaga)
 }
 export function* watchGetWalletLockstate() {
 	yield *takeEvery(constants.GET_WALLET_LOCKSTATE, getWalletLockstateSaga)
