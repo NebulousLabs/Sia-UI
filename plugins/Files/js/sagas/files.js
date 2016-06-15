@@ -6,7 +6,7 @@ import * as constants from '../constants/files.js'
 import BigNumber from 'bignumber.js'
 import { List } from 'immutable'
 import fs from 'fs'
-import { sendError, siadCall, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
+import { sendError, siadCall, readdirRecursive, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
 
 const allowanceHosts = 24
 const blockMonth = 4382
@@ -136,27 +136,6 @@ function* uploadFileSaga(action) {
 	}
 }
 
-// recursively version of readdir
-const readdirRecursive = (path, files) => {
-	const dirfiles = fs.readdirSync(path)
-	let filelist
-	if (typeof files === 'undefined') {
-		filelist = List()
-	} else {
-		filelist = files
-	}
-	dirfiles.forEach((file) => {
-		const filepath = Path.join(path, file)
-		const stat = fs.statSync(filepath)
-		if (stat.isDirectory()) {
-			filelist = readdirRecursive(filepath, filelist)
-		} else if (stat.isFile()) {
-			filelist = filelist.push(filepath)
-		}
-	})
-	return filelist
-}
-
 // Recursively upload the folder at the directory `source`
 function *uploadFolderSaga(action) {
 	try {
@@ -170,7 +149,6 @@ function *uploadFolderSaga(action) {
 			yield put(actions.uploadFile(siafiles.get(i).siapath, siafiles.get(i).source))
 		}
 	} catch (e) {
-		console.error(e)
 		sendError(e)
 	}
 }

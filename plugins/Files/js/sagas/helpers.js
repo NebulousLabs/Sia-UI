@@ -49,6 +49,26 @@ export const ls = (files, path) => {
 	})
 	return parsedFiles.toList().sortBy((file) => file.name)
 }
+// recursively version of readdir
+const readdirRecursive = (path, files) => {
+	const dirfiles = fs.readdirSync(path)
+	let filelist
+	if (typeof files === 'undefined') {
+		filelist = List()
+	} else {
+		filelist = files
+	}
+	dirfiles.forEach((file) => {
+		const filepath = Path.join(path, file)
+		const stat = fs.statSync(filepath)
+		if (stat.isDirectory()) {
+			filelist = readdirRecursive(filepath, filelist)
+		} else if (stat.isFile()) {
+			filelist = filelist.push(filepath)
+		}
+	})
+	return filelist
+}
 // Parse a response from `/renter/downloads`
 // return a list of file downloads
 export const parseDownloads = (since, downloads) => {
