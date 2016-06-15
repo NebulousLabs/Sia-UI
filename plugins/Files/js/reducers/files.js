@@ -15,7 +15,7 @@ const initialState = Map({
 	showUploadDialog: false,
 	showSearchField: false,
 	showFileView: false,
-	showDownloadList: false,
+	showFileTransfers: false,
 	dragging: false,
 })
 
@@ -53,8 +53,10 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('showFileView', true)
 	case constants.HIDE_FILE_VIEW:
 		return state.set('showFileView', false)
-	case constants.TOGGLE_DOWNLOADS_LIST:
-		return state.set('showDownloadList', !state.get('showDownloadList'))
+	case constants.SHOW_FILE_TRANSFERS:
+		return state.set('showFileTransfers', true)
+	case constants.HIDE_FILE_TRANSFERS:
+		return state.set('showFileTransfers', false)
 	default:
 		return state
 	}

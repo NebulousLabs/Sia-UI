@@ -131,3 +131,9 @@ export const removeDownload = (siapath) => ({
 export const toggleDownloadList = () => ({
 	type: constants.TOGGLE_DOWNLOADS_LIST,
 })
+export const showFileTransfers = () => ({
+	type: constants.SHOW_FILE_TRANSFERS,
+})
+export const hideFileTransfers = () => ({
+	type: constants.HIDE_FILE_TRANSFERS,
+})

@@ -6,7 +6,7 @@ import * as constants from '../constants/files.js'
 import BigNumber from 'bignumber.js'
 import { List } from 'immutable'
 import fs from 'fs'
-import { sendError, siadCall, parseDownloads, searchFiles, estimatedStoragePriceGBSC } from './helpers.js'
+import { sendError, siadCall, parseDownloads, estimatedStoragePriceGBSC } from './helpers.js'
 
 const allowanceHosts = 24
 const blockMonth = 4382
@@ -25,7 +25,7 @@ function* getWalletLockstateSaga() {
 }
 
 // Query siad for the user's files.
-function* getFilesSaga(action) {
+function* getFilesSaga() {
 	try {
 		const response = yield siadCall('/renter/files')
 		yield put(actions.receiveFiles(List(response.files)))

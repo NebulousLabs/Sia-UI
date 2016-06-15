@@ -25,7 +25,7 @@ export const siadCall = (uri) => new Promise((resolve, reject) => {
 // return a list of files filtered with path.
 // ... it's ls.
 export const ls = (files, path) => {
-	const fileList = files.filter((file => file.siapath.indexOf(path) !== -1))
+	const fileList = files.filter((file) => file.siapath.indexOf(path) !== -1)
 	let parsedFiles = Map()
 	fileList.forEach((file) => {
 		let type = 'file'
@@ -68,10 +68,10 @@ export const searchFiles = (files, text, path) => {
 	let matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1)
 	matchingFiles = matchingFiles.filter((file) => file.siapath.toLowerCase().indexOf(text.toLowerCase()) !== -1)
 	return matchingFiles.map((file) => ({
-		size: file.filesize, 
-		name: Path.basename(file.siapath), 
-		siapath: file.siapath, 
-		available: file.available, 
+		size: file.filesize,
+		name: Path.basename(file.siapath),
+		siapath: file.siapath,
+		available: file.available,
 		type: 'file',
 		uploadprogress: Math.floor(file.uploadprogress).toString(),
 	}))
