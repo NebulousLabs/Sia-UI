@@ -13,7 +13,6 @@ export const endCommand = (command, id) => ({
 	command, id,
 })
 
-
 export const loadPrevCommand = () => ({
 	type: constants.LOAD_PREV_COMMAND,
 })
@@ -25,6 +24,10 @@ export const setCurrentCommand = (commandText) => ({
 	command: commandText,
 })
 
+export const setWalletPassword = (walletPassword) => ({
+	type: constants.SET_WALLET_PASSWORD,
+	walletPassword,
+})
 
 export const showWalletPrompt = () => ({
 	type: constants.SHOW_WALLET_PROMPT,
@@ -33,14 +36,12 @@ export const hideWalletPrompt = () => ({
 	type: constants.HIDE_WALLET_PROMPT,
 })
 
-
 export const showSeedPrompt = () => ({
 	type: constants.SHOW_SEED_PROMPT,
 })
 export const hideSeedPrompt = () => ({
 	type: constants.HIDE_SEED_PROMPT,
 })
-
 
 export const showCommandOverview = () => ({
 	type: constants.SHOW_COMMAND_OVERVIEW,

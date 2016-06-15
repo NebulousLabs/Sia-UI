@@ -34,7 +34,7 @@ export const initPlugin = () => checkSiaPath().catch(() => {
 
 export const commandType = function(commandString, specialArray) {
 	//Cleans string and sees if any subarray in array starts with the string when split.
-	let args = commandString.replace(/\s*\s/g, ' ').trim().split(' ')
+	const args = commandString.replace(/\s*\s/g, ' ').trim().split(' ')
 	if (args[0] === './siac' || args[0] === 'siac') {
 		args.shift()
 	}
@@ -53,7 +53,7 @@ export const spawnCommand = function(commandStr, actions, newid) {
 
 	//We set the command first so the user sees exactly what they type. (Minus leading and trailing spaces, double spaces, etc.)
 	let commandString = commandStr.replace(/\s*\s/g, ' ').trim()
-	let newCommand = Map({ command: commandString, result: '', id: newid, stat: 'running' })
+	const newCommand = Map({ command: commandString, result: '', id: newid, stat: 'running' })
 	actions.addCommand(newCommand)
 
 	//Remove surrounding whitespace and leading siac command.
@@ -69,19 +69,19 @@ export const spawnCommand = function(commandStr, actions, newid) {
 		args = args.concat([ '-a', SiaAPI.config.attr('address') ])
 	}
 
-	let siac = child_process.spawn('./siac', args, { cwd: SiaAPI.config.attr('siac').path })
+	const siac = child_process.spawn('./siac', args, { cwd: SiaAPI.config.attr('siac').path })
 
 	//Update the UI when the process receives new ouput.
-	let consumeChunk = function(chunk) {
+	const consumeChunk = function(chunk) {
 		console.log('Data chunk ' + chunk)
-		let chunkTrimmed = chunk.toString().replace(/stty: stdin isn't a terminal\n/g, '')
+		const chunkTrimmed = chunk.toString().replace(/stty: stdin isn't a terminal\n/g, '')
 		actions.updateCommand(newCommand.get('command'), newCommand.get('id'), chunkTrimmed)
 	}
 	siac.stdout.on('data', consumeChunk)
 	siac.stderr.on('data', consumeChunk)
 
 	let closed = false
-	let streamClosed = function() {
+	const streamClosed = function() {
 		if (!closed) {
 			actions.endCommand(newCommand.get('command'), newCommand.get('id'))
 			closed = true
@@ -106,7 +106,7 @@ export const spawnCommand = function(commandStr, actions, newid) {
 }
 
 export const httpCommand = function(commandStr, actions, newid) {
-	let commandString = commandStr
+	const commandString = commandStr
 	const originalCommand = commandStr.replace(/\s*\s/g, ' ').trim()
 
 	//Remove surrounding whitespace and leading siac command.
@@ -117,7 +117,7 @@ export const httpCommand = function(commandStr, actions, newid) {
 	}
 
 	//Parse arguments.
-	let args = commandString.split(' ')
+	const args = commandString.split(' ')
 
 	//Add address flag to siac.
 	let siaAddr = url.parse('http://localhost:9980')
@@ -157,11 +157,11 @@ export const httpCommand = function(commandStr, actions, newid) {
 	}
 
 	//Spawn new command if we are good to go.
-	let newCommand = Map({ command: originalCommand, result: '', id: newid, stat: 'running' })
+	const newCommand = Map({ command: originalCommand, result: '', id: newid, stat: 'running' })
 	actions.addCommand(newCommand)
 
 	//Update the UI when the process receives new ouput.
-	let consumeChunk = function(chunk) {
+	const consumeChunk = function(chunk) {
 		console.log('Data chunk ' + chunk)
 		let newChunk = chunk
 		if (chunk.toString().trim() === '{"Success":true}') {
@@ -171,7 +171,7 @@ export const httpCommand = function(commandStr, actions, newid) {
 	}
 
 	let closed = false
-	let streamClosed = function() {
+	const streamClosed = function() {
 		if (!closed) {
 			actions.endCommand(newCommand.get('command'), newCommand.get('id'))
 			closed = true
@@ -183,7 +183,7 @@ export const httpCommand = function(commandStr, actions, newid) {
 		actions.hideCommandOverview()
 	}
 
-	let options = {
+	const options = {
 		hostname: siaAddr.hostname,
 		port: siaAddr.port,
 		path: apiURL,
@@ -193,7 +193,7 @@ export const httpCommand = function(commandStr, actions, newid) {
 			'Content-Type': 'application/x-www-form-urlencoded',
 		},
 	}
-	let req = http.request(options, (res) => {
+	const req = http.request(options, (res) => {
 		res.on('data', consumeChunk)
 		res.on('end', streamClosed)
 	})
@@ -205,11 +205,11 @@ export const httpCommand = function(commandStr, actions, newid) {
 	return req
 }
 
-export const commandInputHelper = function(e, actions, currentCommand, showCommandOverview, newid){
-	//These commands need a password prompt.
+export const commandInputHelper = function(e, actions, currentCommand, showCommandOverview, newid) {
+	//These commands need a password prompt or other special handling.
 	const specialCommands = [ ['wallet', 'load', 'seed'], ['wallet', 'unlock'], ['help'], ['?'] ]
 
-	let eventTarget = e.target
+	const eventTarget = e.target
 	//Enter button.
 	if (e.keyCode === 13) {
 
@@ -225,9 +225,9 @@ export const commandInputHelper = function(e, actions, currentCommand, showComma
 			break
 
 		case constants.HELP: //help
-			let text = 'help'
+			const text = 'help'
 		case constants.HELP_QMARK: //?
-			let newText = text || '?'
+			const newText = text || '?'
 			if (showCommandOverview) {
 				actions.hideCommandOverview()
 			} else {
@@ -235,7 +235,7 @@ export const commandInputHelper = function(e, actions, currentCommand, showComma
 			}
 
 			//The command log won't actually show a help command but we still want to be able to select it in the command history.
-			let newCommand = Map({ command: newText, result: '', id: newid })
+			const newCommand = Map({ command: newText, result: '', id: newid })
 			actions.addCommand(newCommand)
 			actions.endCommand(newCommand.get('command'), newCommand.get('id'))
 			break

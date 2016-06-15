@@ -9,6 +9,7 @@ const initialState = Map({
 	showSeedPrompt: false,
 	showCommandOverview: true,
 	commandRunning: false,
+	walletPassword: '',
 })
 
 export default function commandLineReducer(state = initialState, action) {
@@ -73,6 +74,9 @@ export default function commandLineReducer(state = initialState, action) {
 
 	case constants.SET_CURRENT_COMMAND:
 		return state.set('currentCommand', action.command)
+
+	case constants.SET_WALLET_PASSWORD:
+		   return state.set('walletPassword', action.walletPassword)
 
 	case constants.SHOW_WALLET_PROMPT:
 		return state.set('showWalletPrompt', true)

@@ -11,6 +11,8 @@ const mapStateToProps = (state) => ({
 	showCommandOverview: state.commandLineReducer.get('showCommandOverview'),
 	commandRunning: state.commandLineReducer.get('commandRunning'),
 	commandHistory: state.commandLineReducer.get('commandHistory'),
+	showWalletPrompt: state.commandLineReducer.get('showWalletPrompt'),
+	showSeedPrompt: state.commandLineReducer.get('showSeedPrompt'),
 })
 
 const mapDispatchToProps = (dispatch) => ({

@@ -1,13 +1,25 @@
 import React from 'react'
-import { Map } from 'immutable'
-import { spawnCommand, isCommandSpecial, commandInputHelper } from '../utils/helpers.js'
+import { commandInputHelper } from '../utils/helpers.js'
 
-const CommandInput = ({currentCommand, showCommandOverview, commandHistory, commandRunning, actions}) => {
-	const handleTextInput = (e) => actions.setCurrentCommand(e.target.value)
-	const handleKeyboardPress = (e) => commandInputHelper(e, actions, currentCommand, showCommandOverview, commandHistory.size)
-	return (
-		<input id="command-input" onChange={handleTextInput} onKeyDown={handleKeyboardPress} type="text" value={currentCommand} disabled={ commandRunning }></input>
-	)
-}
+const CommandInput = React.createClass({
+	componentDidUpdate: function() {
+		//Give DOM time to register the update.
+		if (!this.props.showWalletPrompt && !this.props.showSeedPrompt) {
+			this._input.focus()
+		}
+	},
+
+	render: function() {
+		const handleTextInput = (e) => this.props.actions.setCurrentCommand(e.target.value)
+		const handleKeyboardPress = (e) => commandInputHelper(e, this.props.actions, this.props.currentCommand,
+			this.props.showCommandOverview, this.props.commandHistory.size)
+		return (
+			<input id="command-input" onChange={handleTextInput} onKeyDown={handleKeyboardPress} type="text"
+				value={this.props.currentCommand} disabled={this.props.ommandRunning} autoFocus autoComplete
+				ref={(c) => this._input = c}
+   ></input>
+		)
+	},
+})
 
 export default CommandInput
