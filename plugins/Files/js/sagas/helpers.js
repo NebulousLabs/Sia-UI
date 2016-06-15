@@ -2,6 +2,7 @@
 import { List, Map } from 'immutable'
 import BigNumber from 'bignumber.js'
 import Path from 'path'
+import fs from 'fs'
 
 export const sendError = (e) => {
 	SiaAPI.showError({
@@ -81,7 +82,7 @@ export const parseDownloads = (since, downloads) => {
 		state: 'downloading',
 		starttime: download.starttime,
 	}))
-	return parsedDownloads.sortBy((download) => -downloads.starttime)
+	return parsedDownloads.sortBy((download) => -download.starttime)
 }
 // Parse a a set of files from `/renter/files`
 // return a list of file uploads

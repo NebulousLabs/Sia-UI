@@ -5,7 +5,6 @@ import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import BigNumber from 'bignumber.js'
 import { List } from 'immutable'
-import fs from 'fs'
 import { sendError, siadCall, readdirRecursive, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
 
 const allowanceHosts = 24
@@ -154,14 +153,6 @@ function *uploadFolderSaga(action) {
 }
 
 function* downloadFileSaga(action) {
-	const name = Path.basename(action.siapath)
-	const download = {
-		name,
-		siapath: action.siapath,
-		downloadpath: action.downloadpath,
-		progress: 0,
-		state: 'init',
-	}
 	try {
 		yield siadCall({
 			url: '/renter/download/' + action.siapath,
