@@ -98,6 +98,10 @@ export const uploadFile = (siapath, source) => ({
 	siapath,
 	source,
 })
+export const deleteFile = (siapath) => ({
+	type: constants.DELETE_FILE,
+	siapath,
+})
 export const uploadFolder = (siapath, source) => ({
 	type: constants.UPLOAD_FOLDER,
 	siapath,

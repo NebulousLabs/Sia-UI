@@ -233,6 +233,17 @@ function* getDownloadsSaga(action) {
 	}
 }
 
+function* deleteFileSaga(action) {
+	try {
+		yield siadCall({
+			url: '/renter/delete/' + action.siapath,
+			method: 'POST',
+		})
+	} catch (e) {
+		sendError(e)
+	}
+}
+
 export function* watchSetAllowance() {
 	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
 }
@@ -254,6 +265,9 @@ export function* watchGetWalletLockstate() {
 }
 export function* watchGetFiles() {
 	yield *takeEvery(constants.GET_FILES, getFilesSaga)
+}
+export function* watchDeleteFile() {
+	yield *takeEvery(constants.DELETE_FILE, deleteFileSaga)
 }
 export function* watchGetMetrics() {
 	yield *takeEvery(constants.GET_METRICS, getMetricsSaga)

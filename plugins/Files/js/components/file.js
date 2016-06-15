@@ -9,6 +9,10 @@ const File = ({filename, siapath, filesize, available, actions}) => {
 		})
 		actions.downloadFile(siapath, Path.join(downloadpath[0], Path.basename(siapath)))
 	}
+	const onDeleteClick = () => {
+		actions.deleteFile(siapath)
+		actions.hideFileView()
+	}
 	const onBackClick = () => actions.hideFileView()
 	return (
 		<div className="file-view">
@@ -24,6 +28,10 @@ const File = ({filename, siapath, filesize, available, actions}) => {
 				<div onClick={onDownloadClick} className="download-button">
 					<i className="fa fa-cloud-download fa-2x"></i>
 					<div> Download </div>
+				</div>
+				<div onClick={onDeleteClick} className="delete-button">
+					<i className="fa fa-trash fa-2x"></i>
+					<div> Delete </div>
 				</div>
 			</div>
 		</div>
