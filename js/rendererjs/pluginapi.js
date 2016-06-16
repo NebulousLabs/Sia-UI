@@ -3,10 +3,11 @@
 const Siad = require('sia.js')
 const Path = require('path')
 const remote = require('electron').remote
+const app = remote.app
 const dialog = remote.dialog
 const mainWindow = remote.getCurrentWindow()
 const configLoader = remote.require(Path.join(__dirname, '../mainjs/config.js')).default
-const config = configLoader(Path.join(__dirname, '../../config.json')).siad
+const config = configLoader(Path.join(app.getPath('userData'), 'config.json')).siad
 Siad.configure(config)
 
 window.SiaAPI = {

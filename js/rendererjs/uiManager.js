@@ -2,7 +2,7 @@
 import Path from 'path'
 import Fs from 'fs'
 import notification from './notificationManager.js'
-import loadingScreen from './loadingscreen.js'
+import loadingScreen from './loadingScreen.js'
 
 import { scanFolder, loadPlugin, setCurrentPlugin, getPluginName } from './plugins.js'
 const defaultPluginDirectory = Path.join(__dirname, '../../plugins')

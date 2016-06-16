@@ -4,12 +4,19 @@
 import { remote } from 'electron'
 import Siad from 'sia.js'
 import Path from 'path'
+const app = remote.app
 const dialog = remote.dialog
 const fs = remote.require('fs')
-const configLoader = remote.require(Path.join(__dirname, '../mainjs/config.js')).default
+const configLoader = remote.require('./js/mainjs/config.js').default
 
-const config = configLoader(Path.join(__dirname, '../../config.json'))
+const config = configLoader(Path.join(app.getPath('userData'), 'config.json'))
 const siadConfig = config.attr('siad')
+
+// hardcode siad's location for release.
+siadConfig.path = Path.join(app.getAppPath(), '../Sia/siad')
+siadConfig.datadir = Path.join(app.getAppPath(), '../Sia')
+config.attr('siad', siadConfig)
+config.save()
 Siad.configure(siadConfig)
 
 const overlay = document.getElementsByClassName('overlay')[0]
@@ -49,7 +56,6 @@ const startSiad = (callback) => {
 	config.save()
 	Siad.configure(siadConfig, (error) => {
 		if (error) {
-			console.error(error)
 			overlay.showError(error)
 		} else {
 			Siad.start(callback)

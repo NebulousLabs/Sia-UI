@@ -1,12 +1,13 @@
 import fs from 'fs'
 import Path from 'path'
+import { app } from 'electron'
 
 // The default settings
 const defaultConfig = {
 	homePlugin:  'Overview',
 	siad: {
-		path: Path.join(__dirname, '..', '..', 'Sia', 'siad'),
-		datadir: Path.join(__dirname, '..', '..', 'Sia'),
+		path: Path.join(app.getAppPath(), '../Sia/siad'),
+		datadir: Path.join(app.getAppPath(), '../Sia'),
 		detached: false,
 	},
 	closeToTray: process.platform === 'win32' || process.platform === 'darwin' ? true : false,
