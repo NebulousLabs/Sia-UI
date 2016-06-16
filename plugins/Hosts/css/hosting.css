@@ -38,18 +38,21 @@
     border-bottom: 1px solid #DDD;
 }
 
-.toggle-switch{
+.toggle-switch {
     width: 100px;
     height: 25px;
     border-radius: 5px;
     overflow: hidden;
     position: relative;
-    background-color: #F5F5F5;
     color: #C5C5C5;
     border: 1px solid #C5C5C5;
     display: inline-block;
     margin: 10px 15px;
     vertical-align: middle;
+    cursor: pointer;
+}
+.toggle-switch.on {
+    background-color: #F5F5F5;
 }
 .toggle-inner {
     position: absolute;
@@ -62,17 +65,16 @@
     background-color: #DDD;
     border-radius: 5px;
 }
-.toggle-inner.on{
-    left: auto;
-    right: -1px;
+.toggle-switch.on .toggle-inner{
+    left: 74px;
 }
 .toggle-inner:after {
-    content: "Off";
+    content: "No";
     position: absolute;
     right: 45px;
 }
 .toggle-inner:before {
-    content: "On";
+    content: "Yes";
     position: absolute;
     left: 45px;
 }
@@ -142,7 +144,16 @@
 }
 .property .value {
 	border-left: 1px solid #e0e0e0;
-	padding: 10px;
+}
+
+.property .value input {
+    padding: 10px;
+    margin: 0px;
+    border-radius: 0px;
+    border: 0px;
+    width: calc( 100% - 20px );
+    text-align: center;
+    cursor: pointer;
 }
 
 
@@ -223,4 +234,20 @@
 	border-bottom-left-radius: 4px;
 	margin: 0px;
 	transition: all .25s;
+}
+
+.pure-g, .pure-g [class *="pure-u"] {
+    font-family: inherit;
+}
+
+.settings {
+    font-size: inherit;
+}
+
+.settings .row {
+    height: 30px;
+}
+
+.settings .title {
+    font-size: 1em;
 }

@@ -12,7 +12,7 @@ const EditModal = ({ usersettings, actions }) => {
 	)).toList()
 
 	return (
-		<div className={ 'hosting-options-modal modal' + (false) ? ' hidden'  : '' }>
+		<div className={ 'hosting-options-modal modal' + (true ? ' hidden'  : '') }>
 			<form className="hosting-options modal-message">
 				<div className="close-button">
 					X

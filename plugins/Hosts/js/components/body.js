@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { Map, List } from 'immutable'
 
-const Body = ({ usersettings, actions }) => {
+const Body = ({ starthosting, usersettings, actions }) => {
 	const announceHost = () => null
 	const resetHost = () => null
 	const saveHost = () => null
@@ -12,7 +12,9 @@ const Body = ({ usersettings, actions }) => {
 				<div className="name">{ setting.get("name") }</div>
 			</div>
 			<div className="pure-u-1-3">
-				<div className="value">{ setting.get("value") }</div>
+				<div className="value">
+					<input type="text" className="value" value={ setting.get("value") }></input>
+				</div>
 			</div>
 		</div>
 	)).toList()
@@ -26,26 +28,31 @@ const Body = ({ usersettings, actions }) => {
 						<i className='fa fa-bullhorn'></i>
 						&nbsp;Announce
 					</div>
-					<div className='button' id='reset' onClick={ resetHost }>
-						<i className='fa fa-refresh'></i>
-						&nbsp;Reset
-					</div>
-					<div className='button' id='save' onClick={ saveHost }>
-						<i className='fa fa-save'></i>
-						&nbsp;Save
-					</div>
 				</div>
 			</div>
-
 
 			<div className="row accept-contracts">
 				<label>Accepting Contracts</label>
 				<div className="toggle-switch">
-					<div className="toggle-inner on"></div>
+					<div className={ "toggle-inner" + (starthosting ? " on" : "") }></div>
 				</div>
+				<p>You must keep Sia-UI running while hosting.<br />Otherwise you will go offline and lose collateral.</p>
 			</div>
 
-			<div id="properties">
+			<div className="settings">
+				<div className="property row">
+	  				<div className="title"></div>
+					<div className="controls">
+						<div className='button' id='edit' onClick={ saveHost }>
+							<i className='fa fa-save'></i>
+							&nbsp;Save
+						</div>
+						<div className='button' id='reset' onClick={ resetHost }>
+							<i className='fa fa-refresh'></i>
+							&nbsp;Reset
+						</div>
+					</div>
+				</div>
 				{ HostProperties }
 			</div>
 		</div>
