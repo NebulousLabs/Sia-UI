@@ -5,7 +5,7 @@ import loadConfig from './js/mainjs/config.js'
 import initWindow from './js/mainjs/initWindow.js'
 
 // load config.json manager
-const config = loadConfig(Path.join(__dirname, 'config.json'))
+const config = loadConfig(Path.join(__dirname, './config.json'))
 let mainWindow
 
 // When Electron loading has finished, start Sia-UI.
