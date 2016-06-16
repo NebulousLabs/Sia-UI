@@ -51,6 +51,8 @@ function* setAllowanceSaga(action) {
 		yield put(actions.getMetrics())
 		yield put(actions.closeAllowanceDialog())
 	} catch (e) {
+		yield put(actions.setAllowanceCompleted())
+		yield put(actions.closeAllowanceDialog())
 		sendError(e)
 	}
 }
@@ -103,6 +105,9 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 function* setAllowanceProgressBarSaga() {
 	try {
 		let response = yield siadCall('/renter/contracts')
+		if (typeof response.contracts.length === null) {
+			return
+		}
 		const initialContracts = response.contracts.length
 		while (true) {
 			response = yield siadCall('/renter/contracts')
