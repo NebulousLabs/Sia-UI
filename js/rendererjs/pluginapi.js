@@ -5,9 +5,9 @@ const Path = require('path')
 const remote = require('electron').remote
 const dialog = remote.dialog
 const mainWindow = remote.getCurrentWindow()
-const configLoader = remote.require(Path.resolve('js/mainjs/config.js')).default
-const config = configLoader(Path.resolve('config.json'))
-Siad.configure(config.siad)
+const configLoader = remote.require(Path.join(__dirname, '../mainjs/config.js')).default
+const config = configLoader(Path.join(__dirname, '../../config.json')).siad
+Siad.configure(config)
 
 window.SiaAPI = {
 	call: Siad.call,

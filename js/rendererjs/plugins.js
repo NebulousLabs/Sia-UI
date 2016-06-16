@@ -3,7 +3,7 @@ import { List } from 'immutable'
 import Path from 'path'
 const remote = require('electron').remote
 const globalShortcut = remote.require('electron').globalShortcut
-const fs = remote.require('fs')
+import fs from 'fs'
 
 const devtoolsShortcut = 'Ctrl+Shift+P'
 
@@ -32,7 +32,7 @@ const createPluginElement = (markupPath, title) => {
 	elem.src = markupPath
 	// This is enabled for legacy plugin support.
 	elem.nodeintegration = true
-	elem.preload = Path.join('file://', Path.resolve('js/rendererjs/pluginapi.js'))
+	elem.preload = Path.join('file://', Path.join(__dirname, './pluginapi.js'))
 	return elem
 }
 

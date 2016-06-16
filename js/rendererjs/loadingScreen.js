@@ -4,12 +4,11 @@
 import { remote } from 'electron'
 import Siad from 'sia.js'
 import Path from 'path'
+import configLoader from '../mainjs/config.js'
 const dialog = remote.dialog
 const fs = remote.require('fs')
 
-// ES6 remote import weirdness...
-const configLoader = remote.require(Path.resolve('js/mainjs/config.js')).default
-const config = configLoader(Path.resolve('config.json'))
+const config = configLoader(Path.join(__dirname, '../../config.json'))
 const siadConfig = config.attr('siad')
 Siad.configure(siadConfig)
 

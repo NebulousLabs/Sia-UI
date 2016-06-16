@@ -5,7 +5,7 @@ import notification from './notificationManager.js'
 import loadingScreen from './loadingscreen.js'
 
 import { scanFolder, loadPlugin, setCurrentPlugin, getPluginName } from './plugins.js'
-const defaultPluginDirectory = Path.resolve('plugins')
+const defaultPluginDirectory = Path.join(__dirname, '../../plugins')
 const defaultHomePlugin = 'Overview'
 
 const packageinfo = require('../../package.json')
