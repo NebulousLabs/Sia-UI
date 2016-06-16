@@ -32,16 +32,16 @@
 	width: 100%;
 }
 .file-transfers {
+	width: 400px;
 	height: 100%;
-	width: 500px;
+	box-shadow:inset 0px 0px 0px 1px #00CBA0;
 	overflow-y: scroll;
-	overfloy-x: hidden;
+	overflow-x: hidden;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: flex-start;
 	background-color: #C5C5C5;
-	margin: 0;
 }
 .transfer-list {
 	width: 100%;
@@ -98,9 +98,9 @@
 	align-items: center;
 	justify-content: space-between;
 	background-color: #4A4A4A;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	min-height: 60px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	min-height: 50px;
 	overflow: hidden;
 }
 .allowance-info {
