@@ -1,17 +1,13 @@
 import React, { PropTypes } from 'react'
 import { List } from 'immutable'
 import File from './file.js'
+import Directory from './directory.js'
 import Path from 'path'
 import SearchField from '../containers/searchfield.js'
 
 const FileList = ({files, searchResults, path, showSearchField, actions}) => {
 
-	const onFileClick = (file) => () => {
-		if (file.type === 'directory') {
-			actions.setPath(path + file.name + '/')
-		}
-	}
-
+	const onDirectoryClick = (directory) => () => actions.setPath(path + directory.name + '/')
 	const onBackClick = () => {
 		if (path === '') {
 			return
@@ -31,16 +27,21 @@ const FileList = ({files, searchResults, path, showSearchField, actions}) => {
 	}
 
 	const fileElements = filelistFiles.map((file, key) => {
-		let fileIcon
-
 		if (file.type === 'directory') {
-			fileIcon = <i className="fa fa-folder"></i>
-		} else {
-			fileIcon = <i className="fa fa-file"></i>
+			return (
+				<Directory key={key} onClick={onDirectoryClick(file)} name={file.name} />
+			)
 		}
-
+		const onDownloadClick = () => {
+			const downloadpath = SiaAPI.openFile({
+				title: 'Where should we download this file?',
+				properties: ['openDirectory', 'createDirectories'],
+			})
+			actions.downloadFile(siapath, Path.join(downloadpath[0], Path.basename(siapath)))
+		}
+		const onDeleteClick = () => actions.deleteFile(siapath)
 		return (
-			<File key={key} onClick={onFileClick(file)} icon={fileIcon} filename={file.name} filesize={file.size} />
+			<File key={key} filename={file.name} filesize={file.size} onDownloadClick={onDownloadClick} onDeleteClick={onDeleteClick} />
 		)
 	})
 
