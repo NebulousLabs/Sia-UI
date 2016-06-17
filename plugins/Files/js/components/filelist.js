@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import { List } from 'immutable'
+import File from './file.js'
 import Path from 'path'
 import SearchField from '../containers/searchfield.js'
 
@@ -8,8 +9,6 @@ const FileList = ({files, searchResults, path, showSearchField, actions}) => {
 	const onFileClick = (file) => () => {
 		if (file.type === 'directory') {
 			actions.setPath(path + file.name + '/')
-		} else {
-			actions.showFileView(file)
 		}
 	}
 
@@ -33,18 +32,15 @@ const FileList = ({files, searchResults, path, showSearchField, actions}) => {
 
 	const fileElements = filelistFiles.map((file, key) => {
 		let fileIcon
+
 		if (file.type === 'directory') {
 			fileIcon = <i className="fa fa-folder"></i>
 		} else {
 			fileIcon = <i className="fa fa-file"></i>
 		}
+
 		return (
-			<li key={key} onClick={onFileClick(file)}>
-				<div>
-					{fileIcon}
-					<span className="filename">{file.name}</span>
-				</div>
-			</li>
+			<File key={key} onClick={onFileClick(file)} icon={fileIcon} filename={file.name} filesize={file.size} />
 		)
 	})
 

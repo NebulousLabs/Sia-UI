@@ -8,7 +8,6 @@ const mapStateToProps = (state) => ({
 	allocatedspending: state.files.get('allocatedspending'),
 	dragging: state.files.get('dragging'),
 	showUploadDialog: state.files.get('showUploadDialog'),
-	showFileView: state.files.get('showFileView'),
 	showFileTransfers: state.files.get('showFileTransfers'),
 })
 

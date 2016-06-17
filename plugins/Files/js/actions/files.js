@@ -105,13 +105,6 @@ export const uploadFolder = (siapath, source) => ({
 	siapath,
 	source,
 })
-export const showFileView = (file) => ({
-	type: constants.SHOW_FILE_VIEW,
-	file,
-})
-export const hideFileView = () => ({
-	type: constants.HIDE_FILE_VIEW,
-})
 export const getDownloads = (since) => ({
 	type: constants.GET_DOWNLOADS,
 	since,

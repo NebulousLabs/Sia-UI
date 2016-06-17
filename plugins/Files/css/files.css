@@ -147,6 +147,9 @@
 	width: 100%;
 	padding: 0;
 }
+.filesize {
+	font-size: 12px;
+}
 .file-list li {
 	display: flex;
 	height: 50px;
@@ -155,6 +158,19 @@
 	background-color: #ECECEC;
 	padding-left: 10px;
 	padding-right: 10px;
+}
+.file-list .file-info {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.file-buttons {
+	margin-bottom: 5px;
+}
+.filename {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
 }
 .file-list li:hover {
 	background-color: #F5F5F5;
@@ -257,47 +273,6 @@
 	background-color: #ECECEC;
 	width: 80%;
 	height: 70%;
-}
-.file-view {
-	margin: 0;
-	padding: 0;
-	width: 100%;
-	height: 100%;
-	text-align: center;
-}
-.file-view .back-bar {
-	background-color: #ECECEC;
-	width: 100%;
-	display: flex;
-	height: 50px;
-	align-items: center;
-	justify-content: flex-start;
-	padding-left: 10px;
-	padding-right: 10px;
-}
-.file-view .back-bar i {
-	color: #00CBA0;
-	margin-left: 10px;
-	margin-right: 10px;
-}
-.file-view .back-bar:hover {
-	background-color: #F5F5F5;
-}
-.file-view-icon {
-	color: #00CBA0;
-	text-align: center;
-	padding-right: 30px;
-}
-.file-view-detail {
-	margin-left: 25px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-}
-.file-view-detail h3 {
-	margin-top: 15px;
-	margin-bottom: 5px;
 }
 .file-buttons {
 	display: flex;

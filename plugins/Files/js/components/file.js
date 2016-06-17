@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import Path from 'path'
 
-const File = ({filename, siapath, filesize, available, actions}) => {
+const File = ({onClick, icon, filename, filesize, actions}) => {
 	const onDownloadClick = () => {
 		const downloadpath = SiaAPI.openFile({
 			title: 'Where should we download this file?',
@@ -13,36 +13,32 @@ const File = ({filename, siapath, filesize, available, actions}) => {
 		actions.deleteFile(siapath)
 		actions.hideFileView()
 	}
-	const onBackClick = () => actions.hideFileView()
 	return (
-		<div className="file-view">
-			<div className="back-bar" onClick={onBackClick}>
-				<i className="fa fa-backward"></i>
-				<span>Back</span>
+		<li onClick={onClick}>
+			<div className="filename">
+				{icon}
+				<div className="name">{filename}</div>
 			</div>
-			<div className="file-view-detail">
-				<h3> {filename} </h3>
-				<div> Size: {Math.floor(filesize/1000000)} MB</div>
+			<div className="file-info">
+				<span className="filesize">{Math.floor(filesize/1000000)} MB</span>
 				<div className="file-buttons">
 					<div onClick={onDownloadClick} className="download-button">
-						<i className="fa fa-cloud-download fa-4x"></i>
-						<div> Download </div>
+						<i className="fa fa-cloud-download 2x"></i>
 					</div>
 					<div onClick={onDeleteClick} className="delete-button">
-						<i className="fa fa-trash fa-4x"></i>
-						<div> Delete </div>
+						<i className="fa fa-trash 2x"></i>
 					</div>
 				</div>
 			</div>
-		</div>
+		</li>
 	)
 }
 
 File.propTypes = {
+	onClick: PropTypes.func.isRequired,
+	icon: PropTypes.element.isRequired,
 	filename: PropTypes.string.isRequired,
-	siapath: PropTypes.string.isRequired,
 	filesize: PropTypes.number.isRequired,
-	available: PropTypes.bool.isRequired,
 }
 
 export default File
