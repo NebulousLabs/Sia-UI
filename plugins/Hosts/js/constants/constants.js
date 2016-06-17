@@ -1,2 +1,3 @@
 export const UPDATE_SETTING = 'UPDATE_SETTING'
 export const TOGGLE_ACCEPTING = 'TOGGLE_ACCEPTING'
+export const RESET_HOST = 'RESET_HOST'

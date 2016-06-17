@@ -7,7 +7,7 @@ const Body = ({ acceptingContracts, usersettings, actions }) => {
 	const saveHost = () => null
 
 	const handleTextInput = (e) => actions.updateSetting(e.target.attributes.getNamedItem("data-setting").value, e.target.value)
-
+	const addStorageLocation = (e) => "" 
 
 	const HostProperties = usersettings.map((setting, key) => (
 		<div className="property pure-g" key={ key }>
@@ -46,7 +46,7 @@ const Body = ({ acceptingContracts, usersettings, actions }) => {
 				<div className="property row">
 	  				<div className="title"></div>
 					<div className="controls">
-						<div className='button' id='edit' onClick={ saveHost }>
+						<div className='button' id='edit' onClick={ addStorageLocation }>
 							<i className='fa fa-folder-open'></i>
 							&nbsp;Add Storage Folder
 						</div>
@@ -54,7 +54,7 @@ const Body = ({ acceptingContracts, usersettings, actions }) => {
 							<i className='fa fa-save'></i>
 							&nbsp;Save
 						</div>
-						<div className='button' id='reset' onClick={ resetHost }>
+						<div className='button' id='reset' onClick={ actions.resetHost }>
 							<i className='fa fa-refresh'></i>
 							&nbsp;Reset
 						</div>

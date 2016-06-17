@@ -10,6 +10,6 @@ export const toggleAcceptingContracts = () => ({
     type: constants.TOGGLE_ACCEPTING,
 })
 
-//export const getLockStatus = () => ({
-//	type: constants.GET_LOCK_STATUS,
-//})
+export const resetHost = () => ({
+    type: constants.RESET_HOST,
+})

@@ -1,10 +1,10 @@
 import BodyView from '../components/body.js'
 import { connect } from 'react-redux'
-import { updateSetting, toggleAcceptingContracts } from '../actions/actions.js'
+import { updateSetting, toggleAcceptingContracts, resetHost } from '../actions/actions.js'
 import { bindActionCreators } from 'redux'
 
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ updateSetting, toggleAcceptingContracts }, dispatch),
+	actions: bindActionCreators({ updateSetting, toggleAcceptingContracts, resetHost }, dispatch),
 })
 
 const mapStateToProps = (state) => ({
