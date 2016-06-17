@@ -7,9 +7,9 @@ import BigNumber from 'bignumber.js'
 import { List } from 'immutable'
 import { sendError, siadCall, readdirRecursive, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
 
-const allowanceHosts = 24
 const blockMonth = 4382
 const allowanceMonths = 3
+const allowanceHosts = 24
 const allowancePeriod = blockMonth*allowanceMonths
 
 // Query siad for the state of the wallet.
@@ -36,10 +36,10 @@ function* getFilesSaga() {
 // Set the user's renter allowance.
 function* setAllowanceSaga(action) {
 	try {
-		const response = yield siadCall('/renter/allowance')
-		const newAllowance = SiaAPI.siacoinsToHastings(action.funds).add(response.funds)
+		const response = yield siadCall('/renter')
+		const newAllowance = SiaAPI.siacoinsToHastings(action.funds).add(response.settings.allowance.funds)
 		yield siadCall({
-			url: '/renter/allowance',
+			url: '/renter',
 			method: 'POST',
 			qs: {
 				funds: newAllowance.toString(),
@@ -197,6 +197,7 @@ function* deleteFileSaga(action) {
 			url: '/renter/delete/' + action.siapath,
 			method: 'POST',
 		})
+		yield put(actions.getFiles())
 	} catch (e) {
 		sendError(e)
 	}

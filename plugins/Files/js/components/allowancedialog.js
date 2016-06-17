@@ -10,8 +10,10 @@ const AllowanceDialog = ({storageSize, storageCost, settingAllowance, allowanceP
 	if (settingAllowance) {
 		dialogContents = (
 			<div className="allowance-dialog">
-				<h2> Buying {storageSize} GB of storage for a total of {storageCost} SC... </h2>
-				<h3> {allowanceProgress}% complete... </h3>
+				<div>
+					<h2> Buying {storageSize} GB of storage for a total of {storageCost} SC... </h2>
+					<h3> {allowanceProgress}% complete... </h3>
+				</div>
 			</div>
 		)
 	} else {
