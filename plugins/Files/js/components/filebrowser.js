@@ -4,11 +4,12 @@ import SetAllowanceButton from '../containers/setallowancebutton.js'
 import SearchButton from '../containers/searchbutton.js'
 import UploadDialog from '../containers/uploaddialog.js'
 import UploadButton from '../containers/uploadbutton.js'
+import DeleteDialog from '../containers/deletedialog.js'
 import TransfersButton from '../containers/transfersbutton.js'
 import FileTransfers from '../containers/filetransfers.js'
 import DragOverlay from './dragoverlay.js'
 
-const FileBrowser = ({activespending, allocatedspending, dragging, showUploadDialog, showFileTransfers, actions}) => {
+const FileBrowser = ({activespending, allocatedspending, dragging, showUploadDialog, showDeleteDialog, showFileTransfers, actions}) => {
 	const onDragOver = (e) => {
 		e.preventDefault()
 		actions.setDragging()
@@ -26,6 +27,7 @@ const FileBrowser = ({activespending, allocatedspending, dragging, showUploadDia
 		<div className="file-browser-container">
 			<div className="file-browser" onDragOver={onDragOver} onMouseLeave={onDragLeave} onDrop={onDrop}>
 				{showUploadDialog ? <UploadDialog /> : null}
+				{showDeleteDialog ? <DeleteDialog /> : null}
 				{dragging ? <DragOverlay /> : null}
 				<div className="files-toolbar">
 					<div className="allowance-info">
@@ -51,6 +53,7 @@ FileBrowser.propTypes = {
 	allocatedspending: PropTypes.string,
 	dragging: PropTypes.bool.isRequired,
 	showUploadDialog: PropTypes.bool.isRequired,
+	showDeleteDialog: PropTypes.bool.isRequired,
 	showFileTransfers: PropTypes.bool.isRequired,
 }
 

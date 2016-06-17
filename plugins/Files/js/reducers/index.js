@@ -2,13 +2,13 @@ import { combineReducers } from 'redux'
 import wallet from './wallet.js'
 import files from './files.js'
 import allowancedialog from './allowancedialog.js'
-import fileview from './fileview.js'
+import deletedialog from './deletedialog.js'
 
 const rootReducer = combineReducers({
 	wallet,
 	files,
 	allowancedialog,
-	fileview,
+	deletedialog,
 })
 
 export default rootReducer

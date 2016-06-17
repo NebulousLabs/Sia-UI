@@ -16,8 +16,8 @@ const initialState = Map({
 	showAllowanceDialog: false,
 	showUploadDialog: false,
 	showSearchField: false,
-	showFileView: false,
 	showFileTransfers: false,
+	showDeleteDialog: false,
 	dragging: false,
 })
 
@@ -46,6 +46,10 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('dragging', true)
 	case constants.SET_NOT_DRAGGING:
 		return state.set('dragging', false)
+	case constants.SHOW_DELETE_DIALOG:
+		return state.set('showDeleteDialog', true)
+	case constants.HIDE_DELETE_DIALOG:
+		return state.set('showDeleteDialog', false)
 	case constants.SHOW_UPLOAD_DIALOG:
 		return state.set('showUploadDialog', true)
 		            .set('uploadSource', action.source)
@@ -55,10 +59,6 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('uploading', action.uploads)
 	case constants.RECEIVE_DOWNLOADS:
 		return state.set('downloading', action.downloads)
-	case constants.SHOW_FILE_VIEW:
-		return state.set('showFileView', true)
-	case constants.HIDE_FILE_VIEW:
-		return state.set('showFileView', false)
 	case constants.SHOW_FILE_TRANSFERS:
 		return state.set('showFileTransfers', true)
 	case constants.HIDE_FILE_TRANSFERS:

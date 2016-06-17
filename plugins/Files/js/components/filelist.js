@@ -37,9 +37,9 @@ const FileList = ({files, searchResults, path, showSearchField, actions}) => {
 				title: 'Where should we download this file?',
 				properties: ['openDirectory', 'createDirectories'],
 			})
-			actions.downloadFile(siapath, Path.join(downloadpath[0], Path.basename(siapath)))
+			actions.downloadFile(file.siapath, Path.join(downloadpath[0], Path.basename(file.siapath)))
 		}
-		const onDeleteClick = () => actions.deleteFile(siapath)
+		const onDeleteClick = () => actions.showDeleteDialog(file.siapath)
 		return (
 			<File key={key} filename={file.name} filesize={file.size} onDownloadClick={onDownloadClick} onDeleteClick={onDeleteClick} />
 		)

@@ -274,6 +274,26 @@
 	width: 80%;
 	height: 70%;
 }
+.delete-dialog {
+	margin-left: 15px;
+	margin-right: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: #ECECEC;
+	width: 50%;
+	height: 50%;
+}
+.delete-buttons {
+	margin-top: 35px;
+}
+.delete-buttons button {
+	margin-left: 10px;
+	margin-right: 10px;
+}
 .file-buttons {
 	display: flex;
 }
