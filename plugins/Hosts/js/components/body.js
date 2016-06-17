@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { Map, List } from 'immutable'
 import * as helper from '../utils/host.js'
 
-const Body = ({ acceptingContracts, usersettings, files, actions }) => {
+const Body = ({ acceptingContracts, usersettings, defaultsettings, files, actions }) => {
 	const announceHost = () => null
 
 	const handleSettingInput = (e) => actions.updateSetting(e.target.attributes.getNamedItem("data-setting").value, e.target.value)
@@ -61,11 +61,11 @@ const Body = ({ acceptingContracts, usersettings, files, actions }) => {
 				<div className="property row">
 	  				<div className="title"></div>
 					<div className="controls">
-						<div className='button' id='edit' onClick={ function () { helper.saveSettings(Map({ acceptingContracts, usersettings })) } }>
+						<div className='button' onClick={ function () { helper.saveSettings(Map({ acceptingContracts, usersettings }), actions.updateSettings) } }>
 							<i className='fa fa-save'></i>
 							&nbsp;Save
 						</div>
-						<div className='button' id='reset' onClick={ actions.resetHost }>
+						<div className='button' onClick={ function () { helper.saveSettings(Map({ acceptingContracts, defaultsettings }), actions.updateSettings) } }>
 							<i className='fa fa-refresh'></i>
 							&nbsp;Reset
 						</div>
@@ -82,6 +82,10 @@ const Body = ({ acceptingContracts, usersettings, files, actions }) => {
 							<i className='fa fa-folder-open'></i>
 							&nbsp;Add Storage Folder
 						</div>
+                        <div className='pure-u-1-3' style={{ "textAlign": "center" }}>
+                            Max Size (GB)
+						</div>
+
 					</div>
 				</div>
 				{ FileList }

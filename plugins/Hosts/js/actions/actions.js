@@ -6,6 +6,12 @@ export const updateSetting = (setting, value) => ({
 	value,
 })
 
+export const updateSettings = (settings, acceptingContracts) => ({
+	type: constants.UPDATE_SETTINGS,
+	settings,
+	acceptingContracts,
+})
+
 export const toggleAcceptingContracts = () => ({
 	type: constants.TOGGLE_ACCEPTING,
 })

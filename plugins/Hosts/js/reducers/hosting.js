@@ -10,6 +10,12 @@ const initialState = Map({
 		Map({ name: "Price per GB (SC)", value: 1, notes: "Current average price is 3 SC/GB" }),
 		Map({ name: "Bandwidth Price (SC/byte)", value: 2 }),
 	]),
+	defaultsettings: List([
+		Map({ name: "Max Duration (Weeks)", value: 30, min: 12 }),
+		Map({ name: "Collateral (SC)", value: 0 }),
+		Map({ name: "Price per GB (SC)", value: 1, notes: "Current average price is 3 SC/GB" }),
+		Map({ name: "Bandwidth Price (SC/byte)", value: 2 }),
+	]),
 	files: List([
 		Map({ path: "/Users/John/Desktop/Sia-UI.app/Contents/Resources/Sia/", size: 0 }),
 		Map({ path: "/Users/John/Desktop/Sia-UI.app/Contents/Resources/Sia/", size: 0 }),

@@ -9,6 +9,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => ({
     usersettings: state.hostingReducer.get('usersettings'),
+    defaultsettings: state.hostingReducer.get('defaultsettings'),
     starthosting: state.hostingReducer.get("starthosting"),
     acceptingContracts: state.hostingReducer.get("acceptingContracts"),
     files: state.hostingReducer.get('files'),
