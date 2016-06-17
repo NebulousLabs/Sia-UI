@@ -37,8 +37,13 @@ export default function hostingReducer(state = initialState, action) {
 			: value
 		)) 
 		return state.set("usersettings", settingslist)
+
 	case constants.TOGGLE_ACCEPTING:
 		return state.set("acceptingContracts", !state.get("acceptingContracts"))
+
+	case constants.UPDATE_SETTINGS_SUCCESS:
+		return state.set("usersettings", action.settings.get("usersettings")).set("acceptingContracts", action.settings.get("acceptingContracts"))
+
 	case constants.RESET_HOST:
 		return state.set("usersettings", List([
 			Map({ name: "Max Duration (Weeks)", value: 30, min: 12 }),

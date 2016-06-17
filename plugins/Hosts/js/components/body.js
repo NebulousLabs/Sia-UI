@@ -9,6 +9,8 @@ const Body = ({ acceptingContracts, usersettings, defaultsettings, files, action
 	//const handleFileInput = (e) => actions.updateSetting(e.target.attributes.getNamedItem("data-setting").value, e.target.value)
 	const addStorageLocation = (e) => helper.addFile(helper.chooseFileLocation())
 
+    const updateSettings = () => actions.updateSettings(Map({ acceptingContracts, usersettings } ))
+
 	const HostProperties = usersettings.map((setting, key) => (
 		<div className="property pure-g" key={ key }>
 			<div className="pure-u-2-3">
@@ -61,7 +63,7 @@ const Body = ({ acceptingContracts, usersettings, defaultsettings, files, action
 				<div className="property row">
 	  				<div className="title"></div>
 					<div className="controls">
-						<div className='button' onClick={ function () { helper.saveSettings(Map({ acceptingContracts, usersettings }), actions.updateSettings) } }>
+						<div className='button' onClick={ updateSettings }>
 							<i className='fa fa-save'></i>
 							&nbsp;Save
 						</div>

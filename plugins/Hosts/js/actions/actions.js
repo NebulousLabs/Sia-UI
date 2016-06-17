@@ -9,7 +9,15 @@ export const updateSetting = (setting, value) => ({
 export const updateSettings = (settings, acceptingContracts) => ({
 	type: constants.UPDATE_SETTINGS,
 	settings,
-	acceptingContracts,
+})
+
+export const fetchSettings = () => ({
+	type: constants.FETCH_SETTINGS,
+})
+
+export const updateSettingsSuccess = (settings, acceptingContracts) => ({
+	type: constants.UPDATE_SETTINGS_SUCCESS,
+	settings,
 })
 
 export const toggleAcceptingContracts = () => ({
