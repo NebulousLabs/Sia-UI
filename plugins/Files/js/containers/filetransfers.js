@@ -3,7 +3,9 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { hideFileTransfers } from '../actions/files.js'
 
-const mapStateToProps = () => ({
+const mapStateToProps = (state) => ({
+	uploads: state.files.get('uploading'),
+	downloads: state.files.get('downloading'),
 })
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ hideFileTransfers }, dispatch),
