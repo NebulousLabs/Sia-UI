@@ -1,13 +1,13 @@
 /*	Style Guide:
  *		Transparent: 70% Opacity
  *
- * 		White:      #FFFFFF
+ * 		White:	  #FFFFFF
  * 		Grey-White: #F5F5F5
  *		Faint-Grey: #ECECEC
  *		Light-Grey: #DDDDDD
- *		Grey:       #C5C5C5
+ *		Grey:	   #C5C5C5
  * 		Grey-Black: #4A4A4A
- * 		Black:      #000000
+ * 		Black:	  #000000
  */
 /* Configuration Settings */
 .controls {
@@ -33,55 +33,55 @@
 }
 
 .accept-contracts {
-    text-align: center;
-    background-color: white;
-    border-bottom: 1px solid #DDD;
-    padding: 11px 15px;
+	text-align: center;
+	background-color: white;
+	border-bottom: 1px solid #DDD;
+	padding: 11px 15px;
 }
 
 .toggle-switch {
-    width: 100px;
-    height: 25px;
-    border-radius: 5px;
-    overflow: hidden;
-    position: relative;
-    color: #C5C5C5;
-    border: 1px solid #C5C5C5;
-    display: inline-block;
-    margin: 10px 15px;
-    vertical-align: middle;
-    cursor: pointer;
-    transition: all .5s;
+	width: 100px;
+	height: 25px;
+	border-radius: 5px;
+	overflow: hidden;
+	position: relative;
+	color: #C5C5C5;
+	border: 1px solid #C5C5C5;
+	display: inline-block;
+	margin: 10px 15px;
+	vertical-align: middle;
+	cursor: pointer;
+	transition: all .5s;
 }
 .toggle-switch.off {
-    background-color: #F5F5F5;
+	background-color: #F5F5F5;
 }
 .toggle-inner {
-    position: absolute;
-    left: -1px;
-    margin-top: -1px;
-    height: 25px;
-    width: 25px;
-    color: inherit;
-    border: 1px solid #C5C5C5;
-    background-color: #DDD;
-    border-radius: 5px;
-    transition: all .5s;
+	position: absolute;
+	left: -1px;
+	margin-top: -1px;
+	height: 25px;
+	width: 25px;
+	color: inherit;
+	border: 1px solid #C5C5C5;
+	background-color: #DDD;
+	border-radius: 5px;
+	transition: all .5s;
 }
 .toggle-switch.off .toggle-inner{
-    left: 74px;
+	left: 74px;
 }
 .toggle-inner:after {
-    content: "No";
-    position: absolute;
-    top: 1px;
-    right: 45px;
+	content: "No";
+	position: absolute;
+	top: 1px;
+	right: 45px;
 }
 .toggle-inner:before {
-    content: "Yes";
-    position: absolute;
-    top: 1px;
-    left: 45px;
+	content: "Yes";
+	position: absolute;
+	top: 1px;
+	left: 45px;
 }
 
 
@@ -127,7 +127,7 @@
 /* Controls */
 .controls {
 	display: inline-block;
-    padding-top: 3px;
+	padding-top: 3px;
 }
 .controls .button:hover {
 	color: #4a4a4a;
@@ -141,37 +141,17 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 }
-.property {
-	border-bottom: 1px solid #e0e0e0;
-}
-.property .name {
-	padding: 10px 10px 10px 35px;
-}
-.property .value {
-	border-left: 1px solid #e0e0e0;
-}
-
-.property .value input {
-    padding: 10px;
-    margin: 0px;
-    border-radius: 0px;
-    border: 0px;
-    width: calc( 100% - 20px );
-    text-align: center;
-    cursor: pointer;
-}
-
 
 .modal {
 	font-family: 'Roboto Condensed', sans-serif;
 	position: fixed;
-    overflow: scroll;
+	overflow: scroll;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
-    height: 100vh;
-    width: 100vw;
+	height: 100vh;
+	width: 100vw;
 	background-color: rgba(0, 0, 0, 0.5);
 	display: flex;
 	align-items: center;
@@ -198,23 +178,23 @@
 }
 
 .hosting-options-modal .hosting-options {
-    text-align: center;
-    padding: 1em;
+	text-align: center;
+	padding: 1em;
 }
 
 .hosting-options {
-    position: relative;
+	position: relative;
 }
 
 .hosting-options-modal input {
-    margin-top: .25em;
-    display: block;
-    text-align: right;
-    padding: 0em .25em;
+	margin-top: .25em;
+	display: block;
+	text-align: right;
+	padding: 0em .25em;
 }
 
 .hosting-options-modal .button {
-    padding: 15px 40px;
+	padding: 15px 40px;
 }
 
 
@@ -242,28 +222,55 @@
 }
 
 .pure-g, .pure-g [class *="pure-u"] {
-    font-family: inherit;
+	font-family: inherit;
 }
 
-.settings {
-    font-size: inherit;
+.section {
+	font-size: inherit;
 }
 
-.settings .row {
-    height: 30px;
+.section .row {
+	height: 30px;
 }
 
-.settings .title {
-    font-size: 1em;
+.property {
+	border-bottom: 1px solid #e0e0e0;
+}
+.property .name {
+	padding: 20px 10px 20px 35px;
+}
+.property .value {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border-left: 1px solid #e0e0e0;
+	text-align: center;
 }
 
-.settings .controls {
-    width: 100%;
-    text-align: right;
+.property .value input {
+	padding: 9px 10px;
+	margin: 0px;
+	border-radius: 0px;
+	border: 0px;
+	border: 1px solid #FFFFFF;
+	text-align: center;
+	cursor: pointer;
+	transition: all 0s;
+}
+.property .value input:hover {
+	border: 1px solid #DDDDDD;
 }
 
-.settings .controls .button:first-of-type {
-    float: left;
-    display: block;
-    padding-left: 0px;
+.section .title {
+	font-size: 1em;
+}
+
+.section .controls {
+	width: 100%;
+	text-align: right;
+}
+
+.section .controls .button.left {
+	float: left;
+	display: block;
+	padding-left: 0px;
 }

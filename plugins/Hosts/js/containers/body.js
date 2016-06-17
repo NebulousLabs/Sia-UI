@@ -11,6 +11,7 @@ const mapStateToProps = (state) => ({
     usersettings: state.hostingReducer.get('usersettings'),
     starthosting: state.hostingReducer.get("starthosting"),
     acceptingContracts: state.hostingReducer.get("acceptingContracts"),
+    files: state.hostingReducer.get('files'),
 })
 
 const Body = connect(mapStateToProps, mapDispatchToProps)(BodyView)

@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react'
 import { Map, List } from 'immutable'
+import * as helper from '../utils/host.js'
 
-const Body = ({ acceptingContracts, usersettings, actions }) => {
+const Body = ({ acceptingContracts, usersettings, files, actions }) => {
 	const announceHost = () => null
-	const resetHost = () => null
-	const saveHost = () => null
 
-	const handleTextInput = (e) => actions.updateSetting(e.target.attributes.getNamedItem("data-setting").value, e.target.value)
-	const addStorageLocation = (e) => "" 
+	const handleSettingInput = (e) => actions.updateSetting(e.target.attributes.getNamedItem("data-setting").value, e.target.value)
+	//const handleFileInput = (e) => actions.updateSetting(e.target.attributes.getNamedItem("data-setting").value, e.target.value)
+	const addStorageLocation = (e) => helper.addFile(helper.chooseFileLocation())
 
 	const HostProperties = usersettings.map((setting, key) => (
 		<div className="property pure-g" key={ key }>
@@ -16,7 +16,20 @@ const Body = ({ acceptingContracts, usersettings, actions }) => {
 			</div>
 			<div className="pure-u-1-3">
 				<div className="value">
-					<input type="number" data-setting={ setting.get("name") } onChange={ handleTextInput } className="value" value={ setting.get("value") }></input>
+					<input type="number" data-setting={ setting.get("name") } onChange={ handleSettingInput } className="value" value={ setting.get("value") }></input>
+				</div>
+			</div>
+		</div>
+	)).toList()
+
+	const FileList = files.map((file, key) => (
+		<div className="property pure-g" key={ key }>
+			<div className="pure-u-2-3">
+				<div className="name">{ file.get("path") }</div>
+			</div>
+			<div className="pure-u-1-3">
+				<div className="value">
+					<input type="number" data-setting={ key } className="value" value={ file.get("size") }></input>
 				</div>
 			</div>
 		</div>
@@ -36,21 +49,19 @@ const Body = ({ acceptingContracts, usersettings, actions }) => {
 
 			<div className="row accept-contracts">
 				<label>Accepting Contracts</label>
-				<div className={ "toggle-switch" + (acceptingContracts ? "" : " off") } onClick={ actions.toggleAcceptingContracts }>
+				<div className={ "toggle-switch" + (acceptingContracts ? "" : " off") } onClick={ function () {
+							helper.saveSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
+							actions.toggleAcceptingContracts() } }>
 					<div className="toggle-inner"></div>
 				</div>
 				<p>You must keep Sia-UI running while hosting.<br />Otherwise you will go offline and lose collateral.</p>
 			</div>
 
-			<div className="settings">
+			<div className="settings section">
 				<div className="property row">
 	  				<div className="title"></div>
 					<div className="controls">
-						<div className='button' id='edit' onClick={ addStorageLocation }>
-							<i className='fa fa-folder-open'></i>
-							&nbsp;Add Storage Folder
-						</div>
-						<div className='button' id='edit' onClick={ saveHost }>
+						<div className='button' id='edit' onClick={ function () { helper.saveSettings(Map({ acceptingContracts, usersettings })) } }>
 							<i className='fa fa-save'></i>
 							&nbsp;Save
 						</div>
@@ -61,6 +72,19 @@ const Body = ({ acceptingContracts, usersettings, actions }) => {
 					</div>
 				</div>
 				{ HostProperties }
+			</div>
+
+			<div className="files section">
+				<div className="property row">
+	  				<div className="title"></div>
+					<div className="controls">
+						<div className='button left' id='edit' onClick={ addStorageLocation }>
+							<i className='fa fa-folder-open'></i>
+							&nbsp;Add Storage Folder
+						</div>
+					</div>
+				</div>
+				{ FileList }
 			</div>
 		</div>
 	)

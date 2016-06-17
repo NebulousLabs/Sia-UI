@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import hostingReducer from './hosting.js'
 
 const rootReducer = combineReducers({
-    hostingReducer,
+	hostingReducer,
 })
 
 export default rootReducer
