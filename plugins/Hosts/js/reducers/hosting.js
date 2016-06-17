@@ -12,11 +12,22 @@ const initialState = Map({
     ]),
     earned: 200000,
     expected: 100000,
+    acceptingContracts: 0,
 })
 
 export default function hostingReducer(state = initialState, action) {
 	switch (action.type) {
-	default:
-		return state
+    case constants.UPDATE_SETTING:
+        let settingslist = state.get("usersettings")
+        settingslist = settingslist.map((value, key) => (
+            (value.get("name") === action.setting) ?
+                value.set("value", action.value)
+            : value
+        )) 
+        return state.set("usersettings", settingslist)
+    case constants.TOGGLE_ACCEPTING:
+        return state.set("acceptingContracts", !state.get("acceptingContracts"))
+    default:
+        return state
 	}
 }

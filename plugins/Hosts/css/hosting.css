@@ -36,6 +36,7 @@
     text-align: center;
     background-color: white;
     border-bottom: 1px solid #DDD;
+    padding: 11px 15px;
 }
 
 .toggle-switch {
@@ -50,8 +51,9 @@
     margin: 10px 15px;
     vertical-align: middle;
     cursor: pointer;
+    transition: all .5s;
 }
-.toggle-switch.on {
+.toggle-switch.off {
     background-color: #F5F5F5;
 }
 .toggle-inner {
@@ -64,18 +66,21 @@
     border: 1px solid #C5C5C5;
     background-color: #DDD;
     border-radius: 5px;
+    transition: all .5s;
 }
-.toggle-switch.on .toggle-inner{
+.toggle-switch.off .toggle-inner{
     left: 74px;
 }
 .toggle-inner:after {
     content: "No";
     position: absolute;
+    top: 1px;
     right: 45px;
 }
 .toggle-inner:before {
     content: "Yes";
     position: absolute;
+    top: 1px;
     left: 45px;
 }
 
@@ -250,4 +255,15 @@
 
 .settings .title {
     font-size: 1em;
+}
+
+.settings .controls {
+    width: 100%;
+    text-align: right;
+}
+
+.settings .controls .button:first-of-type {
+    float: left;
+    display: block;
+    padding-left: 0px;
 }
