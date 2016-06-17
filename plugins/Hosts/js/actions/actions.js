@@ -11,13 +11,13 @@ export const updateSettings = (settings, acceptingContracts) => ({
 	settings,
 })
 
-export const fetchSettings = () => ({
-	type: constants.FETCH_SETTINGS,
+export const fetchData = () => ({
+	type: constants.FETCH_DATA,
 })
 
-export const updateSettingsSuccess = (settings, acceptingContracts) => ({
-	type: constants.UPDATE_SETTINGS_SUCCESS,
-	settings,
+export const fetchDataSuccess = (data) => ({
+	type: constants.FETCH_DATA_SUCCESS,
+	data,
 })
 
 export const toggleAcceptingContracts = () => ({
@@ -26,4 +26,19 @@ export const toggleAcceptingContracts = () => ({
 
 export const resetHost = () => ({
 	type: constants.RESET_HOST,
+})
+
+export const addFolder = (folder) => ({
+	type: constants.ADD_FOLDER,
+	folder,
+})
+
+export const deleteFolder = (folder) => ({
+	type: constants.RESET_HOST,
+	folder,
+})
+
+export const resizeFolder = (folder) => ({
+	type: constants.RESET_HOST,
+	folder,
 })

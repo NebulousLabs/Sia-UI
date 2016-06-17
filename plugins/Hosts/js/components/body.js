@@ -7,9 +7,11 @@ const Body = ({ acceptingContracts, usersettings, defaultsettings, files, action
 
 	const handleSettingInput = (e) => actions.updateSetting(e.target.attributes.getNamedItem("data-setting").value, e.target.value)
 	//const handleFileInput = (e) => actions.updateSetting(e.target.attributes.getNamedItem("data-setting").value, e.target.value)
-	const addStorageLocation = (e) => helper.addFile(helper.chooseFileLocation())
+	const addStorageLocation = (e) => actions.addFile(helper.chooseFileLocation())
 
     const updateSettings = () => actions.updateSettings(Map({ acceptingContracts, usersettings } ))
+    const resetSettings = () => actions.updateSettings(Map({ acceptingContracts, usersettings: defaultsettings } ))
+    const toggleAcceptingContracts = () => actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
 
 	const HostProperties = usersettings.map((setting, key) => (
 		<div className="property pure-g" key={ key }>
@@ -51,9 +53,7 @@ const Body = ({ acceptingContracts, usersettings, defaultsettings, files, action
 
 			<div className="row accept-contracts">
 				<label>Accepting Contracts</label>
-				<div className={ "toggle-switch" + (acceptingContracts ? "" : " off") } onClick={ function () {
-							helper.saveSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
-							actions.toggleAcceptingContracts() } }>
+				<div className={ "toggle-switch" + (acceptingContracts ? "" : " off") } onClick={ toggleAcceptingContracts }>
 					<div className="toggle-inner"></div>
 				</div>
 				<p>You must keep Sia-UI running while hosting.<br />Otherwise you will go offline and lose collateral.</p>
@@ -67,7 +67,7 @@ const Body = ({ acceptingContracts, usersettings, defaultsettings, files, action
 							<i className='fa fa-save'></i>
 							&nbsp;Save
 						</div>
-						<div className='button' onClick={ function () { helper.saveSettings(Map({ acceptingContracts, defaultsettings }), actions.updateSettings) } }>
+						<div className='button' onClick={ resetSettings }>
 							<i className='fa fa-refresh'></i>
 							&nbsp;Reset
 						</div>

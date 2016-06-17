@@ -3,6 +3,7 @@ import { call, put, fork } from 'redux-saga/effects'
 import * as actions from '../actions/actions.js'
 import * as constants from '../constants/constants.js'
 import { Map, List } from 'immutable'
+import BigNumber from 'bignumber.js'
 
 // siadCall: promisify Siad API calls.  Resolve the promise with `response` if the call was successful,
 // otherwise reject the promise with `err`.
@@ -16,6 +17,26 @@ const siadCall = (uri) => new Promise((resolve, reject) => {
 	})
 })
 
+
+const fetchStorageFiles = (action) => new Promise((resolve, reject) => {
+	siadCall({
+		url: '/storage',
+		method: 'GET',
+	}).then((fetchedFiles) => { 
+		resolve(List(fetchedFiles.StorageFolderMetadata).map((file, key) => (
+			Map({
+				path: file.path,
+				size: (new BigNumber(file.capacity)).times(new BigNumber("1e-9")),
+				free: (new BigNumber(file.capacityremaining)).times(new BigNumber("1e-9"))
+			})
+		)).toList())
+	}).catch( (e) => {
+		console.log(e)
+		reject(e)
+	})
+})
+
+
 const MAX_DUR = 0
 const COLLATERAL = 1
 const PRICE = 2
@@ -28,7 +49,7 @@ function *updateSettings(action) {
 			qs: {
 				"acceptingcontracts": action.settings.get("acceptingContracts"),
 				"maxduration": action.settings.get("usersettings").get(MAX_DUR).get("value"),
-				"collateral": 
+				"maxcollateral": 
 					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(COLLATERAL).get("value")).toString(),
 				"minimumstorageprice": 
 					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(PRICE).get("value")).toString(),
@@ -36,9 +57,8 @@ function *updateSettings(action) {
 					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(BANDWIDTH).get("value")).toString(),
 			},
 		})
-		yield put({ type: constants.FETCH_SETTINGS})
+		yield put({ type: constants.FETCH_DATA})
 	} catch (e) {
-		//TODO: Add error handling.
 		console.log(e)
 	}
 }
@@ -114,17 +134,60 @@ function *updateSettings(action) {
 	}
 }*/
 
+function *addFolder(action) {
+	try {
+		const resp = yield siadCall({
+			url: '/storage/folders/add',
+			method: 'POST',
+			qs: {
+				path: action.file.get("path"),
+				size: action.file.get("size"),
+			},
+		})
+	} catch (e) {
+		console.log(e)
+	}
+}
+
+function *removeFolder(action) {
+	try {
+		const resp = yield siadCall({
+			url: '/storage/folders/add',
+			method: 'POST',
+			qs: {
+				path: action.file.get("path"),
+			},
+		})
+	} catch (e) {
+		console.log(e)
+	}
+}
+
+function *resizeFolder(action) {
+	try {
+		const resp = yield siadCall({
+			url: '/storage/folders/add',
+			method: 'POST',
+			qs: {
+				path: action.file.get("path"),
+				newsize: action.file.get("size"),
+			},
+		})
+	} catch (e) {
+		console.log(e)
+	}
+}
 
 
-function *fetchSettings(action) {
+function *fetchData(action) {
 	try {
 		const updatedData = yield siadCall({
 			url: '/host',
 			method: 'GET',
 		})
 
-		const settings = Map({
-			acceptingContracts: updatedData.externalsettings.acceptingcontacts,
+		const data = Map({
+			acceptingContracts: updatedData.externalsettings.acceptingcontracts,
 			usersettings: List([
 				Map({
 					name: "Max Duration (Weeks)",
@@ -138,16 +201,20 @@ function *fetchSettings(action) {
 				Map({
 					name: "Price per GB (SC)",
 					value:  SiaAPI.hastingsToSiacoins(updatedData.externalsettings.storageprice).toString(),
-					notes: "Current average price is 3 SC/GB",
 				}),
 				Map({
 					name: "Bandwidth Price (SC/byte)",
 					value:  SiaAPI.hastingsToSiacoins(updatedData.externalsettings.downloadbandwidthprice).toString(),
 				}),
 			]),
+			numContracts: updatedData.networkmetrics.formcontractcalls,
+			storage: (new BigNumber(updatedData.externalsettings.totalstorage)).minus(new BigNumber(updatedData.externalsettings.remainingstorage)).toString(),
+			earned: (new BigNumber(updatedData.financialmetrics.contractcompensation)).toString(),
+			expected: (new BigNumber(updatedData.financialmetrics.potentialcontractcompensation)).toString(),
+			files: yield fetchStorageFiles(),
 		})
-		yield put( actions.updateSettingsSuccess(settings) )
-		//yield put({ type: constants.UPDATE_SETTINGS_SUCCESS, settings: settings })
+
+		yield put( actions.fetchDataSuccess(data) )
 	} catch (e) {
 		//TODO: Add error handling.
 		console.log(e)
@@ -158,7 +225,16 @@ function *updateSettingsListener () {
 	yield *takeEvery("UPDATE_SETTINGS", updateSettings)
 }
 function *fetchSettingsListener () {
-	yield *takeEvery("FETCH_SETTINGS", fetchSettings)
+	yield *takeEvery("FETCH_DATA", fetchData)
+}
+function *addFolderListener () {
+	yield *takeEvery("ADD_FOLDER", addFolder)
+}
+function *deleteFolderListener () {
+	yield *takeEvery("DELETE_FOLDER", deleteFolder)
+}
+function *resizeFolderListener () {
+	yield *takeEvery("RESIZE_FOLDER", resizeFolder)
 }
 
 export default function *initSaga() {
@@ -166,4 +242,5 @@ export default function *initSaga() {
 		fork(updateSettingsListener),
 		fork(fetchSettingsListener),
 	]
+	yield put(actions.fetchData())
 }
