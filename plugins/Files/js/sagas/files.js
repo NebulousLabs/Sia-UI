@@ -105,7 +105,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 function* setAllowanceProgressBarSaga() {
 	try {
 		let response = yield siadCall('/renter/contracts')
-		if (typeof response.contracts.length === null) {
+		if (!response.contracts) {
 			return
 		}
 		const initialContracts = response.contracts.length

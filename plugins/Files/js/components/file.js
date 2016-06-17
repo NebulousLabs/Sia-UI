@@ -20,18 +20,18 @@ const File = ({filename, siapath, filesize, available, actions}) => {
 				<i className="fa fa-backward"></i>
 				<span>Back</span>
 			</div>
-			<div className="file-view-info">
+			<div className="file-view-detail">
 				<h3> {filename} </h3>
-				<h5> {siapath} </h5>
-				<div> Size: {filesize} </div>
-				<div> Available to Download: {available ? 'Yes' : 'No'} </div>
-				<div onClick={onDownloadClick} className="download-button">
-					<i className="fa fa-cloud-download fa-2x"></i>
-					<div> Download </div>
-				</div>
-				<div onClick={onDeleteClick} className="delete-button">
-					<i className="fa fa-trash fa-2x"></i>
-					<div> Delete </div>
+				<div> Size: {Math.floor(filesize/1000000)} MB</div>
+				<div className="file-buttons">
+					<div onClick={onDownloadClick} className="download-button">
+						<i className="fa fa-cloud-download fa-4x"></i>
+						<div> Download </div>
+					</div>
+					<div onClick={onDeleteClick} className="delete-button">
+						<i className="fa fa-trash fa-4x"></i>
+						<div> Delete </div>
+					</div>
 				</div>
 			</div>
 		</div>
