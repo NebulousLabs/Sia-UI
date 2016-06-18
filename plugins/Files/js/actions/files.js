@@ -24,14 +24,6 @@ export const setAllowance = (funds) => ({
 	type: constants.SET_ALLOWANCE,
 	funds,
 })
-export const getMetrics = () => ({
-	type: constants.GET_METRICS,
-})
-export const receiveMetrics = (activespending, allocatedspending) => ({
-	type: constants.RECEIVE_METRICS,
-	activespending,
-	allocatedspending,
-})
 export const getWalletBalance = () => ({
 	type: constants.GET_WALLET_BALANCE,
 })
@@ -135,4 +127,8 @@ export const showDeleteDialog = (siapath) => ({
 })
 export const hideDeleteDialog = () => ({
 	type: constants.HIDE_DELETE_DIALOG,
+})
+export const receiveDiskUsage = (usage) => ({
+	type: cosntants.RECEIVE_DISK_USAGE,
+	usage,
 })

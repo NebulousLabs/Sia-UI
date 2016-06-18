@@ -4,8 +4,7 @@ import { bindActionCreators } from 'redux'
 import { setDragging, setNotDragging, showUploadDialog } from '../actions/files.js'
 
 const mapStateToProps = (state) => ({
-	activespending: state.files.get('activespending'),
-	allocatedspending: state.files.get('allocatedspending'),
+	diskusage: state.files.get('usage'),
 	dragging: state.files.get('dragging'),
 	showUploadDialog: state.files.get('showUploadDialog'),
 	showFileTransfers: state.files.get('showFileTransfers'),

@@ -91,31 +91,31 @@
 	align-items: center;
 	justify-content: center;
 }
+
+.files-toolbar h3 {
+	font-size: 30px;
+	color: #fff;
+	margin: 0;
+	padding-bottom: 15px;
+}
 .files-toolbar {
 	width: 100%;
+	height: 70px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	background-color: #4A4A4A;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	min-height: 50px;
+	background-color: #4a4a4a;
+	background: linear-gradient(to top, #5A5A5A 15%, #4A4A4A 85%);
+	color: #fff;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	padding-left: 20px;
 	overflow: hidden;
-}
-.allowance-info {
-	padding-left: 10px;
-	padding-right: 10px;
-	color: #DDDDDD;
-}
-.allowance-info div {
-	font-size: 15px;
-	margin-bottom: 3px;
 }
 .files-toolbar .buttons div {
 	display: inline-block;
-	padding-top: 5px;
-	padding-bottom: 5px;
 	text-align: center;
+	margin-bottom: 5px;
 	width: 100px;
 }
 .files-toolbar .buttons div span {
@@ -128,6 +128,11 @@
 }
 .files-toolbar .buttons div i {
 	color: #00CBA0;
+}
+.file-transfers .close-button {
+	position: absolute;
+	top: 0;
+	right: 10px;
 }
 .file-list {
 	width: 100%;

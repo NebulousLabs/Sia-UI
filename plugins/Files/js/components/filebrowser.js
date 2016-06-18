@@ -9,7 +9,7 @@ import TransfersButton from '../containers/transfersbutton.js'
 import FileTransfers from '../containers/filetransfers.js'
 import DragOverlay from './dragoverlay.js'
 
-const FileBrowser = ({activespending, allocatedspending, dragging, showUploadDialog, showDeleteDialog, showFileTransfers, actions}) => {
+const FileBrowser = ({diskusage, dragging, showUploadDialog, showDeleteDialog, showFileTransfers, actions}) => {
 	const onDragOver = (e) => {
 		e.preventDefault()
 		actions.setDragging()
@@ -29,10 +29,10 @@ const FileBrowser = ({activespending, allocatedspending, dragging, showUploadDia
 				{showUploadDialog ? <UploadDialog /> : null}
 				{showDeleteDialog ? <DeleteDialog /> : null}
 				{dragging ? <DragOverlay /> : null}
+
 				<div className="files-toolbar">
-					<div className="allowance-info">
-						<div>Active Storage Spending: {activespending} SC</div>
-						<div>Available Storage Spending: {allocatedspending} SC</div>
+					<div className="files-usage-info">
+						Storage Usage: {diskusage/1000000000} GB
 					</div>
 					<div className="buttons">
 						<SetAllowanceButton />
@@ -49,8 +49,7 @@ const FileBrowser = ({activespending, allocatedspending, dragging, showUploadDia
 }
 
 FileBrowser.propTypes = {
-	activespending: PropTypes.string,
-	allocatedspending: PropTypes.string,
+	diskusage: PropTypes.number.isRequired,
 	dragging: PropTypes.bool.isRequired,
 	showUploadDialog: PropTypes.bool.isRequired,
 	showDeleteDialog: PropTypes.bool.isRequired,

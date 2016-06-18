@@ -5,7 +5,7 @@ import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import BigNumber from 'bignumber.js'
 import { List } from 'immutable'
-import { sendError, siadCall, readdirRecursive, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
+import { sendError, siadCall, totalUsage, readdirRecursive, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
 
 const blockMonth = 4382
 const allowanceMonths = 3
@@ -27,7 +27,9 @@ function* getWalletLockstateSaga() {
 function* getFilesSaga() {
 	try {
 		const response = yield siadCall('/renter/files')
-		yield put(actions.receiveFiles(List(response.files)))
+		const files = List(response.files)
+		yield put(actions.receiveFiles(files))
+		yield put(actions.receiveDiskUsage(totalUsage(files)))
 	} catch (e) {
 		sendError(e)
 	}
@@ -48,7 +50,6 @@ function* setAllowanceSaga(action) {
 			},
 		})
 		yield put(actions.setAllowanceCompleted())
-		yield put(actions.getMetrics())
 		yield put(actions.closeAllowanceDialog())
 	} catch (e) {
 		yield put(actions.setAllowanceCompleted())
@@ -68,24 +69,6 @@ function* calculateStorageCostSaga(action) {
 		console.error(e)
 		yield put(actions.setStorageSize(''))
 		yield put(actions.setStorageCost('0'))
-	}
-}
-
-
-// Query siad for renter metrics.
-function* getMetricsSaga() {
-	try {
-		const response = yield siadCall('/renter')
-		const downloadspending = new BigNumber(response.financialmetrics.downloadspending)
-		const uploadspending = new BigNumber(response.financialmetrics.uploadspending)
-		const storagespending = new BigNumber(response.financialmetrics.storagespending)
-
-		const allocatedspending = SiaAPI.hastingsToSiacoins(response.financialmetrics.contractspending).round(2).toString()
-		const activespending = SiaAPI.hastingsToSiacoins(downloadspending.plus(uploadspending).plus(storagespending)).round(2).toString()
-
-		yield put(actions.receiveMetrics(activespending, allocatedspending))
-	} catch (e) {
-		sendError(e)
 	}
 }
 
@@ -227,9 +210,6 @@ export function* watchGetFiles() {
 }
 export function* watchDeleteFile() {
 	yield *takeEvery(constants.DELETE_FILE, deleteFileSaga)
-}
-export function* watchGetMetrics() {
-	yield *takeEvery(constants.GET_METRICS, getMetricsSaga)
 }
 export function* watchGetWalletBalance() {
 	yield *takeEvery(constants.GET_WALLET_BALANCE, getWalletBalanceSaga)

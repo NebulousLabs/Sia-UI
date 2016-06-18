@@ -6,7 +6,6 @@ const DeleteDialog = ({siapath, actions}) => {
 		actions.hideDeleteDialog()
 	}
 	const onNoClick = () => actions.hideDeleteDialog()
-	console.log(siapath)
 	return (
 		<div className="modal">
 			<div className="delete-dialog">

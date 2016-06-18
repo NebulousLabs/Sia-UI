@@ -5,6 +5,7 @@ import { ls, searchFiles } from '../sagas/helpers.js'
 const initialState = Map({
 	activespending: '',
 	allocatedspending: '',
+	usage: 0,
 	files: List(),
 	workingDirectoryFiles: List(),
 	searchResults: List(),
@@ -24,9 +25,8 @@ const initialState = Map({
 export default function filesReducer(state = initialState, action) {
 	console.log(action)
 	switch (action.type) {
-	case constants.RECEIVE_METRICS:
-		return state.set('activespending', action.activespending)
-		            .set('allocatedspending', action.allocatedspending)
+	case constants.RECEIVE_DISK_USAGE:
+		return state.set('usage', action.usage)
 	case constants.RECEIVE_FILES:
 		return state.set('files', action.files)
                 .set('workingDirectoryFiles', ls(action.files, state.get('path')))

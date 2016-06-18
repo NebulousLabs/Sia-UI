@@ -6,7 +6,6 @@ export default function* rootSaga() {
 		fork(sagas.watchGetWalletLockstate),
 		fork(sagas.watchGetFiles),
 		fork(sagas.watchSetAllowance),
-		fork(sagas.watchGetMetrics),
 		fork(sagas.watchGetWalletBalance),
 		fork(sagas.watchCalculateStorageCost),
 		fork(sagas.watchSetAllowanceProgress),

@@ -86,6 +86,8 @@ export const parseDownloads = (since, downloads) => {
 	}))
 	return parsedDownloads.sortBy((download) => -download.starttime)
 }
+// Parse a list of files and return the total filesize
+export const totalUsage = (files) => files.reduce((sum, file) => sum + file.filesize, 0)
 
 // Parse a list of files from `/renter/files`
 // return a list of file uploads
