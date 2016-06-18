@@ -10,10 +10,6 @@ const Body = ({ acceptingContracts, usersettings, defaultsettings, files, action
 
 	return (
 		<div className="hosting">
-			<div className="row">
-				<div className="title">Configurations</div>
-			</div>
-
 			<SettingsList />
 
 			<div className="announce section">
@@ -22,7 +18,7 @@ const Body = ({ acceptingContracts, usersettings, defaultsettings, files, action
 					<div className='controls'>
 						<div className='button' id='announce' onClick={ announceHost }>
 							<i className='fa fa-bullhorn'></i>
-							&nbsp;Announce
+							&nbsp;Click to Announce
 						</div>
 					</div>
 				</div>

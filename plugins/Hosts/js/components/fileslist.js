@@ -2,26 +2,26 @@ import React, { PropTypes } from 'react'
 import { Map, List } from 'immutable'
 import * as helper from '../utils/host.js'
 
-const FilesList = ({ files, actions }) => {
+const FilesList = ({ folders, actions }) => {
 	const addStorageLocation = (e) => actions.addFolder(helper.chooseFileLocation())
-	const removeStorageLocation = (file) => actions.deleteFolder(file)
-	//const addStorageLocation = (e) => actions.addFile(helper.chooseFileLocation())
+	const removeStorageLocation = (folder) => actions.removeFolder(folder)
+	const resizeStorageLocation = (folder) => actions.resizeFolder(folder)
 
-	const FileList = files.map((file, key) => (
+	const FileList = folders.map((folder, key) => (
 		<div className="property pure-g" key={ key }>
 			<div className="pure-u-3-4">
-				<div className="name">{ file.get("path") }</div>
+				<div className="name">{ folder.get("path") }</div>
 			</div>
 			<div className="pure-u-1-12">
-				<div>{ file.get("free").toString() } GB</div>
+				<div>{ folder.get("free").toString() } GB</div>
 			</div>
 			<div className="pure-u-1-12">
-				<div>{ file.get("size").toString() } GB</div>
+				<div>{ folder.get("size").toString() } GB</div>
 			</div>
-			<div className='pure-u-1-24' onClick={ function (){ removeStorageLocation(file) } }>
+			<div className='pure-u-1-24' onClick={ function (){ resizeStorageLocation(folder) } }>
 				<div><i className='fa fa-edit'></i></div>
 			</div>
-			<div className='pure-u-1-24'>
+			<div className='pure-u-1-24' onClick={ function (){ removeStorageLocation(folder) } }>
 				<div><i className='fa fa-remove'></i></div>
 			</div>
 		</div>
@@ -31,7 +31,7 @@ const FilesList = ({ files, actions }) => {
 		<div className="files section">
 			<div className="property row">
 				<div className="title"></div>
-				<div className="controls">
+				<div className="controls full">
 					<div className='button left' id='edit' onClick={ addStorageLocation }>
 						<i className='fa fa-folder-open'></i>
 						&nbsp;Add Storage Folder

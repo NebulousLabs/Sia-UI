@@ -5,23 +5,27 @@ const initialState = Map({
 	numContracts: 0,
 	storage: 0,
 	usersettings: List([
-		Map({ name: "Max Duration (Weeks)", value: 0, min: 12 }),
+		Map({ name: "Max Duration (Months)", value: 0, min: 3 }),
 		Map({ name: "Collateral (SC)", value: 0 }),
-		Map({ name: "Price per GB (SC)", value: 0, notes: "Current average price is 3 SC/GB" }),
+		Map({ name: "Price per GB Per Month (SC)", value: 0 }),
 		Map({ name: "Bandwidth Price (SC/byte)", value: 0 }),
 	]),
 	defaultsettings: List([
 		Map({ name: "Max Duration (Weeks)", value: 30, min: 12 }),
-		Map({ name: "Collateral (SC)", value: 0 }),
+		Map({ name: "Collateral (SC)", value: 1200000 }),
 		Map({ name: "Price per GB (SC)", value: 1, notes: "Current average price is 3 SC/GB" }),
 		Map({ name: "Bandwidth Price (SC/byte)", value: 2 }),
 	]),
-	files: List([
-	]),
+	files: List([]),
 	earned: 0,
 	expected: 0,
 	acceptingContracts: 0,
 	settingsChanged: false,
+	modals: Map({
+		shouldShowResizeDialog: false,
+		resizePath: "",
+		resizeSize: 0, 
+	}),
 })
 
 export default function hostingReducer(state = initialState, action) {
@@ -35,8 +39,20 @@ export default function hostingReducer(state = initialState, action) {
 		)) 
 		return state.set("usersettings", settingslist).set("settingsChanged", true)
 
+	case constants.UPDATE_MODAL:
+		return state.set("modals", state.get("modals").set(action.key, action.value))
+
 	case constants.TOGGLE_ACCEPTING:
 		return state.set("acceptingContracts", !state.get("acceptingContracts"))
+
+	case constants.HIDE_RESIZE_DIALOG:
+		return state.set("modals", state.get("modals").set("shouldShowResizeDialog", false))
+
+	case constants.SHOW_RESIZE_DIALOG:
+		return state.set("modals", state.get("modals")
+			.set("shouldShowResizeDialog", true)
+			.set("resizePath", action.folder.get("path"))
+			.set("resizeSize", action.folder.get("size")))
 
 	case constants.FETCH_DATA_SUCCESS:
 		return state.set("usersettings", action.data.get("usersettings"))

@@ -1,5 +1,5 @@
 import { takeEvery } from 'redux-saga'
-import { call, put, fork } from 'redux-saga/effects'
+import { call, put, take, fork } from 'redux-saga/effects'
 import * as actions from '../actions/actions.js'
 import * as constants from '../constants/constants.js'
 import { Map, List } from 'immutable'
@@ -52,12 +52,12 @@ function *updateSettings(action) {
 				"maxcollateral": 
 					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(COLLATERAL).get("value")).toString(),
 				"minimumstorageprice": 
-					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(PRICE).get("value")).toString(),
+					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(PRICE).get("value")).times("0.000231481481481481481481481481481481481481481481481").toString(),
 				"minimumdownloadbandwidthprice":
 					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(BANDWIDTH).get("value")).toString(),
 			},
 		})
-		yield put({ type: constants.FETCH_DATA})
+		yield put( actions.fetchData() )
 	} catch (e) {
 		console.log(e)
 	}
@@ -140,24 +140,26 @@ function *addFolder(action) {
 			url: '/storage/folders/add',
 			method: 'POST',
 			qs: {
-				path: action.file.get("path"),
-				size: action.file.get("size"),
+				path: action.folder.get("path"),
+				size: action.folder.get("size"),
 			},
 		})
+		yield put( actions.fetchData() )
 	} catch (e) {
 		console.log(e)
 	}
 }
 
-function *deleteFolder(action) {
+function *removeFolder(action) {
 	try {
 		const resp = yield siadCall({
-			url: '/storage/folders/add',
+			url: '/storage/folders/remove',
 			method: 'POST',
 			qs: {
-				path: action.file.get("path"),
+				path: action.folder.get("path"),
 			},
 		})
+		yield put( actions.fetchData() )
 	} catch (e) {
 		console.log(e)
 	}
@@ -165,14 +167,20 @@ function *deleteFolder(action) {
 
 function *resizeFolder(action) {
 	try {
-		const resp = yield siadCall({
-			url: '/storage/folders/add',
-			method: 'POST',
-			qs: {
-				path: action.file.get("path"),
-				newsize: action.file.get("size"),
-			},
-		})
+		yield put( actions.showResizeDialog(action.folder) )
+		let closeAction = yield take( constants.HIDE_RESIZE_DIALOG )
+		if (closeAction.folder.get("size")){
+			const resp = yield siadCall({
+				url: '/storage/folders/resize',
+				method: 'POST',
+				qs: {
+					path: closeAction.folder.get("path"),
+					newsize: (new BigNumber(closeAction.folder.get("size"))).times(new BigNumber("1e9")).toString(),
+				},
+			})
+			yield put( actions.fetchData() )
+		}
+		else { console.log("Folder size is zero.") }
 	} catch (e) {
 		console.log(e)
 	}
@@ -190,8 +198,8 @@ function *fetchData(action) {
 			acceptingContracts: updatedData.externalsettings.acceptingcontracts,
 			usersettings: List([
 				Map({
-					name: "Max Duration (Weeks)",
-					value: updatedData.externalsettings.maxduration,
+					name: "Max Duration (Months)",
+					value: (new BigNumber(updatedData.externalsettings.maxduration)).toString(),
 					min: 12,
 				}),
 				Map({
@@ -200,7 +208,7 @@ function *fetchData(action) {
 				}),
 				Map({
 					name: "Price per GB (SC)",
-					value:  SiaAPI.hastingsToSiacoins(updatedData.externalsettings.storageprice).toString(),
+					value:  SiaAPI.hastingsToSiacoins(updatedData.externalsettings.storageprice).times("4320").toString(),
 				}),
 				Map({
 					name: "Bandwidth Price (SC/byte)",
@@ -230,8 +238,8 @@ function *fetchSettingsListener () {
 function *addFolderListener () {
 	yield *takeEvery("ADD_FOLDER", addFolder)
 }
-function *deleteFolderListener () {
-	yield *takeEvery("DELETE_FOLDER", deleteFolder)
+function *removeFolderListener () {
+	yield *takeEvery("REMOVE_FOLDER", removeFolder)
 }
 function *resizeFolderListener () {
 	yield *takeEvery("RESIZE_FOLDER", resizeFolder)
@@ -241,6 +249,9 @@ export default function *initSaga() {
 	yield [
 		fork(updateSettingsListener),
 		fork(fetchSettingsListener),
+		fork(addFolderListener),
+		fork(removeFolderListener),
+		fork(resizeFolderListener),
 	]
 	yield put(actions.fetchData())
 }

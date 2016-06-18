@@ -8,10 +8,10 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const mapStateToProps = (state) => ({
-    usersettings: state.hostingReducer.get('usersettings'),
-    defaultsettings: state.hostingReducer.get('defaultsettings'),
-    acceptingContracts: state.hostingReducer.get("acceptingContracts"),
-    files: state.hostingReducer.get('files'),
+	usersettings: state.hostingReducer.get('usersettings'),
+	defaultsettings: state.hostingReducer.get('defaultsettings'),
+	acceptingContracts: state.hostingReducer.get("acceptingContracts"),
+	files: state.hostingReducer.get('files'),
 })
 
 const Body = connect(mapStateToProps, mapDispatchToProps)(BodyView)

@@ -7,7 +7,7 @@ const EditModal = ({ usersettings, actions }) => {
 	const HostProperties = usersettings.map((setting, key) => (
 		<p key={ key }>
 			<label>{ setting.get("name") }</label>
-			<input type="text" value={ setting.get("value") }></input>
+			<input type="text"></input>
 		</p>
 	)).toList()
 

@@ -6,6 +6,12 @@ export const updateSetting = (setting, value) => ({
 	value,
 })
 
+export const updateModal = (key, value) => ({
+	type: constants.UPDATE_MODAL,
+	key,
+	value,
+})
+
 export const updateSettings = (settings, acceptingContracts) => ({
 	type: constants.UPDATE_SETTINGS,
 	settings,
@@ -33,12 +39,22 @@ export const addFolder = (folder) => ({
 	folder,
 })
 
-export const deleteFolder = (folder) => ({
-	type: constants.DELETE_FOLDER,
+export const removeFolder = (folder) => ({
+	type: constants.REMOVE_FOLDER,
 	folder,
 })
 
 export const resizeFolder = (folder) => ({
 	type: constants.RESIZE_FOLDER,
+	folder,
+})
+
+export const showResizeDialog = (folder) => ({
+	type: constants.SHOW_RESIZE_DIALOG,
+	folder,
+})
+
+export const hideResizeDialog = (folder) => ({
+	type: constants.HIDE_RESIZE_DIALOG,
 	folder,
 })

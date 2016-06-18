@@ -25,7 +25,7 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 	return (
 		<div className="settings section">
 			<div className="property row">
-  				<div className="title"></div>
+  				<div className="title">Configurations</div>
 				<div className="controls">
 					<div className={ 'button' + ( settingsChanged ? '' : ' disable' ) } onClick={ updateSettings }>
 						<i className='fa fa-save'></i>

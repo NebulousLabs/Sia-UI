@@ -133,10 +133,14 @@
 	display: inline-block;
 	padding-top: 3px;
 }
+.controls.full {
+	width: 100%;
+}
 .controls .button:hover {
 	color: #4a4a4a;
 	cursor: pointer;
 }
+
 
 /* Properties */
 #properties {
@@ -190,17 +194,24 @@
 	position: relative;
 }
 
-.hosting-options-modal input {
-	margin-top: .25em;
-	display: block;
-	text-align: right;
-	padding: 0em .25em;
+.hosting-options-modal input[ type="number"] {
+    display: block;
+	padding: 9px 10px;
+	margin: 10px;
+	border-radius: 0px;
+	border: 0px;
+	border: 1px solid #FFFFFF;
+	text-align: center;
+	cursor: pointer;
+	transition: all 0s;
+}
+.hosting-options-modal input[ type="number"]:hover {
+	border: 1px solid #DDDDDD;
 }
 
 .hosting-options-modal .button {
 	padding: 15px 40px;
 }
-
 
 .close-button {
 	position: absolute;
@@ -234,18 +245,18 @@
 }
 
 .section .row {
-	height: 30px;
+	height: 29px;
 }
 
 .property {
 	border-bottom: 1px solid #e0e0e0;
 }
 .property .name {
-	padding: 20px 10px 20px 35px;
+	padding: 19px 10px 19px 35px;
 }
 .property .value {
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-top: 9px;
+	padding-bottom: 9px;
 	border-left: 1px solid #e0e0e0;
 	text-align: center;
 }
@@ -264,12 +275,7 @@
 	border: 1px solid #DDDDDD;
 }
 
-.section .title {
-	font-size: 1em;
-}
-
 .section .controls {
-	width: 100%;
 	text-align: right;
 }
 
