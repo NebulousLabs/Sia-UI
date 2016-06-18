@@ -12,7 +12,6 @@ let appIcon
 app.on('ready', () => {
 	// Load mainWindow
 	mainWindow = initWindow(config)
-	mainWindow.toggleDevTools()
 	// Load tray icon and menu
 	appIcon = new Tray(Path.join(__dirname, 'assets', 'tray.png'))
 	appIcon.setToolTip('Sia - The Collaborative Cloud.')

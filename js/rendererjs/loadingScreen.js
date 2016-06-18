@@ -11,12 +11,6 @@ const configLoader = remote.require(Path.join(__dirname, '../mainjs/config.js'))
 
 const config = configLoader(Path.join(app.getPath('userData'), 'config.json'))
 const siadConfig = config.attr('siad')
-
-// hardcode siad's location for release.
-siadConfig.path = Path.join(app.getAppPath(), '../Sia/siad')
-siadConfig.datadir = Path.join(app.getAppPath(), '../Sia')
-config.attr('siad', siadConfig)
-config.save()
 Siad.configure(siadConfig)
 
 const overlay = document.getElementsByClassName('overlay')[0]
