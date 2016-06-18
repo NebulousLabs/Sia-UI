@@ -34,11 +34,11 @@ export const addFolder = (folder) => ({
 })
 
 export const deleteFolder = (folder) => ({
-	type: constants.RESET_HOST,
+	type: constants.DELETE_FOLDER,
 	folder,
 })
 
 export const resizeFolder = (folder) => ({
-	type: constants.RESET_HOST,
+	type: constants.RESIZE_FOLDER,
 	folder,
 })

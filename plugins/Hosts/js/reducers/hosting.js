@@ -21,6 +21,7 @@ const initialState = Map({
 	earned: 0,
 	expected: 0,
 	acceptingContracts: 0,
+	settingsChanged: false,
 })
 
 export default function hostingReducer(state = initialState, action) {
@@ -32,7 +33,7 @@ export default function hostingReducer(state = initialState, action) {
 				value.set("value", action.value)
 			: value
 		)) 
-		return state.set("usersettings", settingslist)
+		return state.set("usersettings", settingslist).set("settingsChanged", true)
 
 	case constants.TOGGLE_ACCEPTING:
 		return state.set("acceptingContracts", !state.get("acceptingContracts"))
@@ -45,6 +46,7 @@ export default function hostingReducer(state = initialState, action) {
 			.set("earned", action.data.get("earned"))
 			.set("expected", action.data.get("expected"))
 			.set("files", action.data.get("files"))
+			.set("settingsChanged", false)
 
 	default:
 		return state

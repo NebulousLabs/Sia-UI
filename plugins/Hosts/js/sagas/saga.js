@@ -149,7 +149,7 @@ function *addFolder(action) {
 	}
 }
 
-function *removeFolder(action) {
+function *deleteFolder(action) {
 	try {
 		const resp = yield siadCall({
 			url: '/storage/folders/add',

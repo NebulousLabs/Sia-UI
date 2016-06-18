@@ -1,4 +1,4 @@
-import BodyView from '../components/body.js'
+import SettingsListView from '../components/settingslist.js'
 import { connect } from 'react-redux'
 import { updateSetting, updateSettings, toggleAcceptingContracts } from '../actions/actions.js'
 import { bindActionCreators } from 'redux'
@@ -11,8 +11,9 @@ const mapStateToProps = (state) => ({
     usersettings: state.hostingReducer.get('usersettings'),
     defaultsettings: state.hostingReducer.get('defaultsettings'),
     acceptingContracts: state.hostingReducer.get("acceptingContracts"),
-    files: state.hostingReducer.get('files'),
+    settingsChanged: state.hostingReducer.get("settingsChanged"),
 })
 
-const Body = connect(mapStateToProps, mapDispatchToProps)(BodyView)
-export default Body
+const SettingsList = connect(mapStateToProps, mapDispatchToProps)(SettingsListView)
+export default SettingsList
+

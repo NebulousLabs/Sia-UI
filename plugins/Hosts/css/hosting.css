@@ -31,6 +31,10 @@
 	font-size: 22px;
 	padding-left: 20px;
 }
+.row .button.disable {
+	cursor: auto;
+	opacity: .2;
+}
 
 .accept-contracts {
 	text-align: center;
@@ -273,4 +277,17 @@
 	float: left;
 	display: block;
 	padding-left: 0px;
+}
+
+.files .row {
+	padding-right: 0px;
+}
+
+.files .pure-g {
+	font-size: 18px;
+}
+
+.files [class *="pure-u"] div {
+	padding-top: 20px;
+	padding-bottom: 20px;
 }
