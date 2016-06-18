@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import StoragePlan from './storageplan.js'
+import ProgressBar from './progressbar.js'
 
 const AllowanceDialog = ({storageSize, storageCost, settingAllowance, allowanceProgress, actions}) => {
 	const setStorageSize = (size) => actions.calculateStorageCost(size)
@@ -12,7 +13,7 @@ const AllowanceDialog = ({storageSize, storageCost, settingAllowance, allowanceP
 			<div className="allowance-dialog">
 				<div>
 					<h2> Buying {storageSize} GB of storage for a total of {storageCost} SC... </h2>
-					<h3> {allowanceProgress}% complete... </h3>
+					<ProgressBar progress={allowanceProgress} />
 				</div>
 			</div>
 		)

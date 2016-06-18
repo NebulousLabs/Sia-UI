@@ -3,7 +3,6 @@ import { put, take, fork, cancel } from 'redux-saga/effects'
 import Path from 'path'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
-import BigNumber from 'bignumber.js'
 import { List } from 'immutable'
 import { sendError, siadCall, totalUsage, readdirRecursive, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
 
