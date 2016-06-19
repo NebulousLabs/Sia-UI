@@ -10,8 +10,8 @@ plugins.forEach((plugin) => {
 })
 
 entrypoints["renderer"] = ['babel-polyfill', path.resolve('./js/rendererjs/uiManager.js')]
-entrypoints["pluginapi"] = path.resolve('./js/rendererjs/pluginapi.js')
 entrypoints["main"] = path.resolve('./js/mainjs/index.js')
+entrypoints["pluginapi"] = path.resolve('./js/rendererjs/pluginapi.js')
 
 module.exports = {
 	entry: entrypoints,
@@ -48,10 +48,6 @@ module.exports = {
 				query: {
 					presets: ['react', 'es2015']
 				}
-			},
-			{
-				test: /\.scss$/,
-				loaders: ["style", "css", "sass"]
 			}
 		]
 	}
