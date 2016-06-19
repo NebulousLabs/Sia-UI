@@ -26,9 +26,8 @@ export default function configManager(filepath) {
 
 	try {
 		// TODO: write load() function instead of global require
-		/* eslint-disable global-require */
-		config = require(filepath)
-		/* eslint-enable global-require */
+		const data = fs.readFileSync(filepath)
+		config = JSON.parse(data)
 	} catch (err) {
 		config = defaultConfig
 	}
