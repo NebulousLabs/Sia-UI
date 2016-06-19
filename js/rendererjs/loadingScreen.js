@@ -4,9 +4,9 @@
 import { remote } from 'electron'
 import Siad from 'sia.js'
 import Path from 'path'
+import configLoader from '../mainjs/config.js'
 const dialog = remote.dialog
 const fs = remote.require('fs')
-const configLoader = remote.require('./config.js').default
 
 const config = configLoader(Path.join(__dirname, '../config.json'))
 const siadConfig = config.attr('siad')
@@ -52,7 +52,6 @@ const startSiad = (callback) => {
 		if (error) {
 			overlay.showError(error)
 		} else {
-			console.log(siadConfig)
 			Siad.start(callback)
 		}
 	})
