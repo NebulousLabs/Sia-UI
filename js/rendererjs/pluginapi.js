@@ -6,7 +6,7 @@ const remote = require('electron').remote
 const app = remote.app
 const dialog = remote.dialog
 const mainWindow = remote.getCurrentWindow()
-const configLoader = remote.require(Path.join(__dirname, '../mainjs/config.js')).default
+const configLoader = remote.require('./config.js').default
 const config = configLoader(Path.join(app.getPath('userData'), 'config.json')).siad
 Siad.configure(config)
 

@@ -7,7 +7,7 @@ import Path from 'path'
 const app = remote.app
 const dialog = remote.dialog
 const fs = remote.require('fs')
-const configLoader = remote.require(Path.join(__dirname, '../mainjs/config.js')).default
+const configLoader = remote.require('./config.js').default
 
 const config = configLoader(Path.join(app.getPath('userData'), 'config.json'))
 const siadConfig = config.attr('siad')

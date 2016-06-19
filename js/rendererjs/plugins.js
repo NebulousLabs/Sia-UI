@@ -32,7 +32,7 @@ const createPluginElement = (markupPath, title) => {
 	elem.src = markupPath
 	// This is enabled for legacy plugin support.
 	elem.nodeintegration = true
-	elem.preload = Path.join('file://', Path.join(__dirname, './pluginapi.js'))
+	elem.preload = './dist/pluginapi.js'
 	return elem
 }
 

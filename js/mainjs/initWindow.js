@@ -1,4 +1,4 @@
-import { Menu, BrowserWindow } from 'electron'
+import { Menu, BrowserWindow, app } from 'electron'
 import appMenu from './appMenu.js'
 import Path from 'path'
 import Siad from 'sia.js'
@@ -38,7 +38,7 @@ export default function(config) {
 	})
 
 	// Load the index.html of the app.
-	mainWindow.loadURL(Path.join('file://', __dirname, '..', '..', 'index.html'))
+	mainWindow.loadURL(Path.join('file://', app.getAppPath(), 'index.html'))
 	// Choose not to show the menubar
 	if (process.platform !== 'darwin') {
 		mainWindow.setMenuBarVisibility(false)

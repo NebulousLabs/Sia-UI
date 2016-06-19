@@ -1,8 +1,8 @@
 import { app, Tray } from 'electron'
-import appTray from './js/mainjs/trayMenu.js'
+import appTray from './trayMenu.js'
 import Path from 'path'
-import loadConfig from './js/mainjs/config.js'
-import initWindow from './js/mainjs/initWindow.js'
+import loadConfig from './config.js'
+import initWindow from './initWindow.js'
 
 // load config.json manager
 const config = loadConfig(Path.join(app.getPath('userData'), 'config.json'))
@@ -12,8 +12,9 @@ let appIcon
 app.on('ready', () => {
 	// Load mainWindow
 	mainWindow = initWindow(config)
+	mainWindow.toggleDevTools()
 	// Load tray icon and menu
-	appIcon = new Tray(Path.join(__dirname, 'assets', 'tray.png'))
+	appIcon = new Tray(Path.join(app.getAppPath(), 'assets', 'tray.png'))
 	appIcon.setToolTip('Sia - The Collaborative Cloud.')
 	appIcon.setContextMenu(appTray(mainWindow))
 })
