@@ -9,6 +9,7 @@ plugins.forEach((plugin) => {
 })
 entrypoints.uiManager = ['babel-polyfill', path.resolve('./js/rendererjs/uiManager.js')]
 entrypoints.pluginapi = path.resolve('./js/rendererjs/pluginapi.js')
+entrypoints.main = [path.resolve('./js/mainjs/index.js')]
 
 module.exports = {
 	entry: entrypoints,
