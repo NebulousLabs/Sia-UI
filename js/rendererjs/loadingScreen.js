@@ -4,7 +4,6 @@
 import { remote } from 'electron'
 import Siad from 'sia.js'
 import Path from 'path'
-const app = remote.app
 const dialog = remote.dialog
 const fs = remote.require('fs')
 const configLoader = remote.require('./config.js').default

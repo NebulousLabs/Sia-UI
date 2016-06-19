@@ -2,6 +2,7 @@
 const path = require('path')
 const glob = require('glob')
 
+// Compute the entry-points for Sia-UI.
 let entrypoints = {}
 const plugins = glob.sync("./plugins/*/js/index.js")
 plugins.forEach((plugin) => {

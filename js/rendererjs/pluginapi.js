@@ -3,7 +3,6 @@
 const Siad = require('sia.js')
 const Path = require('path')
 const remote = require('electron').remote
-const app = remote.app
 const dialog = remote.dialog
 const mainWindow = remote.getCurrentWindow()
 const configLoader = remote.require('./config.js').default

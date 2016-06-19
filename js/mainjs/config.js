@@ -1,6 +1,5 @@
 import fs from 'fs'
 import Path from 'path'
-import { app } from 'electron'
 
 // The default settings
 const defaultConfig = {

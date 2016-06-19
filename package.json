@@ -6,7 +6,6 @@
   "description": "A UI application for interfacing with Sia",
   "license": "MIT",
   "devDependencies": {
-    "babel-cli": "^6.10.1",
     "babel-eslint": "^6.0.4",
     "chai": "^3.4.1",
     "chai-as-promised": "^5.1.0",
@@ -30,12 +29,11 @@
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "redux-saga": "^0.10.4",
-    "request": "^2.67.0",
     "sia.js": "^0.2.0",
     "webpack": "^1.13.1"
   },
   "scripts": {
-    "start": "electron .",
+    "start": "webpack && electron .",
     "build": "webpack",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
@@ -46,13 +44,13 @@
     "sia-import": "(test -d Sia || mkdir -p Sia) && (cp $GOPATH/bin/siad Sia & cp $GOPATH/bin/siac Sia)",
     "sia-kill": "killall siad; while pgrep siad; do sleep .5; done;",
     "sia-refresh": "npm run sia-kill && rm -rf Sia && npm run sia-import",
-    "release-args": "electron-packager . Sia-UI --app-version=0.6.0-beta --version=1.2.2 --overwrite --prune --ignore='(node_modules|release|config.json|errors.log)' --out=release/v0.6.0-rc1 --icon=assets/icon",
+    "release-args": "webpack && electron-packager . Sia-UI --app-version=0.6.0-beta --version=1.2.2 --overwrite --prune --ignore='(node_modules|release|config.json|errors.log)' --out=release/v0.6.0-beta --icon=assets/icon",
     "release": "npm run release-args -- --all && ./.finalizeRelease.sh all",
     "release-lin64": "npm run release-args -- --platform=linux --arch=x64 && ./.finalizeRelease.sh linux-x64",
     "release-lin32": "npm run release-args -- --platform=linux --arch=ia32 && ./.finalizeRelease.sh linux-ia32",
     "release-win64": "npm run release-args -- --platform=win32 --arch=x64 && ./.finalizeRelease.sh win32-x64",
     "release-win32": "npm run release-args -- --platform=win32 --arch=ia32 && ./.finalizeRelease.sh win32-ia32",
-    "release-mac": "npm run release-args -- --platform=darwin --arch=x64"
+    "release-mac": "npm run release-args -- --platform=darwin --arch=x64 && ./.finalizeRelease.sh darwin-x64"
   },
   "repository": {
     "type": "git",

@@ -3,7 +3,7 @@
 set -o errexit # Exit on error
 readonly VERSION="v0.6.0-beta"
 declare -a Electron_Archs=("linux-x64" "linux-ia32" "win32-x64" "win32-ia32" "darwin-x64")
-declare -a Sia_Archs=("linux-amd64" "linux-386" "windows-amd64" "windows-386" "darwin-amd64")
+declare -a Sia_Archs=("linux-amd64" "linux-386" "windows-amd64" "windows-386" "mac-amd64")
 
 cd "release/$VERSION"
 
@@ -66,8 +66,6 @@ package() {
 	# Delete Sia archive once put in the UI
 	rm -f $sia_archive
 }
-
-package "darwin-x64"
 # dispatch on argument
 case "$1" in
 	linux-x64|linux-ia32|win32-x64|win32-ia32|darwin-x64)
