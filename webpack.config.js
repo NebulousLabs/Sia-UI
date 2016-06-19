@@ -8,9 +8,10 @@ const plugins = glob.sync("./plugins/*/js/index.js")
 plugins.forEach((plugin) => {
 	entrypoints[path.dirname(path.dirname(plugin))] = ['babel-polyfill', plugin]
 })
-entrypoints.uiManager = ['babel-polyfill', path.resolve('./js/rendererjs/uiManager.js')]
-entrypoints.pluginapi = path.resolve('./js/rendererjs/pluginapi.js')
-entrypoints.main = [path.resolve('./js/mainjs/index.js')]
+
+entrypoints["renderer"] = ['babel-polyfill', path.resolve('./js/rendererjs/uiManager.js')]
+entrypoints["pluginapi"] = path.resolve('./js/rendererjs/pluginapi.js')
+entrypoints["main"] = [path.resolve('./js/mainjs/index.js')]
 
 module.exports = {
 	entry: entrypoints,
