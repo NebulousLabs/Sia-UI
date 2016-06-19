@@ -7,7 +7,7 @@ const app = remote.app
 const dialog = remote.dialog
 const mainWindow = remote.getCurrentWindow()
 const configLoader = remote.require('./config.js').default
-const config = configLoader(Path.join(app.getPath('userData'), 'config.json')).siad
+const config = configLoader(Path.join(__dirname, '../config.json')).siad
 Siad.configure(config)
 
 window.SiaAPI = {

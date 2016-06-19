@@ -9,7 +9,7 @@ const dialog = remote.dialog
 const fs = remote.require('fs')
 const configLoader = remote.require('./config.js').default
 
-const config = configLoader(Path.join(app.getPath('userData'), 'config.json'))
+const config = configLoader(Path.join(__dirname, '../config.json'))
 const siadConfig = config.attr('siad')
 Siad.configure(siadConfig)
 
@@ -18,6 +18,7 @@ const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByT
 overlayText.textContent = 'Loading Sia...'
 
 const showError = (error) => {
+	console.error(error)
 	overlayText.textContent = 'A Sia-UI error has occured: ' + error
 }
 
@@ -52,6 +53,7 @@ const startSiad = (callback) => {
 		if (error) {
 			overlay.showError(error)
 		} else {
+			console.log(siadConfig)
 			Siad.start(callback)
 		}
 	})
@@ -67,7 +69,6 @@ export default function loadingScreen(initUI) {
 	} catch (e) {
 		fs.mkdirSync(siadConfig.datadir)
 	}
-
 	Siad.ifRunning(() => {
 		siadConfig.detached = true
 		config.attr('siad', siadConfig)

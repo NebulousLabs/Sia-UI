@@ -23,6 +23,10 @@ module.exports = {
 	resolveLoader: {
 		root: path.resolve('./node_modules'),
 	},
+	node: {
+ 		__dirname: false,
+  	__filename: false,
+	},
 	target: 'electron',
 	module: {
 		// this noParse is to deal with an issue with validate.js not being packed properly.

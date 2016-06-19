@@ -67,6 +67,7 @@ package() {
 	rm -f $sia_archive
 }
 
+package "darwin-x64"
 # dispatch on argument
 case "$1" in
 	linux-x64|linux-ia32|win32-x64|win32-ia32|darwin-x64)
