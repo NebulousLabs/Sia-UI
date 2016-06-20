@@ -17,7 +17,6 @@ export default function commandLineReducer(state = initialState, action) {
 
 	case constants.ADD_COMMAND:
 		//Add command to the command history.
-		console.log('NEW COMMAND!')
 		return state.set('commandHistory', state.get('commandHistory').push(action.command))
 			.set('commandIndex', 0).set('currentCommand', '').set('commandRunning', true)
 
@@ -29,13 +28,11 @@ export default function commandLineReducer(state = initialState, action) {
 			)
 
 		if (!commandArray) {
-			console.log(`Error did not find command: { command: ${action.command}, id: ${action.id} } in command history: ${JSON.stringify(commandHistory)}`)
 			return state
 		}
 
 		let [commandIdx, newCommand] = commandArray
 		newCommand = newCommand.set('result', newCommand.get('result') + action.dataChunk)
-		console.log(newCommand)
 		return state.set('commandHistory', state.get('commandHistory').set(commandIdx, newCommand))
 
 	case constants.END_COMMAND:
@@ -44,13 +41,11 @@ export default function commandLineReducer(state = initialState, action) {
 			)
 
 		if (!commandArray) {
-			console.log(`Error did not find command: { command: ${action.command}, id: ${action.id} } in command history: ${JSON.stringify(commandHistory)}`)
 			return state
 		}
 
 		[commandIdx, newCommand] = commandArray
 		newCommand = newCommand.set('stat', 'done')
-		console.log(newCommand)
 		return state.set('commandHistory', state.get('commandHistory').set(commandIdx, newCommand)).set('commandRunning', false)
 
 	case constants.LOAD_PREV_COMMAND:

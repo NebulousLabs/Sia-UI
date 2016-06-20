@@ -73,7 +73,6 @@ export const spawnCommand = function(commandStr, actions, newid) {
 
 	//Update the UI when the process receives new ouput.
 	const consumeChunk = function(chunk) {
-		console.log('Data chunk ' + chunk)
 		const chunkTrimmed = chunk.toString().replace(/stty: stdin isn't a terminal\n/g, '')
 		actions.updateCommand(newCommand.get('command'), newCommand.get('id'), chunkTrimmed)
 	}
@@ -89,11 +88,9 @@ export const spawnCommand = function(commandStr, actions, newid) {
 	}
 
 	siac.on('error', () => {
-		console.log('\tPROGRAM ERRORED')
 		streamClosed()
 	})
 	siac.on('close', () => {
-		console.log('\tPROGRAM CLOSED')
 		streamClosed()
 	})
 
@@ -152,7 +149,6 @@ export const httpCommand = function(commandStr, actions, newid) {
 		break
 
 	default:
-		console.log(`ERROR Command is not an http command. Rerouting. ${commandString}`)
 		return spawnCommand(commandString, actions).stdin
 	}
 
@@ -162,7 +158,6 @@ export const httpCommand = function(commandStr, actions, newid) {
 
 	//Update the UI when the process receives new ouput.
 	const consumeChunk = function(chunk) {
-		console.log('Data chunk ' + chunk)
 		let newChunk = chunk
 		if (chunk.toString().trim() === '{"Success":true}') {
 			newChunk = 'Success'
@@ -198,7 +193,6 @@ export const httpCommand = function(commandStr, actions, newid) {
 		res.on('end', streamClosed)
 	})
 	req.on('error', (e) => {
-		console.log(`problem with request: ${e.message}`)
 		consumeChunk(e.message)
 		streamClosed()
 	})
@@ -241,7 +235,6 @@ export const commandInputHelper = function(e, actions, currentCommand, showComma
 			break
 
 		default:
-			console.log(`Command input error: ${currentCommand}`)
 			break
 		}
 	 } else if (e.keyCode === 38) {

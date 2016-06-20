@@ -14,7 +14,6 @@ export default class WalletSeedPrompt extends React.Component {
 		const handleKeyboardPress = (e) => {
 			if (e.keyCode === 13) {
 				//Grab input, spawn process, and pipe text field to stdin.
-				console.log('SPECIAL COMMAND: ' + this.props.currentCommand)
 				const siac = httpCommand(this.props.currentCommand, this.props.actions, this.props.commandHistory.size)
 
 				siac.write(querystring.stringify({

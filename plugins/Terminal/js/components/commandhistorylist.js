@@ -7,7 +7,6 @@ export default class CommandHistoryList extends React.Component {
 	}
 
 	render() {
-		console.log('Re-rendering.')
 		const CommandHistoryComponents = this.props.commandHistory.filterNot(
 			(command) => command.get('command') === 'help' || command.get('command') === '?'
 		).map((command, key) => (
