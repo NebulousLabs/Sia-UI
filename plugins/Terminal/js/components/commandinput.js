@@ -1,3 +1,4 @@
+
 import React from 'react'
 import { commandInputHelper } from '../utils/helpers.js'
 
@@ -16,7 +17,8 @@ export default class CommandInput extends React.Component {
 		return (
 			<input id="command-input" onChange={handleTextInput} onKeyDown={handleKeyboardPress} type="text"
 				value={this.props.currentCommand} disabled={this.props.ommandRunning} autoFocus autoComplete
-				ref={(c) => this._input = c}></input>
+				ref={(c) => this._input = c}
+			/>
 		)
 	}
 }

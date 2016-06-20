@@ -39,8 +39,8 @@ export default class WalletPasswordPrompt extends React.Component {
 					<h3>Wallet Password</h3>
 					<p>Please type your wallet password and press enter to continue.</p>
 					<input onChange={handleTextInput} onKeyDown={handleKeyboardPress} type="password"
-						id="wallet-passwd" ref={(c) => this._walletPasswd = c} value={this.props.walletPassword}>
-					</input>
+						id="wallet-passwd" ref={(c) => this._walletPasswd = c} value={this.props.walletPassword}
+					/>
 				</div>
 			</div>
 		)
