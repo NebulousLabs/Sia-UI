@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 const mapStateToProps = (state) => ({
 	confirmedbalance: state.wallet.get('confirmedbalance'),
 	unconfirmedbalance: state.wallet.get('unconfirmedbalance'),
+	siafundbalance: state.wallet.get('siafundbalance'),
 	showReceivePrompt: state.wallet.get('showReceivePrompt'),
 	showSendPrompt: state.wallet.get('showSendPrompt'),
 	showNewWalletDialog: state.wallet.get('showNewWalletDialog'),

@@ -33,10 +33,11 @@ export const createNewWallet = () => ({
 export const getBalance = () => ({
 	type: constants.GET_BALANCE,
 })
-export const setBalance = (confirmed, unconfirmed) => ({
+export const setBalance = (confirmed, unconfirmed, siafunds) => ({
 	type: constants.SET_BALANCE,
 	confirmed,
 	unconfirmed,
+	siafunds,
 })
 export const getTransactions = () => ({
 	type: constants.GET_TRANSACTIONS,
