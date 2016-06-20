@@ -6,14 +6,14 @@ const ResizeDialogModal = ({ shouldShowResizeDialog, resizePath, resizeSize, act
 	const handleSettingInput = (e) => actions.updateModal("resizeSize", e.target.value)
 
 	const handleSettingKeyDown = (e) => {
-		if (e.keyCode === 13){ hideResizeDialog(resizeSize) }
+		if (e.keyCode === 13){ hideResizeDialog(resizeSize); e.preventDefault() }
 	}
 
 	const hideResizeDialog = (newSize) => actions.hideResizeDialog(Map({ path: resizePath, size: newSize }))
 
 	return (
 		<div className={ 'hosting-options-modal modal' + (shouldShowResizeDialog ? '': ' hidden') }>
-			<form className="hosting-options modal-message">
+			<form className="hosting-options modal-message" onSubmit="">
 				<div className="close-button" onClick={ hideResizeDialog }>
 					X
 				</div>

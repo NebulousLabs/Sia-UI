@@ -142,6 +142,10 @@
 }
 
 
+.button .fa {
+    margin-right: .25em;
+}
+
 /* Properties */
 #properties {
 	height: 50%;
@@ -283,6 +287,10 @@
 	float: left;
 	display: block;
 	padding-left: 0px;
+}
+
+.settings .name {
+    text-align: right;
 }
 
 .files .row {

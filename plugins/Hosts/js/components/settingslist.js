@@ -11,7 +11,8 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 
 	const HostProperties = usersettings.map((setting, key) => (
 		<div className="property pure-g" key={ key }>
-			<div className="pure-u-2-3">
+			<div className="pure-u-1-6"></div>
+			<div className="pure-u-1-3">
 				<div className="name">{ setting.get("name") }</div>
 			</div>
 			<div className="pure-u-1-3">
@@ -19,6 +20,7 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 					<input type="number" data-setting={ setting.get("name") } onChange={ handleSettingInput } className="value" value={ setting.get("value") }></input>
 				</div>
 			</div>
+			<div className="pure-u-1-6"></div>
 		</div>
 	)).toList()
 
@@ -29,11 +31,11 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 				<div className="controls">
 					<div className={ 'button' + ( settingsChanged ? '' : ' disable' ) } onClick={ updateSettings }>
 						<i className='fa fa-save'></i>
-						&nbsp;Save
+						Save
 					</div>
 					<div className='button' onClick={ resetSettings }>
 						<i className='fa fa-refresh'></i>
-						&nbsp;Reset
+						Reset
 					</div>
 				</div>
 			</div>

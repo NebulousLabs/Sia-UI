@@ -2,6 +2,7 @@ import { takeEvery } from 'redux-saga'
 import { call, put, take, fork } from 'redux-saga/effects'
 import * as actions from '../actions/actions.js'
 import * as constants from '../constants/constants.js'
+import * as helper from '../utils/host.js'
 import { Map, List } from 'immutable'
 import BigNumber from 'bignumber.js'
 
@@ -52,7 +53,7 @@ function *updateSettings(action) {
 				"collateral": 
 					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(COLLATERAL).get("value")).toString(),
 				"minimumstorageprice": 
-					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(PRICE).get("value")).dividedBy("1008").toString(), //1008 = 60(minutes/hour)/(1 block per 10minutes) * 24hours/day * 7days in a week
+					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(PRICE).get("value")).dividedBy("1e9").dividedBy("4320").toString(), //TB -> bytes, blocks -> month
 				"minimumdownloadbandwidthprice":
 					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(BANDWIDTH).get("value")).toString(),
 			},
@@ -141,7 +142,7 @@ function *addFolder(action) {
 			method: 'POST',
 			qs: {
 				path: action.folder.get("path"),
-				size: action.folder.get("size"),
+				size: action.folder.get("size"), //Is given in GB.
 			},
 		})
 		yield put( actions.fetchData() )
@@ -149,6 +150,25 @@ function *addFolder(action) {
 		console.log(e)
 	}
 }
+
+
+function *addFolderAskPathSize(action) {
+	const newLocation = helper.chooseFileLocation();
+	try {
+		yield put( actions.showResizeDialog(Map({ path: newLocation, size: 50 })) )
+		let closeAction = yield take( constants.HIDE_RESIZE_DIALOG )
+		if (closeAction.folder.get("size")){
+			yield put( actions.addFolder(Map({
+				path: newLocation,
+				size: (new BigNumber(closeAction.folder.get("size"))).times(new BigNumber("1e9")).toString(),
+			})) )
+		}
+		else { console.log("Folder size is zero.") }
+	} catch (e) {
+		console.log(e)
+	}
+}
+
 
 function *removeFolder(action) {
 	try {
@@ -208,7 +228,7 @@ function *fetchData(action) {
 				}),
 				Map({
 					name: "Price per TB per Month (SC)",
-					value: SiaAPI.hastingsToSiacoins(updatedData.externalsettings.storageprice).times("1008").toFixed(0), //1008 = 60(minutes/hour)/(1 block per 10minutes) * 24hours/day * 7days in a week
+					value: SiaAPI.hastingsToSiacoins(updatedData.externalsettings.storageprice).times("1e9").times("4320").toFixed(0), //bytes -> TB, 4320 = blocks per month
 				}),
 				Map({
 					name: "Bandwidth Price (SC/TB)",
@@ -238,6 +258,9 @@ function *fetchSettingsListener () {
 function *addFolderListener () {
 	yield *takeEvery("ADD_FOLDER", addFolder)
 }
+function *addFolderAskListener () {
+	yield *takeEvery("ADD_FOLDER_ASK", addFolderAskPathSize)
+}
 function *removeFolderListener () {
 	yield *takeEvery("REMOVE_FOLDER", removeFolder)
 }
@@ -250,6 +273,7 @@ export default function *initSaga() {
 		fork(updateSettingsListener),
 		fork(fetchSettingsListener),
 		fork(addFolderListener),
+		fork(addFolderAskListener),
 		fork(removeFolderListener),
 		fork(resizeFolderListener),
 	]

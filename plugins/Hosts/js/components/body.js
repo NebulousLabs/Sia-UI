@@ -18,7 +18,7 @@ const Body = ({ acceptingContracts, usersettings, defaultsettings, files, action
 					<div className='controls'>
 						<div className='button' id='announce' onClick={ announceHost }>
 							<i className='fa fa-bullhorn'></i>
-							&nbsp;Click to Announce
+							Click to Announce
 						</div>
 					</div>
 				</div>

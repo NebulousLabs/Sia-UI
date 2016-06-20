@@ -58,18 +58,15 @@ export const addFile = function (file, callback){
 		function (e) {
 			console.log(e)
 			callback(file)
-		},
+		}
 	)
 }
 
 export const chooseFileLocation = function (){
-	return Map({
-		path: SiaAPI.openFile({
+	return SiaAPI.openFile({
 			title: "Choose new storage location.",
 			properties: [ "openDirectory" ]
-		})[0],
-		size: (new BigNumber("50e9")).toString(),
-	})
+		})[0]
 }
 
 /*

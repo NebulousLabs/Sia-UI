@@ -3,7 +3,7 @@ import { Map, List } from 'immutable'
 import * as helper from '../utils/host.js'
 
 const FilesList = ({ folders, actions }) => {
-	const addStorageLocation = (e) => actions.addFolder(helper.chooseFileLocation())
+	const addStorageLocation = (e) => actions.addFolderAskPathSize()
 	const removeStorageLocation = (folder) => actions.removeFolder(folder)
 	const resizeStorageLocation = (folder) => actions.resizeFolder(folder)
 
@@ -34,7 +34,7 @@ const FilesList = ({ folders, actions }) => {
 				<div className="controls full">
 					<div className='button left' id='edit' onClick={ addStorageLocation }>
 						<i className='fa fa-folder-open'></i>
-						&nbsp;Add Storage Folder
+						Add Storage Folder
 					</div>
 					<div className='pure-u-1-12' style={{ "textAlign": "left" }}>Free</div>
 					<div className='pure-u-1-12' style={{ "textAlign": "left" }}>Max Size</div>

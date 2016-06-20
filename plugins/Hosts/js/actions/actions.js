@@ -39,6 +39,10 @@ export const addFolder = (folder) => ({
 	folder,
 })
 
+export const addFolderAskPathSize = (folder) => ({
+	type: constants.ADD_FOLDER_ASK,
+})
+
 export const removeFolder = (folder) => ({
 	type: constants.REMOVE_FOLDER,
 	folder,

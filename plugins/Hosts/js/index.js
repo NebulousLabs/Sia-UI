@@ -4,9 +4,9 @@ import ReactDOM from 'react-dom'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { Provider } from 'react-redux'
-import rootReducer from './js/reducers/index.js'
-import initSaga from './js/sagas/saga.js'
-import HostingApp from './js/components/app.js'
+import rootReducer from './reducers/index.js'
+import initSaga from './sagas/saga.js'
+import HostingApp from './components/app.js'
 
 
 // Render the wallet plugin
