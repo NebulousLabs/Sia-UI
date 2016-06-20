@@ -52,7 +52,7 @@ export const ls = (files, path) => {
 }
 
 // recursively version of readdir
-const readdirRecursive = (path, files) => {
+export const readdirRecursive = (path, files) => {
 	const dirfiles = fs.readdirSync(path)
 	let filelist
 	if (typeof files === 'undefined') {

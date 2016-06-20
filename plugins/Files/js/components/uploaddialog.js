@@ -15,7 +15,7 @@ const UploadDialog = ({source, path, actions}) => {
 		<div className="modal">
 			<div className="upload-dialog">
 				<h1> Confirm Upload </h1>
-				<span> Would you like to upload {source}?</span>
+				<div> Would you like to upload {source}?</div>
 				<div className="upload-dialog-buttons">
 					<button onClick={onUploadClick}>Upload</button>
 					<button onClick={onCancelClick}>Cancel</button>

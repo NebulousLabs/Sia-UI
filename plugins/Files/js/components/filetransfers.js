@@ -7,7 +7,7 @@ const FileTransfers = ({uploads, downloads, actions}) => {
 	let uploadlist
 	if (uploads.size > 0) {
 		uploadlist = (
-			<div>
+			<div className="downloads">
 				<h3> Uploads </h3>
 				<TransferList transfers={uploads} />
 			</div>
@@ -16,7 +16,7 @@ const FileTransfers = ({uploads, downloads, actions}) => {
 	let downloadlist
 	if (downloads.size > 0) {
 		downloadlist = (
-			<div>
+			<div className="uploads">
 				<h3> Downloads </h3>
 				<TransferList transfers={downloads} />
 			</div>

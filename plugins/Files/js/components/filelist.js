@@ -44,13 +44,15 @@ const FileList = ({files, searchResults, path, showSearchField, actions}) => {
 			<File key={key} filename={file.name} filesize={file.size} onDownloadClick={onDownloadClick} onDeleteClick={onDeleteClick} />
 		)
 	})
+	console.log(fileElements)
+	console.log(files)
 
 	return (
 		<div className="file-list">
 			{showSearchField ? <SearchField /> : null}
 			<ul>
 				{path !== '' ? <li onClick={onBackClick}><div><i className="fa fa-backward"></i>Back</div></li> : null}
-				{fileElements.length > 0 ? fileElements : <h2> No files have been uploaded! </h2>}
+				{fileElements.size > 0 ? fileElements : <h2> No files have been uploaded! </h2>}
 			</ul>
 		</div>
 	)

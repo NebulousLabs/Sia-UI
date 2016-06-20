@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom'
 import createSagaMiddleware from 'redux-saga'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
-import rootReducer from './js/reducers/index.js'
-import rootSaga from './js/sagas/index.js'
-import App from './js/containers/app.js'
-import { getWalletLockstate, getUploads, getFiles, setPath, getDownloads } from './js/actions/files.js'
+import rootReducer from './reducers/index.js'
+import rootSaga from './sagas/index.js'
+import App from './containers/app.js'
+import { getWalletLockstate, getUploads, getFiles, setPath, getDownloads } from './actions/files.js'
 
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(

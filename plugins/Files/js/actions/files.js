@@ -28,7 +28,7 @@ export const getWalletBalance = () => ({
 	type: constants.GET_WALLET_BALANCE,
 })
 export const receiveWalletBalance = (balance) => ({
-	type: cosntants.RECEIVE_WALLET_BALANCE,
+	type: constants.RECEIVE_WALLET_BALANCE,
 	balance,
 })
 export const showAllowanceDialog = () => ({
@@ -129,6 +129,6 @@ export const hideDeleteDialog = () => ({
 	type: constants.HIDE_DELETE_DIALOG,
 })
 export const receiveDiskUsage = (usage) => ({
-	type: cosntants.RECEIVE_DISK_USAGE,
+	type: constants.RECEIVE_DISK_USAGE,
 	usage,
 })
