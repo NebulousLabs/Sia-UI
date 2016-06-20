@@ -1,0 +1,177 @@
+/*  Style Guide: 
+ *	Transparent: 70% Opacity
+ *	
+ *	White:	  #FFFFFF
+ *	Grey-White: #F5F5F5
+ *	Faint-Grey: #ECECEC
+ *	Light-Grey: #DDDDDD
+ *	Grey:	   #C5C5C5
+ *	Grey-Black: #4A4A4A
+ *	Black:	  #000000
+ *	Neon-Green: #00CBA0
+ */
+.app {
+	font-family: 'Roboto Mono', sans-serif;
+	font-weight: 100;
+	font-size: 12pt;
+ 	position: absolute;
+ 	top: 60px;
+ 	bottom: 0;
+ 	left: 0;
+ 	right: 0;
+	height: calc( 100% - 60px );
+}
+
+.command-history {
+	position: relative;
+	height: 100%;
+}
+
+.command-history-list {
+	width: 100%;
+	/* Size of main section minus footer. */
+	height: calc( 100% - 2.4em - 9px );
+	max-height: calc( 100% - 2.4em - 9px );
+	overflow-y: scroll;
+	transition: all .5s;
+}
+.overview .command-history-list {
+	/* When overview is opened make this the size of the screen minus footer minus size of overview pane. */
+	max-height: calc( 100% - 2.4em - 9px - (438px - 2.8em - 2px) );
+	transition: all .5s .25s;
+}
+
+.command-history-list ul {
+	list-style: none;
+	padding: 0em 1em 0em;
+	border: 0px;
+}
+
+.command-history-list ul i {
+	margin-left: .5em;
+}
+.command-history-list ul i.hide {
+	opacity: 0;
+	transition: all .5s;
+}
+
+.command-history-list ul p {
+	white-space: pre-wrap;
+	padding-left: 1em;
+	padding-bottom: 2em;
+}
+
+.command-history-list ul li:last-of-type p {
+	padding-bottom: 1em;
+}
+
+footer {
+	position: absolute;
+	bottom: 0px;
+	background-color: #00CBA0;
+	width: 100%;
+}
+
+.command-overview {
+	position: absolute;
+	bottom: calc( 2.8em + 2px );
+	background: #f5f5f5;
+	display: block;
+	border: 1px;
+	padding: 0px 4em;
+	height: calc( 438px - 2.8em - 2px ); /* 438px is the size of the command section using the default window size of 800x600px */
+	width: calc( 100% - 8em );
+	margin-top: 0px;
+	white-space: pre-wrap;
+	max-height: 0px;
+	transition: all .5s;
+}
+.command-overview.expanded {
+	max-height: calc( 438px - 2.8em - 2px );
+	transition: all .5s .25s;
+}
+
+.command-overview-inner {
+	max-height: inherit;
+	overflow: hidden;
+}
+
+.help-button {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	background-color: #00CBA0;
+	color: #FFF;
+	cursor: pointer;
+	font-size: 1.4em;
+	text-align: center;
+	padding: .3em;
+	margin-top: -2em;
+	height: 1.4em;
+	width: 1.4em;
+	border-bottom-left-radius: 0px;
+	border-top-left-radius: 4px;
+	transition: all .5s .75s;
+}
+.command-overview.expanded .help-button {
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 4px;
+	margin: 0px;
+	transition: all .25s;
+}
+
+.command-overview h3 {
+	padding: 22px 0px 0px;
+	margin-top: 0px;
+	margin-bottom: .5em;
+}
+
+.command-overview p {
+	padding: 0px 0em 23px 0em;
+	margin-bottom: 0;
+}
+
+input {
+	font-size: 1.2em;
+	padding: .1em;
+	width: 100%;
+}
+
+#command-input {
+	position: relative;
+	width: calc( 100% - 1.2em - 2px );
+	margin: .5em;
+}
+
+.modal {
+	font-family: 'Roboto Condensed', sans-serif;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.modal .modal-message {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	width: 40%;
+	height: 40%;
+	background-color: #ECECEC;
+	padding: 5%;
+}
+
+.modal .modal-message h3 {
+	margin: 0px;
+}
+
+.modal .modal-message p {
+	padding-bottom: 1em;
+	text-align: center;
+}
