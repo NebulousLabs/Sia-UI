@@ -26,8 +26,8 @@ module.exports = {
 		root: path.resolve('./node_modules'),
 	},
 	node: {
- 		__dirname: false,
-  	__filename: false,
+		__dirname: false,
+		__filename: false,
 	},
 	target: 'electron',
 	module: {
