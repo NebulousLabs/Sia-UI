@@ -10,6 +10,6 @@ export default function* rootSaga() {
 		fork(sagas.watchGetBalance),
 		fork(sagas.watchGetTransactions),
 		fork(sagas.watchGetNewReceiveAddress),
-		fork(sagas.watchSendSiacoin),
+		fork(sagas.watchSendCurrency),
 	]
 }

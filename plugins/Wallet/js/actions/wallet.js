@@ -46,8 +46,9 @@ export const setTransactions = (transactions) => ({
 	type: constants.SET_TRANSACTIONS,
 	transactions,
 })
-export const startSendPrompt = () => ({
+export const startSendPrompt = (currencytype) => ({
 	type: constants.START_SEND_PROMPT,
+	currencytype,
 })
 export const closeSendPrompt = () => ({
 	type: constants.CLOSE_SEND_PROMPT,
@@ -73,10 +74,11 @@ export const setReceiveAddress = (address) => ({
 	type: constants.SET_RECEIVE_ADDRESS,
 	address,
 })
-export const sendSiacoin = (destination, amount) => ({
-	type: constants.SEND_SIACOIN,
+export const sendCurrency = (destination, amount, currencytype) => ({
+	type: constants.SEND_CURRENCY,
 	destination,
 	amount,
+	currencytype,
 })
 export const closePasswordPrompt = () => ({
 	type: constants.CLOSE_PASSWORD_PROMPT,

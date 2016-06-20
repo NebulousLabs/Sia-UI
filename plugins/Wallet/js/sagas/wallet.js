@@ -111,18 +111,22 @@ function *getNewReceiveAddressSaga() {
 		yield sendError(e)
 	}
 }
-// POST to /wallet/siacoins, close the send prompt, then update the balance and transaction list.
-function *sendSiacoinSaga(action) {
+
+function *sendCurrencySaga(action) {
 	try {
-		if (action.amount === undefined || action.destination === undefined || action.amount === '' || action.destination === '') {
+		if (action.currencytype === undefined || action.amount === undefined || action.destination === undefined || action.amount === '' || action.currencytype === '' || action.destination === '') {
 			throw 'You must specify an amount and a destination to send Siacoin!'
 		}
+		if (action.currencytype !== 'siafunds' && action.currencytype !== 'siacoins') {
+			throw 'Invalid currency type!'
+		}
+		const sendAmount = action.currencytype === 'siacoins' ? SiaAPI.siacoinsToHastings(action.amount).toString() : action.amount
 		yield siadCall({
-			url: '/wallet/siacoins',
+			url: '/wallet/' + action.currencytype,
 			method: 'POST',
 			qs: {
 				destination: action.destination,
-				amount: SiaAPI.siacoinsToHastings(action.amount).toString(),
+				amount: sendAmount,
 			},
 		})
 		yield put(actions.closeSendPrompt())
@@ -134,6 +138,7 @@ function *sendSiacoinSaga(action) {
 		yield sendError(e)
 	}
 }
+
 // These functions are run by the redux-saga middleware.
 export function* watchCreateNewWallet() {
 	yield *takeEvery(constants.CREATE_NEW_WALLET, createWalletSaga)
@@ -153,6 +158,6 @@ export function* watchGetTransactions() {
 export function* watchGetNewReceiveAddress() {
 	yield *takeEvery(constants.GET_NEW_RECEIVE_ADDRESS, getNewReceiveAddressSaga)
 }
-export function* watchSendSiacoin() {
-	yield *takeEvery(constants.SEND_SIACOIN, sendSiacoinSaga)
+export function* watchSendCurrency() {
+	yield *takeEvery(constants.SEND_CURRENCY, sendCurrencySaga)
 }
