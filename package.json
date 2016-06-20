@@ -39,6 +39,7 @@
   "scripts": {
     "start": "webpack && electron .",
     "build": "webpack",
+    "watch": "webpack --watch",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
     "test": "npm run lint",
