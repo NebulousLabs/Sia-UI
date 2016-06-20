@@ -4,12 +4,11 @@
 import { remote } from 'electron'
 import Siad from 'sia.js'
 import Path from 'path'
+import configLoader from '../mainjs/config.js'
 const dialog = remote.dialog
 const fs = remote.require('fs')
 
-// ES6 remote import weirdness...
-const configLoader = remote.require(Path.resolve('js/mainjs/config.js')).default
-const config = configLoader(Path.resolve('config.json'))
+const config = configLoader(Path.join(__dirname, '../config.json'))
 const siadConfig = config.attr('siad')
 Siad.configure(siadConfig)
 
@@ -18,6 +17,7 @@ const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByT
 overlayText.textContent = 'Loading Sia...'
 
 const showError = (error) => {
+	console.error(error)
 	overlayText.textContent = 'A Sia-UI error has occured: ' + error
 }
 
@@ -50,7 +50,6 @@ const startSiad = (callback) => {
 	config.save()
 	Siad.configure(siadConfig, (error) => {
 		if (error) {
-			console.error(error)
 			overlay.showError(error)
 		} else {
 			Siad.start(callback)
@@ -68,7 +67,6 @@ export default function loadingScreen(initUI) {
 	} catch (e) {
 		fs.mkdirSync(siadConfig.datadir)
 	}
-
 	Siad.ifRunning(() => {
 		siadConfig.detached = true
 		config.attr('siad', siadConfig)

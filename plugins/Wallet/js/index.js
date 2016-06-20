@@ -4,10 +4,10 @@ import ReactDOM from 'react-dom'
 import createSagaMiddleware from 'redux-saga'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
-import rootReducer from './js/reducers/index.js'
-import rootSaga from './js/sagas/index.js'
-import { getLockStatus, getBalance, getTransactions } from './js/actions/wallet.js'
-import WalletApp from './js/components/app.js'
+import rootReducer from './reducers/index.js'
+import rootSaga from './sagas/index.js'
+import { getLockStatus, getBalance, getTransactions } from './actions/wallet.js'
+import WalletApp from './components/app.js'
 
 // Set up saga middleware system
 const sagaMiddleware = createSagaMiddleware()

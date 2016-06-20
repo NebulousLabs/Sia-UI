@@ -1,19 +1,18 @@
 import { app, Tray } from 'electron'
-import appTray from './js/mainjs/trayMenu.js'
+import appTray from './trayMenu.js'
 import Path from 'path'
-import loadConfig from './js/mainjs/config.js'
-import initWindow from './js/mainjs/initWindow.js'
+import loadConfig from './config.js'
+import initWindow from './initWindow.js'
 
 // load config.json manager
-const config = loadConfig(Path.join(__dirname, 'config.json'))
-
+const config = loadConfig(Path.join(__dirname, '../config.json'))
+let mainWindow
+let appIcon
 // When Electron loading has finished, start Sia-UI.
 app.on('ready', () => {
 	// Load mainWindow
-	const mainWindow = initWindow(config)
-
-	// Load tray icon and menu
-	const appIcon = new Tray(Path.join(__dirname, 'assets', 'tray.png'))
+	mainWindow = initWindow(config)
+	appIcon = new Tray(Path.join(app.getAppPath(), 'assets', 'tray.png'))
 	appIcon.setToolTip('Sia - The Collaborative Cloud.')
 	appIcon.setContextMenu(appTray(mainWindow))
 })
@@ -23,4 +22,3 @@ app.on('window-all-closed', () => {
 	config.save()
 	app.quit()
 })
-

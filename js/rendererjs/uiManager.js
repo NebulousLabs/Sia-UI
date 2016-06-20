@@ -2,17 +2,17 @@
 import Path from 'path'
 import Fs from 'fs'
 import notification from './notificationManager.js'
-import loadingScreen from './loadingscreen.js'
-
+import loadingScreen from './loadingScreen.js'
+import Electron from 'electron'
 import { scanFolder, loadPlugin, setCurrentPlugin, getPluginName } from './plugins.js'
-const defaultPluginDirectory = Path.resolve('plugins')
-const defaultHomePlugin = 'Overview'
-
 const packageinfo = require('../../package.json')
-const Electron = require('electron')
 const App = Electron.remote.app
 const mainWindow = Electron.remote.getCurrentWindow()
 const $ = require('jquery')
+
+const defaultPluginDirectory = Path.join(App.getAppPath(), './plugins')
+const defaultHomePlugin = 'Overview'
+
 
 // Object to export
 var ui = {}

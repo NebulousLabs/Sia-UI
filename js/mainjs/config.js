@@ -5,8 +5,8 @@ import Path from 'path'
 const defaultConfig = {
 	homePlugin:  'Overview',
 	siad: {
-		path: Path.join(__dirname, '..', '..', 'Sia', 'siad'),
-		datadir: Path.join(__dirname, '..', '..', 'Sia'),
+		path: Path.join(__dirname, '../Sia/siad'),
+		datadir: Path.join(__dirname, '../Sia'),
 		detached: false,
 	},
 	closeToTray: process.platform === 'win32' || process.platform === 'darwin' ? true : false,
@@ -25,9 +25,8 @@ export default function configManager(filepath) {
 
 	try {
 		// TODO: write load() function instead of global require
-		/* eslint-disable global-require */
-		config = require(filepath)
-		/* eslint-enable global-require */
+		const data = fs.readFileSync(filepath)
+		config = JSON.parse(data)
 	} catch (err) {
 		config = defaultConfig
 	}
