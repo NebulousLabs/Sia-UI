@@ -6,8 +6,8 @@ import { remote } from 'electron'
 import configLoader from '../mainjs/config.js'
 const dialog = remote.dialog
 const mainWindow = remote.getCurrentWindow()
-const config = configLoader(Path.join(__dirname, '../config.json')).siad
-Siad.configure(config)
+const config = configLoader(Path.join(__dirname, '../config.json'))
+Siad.configure(config.siad)
 
 window.SiaAPI = {
 	call: Siad.call,
