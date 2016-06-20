@@ -49,10 +49,10 @@ function *updateSettings(action) {
 			qs: {
 				"acceptingcontracts": action.settings.get("acceptingContracts"),
 				"maxduration": action.settings.get("usersettings").get(MAX_DUR).get("value"),
-				"maxcollateral": 
+				"collateral": 
 					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(COLLATERAL).get("value")).toString(),
 				"minimumstorageprice": 
-					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(PRICE).get("value")).times("0.000231481481481481481481481481481481481481481481481").toString(),
+					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(PRICE).get("value")).dividedBy("1008").toString(), //1008 = 60(minutes/hour)/(1 block per 10minutes) * 24hours/day * 7days in a week
 				"minimumdownloadbandwidthprice":
 					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(BANDWIDTH).get("value")).toString(),
 			},
@@ -198,21 +198,21 @@ function *fetchData(action) {
 			acceptingContracts: updatedData.externalsettings.acceptingcontracts,
 			usersettings: List([
 				Map({
-					name: "Max Duration (Months)",
+					name: "Max Duration (Weeks)",
 					value: (new BigNumber(updatedData.externalsettings.maxduration)).toString(),
 					min: 12,
 				}),
 				Map({
-					name: "Collateral (SC)",
-					value: SiaAPI.hastingsToSiacoins(updatedData.externalsettings.maxcollateral).toString(),
+					name: "Collateral per TB per Month (SC)",
+					value: SiaAPI.hastingsToSiacoins(updatedData.externalsettings.collateral).toString(),
 				}),
 				Map({
-					name: "Price per GB (SC)",
-					value:  SiaAPI.hastingsToSiacoins(updatedData.externalsettings.storageprice).times("4320").toString(),
+					name: "Price per TB per Month (SC)",
+					value: SiaAPI.hastingsToSiacoins(updatedData.externalsettings.storageprice).times("1008").toFixed(0), //1008 = 60(minutes/hour)/(1 block per 10minutes) * 24hours/day * 7days in a week
 				}),
 				Map({
-					name: "Bandwidth Price (SC/byte)",
-					value:  SiaAPI.hastingsToSiacoins(updatedData.externalsettings.downloadbandwidthprice).toString(),
+					name: "Bandwidth Price (SC/TB)",
+					value: SiaAPI.hastingsToSiacoins(updatedData.externalsettings.downloadbandwidthprice).toString(),
 				}),
 			]),
 			numContracts: updatedData.networkmetrics.formcontractcalls,
