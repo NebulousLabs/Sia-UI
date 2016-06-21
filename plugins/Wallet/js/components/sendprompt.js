@@ -1,15 +1,15 @@
 import React, { PropTypes } from 'react'
 
-const SendPrompt = ({sendAddress, sendAmount, actions}) => {
+const SendPrompt = ({currencytype, sendAddress, sendAmount, actions}) => {
 	const handleSendAddressChange = (e) => actions.setSendAddress(e.target.value)
 	const handleSendAmountChange = (e) => actions.setSendAmount(e.target.value)
-	const handleSendClick = () => actions.sendSiacoin(sendAddress, sendAmount)
+	const handleSendClick = () => actions.sendCurrency(sendAddress, sendAmount, currencytype)
 	const handleCancelClick = () => actions.closeSendPrompt()
 	return (
 		<div className="modal">
 			<div className="sendprompt">
 				<div className="sendamount">
-					<h3>Send Amount (SC) </h3>
+					<h3>Send Amount {currencytype === 'siacoins' ? '(SC)' : '(SF)'} </h3>
 					<input onChange={handleSendAmountChange} value={sendAmount}></input>
 				</div>
 				<div className="sendaddress">
@@ -25,8 +25,9 @@ const SendPrompt = ({sendAddress, sendAmount, actions}) => {
 	)
 }
 SendPrompt.propTypes = {
-	sendAddress: PropTypes.string,
-	sendAmount: PropTypes.string,
+	sendAddress: PropTypes.string.isRequired,
+	sendAmount: PropTypes.string.isRequired,
+	currencytype: PropTypes.string.isRequired,
 }
 
 export default SendPrompt
