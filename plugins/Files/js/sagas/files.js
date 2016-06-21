@@ -94,7 +94,7 @@ function* setAllowanceProgressBarSaga() {
 		while (true) {
 			response = yield siadCall('/renter/contracts')
 			const deltaContracts = response.contracts.length - initialContracts
-			if (deltaContracts === allowanceHosts) {
+			if (deltaContracts >= allowanceHosts) {
 				break
 			}
 			const progress = Math.floor((deltaContracts / allowanceHosts) * 100)
