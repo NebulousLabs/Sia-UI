@@ -10,10 +10,27 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 		}
 	}
 
-	const updateSettings = () => actions.updateSettings(Map({ acceptingContracts, usersettings } ))
+	const updateSettings = () => {
+		if (helper.validNumbers(usersettings.map((val) => val.get("value")).toArray()))
+			actions.updateSettings(Map({ acceptingContracts, usersettings } ))
+	}
+
+    const saveEnabled = () => (
+        helper.validNumbers(usersettings.map((val) => val.get("value")).toArray()) && settingsChanged
+    )
+
 	const resetSettings = () => actions.updateSettings(Map({ acceptingContracts, usersettings: defaultsettings } ))
 	const announceHost = () => null
-	const toggleAcceptingContracts = () => actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
+	const toggleAcceptingContracts = () => {
+		if (!acceptingContracts){
+			actions.showWarning(
+				Map({ title: "Start hosting?", message: "To host files you must keep the Sia-UI open.\nCollateral will also be locked" +
+                        " and you will be unable to spend that SC until the contract is expired." }),
+				() => actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
+			)
+		}
+		else { actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings })) }
+	}
 
 	const HostProperties = usersettings.map((setting, key) => (
 		<div className='property pure-g' key={ key }>
@@ -25,7 +42,7 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 					<input type='number' data-setting={ setting.get('name') } onChange={ handleSettingInput } className='value' value={ setting.get('value') }></input>
 				</div>
 			</div>
-			<div className={ 'error pure-g' + ( setting.get('name') < 0 ? '' : ' hidden' ) }>
+			<div className={ 'error pure-u-1-1' + ( setting.get('value') <= 0  || isNaN(setting.get('value')) ? '' : ' hidden' ) }>
 				<span>Must be a number greater than zero.</span>
 			</div>
 		</div>
@@ -36,11 +53,7 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 			<div className='property row'>
   				<div className='title'>Configurations</div>
 				<div className='controls'>
-					<div className='button' id='announce' onClick={ announceHost }>
-						<i className='fa fa-bullhorn'></i>
-						Announce
-					</div>
-					<div className={ 'button' + ( settingsChanged ? '' : ' disable' ) } onClick={ updateSettings }>
+					<div className={ 'button' + ( saveEnabled() ? '' : ' disable' ) } onClick={ updateSettings }>
 						<i className='fa fa-save'></i>
 						Save
 					</div>

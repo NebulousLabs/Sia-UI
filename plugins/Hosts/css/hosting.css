@@ -143,7 +143,7 @@
 
 
 .button .fa {
-    margin-right: .25em;
+	margin-right: .25em;
 }
 
 /* Properties */
@@ -172,6 +172,7 @@
 
 .modal .modal-message {
 	display: flex;
+	position: relative;
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
@@ -194,12 +195,8 @@
 	padding: 1em;
 }
 
-.hosting-options {
-	position: relative;
-}
-
 .hosting-options-modal input[ type="number"] {
-    display: block;
+	display: block;
 	padding: 9px 10px;
 	margin: 10px;
 	border-radius: 0px;
@@ -213,11 +210,15 @@
 	border: 1px solid #DDDDDD;
 }
 
-.hosting-options-modal .button {
+.modal .button {
 	padding: 15px 40px;
 }
 
-.close-button {
+.modal-message p {
+	max-width: 450px;
+}
+
+.modal .close-button {
 	position: absolute;
 	top: 0px;
 	right: 0px;
@@ -233,7 +234,6 @@
 	border-bottom-left-radius: 0px;
 	border-top-left-radius: 4px;
 	transition: all .5s .75s;
-
 	border-top-left-radius: 0px;
 	border-bottom-left-radius: 4px;
 	margin: 0px;
@@ -256,7 +256,7 @@
 	border-bottom: 1px solid #e0e0e0;
 }
 .property .name {
-	padding: 19px 10px 19px 35px;
+	padding: 19px 35px;
 }
 .property .value {
 	padding-top: 9px;
@@ -279,6 +279,21 @@
 	border: 1px solid #DDDDDD;
 }
 
+.help.section .instructions{
+	width: 522px;
+	letter-spacing: normal;
+	margin: auto;
+	padding: 20px;	
+}
+
+.error {
+	text-align: center;
+	padding: 10px;
+	color: red;
+	border-top: 1px solid #eee;
+	background-color: #eee;
+}
+
 .section .controls {
 	text-align: right;
 }
@@ -290,7 +305,7 @@
 }
 
 .settings .name {
-    text-align: right;
+	text-align: right;
 }
 
 .files .row {

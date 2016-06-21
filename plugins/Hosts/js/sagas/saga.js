@@ -27,12 +27,12 @@ const fetchStorageFiles = (action) => new Promise((resolve, reject) => {
 		resolve(List(fetchedFiles.StorageFolderMetadata).map((file, key) => (
 			Map({
 				path: file.path,
-				size: (new BigNumber(file.capacity)).times(new BigNumber("1e-9")),
-				free: (new BigNumber(file.capacityremaining)).times(new BigNumber("1e-9"))
+				size: (new BigNumber(file.capacity)).times(new BigNumber("1e-9")).toString(),
+				free: (new BigNumber(file.capacityremaining)).times(new BigNumber("1e-9")).toString(),
 			})
 		)).toList())
 	}).catch( (e) => {
-		console.log(e)
+		SiaAPI.showError({ title: "Error Fetching Folders", content: e })
 		reject(e)
 	})
 })
@@ -60,7 +60,7 @@ function *updateSettings(action) {
 		})
 		yield put( actions.fetchData() )
 	} catch (e) {
-		console.log(e)
+		SiaAPI.showError({ title: "Error Updating Settings", content: e })
 	}
 }
 
@@ -147,7 +147,7 @@ function *addFolder(action) {
 		})
 		yield put( actions.fetchData() )
 	} catch (e) {
-		console.log(e)
+		SiaAPI.showError({ title: "Error Adding Folder", content: e })
 	}
 }
 
@@ -165,7 +165,7 @@ function *addFolderAskPathSize(action) {
 		}
 		else { console.log("Folder size is zero.") }
 	} catch (e) {
-		console.log(e)
+		SiaAPI.showError({ title: "Error Adding Folder", content: e })
 	}
 }
 
@@ -181,7 +181,7 @@ function *removeFolder(action) {
 		})
 		yield put( actions.fetchData() )
 	} catch (e) {
-		console.log(e)
+		SiaAPI.showError({ title: "Error Removing Folder", content: e })
 	}
 }
 
@@ -189,7 +189,7 @@ function *resizeFolder(action) {
 	try {
 		yield put( actions.showResizeDialog(action.folder) )
 		let closeAction = yield take( constants.HIDE_RESIZE_DIALOG )
-		if (closeAction.folder.get("size")){
+		if (closeAction.folder.get("size")){ //If size is zero just hide the dialog.
 			const resp = yield siadCall({
 				url: '/storage/folders/resize',
 				method: 'POST',
@@ -200,9 +200,8 @@ function *resizeFolder(action) {
 			})
 			yield put( actions.fetchData() )
 		}
-		else { console.log("Folder size is zero.") }
 	} catch (e) {
-		console.log(e)
+		SiaAPI.showError({ title: "Error Resizing Folder", content: e })
 	}
 }
 
@@ -249,9 +248,15 @@ function *fetchData(action) {
 
 		yield put( actions.fetchDataSuccess(data, action.ignoreSettings) )
 	} catch (e) {
-		//TODO: Add error handling.
-		console.log(e)
+		SiaAPI.showError({ title: "Error Fetching Data", content: e })
 	}
+}
+
+function *showWarning(action) {
+	yield put( actions.showWarningModal(action.modal) )
+	let closeAction = yield take( constants.HIDE_WARNING_MODAL )
+	if (closeAction.accepted){ action.acceptAction() }
+	else { if (action.declineAction){ action.declineAction() } }
 }
 
 function *updateSettingsListener () {
@@ -272,6 +277,9 @@ function *removeFolderListener () {
 function *resizeFolderListener () {
 	yield *takeEvery("RESIZE_FOLDER", resizeFolder)
 }
+function *showWarningModalListener () {
+	yield *takeEvery("SHOW_WARNING", showWarning)
+}
 
 export default function *initSaga() {
 	yield [
@@ -281,6 +289,7 @@ export default function *initSaga() {
 		fork(addFolderAskListener),
 		fork(removeFolderListener),
 		fork(resizeFolderListener),
+		fork(showWarningModalListener),
 	]
 	yield put(actions.fetchData())
 }

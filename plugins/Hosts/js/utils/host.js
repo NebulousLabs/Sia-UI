@@ -18,6 +18,19 @@ export const chooseFileLocation = function (){
 		})[0]
 }
 
+
+export const validNumbers = (values) => (
+	values.reduce((isValid, val) => (!isNaN(val) && val > 0) && isValid, true)
+)
+
+export const hastingsByteBlockToSCTBMonth = function (hastings){
+	
+}
+
+export const SCTBMonthToHastingsByteBlock = function (SC){
+
+}
+
 /*
 qsVars := map[string]interface{}{
 		"acceptingcontracts":   &settings.AcceptingContracts,

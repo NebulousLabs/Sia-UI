@@ -19,13 +19,13 @@ export const updateSettings = (settings, acceptingContracts) => ({
 
 export const fetchData = (ignoreSettings) => ({
 	type: constants.FETCH_DATA,
-    ignoreSettings,
+	ignoreSettings,
 })
 
 export const fetchDataSuccess = (data, ignoreSettings) => ({
 	type: constants.FETCH_DATA_SUCCESS,
 	data,
-    ignoreSettings,
+	ignoreSettings,
 })
 
 export const toggleAcceptingContracts = () => ({
@@ -63,4 +63,21 @@ export const showResizeDialog = (folder) => ({
 export const hideResizeDialog = (folder) => ({
 	type: constants.HIDE_RESIZE_DIALOG,
 	folder,
+})
+
+export const showWarning = (modal, acceptAction, declineAction) => ({
+	type: constants.SHOW_WARNING,
+	modal, // { title: "", message: "" }
+	acceptAction,
+	declineAction,
+})
+
+export const showWarningModal = (modal) => ({
+	type: constants.SHOW_WARNING_MODAL,
+	modal, // { title: "", message: "" }
+})
+
+export const hideWarningModal = (accepted) => ({
+	type: constants.HIDE_WARNING_MODAL,
+	accepted,
 })

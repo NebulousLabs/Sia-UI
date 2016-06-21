@@ -19,10 +19,10 @@ const FilesList = ({ folders, actions }) => {
 				<div>{ folder.get("size").toString() } GB</div>
 			</div>
 			<div className='pure-u-1-24' onClick={ function (){ resizeStorageLocation(folder) } }>
-				<div><i className='fa fa-edit'></i></div>
+				<div><i className='fa fa-edit button'></i></div>
 			</div>
 			<div className='pure-u-1-24' onClick={ function (){ removeStorageLocation(folder) } }>
-				<div><i className='fa fa-remove'></i></div>
+				<div><i className='fa fa-remove button'></i></div>
 			</div>
 		</div>
 	)).toList()
