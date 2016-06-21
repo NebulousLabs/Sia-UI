@@ -1,3 +1,5 @@
+'use strict'
+
 // Sia webpack configuration
 const path = require('path')
 const glob = require('glob')
