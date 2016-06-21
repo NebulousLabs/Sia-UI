@@ -183,6 +183,7 @@ export const httpCommand = function(commandStr, actions, newid) {
 		port: siaAddr.port,
 		path: apiURL,
 		method: 'POST',
+		timeout: 10800000,
 		headers: {
 			'User-Agent': 'Sia-Agent',
 			'Content-Type': 'application/x-www-form-urlencoded',

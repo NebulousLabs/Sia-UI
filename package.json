@@ -37,7 +37,7 @@
     "webpack": "^1.13.1"
   },
   "scripts": {
-    "start": "webpack && electron .",
+    "start": "webpack -d && electron .",
     "build": "webpack",
     "watch": "webpack --watch",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",

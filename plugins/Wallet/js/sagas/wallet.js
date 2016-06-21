@@ -45,6 +45,7 @@ function *walletUnlockSaga(action) {
 		yield siadCall({
 			url: '/wallet/unlock',
 			method: 'POST',
+			timeout: 10800000,
 			qs: {
 				encryptionpassword: action.password,
 			},
@@ -52,7 +53,7 @@ function *walletUnlockSaga(action) {
 		yield put(actions.setEncrypted())
 		yield put(actions.setUnlocked())
 	} catch (e) {
-		yield put(walletUnlockError(e))
+		yield put(walletUnlockError(e.toString()))
 	}
 }
 
