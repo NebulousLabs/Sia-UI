@@ -13,7 +13,7 @@ export default function sendPromptReducer(state = initialState, action) {
 	case SET_SEND_ADDRESS:
 		return state.set('sendaddress', action.address)
 	case START_SEND_PROMPT:
-		return state.set('sendtype', action.currencytype)
+		return state.set('currencytype', action.currencytype)
 	default:
 		return state
 	}
