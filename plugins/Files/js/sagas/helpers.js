@@ -106,16 +106,16 @@ export const totalUsage = (files) => readableFilesize(files.reduce((sum, file) =
 
 // Parse a list of files from `/renter/files`
 // return a list of file uploads
-export const parseUploads = (files) => {
-	let parsedUploads = List(files).filter((file) => file.uploadprogress < 100)
-	parsedUploads = parsedUploads.map((upload) => ({
-		siapath: upload.siapath,
-		name: Path.basename(upload.siapath),
-		progress: Math.floor(upload.uploadprogress),
-		type: 'upload',
-	}))
-	return parsedUploads.sortBy((upload) => upload.name).sortBy((upload) => -upload.progress)
-}
+export const parseUploads = (files) => List(files)
+.filter((file) => file.uploadprogress < 100)
+.map((upload) => ({
+	siapath: upload.siapath,
+	name: Path.basename(upload.siapath),
+	progress: Math.floor(upload.uploadprogress),
+	type: 'upload',
+}))
+.sortBy((upload) => upload.name)
+.sortBy((upload) => -upload.progress)
 
 // Search `files` for `text`, excluding directories not in `path`
 export const searchFiles = (files, text, path) => {
