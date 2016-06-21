@@ -9,7 +9,7 @@ const DeleteDialog = ({siapath, actions}) => {
 	return (
 		<div className="modal">
 			<div className="delete-dialog">
-				<h3> Confrim Deletion </h3>
+				<h3> Confirm Deletion </h3>
 				<div className="delete-text">
 					Are you sure you want to delete {siapath}?
 				</div>

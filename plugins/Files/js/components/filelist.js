@@ -44,9 +44,6 @@ const FileList = ({files, searchResults, path, showSearchField, actions}) => {
 			<File key={key} filename={file.name} filesize={file.size} onDownloadClick={onDownloadClick} onDeleteClick={onDeleteClick} />
 		)
 	})
-	console.log(fileElements)
-	console.log(files)
-
 	return (
 		<div className="file-list">
 			{showSearchField ? <SearchField /> : null}
