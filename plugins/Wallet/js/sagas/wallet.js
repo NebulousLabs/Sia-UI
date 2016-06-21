@@ -46,6 +46,7 @@ function *walletUnlockSaga(action) {
 			url: '/wallet/unlock',
 			method: 'POST',
 			timeout: 10800000,
+			forever: true,
 			qs: {
 				encryptionpassword: action.password,
 			},

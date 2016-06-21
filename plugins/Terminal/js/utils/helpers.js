@@ -184,6 +184,7 @@ export const httpCommand = function(commandStr, actions, newid) {
 		path: apiURL,
 		method: 'POST',
 		timeout: 10800000,
+		forever: true,
 		headers: {
 			'User-Agent': 'Sia-Agent',
 			'Content-Type': 'application/x-www-form-urlencoded',
