@@ -42,7 +42,7 @@ export const readableFilesize = (bytes) => {
 // ... it's ls.
 export const ls = (files, path) => {
 	let fileList = files.filter((file) => file.uploadprogress >= 100)
-	fileList = fileList.filter((file) => file.siapath.indexOf(path) !== -1)
+	                    .filter((file) => file.siapath.indexOf(path) !== -1)
 	let parsedFiles = Map()
 	fileList.forEach((file) => {
 		let type = 'file'
@@ -66,7 +66,7 @@ export const ls = (files, path) => {
 	return parsedFiles.toList().sortBy((file) => file.name)
 }
 
-// recursively version of readdir
+// recursive version of readdir
 export const readdirRecursive = (path, files) => {
 	const dirfiles = fs.readdirSync(path)
 	let filelist
