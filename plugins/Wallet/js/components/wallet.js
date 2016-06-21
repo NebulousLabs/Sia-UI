@@ -16,8 +16,8 @@ const Wallet = ({confirmedbalance, unconfirmedbalance, siafundbalance, showRecei
 					<span>Unconfirmed Delta: {unconfirmedbalance} SC </span>
 					{siafundbalance !== '0' ? (<span> Siafund Balance: {siafundbalance} SF </span>) : null}
 				</div>
-				{siafundbalance !== '0' ? <SendButton currencytype="siafunds" onClick={onSendClick('siafunds')} />: null}
-				<SendButton currencytype="siacoins" onClick={onSendClick('siacoins')} />
+				{siafundbalance !== '0' ? <SendButton currencytype="Siafund" onClick={onSendClick('siafunds')} />: null}
+				<SendButton currencytype="Siacoin" onClick={onSendClick('siacoins')} />
 				<ReceiveButton />
 			</div>
 			{showNewWalletDialog ? <NewWalletDialog /> : null}
