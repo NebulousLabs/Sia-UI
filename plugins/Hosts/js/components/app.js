@@ -3,6 +3,7 @@ import Header from '../containers/header.js'
 import Body from '../containers/body.js'
 import EditModal from '../containers/edit.js'
 import ResizeDialog from '../containers/resizeDialog.js'
+import WalletModal from '../containers/walletmodal.js'
 
 const HostingApp = () => (
 	<div className="app">
@@ -10,6 +11,7 @@ const HostingApp = () => (
 		<Body />
 		<EditModal />
 		<ResizeDialog />
+		<WalletModal />
 	</div>
 )
 

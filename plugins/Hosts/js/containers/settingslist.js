@@ -4,7 +4,7 @@ import { updateSetting, updateSettings, toggleAcceptingContracts } from '../acti
 import { bindActionCreators } from 'redux'
 
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ updateSetting, updateSettings, toggleAcceptingContracts }, dispatch),
+	actions: bindActionCreators({ updateSetting, updateSettings }, dispatch),
 })
 
 const mapStateToProps = (state) => ({

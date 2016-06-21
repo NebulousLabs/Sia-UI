@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'
 import rootReducer from './reducers/index.js'
 import initSaga from './sagas/saga.js'
 import HostingApp from './components/app.js'
+import * as actions from './actions/actions.js'
 
 
 // Render the wallet plugin
@@ -21,14 +22,7 @@ const rootElement = (
 ReactDOM.render(rootElement, document.getElementById('react-root'))
 sagaMiddleware.run(initSaga)
 
-// Get initial UI state
-//store.dispatch(getLockStatus())
-//store.dispatch(getBalance())
-//store.dispatch(getTransactions())
-
 // Poll Siad for state changes.
-//setInterval(() => {
-	//store.dispatch(getLockStatus())
-	//store.dispatch(getBalance())
-	//store.dispatch(getTransactions())
-//}, 15000)
+setInterval(() => {
+	store.dispatch(actions.fetchData({ ignoreSettings: true }))
+}, 5000)

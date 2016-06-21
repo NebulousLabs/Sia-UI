@@ -53,7 +53,7 @@ function *updateSettings(action) {
 				"collateral": 
 					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(COLLATERAL).get("value")).toString(),
 				"minimumstorageprice": 
-					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(PRICE).get("value")).dividedBy("1e9").dividedBy("4320").toString(), //TB -> bytes, blocks -> month
+					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(PRICE).get("value")).dividedBy("1e12").dividedBy("4320").toString(), //bytes->TB, blocks -> month
 				"minimumdownloadbandwidthprice":
 					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(BANDWIDTH).get("value")).toString(),
 			},
@@ -214,6 +214,10 @@ function *fetchData(action) {
 			method: 'GET',
 		})
 
+		const walletUnlocked = yield siadCall({
+			url: '/wallet'
+		})
+
 		const data = Map({
 			acceptingContracts: updatedData.externalsettings.acceptingcontracts,
 			usersettings: List([
@@ -228,7 +232,7 @@ function *fetchData(action) {
 				}),
 				Map({
 					name: "Price per TB per Month (SC)",
-					value: SiaAPI.hastingsToSiacoins(updatedData.externalsettings.storageprice).times("1e9").times("4320").toFixed(0), //bytes -> TB, 4320 = blocks per month
+					value: SiaAPI.hastingsToSiacoins(updatedData.externalsettings.storageprice).times("1e12").times("4320").toFixed(0), //TB, 4320 = blocks per month
 				}),
 				Map({
 					name: "Bandwidth Price (SC/TB)",
@@ -240,9 +244,10 @@ function *fetchData(action) {
 			earned: (new BigNumber(updatedData.financialmetrics.contractcompensation)).toString(),
 			expected: (new BigNumber(updatedData.financialmetrics.potentialcontractcompensation)).toString(),
 			files: yield fetchStorageFiles(),
+			walletLocked: !walletUnlocked.unlocked,
 		})
 
-		yield put( actions.fetchDataSuccess(data) )
+		yield put( actions.fetchDataSuccess(data, action.ignoreSettings) )
 	} catch (e) {
 		//TODO: Add error handling.
 		console.log(e)

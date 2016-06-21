@@ -21,6 +21,7 @@ const initialState = Map({
 	expected: 0,
 	acceptingContracts: 0,
 	settingsChanged: false,
+	walletLocked: true,
 	modals: Map({
 		shouldShowResizeDialog: false,
 		resizePath: "",
@@ -55,14 +56,15 @@ export default function hostingReducer(state = initialState, action) {
 			.set("resizeSize", action.folder.get("size")))
 
 	case constants.FETCH_DATA_SUCCESS:
-		return state.set("usersettings", action.data.get("usersettings"))
+		return state.set("usersettings", action.ignoreSettings ? state.get("usersettings") : action.data.get("usersettings"))
+			.set("settingsChanged", action.ignoreSettings ? action.get("settingsChanged") : false)
 			.set("acceptingContracts", action.data.get("acceptingContracts"))
 			.set("numContracts", action.data.get("numContracts"))
 			.set("storage", action.data.get("storage"))
 			.set("earned", action.data.get("earned"))
 			.set("expected", action.data.get("expected"))
 			.set("files", action.data.get("files"))
-			.set("settingsChanged", false)
+			.set("walletLocked", action.data.get("walletLocked"))
 
 	default:
 		return state

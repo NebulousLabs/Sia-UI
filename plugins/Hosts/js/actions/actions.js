@@ -17,13 +17,15 @@ export const updateSettings = (settings, acceptingContracts) => ({
 	settings,
 })
 
-export const fetchData = () => ({
+export const fetchData = (ignoreSettings) => ({
 	type: constants.FETCH_DATA,
+    ignoreSettings,
 })
 
-export const fetchDataSuccess = (data) => ({
+export const fetchDataSuccess = (data, ignoreSettings) => ({
 	type: constants.FETCH_DATA_SUCCESS,
 	data,
+    ignoreSettings,
 })
 
 export const toggleAcceptingContracts = () => ({
