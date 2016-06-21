@@ -155,7 +155,7 @@ function *addFolder(action) {
 function *addFolderAskPathSize(action) {
 	const newLocation = helper.chooseFileLocation();
 	try {
-		yield put( actions.showResizeDialog(Map({ path: newLocation, size: 50 })) )
+		yield put( actions.showResizeDialog(Map({ path: newLocation, size: 50 }), true) )
 		let closeAction = yield take( constants.HIDE_RESIZE_DIALOG )
 		if (closeAction.folder.get("size")){
 			yield put( actions.addFolder(Map({
@@ -187,7 +187,7 @@ function *removeFolder(action) {
 
 function *resizeFolder(action) {
 	try {
-		yield put( actions.showResizeDialog(action.folder) )
+		yield put( actions.showResizeDialog(action.folder, action.ignoreInitial) )
 		let closeAction = yield take( constants.HIDE_RESIZE_DIALOG )
 		if (closeAction.folder.get("size")){ //If size is zero just hide the dialog.
 			const resp = yield siadCall({
@@ -282,14 +282,20 @@ function *showWarningModalListener () {
 }
 
 export default function *initSaga() {
-	yield [
-		fork(updateSettingsListener),
-		fork(fetchSettingsListener),
-		fork(addFolderListener),
-		fork(addFolderAskListener),
-		fork(removeFolderListener),
-		fork(resizeFolderListener),
-		fork(showWarningModalListener),
-	]
-	yield put(actions.fetchData())
+	try {
+		yield [
+			fork(updateSettingsListener),
+			fork(fetchSettingsListener),
+			fork(addFolderListener),
+			fork(addFolderAskListener),
+			fork(removeFolderListener),
+			fork(resizeFolderListener),
+			fork(showWarningModalListener),
+		]
+		yield put(actions.fetchData())
+	}
+
+	catch (e) {
+		SiadAPI.showError({ title: "Init Saga Error", content: e.message })
+	}
 }

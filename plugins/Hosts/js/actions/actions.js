@@ -50,14 +50,16 @@ export const removeFolder = (folder) => ({
 	folder,
 })
 
-export const resizeFolder = (folder) => ({
+export const resizeFolder = (folder, ignoreInitial) => ({
 	type: constants.RESIZE_FOLDER,
 	folder,
+	ignoreInitial,
 })
 
-export const showResizeDialog = (folder) => ({
+export const showResizeDialog = (folder, ignoreInitial) => ({
 	type: constants.SHOW_RESIZE_DIALOG,
 	folder,
+	ignoreInitial,
 })
 
 export const hideResizeDialog = (folder) => ({

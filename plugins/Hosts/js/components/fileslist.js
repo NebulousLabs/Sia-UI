@@ -4,7 +4,10 @@ import * as helper from '../utils/host.js'
 
 const FilesList = ({ folders, actions }) => {
 	const addStorageLocation = (e) => actions.addFolderAskPathSize()
-	const removeStorageLocation = (folder) => actions.removeFolder(folder)
+	const removeStorageLocation = (folder) => actions.showWarning(Map({
+		title: "Delete storage folder?",
+		message: "No longer use this folder for storage? You may loose collateral if you do not have enough space to fill all contracts.",
+	}), () => actions.removeFolder(folder))
 	const resizeStorageLocation = (folder) => actions.resizeFolder(folder)
 
 	const FileList = folders.map((folder, key) => (

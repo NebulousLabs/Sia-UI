@@ -58,7 +58,7 @@ export default function hostingReducer(state = initialState, action) {
 			.set('shouldShowResizeDialog', true)
 			.set('resizePath', action.folder.get('path'))
 			.set('resizeSize', action.folder.get('size'))
-			.set('initialSize', action.folder.get('size')))
+			.set('initialSize', action.ignoreInitial ? 0 : action.folder.get('size')))
 
 	case constants.HIDE_WARNING_MODAL:
 		return state.set('modals', state.get('modals').set('shouldShowWarningModal', false))
