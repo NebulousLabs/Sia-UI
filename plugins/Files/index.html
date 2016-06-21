@@ -2,113 +2,14 @@
 <html>
 	<head>
 		<title>Files</title>
-		<!-- CSS -->
 		<link rel='stylesheet' href='../../css/roboto-condensed-min.css'>
 		<link rel='stylesheet' href='../../css/font-awesome.min.css'>
 		<link rel='stylesheet' href='../../css/plugin-standard.css'>
 		<link rel='stylesheet' href='css/files.css'>
 	</head>
 	<body>
-		<!-- Frame -->
-		<div class='frame'>
-			<!-- Header -->
-			<div class='header'>
-				<div class='title'>Files</div>
-				<div class='capsule'>
-					<div class='pod' id='host-count'>
-						<i class='fa fa-users'></i>
-						<span></span>
-					</div>
-					<div class='pod' id='price'></div>
-				</div>
-			</div>
-
-			<!-- File Browser -->
-			<div class='box' id='file-browser'>
-				<div class='row'>
-					<span id='cwd'>
-					</span>
-					<ul class='dropdown hidden'>
-						<li class='button'>
-							<span class="icon">
-								<span class='fa-stack'>
-									<i class='fa fa-folder-o fa-stack-2x'></i>
-									<i class='fa fa-plus fa-stack-1x'></i>
-								</span>
-							</span>
-							<span class="label">Make Folder</span>
-						</li>
-						<hr>
-						<li class='button'>
-							<span class="icon">
-								<span class='fa-stack'>
-									<i class='fa fa-file-o fa-stack-2x'></i>
-									<i class='fa fa-arrow-up fa-stack-1x'></i>
-								</span>
-							</span>
-							<span class="label">Upload File</span>
-						</li>
-						<li class='button'>
-							<span class="icon">
-								<span class='fa-stack'>
-									<i class='fa fa-folder-o fa-stack-2x'></i>
-									<i class='fa fa-arrow-up fa-stack-1x'></i>
-								</span>
-							</span>
-							<span class="label">Upload Folder</span>
-						</li>
-						<hr>
-						<li class='button'>
-							<span class="icon">
-								<i class='fa fa-file-text-o fa-2x'></i>
-							</span>
-							<span class="label">Load .Sia File</span>
-						</li>
-						<li class='button'>
-							<span class="icon">
-								<i class='fa fa-clipboard fa-2x'></i>
-							</span>
-							<span class="label">Paste ASCII File</span>
-						</li>
-						<div class='hidden' id='paste-ascii'>
-							<input placeholder='Paste your .sia ASCII'></input>
-							<div class='button hidden'>
-								<i class='fa fa-check fa-2x'></i>
-								<span class="label">Load ASCII File</span>
-							</div>
-						</div>
-					</ul>
-					<span class='controls'>
-						<div class='button rename cssTooltip' tooltip-content="Rename selected">
-							<i class='fa fa-pencil fa-2x'></i>
-						</div>
-						<div class='button download cssTooltip' tooltip-content="Download selected">
-							<i class='fa fa-download fa-2x'></i>
-						</div>
-						<div class='button share cssTooltip' tooltip-content="Share selected">
-							<i class='fa fa-share-alt fa-2x'></i>
-						</div>
-						<div class='button delete cssTooltip' tooltip-content="Delete selected">
-							<i class='fa fa-remove fa-2x'></i>
-						</div>
-						<input type='search' id='search-bar' placeholder='Search files'></input>
-					</span>
-				</div>
-
-				<!-- File list for current folder -->
-				<div class='file label'>
-					<div class='name'>Name</div>
-					<div class='info'>
-						<div class='size'>Size</div>
-						<div class='detail'>Detail</div>
-					</div>
-				</div>
-				<div id='file-list'>
-				</div>
-			</div>
-		</div>
-		
-		<!-- JS -->
-		<script src='js/global.js'></script>
+		<!-- React root -->
+		<div id="react-root"></div>
+		<script src="../../dist/plugins/Files.js"></script>
 	</body>
 </html>
