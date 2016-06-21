@@ -5,10 +5,9 @@ import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import rootReducer from './reducers/index.js'
 import rootSaga from './sagas/index.js'
-import { getLockStatus, getBalance, getTransactions } from './actions/wallet.js'
-import WalletApp from './components/app.js'
+import App from './containers/app.js'
+import { getWalletLockstate, getUploads, getFiles, setPath, getDownloads } from './actions/files.js'
 
-// Set up saga middleware system
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(
 	rootReducer,
@@ -16,23 +15,24 @@ const store = createStore(
 )
 sagaMiddleware.run(rootSaga)
 
-// Render the wallet plugin
 const rootElement = (
 	<Provider store={store}>
-		<WalletApp />
+		<App />
 	</Provider>
 )
-
 ReactDOM.render(rootElement, document.getElementById('react-root'))
 
-// Get initial UI state
-store.dispatch(getLockStatus())
-store.dispatch(getBalance())
-store.dispatch(getTransactions())
+store.dispatch(getWalletLockstate())
+store.dispatch(getFiles())
+store.dispatch(setPath(''))
+store.dispatch(getUploads())
 
-// Poll Siad for state changes.
+const downloadStart = Date.now()
+
 setInterval(() => {
-	store.dispatch(getLockStatus())
-	store.dispatch(getBalance())
-	store.dispatch(getTransactions())
-}, 15000)
+	store.dispatch(getDownloads(downloadStart))
+	store.dispatch(getUploads())
+	store.dispatch(getWalletLockstate())
+	store.dispatch(getFiles())
+}, 3000)
+
