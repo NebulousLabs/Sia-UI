@@ -89,18 +89,18 @@ export const readdirRecursive = (path, files) => {
 
 // Parse a response from `/renter/downloads`
 // return a list of file downloads
-export const parseDownloads = (since, downloads) => {
-	let parsedDownloads = List(downloads).filter((download) => Date.parse(download.starttime) > since)
-	parsedDownloads = parsedDownloads.map((download) => ({
-		siapath: download.siapath,
-		name: Path.basename(download.siapath),
-		progress: Math.floor((download.received / download.filesize) * 100),
-		destination: download.destination,
-		type: 'download',
-		starttime: download.starttime,
-	}))
-	return parsedDownloads.sortBy((download) => -download.starttime)
-}
+export const parseDownloads = (since, downloads) => List(downloads)
+.filter((download) => Date.parse(download.starttime) > since)
+.map((download) => ({
+	siapath: download.siapath,
+	name: Path.basename(download.siapath),
+	progress: Math.floor((download.received / download.filesize) * 100),
+	destination: download.destination,
+	type: 'download',
+	starttime: download.starttime,
+}))
+.sortBy((download) => -download.starttime)
+
 // Parse a list of files and return the total filesize
 export const totalUsage = (files) => readableFilesize(files.reduce((sum, file) => sum + file.filesize, 0))
 
