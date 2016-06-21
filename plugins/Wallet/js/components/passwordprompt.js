@@ -7,7 +7,7 @@ const PasswordPrompt = ({password, error, actions}) => {
 		<div className="password-prompt">
 			<span> Please enter your wallet unlock password to continue. </span>
 			<i className="fa fa-lock fa-4x"></i>
-			<input value={password} className="password-input" onChange={onPasswordChange} />
+			<input type="password" value={password} className="password-input" onChange={onPasswordChange} />
 			<button onClick={onUnlockClick}>Unlock</button>
 			<div className="password-prompt-error">{error}</div>
 		</div>
