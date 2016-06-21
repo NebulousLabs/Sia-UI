@@ -6,7 +6,7 @@ const ResizeDialogModal = ({ shouldShowResizeDialog, resizePath, resizeSize, ini
 	const handleSettingInput = (e) => actions.updateModal('resizeSize', e.target.value)
 	const hideResizeDialog = (newSize) => actions.hideResizeDialog(Map({ path: resizePath, size: newSize }))
 	const handleSettingKeyDown = (e) => { if (e.keyCode === 13) { handleSubmit(); e.preventDefault() } }
-	const handleSubmit = () => { if (resizeSize >= 35 && resizeSize !== initialSize){ hideResizeDialog(resizeSize); } }
+	const handleSubmit = () => { if (resizeSize >= 35 && resizeSize !== initialSize.toString()){ hideResizeDialog(resizeSize); } }
 
 	return (
 		<div className={ 'hosting-options-modal modal' + (shouldShowResizeDialog ? '': ' hidden') }>
@@ -21,9 +21,8 @@ const ResizeDialogModal = ({ shouldShowResizeDialog, resizePath, resizeSize, ini
 					<input type='number' onChange={ handleSettingInput } onKeyDown={ handleSettingKeyDown } value={ resizeSize } min='35'></input>
 				</p>
 				<span className={ 'error' + ( resizeSize < 35 ? '' : ' hidden' ) }>Storage folder must be at least 35 GB.</span>
-				<span className={ 'error' + ( resizeSize === initialSize ? '' : ' hidden' ) }>Folder already this size.</span>
 				<p>
-					<input className='button' type='button' value='Save' onClick={ handleSubmit }></input>
+					<input className={ 'button accept' + ( resizeSize !== initialSize.toString() ? '' : ' disabled' ) } type='button' value='Save' onClick={ handleSubmit }></input>
 				</p>
 			</form>
 		</div>

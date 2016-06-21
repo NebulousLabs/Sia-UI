@@ -12,8 +12,8 @@ const HostingApp = () => (
 		<Body />
 		<EditModal />
 		<ResizeDialog />
-		<WalletModal />
 		<WarningModal />
+		<WalletModal />
 	</div>
 )
 

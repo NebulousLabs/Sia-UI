@@ -19,17 +19,33 @@ export const chooseFileLocation = function (){
 }
 
 
+export const hastingsByteToSCTB = (hastings) => (
+	SiaAPI.hastingsToSiacoins(hastings).dividedBy("1e12") //4320 = blocks per month
+)
+
+export const SCTBToHastingsByte = (SC) => (
+	SiaAPI.siacoinsToHastings(SC).times("1e12") //4320 = blocks per month
+)
+
 export const validNumbers = (values) => (
 	values.reduce((isValid, val) => (!isNaN(val) && val > 0) && isValid, true)
 )
 
-export const hastingsByteBlockToSCTBMonth = function (hastings){
-	
-}
+export const hastingsByteBlockToSCTBMonth = (hastings) => (
+	hastingsByteToSCTB(hastings).dividedBy("4320") //4320 = blocks per month
+)
 
-export const SCTBMonthToHastingsByteBlock = function (SC){
+export const SCTBMonthToHastingsByteBlock = (SC) => (
+	SCTBToHastingsByte(SC).times("4320") //4320 = blocks per month
+)
 
-}
+export const blocksToWeeks = (blocks) => (
+	(new BigNumber(blocks)).dividedBy("1008") //1008 = blocks per week
+)
+
+export const weeksToBlocks = (weeks) => (
+	(new BigNumber(weeks)).times("1008") //1008 = blocks per week
+)
 
 /*
 qsVars := map[string]interface{}{

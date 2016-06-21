@@ -15,21 +15,26 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 			actions.updateSettings(Map({ acceptingContracts, usersettings } ))
 	}
 
-    const saveEnabled = () => (
-        helper.validNumbers(usersettings.map((val) => val.get("value")).toArray()) && settingsChanged
-    )
+	const saveEnabled = () => (
+		helper.validNumbers(usersettings.map((val) => val.get("value")).toArray()) && settingsChanged
+	)
 
 	const resetSettings = () => actions.updateSettings(Map({ acceptingContracts, usersettings: defaultsettings } ))
 	const announceHost = () => null
 	const toggleAcceptingContracts = () => {
 		if (!acceptingContracts){
 			actions.showWarning(
-				Map({ title: "Start hosting?", message: "To host files you must keep the Sia-UI open.\nCollateral will also be locked" +
-                        " and you will be unable to spend that SC until the contract is expired." }),
+				Map({ title: "Start accepting contracts?", message: "To host files you must keep the Sia-UI open. Collateral will also be locked" +
+						" and you will be unable to spend that SC until the contract is expired." }),
 				() => actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
 			)
 		}
-		else { actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings })) }
+		else {
+			actions.showWarning(
+				Map({ title: "Stop accepting contracts?", message: "You must still keep Sia-UI open until the exisitng contracts have expired otherwise you will lose collateral." }),
+				() => actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
+			)
+		}
 	}
 
 	const HostProperties = usersettings.map((setting, key) => (

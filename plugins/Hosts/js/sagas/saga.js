@@ -11,7 +11,7 @@ import BigNumber from 'bignumber.js'
 const siadCall = (uri) => new Promise((resolve, reject) => {
 	SiaAPI.call(uri, (err, response) => {
 		if (err) {
-			reject(err)
+			reject({ message: err })
 		} else {
 			resolve(response)
 		}
@@ -27,12 +27,12 @@ const fetchStorageFiles = (action) => new Promise((resolve, reject) => {
 		resolve(List(fetchedFiles.StorageFolderMetadata).map((file, key) => (
 			Map({
 				path: file.path,
-				size: (new BigNumber(file.capacity)).times(new BigNumber("1e-9")).toString(),
-				free: (new BigNumber(file.capacityremaining)).times(new BigNumber("1e-9")).toString(),
+				size: (new BigNumber(file.capacity)).times("1e-9").toString(),
+				free: (new BigNumber(file.capacityremaining)).times("1e-9").toString(),
 			})
 		)).toList())
 	}).catch( (e) => {
-		SiaAPI.showError({ title: "Error Fetching Folders", content: e })
+		SiaAPI.showError({ title: "Error Fetching Folders", content: e.message })
 		reject(e)
 	})
 })
@@ -49,18 +49,18 @@ function *updateSettings(action) {
 			method: 'POST',
 			qs: {
 				"acceptingcontracts": action.settings.get("acceptingContracts"),
-				"maxduration": action.settings.get("usersettings").get(MAX_DUR).get("value"),
+				"maxduration": helper.weeksToBlocks(action.settings.get("usersettings").get(MAX_DUR).get("value")).toString(),
 				"collateral": 
-					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(COLLATERAL).get("value")).toString(),
+					helper.SCTBMonthToHastingsByteBlock(action.settings.get("usersettings").get(COLLATERAL).get("value")).toString(),
 				"minimumstorageprice": 
-					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(PRICE).get("value")).dividedBy("1e12").dividedBy("4320").toString(), //bytes->TB, blocks -> month
+					helper.SCTBMonthToHastingsByteBlock(action.settings.get("usersettings").get(PRICE).get("value")).toString(), //bytes->TB, blocks -> month
 				"minimumdownloadbandwidthprice":
-					SiaAPI.siacoinsToHastings(action.settings.get("usersettings").get(BANDWIDTH).get("value")).toString(),
+					helper.SCTBToHastingsByte(action.settings.get("usersettings").get(BANDWIDTH).get("value")).toString(),
 			},
 		})
 		yield put( actions.fetchData() )
 	} catch (e) {
-		SiaAPI.showError({ title: "Error Updating Settings", content: e })
+		SiaAPI.showError({ title: "Error Updating Settings", content: e.message })
 	}
 }
 
@@ -147,7 +147,7 @@ function *addFolder(action) {
 		})
 		yield put( actions.fetchData() )
 	} catch (e) {
-		SiaAPI.showError({ title: "Error Adding Folder", content: e })
+		SiaAPI.showError({ title: "Error Adding Folder", content: e.message })
 	}
 }
 
@@ -165,7 +165,7 @@ function *addFolderAskPathSize(action) {
 		}
 		else { console.log("Folder size is zero.") }
 	} catch (e) {
-		SiaAPI.showError({ title: "Error Adding Folder", content: e })
+		SiaAPI.showError({ title: "Error Adding Folder", content: e.message })
 	}
 }
 
@@ -181,7 +181,7 @@ function *removeFolder(action) {
 		})
 		yield put( actions.fetchData() )
 	} catch (e) {
-		SiaAPI.showError({ title: "Error Removing Folder", content: e })
+		SiaAPI.showError({ title: "Error Removing Folder", content: e.message })
 	}
 }
 
@@ -195,13 +195,13 @@ function *resizeFolder(action) {
 				method: 'POST',
 				qs: {
 					path: closeAction.folder.get("path"),
-					newsize: (new BigNumber(closeAction.folder.get("size"))).times(new BigNumber("1e9")).toString(),
+					newsize: (new BigNumber(closeAction.folder.get("size"))).times("1e9").toString(),
 				},
 			})
 			yield put( actions.fetchData() )
 		}
 	} catch (e) {
-		SiaAPI.showError({ title: "Error Resizing Folder", content: e })
+		SiaAPI.showError({ title: "Error Resizing Folder", content: e.message })
 	}
 }
 
@@ -222,20 +222,20 @@ function *fetchData(action) {
 			usersettings: List([
 				Map({
 					name: "Max Duration (Weeks)",
-					value: (new BigNumber(updatedData.externalsettings.maxduration)).toString(),
+					value: helper.blocksToWeeks(updatedData.externalsettings.maxduration).toString(),
 					min: 12,
 				}),
 				Map({
 					name: "Collateral per TB per Month (SC)",
-					value: SiaAPI.hastingsToSiacoins(updatedData.externalsettings.collateral).toString(),
+					value: helper.hastingsByteBlockToSCTBMonth(updatedData.externalsettings.collateral).toString(),
 				}),
 				Map({
 					name: "Price per TB per Month (SC)",
-					value: SiaAPI.hastingsToSiacoins(updatedData.externalsettings.storageprice).times("1e12").times("4320").toFixed(0), //TB, 4320 = blocks per month
+					value: helper.hastingsByteBlockToSCTBMonth(updatedData.externalsettings.storageprice).toFixed(0),
 				}),
 				Map({
 					name: "Bandwidth Price (SC/TB)",
-					value: SiaAPI.hastingsToSiacoins(updatedData.externalsettings.downloadbandwidthprice).toString(),
+					value: helper.hastingsByteToSCTB(updatedData.externalsettings.downloadbandwidthprice).toString(),
 				}),
 			]),
 			numContracts: updatedData.networkmetrics.formcontractcalls,
@@ -248,7 +248,7 @@ function *fetchData(action) {
 
 		yield put( actions.fetchDataSuccess(data, action.ignoreSettings) )
 	} catch (e) {
-		SiaAPI.showError({ title: "Error Fetching Data", content: e })
+		SiaAPI.showError({ title: "Error Fetching Data", content: e.message })
 	}
 }
 
