@@ -32,7 +32,7 @@ const FileBrowser = ({diskusage, dragging, showUploadDialog, showDeleteDialog, s
 
 				<div className="files-toolbar">
 					<div className="files-usage-info">
-						Storage Usage: {diskusage/1000000000} GB
+						Storage Usage: {diskusage}
 					</div>
 					<div className="buttons">
 						<SetAllowanceButton />
@@ -49,7 +49,7 @@ const FileBrowser = ({diskusage, dragging, showUploadDialog, showDeleteDialog, s
 }
 
 FileBrowser.propTypes = {
-	diskusage: PropTypes.number.isRequired,
+	diskusage: PropTypes.string.isRequired,
 	dragging: PropTypes.bool.isRequired,
 	showUploadDialog: PropTypes.bool.isRequired,
 	showDeleteDialog: PropTypes.bool.isRequired,

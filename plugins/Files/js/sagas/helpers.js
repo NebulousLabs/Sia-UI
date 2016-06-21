@@ -23,6 +23,21 @@ export const siadCall = (uri) => new Promise((resolve, reject) => {
 	})
 })
 
+// Take a number of bytes and return a sane, human-readable size.
+export const readableFilesize = (bytes) => {
+	const units = ['PB', 'TB', 'GB', 'MB', 'KB', 'B']
+	let readableunit = 'B'
+	let readablesize = bytes
+	for (const unit in units) {
+		if (readablesize < 1000) {
+			readableunit = units[unit]
+			break
+		}
+		readablesize /= 1000
+	}
+	return readablesize.toFixed(2).toString() + ' ' + readableunit
+}
+
 // return a list of files filtered with path.
 // ... it's ls.
 export const ls = (files, path) => {
@@ -40,7 +55,7 @@ export const ls = (files, path) => {
 			uploadprogress = ''
 		}
 		parsedFiles = parsedFiles.set(filename, {
-			size: file.filesize,
+			size: readableFilesize(file.filesize),
 			name: filename,
 			siapath: file.siapath,
 			available: file.available,
@@ -87,7 +102,7 @@ export const parseDownloads = (since, downloads) => {
 	return parsedDownloads.sortBy((download) => -download.starttime)
 }
 // Parse a list of files and return the total filesize
-export const totalUsage = (files) => files.reduce((sum, file) => sum + file.filesize, 0)
+export const totalUsage = (files) => readableFilesize(files.reduce((sum, file) => sum + file.filesize, 0))
 
 // Parse a list of files from `/renter/files`
 // return a list of file uploads
@@ -108,7 +123,7 @@ export const searchFiles = (files, text, path) => {
 	matchingFiles = matchingFiles.filter((file) => file.uploadprogress >= 100)
 	matchingFiles = matchingFiles.filter((file) => file.siapath.toLowerCase().indexOf(text.toLowerCase()) !== -1)
 	return matchingFiles.map((file) => ({
-		size: file.filesize,
+		size: readableFilesize(file.filesize),
 		name: Path.basename(file.siapath),
 		siapath: file.siapath,
 		available: file.available,

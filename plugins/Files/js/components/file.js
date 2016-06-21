@@ -7,7 +7,7 @@ const File = ({filename, filesize, onDownloadClick, onDeleteClick}) => (
 			<div className="name">{filename}</div>
 		</div>
 		<div className="file-info">
-			<span className="filesize">{Math.floor(filesize/1000000)} MB</span>
+			<span className="filesize">{filesize} MB</span>
 			<div className="file-buttons">
 				<div onClick={onDownloadClick} className="download-button">
 					<i className="fa fa-cloud-download 2x"></i>
@@ -22,7 +22,7 @@ const File = ({filename, filesize, onDownloadClick, onDeleteClick}) => (
 
 File.propTypes = {
 	filename: PropTypes.string.isRequired,
-	filesize: PropTypes.number.isRequired,
+	filesize: PropTypes.string.isRequired,
 	onDownloadClick: PropTypes.func.isRequired,
 	onDeleteClick: PropTypes.func.isRequired,
 }
