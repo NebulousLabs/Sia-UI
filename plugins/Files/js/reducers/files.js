@@ -23,19 +23,19 @@ const initialState = Map({
 })
 
 export default function filesReducer(state = initialState, action) {
-	console.log(action)
 	switch (action.type) {
 	case constants.RECEIVE_DISK_USAGE:
 		return state.set('usage', action.usage)
 	case constants.RECEIVE_FILES:
 		return state.set('files', action.files)
-                .set('workingDirectoryFiles', ls(action.files, state.get('path')))
+		            .set('workingDirectoryFiles', ls(state.get('files', action.path)))
 	case constants.SET_SEARCH_TEXT:
-		return state.set('searchResults', searchFiles(state.get('files'), action.text, state.get('path')))
-                .set('searchText', action.text)
+		const results = searchFiles(state.get('files'), action.text, state.get('path'))
+		return state.set('searchResults', results)
+		            .set('searchText', action.text)
 	case constants.SET_PATH:
 		return state.set('path', action.path)
-                .set('workingDirectoryFiles', ls(state.get('files'), action.path))
+		            .set('workingDirectoryFiles', ls(state.get('files', action.path)))
 	case constants.SHOW_ALLOWANCE_DIALOG:
 		return state.set('showAllowanceDialog', true)
 	case constants.CLOSE_ALLOWANCE_DIALOG:
