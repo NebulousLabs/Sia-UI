@@ -51,7 +51,9 @@ function *walletUnlockSaga(action) {
 		})
 		yield put(actions.setEncrypted())
 		yield put(actions.setUnlocked())
+		yield put(actions.handlePasswordChange(''))
 	} catch (e) {
+		yield put(actions.handlePasswordChange(''))
 		yield put(walletUnlockError(e))
 	}
 }
