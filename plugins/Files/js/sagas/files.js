@@ -65,9 +65,10 @@ function* calculateStorageCostSaga(action) {
 		yield put(actions.setStorageCost(cost.round(3).toString()))
 		yield put(actions.setStorageSize(action.size))
 	} catch (e) {
-		console.error(e)
 		yield put(actions.setStorageSize(''))
 		yield put(actions.setStorageCost('0'))
+		yield put(actions.closeAllowanceDialog())
+		sendError(e)
 	}
 }
 
