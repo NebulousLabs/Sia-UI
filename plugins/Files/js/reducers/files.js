@@ -5,7 +5,7 @@ import { ls, searchFiles } from '../sagas/helpers.js'
 const initialState = Map({
 	activespending: '',
 	allocatedspending: '',
-	usage: 0,
+	usage: '',
 	files: List(),
 	workingDirectoryFiles: List(),
 	searchResults: List(),

@@ -61,6 +61,9 @@
 	justify-content: space-around;
 	background-color: #ECECEC;
 }
+.downloads .transfer-list li:hover {
+	background-color: #DDDDDD;
+}
 .transfername {
 	font-size: 17px;
 	margin-top: 10px;

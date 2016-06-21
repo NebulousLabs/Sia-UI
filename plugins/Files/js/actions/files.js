@@ -132,3 +132,7 @@ export const receiveDiskUsage = (usage) => ({
 	type: constants.RECEIVE_DISK_USAGE,
 	usage,
 })
+export const openDownloadLocation = (location) => ({
+	type: constants.OPEN_DOWNLOAD_LOCATION,
+	location,
+})
