@@ -41,7 +41,7 @@ export const readableFilesize = (bytes) => {
 // return a list of files filtered with path.
 // ... it's ls.
 export const ls = (files, path) => {
-	let fileList = files.filter((file) => file.uploadprogress >= 100)
+	const fileList = files.filter((file) => file.uploadprogress >= 100)
 	                    .filter((file) => file.siapath.indexOf(path) !== -1)
 	let parsedFiles = Map()
 	fileList.forEach((file) => {
