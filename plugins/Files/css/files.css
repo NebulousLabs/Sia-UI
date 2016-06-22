@@ -109,6 +109,7 @@
 	padding-bottom: 15px;
 }
 .files-toolbar {
+	min-width: 575px;
 	width: 100%;
 	height: 70px;
 	display: flex;
@@ -119,18 +120,34 @@
 	color: #fff;
 	padding-bottom: 10px;
 	padding-top: 10px;
-	padding-left: 5px;
-	padding-right: 5px;
+	overflow: hidden;
+}
+.set-allowance-button {
+	display: inline-block;
+}
+.search-button {
+	display: inline-block;
+}
+.upload-button {
+	display: inline-block;
+}
+.transfers-button {
+	display: inline-block;
+}
+.files-toolbar .buttons {
 	overflow: hidden;
 }
 .files-toolbar .buttons div:hover {
 	opacity: 0.5;
 }
+.files-usage-info {
+	margin-left: 5px;
+}
 .files-toolbar .buttons div {
-	display: inline-block;
 	text-align: center;
 	margin-bottom: 5px;
 	width: 100px;
+	cursor: pointer;
 }
 .files-toolbar .buttons div span {
 	display: block;
@@ -148,6 +165,7 @@
 	position: absolute;
 	top: 0;
 	right: 10px;
+	cursor: pointer;
 }
 .file-list h2 {
 	text-align: center;
@@ -159,7 +177,7 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: flex-start;
-	overflow-y: scroll;
+	overflow-y: auto;
 	background-color: #C5C5C5;
 	margin: 0;
 }
