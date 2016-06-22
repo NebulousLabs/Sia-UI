@@ -6,8 +6,8 @@ import * as constants from '../constants/files.js'
 import { List } from 'immutable'
 import { sendError, siadCall, totalUsage, readdirRecursive, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
 
-const blockMonth = 4382
-const allowanceMonths = 3
+const blockMonth = 4320
+const allowanceMonths = 0.1
 const allowanceHosts = 24
 const allowancePeriod = blockMonth*allowanceMonths
 
