@@ -145,6 +145,7 @@ export const estimatedStoragePriceGBSC = (hosts, size, duration) => {
 	}
 	// Compute the average host price.
 	// Multiply this average by 9 to assume a redundancy of 6 with 25% of the files being downloaded at 2x monthly price
+	// TODO: this functionality should be in the api.
 	const averagePricePerByteBlockH = hostPrices.reduce((sum, price) => sum.add(price), new BigNumber(0)).dividedBy(hostPrices.size).times(9)
 	const averagePricePerGBBlockH = averagePricePerByteBlockH.times(bytesPerGB)
 	const averagePricePerGBBlockSC = SiaAPI.hastingsToSiacoins(averagePricePerGBBlockH)
