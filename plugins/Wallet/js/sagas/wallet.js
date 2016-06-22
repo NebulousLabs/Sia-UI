@@ -58,6 +58,19 @@ function *walletUnlockSaga(action) {
 	}
 }
 
+function *walletLockSaga() {
+	try {
+		yield siadCall({
+			url: '/wallet/lock',
+			method: 'POST',
+		})
+		yield put(actions.setEncrypted())
+		yield put(actions.setLocked())
+	} catch (e) {
+		sendError(e)
+	}
+}
+
 // Call /wallet/init to create a new wallet, show the user the newWalletDialog,
 // Wait for the user to close the dialog, then unlock the wallet using the primary seed.
 function *createWalletSaga() {
@@ -150,6 +163,9 @@ export function* watchGetLockStatus() {
 }
 export function* watchUnlockWallet() {
 	yield *takeEvery(constants.UNLOCK_WALLET, walletUnlockSaga)
+}
+export function* watchLockWallet() {
+	yield *takeEvery(constants.LOCK_WALLET, walletLockSaga)
 }
 export function* watchGetBalance() {
 	yield *takeEvery(constants.GET_BALANCE, getBalanceSaga)
