@@ -18,7 +18,6 @@ const siadCall = (uri) => new Promise((resolve, reject) => {
 	})
 })
 
-
 const fetchStorageFiles = (action) => new Promise((resolve, reject) => {
 	siadCall({
 		url: '/storage',
@@ -37,6 +36,21 @@ const fetchStorageFiles = (action) => new Promise((resolve, reject) => {
 	})
 })
 
+function *announceHost(action) {
+	try {
+		yield put( actions.showAnnounceDialog(action.address) )
+		let closeAction = yield take( constants.HIDE_ANNOUNCE_DIALOG )
+		if (closeAction.address !== ''){ //If size is zero just hide the dialog.
+			const resp = yield siadCall({
+				url: '/host/announce',
+				method: 'POST',
+				qs: { netaddress: closeAction.address },
+			})
+		}
+	} catch (e) {
+		SiaAPI.showError({ title: "Error Announcing Host", content: e.message })
+	}
+}
 
 const MAX_DUR = 0
 const COLLATERAL = 1
@@ -52,9 +66,9 @@ function *updateSettings(action) {
 				"maxduration": helper.weeksToBlocks(action.settings.get("usersettings").get(MAX_DUR).get("value")).toString(),
 				"collateral": 
 					helper.SCTBMonthToHastingsByteBlock(action.settings.get("usersettings").get(COLLATERAL).get("value")).toString(),
-				"minimumstorageprice": 
+				"minstorageprice": 
 					helper.SCTBMonthToHastingsByteBlock(action.settings.get("usersettings").get(PRICE).get("value")).toString(), //bytes->TB, blocks -> month
-				"minimumdownloadbandwidthprice":
+				"mindownloadbandwidthprice":
 					helper.SCTBToHastingsByte(action.settings.get("usersettings").get(BANDWIDTH).get("value")).toString(),
 			},
 		})
@@ -227,7 +241,7 @@ function *fetchData(action) {
 				}),
 				Map({
 					name: "Collateral per TB per Month (SC)",
-					value: helper.hastingsByteBlockToSCTBMonth(updatedData.externalsettings.collateral).toString(),
+					value: helper.hastingsByteBlockToSCTBMonth(updatedData.externalsettings.collateral).toFixed(0),
 				}),
 				Map({
 					name: "Price per TB per Month (SC)",
@@ -238,12 +252,13 @@ function *fetchData(action) {
 					value: helper.hastingsByteToSCTB(updatedData.externalsettings.downloadbandwidthprice).toString(),
 				}),
 			]),
-			numContracts: updatedData.networkmetrics.formcontractcalls,
+			numContracts: updatedData.financialmetrics.contractcount,
 			storage: (new BigNumber(updatedData.externalsettings.totalstorage)).minus(new BigNumber(updatedData.externalsettings.remainingstorage)).toString(),
 			earned: (new BigNumber(updatedData.financialmetrics.contractcompensation)).toString(),
 			expected: (new BigNumber(updatedData.financialmetrics.potentialcontractcompensation)).toString(),
 			files: yield fetchStorageFiles(),
 			walletLocked: !walletUnlocked.unlocked,
+			defaultAnnounceAddress: updatedData.externalsettings.netaddress,
 		})
 
 		yield put( actions.fetchDataSuccess(data, action.ignoreSettings) )
@@ -277,6 +292,9 @@ function *removeFolderListener () {
 function *resizeFolderListener () {
 	yield *takeEvery("RESIZE_FOLDER", resizeFolder)
 }
+function *announceHostListener () {
+	yield *takeEvery("ANNOUNCE_HOST", announceHost)
+}
 function *showWarningModalListener () {
 	yield *takeEvery("SHOW_WARNING", showWarning)
 }
@@ -290,6 +308,7 @@ export default function *initSaga() {
 			fork(addFolderAskListener),
 			fork(removeFolderListener),
 			fork(resizeFolderListener),
+			fork(announceHostListener),
 			fork(showWarningModalListener),
 		]
 		yield put(actions.fetchData())

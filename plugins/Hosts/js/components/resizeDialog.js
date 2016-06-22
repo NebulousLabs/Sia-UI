@@ -22,7 +22,7 @@ const ResizeDialogModal = ({ shouldShowResizeDialog, resizePath, resizeSize, ini
 				</p>
 				<span className={ 'error' + ( resizeSize < 35 ? '' : ' hidden' ) }>Storage folder must be at least 35 GB.</span>
 				<p>
-					<input className={ 'button accept' + ( resizeSize !== initialSize.toString() ? '' : ' disabled' ) } type='button' value='Save' onClick={ handleSubmit }></input>
+					<input className={ 'button accept' + ( resizeSize !== initialSize.toString() && resizeSize >= 35 ? '' : ' disabled' ) } type='button' value='Save' onClick={ handleSubmit }></input>
 				</p>
 			</form>
 		</div>

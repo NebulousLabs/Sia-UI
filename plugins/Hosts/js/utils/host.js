@@ -18,13 +18,12 @@ export const chooseFileLocation = function (){
 		})[0]
 }
 
-
 export const hastingsByteToSCTB = (hastings) => (
-	SiaAPI.hastingsToSiacoins(hastings).dividedBy("1e12") //4320 = blocks per month
+	SiaAPI.hastingsToSiacoins(hastings).times("1e12") //4320 = blocks per month
 )
 
 export const SCTBToHastingsByte = (SC) => (
-	SiaAPI.siacoinsToHastings(SC).times("1e12") //4320 = blocks per month
+	SiaAPI.siacoinsToHastings(SC).dividedBy("1e12") //4320 = blocks per month
 )
 
 export const validNumbers = (values) => (
@@ -32,11 +31,11 @@ export const validNumbers = (values) => (
 )
 
 export const hastingsByteBlockToSCTBMonth = (hastings) => (
-	hastingsByteToSCTB(hastings).dividedBy("4320") //4320 = blocks per month
+	hastingsByteToSCTB(hastings).times("4320") //4320 = blocks per month
 )
 
 export const SCTBMonthToHastingsByteBlock = (SC) => (
-	SCTBToHastingsByte(SC).times("4320") //4320 = blocks per month
+	SCTBToHastingsByte(SC).dividedBy("4320") //4320 = blocks per month
 )
 
 export const blocksToWeeks = (blocks) => (

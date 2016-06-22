@@ -22,6 +22,7 @@ const initialState = Map({
 	acceptingContracts: 0,
 	settingsChanged: false,
 	walletLocked: true,
+	defaultAnnounceAddress: '',
 	modals: Map({
 		shouldShowResizeDialog: false,
 		resizePath: '',
@@ -30,6 +31,8 @@ const initialState = Map({
 		warningModalTitle: '',
 		warningModalMessage: '',
 		shouldShowWarningModal: false,
+		shouldShowAnnounceDialog: false,
+		announceAddress: '',
 	}),
 })
 
@@ -60,6 +63,14 @@ export default function hostingReducer(state = initialState, action) {
 			.set('resizeSize', action.folder.get('size'))
 			.set('initialSize', action.ignoreInitial ? 0 : action.folder.get('size')))
 
+	case constants.HIDE_ANNOUNCE_DIALOG:
+		return state.set('modals', state.get('modals').set('shouldShowAnnounceDialog', false))
+
+	case constants.SHOW_ANNOUNCE_DIALOG:
+		return state.set('modals', state.get('modals')
+			.set('shouldShowAnnounceDialog', true)
+			.set('announceAddress', action.address || state.get("defaultAnnounceAddress")))
+
 	case constants.HIDE_WARNING_MODAL:
 		return state.set('modals', state.get('modals').set('shouldShowWarningModal', false))
 
@@ -79,6 +90,7 @@ export default function hostingReducer(state = initialState, action) {
 			.set('expected', action.data.get('expected'))
 			.set('files', action.data.get('files'))
 			.set('walletLocked', action.data.get('walletLocked'))
+			.set('defaultAnnounceAddress', action.data.get('defaultAnnounceAddress'))
 
 	default:
 		return state

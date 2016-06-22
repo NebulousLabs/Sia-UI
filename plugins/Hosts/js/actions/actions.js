@@ -67,6 +67,21 @@ export const hideResizeDialog = (folder) => ({
 	folder,
 })
 
+export const announceHost = (address) => ({
+	type: constants.ANNOUNCE_HOST,
+	address,
+})
+
+export const showAnnounceDialog = (address) => ({
+	type: constants.SHOW_ANNOUNCE_DIALOG,
+	address,
+})
+
+export const hideAnnounceDialog = (address) => ({
+	type: constants.HIDE_ANNOUNCE_DIALOG,
+	address,
+})
+
 export const showWarning = (modal, acceptAction, declineAction) => ({
 	type: constants.SHOW_WARNING,
 	modal, // { title: "", message: "" }

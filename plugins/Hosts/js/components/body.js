@@ -5,6 +5,7 @@ import FilesList from '../containers/fileslist.js'
 import SettingsList from '../containers/settingslist.js'
 
 const Body = ({ acceptingContracts, usersettings, defaultsettings, files, actions }) => {
+    const announceHost = () => actions.announceHost()
 
 	return (
 		<div className="hosting">
@@ -13,7 +14,7 @@ const Body = ({ acceptingContracts, usersettings, defaultsettings, files, action
 				<div className="property row">
 					<div className="title">Help</div>
 					<div className='controls'>
-						<div className='button' id='announce' onClick={ function () {} }>
+						<div className='button' id='announce' onClick={ announceHost }>
 							<i className='fa fa-bullhorn'></i>
 							Announce
 						</div>

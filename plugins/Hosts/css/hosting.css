@@ -232,12 +232,8 @@
 	text-align: center;
 }
 
-.hosting-options-modal .hosting-options {
-	text-align: center;
-	padding: 1em;
-}
-
-.hosting-options-modal input[ type="number"] {
+.modal input[ type="number"],
+.modal input[ type="text"] {
 	display: block;
 	padding: 9px 10px;
 	margin: 10px;
@@ -248,8 +244,15 @@
 	cursor: pointer;
 	transition: all 0s;
 }
-.hosting-options-modal input[ type="number"]:hover {
+
+.modal input[ type="number"]:hover,
+.modal input[ type="text"]:hover {
 	border: 1px solid #DDDDDD;
+}
+
+.hosting-options-modal .hosting-options {
+	text-align: center;
+	padding: 1em;
 }
 
 .hosting-options-modal .button {
