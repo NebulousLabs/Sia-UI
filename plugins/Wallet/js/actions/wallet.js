@@ -87,4 +87,6 @@ export const handlePasswordChange = (password) => ({
 	type: constants.HANDLE_PASSWORD_CHANGE,
 	password,
 })
-
+export const lockWallet = () => ({
+	type: constants.LOCK_WALLET,
+})

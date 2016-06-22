@@ -5,6 +5,7 @@ export default function* rootSaga() {
 	yield [
 		fork(sagas.watchGetLockStatus),
 		fork(sagas.watchUnlockWallet),
+		fork(sagas.watchLockWallet),
 		fork(sagas.watchCreateNewWallet),
 		fork(sagas.watchGetBalance),
 		fork(sagas.watchGetTransactions),

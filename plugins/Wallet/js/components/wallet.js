@@ -5,6 +5,7 @@ import SendPrompt from '../containers/sendprompt.js'
 import ReceiveButton from '../containers/receivebutton.js'
 import ReceivePrompt from '../containers/receiveprompt.js'
 import NewWalletDialog from '../containers/newwalletdialog.js'
+import LockButton from '../containers/lockbutton.js'
 
 const Wallet = ({confirmedbalance, unconfirmedbalance, siafundbalance, showReceivePrompt, showSendPrompt, showNewWalletDialog, actions }) => {
 	const onSendClick = (currencytype) => () => actions.startSendPrompt(currencytype)
@@ -16,6 +17,7 @@ const Wallet = ({confirmedbalance, unconfirmedbalance, siafundbalance, showRecei
 					<span>Unconfirmed Delta: {unconfirmedbalance} SC </span>
 					{siafundbalance !== '0' ? (<span> Siafund Balance: {siafundbalance} SF </span>) : null}
 				</div>
+				<LockButton />
 				{siafundbalance !== '0' ? <SendButton currencytype="Siafund" onClick={onSendClick('siafunds')} />: null}
 				<SendButton currencytype="Siacoin" onClick={onSendClick('siacoins')} />
 				<ReceiveButton />
