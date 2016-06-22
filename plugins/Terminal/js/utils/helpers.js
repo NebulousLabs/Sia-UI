@@ -7,7 +7,7 @@ import url from 'url'
 import * as constants from '../constants/helper.js'
 
 export const checkSiaPath = () => new Promise((resolve, reject) => {
-	fs.stat(Path.join(SiaAPI.config.attr('siad').path, process.platform === 'win32' ? '../siac.exe' : '../siac'), (err) => {
+	fs.stat(Path.resolve(SiaAPI.config.attr('siac').path, './siac'), (err) => {
 		 if (!err) {
 			resolve()
 		 } else {
@@ -17,15 +17,22 @@ export const checkSiaPath = () => new Promise((resolve, reject) => {
 })
 
 export const initPlugin = () => checkSiaPath().catch(() => {
-	// config.path doesn't exist. Prompt the user for siac's location
-	SiaAPI.showError({ title: 'Siac not found', content: 'Sia-UI couldn\'t locate siac. Please navigate to siac.' })
-	const siacPath = SiaAPI.openFile({
-		title: 'Please locate siac.',
-		properties: ['openFile'],
-		defaultPath: Path.join('..', SiaAPI.config.attr('siac').path || './' ),
-		filters: [{ name: 'siac', extensions: ['*'] }],
+	//Look in the siad folder for siac.
+	SiaAPI.config.attr('siac', { path: Path.dirname(SiaAPI.config.attr('siad').path) })
+	checkSiaPath().catch(() => {
+		// config.path doesn't exist. Prompt the user for siac's location
+		if (!SiaAPI.config.attr('siac')) {
+			SiaAPI.config.attr('siac', { path: SiaAPI.config.attr('siad').path })
+		}
+		SiaAPI.showError({ title: 'Siac not found', content: 'Sia-UI couldn\'t locate siac. Please navigate to siac.' })
+		const siacPath = SiaAPI.openFile({
+			title: 'Please locate siac.',
+			properties: ['openFile'],
+			defaultPath: Path.join('..', SiaAPI.config.attr('siac').path || './' ),
+			filters: [{ name: 'siac', extensions: ['*'] }],
+		})
+		SiaAPI.config.attr('siac', { path: Path.dirname(siacPath[0]) })
 	})
-	SiaAPI.config.attr('siac', { path: Path.dirname(siacPath[0]) })
 	SiaAPI.config.save()
 })
 
@@ -248,3 +255,4 @@ export const commandInputHelper = function(e, actions, currentCommand, showComma
 		}, 0)
 	}
 }
+
