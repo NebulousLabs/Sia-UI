@@ -25,7 +25,7 @@ export const siadCall = (uri) => new Promise((resolve, reject) => {
 
 // Take a number of bytes and return a sane, human-readable size.
 export const readableFilesize = (bytes) => {
-	const units = ['PB', 'TB', 'GB', 'MB', 'KB', 'B']
+	const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
 	let readableunit = 'B'
 	let readablesize = bytes
 	for (const unit in units) {
