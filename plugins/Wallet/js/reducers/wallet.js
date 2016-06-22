@@ -35,7 +35,6 @@ export default function walletReducer(state = initialState, action) {
 		return state.set('unlocking', false)
 	case constants.SET_LOCKED:
 		return state.set('unlocked', false)
-                .set('unlocking', false)
 	case constants.SET_UNLOCKED:
 		return state.set('unlocked', true)
                 .set('unlocking', false)
