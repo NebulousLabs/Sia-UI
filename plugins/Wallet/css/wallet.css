@@ -61,7 +61,7 @@
 .transaction-list, .transaction-list table {
 	width: 100%;
 	text-align: center;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 .transaction-list table td {
 	font-size: 11px;
