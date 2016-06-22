@@ -133,8 +133,8 @@ function *uploadFolderSaga(action) {
 			source: file,
 		})).map((file) => actions.uploadFile(file.siapath, file.source))
 
-		for (const upload in uploads) {
-			yield put(uploads[upload])
+		for (const upload in uploads.toArray()) {
+			yield put(uploads.get(upload))
 		}
 	} catch (e) {
 		sendError(e)
