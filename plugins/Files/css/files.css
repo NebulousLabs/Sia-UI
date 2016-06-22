@@ -65,6 +65,9 @@
 .downloads .transfer-list li:hover {
 	background-color: #DDDDDD;
 }
+.downloads .transfer-list li {
+	cursor: pointer;
+}
 .transfername {
 	font-size: 17px;
 	margin-top: 10px;
