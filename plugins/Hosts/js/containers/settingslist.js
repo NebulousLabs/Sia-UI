@@ -10,10 +10,9 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => ({
 	usersettings: state.hostingReducer.get('usersettings'),
 	defaultsettings: state.hostingReducer.get('defaultsettings'),
-	acceptingContracts: state.hostingReducer.get("acceptingContracts"),
-	settingsChanged: state.hostingReducer.get("settingsChanged"),
+	acceptingContracts: state.hostingReducer.get('acceptingContracts'),
+	settingsChanged: state.hostingReducer.get('settingsChanged'),
 })
 
 const SettingsList = connect(mapStateToProps, mapDispatchToProps)(SettingsListView)
 export default SettingsList
-

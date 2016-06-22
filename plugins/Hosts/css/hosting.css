@@ -9,28 +9,30 @@
  * 		Grey-Black: #4A4A4A
  * 		Black:	  #000000
  */
-/* Configuration Settings */
+
 .controls {
 	display: inline-block;
 	float: right;
 }
 
-/* Box */
 .row {
 	background: #f5f5f5;
 	display: block;
 	border: 1px;
 	padding: 15px;
 }
+
 .row .title {
 	display: inline-block;
 	font-size: 26px;
 }
+
 .row .button {
 	display: inline-block;
 	font-size: 22px;
 	padding-left: 20px;
 }
+
 .row .button.disable {
 	cursor: auto;
 	opacity: .2;
@@ -58,9 +60,11 @@
 	cursor: pointer;
 	transition: all .5s;
 }
+
 .toggle-switch.off {
 	background-color: #F5F5F5;
 }
+
 .toggle-inner {
 	position: absolute;
 	left: -1px;
@@ -73,15 +77,18 @@
 	border-radius: 5px;
 	transition: all .5s;
 }
+
 .toggle-switch.off .toggle-inner{
 	left: 74px;
 }
+
 .toggle-inner:after {
 	content: "No";
 	position: absolute;
 	top: 1px;
 	right: 45px;
 }
+
 .toggle-inner:before {
 	content: "Yes";
 	position: absolute;
@@ -90,9 +97,6 @@
 	left: 45px;
 }
 
-
-
-/* Controls */
 .popup {
 	display: none;
 	position: absolute;
@@ -104,20 +108,20 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 	-webkit-animation: fadein 0.5s;
-
 	background-color: #ffffff;
 	z-index: 2;
-
 	border: solid 1px #c5c5c5;
 	border-radius: 8px;
 	text-align: center;
 	font-size: 16px;
 	overflow: auto;
 }
+
 .popup .title {
 	font-size: 24px;
 	display: block;
 }
+
 .popup .address-list {
 	font-family: monospace;
 	font-size: 11px;
@@ -126,18 +130,20 @@
 	overflow: auto;
 	padding: 20px;
 }
+
 .popup p {
 	margin: 0;
 }
 
-/* Controls */
 .controls {
 	display: inline-block;
 	padding-top: 3px;
 }
+
 .controls.full {
 	width: 100%;
 }
+
 .controls .button:hover {
 	color: #4a4a4a;
 	cursor: pointer;
@@ -148,7 +154,7 @@
 	margin-right: .25em;
 }
 
-/* Properties */
+
 #properties {
 	height: 50%;
 	font-size: 14px;
@@ -209,7 +215,6 @@
 	margin: 0px;
 	transition: all .25s;
 }
-
 
 .modal .modal-message {
 	display: flex;
@@ -274,9 +279,11 @@
 .property {
 	border-bottom: 1px solid #e0e0e0;
 }
+
 .property .name {
 	padding: 19px 35px;
 }
+
 .property .value {
 	padding-top: 9px;
 	padding-bottom: 9px;
@@ -294,6 +301,7 @@
 	cursor: pointer;
 	transition: all 0s;
 }
+
 .property .value input:hover {
 	border: 1px solid #DDDDDD;
 }

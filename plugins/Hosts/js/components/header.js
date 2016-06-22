@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react'
 
-//<div className='pod' id='numcontracts'>{ numContracts } contacts</div>
 const Header = ({ numContracts, earned, expected, storage }) => (
-	<header className="header">
+	<header className='header'>
 		<div className='title'>Hosting</div>
 		<div className='capsule'>
 			<div className='pod' id='contacts'>{ numContracts } active contracts</div>

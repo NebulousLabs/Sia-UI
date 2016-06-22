@@ -1,17 +1,15 @@
 import React from 'react'
 import Header from '../containers/header.js'
 import Body from '../containers/body.js'
-import EditModal from '../containers/edit.js'
 import ResizeDialog from '../containers/resizeDialog.js'
 import AnnounceDialog from '../containers/announce.js'
 import WalletModal from '../containers/walletmodal.js'
 import WarningModal from '../containers/warningmodal.js'
 
 const HostingApp = () => (
-	<div className="app">
+	<div className='app'>
 		<Header />
 		<Body />
-		<EditModal />
 		<ResizeDialog />
 		<AnnounceDialog />
 		<WarningModal />

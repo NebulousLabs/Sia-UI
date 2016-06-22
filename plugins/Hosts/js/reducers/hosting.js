@@ -10,12 +10,7 @@ const initialState = Map({
 		Map({ name: 'Price per TB per Month (SC)', value: 0 }),
 		Map({ name: 'Bandwidth Price (SC/TB)', value: 0 }),
 	]),
-	defaultsettings: List([
-		Map({ name: 'Max Duration (Weeks)', value: 24, min: 12 }),
-		Map({ name: 'Collateral per TB per Month (SC)', value: 250000 }),
-		Map({ name: 'Price per TB per Month (SC)', value: 10 }),
-		Map({ name: 'Bandwidth Price (SC/TB)', value: 10 })
-	]),
+	defaultsettings: undefined,
 	files: List([]),
 	earned: 0,
 	expected: 0,
@@ -69,7 +64,7 @@ export default function hostingReducer(state = initialState, action) {
 	case constants.SHOW_ANNOUNCE_DIALOG:
 		return state.set('modals', state.get('modals')
 			.set('shouldShowAnnounceDialog', true)
-			.set('announceAddress', action.address || state.get("defaultAnnounceAddress")))
+			.set('announceAddress', action.address || state.get('defaultAnnounceAddress')))
 
 	case constants.HIDE_WARNING_MODAL:
 		return state.set('modals', state.get('modals').set('shouldShowWarningModal', false))
@@ -81,7 +76,10 @@ export default function hostingReducer(state = initialState, action) {
 			.set('warningModalMessage', action.modal.get('message')))
 
 	case constants.FETCH_DATA_SUCCESS:
-		return state.set('usersettings', action.ignoreSettings ? state.get('usersettings') : action.data.get('usersettings'))
+		return state.set('usersettings', action.ignoreSettings
+				? state.get('usersettings') : action.data.get('usersettings'))
+			.set('defaultsettings', state.get('defaultsettings') === undefined
+				? action.data.get('usersettings') : state.get('defaultsettings')) 
 			.set('settingsChanged', action.ignoreSettings ? state.get('settingsChanged') : false)
 			.set('acceptingContracts', action.data.get('acceptingContracts'))
 			.set('numContracts', action.data.get('numContracts'))

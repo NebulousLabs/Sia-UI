@@ -11,12 +11,12 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 	}
 
 	const updateSettings = () => {
-		if (helper.validNumbers(usersettings.map((val) => val.get("value")).toArray()))
+		if (helper.validNumbers(usersettings.map((val) => ({ val: val.get('value'), min: val.get('min') || 0 })).toArray()))
 			actions.updateSettings(Map({ acceptingContracts, usersettings } ))
 	}
 
 	const saveEnabled = () => (
-		helper.validNumbers(usersettings.map((val) => val.get("value")).toArray()) && settingsChanged
+		helper.validNumbers(usersettings.map((val) => ({ val: val.get('value'), min: val.get('min') || 0 })).toArray()) && settingsChanged
 	)
 
 	const resetSettings = () => actions.updateSettings(Map({ acceptingContracts, usersettings: defaultsettings } ))
@@ -24,14 +24,14 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 	const toggleAcceptingContracts = () => {
 		if (!acceptingContracts){
 			actions.showWarning(
-				Map({ title: "Start accepting contracts?", message: "To host files you must keep the Sia-UI open. Collateral will also be locked" +
-						" and you will be unable to spend that SC until the contract is expired." }),
+				Map({ title: 'Start accepting contracts?', message: 'To host files you must keep the Sia-UI open. Collateral will also be locked' +
+					' and you will be unable to spend that SC until the contract is expired.' }),
 				() => actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
 			)
 		}
 		else {
 			actions.showWarning(
-				Map({ title: "Stop accepting contracts?", message: "You must still keep Sia-UI open until the exisitng contracts have expired otherwise you will lose collateral." }),
+				Map({ title: 'Stop accepting contracts?', message: 'You must still keep Sia-UI open until the exisitng contracts have expired otherwise you will lose collateral.' }),
 				() => actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
 			)
 		}
@@ -47,8 +47,8 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 					<input type='number' data-setting={ setting.get('name') } onChange={ handleSettingInput } className='value' value={ setting.get('value') }></input>
 				</div>
 			</div>
-			<div className={ 'error pure-u-1-1' + ( setting.get('value') <= 0  || isNaN(setting.get('value')) ? '' : ' hidden' ) }>
-				<span>Must be a number greater than zero.</span>
+			<div className={ 'error pure-u-1-1' + ( setting.get('value') <= Number(setting.get('min'))  || isNaN(setting.get('value')) ? '' : ' hidden' ) }>
+				<span>Must be a number greater than { setting.get('min') || 'zero' }.</span>
 			</div>
 		</div>
 	)).toList()
