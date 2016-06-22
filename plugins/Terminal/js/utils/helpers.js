@@ -7,7 +7,7 @@ import url from 'url'
 import * as constants from '../constants/helper.js'
 
 export const checkSiaPath = () => new Promise((resolve, reject) => {
-	fs.stat(Path.join(SiaAPI.config.attr('siad').path, process.platform === 'win32' ? './siac.exe' : './siac'), (err) => {
+	fs.stat(Path.join(SiaAPI.config.attr('siad').path, process.platform === 'win32' ? '../siac.exe' : '../siac'), (err) => {
 		 if (!err) {
 			resolve()
 		 } else {
