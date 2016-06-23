@@ -12,7 +12,7 @@ export const updateModal = (key, value) => ({
 	value,
 })
 
-export const updateSettings = (settings, acceptingContracts) => ({
+export const updateSettings = (settings) => ({
 	type: constants.UPDATE_SETTINGS,
 	settings,
 })
@@ -41,7 +41,7 @@ export const addFolder = (folder) => ({
 	folder,
 })
 
-export const addFolderAskPathSize = (folder) => ({
+export const addFolderAskPathSize = () => ({
 	type: constants.ADD_FOLDER_ASK,
 })
 

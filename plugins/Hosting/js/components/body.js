@@ -1,27 +1,25 @@
-import React, { PropTypes } from 'react'
-import { Map, List } from 'immutable'
-import * as helper from '../utils/host.js'
+import React from 'react'
 import FilesList from '../containers/fileslist.js'
 import SettingsList from '../containers/settingslist.js'
 
-const Body = ({ acceptingContracts, usersettings, defaultsettings, files, actions }) => {
+const Body = ({ actions }) => {
 	const announceHost = () => actions.announceHost()
 
 	return (
-		<div className='hosting'>
+		<div className="hosting">
 
-			<div className='help section'>
-				<div className='property row'>
-					<div className='title'>Help</div>
-					<div className='controls'>
-						<div className='button' id='announce' onClick={ announceHost }>
-							<i className='fa fa-bullhorn'></i>
+			<div className="help section">
+				<div className="property row">
+					<div className="title">Help</div>
+					<div className="controls">
+						<div className="button" id="announce" onClick={announceHost}>
+							<i className="fa fa-bullhorn"></i>
 							Announce
 						</div>
 					</div>
 				</div>
-				<div className='property'>
-					<div className='instructions'>
+				<div className="property">
+					<div className="instructions">
 						To start hosting:
 						<ol>
 							<li>Add a storage folder.</li>

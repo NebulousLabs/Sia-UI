@@ -22,7 +22,7 @@ const initialState = Map({
 		shouldShowResizeDialog: false,
 		resizePath: '',
 		resizeSize: 0,
-		initialSize: 0, 
+		initialSize: 0,
 		warningModalTitle: '',
 		warningModalMessage: '',
 		shouldShowWarningModal: false,
@@ -35,11 +35,11 @@ export default function hostingReducer(state = initialState, action) {
 	switch (action.type) {
 	case constants.UPDATE_SETTING:
 		let settingslist = state.get('usersettings')
-		settingslist = settingslist.map((value, key) => (
+		settingslist = settingslist.map((value) => (
 			(value.get('name') === action.setting) ?
 				value.set('value', action.value)
 			: value
-		)) 
+		))
 		return state.set('usersettings', settingslist).set('settingsChanged', true)
 
 	case constants.UPDATE_MODAL:
@@ -79,7 +79,7 @@ export default function hostingReducer(state = initialState, action) {
 		return state.set('usersettings', action.ignoreSettings
 				? state.get('usersettings') : action.data.get('usersettings'))
 			.set('defaultsettings', state.get('defaultsettings') === undefined
-				? action.data.get('usersettings') : state.get('defaultsettings')) 
+				? action.data.get('usersettings') : state.get('defaultsettings'))
 			.set('settingsChanged', action.ignoreSettings ? state.get('settingsChanged') : false)
 			.set('acceptingContracts', action.data.get('acceptingContracts'))
 			.set('numContracts', action.data.get('numContracts'))

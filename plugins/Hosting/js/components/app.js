@@ -7,7 +7,7 @@ import WalletModal from '../containers/walletmodal.js'
 import WarningModal from '../containers/warningmodal.js'
 
 const HostingApp = () => (
-	<div className='app'>
+	<div className="app">
 		<Header />
 		<Body />
 		<ResizeDialog />
