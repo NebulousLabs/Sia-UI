@@ -9,7 +9,11 @@ import * as constants from '../constants/helper.js'
 export const checkSiaPath = () => new Promise((resolve, reject) => {
 	fs.stat(SiaAPI.config.attr('siac').path, (err) => {
 		 if (!err) {
-			resolve()
+			if (Path.basename(SiaAPI.config.attr('siac').path).indexOf('siac') !== -1){
+                resolve()
+            } else {
+                reject({ message: "Invalid binary name." })
+            }
 		 } else {
 			reject(err)
 		 }
