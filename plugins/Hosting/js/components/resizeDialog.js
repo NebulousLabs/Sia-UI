@@ -4,7 +4,8 @@ import path from 'path'
 
 const ResizeDialogModal = ({ shouldShowResizeDialog, resizePath, resizeSize, initialSize, actions }) => {
 	const handleSettingInput = (e) => actions.updateModal('resizeSize', e.target.value)
-	const hideResizeDialog = (newSize) => actions.hideResizeDialog(Map({ path: resizePath, size: newSize || 0 }))
+	const hideResizeDialog = (newSize) => actions.hideResizeDialog(Map({ path: resizePath, size: newSize }))
+	const closeResizeDialog = () => hideResizeDialog(0)
 	const handleSubmit = () => {
 		if (resizeSize >= 35 && resizeSize !== initialSize.toString()) {
 			hideResizeDialog(resizeSize)
@@ -21,7 +22,7 @@ const ResizeDialogModal = ({ shouldShowResizeDialog, resizePath, resizeSize, ini
 	return (
 		<div className={'hosting-options-modal modal' + (shouldShowResizeDialog ? '': ' hidden')}>
 			<form className="hosting-options modal-message" onSubmit="">
-				<div className="close-button" onClick={hideResizeDialog}>
+				<div className="close-button" onClick={closeResizeDialog}>
 					X
 				</div>
 
