@@ -9,11 +9,11 @@ import * as constants from '../constants/helper.js'
 export const checkSiaPath = () => new Promise((resolve, reject) => {
 	fs.stat(SiaAPI.config.attr('siac').path, (err) => {
 		 if (!err) {
-			if (Path.basename(SiaAPI.config.attr('siac').path).indexOf('siac') !== -1){
-                resolve()
-            } else {
-                reject({ message: "Invalid binary name." })
-            }
+			if (Path.basename(SiaAPI.config.attr('siac').path).indexOf('siac') !== -1) {
+				resolve()
+			} else {
+				reject({ message: 'Invalid binary name.' })
+			}
 		 } else {
 			reject(err)
 		 }
@@ -35,15 +35,15 @@ export const initPlugin = () => checkSiaPath().catch(() => {
 			defaultPath: Path.join('..', SiaAPI.config.attr('siac').path || './' ),
 			filters: [{ name: 'siac', extensions: ['*'] }],
 		})
-        if (siacPath) {
-            if (Path.basename(siacPath[0]).indexOf('siac') === -1) {
-                SiaAPI.showError({ title: 'Invalid Binary Name', content: 'The siac plugin must be called siac. Restart the plugin to choose a valid binary.' })
-            } else {
-        		SiaAPI.config.attr('siac', { path: siacPath[0] })
-            }
-        } else {
-            SiaAPI.showError({ title: 'Siac not found', content: 'This plugin will be unusable until a proper siac binary is found.' })
-        }
+		if (siacPath) {
+			if (Path.basename(siacPath[0]).indexOf('siac') === -1) {
+				SiaAPI.showError({ title: 'Invalid Binary Name', content: 'The siac plugin must be called siac. Restart the plugin to choose a valid binary.' })
+			} else {
+				SiaAPI.config.attr('siac', { path: siacPath[0] })
+			}
+		} else {
+			SiaAPI.showError({ title: 'Siac not found', content: 'This plugin will be unusable until a proper siac binary is found.' })
+		}
 	})
 	SiaAPI.config.save()
 })
@@ -104,7 +104,7 @@ export const spawnCommand = function(commandStr, actions, newid) {
 	}
 
 	siac.on('error', (e) => {
-        consumeChunk(`Error running command: ${e.message}.\nIs your siac path correct?`)
+		consumeChunk(`Error running command: ${e.message}.\nIs your siac path correct?`)
 		streamClosed()
 	})
 	siac.on('close', () => {
