@@ -37,7 +37,7 @@ export const initPlugin = () => checkSiaPath().catch(() => {
 		})
 		if (siacPath) {
 			if (Path.basename(siacPath[0]).indexOf('siac') === -1) {
-				SiaAPI.showError({ title: 'Invalid Binary Name', content: 'The siac plugin must be called siac. Restart the plugin to choose a valid binary.' })
+				SiaAPI.showError({ title: 'Invalid Binary Name', content: 'The siac binary must be called siac. Restart the plugin to choose a valid binary.' })
 			} else {
 				SiaAPI.config.attr('siac', { path: siacPath[0] })
 			}
