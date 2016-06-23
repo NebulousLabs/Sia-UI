@@ -163,6 +163,10 @@
 	padding-bottom: 5px;
 	text-align: center;
 	width: 100px;
+	cursor: pointer;
+}
+.send-button:hover, .receive-button:hover, .lock-button:hover {
+	opacity: 0.5;
 }
 .send-button span, .receive-button span, .lock-button span {
 	display: block;
