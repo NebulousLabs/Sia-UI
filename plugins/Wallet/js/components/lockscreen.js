@@ -9,7 +9,7 @@ const LockScreen = ({unlocked, unlocking, encrypted}) => {
 			<div></div>
 		)
 	}
-	var lockscreenContents
+	let lockscreenContents
 	if (!unlocked && encrypted && !unlocking) {
 		lockscreenContents = (
 			<PasswordPrompt />

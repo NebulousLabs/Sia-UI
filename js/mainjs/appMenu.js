@@ -3,7 +3,7 @@ import { Menu } from 'electron'
 export default function(window) {
 	// Template for OSX app menu commands
 	// Selectors call the main app's NSApplication methods.
-	var menutemplate = [
+	const menutemplate = [
 		{
 			label: 'Sia',
 			submenu: [
