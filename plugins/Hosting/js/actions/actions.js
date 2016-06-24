@@ -1,9 +1,28 @@
 import * as constants from '../constants/constants.js'
 
-export const updateSetting = (setting, value) => ({
-	type: constants.UPDATE_SETTING,
-	setting,
-	value,
+export const updateDuration = (newvalue) => ({
+	type: constants.UPDATE_DURATION,
+	newvalue,
+})
+
+export const updateCollateral = (newvalue) => ({
+	type: constants.UPDATE_COLLATERAL,
+	newvalue,
+})
+
+export const updateStoragePrice = (newvalue) => ({
+	type: constants.UPDATE_STORAGE_PRICE,
+	newvalue,
+})
+
+export const updateDownloadPrice = (newvalue) => ({
+	type: constants.UPDATE_DOWNLOAD_PRICE,
+	newvalue,
+})
+
+export const updateDefaultSettings = (newvalue) => ({
+	type: constants.UPDATE_DEFAULT_SETTINGS,
+	newvalue,
 })
 
 export const updateModal = (key, value) => ({
@@ -17,15 +36,20 @@ export const updateSettings = (settings) => ({
 	settings,
 })
 
+export const pushSettings = (settings) => ({
+	type: constants.PUSH_SETTINGS,
+	settings,
+})
+
 export const fetchData = (ignoreSettings) => ({
 	type: constants.FETCH_DATA,
 	ignoreSettings,
 })
 
-export const fetchDataSuccess = (data, ignoreSettings) => ({
+export const fetchDataSuccess = (data, settings) => ({
 	type: constants.FETCH_DATA_SUCCESS,
 	data,
-	ignoreSettings,
+	settings,
 })
 
 export const showToggleAcceptingModal = () => ({

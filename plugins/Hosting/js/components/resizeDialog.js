@@ -2,7 +2,7 @@ import React from 'react'
 import { Map } from 'immutable'
 import Path from 'path'
 
-const ResizeDialogModal = ({ shouldShowResizeDialog, resizePath, resizeSize, initialSize, actions }) => {
+const ResizeDialogModal = ({ resizePath, resizeSize, initialSize, actions }) => {
 	const handleSettingInput = (e) => actions.updateModal('resizeSize', e.target.value)
 	const hideResizeDialog = (newSize) => actions.hideResizeDialog(Map({ path: resizePath, size: newSize }))
 	const closeResizeDialog = () => hideResizeDialog(0)
@@ -20,7 +20,7 @@ const ResizeDialogModal = ({ shouldShowResizeDialog, resizePath, resizeSize, ini
 	}
 
 	return (
-		<div className={'hosting-options-modal modal' + (shouldShowResizeDialog ? '': ' hidden')}>
+		<div className={'hosting-options-modal modal' + (resizePath ? '': ' hidden')}>
 			<form className="hosting-options modal-message" onSubmit="">
 				<div className="close-button" onClick={closeResizeDialog}>
 					X

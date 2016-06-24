@@ -4,7 +4,6 @@ import { hideResizeDialog, updateModal } from '../actions/actions.js'
 import { bindActionCreators } from 'redux'
 
 const mapStateToProps = (state) => ({
-	shouldShowResizeDialog: state.hostingReducer.get('modals').get('shouldShowResizeDialog'),
 	resizePath: state.hostingReducer.get('modals').get('resizePath'),
 	resizeSize: state.hostingReducer.get('modals').get('resizeSize'),
 	initialSize: state.hostingReducer.get('modals').get('initialSize'),

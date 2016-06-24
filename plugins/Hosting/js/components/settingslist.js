@@ -1,5 +1,4 @@
 import React from 'react'
-import { Map } from 'immutable'
 import * as helper from '../utils/host.js'
 import Modal from './warningmodal.js'
 
@@ -7,27 +6,24 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 
 	const handleSettingInput = (e) => {
 		if (e.target.value >= 0) {
-			actions.updateSetting(e.target.attributes.getNamedItem('data-setting').value, e.target.value)
+			const settingToChange = e.target.attributes.getNamedItem('data-setting').value
+			actions.updateSettings(usersettings.map( (setting, key) => (key === settingToChange) ? e.target.value : setting.get('value') ))
 		}
 	}
 
+	const settingValues = (acceptcontracts, settings) => settings.map((setting) => setting.get('value')).set('acceptingContracts', acceptcontracts)
+	const saveEnabled = () => helper.validNumbers(usersettings.toList().toJSON()) && settingsChanged
+	const resetSettings = () => actions.pushSettings(defaultsettings)
 	const updateSettings = () => {
-		if (helper.validNumbers(usersettings.map((val) => ({ val: val.get('value'), min: val.get('min') || 0 })).toArray())) {
-			actions.updateSettings(Map({ acceptingContracts, usersettings } ))
+		if ( saveEnabled() ) {
+			actions.pushSettings(settingValues(acceptingContracts, usersettings))
 		}
 	}
-
-	const saveEnabled = () => (
-		helper.validNumbers(usersettings.map((val) => ({ val: val.get('value'), min: val.get('min') || 0 })).toArray()) && settingsChanged
-	)
-
-	const resetSettings = () => actions.updateSettings(Map({ acceptingContracts, usersettings: defaultsettings } ))
 
 	const showToggleAcceptingModal = () => actions.showToggleAcceptingModal()
 	const hideToggleAcceptingModal = () => actions.hideToggleAcceptingModal()
-
 	const toggleAcceptingContracts = () => {
-		actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
+		actions.pushSettings(settingValues(!acceptingContracts, usersettings))
 		hideToggleAcceptingModal()
 	}
 
@@ -38,7 +34,7 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 			</div>
 			<div className="pure-u-1-2">
 				<div className="value">
-					<input type="number" data-setting={setting.get('name')} onChange={handleSettingInput} className="value" value={setting.get('value')}></input>
+					<input type="number" data-setting={key} onChange={handleSettingInput} className="value" value={setting.get('value')}></input>
 				</div>
 			</div>
 			<div className={'error pure-u-1-1' + ( setting.get('value') <= Number(setting.get('min'))  || isNaN(setting.get('value')) ? '' : ' hidden' )}>

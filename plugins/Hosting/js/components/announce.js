@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AnnounceDialogModal = ({ shouldShowAnnounceDialog, announceAddress, actions }) => {
+const AnnounceDialogModal = ({ announceAddress, actions }) => {
 	const handleSettingInput = (e) => actions.updateModal('announceAddress', e.target.value)
 	const hideAnnounceDialog = (address) => actions.hideAnnounceDialog(address)
 	const closeAnnounceDialog = () => hideAnnounceDialog('')
@@ -18,7 +18,7 @@ const AnnounceDialogModal = ({ shouldShowAnnounceDialog, announceAddress, action
 	}
 
 	return (
-		<div className={'hosting-options-modal modal' + (shouldShowAnnounceDialog ? '': ' hidden')}>
+		<div className={'hosting-options-modal modal' + (announceAddress ? '': ' hidden')}>
 			<form className="hosting-options modal-message" onSubmit="">
 				<div className="close-button" onClick={closeAnnounceDialog}>
 					X

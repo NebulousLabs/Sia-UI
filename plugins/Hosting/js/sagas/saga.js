@@ -119,24 +119,20 @@ function *resizeFolder(action) {
 	}
 }
 
-const MAX_DUR = 0
-const COLLATERAL = 1
-const PRICE = 2
-const BANDWIDTH = 3
-function *updateSettings(action) {
+function *pushSettings(action) {
 	try {
 		yield siadCall({
 			url: '/host',
 			method: 'POST',
 			qs: {
 				'acceptingcontracts': action.settings.get('acceptingContracts'),
-				'maxduration': helper.weeksToBlocks(action.settings.get('usersettings').get(MAX_DUR).get('value')).toString(),
+				'maxduration': helper.weeksToBlocks(action.settings.get('maxduration')).toString(),
 				'collateral':
-					helper.SCTBMonthToHastingsByteBlock(action.settings.get('usersettings').get(COLLATERAL).get('value')).toString(),
+					helper.SCTBMonthToHastingsByteBlock(action.settings.get('collateral')).toString(),
 				'minstorageprice':
-					helper.SCTBMonthToHastingsByteBlock(action.settings.get('usersettings').get(PRICE).get('value')).toString(), //bytes->TB, blocks -> month
+					helper.SCTBMonthToHastingsByteBlock(action.settings.get('storageprice')).toString(), //bytes->TB, blocks -> month
 				'mindownloadbandwidthprice':
-					helper.SCTBToHastingsByte(action.settings.get('usersettings').get(BANDWIDTH).get('value')).toString(),
+					helper.SCTBToHastingsByte(action.settings.get('downloadbandwidthprice')).toString(),
 			},
 		})
 		yield put( actions.fetchData() )
@@ -147,36 +143,10 @@ function *updateSettings(action) {
 
 function *fetchData(action) {
 	try {
-		const updatedData = yield siadCall({
-			url: '/host',
-			method: 'GET',
-		})
-
-		const walletUnlocked = yield siadCall({
-			url: '/wallet',
-		})
+		const updatedData = yield siadCall({ url: '/host' })
+		const walletUnlocked = yield siadCall({ url: '/wallet' })
 
 		const data = Map({
-			acceptingContracts: updatedData.externalsettings.acceptingcontracts,
-			usersettings: List([
-				Map({
-					name: 'Max Duration (Weeks)',
-					value: helper.blocksToWeeks(updatedData.externalsettings.maxduration).toString(),
-					min: 12,
-				}),
-				Map({
-					name: 'Collateral per TB per Month (SC)',
-					value: helper.hastingsByteBlockToSCTBMonth(updatedData.externalsettings.collateral).toFixed(0),
-				}),
-				Map({
-					name: 'Price per TB per Month (SC)',
-					value: helper.hastingsByteBlockToSCTBMonth(updatedData.externalsettings.storageprice).toFixed(0),
-				}),
-				Map({
-					name: 'Bandwidth Price (SC/TB)',
-					value: helper.hastingsByteToSCTB(updatedData.externalsettings.downloadbandwidthprice).toString(),
-				}),
-			]),
 			numContracts: updatedData.financialmetrics.contractcount,
 			storage: (new BigNumber(updatedData.externalsettings.totalstorage)).minus(new BigNumber(updatedData.externalsettings.remainingstorage)).toString(),
 			earned: (new BigNumber(updatedData.financialmetrics.contractcompensation)).toString(),
@@ -187,14 +157,22 @@ function *fetchData(action) {
 			defaultAnnounceAddress: updatedData.externalsettings.netaddress,
 		})
 
-		yield put( actions.fetchDataSuccess(data, action.ignoreSettings) )
+		const settings = action.ignoreSettings ? undefined : Map({
+			maxduration: helper.blocksToWeeks(updatedData.externalsettings.maxduration).toString(),
+			collateral: helper.hastingsByteBlockToSCTBMonth(updatedData.externalsettings.collateral).toFixed(0),
+			storageprice: helper.hastingsByteBlockToSCTBMonth(updatedData.externalsettings.storageprice).toFixed(0),
+			downloadbandwidthprice: helper.hastingsByteToSCTB(updatedData.externalsettings.downloadbandwidthprice).toString(),
+			acceptingContracts: updatedData.externalsettings.acceptingcontracts,
+		})
+
+		yield put( actions.fetchDataSuccess(data, settings) )
 	} catch (e) {
 		SiaAPI.showError({ title: 'Error Fetching Data', content: e.message })
 	}
 }
 
-function *updateSettingsListener() {
-	yield *takeEvery('UPDATE_SETTINGS', updateSettings)
+function *pushSettingsListener() {
+	yield *takeEvery('PUSH_SETTINGS', pushSettings)
 }
 function *fetchSettingsListener() {
 	yield *takeEvery('FETCH_DATA', fetchData)
@@ -218,7 +196,7 @@ function *announceHostListener() {
 export default function *initSaga() {
 	try {
 		yield [
-			fork(updateSettingsListener),
+			fork(pushSettingsListener),
 			fork(fetchSettingsListener),
 			fork(addFolderListener),
 			fork(addFolderAskListener),

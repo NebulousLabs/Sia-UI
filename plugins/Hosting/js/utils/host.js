@@ -17,7 +17,7 @@ export const SCTBToHastingsByte = (SC) => (
 
 export const validNumbers = (values) => (
 	//Expects array of dict, first is value, second is minimum.
-	values.reduce((isValid, val) => (!isNaN(val.val) && val.val > val.min) && isValid, true)
+	values.reduce((isValid, val) => (!isNaN(val.value) && val.value > (val.min || 0)) && isValid, true)
 )
 
 export const hastingsByteBlockToSCTBMonth = (hastings) => (

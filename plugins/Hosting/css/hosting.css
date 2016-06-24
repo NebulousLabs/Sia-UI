@@ -165,6 +165,7 @@
 .modal {
 	font-family: 'Roboto Condensed', sans-serif;
 	position: fixed;
+	z-index: 2;
 	overflow: scroll;
 	top: 0;
 	left: 0;

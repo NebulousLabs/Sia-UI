@@ -2,7 +2,7 @@ import React from 'react'
 import Modal from './warningmodal.js'
 import Path from 'path'
 
-const FilesList = ({ folders, folderToRemove, actions }) => {
+const FilesList = ({ folders, folderPathToRemove, actions }) => {
 	const addStorageLocation = () => actions.addFolderAskPathSize()
 	const removeStorageLocation = (folder) => () => {
 		actions.removeFolder(folder)
@@ -10,7 +10,7 @@ const FilesList = ({ folders, folderToRemove, actions }) => {
 	}
 
 	const onResizeStorageLocationClick = (folder) => () => actions.resizeFolder(folder)
-	const onRemoveStorageLocationClick = (folder) => () => actions.updateFolderToRemove(folder)
+	const onRemoveStorageLocationClick = (folder) => () => actions.updateFolderToRemove(folder.get('path'))
 	const hideRemoveStorageModal = () => actions.updateFolderToRemove()
 
 	const FileList = folders.map((folder, key) => (
@@ -31,7 +31,7 @@ const FilesList = ({ folders, folderToRemove, actions }) => {
 				<div><i className="fa fa-remove button"></i></div>
 			</div>
 			{
-				folderToRemove && folderToRemove.get('path') === folder.get('path') ?
+				folderPathToRemove && folderPathToRemove === folder.get('path') ?
 					<Modal title={`Remove "${ Path.basename(folder.get('path')) }"?`}
 						message="No longer use this folder for storage? You may lose collateral if you do not have enough space to fill all contracts."
 						actions={{ acceptModal: removeStorageLocation(folder), declineModal: hideRemoveStorageModal  }}
