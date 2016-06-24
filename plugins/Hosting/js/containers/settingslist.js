@@ -12,7 +12,7 @@ const mapStateToProps = (state) => ({
 	defaultsettings: state.hostingReducer.get('defaultsettings'),
 	acceptingContracts: state.hostingReducer.get('acceptingContracts'),
 	settingsChanged: state.hostingReducer.get('settingsChanged'),
-    shouldShowToggleAcceptingModal: state.hostingReducer.get('shouldShowToggleAcceptingModal'),
+	shouldShowToggleAcceptingModal: state.hostingReducer.get('modals').get('shouldShowToggleAcceptingModal'),
 })
 
 const SettingsList = connect(mapStateToProps, mapDispatchToProps)(SettingsListView)

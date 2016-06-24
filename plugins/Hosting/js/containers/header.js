@@ -6,6 +6,7 @@ const mapStateToProps = (state) => ({
 	storage: state.hostingReducer.get('storage'),
 	earned: state.hostingReducer.get('earned'),
 	expected: state.hostingReducer.get('expected'),
+	walletsize: state.hostingReducer.get('walletsize'),
 })
 
 const Header = connect(mapStateToProps)(HeaderView)

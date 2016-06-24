@@ -1,6 +1,7 @@
 import React from 'react'
 import { Map } from 'immutable'
 import Modal from './warningmodal.js'
+import Path from 'path'
 
 const FilesList = ({ folders, folderToRemove, actions }) => {
 	const addStorageLocation = () => actions.addFolderAskPathSize()
@@ -32,7 +33,7 @@ const FilesList = ({ folders, folderToRemove, actions }) => {
 			</div>
 			{
 				folderToRemove && folderToRemove.get('path') === folder.get('path') ?
-					<Modal title="Delete storage folder?"
+					<Modal title={ `Remove "${ Path.basename(folder.get('path')) }"?` }
 						message="No longer use this folder for storage? You may lose collateral if you do not have enough space to fill all contracts."
 						actions={{ acceptModal: removeStorageLocation(folder), declineModal: hideRemoveStorageModal  }} />
 					: null

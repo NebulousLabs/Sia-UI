@@ -24,9 +24,9 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 	const resetSettings = () => actions.updateSettings(Map({ acceptingContracts, usersettings: defaultsettings } ))
 
 	const toggleAcceptingContracts = () => {
-        actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
-        hideToggleAcceptingModal()
-    }
+		actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
+		hideToggleAcceptingModal()
+	}
 
 	const showToggleAcceptingModal = () => actions.showToggleAcceptingModal()
 	const hideToggleAcceptingModal = () => actions.hideToggleAcceptingModal()

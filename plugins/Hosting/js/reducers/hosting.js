@@ -12,22 +12,21 @@ const initialState = Map({
 	]),
 	defaultsettings: undefined,
 	files: List([]),
-    folderToRemove: undefined,
 	earned: 0,
 	expected: 0,
 	acceptingContracts: 0,
 	settingsChanged: false,
 	walletLocked: true,
+	walletsize: 0,
 	defaultAnnounceAddress: '',
 	modals: Map({
-		shouldShowResizeDialog: false,
 		resizePath: '',
 		resizeSize: 0,
 		initialSize: 0,
-		warningModalTitle: '',
-		warningModalMessage: '',
-		shouldShowWarningModal: false,
+		folderToRemove: undefined,
 		shouldShowAnnounceDialog: false,
+		shouldShowToggleAcceptingModal: false,
+		shouldShowResizeDialog: false,
 		announceAddress: '',
 	}),
 })
@@ -47,21 +46,19 @@ export default function hostingReducer(state = initialState, action) {
 		return state.set('modals', state.get('modals').set(action.key, action.value))
 
 	case constants.SHOW_TOGGLE_ACCEPTING_MODAL:
-		return state.set('shouldShowToggleAcceptingModal', true)
+		return state.setIn(['modals', 'shouldShowToggleAcceptingModal'], true)
 
 	case constants.HIDE_TOGGLE_ACCEPTING_MODAL:
-		return state.set('shouldShowToggleAcceptingModal', false)
+		return state.setIn(['modals', 'shouldShowToggleAcceptingModal'], false)
 
-		return state.set('acceptingContracts', !state.get('acceptingContracts'))
 	case constants.HIDE_RESIZE_DIALOG:
-		return state.set('modals', state.get('modals').set('shouldShowResizeDialog', false))
+		return state.setIn(['modals', 'shouldShowResizeDialog'], false)
 
 	case constants.SHOW_RESIZE_DIALOG:
-		return state.set('modals', state.get('modals')
-			.set('shouldShowResizeDialog', true)
-			.set('resizePath', action.folder.get('path'))
-			.set('resizeSize', action.folder.get('size'))
-			.set('initialSize', action.ignoreInitial ? 0 : action.folder.get('size')))
+		return state.setIn(['modals', 'shouldShowResizeDialog'], true)
+			.setIn(['modals', 'resizePath'], action.folder.get('path'))
+			.setIn(['modals', 'resizeSize'], action.folder.get('size'))
+			.setIn(['modals', 'initialSize'], action.ignoreInitial ? 0 : action.folder.get('size'))
 
 	case constants.HIDE_ANNOUNCE_DIALOG:
 		return state.set('modals', state.get('modals').set('shouldShowAnnounceDialog', false))
@@ -71,32 +68,15 @@ export default function hostingReducer(state = initialState, action) {
 			.set('shouldShowAnnounceDialog', true)
 			.set('announceAddress', action.address || state.get('defaultAnnounceAddress')))
 
-	case constants.HIDE_WARNING_MODAL:
-		return state.set('modals', state.get('modals').set('shouldShowWarningModal', false))
-
-	case constants.SHOW_WARNING_MODAL:
-		return state.set('modals', state.get('modals')
-			.set('shouldShowWarningModal', true)
-			.set('warningModalTitle', action.modal.get('title'))
-			.set('warningModalMessage', action.modal.get('message')))
-
-    case constants.UPDATE_FOLDER_TO_REMOVE:
-        return state.set('folderToRemove', action.folder)
+	case constants.UPDATE_FOLDER_TO_REMOVE:
+		return state.setIn(['modals', 'folderToRemove'], action.folder)
 
 	case constants.FETCH_DATA_SUCCESS:
-		return state.set('usersettings', action.ignoreSettings
-				? state.get('usersettings') : action.data.get('usersettings'))
+		return state.mergeWith((old, newer, key) => (key === 'usersettings' && action.ignoreSettings)
+			? old : newer, action.data)
+			.set('settingsChanged', action.ignoreSettings ? state.get('settingsChanged') : false)
 			.set('defaultsettings', state.get('defaultsettings') === undefined
 				? action.data.get('usersettings') : state.get('defaultsettings'))
-			.set('settingsChanged', action.ignoreSettings ? state.get('settingsChanged') : false)
-			.set('acceptingContracts', action.data.get('acceptingContracts'))
-			.set('numContracts', action.data.get('numContracts'))
-			.set('storage', action.data.get('storage'))
-			.set('earned', action.data.get('earned'))
-			.set('expected', action.data.get('expected'))
-			.set('files', action.data.get('files'))
-			.set('walletLocked', action.data.get('walletLocked'))
-			.set('defaultAnnounceAddress', action.data.get('defaultAnnounceAddress'))
 
 	default:
 		return state

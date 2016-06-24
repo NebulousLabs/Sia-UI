@@ -90,20 +90,3 @@ export const hideAnnounceDialog = (address) => ({
 	type: constants.HIDE_ANNOUNCE_DIALOG,
 	address,
 })
-
-export const showWarning = (modal, acceptAction, declineAction) => ({
-	type: constants.SHOW_WARNING,
-	modal, // { title: "", message: "" }
-	acceptAction,
-	declineAction,
-})
-
-export const showWarningModal = (modal) => ({
-	type: constants.SHOW_WARNING_MODAL,
-	modal, // { title: "", message: "" }
-})
-
-export const hideWarningModal = (accepted) => ({
-	type: constants.HIDE_WARNING_MODAL,
-	accepted,
-})

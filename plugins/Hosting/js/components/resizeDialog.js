@@ -1,6 +1,6 @@
 import React from 'react'
 import { Map } from 'immutable'
-import path from 'path'
+import Path from 'path'
 
 const ResizeDialogModal = ({ shouldShowResizeDialog, resizePath, resizeSize, initialSize, actions }) => {
 	const handleSettingInput = (e) => actions.updateModal('resizeSize', e.target.value)
@@ -26,7 +26,7 @@ const ResizeDialogModal = ({ shouldShowResizeDialog, resizePath, resizeSize, ini
 					X
 				</div>
 
-				<h3>Resize &quot;{path.basename(resizePath)}&quot;</h3>
+				<h3>Resize &quot;{Path.basename(resizePath)}&quot;</h3>
 				<p>
 					<label>Size in GB (Min is 35 GB)</label>
 					<input type="number" onChange={handleSettingInput} onKeyDown={handleSettingKeyDown} value={resizeSize} min="35"></input>

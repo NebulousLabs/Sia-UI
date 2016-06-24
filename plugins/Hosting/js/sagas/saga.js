@@ -183,22 +183,13 @@ function *fetchData(action) {
 			expected: (new BigNumber(updatedData.financialmetrics.potentialcontractcompensation)).toString(),
 			files: yield fetchStorageFiles(),
 			walletLocked: !walletUnlocked.unlocked,
+			walletsize: walletUnlocked.confirmedsiacoinbalance,
 			defaultAnnounceAddress: updatedData.externalsettings.netaddress,
 		})
 
 		yield put( actions.fetchDataSuccess(data, action.ignoreSettings) )
 	} catch (e) {
 		SiaAPI.showError({ title: 'Error Fetching Data', content: e.message })
-	}
-}
-
-function *showWarning(action) {
-	yield put( actions.showWarningModal(action.modal) )
-	const closeAction = yield take( constants.HIDE_WARNING_MODAL )
-	if (closeAction.accepted) {
-		action.acceptAction()
-	} else if (action.declineAction) {
-		action.declineAction()
 	}
 }
 
@@ -223,9 +214,6 @@ function *resizeFolderListener() {
 function *announceHostListener() {
 	yield *takeEvery('ANNOUNCE_HOST', announceHost)
 }
-function *showWarningModalListener() {
-	yield *takeEvery('SHOW_WARNING', showWarning)
-}
 
 export default function *initSaga() {
 	try {
@@ -237,7 +225,6 @@ export default function *initSaga() {
 			fork(removeFolderListener),
 			fork(resizeFolderListener),
 			fork(announceHostListener),
-			fork(showWarningModalListener),
 		]
 		yield put(actions.fetchData())
 	} catch (e) {
