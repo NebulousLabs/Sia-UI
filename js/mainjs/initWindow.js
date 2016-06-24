@@ -1,7 +1,14 @@
 import { Menu, BrowserWindow, app } from 'electron'
 import appMenu from './appMenu.js'
 import Path from 'path'
-import Siad from 'sia.js'
+
+// Save window position and bounds every time the window is moved or resized.
+const onBoundsChange = (mainWindow, config) => () => {
+	const bounds = mainWindow.getBounds()
+	for (const b in bounds) {
+		config.attr(b, bounds[b])
+	}
+}
 
 // Main process logic partitioned to other files
 // Creates the window and loads index.html
@@ -18,24 +25,8 @@ export default function(config) {
 
 	// Load the window's size and position
 	mainWindow.setBounds(config)
-
-	// Emitted when the window is closing.
-	mainWindow.on('close', () => {
-		// Save the window's size and position
-		var bounds = mainWindow.getBounds()
-		for (var k in bounds) {
-			if (bounds.hasOwnProperty(k)) {
-				config[k] = bounds[k]
-			}
-		}
-	})
-	// Unregister all shortcuts when mainWindow is closed.
-	// Stop Siad if it is not running detached.
-	mainWindow.on('closed', () => {
-		if (!config.siad.detached) {
-			Siad.stop()
-		}
-	})
+	mainWindow.on('move', onBoundsChange(mainWindow, config))
+	mainWindow.on('resize', onBoundsChange(mainWindow, config))
 
 	// Load the index.html of the app.
 	mainWindow.loadURL(Path.join('file://', app.getAppPath(), 'index.html'))

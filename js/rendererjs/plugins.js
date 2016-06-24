@@ -102,7 +102,7 @@ export const scanFolder = (path) => {
 			fs.statSync(markupPath)
 			return true
 		} catch (e) {
-			console.error('plugin ' + path + ' has an invalid structure')
+			console.error('plugin ' + pluginPath + ' has an invalid structure')
 		}
 		return false
 	})
