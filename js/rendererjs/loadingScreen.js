@@ -5,6 +5,7 @@ import { remote } from 'electron'
 import Siad from 'sia.js'
 import Path from 'path'
 const dialog = remote.dialog
+const app = remote.app
 const fs = remote.require('fs')
 const config = remote.getGlobal('config')
 const siadConfig = config.attr('siad')
@@ -15,7 +16,6 @@ const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByT
 overlayText.textContent = 'Loading Sia...'
 
 const showError = (error) => {
-	console.error(error)
 	overlayText.textContent = 'A Sia-UI error has occured: ' + error
 }
 
@@ -89,6 +89,10 @@ export default function loadingScreen(initUI) {
 				defaultPath: Path.join('..', siadConfig.path),
 				filters: [{ name: 'siad', extensions: ['*'] }],
 			})
+			if (typeof siadPath === 'undefined') {
+				// The user didn't choose siad, we should just close.
+				app.quit()
+			}
 			siadConfig.path = siadPath[0]
 			startSiad((error) => {
 				if (error) {
