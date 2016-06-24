@@ -12,7 +12,6 @@ const initialState = Map({
 	]),
 	defaultsettings: undefined,
 	files: List([]),
-    folderToRemove: undefined,
 	earned: 0,
 	expected: 0,
 	acceptingContracts: 0,
@@ -76,9 +75,6 @@ export default function hostingReducer(state = initialState, action) {
 			.set('warningModalTitle', action.modal.get('title'))
 			.set('warningModalMessage', action.modal.get('message')))
 
-    case constants.UPDATE_FOLDER_TO_REMOVE:
-        return state.set('folderToRemove', action.folder)
-
 	case constants.FETCH_DATA_SUCCESS:
 		return state.set('usersettings', action.ignoreSettings
 				? state.get('usersettings') : action.data.get('usersettings'))
@@ -98,3 +94,4 @@ export default function hostingReducer(state = initialState, action) {
 		return state
 	}
 }
+

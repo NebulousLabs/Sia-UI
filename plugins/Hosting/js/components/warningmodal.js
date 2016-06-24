@@ -1,22 +1,17 @@
 import React from 'react'
 
-const DECLINED = 0
-const ACCEPTED = 1
-
-const WarningModalModal = ({ shouldShow, title, message, actions }) => {
-	const acceptModal = () => actions.hideModal(ACCEPTED)
-	const declineModal = () => actions.hideModal(DECLINED)
+const WarningModalModal = ({ title, message, actions }) => {
 
 	return (
-		<div className={'modal' + (shouldShow ? '': ' hidden')}>
+		<div className={'modal'}>
 			<div className="modal-message">
-				<div className="close-button" onClick={declineModal}>X</div>
+				<div className="close-button" onClick={actions.declineModal}>X</div>
 				<h3>{title}</h3>
 				<p>{message}</p>
 				<p>
-					<input className="button accept" type="button" value="Accept" onClick={acceptModal}></input>
+					<input className="button accept" type="button" value="Accept" onClick={actions.acceptModal}></input>
 					<br />
-					<input className="button cancel" type="button" value="Cancel" onClick={declineModal}></input>
+					<input className="button cancel" type="button" value="Cancel" onClick={actions.declineModal}></input>
 				</p>
 			</div>
 		</div>
