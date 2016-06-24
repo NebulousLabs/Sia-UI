@@ -7,9 +7,13 @@ import url from 'url'
 import * as constants from '../constants/helper.js'
 
 export const checkSiaPath = () => new Promise((resolve, reject) => {
-	fs.stat(Path.resolve(SiaAPI.config.attr('siac').path, './siac'), (err) => {
+	fs.stat(SiaAPI.config.attr('siac').path, (err) => {
 		 if (!err) {
-			resolve()
+			if (Path.basename(SiaAPI.config.attr('siac').path).indexOf('siac') !== -1) {
+				resolve()
+			} else {
+				reject({ message: 'Invalid binary name.' })
+			}
 		 } else {
 			reject(err)
 		 }
@@ -18,11 +22,11 @@ export const checkSiaPath = () => new Promise((resolve, reject) => {
 
 export const initPlugin = () => checkSiaPath().catch(() => {
 	//Look in the siad folder for siac.
-	SiaAPI.config.attr('siac', { path: Path.dirname(SiaAPI.config.attr('siad').path) })
+	SiaAPI.config.attr('siac', { path: Path.resolve( Path.dirname(SiaAPI.config.attr('siad').path), (process.platform === 'win32' ? './siac.exe' : './siac') ) })
 	checkSiaPath().catch(() => {
 		// config.path doesn't exist. Prompt the user for siac's location
 		if (!SiaAPI.config.attr('siac')) {
-			SiaAPI.config.attr('siac', { path: SiaAPI.config.attr('siad').path })
+			SiaAPI.config.attr('siac', { path: '' })
 		}
 		SiaAPI.showError({ title: 'Siac not found', content: 'Sia-UI couldn\'t locate siac. Please navigate to siac.' })
 		const siacPath = SiaAPI.openFile({
@@ -31,7 +35,15 @@ export const initPlugin = () => checkSiaPath().catch(() => {
 			defaultPath: Path.join('..', SiaAPI.config.attr('siac').path || './' ),
 			filters: [{ name: 'siac', extensions: ['*'] }],
 		})
-		SiaAPI.config.attr('siac', { path: Path.dirname(siacPath[0]) })
+		if (siacPath) {
+			if (Path.basename(siacPath[0]).indexOf('siac') === -1) {
+				SiaAPI.showError({ title: 'Invalid Binary Name', content: 'The siac binary must be called siac. Restart the plugin to choose a valid binary.' })
+			} else {
+				SiaAPI.config.attr('siac', { path: siacPath[0] })
+			}
+		} else {
+			SiaAPI.showError({ title: 'Siac not found', content: 'This plugin will be unusable until a proper siac binary is found.' })
+		}
 	})
 	SiaAPI.config.save()
 })
@@ -73,7 +85,7 @@ export const spawnCommand = function(commandStr, actions, newid) {
 		args = args.concat([ '-a', SiaAPI.config.attr('address') ])
 	}
 
-	const siac = child_process.spawn('./siac', args, { cwd: SiaAPI.config.attr('siac').path })
+	const siac = child_process.spawn('./siac', args, { cwd: Path.dirname(SiaAPI.config.attr('siac').path || '') })
 
 	//Update the UI when the process receives new ouput.
 	const consumeChunk = function(chunk) {
@@ -91,7 +103,8 @@ export const spawnCommand = function(commandStr, actions, newid) {
 		}
 	}
 
-	siac.on('error', () => {
+	siac.on('error', (e) => {
+		consumeChunk(`Error running command: ${e.message}.\nIs your siac path correct?`)
 		streamClosed()
 	})
 	siac.on('close', () => {
