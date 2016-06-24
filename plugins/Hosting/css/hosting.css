@@ -172,7 +172,7 @@
 	bottom: 0;
 	height: 100vh;
 	width: 100vw;
-    letter-spacing: normal;
+	letter-spacing: normal;
 	background-color: rgba(0, 0, 0, 0.5);
 	display: flex;
 	align-items: center;
@@ -263,6 +263,26 @@
 
 .hosting-options-modal .button {
 	width: auto;
+}
+
+.warning-bar {
+	position: fixed;
+	top: 13px;
+	left: calc( 50% - 200px );
+	z-index: 1;
+	width: 400px;
+	background-color: #00CBA0;
+	border: 1px solid #fff;
+	padding: 10px 10px;
+	border-radius: 20px;
+	box-shadow: rgba(0, 0, 0, .7) 0px 0px 15px;
+	text-align: center;
+}
+
+.warning-bar h3,
+.warning-bar p {
+	margin: 0px;
+	padding: 5px;
 }
 
 .pure-g, .pure-g [class *="pure-u"] {

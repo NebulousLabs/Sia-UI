@@ -1,6 +1,6 @@
 import SettingsListView from '../components/settingslist.js'
 import { connect } from 'react-redux'
-import { updateSetting, updateSettings, showWarning, showToggleAcceptingModal, hideToggleAcceptingModal } from '../actions/actions.js'
+import { updateSetting, updateSettings, showToggleAcceptingModal, hideToggleAcceptingModal } from '../actions/actions.js'
 import { bindActionCreators } from 'redux'
 
 const mapDispatchToProps = (dispatch) => ({

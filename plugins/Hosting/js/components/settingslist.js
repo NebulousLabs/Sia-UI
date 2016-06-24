@@ -23,13 +23,13 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 
 	const resetSettings = () => actions.updateSettings(Map({ acceptingContracts, usersettings: defaultsettings } ))
 
+	const showToggleAcceptingModal = () => actions.showToggleAcceptingModal()
+	const hideToggleAcceptingModal = () => actions.hideToggleAcceptingModal()
+
 	const toggleAcceptingContracts = () => {
 		actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
 		hideToggleAcceptingModal()
 	}
-
-	const showToggleAcceptingModal = () => actions.showToggleAcceptingModal()
-	const hideToggleAcceptingModal = () => actions.hideToggleAcceptingModal()
 
 	const HostProperties = usersettings.map((setting, key) => (
 		<div className="property pure-g" key={key}>
@@ -80,14 +80,16 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 				shouldShowToggleAcceptingModal && acceptingContracts ?
 					<Modal title="Stop accepting contracts?"
 						message="You must still keep Sia-UI open until the exisitng contracts have expired otherwise you will lose collateral."
-						actions={{ acceptModal: toggleAcceptingContracts, declineModal: hideToggleAcceptingModal  }} />
+						actions={{ acceptModal: toggleAcceptingContracts, declineModal: hideToggleAcceptingModal  }}
+					/>
 					: null
 			}
 			{
 				shouldShowToggleAcceptingModal && !acceptingContracts ?
 					<Modal title="Start accepting contracts?"
 						message="To host files you must keep the Sia-UI open. Collateral will also be locked and you will be unable to spend that SC until the contract is expired."
-						actions={{ acceptModal: toggleAcceptingContracts, declineModal: hideToggleAcceptingModal  }} />
+						actions={{ acceptModal: toggleAcceptingContracts, declineModal: hideToggleAcceptingModal  }}
+					/>
 					: null
 			}
 		</div>
