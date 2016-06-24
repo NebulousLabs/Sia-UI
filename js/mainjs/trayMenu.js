@@ -2,7 +2,7 @@ import { Menu } from 'electron'
 
 export default function(window) {
 	// Template for Sia-UI tray menu.
-	var menutemplate = [
+	const menutemplate = [
 		{
 			label: 'Show Sia',
 			click: () => window.show(),

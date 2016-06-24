@@ -24,10 +24,10 @@ function errored(err, result) {
 
 // Convert to Siacoin
 function formatSiacoin(hastings) {
-	var number = new BigNumber(hastings)
-	var ConversionFactor = new BigNumber(10).pow(24)
+	const number = new BigNumber(hastings)
+	const ConversionFactor = new BigNumber(10).pow(24)
 	// Display two digits of Siacoin
-	var display = number.dividedBy(ConversionFactor).round(2) + ' S'
+	const display = number.dividedBy(ConversionFactor).round(2) + ' S'
 	return display
 }
 
@@ -37,13 +37,13 @@ function updateWallet(err, result) {
 		return
 	}
 
-	var unlocked = result.unlocked
-	var unencrypted = !result.encrypted
+	const unlocked = result.unlocked
+	const unencrypted = !result.encrypted
 
-	var lockText = unencrypted ? 'New Wallet' : unlocked ? 'Unlocked' : 'Locked'
+	const lockText = unencrypted ? 'New Wallet' : unlocked ? 'Unlocked' : 'Locked'
 	document.getElementById('lock').innerText = lockText
 
-	var bal = unlocked ? formatSiacoin(result.confirmedsiacoinbalance) : '--'
+	const bal = unlocked ? formatSiacoin(result.confirmedsiacoinbalance) : '--'
 	document.getElementById('balance').innerText = 'Balance: ' + bal
 }
 
