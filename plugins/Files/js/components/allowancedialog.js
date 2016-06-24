@@ -7,7 +7,6 @@ const AllowanceDialog = ({unlocked, storageSize, storageCost, settingAllowance, 
 	const setStorageSize = (size) => actions.calculateStorageCost(size)
 	const onCancelClick = () => actions.closeAllowanceDialog()
 	const onAcceptClick = () => actions.setAllowance(storageCost)
-	console.log(storageCost)
 	let dialogContents
 	if (settingAllowance) {
 		dialogContents = (

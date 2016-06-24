@@ -6,7 +6,6 @@ import Path from 'path'
 import SearchField from '../containers/searchfield.js'
 
 const FileList = ({files, searchResults, path, showSearchField, actions}) => {
-
 	const onDirectoryClick = (directory) => () => actions.setPath(Path.join(path, directory.name))
 	const onBackClick = () => {
 		if (path === '') {

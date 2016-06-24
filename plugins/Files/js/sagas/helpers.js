@@ -46,13 +46,13 @@ export const ls = (files, path) => {
 	let parsedFiles = Map()
 	fileList.forEach((file) => {
 		let type = 'file'
-		const relativePath = file.siapath.substring(path.length, file.siapath.length)
+		const relativePath = Path.relative(path, file.siapath)
 		let filename = Path.basename(relativePath)
 		let uploadprogress = Math.floor(file.uploadprogress)
 		if (relativePath.indexOf('/') !== -1) {
 			type = 'directory'
 			filename = relativePath.split('/')[0]
-			uploadprogress = ''
+			uploadprogress = 0
 		}
 		parsedFiles = parsedFiles.set(filename, {
 			size: readableFilesize(file.filesize),

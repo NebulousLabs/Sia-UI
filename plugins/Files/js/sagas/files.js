@@ -39,7 +39,6 @@ function* setAllowanceSaga(action) {
 	try {
 		const response = yield siadCall('/renter')
 		const newAllowance = SiaAPI.siacoinsToHastings(action.funds).add(response.settings.allowance.funds)
-		console.log(newAllowance.toString())
 		yield siadCall({
 			url: '/renter',
 			method: 'POST',
