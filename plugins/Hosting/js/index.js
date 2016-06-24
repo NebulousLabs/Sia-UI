@@ -1,4 +1,4 @@
-// index.js: main entrypoint for the Sia-UI wallet plugin.
+// index.js: main entrypoint for the Sia-UI hosting plugin.
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, applyMiddleware } from 'redux'
@@ -10,7 +10,7 @@ import HostingApp from './components/app.js'
 import * as actions from './actions/actions.js'
 
 
-// Render the wallet plugin
+// Render the hosting plugin
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
 const rootElement = (

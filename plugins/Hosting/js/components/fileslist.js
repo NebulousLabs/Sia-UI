@@ -5,7 +5,7 @@ const FilesList = ({ folders, actions }) => {
 	const addStorageLocation = () => actions.addFolderAskPathSize()
 	const removeStorageLocation = (folder) => actions.showWarning(Map({
 		title: 'Delete storage folder?',
-		message: 'No longer use this folder for storage? You may loose collateral if you do not have enough space to fill all contracts.',
+		message: 'No longer use this folder for storage? You may lose collateral if you do not have enough space to fill all contracts.',
 	}), () => actions.removeFolder(folder))
 
 	const onResizeStorageLocationClick = (folder) => () => actions.resizeFolder(folder)
