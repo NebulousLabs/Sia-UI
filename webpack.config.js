@@ -11,7 +11,7 @@ plugins.forEach((plugin) => {
 	entrypoints[path.dirname(path.dirname(plugin))] = ['babel-polyfill', plugin]
 })
 
-entrypoints["renderer"] = ['babel-polyfill', path.resolve('./js/rendererjs/uiManager.js')]
+entrypoints["renderer"] = ['babel-polyfill', path.resolve('./js/rendererjs/index.js')]
 entrypoints["main"] = path.resolve('./js/mainjs/index.js')
 entrypoints["pluginapi"] = path.resolve('./js/rendererjs/pluginapi.js')
 
