@@ -25,7 +25,6 @@ const FileList = ({files, searchResults, path, showSearchField, actions}) => {
 	} else {
 		filelistFiles = files
 	}
-
 	const fileElements = filelistFiles.map((file, key) => {
 		if (file.type === 'directory') {
 			return (

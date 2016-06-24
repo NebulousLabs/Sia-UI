@@ -7,7 +7,7 @@ const File = ({filename, filesize, onDownloadClick, onDeleteClick}) => (
 			<div className="name">{filename}</div>
 		</div>
 		<div className="file-info">
-			<span className="filesize">{filesize} MB</span>
+			<span className="filesize">{filesize}</span>
 			<div className="file-buttons">
 				<div onClick={onDownloadClick} className="download-button">
 					<i className="fa fa-cloud-download 2x"></i>

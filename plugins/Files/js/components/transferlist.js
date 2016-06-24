@@ -2,7 +2,9 @@ import React, { PropTypes } from 'react'
 import { List } from 'immutable'
 import Transfer from './transfer.js'
 
-const TransferList = ({transfers, onTransferClick = () => {}}) => {
+const defaultTransferClick = () => () => {}
+
+const TransferList = ({transfers, onTransferClick = defaultTransferClick}) => {
 	const transferComponents = transfers.map((transfer, key) => (
 		<Transfer key={key} name={transfer.name} progress={transfer.progress} onClick={onTransferClick(transfer)} />
 	))

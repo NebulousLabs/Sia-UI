@@ -120,7 +120,7 @@ export const parseUploads = (files) => List(files)
 // Search `files` for `text`, excluding directories not in `path`
 export const searchFiles = (files, text, path) => {
 	let matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1)
-	matchingFiles = matchingFiles.filter((file) => file.uploadprogress >= 100)
+	matchingFiles = matchingFiles.filter((file) => file.available)
 	matchingFiles = matchingFiles.filter((file) => file.siapath.toLowerCase().indexOf(text.toLowerCase()) !== -1)
 	return matchingFiles.map((file) => ({
 		size: readableFilesize(file.filesize),
