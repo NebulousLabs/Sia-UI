@@ -52,7 +52,7 @@
 	justify-content: center;
 	align-items: center;
 }
-.transfer-list li {
+.filetransfer {
 	margin: 0;
 	display: flex;
 	width: 100%;
@@ -61,6 +61,12 @@
 	align-items: center;
 	justify-content: space-around;
 	background-color: #ECECEC;
+}
+.transfertext {
+	display: none;
+}
+.filetransfer:hover + .transfertext {
+	display: inline-block;
 }
 .downloads .transfer-list li:hover {
 	background-color: #DDDDDD;
@@ -210,6 +216,7 @@
 }
 .file-buttons {
 	margin-bottom: 5px;
+	cursor: pointer;
 }
 .filename {
 	display: flex;
