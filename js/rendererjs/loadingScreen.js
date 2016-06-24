@@ -4,11 +4,9 @@
 import { remote } from 'electron'
 import Siad from 'sia.js'
 import Path from 'path'
-import configLoader from '../mainjs/config.js'
 const dialog = remote.dialog
 const fs = remote.require('fs')
-
-const config = configLoader(Path.join(__dirname, '../config.json'))
+const config = remote.getGlobal('config')
 const siadConfig = config.attr('siad')
 Siad.configure(siadConfig)
 
