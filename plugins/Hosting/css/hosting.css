@@ -78,7 +78,7 @@
 	transition: all .5s;
 }
 
-.toggle-switch.off .toggle-inner{
+.toggle-switch.off .toggle-inner {
 	left: 74px;
 }
 
@@ -149,11 +149,9 @@
 	cursor: pointer;
 }
 
-
 .button .fa {
 	margin-right: .25em;
 }
-
 
 #properties {
 	height: 50%;
@@ -328,7 +326,7 @@
 	border: 1px solid #DDDDDD;
 }
 
-.help.section .instructions{
+.help.section .instructions {
 	width: 522px;
 	letter-spacing: normal;
 	margin: auto;

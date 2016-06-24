@@ -13,7 +13,7 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 
 	const settingValues = (acceptcontracts, settings) => settings.map((setting) => setting.get('value')).set('acceptingContracts', acceptcontracts)
 	const saveEnabled = () => helper.validNumbers(usersettings.toList().toJSON()) && settingsChanged
-	const resetSettings = () => actions.pushSettings(defaultsettings)
+	const resetSettings = () => actions.pushSettings(defaultsettings.set('acceptingContracts', acceptingContracts))
 	const updateSettings = () => {
 		if ( saveEnabled() ) {
 			actions.pushSettings(settingValues(acceptingContracts, usersettings))
@@ -37,7 +37,7 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 					<input type="number" data-setting={key} onChange={handleSettingInput} className="value" value={setting.get('value')}></input>
 				</div>
 			</div>
-			<div className={'error pure-u-1-1' + ( setting.get('value') <= Number(setting.get('min'))  || isNaN(setting.get('value')) ? '' : ' hidden' )}>
+			<div className={'error pure-u-1-1' + ( setting.get('value') <= Number(setting.get('min') || 0)  || isNaN(setting.get('value')) ? '' : ' hidden' )}>
 				<span>Must be a number greater than {setting.get('min') || 'zero'}.</span>
 			</div>
 		</div>

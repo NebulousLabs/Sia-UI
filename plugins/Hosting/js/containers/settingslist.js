@@ -36,7 +36,7 @@ const mapStateToProps = (state) => ({
 	acceptingContracts: state.settingsReducer.get('acceptingContracts'),
 	settingsChanged: state.settingsReducer.get('settingsChanged'),
 	defaultsettings: state.settingsReducer.get('defaultsettings'),
-	shouldShowToggleAcceptingModal: state.hostingReducer.get('modals').get('shouldShowToggleAcceptingModal'),
+	shouldShowToggleAcceptingModal: state.modalReducer.get('shouldShowToggleAcceptingModal'),
 })
 
 const SettingsList = connect(mapStateToProps, mapDispatchToProps)(SettingsListView)

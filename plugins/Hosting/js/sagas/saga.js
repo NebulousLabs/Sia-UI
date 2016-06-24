@@ -23,13 +23,13 @@ const fetchStorageFiles = () => new Promise((resolve, reject) => {
 		url: '/storage',
 		method: 'GET',
 	}).then((fetchedFiles) => {
-		resolve(List(fetchedFiles.StorageFolderMetadata).map((file) => (
+		resolve(List((fetchedFiles.StorageFolderMetadata || []).map((file) => (
 			Map({
 				path: file.path,
 				size: (new BigNumber(file.capacity)).times('1e-9').toString(),
 				free: (new BigNumber(file.capacityremaining)).times('1e-9').toString(),
 			})
-		)).toList())
+		))))
 	}).catch( (e) => {
 		SiaAPI.showError({ title: 'Error Fetching Folders', content: e.message })
 		reject(e)
@@ -70,17 +70,19 @@ function *addFolder(action) {
 
 function *addFolderAskPathSize() {
 	const newLocation = helper.chooseFileLocation()
-	try {
-		yield put( actions.showResizeDialog(Map({ path: newLocation, size: 50 }), true) )
-		const closeAction = yield take( constants.HIDE_RESIZE_DIALOG )
-		if (closeAction.folder.get('size')) {
-			yield put( actions.addFolder(Map({
-				path: newLocation,
-				size: (new BigNumber(closeAction.folder.get('size'))).times(new BigNumber('1e9')).toString(),
-			})) )
+	if (newLocation) {
+		try {
+			yield put( actions.showResizeDialog(Map({ path: newLocation, size: 50 }), true) )
+			const closeAction = yield take( constants.HIDE_RESIZE_DIALOG )
+			if (closeAction.folder.get('size')) {
+				yield put( actions.addFolder(Map({
+					path: newLocation,
+					size: (new BigNumber(closeAction.folder.get('size'))).times(new BigNumber('1e9')).toString(),
+				})) )
+			}
+		} catch (e) {
+			SiaAPI.showError({ title: 'Error Adding Folder', content: e.message })
 		}
-	} catch (e) {
-		SiaAPI.showError({ title: 'Error Adding Folder', content: e.message })
 	}
 }
 
@@ -154,18 +156,21 @@ function *fetchData(action) {
 			files: yield fetchStorageFiles(),
 			walletLocked: !walletUnlocked.unlocked,
 			walletsize: walletUnlocked.confirmedsiacoinbalance,
+		})
+
+		const modals = Map({
 			defaultAnnounceAddress: updatedData.externalsettings.netaddress,
 		})
 
 		const settings = action.ignoreSettings ? undefined : Map({
-			maxduration: helper.blocksToWeeks(updatedData.externalsettings.maxduration).toString(),
+			maxduration: helper.blocksToWeeks(updatedData.externalsettings.maxduration).toFixed(0),
 			collateral: helper.hastingsByteBlockToSCTBMonth(updatedData.externalsettings.collateral).toFixed(0),
 			storageprice: helper.hastingsByteBlockToSCTBMonth(updatedData.externalsettings.storageprice).toFixed(0),
 			downloadbandwidthprice: helper.hastingsByteToSCTB(updatedData.externalsettings.downloadbandwidthprice).toString(),
 			acceptingContracts: updatedData.externalsettings.acceptingcontracts,
 		})
 
-		yield put( actions.fetchDataSuccess(data, settings) )
+		yield put( actions.fetchDataSuccess(data, settings, modals) )
 	} catch (e) {
 		SiaAPI.showError({ title: 'Error Fetching Data', content: e.message })
 	}

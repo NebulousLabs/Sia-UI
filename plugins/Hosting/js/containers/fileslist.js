@@ -10,7 +10,7 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => ({
 	acceptingContracts: state.hostingReducer.get('acceptingContracts'),
 	folders: state.hostingReducer.get('files'),
-	folderPathToRemove: state.hostingReducer.get('modals').get('folderPathToRemove'),
+	folderPathToRemove: state.modalReducer.get('folderPathToRemove'),
 })
 
 const FilesList = connect(mapStateToProps, mapDispatchToProps)(FilesListView)

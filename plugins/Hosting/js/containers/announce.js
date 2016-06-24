@@ -4,8 +4,8 @@ import { hideAnnounceDialog, updateModal } from '../actions/actions.js'
 import { bindActionCreators } from 'redux'
 
 const mapStateToProps = (state) => ({
-	shouldShowAnnounceDialog: state.hostingReducer.get('modals').get('shouldShowAnnounceDialog'),
-	announceAddress: state.hostingReducer.get('modals').get('announceAddress'),
+	shouldShowAnnounceDialog: state.modalReducer.get('shouldShowAnnounceDialog'),
+	announceAddress: state.modalReducer.get('announceAddress'),
 })
 
 const mapDispatchToProps = (dispatch) => ({

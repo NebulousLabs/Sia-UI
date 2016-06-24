@@ -46,10 +46,11 @@ export const fetchData = (ignoreSettings) => ({
 	ignoreSettings,
 })
 
-export const fetchDataSuccess = (data, settings) => ({
+export const fetchDataSuccess = (data, settings, modals) => ({
 	type: constants.FETCH_DATA_SUCCESS,
 	data,
 	settings,
+	modals,
 })
 
 export const showToggleAcceptingModal = () => ({

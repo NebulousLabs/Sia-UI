@@ -17,25 +17,6 @@ export default function settingsReducer(state = initialState, action) {
 	case constants.UPDATE_SETTINGS:
 		return state.merge(action.settings).set('settingsChanged', true)
 
-	case constants.UPDATE_DURATION:
-		return state.set('maxduration', action.get('newval'))
-			.set('settingsChanged', true)
-
-	case constants.UPDATE_COLLATERAL:
-		return state.set('collateral', action.get('newval'))
-			.set('settingsChanged', true)
-
-	case constants.UPDATE_STORAGE_PRICE:
-		return state.set('storageprice', action.get('newval'))
-			.set('settingsChanged', true)
-
-	case constants.UPDATE_DOWNLOAD_PRICE:
-		return state.set('downloadbandwidthprice', action.get('newval'))
-			.set('settingsChanged', true)
-
-	case constants.UPDATE_DEFAULT_SETTINGS:
-		return state.set('defaultsettings', action.get('newval'))
-
 	case constants.FETCH_DATA_SUCCESS:
 		return (action.settings === undefined ? state : state.merge(action.settings))
 			.set('defaultsettings', state.get('defaultsettings') === undefined

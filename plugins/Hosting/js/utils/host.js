@@ -1,10 +1,15 @@
 import BigNumber from 'bignumber.js'
 
 export const chooseFileLocation = function() {
-	return SiaAPI.openFile({
+	const selectedFile = SiaAPI.openFile({
 		title: 'Choose new storage location.',
 		properties: [ 'openDirectory' ],
-	})[0]
+	})
+	if (selectedFile) {
+		return selectedFile[0]
+	} else {
+		return undefined
+	}
 }
 
 export const hastingsByteToSCTB = (hastings) => (
