@@ -21,16 +21,16 @@ const AllowanceDialog = ({unlocked, storageSize, storageCost, settingAllowance, 
 		dialogContents = (
 			<div className="allowance-dialog">
 				<h3> Buy storage on the Sia Decentralized Network</h3>
-					<div className="storage-plans">
-						<StoragePlan storageSize={'10'} currentStorageSize={storageSize} setStorageSize={setStorageSize} />
-						<StoragePlan storageSize={'100'} currentStorageSize={storageSize} setStorageSize={setStorageSize} />
-						<StoragePlan storageSize={'250'} currentStorageSize={storageSize} setStorageSize={setStorageSize} />
-					</div>
-					<p> Estimated cost: {Math.floor(storageCost)} SC </p>
-					<p className="allowance-warning">Any unused funds will be refunded.</p>
-					<div className="allowance-buttons">
-						<button onClick={onCancelClick} className="allowance-button-cancel">Cancel</button>
-						<button onClick={onAcceptClick} className="allowance-button-accept">Accept</button>
+				<div className="storage-plans">
+					<StoragePlan storageSize={'10'} currentStorageSize={storageSize} setStorageSize={setStorageSize} />
+					<StoragePlan storageSize={'100'} currentStorageSize={storageSize} setStorageSize={setStorageSize} />
+					<StoragePlan storageSize={'250'} currentStorageSize={storageSize} setStorageSize={setStorageSize} />
+				</div>
+				<p> Estimated cost: {Math.floor(storageCost)} SC </p>
+				<p className="allowance-warning">Any unused funds will be refunded.</p>
+				<div className="allowance-buttons">
+					<button onClick={onCancelClick} className="allowance-button-cancel">Cancel</button>
+					<button onClick={onAcceptClick} className="allowance-button-accept">Accept</button>
 				</div>
 			</div>
 		)
