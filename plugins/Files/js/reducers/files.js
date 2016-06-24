@@ -23,6 +23,7 @@ const initialState = Map({
 })
 
 export default function filesReducer(state = initialState, action) {
+	console.log(action)
 	switch (action.type) {
 	case constants.RECEIVE_DISK_USAGE:
 		return state.set('usage', action.usage)

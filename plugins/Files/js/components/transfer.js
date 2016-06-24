@@ -12,7 +12,7 @@ const Transfer = ({name, progress, onClick}) => (
 
 Transfer.propTypes = {
 	name: PropTypes.string.isRequired,
-	progress: PropTypes.string.isRequired,
+	progress: PropTypes.number.isRequired,
 	onClick: PropTypes.func.isRequired,
 }
 

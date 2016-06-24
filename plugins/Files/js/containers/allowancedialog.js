@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux'
 import { closeAllowanceDialog, calculateStorageCost, setAllowance } from '../actions/files.js'
 
 const mapStateToProps = (state) => ({
+	unlocked: state.wallet.get('unlocked'),
 	storageSize: state.allowancedialog.get('storageSize'),
 	storageCost: state.allowancedialog.get('storageCost'),
 	allowanceProgress: state.allowancedialog.get('allowanceProgress'),

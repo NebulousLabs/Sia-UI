@@ -4,7 +4,7 @@ import * as constants from '../constants/files.js'
 const initialState = Map({
 	storageSize: '',
 	storageCost: '0',
-	allowanceProgress: '0',
+	allowanceProgress: 0,
 	settingAllowance: false,
 })
 

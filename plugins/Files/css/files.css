@@ -306,6 +306,12 @@
 	margin-top: 30px;
 	margin-bottom: 10px;
 }
+.allowance-dialog.unlock-warning {
+	justify-content: center;
+}
+.unlock-warning-head {
+	margin-top: 10px;
+}
 .allowance-dialog p {
 	margin-top: 10px;
 	text-align: center;
@@ -315,6 +321,12 @@
 }
 .allowance-buttons {
 	margin-bottom: 15px;
+}
+.allowance-buttons button {
+	width: 100px;
+	height: 25px;
+	margin-left: 5px;
+	margin-right: 5px;
 }
 .allowance-dialog {
 	margin-left: 15px;
