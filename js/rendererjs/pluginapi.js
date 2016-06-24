@@ -1,12 +1,10 @@
 // pluginapi.js: Sia-UI plugin API interface exposed to all plugins.
 // This is injected into every plugin's global namespace.
 import Siad from 'sia.js'
-import Path from 'path'
 import { remote } from 'electron'
-import configLoader from '../mainjs/config.js'
 const dialog = remote.dialog
 const mainWindow = remote.getCurrentWindow()
-const config = configLoader(Path.join(__dirname, '../config.json'))
+const config = remote.getGlobal('config')
 Siad.configure(config.siad)
 
 window.SiaAPI = {
