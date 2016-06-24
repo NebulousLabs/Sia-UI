@@ -5,15 +5,15 @@ import Path from 'path'
 const defaultConfig = {
 	homePlugin:  'Overview',
 	siad: {
-		path: Path.join(__dirname, '../Sia/siad'),
+		path: Path.join(__dirname, '../Sia/' + (process.platform === 'win32' ? 'siad.exe' : 'siad')),
 		datadir: Path.join(__dirname, '../Sia'),
 		detached: false,
 	},
 	closeToTray: process.platform === 'win32' || process.platform === 'darwin' ? true : false,
-	width:       800,
-	height:      600,
-	x:           0,
-	y:           0,
+	width:	   1024,
+	height:	  768,
+	x:		   0,
+	y:		   0,
 }
 
 /**
