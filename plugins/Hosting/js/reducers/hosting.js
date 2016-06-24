@@ -46,9 +46,13 @@ export default function hostingReducer(state = initialState, action) {
 	case constants.UPDATE_MODAL:
 		return state.set('modals', state.get('modals').set(action.key, action.value))
 
-	case constants.TOGGLE_ACCEPTING:
-		return state.set('acceptingContracts', !state.get('acceptingContracts'))
+	case constants.SHOW_TOGGLE_ACCEPTING_MODAL:
+		return state.set('shouldShowToggleAcceptingModal', true)
 
+	case constants.HIDE_TOGGLE_ACCEPTING_MODAL:
+		return state.set('shouldShowToggleAcceptingModal', false)
+
+		return state.set('acceptingContracts', !state.get('acceptingContracts'))
 	case constants.HIDE_RESIZE_DIALOG:
 		return state.set('modals', state.get('modals').set('shouldShowResizeDialog', false))
 

@@ -1,8 +1,9 @@
 import React from 'react'
 import { Map } from 'immutable'
 import * as helper from '../utils/host.js'
+import Modal from './warningmodal.js'
 
-const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, settingsChanged, actions }) => {
+const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, settingsChanged, shouldShowToggleAcceptingModal, actions }) => {
 
 	const handleSettingInput = (e) => {
 		if (e.target.value >= 0) {
@@ -21,20 +22,14 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 	)
 
 	const resetSettings = () => actions.updateSettings(Map({ acceptingContracts, usersettings: defaultsettings } ))
+
 	const toggleAcceptingContracts = () => {
-		if (!acceptingContracts) {
-			actions.showWarning(
-				Map({ title: 'Start accepting contracts?', message: 'To host files you must keep the Sia-UI open. Collateral will also be locked' +
-					' and you will be unable to spend that SC until the contract is expired.' }),
-				() => actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
-			)
-		} else {
-			actions.showWarning(
-				Map({ title: 'Stop accepting contracts?', message: 'You must still keep Sia-UI open until the exisitng contracts have expired otherwise you will lose collateral.' }),
-				() => actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
-			)
-		}
-	}
+        actions.updateSettings(Map({ acceptingContracts: !acceptingContracts, usersettings }))
+        hideToggleAcceptingModal()
+    }
+
+	const showToggleAcceptingModal = () => actions.showToggleAcceptingModal()
+	const hideToggleAcceptingModal = () => actions.hideToggleAcceptingModal()
 
 	const HostProperties = usersettings.map((setting, key) => (
 		<div className="property pure-g" key={key}>
@@ -75,12 +70,26 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 				</div>
 				<div className="pure-u-1-2">
 					<div className="value">
-						<div className={'toggle-switch' + (acceptingContracts ? '' : ' off')} onClick={toggleAcceptingContracts}>
+						<div className={'toggle-switch' + (acceptingContracts ? '' : ' off')} onClick={showToggleAcceptingModal}>
 							<div className="toggle-inner"></div>
 						</div>
 					</div>
 				</div>
 			</div>
+			{
+				shouldShowToggleAcceptingModal && acceptingContracts ?
+					<Modal title="Stop accepting contracts?"
+						message="You must still keep Sia-UI open until the exisitng contracts have expired otherwise you will lose collateral."
+						actions={{ acceptModal: toggleAcceptingContracts, declineModal: hideToggleAcceptingModal  }} />
+					: null
+			}
+			{
+				shouldShowToggleAcceptingModal && !acceptingContracts ?
+					<Modal title="Start accepting contracts?"
+						message="To host files you must keep the Sia-UI open. Collateral will also be locked and you will be unable to spend that SC until the contract is expired."
+						actions={{ acceptModal: toggleAcceptingContracts, declineModal: hideToggleAcceptingModal  }} />
+					: null
+			}
 		</div>
 	)
 }

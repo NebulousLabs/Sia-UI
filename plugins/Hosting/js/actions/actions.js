@@ -28,8 +28,12 @@ export const fetchDataSuccess = (data, ignoreSettings) => ({
 	ignoreSettings,
 })
 
-export const toggleAcceptingContracts = () => ({
-	type: constants.TOGGLE_ACCEPTING,
+export const showToggleAcceptingModal = () => ({
+	type: constants.SHOW_TOGGLE_ACCEPTING_MODAL,
+})
+
+export const hideToggleAcceptingModal = () => ({
+	type: constants.HIDE_TOGGLE_ACCEPTING_MODAL,
 })
 
 export const resetHost = () => ({

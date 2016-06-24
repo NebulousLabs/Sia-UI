@@ -1,10 +1,10 @@
 import SettingsListView from '../components/settingslist.js'
 import { connect } from 'react-redux'
-import { updateSetting, updateSettings, showWarning } from '../actions/actions.js'
+import { updateSetting, updateSettings, showWarning, showToggleAcceptingModal, hideToggleAcceptingModal } from '../actions/actions.js'
 import { bindActionCreators } from 'redux'
 
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ updateSetting, updateSettings, showWarning }, dispatch),
+	actions: bindActionCreators({ updateSetting, updateSettings, showToggleAcceptingModal, hideToggleAcceptingModal }, dispatch),
 })
 
 const mapStateToProps = (state) => ({
@@ -12,6 +12,7 @@ const mapStateToProps = (state) => ({
 	defaultsettings: state.hostingReducer.get('defaultsettings'),
 	acceptingContracts: state.hostingReducer.get('acceptingContracts'),
 	settingsChanged: state.hostingReducer.get('settingsChanged'),
+    shouldShowToggleAcceptingModal: state.hostingReducer.get('shouldShowToggleAcceptingModal'),
 })
 
 const SettingsList = connect(mapStateToProps, mapDispatchToProps)(SettingsListView)
