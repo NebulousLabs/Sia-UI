@@ -5,7 +5,7 @@ import AllowanceDialog from '../containers/allowancedialog.js'
 const FilesApp = ({unlocked, showAllowanceDialog}) => (
 	<div className="app">
 		{showAllowanceDialog ? <AllowanceDialog /> : null}
-		{unlocked ? <FileBrowser /> : <div className="unlock-dialog"><h3>You must unlock your wallet you can upload files!</h3></div>}
+		{unlocked ? <FileBrowser /> : <div className="unlock-dialog"><h3>You must unlock your wallet before you can upload files!</h3></div>}
 	</div>
 )
 
