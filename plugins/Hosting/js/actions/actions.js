@@ -1,25 +1,5 @@
 import * as constants from '../constants/constants.js'
 
-export const updateDuration = (newvalue) => ({
-	type: constants.UPDATE_DURATION,
-	newvalue,
-})
-
-export const updateCollateral = (newvalue) => ({
-	type: constants.UPDATE_COLLATERAL,
-	newvalue,
-})
-
-export const updateStoragePrice = (newvalue) => ({
-	type: constants.UPDATE_STORAGE_PRICE,
-	newvalue,
-})
-
-export const updateDownloadPrice = (newvalue) => ({
-	type: constants.UPDATE_DOWNLOAD_PRICE,
-	newvalue,
-})
-
 export const updateDefaultSettings = (newvalue) => ({
 	type: constants.UPDATE_DEFAULT_SETTINGS,
 	newvalue,
