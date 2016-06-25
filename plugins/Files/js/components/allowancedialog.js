@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react'
 import StoragePlan from './storageplan.js'
 import ProgressBar from './progressbar.js'
+import UnlockWarning from './unlockwarning.js'
 
-const AllowanceDialog = ({storageSize, storageCost, settingAllowance, allowanceProgress, actions}) => {
+const AllowanceDialog = ({unlocked, storageSize, storageCost, settingAllowance, allowanceProgress, actions}) => {
 	const setStorageSize = (size) => actions.calculateStorageCost(size)
 	const onCancelClick = () => actions.closeAllowanceDialog()
 	const onAcceptClick = () => actions.setAllowance(storageCost)
-
 	let dialogContents
 	if (settingAllowance) {
 		dialogContents = (
@@ -26,26 +26,27 @@ const AllowanceDialog = ({storageSize, storageCost, settingAllowance, allowanceP
 					<StoragePlan storageSize={'100'} currentStorageSize={storageSize} setStorageSize={setStorageSize} />
 					<StoragePlan storageSize={'250'} currentStorageSize={storageSize} setStorageSize={setStorageSize} />
 				</div>
-				<p> Estimated 3-month cost: {Math.floor(storageCost)} SC </p>
+				<p> Estimated cost: {Math.floor(storageCost)} SC </p>
 				<p className="allowance-warning">Any unused funds will be refunded.</p>
 				<div className="allowance-buttons">
 					<button onClick={onCancelClick} className="allowance-button-cancel">Cancel</button>
-					<button onClick={onAcceptClick} className="allowance-buttons">Accept</button>
+					<button onClick={onAcceptClick} className="allowance-button-accept">Accept</button>
 				</div>
 			</div>
 		)
 	}
 	return (
 		<div className="modal">
-			{dialogContents}
+			{unlocked ? dialogContents : <UnlockWarning onClick={onCancelClick} />}
 		</div>
 	)
 }
 
 AllowanceDialog.propTypes = {
+	unlocked: PropTypes.bool.isRequired,
 	storageSize: PropTypes.string.isRequired,
 	storageCost: PropTypes.string.isRequired,
-	allowanceProgress: PropTypes.string,
+	allowanceProgress: PropTypes.number,
 	settingAllowance: PropTypes.bool.isRequired,
 }
 

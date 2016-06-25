@@ -51,9 +51,9 @@ function* setAllowanceSaga(action) {
 		yield put(actions.setAllowanceCompleted())
 		yield put(actions.closeAllowanceDialog())
 	} catch (e) {
+		sendError(e)
 		yield put(actions.setAllowanceCompleted())
 		yield put(actions.closeAllowanceDialog())
-		sendError(e)
 	}
 }
 
@@ -99,7 +99,7 @@ function* setAllowanceProgressBarSaga() {
 				break
 			}
 			const progress = Math.floor((deltaContracts / allowanceHosts) * 100)
-			yield put(actions.setAllowanceProgress(progress.toString()))
+			yield put(actions.setAllowanceProgress(progress))
 			yield delay(500)
 		}
 	} catch (e) {

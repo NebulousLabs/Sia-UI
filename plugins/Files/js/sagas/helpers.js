@@ -41,18 +41,18 @@ export const readableFilesize = (bytes) => {
 // return a list of files filtered with path.
 // ... it's ls.
 export const ls = (files, path) => {
-	const fileList = files.filter((file) => file.uploadprogress >= 100)
-	                    .filter((file) => file.siapath.indexOf(path) !== -1)
+	const fileList = files.filter((file) => file.available)
+	                      .filter((file) => file.siapath.indexOf(path) !== -1)
 	let parsedFiles = Map()
 	fileList.forEach((file) => {
 		let type = 'file'
-		const relativePath = file.siapath.substring(path.length, file.siapath.length)
+		const relativePath = Path.relative(path, file.siapath)
 		let filename = Path.basename(relativePath)
 		let uploadprogress = Math.floor(file.uploadprogress)
 		if (relativePath.indexOf('/') !== -1) {
 			type = 'directory'
 			filename = relativePath.split('/')[0]
-			uploadprogress = ''
+			uploadprogress = 0
 		}
 		parsedFiles = parsedFiles.set(filename, {
 			size: readableFilesize(file.filesize),
@@ -120,7 +120,7 @@ export const parseUploads = (files) => List(files)
 // Search `files` for `text`, excluding directories not in `path`
 export const searchFiles = (files, text, path) => {
 	let matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1)
-	matchingFiles = matchingFiles.filter((file) => file.uploadprogress >= 100)
+	matchingFiles = matchingFiles.filter((file) => file.available)
 	matchingFiles = matchingFiles.filter((file) => file.siapath.toLowerCase().indexOf(text.toLowerCase()) !== -1)
 	return matchingFiles.map((file) => ({
 		size: readableFilesize(file.filesize),

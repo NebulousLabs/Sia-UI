@@ -1,15 +1,12 @@
 import React, { PropTypes } from 'react'
-import ProgressBar from './progressbar.js'
 import { List } from 'immutable'
+import Transfer from './transfer.js'
 
-const TransferList = ({transfers, onTransferClick = () => {}}) => {
+const defaultTransferClick = () => () => {}
+
+const TransferList = ({transfers, onTransferClick = defaultTransferClick}) => {
 	const transferComponents = transfers.map((transfer, key) => (
-		<li key={key} onClick={onTransferClick(transfer)}>
-			<div className="transfer-info">
-				<div className="transfername">{transfer.name}</div>
-				<ProgressBar progress={transfer.progress} />
-			</div>
-		</li>
+		<Transfer key={key} name={transfer.name} progress={transfer.progress} onClick={onTransferClick(transfer)} />
 	))
 	return (
 		<ul className="transfer-list">
