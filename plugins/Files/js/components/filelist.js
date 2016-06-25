@@ -47,7 +47,7 @@ const FileList = ({files, searchResults, path, showSearchField, actions}) => {
 			{showSearchField ? <SearchField /> : null}
 			<ul>
 				{path !== '' ? <li onClick={onBackClick}><div><i className="fa fa-backward"></i>Back</div></li> : null}
-				{fileElements.size > 0 && !showSearchField ? fileElements : <h2> No files have been uploaded! </h2>}
+				{fileElements.size > 0 ? fileElements : (showSearchField ? <h2> No matching files </h2> : <h2> No files uploaded </h2>)}
 			</ul>
 		</div>
 	)
