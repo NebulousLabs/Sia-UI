@@ -148,12 +148,20 @@ export const estimatedStoragePriceH = (hosts) => {
 	return hostPrices.reduce((sum, price) => sum.add(price), new BigNumber(0)).dividedBy(hostPrices.size).times(9)
 }
 
+// Maximum estimated storage is 1TB
+const maxEstimatedStorage = 1000000000000
+
 // Take an allowance and return a number of bytes this allowance
 // can be used to store, given a list of hosts to store data on.
 export const allowanceStorage = (funds, hosts, period) => {
 	const allowanceFunds = new BigNumber(funds)
-	const costPerB = estimatedStoragePriceH(hosts).times(period)
-	return readableFilesize(allowanceFunds.dividedBy(costPerB).toNumber())
+	let costPerB = estimatedStoragePriceH(hosts).times(period)
+	// If costPerB is zero, set it to some sane, low, amount instead
+	if (costPerB.isZero()) {
+		costPerB = new BigNumber('10000')
+	}
+	const storageBytes = Math.min(maxEstimatedStorage, allowanceFunds.dividedBy(costPerB).toNumber())
+	return readableFilesize(storageBytes)
 }
 
 // Compute the estimated price given a List of hosts, size to store, and duration.
