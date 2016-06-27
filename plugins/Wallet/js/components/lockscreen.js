@@ -21,7 +21,7 @@ const LockScreen = ({unlocked, unlocking, encrypted}) => {
 		)
 	} else if (unlocking) {
 		lockscreenContents = (
-			<span> Unlocking your wallet... </span>
+			<span> Unlocking your wallet, this may take a while (up to several minutes)... </span>
 		)
 	}
 	return (
