@@ -107,10 +107,14 @@ function* setAllowanceProgressBarSaga() {
 	}
 }
 
+// UploadFileSaga uploads a file to the Sia network.
+// action.siapath: the working directory to upload the file to
+// action.source: the path to the file to upload.
+// The full siapath is computed as Path.join(action.siapath, Path.basename(action.source))
 function* uploadFileSaga(action) {
 	try {
 		const filename = Path.basename(action.source)
-		const destpath = action.siapath + filename
+		const destpath = Path.join(action.siapath, filename)
 		yield siadCall({
 			url: '/renter/upload/' + destpath,
 			method: 'POST',
@@ -129,7 +133,7 @@ function *uploadFolderSaga(action) {
 		const files = readdirRecursive(action.source)
 		const folderName = Path.basename(action.source)
 		const uploads = files.map((file) => ({
-			siapath: file.substring(file.indexOf(folderName), file.lastIndexOf(Path.basename(file))),
+			siapath: Path.join(action.siapath, file.substring(file.indexOf(folderName), file.lastIndexOf(Path.basename(file)))),
 			source: file,
 		})).map((file) => actions.uploadFile(file.siapath, file.source))
 
