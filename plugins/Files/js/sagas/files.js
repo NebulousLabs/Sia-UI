@@ -47,7 +47,8 @@ function* getStorageMetricsSaga() {
 		const usage = totalUsage(List(files))
 		yield put(actions.receiveStorageMetrics(usage, available))
 	} catch (e) {
-		sendError(e)
+		yield put(actions.receiveStorageMetrics('-- MB', '-- MB'))
+		console.error(e)
 	}
 }
 
