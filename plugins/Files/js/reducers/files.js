@@ -24,7 +24,7 @@ const initialState = Map({
 export default function filesReducer(state = initialState, action) {
 	switch (action.type) {
 	case constants.RECEIVE_STORAGE_METRICS:
-	return state.set('storageUsage', action.usage)
+		return state.set('storageUsage', action.usage)
 		            .set('storageAvailable', action.available)
 	case constants.RECEIVE_FILES:
 		return state.set('files', action.files)
