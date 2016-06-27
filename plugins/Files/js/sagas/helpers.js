@@ -134,19 +134,33 @@ export const searchFiles = (files, text, path) => {
 
 const bytesPerGB = new BigNumber('1000000000')
 
-// Compute the estimated price given a List of hosts, size to store, and duration.
-// `duration` is in blocks, size is in GB.
-// returns a `BigNumber` representing the average number of Siacoins per GB per duration
-export const estimatedStoragePriceGBSC = (hosts, size, duration) => {
+// Compute the estimated price per byte/hastings given a list of hosts.
+export const estimatedStoragePriceH = (hosts) => {
 	const minimumHosts = 14
 	const hostPrices = List(hosts).map((host) => new BigNumber(host.storageprice))
 	if (hostPrices.size < minimumHosts) {
 		throw 'not enough hosts'
 	}
+
 	// Compute the average host price.
 	// Multiply this average by 9 to assume a redundancy of 6 with 25% of the files being downloaded at 2x monthly price
 	// TODO: this functionality should be in the api.
-	const averagePricePerByteBlockH = hostPrices.reduce((sum, price) => sum.add(price), new BigNumber(0)).dividedBy(hostPrices.size).times(9)
+	return hostPrices.reduce((sum, price) => sum.add(price), new BigNumber(0)).dividedBy(hostPrices.size).times(9)
+}
+
+// Take an allowance and return a number of bytes this allowance
+// can be used to store, given a list of hosts to store data on.
+export const allowanceStorage = (funds, hosts, period) => {
+	const allowanceFunds = new BigNumber(funds)
+	const costPerB = estimatedStoragePriceH(hosts).times(period)
+	return readableFilesize(allowanceFunds.dividedBy(costPerB).toNumber())
+}
+
+// Compute the estimated price given a List of hosts, size to store, and duration.
+// `duration` is in blocks, size is in GB.
+// returns a `BigNumber` representing the average number of Siacoins per GB per duration
+export const estimatedStoragePriceGBSC = (hosts, size, duration) => {
+	const averagePricePerByteBlockH = estimatedStoragePriceH(hosts)
 	const averagePricePerGBBlockH = averagePricePerByteBlockH.times(bytesPerGB)
 	const averagePricePerGBBlockSC = SiaAPI.hastingsToSiacoins(averagePricePerGBBlockH)
 

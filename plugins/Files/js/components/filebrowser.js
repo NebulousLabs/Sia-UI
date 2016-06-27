@@ -7,9 +7,10 @@ import UploadButton from '../containers/uploadbutton.js'
 import DeleteDialog from '../containers/deletedialog.js'
 import TransfersButton from '../containers/transfersbutton.js'
 import FileTransfers from '../containers/filetransfers.js'
+import UsageStats from '../containers/usagestats.js'
 import DragOverlay from './dragoverlay.js'
 
-const FileBrowser = ({diskusage, dragging, showUploadDialog, showDeleteDialog, showFileTransfers, actions}) => {
+const FileBrowser = ({dragging, showUploadDialog, showDeleteDialog, showFileTransfers, actions}) => {
 	const onDragOver = (e) => {
 		e.preventDefault()
 		actions.setDragging()
@@ -29,11 +30,8 @@ const FileBrowser = ({diskusage, dragging, showUploadDialog, showDeleteDialog, s
 				{showUploadDialog ? <UploadDialog /> : null}
 				{showDeleteDialog ? <DeleteDialog /> : null}
 				{dragging ? <DragOverlay /> : null}
-
 				<div className="files-toolbar">
-					<div className="files-usage-info">
-						Storage Usage: {diskusage}
-					</div>
+					<UsageStats />
 					<div className="buttons">
 						<SetAllowanceButton />
 						<SearchButton />
@@ -49,7 +47,6 @@ const FileBrowser = ({diskusage, dragging, showUploadDialog, showDeleteDialog, s
 }
 
 FileBrowser.propTypes = {
-	diskusage: PropTypes.string.isRequired,
 	dragging: PropTypes.bool.isRequired,
 	showUploadDialog: PropTypes.bool.isRequired,
 	showDeleteDialog: PropTypes.bool.isRequired,
