@@ -48,16 +48,22 @@ export const ls = (files, path) => {
 		let type = 'file'
 		const relativePath = Path.relative(path, file.siapath)
 		let filename = Path.basename(relativePath)
-		let uploadprogress = Math.floor(file.uploadprogress)
+		if (parsedFiles.has(filename)) {
+			return
+		}
+		const uploadprogress = Math.floor(file.uploadprogress)
+		let siapath = file.siapath
+		let filesize = readableFilesize(file.filesize)
 		if (relativePath.indexOf('/') !== -1) {
 			type = 'directory'
 			filename = relativePath.split('/')[0]
-			uploadprogress = 0
+			siapath = Path.join(path, filename) + '/'
+			filesize = ''
 		}
 		parsedFiles = parsedFiles.set(filename, {
-			size: readableFilesize(file.filesize),
+			size: filesize,
 			name: filename,
-			siapath: file.siapath,
+			siapath: siapath,
 			available: file.available,
 			uploadprogress: uploadprogress,
 			type,
