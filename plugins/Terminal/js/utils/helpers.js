@@ -174,17 +174,23 @@ export const httpCommand = function(commandStr, actions, newid) {
 	actions.addCommand(newCommand)
 
 	//Update the UI when the process receives new ouput.
+	let buffer = ''
 	const consumeChunk = function(chunk) {
-		let newChunk = chunk
-		if (chunk.toString().trim() === '{"Success":true}') {
-			newChunk = 'Success'
-		}
-		actions.updateCommand(newCommand.get('command'), newCommand.get('id'), newChunk)
+		buffer += chunk.toString()
 	}
 
 	let closed = false
-	const streamClosed = function() {
+	const streamClosed = function(res) {
 		if (!closed) {
+			try {
+				buffer = JSON.parse(buffer).message
+			} catch (e){}
+			
+			if (res.statusCode >= 200 && res.statusCode <= 299){
+				buffer += 'Success'
+			}
+
+			actions.updateCommand(newCommand.get('command'), newCommand.get('id'), buffer)
 			actions.endCommand(newCommand.get('command'), newCommand.get('id'))
 			closed = true
 		}
@@ -207,7 +213,7 @@ export const httpCommand = function(commandStr, actions, newid) {
 	}
 	const req = http.request(options, (res) => {
 		res.on('data', consumeChunk)
-		res.on('end', streamClosed)
+		res.on('end', () => streamClosed(res))
 	})
 	req.on('error', (e) => {
 		consumeChunk(e.message)
