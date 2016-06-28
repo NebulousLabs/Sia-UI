@@ -9,7 +9,7 @@ import { walletUnlockError } from '../actions/error.js'
 const sendError = (e) => {
 	SiaAPI.showError({
 		title: 'Sia-UI Wallet Error',
-		content: e.toString(),
+		content: e.message,
 	})
 }
 
@@ -54,7 +54,7 @@ function *walletUnlockSaga(action) {
 		yield put(actions.handlePasswordChange(''))
 	} catch (e) {
 		yield put(actions.handlePasswordChange(''))
-		yield put(walletUnlockError(e))
+		yield put(walletUnlockError(e.message))
 	}
 }
 
