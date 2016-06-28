@@ -11,7 +11,7 @@ import BigNumber from 'bignumber.js'
 const siadCall = (uri) => new Promise((resolve, reject) => {
 	SiaAPI.call(uri, (err, response) => {
 		if (err) {
-			reject({ message: err })
+			reject(err)
 		} else {
 			resolve(response)
 		}
