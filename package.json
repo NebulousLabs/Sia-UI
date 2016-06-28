@@ -46,7 +46,7 @@
     "watch": "webpack --watch",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
-    "test": "mocha --compilers js:babel-register --recursive ./test",
+    "test": "npm run lint && npm run build && mocha --compilers js:babel-register --recursive ./test",
     "lint": "eslint --max-warnings 0 --ignore-path .eslintignore ./index.js ./plugins ./js ./test",
     "lint-fix": "eslint --fix --ignore-path .eslintignore ./index.js ./plugins ./js ./test",
     "sia-repo": "go get -u github.com/NebulousLabs/Sia/...",
