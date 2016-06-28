@@ -20,10 +20,10 @@ const siadCall = (uri) => new Promise((resolve, reject) => {
 
 const fetchStorageFiles = () => new Promise((resolve, reject) => {
 	siadCall({
-		url: '/storage',
+		url: '/host/storage',
 		method: 'GET',
 	}).then((fetchedFiles) => {
-		resolve(List((fetchedFiles.StorageFolderMetadata || []).map((file) => (
+		resolve(List((fetchedFiles.folders || []).map((file) => (
 			Map({
 				path: file.path,
 				size: (new BigNumber(file.capacity)).times('1e-9').toString(),
