@@ -7,7 +7,7 @@ import fs from 'fs'
 export const sendError = (e) => {
 	SiaAPI.showError({
 		title: 'Sia-UI Files Error',
-		content: e.toString(),
+		content: e.message,
 	})
 }
 

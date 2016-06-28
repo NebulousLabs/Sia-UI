@@ -40,7 +40,7 @@ function* getStorageMetricsSaga() {
 		const files = response.files
 		response = yield siadCall('/renter')
 		const funds = response.settings.allowance.funds
-		response = yield siadCall('/renter/hosts/active')
+		response = yield siadCall('/hostdb/active')
 		const hosts = response.hosts
 
 		const available = allowanceStorage(funds, hosts, allowancePeriod)
@@ -78,7 +78,7 @@ function* setAllowanceSaga(action) {
 // Calculate monthly storage cost from a requested monthly storage amount
 function* calculateStorageCostSaga(action) {
 	try {
-		const response = yield siadCall('/renter/hosts/active')
+		const response = yield siadCall('/hostdb/active')
 		const cost = estimatedStoragePriceGBSC(response.hosts, action.size, allowancePeriod)
 		yield put(actions.setStorageCost(cost.round(3).toString()))
 		yield put(actions.setStorageSize(action.size))
