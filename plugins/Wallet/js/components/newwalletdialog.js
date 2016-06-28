@@ -19,8 +19,8 @@ const NewWalletDialog = ({password, seed, actions}) => {
 }
 
 NewWalletDialog.propTypes = {
-	password: PropTypes.string,
-	seed: PropTypes.string,
+	password: PropTypes.string.isRequired,
+	seed: PropTypes.string.isRequired,
 }
 
 export default NewWalletDialog
