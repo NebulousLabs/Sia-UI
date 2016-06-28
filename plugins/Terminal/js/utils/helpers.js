@@ -184,9 +184,9 @@ export const httpCommand = function(commandStr, actions, newid) {
 		if (!closed) {
 			try {
 				buffer = JSON.parse(buffer).message
-			} catch (e){}
-			
-			if (res.statusCode >= 200 && res.statusCode <= 299){
+			} catch (e) {}
+
+			if (res.statusCode >= 200 && res.statusCode <= 299) {
 				buffer += 'Success'
 			}
 
