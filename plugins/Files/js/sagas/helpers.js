@@ -35,7 +35,7 @@ export const readableFilesize = (bytes) => {
 		}
 		readablesize /= 1000
 	}
-	return readablesize.toFixed(2).toString() + ' ' + readableunit
+	return readablesize.toFixed().toString() + ' ' + readableunit
 }
 
 // return a list of files filtered with path.
