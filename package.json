@@ -10,11 +10,14 @@
     "chai": "^3.4.1",
     "chai-as-promised": "^5.1.0",
     "electron-packager": "^7.0.4",
+    "enzyme": "^2.3.0",
     "eslint": "^2.11.0",
     "eslint-plugin-import": "^1.9.2",
     "eslint-plugin-react": "^5.1.1",
     "glob": "^7.0.4",
-    "mocha": "^2.5.3"
+    "mocha": "^2.5.3",
+    "react-addons-test-utils": "^15.1.0",
+    "sinon": "^1.17.4"
   },
   "dependencies": {
     "babel-loader": "^6.2.4",
@@ -43,7 +46,7 @@
     "watch": "webpack --watch",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
-    "test": "npm run lint && webpack",
+    "test": "mocha --compilers js:babel-register --recursive ./test",
     "lint": "eslint --max-warnings 0 --ignore-path .eslintignore ./index.js ./plugins ./js ./test",
     "lint-fix": "eslint --fix --ignore-path .eslintignore ./index.js ./plugins ./js ./test",
     "sia-repo": "go get -u github.com/NebulousLabs/Sia/...",
