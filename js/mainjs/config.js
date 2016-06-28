@@ -7,7 +7,7 @@ const defaultConfig = {
 	homePlugin:  'Overview',
 	siad: {
 		path: Path.join(__dirname, '../Sia/' + (process.platform === 'win32' ? 'siad.exe' : 'siad')),
-		datadir: app.getPath('userData'),
+		datadir: Path.join(app.getPath('userData'), './sia-data'),
 		detached: false,
 	},
 	closeToTray: process.platform === 'win32' || process.platform === 'darwin' ? true : false,
