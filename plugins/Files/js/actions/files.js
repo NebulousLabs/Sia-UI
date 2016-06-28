@@ -128,9 +128,13 @@ export const showDeleteDialog = (siapath) => ({
 export const hideDeleteDialog = () => ({
 	type: constants.HIDE_DELETE_DIALOG,
 })
-export const receiveDiskUsage = (usage) => ({
-	type: constants.RECEIVE_DISK_USAGE,
+export const getStorageMetrics = () => ({
+	type: constants.GET_STORAGE_METRICS,
+})
+export const receiveStorageMetrics = (usage, available) => ({
+	type: constants.RECEIVE_STORAGE_METRICS,
 	usage,
+	available,
 })
 export const openDownloadLocation = (location) => ({
 	type: constants.OPEN_DOWNLOAD_LOCATION,

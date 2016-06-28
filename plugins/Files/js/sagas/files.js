@@ -4,7 +4,7 @@ import Path from 'path'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import { List } from 'immutable'
-import { sendError, siadCall, totalUsage, readdirRecursive, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
+import { sendError, allowanceStorage, siadCall, totalUsage, readdirRecursive, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
 
 const blockMonth = 4320
 const allowanceMonths = 0.1
@@ -28,9 +28,27 @@ function* getFilesSaga() {
 		const response = yield siadCall('/renter/files')
 		const files = List(response.files)
 		yield put(actions.receiveFiles(files))
-		yield put(actions.receiveDiskUsage(totalUsage(files)))
 	} catch (e) {
 		sendError(e)
+	}
+}
+
+// Get the storage usage as well as the available contract storage.
+function* getStorageMetricsSaga() {
+	try {
+		let response = yield siadCall('/renter/files')
+		const files = response.files
+		response = yield siadCall('/renter')
+		const funds = response.settings.allowance.funds
+		response = yield siadCall('/renter/hosts/active')
+		const hosts = response.hosts
+
+		const available = allowanceStorage(funds, hosts, allowancePeriod)
+		const usage = totalUsage(List(files))
+		yield put(actions.receiveStorageMetrics(usage, available))
+	} catch (e) {
+		yield put(actions.receiveStorageMetrics('-- MB', '-- MB'))
+		console.error(e)
 	}
 }
 
@@ -230,4 +248,7 @@ export function* watchUploadFile() {
 }
 export function* watchDownloadFile() {
 	yield *takeEvery(constants.DOWNLOAD_FILE, downloadFileSaga)
+}
+export function* watchGetStorageMetrics() {
+	yield *takeEvery(constants.GET_STORAGE_METRICS, getStorageMetricsSaga)
 }

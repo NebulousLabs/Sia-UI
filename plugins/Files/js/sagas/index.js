@@ -15,5 +15,6 @@ export default function* rootSaga() {
 		fork(sagas.watchGetUploads),
 		fork(sagas.watchDeleteFile),
 		fork(sagas.watchUploadFolder),
+		fork(sagas.watchGetStorageMetrics),
 	]
 }
