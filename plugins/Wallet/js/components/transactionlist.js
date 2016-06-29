@@ -10,9 +10,9 @@ const TransactionList = ({transactions}) => {
 		)
 	}
 	const transactionComponents = transactions.map((txn, key) => {
-		let valueData = '0 SC '
+		let valueData = ''
 		if (txn.transactionsums.totalSiacoin.abs().gt(0)) {
-			valueData = txn.transactionsums.totalSiacoin.round(4).toString() + ' SC '
+			valueData += txn.transactionsums.totalSiacoin.round(4).toString() + ' SC '
 		}
 		if (txn.transactionsums.totalSiafund.abs().gt(0)) {
 			valueData += txn.transactionsums.totalSiafund.round(4).toString() + ' SF '
@@ -31,7 +31,7 @@ const TransactionList = ({transactions}) => {
 	return (
 		<div className="transaction-list">
 			<h2> Recent Transactions </h2>
-			<table className="pure-table">
+			<table className="pure-table transaction-table">
 				<thead>
 					<tr>
 						<th>Net Value</th>
@@ -48,7 +48,7 @@ const TransactionList = ({transactions}) => {
 }
 
 TransactionList.propTypes = {
-	transactions: PropTypes.instanceOf(List),
+	transactions: PropTypes.instanceOf(List).isRequired,
 }
 
 export default TransactionList
