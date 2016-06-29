@@ -96,6 +96,16 @@ const testTxns = List([
 		transactionid: 'testid8',
 		confirmationtimestamp: 1008,
 	},
+	{ 
+		confirmed: false, 
+		transactionsums: { 
+			totalSiacoin: new BigNumber(0), 
+			totalSiafund: new BigNumber(0), 
+			totalMiner: new BigNumber(0), 
+		},
+		transactionid: 'testid9',
+		confirmationtimestamp: 1009,
+	},
 ])
 
 const expectedValues = List([
@@ -108,6 +118,7 @@ const expectedValues = List([
 	'1 SC ',
 	'10 SC -5 SF ',
 	'10 SC 1 SF 1 SC (miner) ',
+	'0 SC',
 ])
 
 const txnlistComponent = shallow(<TransactionList transactions={testTxns} />)
