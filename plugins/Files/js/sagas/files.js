@@ -7,7 +7,7 @@ import { List } from 'immutable'
 import { sendError, allowanceStorage, siadCall, totalUsage, readdirRecursive, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
 
 const blockMonth = 4320
-const allowanceMonths = 0.1
+const allowanceMonths = 3
 const allowanceHosts = 24
 const allowancePeriod = blockMonth*allowanceMonths
 
