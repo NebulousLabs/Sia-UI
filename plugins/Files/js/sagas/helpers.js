@@ -151,7 +151,9 @@ export const estimatedStoragePriceH = (hosts) => {
 	// Compute the average host price.
 	// Multiply this average by 9 to assume a redundancy of 6 with 25% of the files being downloaded at 2x monthly price
 	// TODO: this functionality should be in the api.
-	return hostPrices.reduce((sum, price) => sum.add(price), new BigNumber(0)).dividedBy(hostPrices.size).times(9)
+	return hostPrices.sortBy((price) => price.toNumber())
+	                 .take(36).reduce((sum, price) => sum.add(price), new BigNumber(0))
+	                 .dividedBy(hostPrices.size).times(9)
 }
 
 // Maximum estimated storage is 1TB
