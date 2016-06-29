@@ -1,6 +1,6 @@
 {
-  "name": "Sia-UI-beta",
-  "version": "v0.5.2-beta",
+  "name": "Sia-UI",
+  "version": "v1.0.0",
   "main": "dist/main.js",
   "author": "NebulousLabs",
   "description": "A UI application for interfacing with Sia",
@@ -54,7 +54,7 @@
     "sia-import": "(test -d Sia || mkdir -p Sia) && (cp $GOPATH/bin/siad Sia & cp $GOPATH/bin/siac Sia)",
     "sia-kill": "killall siad; while pgrep siad; do sleep .5; done;",
     "sia-refresh": "npm run sia-kill && rm -rf Sia && npm run sia-import",
-    "release-args": "webpack && electron-packager . Sia-UI --app-version=0.6.0-beta --version=1.2.2 --overwrite --prune --ignore='(node_modules|release|config.json|errors.log)' --out=release/v0.6.0-beta --icon=assets/icon",
+    "release-args": "webpack && electron-packager . Sia-UI --app-version=1.0.0 --version=1.2.2 --overwrite --prune --ignore='(node_modules|release|config.json|errors.log)' --out=release/v1.0.0 --icon=assets/icon",
     "release": "npm run release-args -- --all && ./.finalizeRelease.sh all",
     "release-lin64": "npm run release-args -- --platform=linux --arch=x64 && ./.finalizeRelease.sh linux-x64",
     "release-lin32": "npm run release-args -- --platform=linux --arch=ia32 && ./.finalizeRelease.sh linux-ia32",
