@@ -19,6 +19,12 @@ app.on('ready', () => {
 	appIcon.setContextMenu(appTray(mainWindow))
 })
 
+// Allow only one instance of Sia-UI
+app.makeSingleInstance(() => {
+	mainWindow.restore()
+	mainWindow.focus()
+})
+
 // Quit once all windows have been closed.
 app.on('window-all-closed', () => {
 	app.quit()
