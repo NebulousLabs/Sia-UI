@@ -37,7 +37,7 @@
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "redux-saga": "^0.10.4",
-    "sia.js": "^0.2.0",
+    "sia.js": "^0.2.1",
     "webpack": "^1.13.1"
   },
   "scripts": {
