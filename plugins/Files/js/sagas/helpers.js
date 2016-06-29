@@ -148,12 +148,13 @@ export const estimatedStoragePriceH = (hosts) => {
 		throw 'not enough hosts'
 	}
 
-	// Compute the median host price.
+	// Compute the average host price.
 	// Multiply this median by 9 to assume a redundancy of 6 with 25% of the files being downloaded at 2x monthly price
 	// TODO: this functionality should be in the api.
 	return hostPrices.sortBy((price) => price.toNumber())
 	                 .take(36)
-	                 .get(18)
+	                 .filter((price) => price.lt(SiaAPI.siacoinsToHastings(500000))) // filter outliers
+	                 .reduce((sum, price) => sum.add(price), new BigNumber(0))
 	                 .times(9)
 }
 
