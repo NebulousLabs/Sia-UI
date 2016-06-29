@@ -20,6 +20,9 @@ const TransactionList = ({transactions}) => {
 		if (txn.transactionsums.totalMiner.abs().gt(0)) {
 			valueData += txn.transactionsums.totalMiner.round(4).toString() + ' SC (miner) '
 		}
+		if (valueData === '') {
+			valueData = '0 SC'
+		}
 		return (
 			<tr key={key}>
 				<td>{valueData}</td>
