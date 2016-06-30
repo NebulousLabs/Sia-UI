@@ -55,7 +55,7 @@ function *announceHost(action) {
 function *addFolder(action) {
 	try {
 		yield siadCall({
-			url: '/storage/folders/add',
+			url: '/host/storage/folders/add',
 			method: 'POST',
 			qs: {
 				path: action.folder.get('path'),
@@ -89,7 +89,7 @@ function *addFolderAskPathSize() {
 function *removeFolder(action) {
 	try {
 		yield siadCall({
-			url: '/storage/folders/remove',
+			url: '/host/storage/folders/remove',
 			method: 'POST',
 			qs: {
 				path: action.folder.get('path'),
@@ -107,7 +107,7 @@ function *resizeFolder(action) {
 		const closeAction = yield take( constants.HIDE_RESIZE_DIALOG )
 		if (closeAction.folder.get('size')) { //If size is zero just hide the dialog.
 			yield siadCall({
-				url: '/storage/folders/resize',
+				url: '/host/storage/folders/resize',
 				method: 'POST',
 				qs: {
 					path: closeAction.folder.get('path'),
