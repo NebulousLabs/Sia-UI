@@ -149,7 +149,7 @@ export const estimatedStoragePriceH = (hosts) => {
 	}
 
 	// Compute the average host price.
-	// Multiply this median by 9 to assume a redundancy of 6 with 25% of the files being downloaded at 2x monthly price
+	// Multiply this average by 9 to assume a redundancy of 6 with 25% of the files being downloaded at 2x monthly price
 	// TODO: this functionality should be in the api.
 	return hostPrices.sortBy((price) => price.toNumber())
 	                 .take(36)
