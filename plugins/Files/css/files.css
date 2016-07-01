@@ -338,6 +338,7 @@
 	background-color: #ECECEC;
 	width: 80%;
 	height: 70%;
+	z-index: 10;
 }
 .delete-dialog {
 	margin-left: 15px;
@@ -376,3 +377,4 @@
 .file-buttons div {
 	margin: 10px 5px 5px 10px;
 }
+
