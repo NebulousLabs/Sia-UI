@@ -151,8 +151,8 @@ function *fetchData(action) {
 		const data = Map({
 			numContracts: updatedData.financialmetrics.contractcount,
 			storage: (new BigNumber(updatedData.externalsettings.totalstorage)).minus(new BigNumber(updatedData.externalsettings.remainingstorage)).toString(),
-			earned: (new BigNumber(updatedData.financialmetrics.contractcompensation)).toString(),
-			expected: (new BigNumber(updatedData.financialmetrics.potentialcontractcompensation)).toString(),
+			earned: SiaAPI.hastingsToSiacoins(updatedData.financialmetrics.contractcompensation).toString(),
+			expected: SiaAPI.hastingsToSiacoins(updatedData.financialmetrics.potentialcontractcompensation).toString(),
 			files: yield fetchStorageFiles(),
 			walletLocked: !walletUnlocked.unlocked,
 			walletsize: walletUnlocked.confirmedsiacoinbalance,
