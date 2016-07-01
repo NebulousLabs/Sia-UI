@@ -145,7 +145,7 @@ export const estimatedStoragePriceH = (hosts) => {
 	const minimumHosts = 14
 	const hostPrices = List(hosts).map((host) => new BigNumber(host.storageprice))
 	if (hostPrices.size < minimumHosts) {
-		throw 'not enough hosts'
+		throw { message: 'not enough hosts' }
 	}
 
 	// Compute the average host price.
