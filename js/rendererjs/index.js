@@ -7,7 +7,7 @@ import { scanFolder, loadPlugin, setCurrentPlugin, getPluginName } from './plugi
 const App = Electron.remote.app
 const mainWindow = Electron.remote.getCurrentWindow()
 const defaultPluginDirectory = Path.join(App.getAppPath(), './plugins')
-const defaultHomePlugin = 'Overview'
+const defaultHomePlugin = 'Files'
 
 // Called at window.onload by the loading screen.
 // Wait for siad to load, then load the plugin system.
