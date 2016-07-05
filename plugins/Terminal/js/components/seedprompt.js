@@ -22,6 +22,8 @@ export default class WalletSeedPrompt extends React.Component {
 					'dictionary': 'english',
 				}))
 				siac.end()
+				e.target.value = ''
+				this.props.actions.setWalletPassword('')
 				this.props.actions.hideSeedPrompt()
 			}
 		}
