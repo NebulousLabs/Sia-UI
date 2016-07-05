@@ -2,27 +2,34 @@
 // This is injected into every plugin's global namespace.
 import Siad from 'sia.js'
 import { remote } from 'electron'
-import Path from 'path'
+import React from 'react'
+import DisabledPlugin from './disabledplugin.js'
 const dialog = remote.dialog
-const app = remote.app
 const mainWindow = remote.getCurrentWindow()
 const config = remote.getGlobal('config')
 Siad.configure(config.siad)
 let disabled = false
 
-// Poll Siad.ifRunning and disable the plugin if siad is not running.
-setInterval(() => {
-	Siad.ifRunning(() => {
-		if (disabled) {
-			window.location.reload()
-		}
-	}, () => {
-		if (!disabled) {
-			disabled = true
-			document.body.innerHTML = "<h1>Siad has stopped.</h1>"
-		}
-	})
-}, 2000)
+window.onload = () => {
+	/* eslint-disable global-require */
+	const ReactDOM = require('react-dom')
+	/* eslint-enable global-require */
+
+	// Poll Siad.ifRunning and disable the plugin if siad is not running.
+	setInterval(() => {
+		Siad.ifRunning(() => {
+			if (disabled) {
+				window.location.reload()
+			}
+		}, () => {
+			if (!disabled) {
+				disabled = true
+				ReactDOM.render(<DisabledPlugin startSiad={Siad.start} />, document.body)
+			}
+		})
+	}, 2000)
+
+}
 
 // Siad call wrapper.
 // Only call siad if siad is running.
