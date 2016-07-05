@@ -27,6 +27,7 @@ export default class WalletPasswordPrompt extends React.Component {
 					const siac = httpCommand(this.props.currentCommand, this.props.actions, this.props.commandHistory.size)
 					siac.write(querystring.stringify({ 'encryptionpassword': this.props.walletPassword }))
 					siac.end()
+                    this.props.actions.setWalletPassword('')
 					break
 				}
 				this.props.actions.hideWalletPrompt()
