@@ -61,6 +61,34 @@ html,body {
 .logo-container:hover {
 	cursor: pointer;
 }
+.status-bar div {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 75%;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+.status-bar-unsynced i, .status-bar-synced i {
+	margin-right: 10px;
+	margin-left: 10px;
+}
+.status-bar-unsynced {
+	color: #E0000B;
+}
+.status-bar-synced {
+	color: #00CBA0;
+}
+.status-bar {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding-right: 25px;
+}
+.status-bar-blockheight {
+	color: #f5f5f5;
+}
 
 /* Header Buttons */
 .header-button {

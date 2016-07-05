@@ -4,6 +4,10 @@
 import { remote } from 'electron'
 import Siad from 'sia.js'
 import Path from 'path'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import StatusBar from './statusbar.js'
+
 const dialog = remote.dialog
 const app = remote.app
 const fs = remote.require('fs')
@@ -35,6 +39,16 @@ const checkSiaPath = () => new Promise((resolve, reject) => {
 const startUI = (welcomeMsg, initUI) => {
 	// Display a welcome message, then initialize the ui
 	overlayText.innerHTML = welcomeMsg
+
+	// Construct the status bar component and poll for updates from Siad
+	setInterval(() => {
+		Siad.call('/consensus', (err, response) => {
+			if (err) {
+				return
+			}
+			ReactDOM.render(<StatusBar synced={response.synced} blockheight={response.height} />, document.getElementById('statusbar'))
+		})
+	}, 2000)
 	initUI(() => {
 		overlay.style.display = 'none'
 	})
