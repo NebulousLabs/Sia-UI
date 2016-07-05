@@ -28,7 +28,6 @@ window.onload = () => {
 			}
 		})
 	}, 2000)
-
 }
 
 // Siad call wrapper.
