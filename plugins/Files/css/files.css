@@ -1,14 +1,14 @@
 /*  Style Guide: 
- *    Transparent: 70% Opacity
- *    
- *    White:      #FFFFFF
- *    Grey-White: #F5F5F5
- *    Faint-Grey: #ECECEC
- *    Light-Grey: #DDDDDD
- *    Grey:       #C5C5C5
- *    Grey-Black: #4A4A4A
- *    Black:      #000000
- *    Neon-Green: #00CBA0
+ *	Transparent: 70% Opacity
+ *	
+ *	White:	  #FFFFFF
+ *	Grey-White: #F5F5F5
+ *	Faint-Grey: #ECECEC
+ *	Light-Grey: #DDDDDD
+ *	Grey:	   #C5C5C5
+ *	Grey-Black: #4A4A4A
+ *	Black:	  #000000
+ *	Neon-Green: #00CBA0
  */
 
 .app {
@@ -96,6 +96,7 @@
 }
 .modal {
 	position: absolute;
+	z-index: 1;
 	top: 0;
 	left: 0;
 	right: 0;
@@ -124,7 +125,6 @@
 	color: #fff;
 	padding-bottom: 10px;
 	padding-top: 12px;
-	overflow: hidden;
 }
 .set-allowance-button {
 	display: inline-block;
@@ -135,13 +135,41 @@
 .upload-button {
 	display: inline-block;
 }
+.upload-button:last-of-type {
+    position: absolute;
+    left: 0px;
+    top: 55px;
+    overflow: hidden;
+    padding: 17px 0px 0px;
+    max-height: 0px;
+    background-color: #575757;
+    transition: all 1s .1s;
+}
+.upload-button-container:hover .upload-button:last-of-type {
+    max-height: 100px;
+    padding: 23px 0px 5px;
+} 
+.upload-button-container {
+	display: inline-block;
+    position: relative;
+    top: 0px;
+}
+.files-toolbar .buttons div {
+    text-align: center;
+    margin-bottom: 5px;
+    width: 100px;
+    cursor: pointer;
+}
+.files-toolbar .buttons div {
+    text-align: center;
+    margin-bottom: 5px;
+    width: 100px;
+    cursor: pointer;
+}
 .transfers-button {
 	display: inline-block;
 }
-.files-toolbar .buttons {
-	overflow: hidden;
-}
-.files-toolbar .buttons div:hover {
+.files-toolbar .buttons div[class$="button"]:hover {
 	opacity: 0.5;
 }
 .files-usage-info {
@@ -377,4 +405,3 @@
 .file-buttons div {
 	margin: 10px 5px 5px 10px;
 }
-

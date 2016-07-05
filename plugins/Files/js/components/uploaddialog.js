@@ -3,11 +3,13 @@ import fs from 'fs'
 
 const UploadDialog = ({source, path, actions}) => {
 	const onUploadClick = () => {
-		if (fs.statSync(source).isDirectory()) {
-			actions.uploadFolder(path, source)
-		} else {
-			actions.uploadFile(path, source)
-		}
+		source.forEach((file) => {
+			if (fs.statSync(file).isDirectory()) {
+				actions.uploadFolder(path, file)
+			} else {
+				actions.uploadFile(path, file)
+			}
+		})
 		actions.hideUploadDialog()
 	}
 	const onCancelClick = () => actions.hideUploadDialog()
@@ -15,7 +17,7 @@ const UploadDialog = ({source, path, actions}) => {
 		<div className="modal">
 			<div className="upload-dialog">
 				<h1> Confirm Upload </h1>
-				<div> Would you like to upload {source}?</div>
+				<div>Would you like to upload {source.length} {source.length === 1 ? 'item' : 'items'}?</div>
 				<div className="upload-dialog-buttons">
 					<button onClick={onUploadClick}>Upload</button>
 					<button onClick={onCancelClick}>Cancel</button>
@@ -26,7 +28,7 @@ const UploadDialog = ({source, path, actions}) => {
 }
 
 UploadDialog.propTypes = {
-	source: PropTypes.string.isRequired,
+	source: PropTypes.array.isRequired,
 	path: PropTypes.string.isRequired,
 }
 
