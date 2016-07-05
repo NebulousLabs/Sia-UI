@@ -23,15 +23,17 @@ const CommandLine = ({showCommandOverview, actions}) => {
 					<div className="command-overview-inner">
 						<h3>Available Commands:</h3>
 						<p>
-							version     Print version information<br />
-							stop        Stop the Sia daemon<br />
+							consensus   Print the current state of consensus<br />
+							gateway     Perform gateway actions<br />
 							host        Perform host actions<br />
 							hostdb      View or modify the host database<br />
 							miner       Perform miner actions<br />
-							wallet      Perform wallet actions<br />
 							renter      Perform renter actions<br />
-							gateway     Perform gateway actions<br />
-							consensus   Print the current state of consensus<br /><br />
+							stop        Stop the Sia daemon<br />
+							update      Update Sia<br />
+							version     Print version information<br />
+							wallet      Perform wallet actions<br /><br />
+
 							Use '[command] --help' for more information about a command.<br />
 						</p>
 					</div>
