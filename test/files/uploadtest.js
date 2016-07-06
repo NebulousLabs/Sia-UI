@@ -49,8 +49,8 @@ const siaOpenFoldersArg = {
 	properties: ['openDirectory'],
 }
 
-describe('upload button', () => {
-	it('checks single file uploading', () => {
+describe('files upload button component', () => {
+	it('dispatches proper action for a single file upload', () => {
 		const testFiles = ['filename.png']
 		const spies = testButton(testFiles)
 		expect(spies.uploadSpy.alwaysCalledWithExactly(testFiles)).to.be.true
@@ -59,7 +59,7 @@ describe('upload button', () => {
 		expect(spies.openFileSpy.calledOnce).to.be.true
 	})
 
-	it('checks multiple file uploading', () => {
+	it('dispatches proper action for a multiple file upload', () => {
 		const testFiles = ['filename.png', 'file2.jpg', 'files3.pdf', 'cat.gifs']
 		const spies = testButton(testFiles)
 		expect(spies.uploadSpy.alwaysCalledWithExactly(testFiles)).to.be.true
@@ -68,7 +68,7 @@ describe('upload button', () => {
 		expect(spies.openFileSpy.calledOnce).to.be.true
 	})
 
-	it('checks folder uploading', () => {
+	it('dispatches proper action for a single folder upload', () => {
 		const testFolders = ['I am a folder.']
 		const spies = testButton(testFolders, true)
 		expect(spies.uploadSpy.alwaysCalledWithExactly(testFolders)).to.be.true
@@ -77,7 +77,7 @@ describe('upload button', () => {
 		expect(spies.openFileSpy.calledOnce).to.be.true
 	})
 
-	it('checks multiple folder uploading', () => {
+	it('dispatches proper action for a multiple folder upload', () => {
 		const testFolders = ['Folders ', '987238479Holder', 'Yeah I\'m a folder.', 'Me too!']
 		const spies = testButton(testFolders, true)
 		expect(spies.uploadSpy.alwaysCalledWithExactly(testFolders)).to.be.true
@@ -87,8 +87,8 @@ describe('upload button', () => {
 	})
 })
 
-describe('upload dialog', () => {
-	it('checks single file is correctly displayed', () => {
+describe('files upload dialog component', () => {
+	it('correctly displays dialog for single file', () => {
 		const testFiles = ['filename.png']
 		const testResults = testDialog(testFiles)
 		expect(testResults.uploadDialog.find('.upload-dialog').children('div').first().text()).to.equal(`Would you like to upload ${testFiles.length} ${testFiles.length === 1 ? 'item' : 'items'}?`)
@@ -99,7 +99,7 @@ describe('upload dialog', () => {
 		})
 	})
 
-	it('checks multiple files are correctly displayed', () => {
+	it('correctly displays dialog for multiple files', () => {
 		const testFiles = ['filename.png', 'tomuch.meme', 'sia.sia.sia.sia.sia', '.sia.test']
 		const testResults = testDialog(testFiles)
 		expect(testResults.uploadDialog.find('.upload-dialog').children('div').first().text()).to.equal(`Would you like to upload ${testFiles.length} ${testFiles.length === 1 ? 'item' : 'items'}?`)
@@ -110,7 +110,7 @@ describe('upload dialog', () => {
 		})
 	})
 
-	it('checks single folder is correctly displayed', () => {
+	it('correctly displays dialog for single folder', () => {
 		const testFiles = ['folder']
 		const testResults = testDialog(testFiles, true)
 		expect(testResults.uploadDialog.find('.upload-dialog').children('div').first().text()).to.equal(`Would you like to upload ${testFiles.length} ${testFiles.length === 1 ? 'item' : 'items'}?`)
@@ -121,7 +121,7 @@ describe('upload dialog', () => {
 		})
 	})
 
-	it('checks multiple files are correctly displayed', () => {
+	it('correctly displays dialog for multiple folders', () => {
 		const testFiles = ['foldername', 'An amazing name', 'SIASIASIASIASIASIA', 'FTW']
 		const testResults = testDialog(testFiles, true)
 		expect(testResults.uploadDialog.find('.upload-dialog').children('div').first().text()).to.equal(`Would you like to upload ${testFiles.length} ${testFiles.length === 1 ? 'item' : 'items'}?`)
