@@ -19,8 +19,7 @@ window.onload = () => {
 	const ReactDOM = require('react-dom')
 	/* eslint-enable global-require */
 
-	// Poll Siad.ifRunning and disable the plugin if siad is not running.
-	setInterval(() => {
+	const checkSiad = () => {
 		Siad.ifRunning(() => {
 			if (disabled) {
 				disabled = false
@@ -32,7 +31,11 @@ window.onload = () => {
 				ReactDOM.render(<DisabledPlugin startSiad={Siad.start} />, document.body)
 			}
 		})
-	}, 2000)
+	}
+
+	checkSiad()
+	// Poll Siad.ifRunning and disable the plugin if siad is not running.
+	setInterval(checkSiad, 2000)
 }
 
 // Siad call wrapper.

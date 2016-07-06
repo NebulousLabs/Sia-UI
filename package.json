@@ -16,6 +16,7 @@
     "eslint-plugin-react": "^5.1.1",
     "glob": "^7.0.4",
     "mocha": "^2.5.3",
+    "proxyquire": "^1.7.10",
     "react-addons-test-utils": "^15.1.0",
     "rewire": "^2.5.2",
     "sinon": "^1.17.4"
