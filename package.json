@@ -32,6 +32,7 @@
     "jquery": "^2.1.4",
     "json-loader": "^0.5.4",
     "mkdirp": "^0.5.1",
+    "proxyquire": "^1.7.10",
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
     "react-redux": "^4.4.5",
@@ -42,6 +43,7 @@
   },
   "scripts": {
     "start": "webpack && electron .",
+    "debug": "webpack -d",
     "build": "webpack",
     "watch": "webpack --watch",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",

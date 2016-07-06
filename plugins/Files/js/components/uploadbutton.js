@@ -26,7 +26,7 @@ const UploadButton = ({actions}) => {
 				<span>Upload Files</span>
 			</div>
 			<div onClick={onUploadClickFolder} className="upload-button">
-				<i className="fa fa-cloud-upload fa-2x"></i>
+				<i className="fa fa-folder-open-o fa-2x"></i>
 				<span>Upload Folder</span>
 			</div>
 		</div>
