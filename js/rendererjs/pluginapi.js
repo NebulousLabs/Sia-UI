@@ -11,6 +11,10 @@ Siad.configure(config.siad)
 let disabled = false
 
 window.onload = () => {
+	// ReactDOM needs a DOM in order to be imported,
+	// but the DOM is not available until the plugin has loaded.
+	// therefore, we have to global require it inside the window.onload event.
+
 	/* eslint-disable global-require */
 	const ReactDOM = require('react-dom')
 	/* eslint-enable global-require */
