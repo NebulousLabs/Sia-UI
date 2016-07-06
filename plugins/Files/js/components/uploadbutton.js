@@ -2,16 +2,33 @@ import React from 'react'
 
 const UploadButton = ({actions}) => {
 	const onUploadClick = () => {
-		const filepath = SiaAPI.openFile({
+		const filepaths = SiaAPI.openFile({
 			title: 'Choose a file to upload',
-			properties: ['openFile', 'openDirectory'],
-		})[0]
-		actions.showUploadDialog(filepath)
+			properties: ['openFile', 'multiSelections'],
+		})
+		if (filepaths) {
+			actions.showUploadDialog(filepaths)
+		}
+	}
+	const onUploadClickFolder = () => {
+		const filepaths = SiaAPI.openFile({
+			title: 'Choose a file to upload',
+			properties: ['openDirectory'],
+		})
+		if (filepaths) {
+			actions.showUploadDialog(filepaths)
+		}
 	}
 	return (
-		<div onClick={onUploadClick} className="upload-button">
-			<i className="fa fa-cloud-upload fa-2x"></i>
-			<span>Upload</span>
+		<div className="upload-button-container">
+			<div onClick={onUploadClick} className="upload-button">
+				<i className="fa fa-cloud-upload fa-2x"></i>
+				<span>Upload Files</span>
+			</div>
+			<div onClick={onUploadClickFolder} className="upload-button">
+				<i className="fa fa-folder-open-o fa-2x"></i>
+				<span>Upload Folder</span>
+			</div>
 		</div>
 	)
 }
