@@ -46,9 +46,6 @@ const mock = {
 
 proxyquire('../js/rendererjs/pluginapi.js', mock)
 
-
-const mockSiad = sinon.mock()
-
 describe('plugin API', () => {
 	it('creates a SiaAPI window object', () => {
 		expect(window.SiaAPI).to.exist
