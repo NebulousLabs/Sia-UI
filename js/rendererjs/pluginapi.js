@@ -2,13 +2,57 @@
 // This is injected into every plugin's global namespace.
 import Siad from 'sia.js'
 import { remote } from 'electron'
+import React from 'react'
+import DisabledPlugin from './disabledplugin.js'
 const dialog = remote.dialog
 const mainWindow = remote.getCurrentWindow()
 const config = remote.getGlobal('config')
 Siad.configure(config.siad)
+let disabled = false
+
+window.onload = () => {
+	// ReactDOM needs a DOM in order to be imported,
+	// but the DOM is not available until the plugin has loaded.
+	// therefore, we have to global require it inside the window.onload event.
+
+	/* eslint-disable global-require */
+	const ReactDOM = require('react-dom')
+	/* eslint-enable global-require */
+
+	// Continuously check (every 2000ms) if siad is running.
+	// If siad is not running, disable the plugin by mounting
+	// the `DisabledPlugin` component in the DOM's body.
+	// If siad is running and the plugin has been disabled,
+	// reload the plugin.
+	const checkSiad = () => {
+		Siad.ifRunning(() => {
+			if (disabled) {
+				disabled = false
+				window.location.reload()
+			}
+		}, () => {
+			if (!disabled) {
+				disabled = true
+				ReactDOM.render(<DisabledPlugin startSiad={Siad.start} />, document.body)
+			}
+		})
+	}
+
+	checkSiad()
+	// Poll Siad.ifRunning and disable the plugin if siad is not running.
+	setInterval(checkSiad, 2000)
+}
+
+// Siad call wrapper.
+// Only call siad if siad is running.
+const callWrapper = (uri, callback) => {
+	Siad.ifRunning(() => {
+		Siad.call(uri, callback)
+	})
+}
 
 window.SiaAPI = {
-	call: Siad.call,
+	call: callWrapper,
 	config: config,
 	hastingsToSiacoins: Siad.hastingsToSiacoins,
 	siacoinsToHastings: Siad.siacoinsToHastings,
