@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import sinon from 'sinon'
+import { shallow } from 'enzyme'
 import proxyquire from 'proxyquire'
 import React from 'react'
 import DisabledPlugin from '../js/rendererjs/disabledplugin.js'
@@ -68,5 +69,12 @@ describe('plugin API', () => {
 			expect(mock['react-dom'].render.calledWith(<DisabledPlugin startSiad={mock['sia.js'].start} />, document.body)).to.be.true
 			done()
 		}, 2000)
+	})
+	describe('DisabledPlugin component', () => {
+		it('should call siajs.start on click', () => {
+			const component = shallow(<DisabledPlugin startSiad={mock['sia.js'].start} />)
+			component.find('button').first().simulate('click')
+			expect(mock['sia.js'].start.called).to.be.true
+		})
 	})
 })
