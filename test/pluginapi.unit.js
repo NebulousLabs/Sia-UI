@@ -71,7 +71,7 @@ describe('plugin API', () => {
 		}, 2000)
 	})
 	describe('DisabledPlugin component', () => {
-		it('should call siajs.start on click', () => {
+		it('calls siajs.start on click', () => {
 			const component = shallow(<DisabledPlugin startSiad={mock['sia.js'].start} />)
 			component.find('button').first().simulate('click')
 			expect(mock['sia.js'].start.called).to.be.true
