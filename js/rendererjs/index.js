@@ -39,11 +39,13 @@ function init(callback) {
 			homePluginView = plugin
 		}
 	}
-	// wait for the home plugin to load before calling back
-	homePluginView.addEventListener('dom-ready', () => {
+	const onHomeLoad = () => {
 		setCurrentPlugin(defaultHomePlugin)
+		homePluginView.removeEventListener('dom-ready', onHomeLoad)
 		callback()
-	})
+	}
+	// wait for the home plugin to load before calling back
+	homePluginView.addEventListener('dom-ready', onHomeLoad)
 }
 
 // If closeToTray is set, hide the window and cancel the close.

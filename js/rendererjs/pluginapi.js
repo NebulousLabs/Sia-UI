@@ -19,6 +19,7 @@ window.onload = () => {
 	setInterval(() => {
 		Siad.ifRunning(() => {
 			if (disabled) {
+				disabled = false
 				window.location.reload()
 			}
 		}, () => {
