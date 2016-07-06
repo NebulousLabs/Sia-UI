@@ -20,7 +20,7 @@ const mock = {
 		},
 		start: sinon.spy(),
 	},
-	electron: {
+	'electron': {
 		remote: {
 			getCurrentWindow: sinon.spy(),
 			getGlobal: (name) => {
