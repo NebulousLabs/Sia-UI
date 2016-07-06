@@ -50,7 +50,7 @@ describe('plugin API', () => {
 	it('creates a SiaAPI window object', () => {
 		expect(window.SiaAPI).to.exist
 	})
-	it('doesnt mount disabled plugin component if siad is running', function(done) {
+	it('does not mount disabled plugin component if siad is running', function(done) {
 		running = true
 		this.timeout(10000)
 		setTimeout(() => {
