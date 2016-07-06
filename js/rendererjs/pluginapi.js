@@ -19,6 +19,11 @@ window.onload = () => {
 	const ReactDOM = require('react-dom')
 	/* eslint-enable global-require */
 
+	// Continuously check (every 2000ms) if siad is running.
+	// If siad is not running, disable the plugin by mounting
+	// the `DisabledPlugin` component in the DOM's body.
+	// If siad is running and the plugin has been disabled,
+	// reload the plugin.
 	const checkSiad = () => {
 		Siad.ifRunning(() => {
 			if (disabled) {
