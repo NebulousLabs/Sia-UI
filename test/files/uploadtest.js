@@ -5,6 +5,7 @@ import { expect } from 'chai'
 import sinon from 'sinon'
 
 import UploadButton from '../../plugins/Files/js/components/uploadbutton.js'
+import FileBrowser from '../../plugins/Files/js/components/filebrowser.js'
 
 const testButton = (files, isDir) => {
 	const uploadSpy = sinon.spy()
@@ -20,6 +21,23 @@ const testButton = (files, isDir) => {
 		uploadButton.find('.upload-button').first().simulate('click')
 	}
 	return {uploadSpy, openFileSpy}
+}
+
+const testDrag = (files) => {
+	const uploadSpy = sinon.spy()
+	const notDraggingSpy = sinon.spy()
+	const testActions = {
+		showUploadDialog: uploadSpy,
+		setNotDragging: notDraggingSpy,
+	}
+	const fileBrowser = shallow(<FileBrowser dragging={false} showUploadDialog={false} showDeleteDialog={false} showFileTransfers={false} actions={testActions} />)
+	fileBrowser.find('.file-browser').first().simulate('drop', {
+		dataTransfer: {
+			files: files.map((file) => ({ path: file }))
+		},
+		preventDefault: () => undefined,
+	})
+	return {uploadSpy, notDraggingSpy}
 }
 
 const testDialog = (files, isDir) => {
@@ -84,6 +102,40 @@ describe('files upload button component', () => {
 		expect(spies.uploadSpy.calledOnce).to.be.true
 		expect(spies.openFileSpy.alwaysCalledWithExactly(siaOpenFoldersArg)).to.be.true
 		expect(spies.openFileSpy.calledOnce).to.be.true
+	})
+})
+
+describe('files drag upload', () => {
+	it('dispatches proper action for a single file drag upload', () => {
+		const testFiles = ['filename.png']
+		const spies = testDrag(testFiles)
+		expect(spies.uploadSpy.alwaysCalledWithExactly(testFiles)).to.be.true
+		expect(spies.uploadSpy.calledOnce).to.be.true
+		expect(spies.notDraggingSpy.calledOnce).to.be.true
+	})
+
+	it('dispatches proper action for a multiple file drag upload', () => {
+		const testFiles = ['filename.png', 'another file name.har', 'yesStillAnotherName.wohoo']
+		const spies = testDrag(testFiles)
+		expect(spies.uploadSpy.alwaysCalledWithExactly(testFiles)).to.be.true
+		expect(spies.uploadSpy.calledOnce).to.be.true
+		expect(spies.notDraggingSpy.calledOnce).to.be.true
+	})
+
+	it('dispatches proper action for a single folder drag upload', () => {
+		const testFiles = ['Awesome Folder']
+		const spies = testDrag(testFiles)
+		expect(spies.uploadSpy.alwaysCalledWithExactly(testFiles)).to.be.true
+		expect(spies.uploadSpy.calledOnce).to.be.true
+		expect(spies.notDraggingSpy.calledOnce).to.be.true
+	})
+
+	it('dispatches proper action for a multiple folder drag upload', () => {
+		const testFiles = ['An amazing Folder', 'Another Amazing Folder', 'Still Another More Amazing Folder']
+		const spies = testDrag(testFiles)
+		expect(spies.uploadSpy.alwaysCalledWithExactly(testFiles)).to.be.true
+		expect(spies.uploadSpy.calledOnce).to.be.true
+		expect(spies.notDraggingSpy.calledOnce).to.be.true
 	})
 })
 
