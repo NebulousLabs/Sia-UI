@@ -8,5 +8,9 @@ notifications:
 
 sudo: false
 
+branches:
+  only:
+    - master
+
 install:
   - npm install
