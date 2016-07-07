@@ -1,6 +1,16 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 
-const UploadButton = ({actions}) => {
+const minimumContracts = 14
+
+const UploadButton = ({contracts = minimumContracts, actions}) => {
+	if (contracts < minimumContracts) {
+		return (
+			<div className="upload-button-container">
+				<i className="fa fa-spinner fa-2x"></i>
+				Forming Contracts...
+			</div>
+		)
+	}
 	const onUploadClick = () => {
 		const filepaths = SiaAPI.openFile({
 			title: 'Choose a file to upload',
@@ -31,6 +41,10 @@ const UploadButton = ({actions}) => {
 			</div>
 		</div>
 	)
+}
+
+UploadButton.propTypes = {
+	contracts: PropTypes.number,
 }
 
 export default UploadButton
