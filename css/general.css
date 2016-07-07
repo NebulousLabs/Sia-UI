@@ -69,7 +69,7 @@ html,body {
 	margin-left: 5px;
 	margin-right: 5px;
 }
-.status-bar-unsynced i, .status-bar-synced i {
+.status-bar i {
 	margin-right: 10px;
 	margin-left: 10px;
 }
