@@ -68,4 +68,8 @@ describe('files upload button component', () => {
 		expect(spies.openFileSpy.alwaysCalledWithExactly(siaOpenFoldersArg)).to.be.true
 		expect(spies.openFileSpy.calledOnce).to.be.true
 	})
+
+	it('renders Forming Contracts... if there are not enough contracts', () => {
+		expect(shallow(<UploadButton contracts={0} />).find('.upload-button-container span').first().text()).to.contain('Forming Contracts')
+	})
 })

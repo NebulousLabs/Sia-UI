@@ -7,7 +7,7 @@ const UploadButton = ({contracts = minimumContracts, actions}) => {
 		return (
 			<div className="upload-button-container">
 				<i className="fa fa-spinner fa-2x"></i>
-				Forming Contracts...
+				<span>Forming Contracts...</span>
 			</div>
 		)
 	}
