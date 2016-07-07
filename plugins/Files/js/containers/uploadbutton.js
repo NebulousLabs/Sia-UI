@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { showUploadDialog } from '../actions/files.js'
 
-const mapStateToProps = () => ({
+const mapStateToProps = (state) => ({
+	contracts: state.files.get('contractCount'),
 })
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ showUploadDialog }, dispatch),

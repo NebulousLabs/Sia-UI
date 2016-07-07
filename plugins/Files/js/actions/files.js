@@ -140,3 +140,10 @@ export const openDownloadLocation = (location) => ({
 	type: constants.OPEN_DOWNLOAD_LOCATION,
 	location,
 })
+export const getContractCount = () => ({
+	type: constants.GET_CONTRACT_COUNT,
+})
+export const setContractCount = (count) => ({
+	type: constants.SET_CONTRACT_COUNT,
+	count,
+})

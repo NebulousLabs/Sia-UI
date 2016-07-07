@@ -70,6 +70,6 @@ describe('files upload button component', () => {
 	})
 
 	it('renders Forming Contracts... if there are not enough contracts', () => {
-		expect(shallow(<UploadButton contracts={0} />).find('.upload-button-container span').first().text()).to.contain('Forming Contracts')
+		expect(shallow(<UploadButton contracts={0} />).find('.upload-button-container span').first().text()).to.contain('Not Enough Contracts')
 	})
 })

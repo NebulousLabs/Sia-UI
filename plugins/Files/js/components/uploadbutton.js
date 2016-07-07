@@ -5,9 +5,9 @@ const minimumContracts = 14
 const UploadButton = ({contracts = minimumContracts, actions}) => {
 	if (contracts < minimumContracts) {
 		return (
-			<div className="upload-button-container">
-				<i className="fa fa-spinner fa-2x"></i>
-				<span>Forming Contracts...</span>
+			<div style={{pointer: 'default', opacity: '0%'}} className="upload-button-container">
+				<i className="fa fa-cloud-upload"></i>
+				<span>Not Enough Contracts</span>
 			</div>
 		)
 	}
