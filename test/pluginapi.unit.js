@@ -53,19 +53,23 @@ describe('plugin API', () => {
 	it('does not mount disabled plugin component if siad is running', function(done) {
 		running = true
 		this.timeout(10000)
-		setTimeout(() => {
-			expect(mock['react-dom'].render.called).to.be.false
-			done()
-		}, 2000)
+		const poll = setInterval(() => {
+			if (mock['react-dom'].render.called === false) {
+				clearInterval(poll)
+				done()
+			}
+		}, 50)
 	})
 	it('mounts disabled plugin if siad is not running', function(done) {
 		running = false
 		this.timeout(10000)
-		setTimeout(() => {
-			expect(mock['react-dom'].render.called).to.be.true
-			expect(mock['react-dom'].render.calledWith(<DisabledPlugin startSiad={mock['sia.js'].start} />, document.body)).to.be.true
-			done()
-		}, 2000)
+		const poll = setInterval(() => {
+			if (mock['react-dom'].render.called && 
+				  mock['react-dom'].render.calledWith(<DisabledPlugin startSiad={mock['sia.js'].start} />, document.body)) {
+				clearInterval(poll)
+				done()
+			}
+		}, 50)
 	})
 	describe('DisabledPlugin component', () => {
 		it('calls siajs.start on click', () => {
