@@ -42,11 +42,16 @@ const startUI = (welcomeMsg, initUI) => {
 
 	// Construct the status bar component and poll for updates from Siad
 	setInterval(() => {
-		Siad.call('/consensus', (err, response) => {
-			if (err) {
+		Siad.call('/consensus', (consensusErr, consensusResponse) => {
+			if (consensusErr) {
 				return
 			}
-			ReactDOM.render(<StatusBar synced={response.synced} blockheight={response.height} />, document.getElementById('statusbar'))
+			Siad.call('/gateway', (gatewayErr, gatewayResponse) => {
+				if (gatewayErr) {
+					return
+				}
+				ReactDOM.render(<StatusBar peers={gatewayResponse.peers.length} synced={consensusResponse.synced} blockheight={consensusResponse.height} />, document.getElementById('statusbar'))
+			})
 		})
 	}, 2000)
 	initUI(() => {
