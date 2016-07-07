@@ -135,35 +135,35 @@
 	display: inline-block;
 }
 .upload-button:last-of-type {
-    position: absolute;
-    left: 0px;
-    top: 55px;
-    overflow: hidden;
-    padding: 17px 0px 0px;
-    max-height: 0px;
-    background-color: #575757;
-    transition: all 1s .1s;
+	position: absolute;
+	left: 0px;
+	top: 55px;
+	overflow: hidden;
+	padding: 17px 0px 0px;
+	max-height: 0px;
+	background-color: #575757;
+	transition: all 1s .1s;
 }
 .upload-button-container:hover .upload-button:last-of-type {
-    max-height: 100px;
-    padding: 23px 0px 5px;
+	max-height: 100px;
+	padding: 23px 0px 5px;
 } 
 .upload-button-container {
 	display: inline-block;
-    position: relative;
-    top: 0px;
+	position: relative;
+	top: 0px;
 }
 .files-toolbar .buttons div {
-    text-align: center;
-    margin-bottom: 5px;
-    width: 100px;
-    cursor: pointer;
+	text-align: center;
+	margin-bottom: 5px;
+	width: 100px;
+	cursor: pointer;
 }
 .files-toolbar .buttons div {
-    text-align: center;
-    margin-bottom: 5px;
-    width: 100px;
-    cursor: pointer;
+	text-align: center;
+	margin-bottom: 5px;
+	width: 100px;
+	cursor: pointer;
 }
 .transfers-button {
 	display: inline-block;
@@ -284,12 +284,19 @@
 	align-items: center;
 	justify-content: center;
 }
+
+.drag-overlay span {
+	color: #FFFFFF;
+	text-align: center;
+}
 .drag-overlay i {
 	color: #00CBA0;
 }
-.drag-overlay span {
-	color: #FFFFFF;
+.drag-overlay h3 {
+	margin-top: .2em;
+	margin-bottom: 0em;
 }
+
 .upload-dialog {
 	padding-left: 25px;
 	padding-right: 25px;

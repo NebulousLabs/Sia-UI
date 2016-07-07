@@ -18,7 +18,8 @@ const FileBrowser = ({dragging, showUploadDialog, showDeleteDialog, showFileTran
 	const onDrop = (e) => {
 		e.preventDefault()
 		actions.setNotDragging()
-		actions.showUploadDialog(e.dataTransfer.files[0].path)
+		// Convert file list into a list of file paths.
+		actions.showUploadDialog(Array.from(e.dataTransfer.files, (file) => file.path))
 	}
 	const onDragLeave = (e) => {
 		e.preventDefault()

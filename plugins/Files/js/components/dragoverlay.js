@@ -2,8 +2,10 @@ import React from 'react'
 
 const DragOverlay = () => (
 	<div className="drag-overlay">
-		<h3> Upload </h3>
-		<i className="fa fa-cloud-upload fa-3x"></i>
+		<span>
+			<i className="fa fa-cloud-upload fa-3x"></i>
+			<h3>Drag to Upload</h3>
+		</span>
 	</div>
 )
 
