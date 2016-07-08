@@ -12,7 +12,7 @@ const siaOpenFilesArg = {
 }
 
 const siaOpenFoldersArg = {
-	title: 'Choose a file to upload',
+	title: 'Choose a folder to upload',
 	properties: ['openDirectory'],
 }
 
@@ -23,7 +23,7 @@ const testButton = (files, isDir) => {
 	}
 	const openFileSpy = sinon.spy( () => files )
 	global.SiaAPI = { openFile: openFileSpy }
-	const uploadButton = shallow(<UploadButton actions={testActions} />)
+	const uploadButton = shallow(<UploadButton contracts={18} actions={testActions} />)
 	if (isDir) {
 		uploadButton.find('.upload-button').at(1).simulate('click')
 	} else {
@@ -67,9 +67,5 @@ describe('files upload button component', () => {
 		expect(spies.uploadSpy.calledOnce).to.be.true
 		expect(spies.openFileSpy.alwaysCalledWithExactly(siaOpenFoldersArg)).to.be.true
 		expect(spies.openFileSpy.calledOnce).to.be.true
-	})
-
-	it('renders Forming Contracts... if there are not enough contracts', () => {
-		expect(shallow(<UploadButton contracts={0} />).find('.upload-button-container span').first().text()).to.contain('Not Enough Contracts')
 	})
 })
