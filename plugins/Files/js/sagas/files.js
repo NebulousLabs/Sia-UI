@@ -209,7 +209,7 @@ function* deleteFileSaga(action) {
 	}
 }
 
-function* getContractCountSaga(action) {
+function* getContractCountSaga() {
 	try {
 		const response = yield siadCall('/renter/contracts')
 		yield put(actions.setContractCount(response.contracts.length))

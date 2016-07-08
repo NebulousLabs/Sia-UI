@@ -7,7 +7,7 @@ const UploadButton = ({contracts = minimumContracts, actions}) => {
 		if (contracts < minimumContracts) {
 			SiaAPI.showError({
 				title: 'Sia-UI files error',
-				content: 'Not enough contracts to upload.  You must buy storage before uploading, or wait for contracts to form.'
+				content: 'Not enough contracts to upload.  You must buy storage before uploading, or wait for contracts to form.',
 			})
 			return
 		}
@@ -19,7 +19,7 @@ const UploadButton = ({contracts = minimumContracts, actions}) => {
 		}
 		const filepaths = SiaAPI.openFile({
 			title: 'Choose a ' + type + ' to upload',
-			properties: dialogProperties
+			properties: dialogProperties,
 		})
 		if (filepaths) {
 			actions.showUploadDialog(filepaths)
