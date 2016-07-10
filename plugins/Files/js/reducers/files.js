@@ -19,6 +19,7 @@ const initialState = Map({
 	showFileTransfers: false,
 	showDeleteDialog: false,
 	dragging: false,
+	contractCount: 0,
 })
 
 export default function filesReducer(state = initialState, action) {
@@ -65,6 +66,8 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('showFileTransfers', false)
 	case constants.TOGGLE_FILE_TRANSFERS:
 		return state.set('showFileTransfers', !state.get('showFileTransfers'))
+	case constants.SET_CONTRACT_COUNT:
+		return state.set('contractCount', action.count)
 	default:
 		return state
 	}

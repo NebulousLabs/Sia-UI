@@ -209,6 +209,15 @@ function* deleteFileSaga(action) {
 	}
 }
 
+function* getContractCountSaga() {
+	try {
+		const response = yield siadCall('/renter/contracts')
+		yield put(actions.setContractCount(response.contracts.length))
+	} catch (e) {
+		sendError(e)
+	}
+}
+
 export function* watchSetAllowance() {
 	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
 }
@@ -242,6 +251,9 @@ export function* watchUploadFolder() {
 }
 export function* watchCalculateStorageCost() {
 	yield *takeEvery(constants.CALCULATE_STORAGE_COST, calculateStorageCostSaga)
+}
+export function* watchGetContractCount() {
+	yield *takeEvery(constants.GET_CONTRACT_COUNT, getContractCountSaga)
 }
 export function* watchUploadFile() {
 	yield *takeEvery(constants.UPLOAD_FILE, uploadFileSaga)
