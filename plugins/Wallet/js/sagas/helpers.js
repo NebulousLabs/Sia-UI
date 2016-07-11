@@ -48,7 +48,7 @@ const computeTransactionSum = (txn) => {
 	}
 	return {
 		totalSiacoin: SiaAPI.hastingsToSiacoins(totalSiacoinOutput.minus(totalSiacoinInput)),
-		totalSiafund: SiaAPI.hastingsToSiacoins(totalSiafundOutput.minus(totalSiafundInput)),
+		totalSiafund: totalSiafundOutput.minus(totalSiafundInput),
 		totalMiner:   SiaAPI.hastingsToSiacoins(totalMinerOutput.minus(totalMinerInput)),
 	}
 }
