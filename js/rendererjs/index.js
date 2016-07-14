@@ -5,6 +5,7 @@ import Electron from 'electron'
 import { scanFolder, loadPlugin, setCurrentPlugin, getPluginName } from './plugins.js'
 
 const App = Electron.remote.app
+const Tray = Electron.remote.Tray
 const mainWindow = Electron.remote.getCurrentWindow()
 const defaultPluginDirectory = Path.join(App.getAppPath(), './plugins')
 const defaultHomePlugin = 'Files'
@@ -47,11 +48,20 @@ function init(callback) {
 	// wait for the home plugin to load before calling back
 	homePluginView.addEventListener('dom-ready', onHomeLoad)
 }
-
 // If closeToTray is set, hide the window and cancel the close.
+// On windows, display a balloon notification on first hide
+// to inform users that Sia-UI is still running.
+let hasClosed = false
 if (mainWindow.closeToTray) {
 	window.onbeforeunload = function() {
 		mainWindow.hide()
+		if (process.platform === 'win32' && !hasClosed) {
+			Tray.displayBalloon({
+				title: 'Sia-UI information',
+				content: 'Sia is still running.  Right click this tray icon to quit or restore Sia.',
+			})
+			hasClosed = true
+		}
 		return false
 	}
 }
