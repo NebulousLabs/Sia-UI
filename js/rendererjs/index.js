@@ -49,7 +49,7 @@ function init(callback) {
 	homePluginView.addEventListener('dom-ready', onHomeLoad)
 }
 // If closeToTray is set, hide the window and cancel the close.
-// On windows, display a baloon notification on first hide
+// On windows, display a balloon notification on first hide
 // to inform users that Sia-UI is still running.
 let hasClosed = false
 if (mainWindow.closeToTray) {
