@@ -3,7 +3,6 @@ import appTray from './trayMenu.js'
 import Path from 'path'
 import loadConfig from './config.js'
 import initWindow from './initWindow.js'
-import Siad from 'sia.js'
 
 // load config.json manager
 global.config = loadConfig(Path.join(__dirname, '../config.json'))
@@ -17,6 +16,7 @@ app.on('ready', () => {
 	appIcon = new Tray(Path.join(app.getAppPath(), 'assets', 'tray.png'))
 	appIcon.setToolTip('Sia - The Collaborative Cloud.')
 	appIcon.setContextMenu(appTray(mainWindow))
+	mainWindow.toggleDevTools()
 })
 
 // Allow only one instance of Sia-UI
@@ -30,11 +30,9 @@ app.on('window-all-closed', () => {
 	app.quit()
 })
 
-// On quit, save the config, and stop siad if it is running attached.
+// On quit, save the config.
+// There's no need to call siad.stop here, since if siad was launched by the UI,
+// it will be a descendant of the UI in the process tree and will therefore be killed.
 app.on('quit', () => {
-	Siad.configure(config.attr('siad'))
-	if (!config.siad.detached) {
-		Siad.stop()
-	}
 	config.save()
 })

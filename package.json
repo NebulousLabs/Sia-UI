@@ -46,7 +46,7 @@
   },
   "scripts": {
     "start": "webpack && electron .",
-    "debug": "webpack -d",
+    "debug": "webpack -d && electron .",
     "build": "webpack",
     "watch": "webpack --watch",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
