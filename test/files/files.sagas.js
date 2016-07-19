@@ -19,6 +19,10 @@ let files = [
 	'testfile3',
 	'testfile4',
 ]
+const walletState = {
+	unlocked: false,
+	encrypted: true,
+}
 const mockSiaAPI = {
 	call: (uri, callback) => {
 		if (uri === '/renter/contracts') {
@@ -26,6 +30,9 @@ const mockSiaAPI = {
 		}
 		if (uri === '/renter/files') {
 			callback(null, { files })
+		}
+		if (uri === '/wallet') {
+			callback(null, walletState)
 		}
 	},
 	showError: spy(),
@@ -61,5 +68,16 @@ describe('files plugin sagas', () => {
 		store.dispatch(actions.getFiles())
 		await sleep(100)
 		expect(store.getState().files.get('files').size).to.equal(files.length)
+		expect(SiaAPI.showError.called).to.be.false
+	})
+	it('sets wallet lock state on getWalletLockstate', async () => {
+		store.dispatch(actions.getWalletLockstate())
+		await sleep(100)
+		expect(store.getState().wallet.get('unlocked')).to.be.false
+		walletState.unlocked = true
+		store.dispatch(actions.getWalletLockstate())
+		await sleep(100)
+		expect(store.getState().wallet.get('unlocked')).to.be.true
+		expect(SiaAPI.showError.called).to.be.false
 	})
 })
