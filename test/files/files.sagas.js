@@ -23,6 +23,7 @@ const walletState = {
 	unlocked: false,
 	encrypted: true,
 }
+const uploadSpy = spy()
 const mockSiaAPI = {
 	call: (uri, callback) => {
 		if (uri === '/renter/contracts') {
@@ -33,6 +34,11 @@ const mockSiaAPI = {
 		}
 		if (uri === '/wallet') {
 			callback(null, walletState)
+		}
+		if (typeof uri === 'object') {
+			if (uri.url.indexOf('/renter/upload') !== -1) {
+				uploadSpy(uri.url)
+			}
 		}
 	},
 	showError: spy(),
@@ -79,5 +85,11 @@ describe('files plugin sagas', () => {
 		await sleep(100)
 		expect(store.getState().wallet.get('unlocked')).to.be.true
 		expect(SiaAPI.showError.called).to.be.false
+	})
+	it('calls /renter/upload on uploadFile', async () => {
+		uploadSpy.reset()
+		store.dispatch(actions.uploadFile('testfile', ''))
+		await sleep(100)
+		expect(uploadSpy.calledWithExactly('/renter/upload/testfile')).to.be.true
 	})
 })
