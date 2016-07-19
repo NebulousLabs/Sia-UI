@@ -11,11 +11,21 @@ import rootReducer from '../../plugins/Files/js/reducers/index.js'
 const sagaMiddleware = createSagaMiddleware()
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
 let contracts = []
+let files = [
+	'testfile',
+	'testfile2',
+	'testfile3',
+	'testfile4',
+]
 const mockSiaAPI = {
 	call: (uri, callback) => {
 		if (uri === '/renter/contracts') {
 			callback(null, { contracts })
+		}
+		if (uri === '/renter/files') {
+			callback(null, { files })
 		}
 	},
 	showError: spy(),
@@ -34,6 +44,9 @@ describe('files plugin sagas', () => {
 	it('runs every watcher saga defined in files', () => {
 		expect(rootSaga().next().value).to.have.length(Object.keys(sagas).length)
 	})
+	afterEach(() => {
+		SiaAPI.showError.reset()
+	})
 	it('sets contract count on getContractCount', async () => {
 		const contractCount = 36
 		for (let i = 0; i < contractCount; i++) {
@@ -43,5 +56,10 @@ describe('files plugin sagas', () => {
 		await sleep(100)
 		expect(store.getState().files.get('contractCount')).to.equal(contracts.length)
 		expect(SiaAPI.showError.called).to.be.false
+	})
+	it('sets files on getFiles', async () => {
+		store.dispatch(actions.getFiles())
+		await sleep(100)
+		expect(store.getState().files.get('files').size).to.equal(files.length)
 	})
 })
