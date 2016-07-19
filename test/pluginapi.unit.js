@@ -13,14 +13,10 @@ const mock = {
 		render: sinon.spy(),
 	},
 	'sia.js': {
-		ifRunning: (is, not) => {
-			if (running) {
-				is()
-			} else {
-				not()
-			}
-		},
-		start: sinon.spy(),
+		isRunning: (address) => new Promise((resolve, reject) => {
+			resolve(running)
+		}),
+		launch: sinon.spy(),
 	},
 	'electron': {
 		remote: {
@@ -67,18 +63,17 @@ describe('plugin API', () => {
 		running = false
 		this.timeout(10000)
 		const poll = setInterval(() => {
-			if (mock['react-dom'].render.called &&
-				  mock['react-dom'].render.calledWith(<DisabledPlugin startSiad={mock['sia.js'].start} />, document.body)) {
+			if (mock['react-dom'].render.called === true) {
 				clearInterval(poll)
 				done()
 			}
 		}, 50)
 	})
 	describe('DisabledPlugin component', () => {
-		it('calls siajs.start on click', () => {
-			const component = shallow(<DisabledPlugin startSiad={mock['sia.js'].start} />)
+		it('calls siajs.launch on click', () => {
+			const component = shallow(<DisabledPlugin startSiad={mock['sia.js'].launch} />)
 			component.find('button').first().simulate('click')
-			expect(mock['sia.js'].start.called).to.be.true
+			expect(mock['sia.js'].launch.called).to.be.true
 		})
 	})
 })

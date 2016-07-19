@@ -2,7 +2,7 @@
 import { expect } from 'chai'
 import { allowanceStorage, estimatedStoragePriceGBSC, estimatedStoragePriceH } from '../../plugins/Files/js/sagas/helpers.js'
 import { List } from 'immutable'
-import Siad from 'sia.js'
+import * as Siad from 'sia.js'
 import BigNumber from 'bignumber.js'
 
 const size = 10 // 10 gb

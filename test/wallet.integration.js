@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { spy, stub, match } from 'sinon'
 import { mount } from 'enzyme'
 import { initWallet } from '../plugins/Wallet/js/main.js'
-import Siad from 'sia.js'
+import * as Siad from 'sia.js'
 
 let walletComponent
 

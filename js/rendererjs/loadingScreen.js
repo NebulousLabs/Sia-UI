@@ -22,29 +22,29 @@ const showError = (error) => {
 	overlayText.textContent = 'A Sia-UI error has occured: ' + error
 }
 
+// Helper function to help rate limit async operations in the loading screen
+const sleep = (ms = 0) => new Promise((r) => setTimeout(r, ms))
+
 // startUI starts a Sia UI instance using the given welcome message.
 // calls initUI() after displaying a welcome message.
-async function startUI(welcomeMsg, initUI) {
+const startUI = (welcomeMsg, initUI) => {
 	// Display a welcome message, then initialize the ui
 	overlayText.innerHTML = welcomeMsg
+
+	// Construct the status bar component and poll for updates from Siad
+	const updateSyncStatus = async function() {
+		const consensusData = await Siad.call(siadConfig.address, '/consensus')
+		const gatewayData = await Siad.call(siadConfig.address, '/gateway')
+		ReactDOM.render(<StatusBar peers={gatewayData.peers.length} synced={consensusData.synced} blockheight={consensusData.height} />, document.getElementById('statusbar'))
+	}
+
+	updateSyncStatus()
+	setInterval(updateSyncStatus, 1000)
+
 	initUI(() => {
 		overlay.style.display = 'none'
 	})
-
-	// Construct the status bar component and poll for updates from Siad
-	const sia = await Siad.connect(siadConfig.address)
-	while (true) {
-		try {
-			const consensusData = await sia.call('/consensus')
-			const gatewayData = await sia.call('/gateway')
-			ReactDOM.render(<StatusBar peers={gatewayResponse.peers.length} synced={consensusResponse.synced} blockheight={consensusResponse.height} />, document.getElementById('statusbar'))
-		} catch (e) {
-		}
-	}
 }
-
-// Helper function to help rate limit async operations in the loading screen
-const sleep = (ms = 0) => new Promise((r) => setTimeout(r, ms))
 
 // checkSiaPath validates config's Sia path.
 // returns a promise that is resolved with `true` if siadConfig.path exists

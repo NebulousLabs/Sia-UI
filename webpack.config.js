@@ -8,12 +8,12 @@ const glob = require('glob')
 let entrypoints = {}
 const plugins = glob.sync("./plugins/*/js/index.js")
 plugins.forEach((plugin) => {
-	entrypoints[path.dirname(path.dirname(plugin))] = ['babel-polyfill', plugin]
+	entrypoints[path.dirname(path.dirname(plugin))] = plugin
 })
 
 entrypoints["renderer"] = ['babel-polyfill', path.resolve('./js/rendererjs/index.js')]
 entrypoints["main"] = path.resolve('./js/mainjs/index.js')
-entrypoints["pluginapi"] = path.resolve('./js/rendererjs/pluginapi.js')
+entrypoints["pluginapi"] = ['babel-polyfill', path.resolve('./js/rendererjs/pluginapi.js')]
 
 module.exports = {
 	entry: entrypoints,
