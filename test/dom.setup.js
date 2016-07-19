@@ -1,4 +1,5 @@
 import { jsdom } from 'jsdom'
+import 'babel-polyfill'
 
 const exposedProperties = ['window', 'navigator', 'document'];
 
