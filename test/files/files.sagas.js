@@ -5,6 +5,7 @@ import * as sagas from '../../plugins/Files/js/sagas/files.js'
 import { expect } from 'chai'
 import { spy } from 'sinon'
 import proxyquire from 'proxyquire'
+import Siad from 'sia.js'
 
 const testAvailableStorage = '12 GB'
 const testUsage = '2 GB'
@@ -36,6 +37,8 @@ const walletState = {
 	encrypted: true,
 }
 const uploadSpy = spy()
+const setAllowanceSpy = spy()
+const testFunds = Siad.siacoinsToHastings(100000)
 const mockSiaAPI = {
 	call: (uri, callback) => {
 		if (uri === '/renter/contracts') {
@@ -56,18 +59,26 @@ const mockSiaAPI = {
 			callback(null, {
 				settings: {
 					allowance: {
-						funds: 0,
+						funds: testFunds.toString(),
 					}
 				}
 			})
 		}
+
 		if (typeof uri === 'object') {
 			if (uri.url.indexOf('/renter/upload') !== -1) {
 				uploadSpy(uri.url)
+				callback(null)
+			}
+			if (uri.url === '/renter') {
+				setAllowanceSpy(uri.qs.funds, uri.qs.hosts, uri.qs.period)
+				callback(null)
 			}
 		}
 	},
 	showError: spy(),
+	siacoinsToHastings: Siad.siacoinsToHastings,
+	hastingsToSiacoins: Siad.hastingsToSiacoins,
 }
 
 let store
@@ -126,5 +137,16 @@ describe('files plugin sagas', () => {
 		expect(store.getState().files.get('storageUsage')).to.equal(testUsage)
 		expect(store.getState().files.get('storageAvailable')).to.equal(testAvailableStorage)
 		expect(SiaAPI.showError.called).to.be.false
+	})
+	it('sets allowance with the correct allowance on setAllowance', async () => {
+		const buyAmount = '1000'
+		const expectedAllowance = testFunds.add(Siad.siacoinsToHastings(buyAmount)).toString()
+		const expectedPeriod = 3*4320
+		const expectedHosts = 24
+		store.dispatch(actions.setAllowance(buyAmount))
+		await sleep(100)
+		expect(setAllowanceSpy.calledWithExactly(expectedAllowance, expectedHosts, expectedPeriod)).to.be.true
+		expect(store.getState().files.get('showAllowanceDialog')).to.be.false
+		expect(store.getState().allowancedialog.get('settingAllowance')).to.be.false
 	})
 })
