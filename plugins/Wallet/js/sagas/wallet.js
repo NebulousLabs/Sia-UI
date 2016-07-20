@@ -130,10 +130,10 @@ function *getNewReceiveAddressSaga() {
 function *sendCurrencySaga(action) {
 	try {
 		if (action.currencytype === undefined || action.amount === undefined || action.destination === undefined || action.amount === '' || action.currencytype === '' || action.destination === '') {
-			throw 'You must specify an amount and a destination to send Siacoin!'
+			throw { message: 'You must specify an amount and a destination to send Siacoin!' }
 		}
 		if (action.currencytype !== 'siafunds' && action.currencytype !== 'siacoins') {
-			throw 'Invalid currency type!'
+			throw { message: 'Invalid currency type!' }
 		}
 		const sendAmount = action.currencytype === 'siacoins' ? SiaAPI.siacoinsToHastings(action.amount).toString() : action.amount
 		yield siadCall({
