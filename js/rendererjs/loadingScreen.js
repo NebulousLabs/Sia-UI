@@ -22,9 +22,6 @@ const showError = (error) => {
 	overlayText.textContent = 'A Sia-UI error has occured: ' + error
 }
 
-// Helper function to help rate limit async operations in the loading screen
-const sleep = (ms = 0) => new Promise((r) => setTimeout(r, ms))
-
 // startUI starts a Sia UI instance using the given welcome message.
 // calls initUI() after displaying a welcome message.
 const startUI = (welcomeMsg, initUI) => {
@@ -99,7 +96,9 @@ export default async function loadingScreen(initUI) {
 			showError(e.toString())
 			return
 		}
+
 		// Wait for this process to become reachable before starting the UI.
+		const sleep = (ms = 0) => new Promise((r) => setTimeout(r, ms))
 		while (await Siad.isRunning(siadConfig.address) === false) {
 			await sleep(500)
 		}

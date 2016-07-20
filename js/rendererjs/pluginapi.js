@@ -51,7 +51,7 @@ window.SiaAPI = {
 			let results
 			let error
 			try {
-				results = Siad.call(siadConfig.address, url)
+				results = await Siad.call(siadConfig.address, url)
 			} catch (e) {
 				error = e
 			}
