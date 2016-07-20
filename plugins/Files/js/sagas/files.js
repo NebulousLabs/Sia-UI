@@ -42,7 +42,6 @@ function* getStorageMetricsSaga() {
 		const funds = response.settings.allowance.funds
 		response = yield siadCall('/hostdb/active')
 		const hosts = response.hosts
-
 		const available = allowanceStorage(funds, hosts, allowancePeriod)
 		const usage = totalUsage(List(files))
 		yield put(actions.receiveStorageMetrics(usage, available))

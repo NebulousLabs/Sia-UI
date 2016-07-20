@@ -4,8 +4,20 @@ import * as actions from '../../plugins/Files/js/actions/files.js'
 import * as sagas from '../../plugins/Files/js/sagas/files.js'
 import { expect } from 'chai'
 import { spy } from 'sinon'
+import proxyquire from 'proxyquire'
 
-import rootSaga from '../../plugins/Files/js/sagas/index.js'
+const testAvailableStorage = '12 GB'
+const testUsage = '2 GB'
+
+const helperMocks = {
+	'./helpers.js': {
+		allowanceStorage: () => testAvailableStorage,
+		totalUsage: () => testUsage,
+		'@global': true,
+	}
+}
+
+const rootSaga = proxyquire('../../plugins/Files/js/sagas/index.js', helperMocks).default
 import rootReducer from '../../plugins/Files/js/reducers/index.js'
 
 const sagaMiddleware = createSagaMiddleware()
@@ -35,6 +47,20 @@ const mockSiaAPI = {
 		if (uri === '/wallet') {
 			callback(null, walletState)
 		}
+		if (uri === '/hostdb/active') {
+			callback(null, {
+				hosts: [],
+			})
+		}
+		if (uri === '/renter') {
+			callback(null, {
+				settings: {
+					allowance: {
+						funds: 0,
+					}
+				}
+			})
+		}
 		if (typeof uri === 'object') {
 			if (uri.url.indexOf('/renter/upload') !== -1) {
 				uploadSpy(uri.url)
@@ -43,6 +69,7 @@ const mockSiaAPI = {
 	},
 	showError: spy(),
 }
+
 let store
 
 describe('files plugin sagas', () => {
@@ -91,5 +118,13 @@ describe('files plugin sagas', () => {
 		store.dispatch(actions.uploadFile('testfile', ''))
 		await sleep(100)
 		expect(uploadSpy.calledWithExactly('/renter/upload/testfile')).to.be.true
+		expect(SiaAPI.showError.called).to.be.false
+	})
+	it('calls receiveStorageMetrics on getStorageMetrics', async () => {
+		store.dispatch(actions.getStorageMetrics())
+		await sleep(100)
+		expect(store.getState().files.get('storageUsage')).to.equal(testUsage)
+		expect(store.getState().files.get('storageAvailable')).to.equal(testAvailableStorage)
+		expect(SiaAPI.showError.called).to.be.false
 	})
 })
