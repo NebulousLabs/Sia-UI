@@ -42,6 +42,7 @@ const walletState = {
 }
 const uploadSpy = spy()
 const setAllowanceSpy = spy()
+const downloadSpy = spy()
 const testFunds = Siad.siacoinsToHastings(100000)
 const mockSiaAPI = {
 	call: (uri, callback) => {
@@ -70,13 +71,17 @@ const mockSiaAPI = {
 		}
 
 		if (typeof uri === 'object') {
+			if (uri.url.indexOf('/renter/download') !== -1) {
+				downloadSpy(uri.url, uri.qs.destination)
+				callback()
+			}
 			if (uri.url.indexOf('/renter/upload') !== -1) {
 				uploadSpy(uri.url)
-				callback(null)
+				callback()
 			}
 			if (uri.url === '/renter') {
 				setAllowanceSpy(uri.qs.funds, uri.qs.hosts, uri.qs.period)
-				callback(null)
+				callback()
 			}
 		}
 	},
@@ -133,6 +138,12 @@ describe('files plugin sagas', () => {
 		store.dispatch(actions.uploadFile('testfile', ''))
 		await sleep(100)
 		expect(uploadSpy.calledWithExactly('/renter/upload/testfile')).to.be.true
+		expect(SiaAPI.showError.called).to.be.false
+	})
+	it('calls /renter/download on downloadFile', async () => {
+		store.dispatch(actions.downloadFile('test/siapath', '/test/downloadpath'))
+		await sleep(100)
+		expect(downloadSpy.calledWithExactly('/renter/download/test/siapath', '/test/downloadpath')).to.be.true
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('calls receiveStorageMetrics on getStorageMetrics', async () => {
