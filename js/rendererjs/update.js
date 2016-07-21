@@ -25,7 +25,7 @@ const openReleasesPage = () => {
 }
 
 // Update is a container that takes the current UI version as its first argument
-// and returns a rendered VersionStatsComponent that either shows a checkbox and 'up to date'
+// and returns a rendered UpdateComponent that either shows a checkbox and 'up to date'
 // or an update icon with a link to the new version, if the current version is behind.
 const Update = async (currentVersion) => {
 	const checkVersion = async () => {
