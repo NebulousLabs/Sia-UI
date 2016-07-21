@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import proxyquire from 'proxyquire'
 import { shallow } from 'enzyme'
 import { expect } from 'chai'
@@ -17,8 +18,8 @@ const mock = {
 	electron: {
 		shell: {
 			openExternal: spy(),
-		}
-	}
+		},
+	},
 }
 
 const Update = proxyquire('../js/rendererjs/update.js', mock).default
@@ -44,5 +45,4 @@ describe('update checker component', () => {
 		expect(updateComponent.find('.version-status-text')).to.have.length(0)
 	})
 })
-
-
+/* eslint-enable no-unused-expressions */

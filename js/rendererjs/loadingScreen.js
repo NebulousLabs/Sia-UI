@@ -29,8 +29,12 @@ const startUI = async (welcomeMsg, initUI) => {
 	// Display a welcome message, then initialize the ui
 	overlayText.innerHTML = welcomeMsg
 
-	// construct the autoupdater component and check for updates
-	ReactDOM.render(await Update(currentVersion), document.getElementById('update-status-container'))
+	// construct the autoupdater component and check for updates every 30 minutes.
+	const checkUpdate = async () => ReactDOM.render(await Update(currentVersion), document.getElementById('update-status-container'))
+	setInterval(async () => {
+		await checkUpdate()
+	}, 18000000)
+	await checkUpdate()
 
 	// Construct the status bar component and poll for updates from Siad
 	const updateSyncStatus = async function() {
