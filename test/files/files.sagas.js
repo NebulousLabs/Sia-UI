@@ -11,21 +11,12 @@ import BigNumber from 'bignumber.js'
 import rootReducer from '../../plugins/Files/js/reducers/index.js'
 const sagaMiddleware = createSagaMiddleware()
 
-
 // Stub out the helper functions used in the files sagas.
-const testAvailableStorage = '12 GB'
-const testUsage = '2 GB'
-const testCost = new BigNumber('1337')
-const testUploads = [
-	'upload1',
-	'upload2',
-	'upload3',
-]
-const testDownloads = [
-	'upload4',
-	'upload5',
-	'upload6',
-]
+let testAvailableStorage
+let testUsage
+let testCost
+let testUploads
+let testDownloads
 let testDirectoryFiles
 const helperMocks = {
 	'./helpers.js': {
@@ -44,17 +35,8 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 // Stub the parts of the Sia API that the files plugin uses.
 let contracts = []
-let files = [
-	'testfile',
-	'testfile2',
-	'testfile3',
-	'testfile4',
-]
-const walletState = {
-	unlocked: false,
-	encrypted: true,
-	confirmedsiacoinbalance: Siad.siacoinsToHastings(1000).toString(),
-}
+let testFiles
+let walletState
 const uploadSpy = spy()
 const setAllowanceSpy = spy()
 const downloadSpy = spy()
@@ -66,7 +48,7 @@ const mockSiaAPI = {
 			callback(null, { contracts })
 		}
 		if (uri === '/renter/files') {
-			callback(null, { files })
+			callback(null, { files: testFiles })
 		}
 		if (uri === '/wallet') {
 			callback(null, walletState)
@@ -143,12 +125,23 @@ describe('files plugin sagas', () => {
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('sets files on getFiles', async () => {
+		testFiles = [
+			'testfile',
+			'testfile2',
+			'testfile3',
+			'testfile4',
+		]
 		store.dispatch(actions.getFiles())
 		await sleep(100)
-		expect(store.getState().files.get('files').size).to.equal(files.length)
+		expect(store.getState().files.get('files').size).to.equal(testFiles.length)
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('sets wallet lock state on getWalletLockstate', async () => {
+		walletState = {
+			unlocked: false,
+			encrypted: true,
+			confirmedsiacoinbalance: Siad.siacoinsToHastings(1000).toString(),
+		}
 		store.dispatch(actions.getWalletLockstate())
 		await sleep(100)
 		expect(store.getState().wallet.get('unlocked')).to.be.false
@@ -185,12 +178,22 @@ describe('files plugin sagas', () => {
 		})
 	})
 	it('sets uploads on getUploads', async () => {
+		testUploads = [
+			'upload1',
+			'upload2',
+			'upload3',
+		]
 		store.dispatch(actions.getUploads())
 		await sleep(100)
 		expect(store.getState().files.get('uploading')).to.deep.equal(testUploads)
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('sets downloads on getDownloads', async () => {
+		testDownloads = [
+			'upload4',
+			'upload5',
+			'upload6',
+		]
 		store.dispatch(actions.getDownloads())
 		await sleep(100)
 		expect(store.getState().files.get('downloading')).to.deep.equal(testDownloads)
@@ -209,6 +212,8 @@ describe('files plugin sagas', () => {
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('calls receiveStorageMetrics on getStorageMetrics', async () => {
+		testUsage = '2 GB'
+		testAvailableStorage = '12 GB'
 		store.dispatch(actions.getStorageMetrics())
 		await sleep(100)
 		expect(store.getState().files.get('storageUsage')).to.equal(testUsage)
@@ -228,6 +233,7 @@ describe('files plugin sagas', () => {
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('sets storage cost and size on calculateStorageCost', async () => {
+		testCost = new BigNumber('1337')
 		store.dispatch(actions.calculateStorageCost('100'))
 		await sleep(100)
 		expect(store.getState().allowancedialog.get('storageSize')).to.equal('100')
