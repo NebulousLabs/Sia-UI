@@ -6,14 +6,17 @@ import { expect } from 'chai'
 import { spy } from 'sinon'
 import proxyquire from 'proxyquire'
 import Siad from 'sia.js'
+import BigNumber from 'bignumber.js'
 
 const testAvailableStorage = '12 GB'
 const testUsage = '2 GB'
+const testCost = new BigNumber('1337')
 
 const helperMocks = {
 	'./helpers.js': {
 		allowanceStorage: () => testAvailableStorage,
 		totalUsage: () => testUsage,
+		estimatedStoragePriceGBSC: () => testCost,
 		'@global': true,
 	}
 }
@@ -92,11 +95,11 @@ describe('files plugin sagas', () => {
 		)
 		sagaMiddleware.run(rootSaga)
 	})
-	it('runs every watcher saga defined in files', () => {
-		expect(rootSaga().next().value).to.have.length(Object.keys(sagas).length)
-	})
 	afterEach(() => {
 		SiaAPI.showError.reset()
+	})
+	it('runs every watcher saga defined in files', () => {
+		expect(rootSaga().next().value).to.have.length(Object.keys(sagas).length)
 	})
 	it('sets contract count on getContractCount', async () => {
 		const contractCount = 36
@@ -148,5 +151,13 @@ describe('files plugin sagas', () => {
 		expect(setAllowanceSpy.calledWithExactly(expectedAllowance, expectedHosts, expectedPeriod)).to.be.true
 		expect(store.getState().files.get('showAllowanceDialog')).to.be.false
 		expect(store.getState().allowancedialog.get('settingAllowance')).to.be.false
+		expect(SiaAPI.showError.called).to.be.false
+	})
+	it('sets storage cost and size on calculateStorageCost', async () => {
+		store.dispatch(actions.calculateStorageCost('100'))
+		await sleep(100)
+		expect(store.getState().allowancedialog.get('storageSize')).to.equal('100')
+		expect(store.getState().allowancedialog.get('storageCost')).to.equal(testCost.round(3).toString())
+		expect(SiaAPI.showError.called).to.be.false
 	})
 })
