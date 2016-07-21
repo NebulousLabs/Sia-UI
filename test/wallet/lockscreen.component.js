@@ -7,7 +7,7 @@ import PasswordPrompt from '../../plugins/Wallet/js/containers/passwordprompt.js
 import NewWalletButton from '../../plugins/Wallet/js/containers/newwalletbutton.js'
 
 const lockedEncryptedScreen = shallow(<LockScreen unlocked={false} encrypted unlocking={false} />)
-const lockedUnencryptedScreen = shallow(<LockScreen unlocked={false} encrypted unlocking={false} />)
+const lockedUnencryptedScreen = shallow(<LockScreen unlocked={false} encrypted={false} unlocking={false} />)
 const unlockedEncryptedScreen = shallow(<LockScreen unlocked encrypted unlocking={false} />)
 const lockedEncryptedUnlockingScreen = shallow(<LockScreen unlocked={false} encrypted unlocking />)
 
