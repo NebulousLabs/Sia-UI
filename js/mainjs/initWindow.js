@@ -14,10 +14,10 @@ const onBoundsChange = (mainWindow, config) => () => {
 // Creates the window and loads index.html
 export default function(config) {
 	// Create the browser
-	const iconPath = Path.join(__dirname, '../..', 'assets', 'icon.png')
+	const iconPath = Path.join(__dirname, '../', 'assets', 'icon.png')
 	const mainWindow = new BrowserWindow({
 		icon:   iconPath,
-		title:  'Sia-UI-beta',
+		title:  'Sia-UI',
 	})
 	// Set mainWindow's closeToTray flag from config.
 	// This should be used in the renderer to cancel close() events using window.onbeforeunload
