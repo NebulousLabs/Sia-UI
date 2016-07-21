@@ -120,7 +120,7 @@ describe('files plugin sagas', () => {
 			contracts.push('test' + i)
 		}
 		store.dispatch(actions.getContractCount())
-		await sleep(100)
+		await sleep(10)
 		expect(store.getState().files.get('contractCount')).to.equal(contracts.length)
 		expect(SiaAPI.showError.called).to.be.false
 	})
@@ -132,7 +132,7 @@ describe('files plugin sagas', () => {
 			'testfile4',
 		]
 		store.dispatch(actions.getFiles())
-		await sleep(100)
+		await sleep(10)
 		expect(store.getState().files.get('files').size).to.equal(testFiles.length)
 		expect(SiaAPI.showError.called).to.be.false
 	})
@@ -143,18 +143,18 @@ describe('files plugin sagas', () => {
 			confirmedsiacoinbalance: Siad.siacoinsToHastings(1000).toString(),
 		}
 		store.dispatch(actions.getWalletLockstate())
-		await sleep(100)
+		await sleep(10)
 		expect(store.getState().wallet.get('unlocked')).to.be.false
 		walletState.unlocked = true
 		store.dispatch(actions.getWalletLockstate())
-		await sleep(100)
+		await sleep(10)
 		expect(store.getState().wallet.get('unlocked')).to.be.true
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('calls /renter/upload on uploadFile', async () => {
 		uploadSpy.reset()
 		store.dispatch(actions.uploadFile('testfile', ''))
-		await sleep(100)
+		await sleep(10)
 		expect(uploadSpy.calledWithExactly('/renter/upload/testfile')).to.be.true
 		expect(SiaAPI.showError.called).to.be.false
 	})
@@ -168,7 +168,7 @@ describe('files plugin sagas', () => {
 			'testfile.app.png',
 		])
 		store.dispatch(actions.uploadFolder('test/testsiapath', '/test/testdir'))
-		await sleep(100)
+		await sleep(10)
 		expect(SiaAPI.showError.called).to.be.false
 		expect(uploadSpy.callCount).to.equal(testDirectoryFiles.size)
 		let callIndex = 0
@@ -184,7 +184,7 @@ describe('files plugin sagas', () => {
 			'upload3',
 		]
 		store.dispatch(actions.getUploads())
-		await sleep(100)
+		await sleep(10)
 		expect(store.getState().files.get('uploading')).to.deep.equal(testUploads)
 		expect(SiaAPI.showError.called).to.be.false
 	})
@@ -195,19 +195,19 @@ describe('files plugin sagas', () => {
 			'upload6',
 		]
 		store.dispatch(actions.getDownloads())
-		await sleep(100)
+		await sleep(10)
 		expect(store.getState().files.get('downloading')).to.deep.equal(testDownloads)
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('calls /renter/download on downloadFile', async () => {
 		store.dispatch(actions.downloadFile('test/siapath', '/test/downloadpath'))
-		await sleep(100)
+		await sleep(10)
 		expect(downloadSpy.calledWithExactly('/renter/download/test/siapath', '/test/downloadpath')).to.be.true
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('calls /renter/delete on deleteFile', async () => {
 		store.dispatch(actions.deleteFile('test/siapath'))
-		await sleep(100)
+		await sleep(10)
 		expect(deleteSpy.calledWithExactly('/renter/delete/test/siapath')).to.be.true
 		expect(SiaAPI.showError.called).to.be.false
 	})
@@ -215,7 +215,7 @@ describe('files plugin sagas', () => {
 		testUsage = '2 GB'
 		testAvailableStorage = '12 GB'
 		store.dispatch(actions.getStorageMetrics())
-		await sleep(100)
+		await sleep(10)
 		expect(store.getState().files.get('storageUsage')).to.equal(testUsage)
 		expect(store.getState().files.get('storageAvailable')).to.equal(testAvailableStorage)
 		expect(SiaAPI.showError.called).to.be.false
@@ -226,7 +226,7 @@ describe('files plugin sagas', () => {
 		const expectedPeriod = 3*4320
 		const expectedHosts = 24
 		store.dispatch(actions.setAllowance(buyAmount))
-		await sleep(100)
+		await sleep(10)
 		expect(setAllowanceSpy.calledWithExactly(expectedAllowance, expectedHosts, expectedPeriod)).to.be.true
 		expect(store.getState().files.get('showAllowanceDialog')).to.be.false
 		expect(store.getState().allowancedialog.get('settingAllowance')).to.be.false
@@ -235,14 +235,14 @@ describe('files plugin sagas', () => {
 	it('sets storage cost and size on calculateStorageCost', async () => {
 		testCost = new BigNumber('1337')
 		store.dispatch(actions.calculateStorageCost('100'))
-		await sleep(100)
+		await sleep(10)
 		expect(store.getState().allowancedialog.get('storageSize')).to.equal('100')
 		expect(store.getState().allowancedialog.get('storageCost')).to.equal(testCost.round(3).toString())
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('sets the correct wallet balance on getWalletBalance', async () => {
 		store.dispatch(actions.getWalletBalance())
-		await sleep(100)
+		await sleep(10)
 		expect(store.getState().wallet.get('balance')).to.equal(Siad.hastingsToSiacoins(walletState.confirmedsiacoinbalance).round(2).toString())
 		expect(SiaAPI.showError.called).to.be.false
 	})
