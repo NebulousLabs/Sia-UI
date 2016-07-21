@@ -52,7 +52,7 @@ describe('files plugin helper functions', () => {
 				{ size: readableFilesize(1337), name: 'itsdatboi.mov', siapath: 'memes/itsdatboi.mov', available: true, uploadprogress: 100, type: 'file' },
 				{ size: '', name: 'rares', siapath: 'memes/rares/', available: true, uploadprogress: 100, type: 'directory' },
 				{ size: readableFilesize(1317), name: 'waddup.png', siapath: 'memes/waddup.png', available: true, uploadprogress: 100, type: 'file' },
-			])
+			]),
 		}
 		for (const path in expectedOutputs) {
 			const output = ls(siapathInputs, path)

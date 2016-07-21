@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-expressions */
+
 import React from 'react'
-import proxyquire from 'proxyquire'
 import { shallow } from 'enzyme'
 import { expect } from 'chai'
 import sinon from 'sinon'
@@ -16,7 +17,7 @@ const testDrag = (files) => {
 	const fileBrowser = shallow(<FileBrowser dragging={false} showUploadDialog={false} showDeleteDialog={false} showFileTransfers={false} actions={testActions} />)
 	fileBrowser.find('.file-browser').first().simulate('drop', {
 		dataTransfer: {
-			files: files.map((file) => ({ path: file }))
+			files: files.map((file) => ({ path: file })),
 		},
 		preventDefault: () => undefined,
 	})
@@ -56,3 +57,5 @@ describe('files drag upload', () => {
 		expect(spies.notDraggingSpy.calledOnce).to.be.true
 	})
 })
+
+/* eslint-enable no-unused-expressions */

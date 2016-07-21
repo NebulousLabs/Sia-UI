@@ -6,102 +6,102 @@ import TransactionList from '../../plugins/Wallet/js/components/transactionlist.
 import BigNumber from 'bignumber.js'
 
 const testTxns = List([
-	{ 
-		confirmed: true, 
-		transactionsums: { 
-			totalSiacoin: new BigNumber(10), 
-			totalSiafund: new BigNumber(0), 
-			totalMiner: new BigNumber(0), 
+	{
+		confirmed: true,
+		transactionsums: {
+			totalSiacoin: new BigNumber(10),
+			totalSiafund: new BigNumber(0),
+			totalMiner: new BigNumber(0),
 		},
 		transactionid: 'testid',
 		confirmationtimestamp: 1000,
 	},
-	{ 
-		confirmed: true, 
-		transactionsums: { 
-			totalSiacoin: new BigNumber(0), 
-			totalSiafund: new BigNumber(10), 
-			totalMiner: new BigNumber(0), 
+	{
+		confirmed: true,
+		transactionsums: {
+			totalSiacoin: new BigNumber(0),
+			totalSiafund: new BigNumber(10),
+			totalMiner: new BigNumber(0),
 		},
 		transactionid: 'testid1',
 		confirmationtimestamp: 1001,
 	},
-	{ 
-		confirmed: true, 
-		transactionsums: { 
-			totalSiacoin: new BigNumber(0), 
-			totalSiafund: new BigNumber(0), 
-			totalMiner: new BigNumber(10), 
+	{
+		confirmed: true,
+		transactionsums: {
+			totalSiacoin: new BigNumber(0),
+			totalSiafund: new BigNumber(0),
+			totalMiner: new BigNumber(10),
 		},
 		transactionid: 'testid2',
 		confirmationtimestamp: 1002,
 	},
-	{ 
-		confirmed: true, 
-		transactionsums: { 
-			totalSiacoin: new BigNumber(-10), 
-			totalSiafund: new BigNumber(0), 
-			totalMiner: new BigNumber(0), 
+	{
+		confirmed: true,
+		transactionsums: {
+			totalSiacoin: new BigNumber(-10),
+			totalSiafund: new BigNumber(0),
+			totalMiner: new BigNumber(0),
 		},
 		transactionid: 'testid3',
 		confirmationtimestamp: 1003,
 	},
-	{ 
-		confirmed: true, 
-		transactionsums: { 
-			totalSiacoin: new BigNumber(0), 
-			totalSiafund: new BigNumber(-10), 
-			totalMiner: new BigNumber(0), 
+	{
+		confirmed: true,
+		transactionsums: {
+			totalSiacoin: new BigNumber(0),
+			totalSiafund: new BigNumber(-10),
+			totalMiner: new BigNumber(0),
 		},
 		transactionid: 'testid4',
 		confirmationtimestamp: 1004,
 	},
-	{ 
-		confirmed: true, 
-		transactionsums: { 
-			totalSiacoin: new BigNumber(0), 
-			totalSiafund: new BigNumber(0), 
-			totalMiner: new BigNumber(-10), 
+	{
+		confirmed: true,
+		transactionsums: {
+			totalSiacoin: new BigNumber(0),
+			totalSiafund: new BigNumber(0),
+			totalMiner: new BigNumber(-10),
 		},
 		transactionid: 'testid5',
 		confirmationtimestamp: 1005,
 	},
-	{ 
-		confirmed: false, 
-		transactionsums: { 
-			totalSiacoin: new BigNumber(1), 
-			totalSiafund: new BigNumber(0), 
-			totalMiner: new BigNumber(0), 
+	{
+		confirmed: false,
+		transactionsums: {
+			totalSiacoin: new BigNumber(1),
+			totalSiafund: new BigNumber(0),
+			totalMiner: new BigNumber(0),
 		},
 		transactionid: 'testid6',
 		confirmationtimestamp: 1006,
 	},
-	{ 
-		confirmed: false, 
-		transactionsums: { 
-			totalSiacoin: new BigNumber(10), 
-			totalSiafund: new BigNumber(-5), 
-			totalMiner: new BigNumber(0), 
+	{
+		confirmed: false,
+		transactionsums: {
+			totalSiacoin: new BigNumber(10),
+			totalSiafund: new BigNumber(-5),
+			totalMiner: new BigNumber(0),
 		},
 		transactionid: 'testid7',
 		confirmationtimestamp: 1007,
 	},
-	{ 
-		confirmed: false, 
-		transactionsums: { 
-			totalSiacoin: new BigNumber(10), 
-			totalSiafund: new BigNumber(1), 
-			totalMiner: new BigNumber(1), 
+	{
+		confirmed: false,
+		transactionsums: {
+			totalSiacoin: new BigNumber(10),
+			totalSiafund: new BigNumber(1),
+			totalMiner: new BigNumber(1),
 		},
 		transactionid: 'testid8',
 		confirmationtimestamp: 1008,
 	},
-	{ 
-		confirmed: false, 
-		transactionsums: { 
-			totalSiacoin: new BigNumber(0), 
-			totalSiafund: new BigNumber(0), 
-			totalMiner: new BigNumber(0), 
+	{
+		confirmed: false,
+		transactionsums: {
+			totalSiacoin: new BigNumber(0),
+			totalSiafund: new BigNumber(0),
+			totalMiner: new BigNumber(0),
 		},
 		transactionid: 'testid9',
 		confirmationtimestamp: 1009,

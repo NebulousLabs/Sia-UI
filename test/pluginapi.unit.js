@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-invalid-this */
 import { expect } from 'chai'
 import sinon from 'sinon'
 import { shallow } from 'enzyme'
@@ -30,18 +32,19 @@ const mock = {
 							path: 'testpath/siad',
 							datadir: 'testpath/datadir',
 							detached: false,
-						}
+						},
 					}
 				}
+				return null
 			},
 			dialog: {
 				showOpenDialog: sinon.spy(),
 				showSaveDialog: sinon.spy(),
 				showMessageBox: sinon.spy(),
 				showErrorBox: sinon.spy(),
-			}
-		}
-	}
+			},
+		},
+	},
 }
 
 proxyquire('../js/rendererjs/pluginapi.js', mock)
@@ -64,7 +67,7 @@ describe('plugin API', () => {
 		running = false
 		this.timeout(10000)
 		const poll = setInterval(() => {
-			if (mock['react-dom'].render.called && 
+			if (mock['react-dom'].render.called &&
 				  mock['react-dom'].render.calledWith(<DisabledPlugin startSiad={mock['sia.js'].start} />, document.body)) {
 				clearInterval(poll)
 				done()
@@ -79,3 +82,5 @@ describe('plugin API', () => {
 		})
 	})
 })
+/* eslint-enable no-unused-expressions */
+/* eslint-enable no-invalid-this */

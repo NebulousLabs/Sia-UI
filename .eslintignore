@@ -1,7 +1,0 @@
-**/*.js
-!plugins/Wallet/*
-!plugins/Terminal/*
-!plugins/Files/*
-!plugins/Hosting/*
-!index.js
-!js/*

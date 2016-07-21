@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-expressions */
+
 import React from 'react'
 import { shallow } from 'enzyme'
 import { expect } from 'chai'
 import sinon from 'sinon'
 import proxyquire from 'proxyquire'
-import UploadDialog from '../../plugins/Files/js/components/uploaddialog.js'
 
 const testDialog = (files, isDir) => {
 	const uploadFolderSpy = sinon.spy()
@@ -68,3 +69,5 @@ describe('files upload dialog component', () => {
 		})
 	})
 })
+
+/* eslint-enable no-unused-expressions */

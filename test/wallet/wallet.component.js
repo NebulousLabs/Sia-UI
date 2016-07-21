@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import React from 'react'
 import { shallow } from 'enzyme'
 import { expect } from 'chai'
@@ -6,7 +7,6 @@ import Wallet from '../../plugins/Wallet/js/components/wallet.js'
 import ReceiveButton from '../../plugins/Wallet/js/containers/receivebutton.js'
 import ReceivePrompt from '../../plugins/Wallet/js/containers/receiveprompt.js'
 import NewWalletDialog from '../../plugins/Wallet/js/containers/newwalletdialog.js'
-import LockButton from '../../plugins/Wallet/js/containers/lockbutton.js'
 import TransactionList from '../../plugins/Wallet/js/containers/transactionlist.js'
 import SendPrompt from '../../plugins/Wallet/js/containers/sendprompt.js'
 
@@ -56,7 +56,7 @@ describe('wallet component', () => {
 		expect(walletComponent.contains(<NewWalletDialog />)).to.be.false
 	})
 	it('renders show new wallet dialog when showNewWalletDialog', () => {
-		const walletComponent = shallow(<Wallet showNewWalletDialog={true} confirmedbalance="10" unconfirmedbalance="1" siafundbalance="0" actions={testActions} />)
+		const walletComponent = shallow(<Wallet showNewWalletDialog confirmedbalance="10" unconfirmedbalance="1" siafundbalance="0" actions={testActions} />)
 		expect(walletComponent.contains(<NewWalletDialog />)).to.be.true
 	})
 	it('does not render show send prompt unless showSendPrompt', () => {
@@ -64,7 +64,7 @@ describe('wallet component', () => {
 		expect(walletComponent.contains(<SendPrompt />)).to.be.false
 	})
 	it('renders show send prompt when showSendPrompt', () => {
-		const walletComponent = shallow(<Wallet showSendPrompt={true} confirmedbalance="10" unconfirmedbalance="1" siafundbalance="0" actions={testActions} />)
+		const walletComponent = shallow(<Wallet showSendPrompt confirmedbalance="10" unconfirmedbalance="1" siafundbalance="0" actions={testActions} />)
 		expect(walletComponent.contains(<SendPrompt />)).to.be.true
 	})
 	it('does not render show receive prompt unless showReceivePrompt', () => {
@@ -72,7 +72,8 @@ describe('wallet component', () => {
 		expect(walletComponent.contains(<ReceivePrompt />)).to.be.false
 	})
 	it('renders show receive prompt when showReceivePrompt', () => {
-		const walletComponent = shallow(<Wallet showReceivePrompt={true} confirmedbalance="10" unconfirmedbalance="1" siafundbalance="0" actions={testActions} />)
+		const walletComponent = shallow(<Wallet showReceivePrompt confirmedbalance="10" unconfirmedbalance="1" siafundbalance="0" actions={testActions} />)
 		expect(walletComponent.contains(<ReceivePrompt />)).to.be.true
 	})
 })
+/* eslint-enable no-unused-expressions */
