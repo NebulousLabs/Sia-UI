@@ -38,6 +38,7 @@ let files = [
 const walletState = {
 	unlocked: false,
 	encrypted: true,
+	confirmedsiacoinbalance: Siad.siacoinsToHastings(1000).toString(),
 }
 const uploadSpy = spy()
 const setAllowanceSpy = spy()
@@ -158,6 +159,12 @@ describe('files plugin sagas', () => {
 		await sleep(100)
 		expect(store.getState().allowancedialog.get('storageSize')).to.equal('100')
 		expect(store.getState().allowancedialog.get('storageCost')).to.equal(testCost.round(3).toString())
+		expect(SiaAPI.showError.called).to.be.false
+	})
+	it('sets the correct wallet balance on getWalletBalance', async () => {
+		store.dispatch(actions.getWalletBalance())
+		await sleep(100)
+		expect(store.getState().wallet.get('balance')).to.equal(Siad.hastingsToSiacoins(walletState.confirmedsiacoinbalance).round(2).toString())
 		expect(SiaAPI.showError.called).to.be.false
 	})
 })
