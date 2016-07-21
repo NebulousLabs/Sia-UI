@@ -153,7 +153,6 @@ function *uploadFolderSaga(action) {
 			siapath: Path.join(action.siapath, file.substring(file.indexOf(folderName), file.lastIndexOf(Path.basename(file)))),
 			source: file,
 		})).map((file) => actions.uploadFile(file.siapath, file.source))
-
 		for (const upload in uploads.toArray()) {
 			yield put(uploads.get(upload))
 		}

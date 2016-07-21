@@ -5,9 +5,14 @@ import * as sagas from '../../plugins/Files/js/sagas/files.js'
 import { expect } from 'chai'
 import { spy } from 'sinon'
 import proxyquire from 'proxyquire'
+import { List } from 'immutable'
 import Siad from 'sia.js'
 import BigNumber from 'bignumber.js'
+import rootReducer from '../../plugins/Files/js/reducers/index.js'
+const sagaMiddleware = createSagaMiddleware()
 
+
+// Stub out the helper functions used in the files sagas.
 const testAvailableStorage = '12 GB'
 const testUsage = '2 GB'
 const testCost = new BigNumber('1337')
@@ -21,6 +26,7 @@ const testDownloads = [
 	'upload5',
 	'upload6',
 ]
+let testDirectoryFiles
 const helperMocks = {
 	'./helpers.js': {
 		allowanceStorage: () => testAvailableStorage,
@@ -28,17 +34,15 @@ const helperMocks = {
 		estimatedStoragePriceGBSC: () => testCost,
 		parseUploads: () => testUploads,
 		parseDownloads: () => testDownloads,
+		readdirRecursive: () => testDirectoryFiles,
 		'@global': true,
 	}
 }
 
 const rootSaga = proxyquire('../../plugins/Files/js/sagas/index.js', helperMocks).default
-import rootReducer from '../../plugins/Files/js/reducers/index.js'
-
-const sagaMiddleware = createSagaMiddleware()
-
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
+// Stub the parts of the Sia API that the files plugin uses.
 let contracts = []
 let files = [
 	'testfile',
@@ -160,6 +164,25 @@ describe('files plugin sagas', () => {
 		await sleep(100)
 		expect(uploadSpy.calledWithExactly('/renter/upload/testfile')).to.be.true
 		expect(SiaAPI.showError.called).to.be.false
+	})
+	it('calls /renter/upload correctly on every file in a folder on uploadFolder', async () => {
+		uploadSpy.reset()
+		testDirectoryFiles = List([
+			'testfile5',
+			'testfile6',
+			'testfolder/testfile2.jpg',
+			'testfolder/testfolder2/testfolder.png',
+			'testfile.app.png',
+		])
+		store.dispatch(actions.uploadFolder('test/testsiapath', '/test/testdir'))
+		await sleep(100)
+		expect(SiaAPI.showError.called).to.be.false
+		expect(uploadSpy.callCount).to.equal(testDirectoryFiles.size)
+		let callIndex = 0
+		testDirectoryFiles.forEach((file) => {
+			expect(uploadSpy.getCall(callIndex).calledWithExactly('/renter/upload/test/testsiapath/' + file)).to.be.true
+			callIndex++
+		})
 	})
 	it('sets uploads on getUploads', async () => {
 		store.dispatch(actions.getUploads())
