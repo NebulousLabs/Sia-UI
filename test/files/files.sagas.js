@@ -16,12 +16,18 @@ const testUploads = [
 	'upload2',
 	'upload3',
 ]
+const testDownloads = [
+	'upload4',
+	'upload5',
+	'upload6',
+]
 const helperMocks = {
 	'./helpers.js': {
 		allowanceStorage: () => testAvailableStorage,
 		totalUsage: () => testUsage,
 		estimatedStoragePriceGBSC: () => testCost,
 		parseUploads: () => testUploads,
+		parseDownloads: () => testDownloads,
 		'@global': true,
 	}
 }
@@ -64,6 +70,11 @@ const mockSiaAPI = {
 		if (uri === '/hostdb/active') {
 			callback(null, {
 				hosts: [],
+			})
+		}
+		if (uri === '/renter/downloads') {
+			callback(null, {
+				downloads: testDownloads,
 			})
 		}
 		if (uri === '/renter') {
@@ -154,6 +165,12 @@ describe('files plugin sagas', () => {
 		store.dispatch(actions.getUploads())
 		await sleep(100)
 		expect(store.getState().files.get('uploading')).to.deep.equal(testUploads)
+		expect(SiaAPI.showError.called).to.be.false
+	})
+	it('sets downloads on getDownloads', async () => {
+		store.dispatch(actions.getDownloads())
+		await sleep(100)
+		expect(store.getState().files.get('downloading')).to.deep.equal(testDownloads)
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('calls /renter/download on downloadFile', async () => {
