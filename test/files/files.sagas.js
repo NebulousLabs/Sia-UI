@@ -11,12 +11,17 @@ import BigNumber from 'bignumber.js'
 const testAvailableStorage = '12 GB'
 const testUsage = '2 GB'
 const testCost = new BigNumber('1337')
-
+const testUploads = [
+	'upload1',
+	'upload2',
+	'upload3',
+]
 const helperMocks = {
 	'./helpers.js': {
 		allowanceStorage: () => testAvailableStorage,
 		totalUsage: () => testUsage,
 		estimatedStoragePriceGBSC: () => testCost,
+		parseUploads: () => testUploads,
 		'@global': true,
 	}
 }
@@ -143,6 +148,12 @@ describe('files plugin sagas', () => {
 		store.dispatch(actions.uploadFile('testfile', ''))
 		await sleep(100)
 		expect(uploadSpy.calledWithExactly('/renter/upload/testfile')).to.be.true
+		expect(SiaAPI.showError.called).to.be.false
+	})
+	it('sets uploads on getUploads', async () => {
+		store.dispatch(actions.getUploads())
+		await sleep(100)
+		expect(store.getState().files.get('uploading')).to.deep.equal(testUploads)
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('calls /renter/download on downloadFile', async () => {
