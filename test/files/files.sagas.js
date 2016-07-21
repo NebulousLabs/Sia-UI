@@ -1,6 +1,7 @@
 import createSagaMiddleware from 'redux-saga'
 import { createStore, applyMiddleware } from 'redux'
 import * as actions from '../../plugins/Files/js/actions/files.js'
+import * as sagas from '../../plugins/Files/js/sagas/files.js'
 import { expect } from 'chai'
 import { spy } from 'sinon'
 
@@ -29,6 +30,9 @@ describe('files plugin sagas', () => {
 			applyMiddleware(sagaMiddleware)
 		)
 		sagaMiddleware.run(rootSaga)
+	})
+	it('runs every watcher saga defined in files', () => {
+		expect(rootSaga().next().value).to.have.length(Object.keys(sagas).length)
 	})
 	it('sets contract count on getContractCount', async () => {
 		const contractCount = 36
