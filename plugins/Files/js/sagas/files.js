@@ -42,7 +42,6 @@ function* getStorageMetricsSaga() {
 		const funds = response.settings.allowance.funds
 		response = yield siadCall('/hostdb/active')
 		const hosts = response.hosts
-
 		const available = allowanceStorage(funds, hosts, allowancePeriod)
 		const usage = totalUsage(List(files))
 		yield put(actions.receiveStorageMetrics(usage, available))
@@ -154,7 +153,6 @@ function *uploadFolderSaga(action) {
 			siapath: Path.join(action.siapath, file.substring(file.indexOf(folderName), file.lastIndexOf(Path.basename(file)))),
 			source: file,
 		})).map((file) => actions.uploadFile(file.siapath, file.source))
-
 		for (const upload in uploads.toArray()) {
 			yield put(uploads.get(upload))
 		}
