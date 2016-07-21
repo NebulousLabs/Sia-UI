@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import React from 'react'
 import { shallow } from 'enzyme'
 import { expect } from 'chai'
@@ -30,3 +31,4 @@ describe('wallet password prompt component', () => {
 		expect(testActions.handlePasswordChange.calledWith('test-changed')).to.be.true
 	})
 })
+/* eslint-enable no-unused-expressions */

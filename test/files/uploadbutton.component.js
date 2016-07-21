@@ -1,8 +1,8 @@
+/* eslint-disable no-unused-expressions */
 import React from 'react'
 import { shallow } from 'enzyme'
 import { expect } from 'chai'
 import sinon from 'sinon'
-import proxyquire from 'proxyquire'
 
 import UploadButton from '../../plugins/Files/js/components/uploadbutton.js'
 
@@ -69,3 +69,4 @@ describe('files upload button component', () => {
 		expect(spies.openFileSpy.calledOnce).to.be.true
 	})
 })
+/* eslint-enable no-unused-expressions */

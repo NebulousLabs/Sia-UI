@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import createSagaMiddleware from 'redux-saga'
 import { createStore, applyMiddleware } from 'redux'
 import * as actions from '../../plugins/Files/js/actions/files.js'
@@ -27,14 +28,14 @@ const helperMocks = {
 		parseDownloads: () => testDownloads,
 		readdirRecursive: () => testDirectoryFiles,
 		'@global': true,
-	}
+	},
 }
 
 const rootSaga = proxyquire('../../plugins/Files/js/sagas/index.js', helperMocks).default
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 // Stub the parts of the Sia API that the files plugin uses.
-let contracts = []
+const contracts = []
 let testFiles
 let walletState
 const uploadSpy = spy()
@@ -68,8 +69,8 @@ const mockSiaAPI = {
 				settings: {
 					allowance: {
 						funds: testFunds.toString(),
-					}
-				}
+					},
+				},
 			})
 		}
 
@@ -247,3 +248,4 @@ describe('files plugin sagas', () => {
 		expect(SiaAPI.showError.called).to.be.false
 	})
 })
+/* eslint-enable no-unused-expressions */

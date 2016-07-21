@@ -7,12 +7,14 @@
 	},
 	"plugins": [
 		"react",
-		"import"
+		"import",
+		"babel"
 	],
 	"rules": {
 		"no-console": 0,
 		"arrow-body-style": 2,
-		"arrow-parens": 2,
+		"arrow-parens": 0,
+		"babel/arrow-parens": 2,
 		"arrow-spacing": 2,
 		"block-scoped-var": 2,
 		"brace-style": [2, "1tbs"],

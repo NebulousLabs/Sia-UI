@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import { expect } from 'chai'
 import { allowanceStorage, estimatedStoragePriceGBSC, estimatedStoragePriceH } from '../../plugins/Files/js/sagas/helpers.js'
 import { List } from 'immutable'
@@ -42,3 +43,4 @@ describe('storage estimation', () => {
 		expect(estimatedStoragePriceH(hosts, 1, 100).lt(unfilteredAverage)).to.be.true
 	})
 })
+/* eslint-enable no-unused-expressions */

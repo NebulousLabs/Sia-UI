@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import React from 'react'
 import { shallow } from 'enzyme'
 import { expect } from 'chai'
@@ -48,3 +49,4 @@ describe('wallet send prompt component', () => {
 		expect(testActions.setSendAmount.calledWith('newamount')).to.be.true
 	})
 })
+/* eslint-enable no-unused-expressions */

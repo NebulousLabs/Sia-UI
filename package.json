@@ -13,6 +13,7 @@
     "electron-packager": "^7.0.4",
     "enzyme": "^2.3.0",
     "eslint": "^2.11.0",
+    "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-import": "^1.9.2",
     "eslint-plugin-react": "^5.1.1",
     "glob": "^7.0.4",

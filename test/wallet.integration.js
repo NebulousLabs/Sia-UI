@@ -1,4 +1,3 @@
-import 'babel-polyfill'
 import { expect } from 'chai'
 import { spy, stub, match } from 'sinon'
 import { mount } from 'enzyme'
@@ -12,30 +11,17 @@ const mockSiaAPI = {
 	config: {},
 	hastingsToSiacoins: Siad.hastingsToSiacoins,
 	siacoinsToHastings: Siad.siacoinsToHastings,
-	openFile: (options) => spy(),
-	saveFile: (options) => spy(),
-	showMessage: (options) => spy(),
-	showError: (options) => spy(),
-}
-
-// Set up default siad call mocks for the wallet.
-// Currently, wallet lock state, login, and send siacoin calls are mocked.
-const setupMockCalls = () => {
-	SiaAPI.call.withArgs(match({
-		url: '/wallet/lock',
-		method: 'POST',
-	})).callsArgWith(1, null)
-	setMockLockState({unlocked: false, encrypted: true})
-	setMockWalletPassword('testpass')
-	setMockIncorrectWalletPassword('wrongpass')
-	mockSendSiacoin()
+	openFile: () => spy(),
+	saveFile: () => spy(),
+	showMessage: () => spy(),
+	showError: () => spy(),
 }
 
 const setMockLockState = (lockstate) => {
 	SiaAPI.call.withArgs('/wallet').callsArgWith(1, null, lockstate)
 }
 
-// This is a sinon matcher function used to set up separate mocks for 
+// This is a sinon matcher function used to set up separate mocks for
 // calls to /wallet/unlock with different `encryptionpassword`s
 const callHasPassword = (call, password) => {
 	if (typeof call.qs === 'undefined') {
@@ -62,6 +48,19 @@ const setMockReceiveAddress = (address) => {
 }
 const mockSendSiacoin = () => {
 	SiaAPI.call.withArgs(match.has('url', '/wallet/siacoins')).callsArgWith(1, null)
+}
+
+// Set up default siad call mocks for the wallet.
+// Currently, wallet lock state, login, and send siacoin calls are mocked.
+const setupMockCalls = () => {
+	SiaAPI.call.withArgs(match({
+		url: '/wallet/lock',
+		method: 'POST',
+	})).callsArgWith(1, null)
+	setMockLockState({unlocked: false, encrypted: true})
+	setMockWalletPassword('testpass')
+	setMockIncorrectWalletPassword('wrongpass')
+	mockSendSiacoin()
 }
 
 describe('wallet plugin integration tests', () => {
@@ -119,7 +118,6 @@ describe('wallet plugin integration tests', () => {
 	it('sends the correct amount of siacoins to the correct address', () => {
 		walletComponent.find('.sendamount input').simulate('change', { target: { value: '100' }})
 		walletComponent.find('.sendaddress input').simulate('change', { target: { value: 'testaddress'}})
-		const sendspy = spy(SiaAPI.call)
 		walletComponent.find('.send-siacoin-button').simulate('click')
 		expect(SiaAPI.call.lastCall.args[0]).to.deep.equal({
 			url: '/wallet/siacoins',
