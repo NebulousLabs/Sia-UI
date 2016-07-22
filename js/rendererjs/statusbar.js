@@ -16,6 +16,9 @@ const StatusBar = ({synced, blockheight, peers}) => {
 	} else if (!synced && peers > 0) {
 		syncStyle.color = yellowColor
 		status = 'Synchronizing'
+	} else if (synced && peers === 0) {
+		syncStyle.color = redColor
+		status = 'No Peers'
 	} else if (synced) {
 		syncStyle.color = greenColor
 		status = 'Synchronized'
