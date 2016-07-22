@@ -25,16 +25,16 @@ const showError = (error) => {
 
 // startUI starts a Sia UI instance using the given welcome message.
 // calls initUI() after displaying a welcome message.
-const startUI = async (welcomeMsg, initUI) => {
+const startUI = (welcomeMsg, initUI) => {
 	// Display a welcome message, then initialize the ui
 	overlayText.innerHTML = welcomeMsg
 
 	// construct the autoupdater component and check for updates every 30 minutes.
 	const checkUpdate = async () => ReactDOM.render(await Update(currentVersion), document.getElementById('update-status-container'))
-	setInterval(async () => {
-		await checkUpdate()
+	setInterval(() => {
+		checkUpdate()
 	}, 18000000)
-	await checkUpdate()
+	checkUpdate()
 
 	// Construct the status bar component and poll for updates from Siad
 	const updateSyncStatus = async function() {
