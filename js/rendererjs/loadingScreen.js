@@ -31,9 +31,7 @@ const startUI = (welcomeMsg, initUI) => {
 
 	// construct the autoupdater component and check for updates every 30 minutes.
 	const checkUpdate = async () => ReactDOM.render(await Update(currentVersion), document.getElementById('update-status-container'))
-	setInterval(() => {
-		checkUpdate()
-	}, 18000000)
+	setInterval(checkUpdate, 18000000)
 	checkUpdate()
 
 	// Construct the status bar component and poll for updates from Siad
