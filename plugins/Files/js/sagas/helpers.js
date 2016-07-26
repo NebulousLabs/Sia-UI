@@ -182,5 +182,5 @@ export const allowanceStorage = (funds, hosts, period) => {
 export const estimatedStoragePriceGBSC = (hosts, size, duration) => {
 	const pricePerByteSC = SiaAPI.hastingsToSiacoins(estimatedStoragePriceH(hosts))
 	const averagePricePerGBBlock = pricePerByteSC.times(bytesPerGB)
-	return averagePricePerGBBlock.times(size).times(duration)
+	return averagePricePerGBBlock.times(size).times(duration).add('2000')
 }
