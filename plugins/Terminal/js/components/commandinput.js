@@ -16,7 +16,7 @@ export default class CommandInput extends React.Component {
 			this.props.showCommandOverview, this.props.commandHistory.size)
 		return (
 			<input id="command-input" onChange={handleTextInput} onKeyDown={handleKeyboardPress} type="text"
-				value={this.props.currentCommand} disabled={this.props.ommandRunning} autoFocus autoComplete
+				value={this.props.currentCommand} autoFocus autoComplete
 				ref={(c) => this._input = c}
 			/>
 		)
