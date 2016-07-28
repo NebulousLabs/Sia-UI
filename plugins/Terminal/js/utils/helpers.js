@@ -190,9 +190,9 @@ export const httpCommand = function(commandStr, actions, newid) {
 		apiURL = '/wallet/unlock'
 	} else if (commandString === 'wallet load seed') {
 		apiURL = '/wallet/seed'
-	} else if (commandString.indexOf('wallet load 033x') === 0) {
+	} else if (commandString.includes('wallet load 033x', 0)) {
 		apiURL = '/wallet/033x'
-	} else if (commandString.indexOf('wallet load siag') === 0) {
+	} else if (commandString.includes('wallet load siag', 0)) {
 		apiURL = '/wallet/siagkey'
 	} else {
 		return spawnCommand(commandString, actions).stdin

@@ -22,17 +22,20 @@ export default class WalletPasswordPrompt extends React.Component {
 					break
 
 				case constants.WALLET_033X:
+					// Logic for WALLET_033X and WALLET_SIAG is almost identical
+					// use the case fall through to reuse the logic.
 					let options = {
 						'source': getArgumentString(this.props.currentCommand, constants.specialCommands[constants.WALLET_033X]),
 						'encryptionpassword': this.props.walletPassword,
 					}
 				case constants.WALLET_SIAG:
+					// Use the WALLET_SIAG options if we didn't fall through from WALLET_033X.
 					options = options || {
 						'keyfiles': getArgumentString(this.props.currentCommand, constants.specialCommands[constants.WALLET_SIAG]),
 						'encryptionpassword': this.props.walletPassword,
 					}
 
-					//Grab input, spawn process, and pipe text field to stdin.
+					//Grab input, spawn process, and write options.
 					let siac = httpCommand(this.props.currentCommand, this.props.actions, this.props.commandHistory.size)
 					siac.write(querystring.stringify(options))
 					siac.end()
@@ -40,7 +43,7 @@ export default class WalletPasswordPrompt extends React.Component {
 					break
 
 				default:
-					//Grab input, spawn process, and pipe text field to stdin.
+					//Grab input, spawn process, and write password.
 					siac = httpCommand(this.props.currentCommand, this.props.actions, this.props.commandHistory.size)
 					siac.write(querystring.stringify({ 'encryptionpassword': this.props.walletPassword }))
 					siac.end()
