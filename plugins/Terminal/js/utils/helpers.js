@@ -78,7 +78,7 @@ export const getArgumentString = function(commandString, rawCommandSplit) {
 		if (args[0] === token) {
 			args.shift()
 		} else {
-			console.log(`ERROR: getArgumentString failed, string: ${commandString}, did not contain command: ${rawCommand}`)
+			console.log(`ERROR: getArgumentString failed, string: ${commandString}, did not contain command: ${rawCommandSplit.join(' ')}`)
 			return ''
 		}
 	}
@@ -215,7 +215,7 @@ export const httpCommand = function(commandStr, actions, newid) {
 				buffer = JSON.parse(buffer).message
 			} catch (e) {}
 
-			if (res.statusCode >= 200 && res.statusCode <= 299) {
+			if (res && res.statusCode >= 200 && res.statusCode <= 299) {
 				buffer += 'Success'
 			}
 
