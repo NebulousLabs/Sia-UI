@@ -22,7 +22,9 @@ window.onload = async function() {
 	/* eslint-enable global-require */
 
 	const startSiad = () => {
-		Siad.launch(siadConfig)
+		Siad.launch(siadConfig.path, {
+			'sia-directory': siadConfig.datadir,
+		})
 	}
 	// Continuously check (every 2000ms) if siad is running.
 	// If siad is not running, disable the plugin by mounting
