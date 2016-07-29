@@ -64,6 +64,36 @@ export const commandType = function(commandString, specialArray) {
 	)
 }
 
+export const getArgumentString = function(commandString, rawCommandSplit) {
+	//Parses out ./siac, siac, command, and address flags leaving only arguments.
+
+	//Remove leading ./siac or siac
+	const args = commandString.replace(/\s*\s/g, ' ').trim().split(' ')
+	if (args[0] === './siac' || args[0] === 'siac') {
+		args.shift()
+	}
+
+	//Remove command from sting.
+	for (const token of rawCommandSplit) {
+		if (args[0] === token) {
+			args.shift()
+		} else {
+			console.log(`ERROR: getArgumentString failed, string: ${commandString}, did not contain command: ${rawCommandSplit.join(' ')}`)
+			return ''
+		}
+	}
+
+	//Strip out address flag.
+	let index = args.indexOf('-a')
+	if  (index === -1) {
+		index = args.indexOf('--address')
+	}
+	if (index !== -1) {
+		args.splice(index, 2)
+	}
+	return args.join(' ')
+}
+
 export const spawnCommand = function(commandStr, actions, newid) {
 	//Create new command object. Id doesn't need to be unique, just can't be the same for adjacent commands.
 
@@ -156,16 +186,15 @@ export const httpCommand = function(commandStr, actions, newid) {
 	}
 
 	let apiURL = ''
-	switch (commandString) {
-	case 'wallet unlock':
+	if (commandString === 'wallet unlock') {
 		apiURL = '/wallet/unlock'
-		break
-
-	case 'wallet load seed':
+	} else if (commandString === 'wallet load seed') {
 		apiURL = '/wallet/seed'
-		break
-
-	default:
+	} else if (commandString.includes('wallet load 033x', 0)) {
+		apiURL = '/wallet/033x'
+	} else if (commandString.includes('wallet load siag', 0)) {
+		apiURL = '/wallet/siagkey'
+	} else {
 		return spawnCommand(commandString, actions).stdin
 	}
 
@@ -186,7 +215,7 @@ export const httpCommand = function(commandStr, actions, newid) {
 				buffer = JSON.parse(buffer).message
 			} catch (e) {}
 
-			if (res.statusCode >= 200 && res.statusCode <= 299) {
+			if (res && res.statusCode >= 200 && res.statusCode <= 299) {
 				buffer += 'Success'
 			}
 
@@ -223,20 +252,19 @@ export const httpCommand = function(commandStr, actions, newid) {
 }
 
 export const commandInputHelper = function(e, actions, currentCommand, showCommandOverview, newid) {
-	//These commands need a password prompt or other special handling.
-	const specialCommands = [ ['wallet', 'load', 'seed'], ['wallet', 'unlock'], ['help'], ['?'] ]
-
 	const eventTarget = e.target
 	//Enter button.
 	if (e.keyCode === 13) {
 
 		//Check if command is special.
-		switch ( commandType(currentCommand, specialCommands) ) {
+		switch ( commandType(currentCommand, constants.specialCommands) ) {
 		case constants.REGULAR_COMMAND: //Regular command.
 			spawnCommand(currentCommand, actions, newid) //Spawn command defined in index.js.
 			break
 
 		case constants.WALLET_UNLOCK: //wallet unlock
+		case constants.WALLET_033X: //wallet load 033x
+		case constants.WALLET_SIAG: //wallet load siag
 		case constants.WALLET_SEED: //wallet load seed
 			actions.showWalletPrompt()
 			break
