@@ -13,7 +13,7 @@ const mock = {
 		render: sinon.spy(),
 	},
 	'sia.js': {
-		isRunning: (address) => new Promise((resolve, reject) => {
+		isRunning: () => new Promise((resolve) => {
 			resolve(running)
 		}),
 		launch: sinon.spy(),
