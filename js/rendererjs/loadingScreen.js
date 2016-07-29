@@ -88,7 +88,9 @@ export default async function loadingScreen(initUI) {
 		}
 		// Launch the new Siad process
 		try {
-			const siadProcess = Siad.launch(siadConfig)
+			const siadProcess = Siad.launch(siadConfig.path, {
+				'sia-directory': siadConfig.datadir,
+			})
 			siadProcess.on('error', (e) => showError('Siad couldnt start: ' + e.toString()))
 			siadProcess.on('close', () => showError('Siad unexpectedly closed.'))
 			siadProcess.on('exit', () => showError('Siad unexpectedly exited.'))
