@@ -7,6 +7,7 @@ import Path from 'path'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import StatusBar from './statusbar.js'
+import StopButton from './stopbutton.js'
 
 const dialog = remote.dialog
 const app = remote.app
@@ -54,6 +55,9 @@ const startUI = (welcomeMsg, initUI) => {
 			})
 		})
 	}, 2000)
+
+	// Render the 'stop siad' button
+	ReactDOM.render(<StopButton stopSiad={Siad.stop} />, document.getElementById('siad-sidebar-button'))
 	initUI(() => {
 		overlay.style.display = 'none'
 	})
