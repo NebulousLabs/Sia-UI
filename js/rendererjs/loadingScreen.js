@@ -68,44 +68,44 @@ export default async function loadingScreen(initUI) {
 	}
 	// If Sia is already running, start the UI with a 'Welcome Back' message.
 	const running = await Siad.isRunning(siadConfig.address)
-	if (!running) {
-		// Check siadConfig.path, and ask for a new path if siad doesn't exist.
-		const exists = await checkSiaPath(siadConfig.path)
-		if (!exists) {
-			// config.path doesn't exist.  Prompt the user for siad's location
-			dialog.showErrorBox('Siad not found', 'Sia-UI couldn\'t locate siad.  Please navigate to siad.')
-			const siadPath = dialog.showOpenDialog({
-				title: 'Please locate siad.',
-				properties: ['openFile'],
-				defaultPath: Path.join('..', siadConfig.path),
-				filters: [{ name: 'siad', extensions: ['*'] }],
-			})
-			if (typeof siadPath === 'undefined') {
-				// The user didn't choose siad, we should just close.
-				app.quit()
-			}
-			siadConfig.path = siadPath[0]
-		}
-		// Launch the new Siad process
-		try {
-			const siadProcess = Siad.launch(siadConfig.path, {
-				'sia-directory': siadConfig.datadir,
-			})
-			siadProcess.on('error', (e) => showError('Siad couldnt start: ' + e.toString()))
-			siadProcess.on('close', () => showError('Siad unexpectedly closed.'))
-			siadProcess.on('exit', () => showError('Siad unexpectedly exited.'))
-		} catch (e) {
-			showError(e.toString())
-			return
-		}
-
-		// Wait for this process to become reachable before starting the UI.
-		const sleep = (ms = 0) => new Promise((r) => setTimeout(r, ms))
-		while (await Siad.isRunning(siadConfig.address) === false) {
-			await sleep(500)
-		}
-		startUI('Welcome to Sia', initUI)
-	} else {
+	if (running) {
 		startUI('Welcome back', initUI)
+		return
 	}
+
+	// Check siadConfig.path, and ask for a new path if siad doesn't exist.
+	const exists = await checkSiaPath(siadConfig.path)
+	if (!exists) {
+		// config.path doesn't exist.  Prompt the user for siad's location
+		dialog.showErrorBox('Siad not found', 'Sia-UI couldn\'t locate siad.  Please navigate to siad.')
+		const siadPath = dialog.showOpenDialog({
+			title: 'Please locate siad.',
+			properties: ['openFile'],
+			defaultPath: Path.join('..', siadConfig.path),
+			filters: [{ name: 'siad', extensions: ['*'] }],
+		})
+		if (typeof siadPath === 'undefined') {
+			// The user didn't choose siad, we should just close.
+			app.quit()
+		}
+		siadConfig.path = siadPath[0]
+	}
+	// Launch the new Siad process
+	try {
+		const siadProcess = Siad.launch(siadConfig.path, {
+			'sia-directory': siadConfig.datadir,
+		})
+		siadProcess.on('error', (e) => showError('Siad couldnt start: ' + e.toString()))
+		siadProcess.on('close', () => showError('Siad unexpectedly closed.'))
+		siadProcess.on('exit', () => showError('Siad unexpectedly exited.'))
+	} catch (e) {
+		showError(e.toString())
+		return
+	}
+	// Wait for this process to become reachable before starting the UI.
+	const sleep = (ms = 0) => new Promise((r) => setTimeout(r, ms))
+	while (await Siad.isRunning(siadConfig.address) === false) {
+		await sleep(500)
+	}
+	startUI('Welcome to Sia', initUI)
 }
