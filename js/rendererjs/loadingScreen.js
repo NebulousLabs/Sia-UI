@@ -2,7 +2,7 @@
 // if an available daemon is not running on the host,
 // launch an instance of siad using config.js.
 import { remote } from 'electron'
-import Siad from 'sia.js'
+import * as Siad from 'sia.js'
 import Path from 'path'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -13,7 +13,6 @@ const app = remote.app
 const fs = remote.require('fs')
 const config = remote.getGlobal('config')
 const siadConfig = config.attr('siad')
-Siad.configure(siadConfig)
 
 const overlay = document.getElementsByClassName('overlay')[0]
 const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByTagName('p')[0]
@@ -23,17 +22,6 @@ const showError = (error) => {
 	overlayText.textContent = 'A Sia-UI error has occured: ' + error
 }
 
-// checkSiaPath validates config's Sia path.
-// returns a promise that is resolved if the path is a valid directory
-const checkSiaPath = () => new Promise((resolve, reject) => {
-	fs.stat(siadConfig.path, (err) => {
-		if (!err) {
-			resolve()
-		} else {
-			reject(err)
-		}
-	})
-})
 // startUI starts a Sia UI instance using the given welcome message.
 // calls initUI() after displaying a welcome message.
 const startUI = (welcomeMsg, initUI) => {
@@ -41,85 +29,83 @@ const startUI = (welcomeMsg, initUI) => {
 	overlayText.innerHTML = welcomeMsg
 
 	// Construct the status bar component and poll for updates from Siad
-	setInterval(() => {
-		Siad.call('/consensus', (consensusErr, consensusResponse) => {
-			if (consensusErr) {
-				return
-			}
-			Siad.call('/gateway', (gatewayErr, gatewayResponse) => {
-				if (gatewayErr) {
-					return
-				}
-				ReactDOM.render(<StatusBar peers={gatewayResponse.peers.length} synced={consensusResponse.synced} blockheight={consensusResponse.height} />, document.getElementById('statusbar'))
-			})
-		})
-	}, 2000)
+	const updateSyncStatus = async function() {
+		const consensusData = await Siad.call(siadConfig.address, '/consensus')
+		const gatewayData = await Siad.call(siadConfig.address, '/gateway')
+		ReactDOM.render(<StatusBar peers={gatewayData.peers.length} synced={consensusData.synced} blockheight={consensusData.height} />, document.getElementById('statusbar'))
+	}
+
+	updateSyncStatus()
+	setInterval(updateSyncStatus, 1000)
+
 	initUI(() => {
 		overlay.style.display = 'none'
 	})
 }
 
-// startSiad configures and starts a Siad instance.
-// callback is called on successful start.
-const startSiad = (callback) => {
-	siadConfig.detached = false
-	config.attr('siad', siadConfig)
-	config.save()
-	Siad.configure(siadConfig, (error) => {
-		if (error) {
-			overlay.showError(error)
+// checkSiaPath validates config's Sia path.
+// returns a promise that is resolved with `true` if siadConfig.path exists
+// or `false` if it does not exist.
+const checkSiaPath = () => new Promise((resolve, reject) => {
+	fs.stat(siadConfig.path, (err) => {
+		if (!err) {
+			resolve(true)
 		} else {
-			Siad.start(callback)
+			reject(false)
 		}
 	})
-}
+})
 
 // Check if Siad is already running on this host.
 // If it is, start the UI and display a welcome message to the user.
 // Otherwise, start a new instance of Siad using config.js.
-export default function loadingScreen(initUI) {
+export default async function loadingScreen(initUI) {
 	// Create the Sia data directory if it does not exist
 	try {
 		fs.statSync(siadConfig.datadir)
 	} catch (e) {
 		fs.mkdirSync(siadConfig.datadir)
 	}
-	Siad.ifRunning(() => {
-		siadConfig.detached = true
-		config.attr('siad', siadConfig)
-		config.save()
-		Siad.configure(siadConfig)
+	// If Sia is already running, start the UI with a 'Welcome Back' message.
+	const running = await Siad.isRunning(siadConfig.address)
+	if (running) {
 		startUI('Welcome back', initUI)
-	}, () => {
-		checkSiaPath().then(() => {
-			startSiad((error) => {
-				if (error) {
-					showError(error)
-				} else {
-					startUI('Welcome to Sia', initUI)
-				}
-			})
-		}).catch(() => {
-			// config.path doesn't exist.  Prompt the user for siad's location
-			dialog.showErrorBox('Siad not found', 'Sia-UI couldn\'t locate siad.  Please navigate to siad.')
-			const siadPath = dialog.showOpenDialog({
-				title: 'Please locate siad.',
-				properties: ['openFile'],
-				defaultPath: Path.join('..', siadConfig.path),
-				filters: [{ name: 'siad', extensions: ['*'] }],
-			})
-			if (typeof siadPath === 'undefined') {
-				// The user didn't choose siad, we should just close.
-				app.quit()
-			}
-			siadConfig.path = siadPath[0]
-			startSiad((error) => {
-				if (error) {
-					showError(error)
-				} else {
-					startUI('Welcome to Sia', initUI)
-				}
-			})
+		return
+	}
+
+	// Check siadConfig.path, and ask for a new path if siad doesn't exist.
+	const exists = await checkSiaPath(siadConfig.path)
+	if (!exists) {
+		// config.path doesn't exist.  Prompt the user for siad's location
+		dialog.showErrorBox('Siad not found', 'Sia-UI couldn\'t locate siad.  Please navigate to siad.')
+		const siadPath = dialog.showOpenDialog({
+			title: 'Please locate siad.',
+			properties: ['openFile'],
+			defaultPath: Path.join('..', siadConfig.path),
+			filters: [{ name: 'siad', extensions: ['*'] }],
 		})
-	})
-};
+		if (typeof siadPath === 'undefined') {
+			// The user didn't choose siad, we should just close.
+			app.quit()
+		}
+		siadConfig.path = siadPath[0]
+	}
+	// Launch the new Siad process
+	try {
+		const siadProcess = Siad.launch(siadConfig.path, {
+			'sia-directory': siadConfig.datadir,
+		})
+		siadProcess.on('error', (e) => showError('Siad couldnt start: ' + e.toString()))
+		siadProcess.on('close', () => showError('Siad unexpectedly closed.'))
+		siadProcess.on('exit', () => showError('Siad unexpectedly exited.'))
+	} catch (e) {
+		showError(e.toString())
+		return
+	}
+	// Wait for this process to become reachable before starting the UI.
+	const sleep = (ms = 0) => new Promise((r) => setTimeout(r, ms))
+	while (await Siad.isRunning(siadConfig.address) === false) {
+		await sleep(500)
+	}
+	startUI('Welcome to Sia', initUI)
+}

@@ -41,12 +41,12 @@
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "redux-saga": "^0.11.0",
-    "sia.js": "^0.2.2",
+    "sia.js": "^0.3.0",
     "webpack": "^1.13.1"
   },
   "scripts": {
     "start": "webpack && electron .",
-    "debug": "webpack -d",
+    "debug": "webpack -d && electron .",
     "build": "webpack",
     "watch": "webpack --watch",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
