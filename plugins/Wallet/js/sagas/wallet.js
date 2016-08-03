@@ -83,8 +83,8 @@ function *createWalletSaga() {
 			},
 		})
 		yield put(actions.showNewWalletDialog(response.primaryseed, response.primaryseed))
-		yield take(constants.DISMISS_NEW_WALLET_DIALOG)
-		yield put(actions.unlockWallet(response.primaryseed))
+		yield take(constants.SET_UNLOCKED)
+		yield put(actions.dismissNewWalletDialog())
 	} catch (e) {
 		yield sendError(e)
 	}

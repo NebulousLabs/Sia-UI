@@ -9,7 +9,6 @@ import NewWalletButton from '../../plugins/Wallet/js/containers/newwalletbutton.
 const lockedEncryptedScreen = shallow(<LockScreen unlocked={false} encrypted unlocking={false} />)
 const lockedUnencryptedScreen = shallow(<LockScreen unlocked={false} encrypted={false} unlocking={false} />)
 const unlockedEncryptedScreen = shallow(<LockScreen unlocked encrypted unlocking={false} />)
-const lockedEncryptedUnlockingScreen = shallow(<LockScreen unlocked={false} encrypted unlocking />)
 
 describe('wallet lock screen component', () => {
 	it('renders an empty div if the wallet is unlocked and encrypted and not unlocking', () => {
@@ -20,9 +19,6 @@ describe('wallet lock screen component', () => {
 	})
 	it('renders a new wallet button if the wallet is locked but not encrypted or unlocking', () => {
 		expect(lockedUnencryptedScreen.contains(<NewWalletButton />)).to.be.true
-	})
-	it('renders unlocking text if wallet is unlocking', () => {
-		expect(lockedEncryptedUnlockingScreen.text()).to.contain('Unlocking')
 	})
 })
 /* eslint-enable no-unused-expressions */

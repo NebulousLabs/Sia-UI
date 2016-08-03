@@ -1,8 +1,13 @@
 import React, { PropTypes } from 'react'
 
-const PasswordPrompt = ({password, error, actions}) => {
+const PasswordPrompt = ({password, error, unlocking, actions}) => {
 	const onPasswordChange = (e) => actions.handlePasswordChange(e.target.value)
 	const onUnlockClick = () => actions.unlockWallet(password)
+	if (unlocking) {
+		return (
+			<span className="unlock-status"> Unlocking your wallet, this may take a while (up to several minutes)... </span>
+		)
+	}
 	return (
 		<div className="password-prompt">
 			<h2> Wallet Locked </h2>

@@ -10,18 +10,14 @@ const LockScreen = ({unlocked, unlocking, encrypted}) => {
 		)
 	}
 	let lockscreenContents
-	if (!unlocked && encrypted && !unlocking) {
+	if (!unlocked && encrypted) {
 		lockscreenContents = (
 			<PasswordPrompt />
 		)
-	} else  if (!encrypted && !unlocking) {
+	} else  if (!encrypted) {
 		// Wallet is not encrypted, return a lockScreen that initializes a new wallet.
 		lockscreenContents = (
 			<NewWalletButton />
-		)
-	} else if (unlocking) {
-		lockscreenContents = (
-			<span> Unlocking your wallet, this may take a while (up to several minutes)... </span>
 		)
 	}
 	return (
