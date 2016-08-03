@@ -90,3 +90,10 @@ export const handlePasswordChange = (password) => ({
 export const lockWallet = () => ({
 	type: constants.LOCK_WALLET,
 })
+export const showConfirmationDialog = () => ({
+	type: constants.SHOW_CONFIRMATION_DIALOG,
+})
+export const hideConfirmationDialog = () => ({
+	type: constants.HIDE_CONFIRMATION_DIALOG,
+})
+\
