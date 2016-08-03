@@ -201,6 +201,16 @@
 	padding-right: 100px;
 	z-index: 10;
 }
+.confirmation-dialog {
+	display: flex;
+	padding: 10px 10px 10px 10px;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+	background-color: #ECECEC;
+	width: 75%;
+	height: 75%;
+}
 .newwallet-dialog button {
 	margin-top: 20px;
 }

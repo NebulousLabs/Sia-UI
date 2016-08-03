@@ -89,7 +89,7 @@ describe('wallet plugin integration tests', () => {
 	it('unlocks given the correct password', (done) => {
 		walletComponent.find('PasswordPrompt').find('.password-input').simulate('change', {target: {value: 'testpass'}})
 		walletComponent.find('PasswordPrompt').find('.unlock-button').simulate('click')
-		expect(walletComponent.find('.lockscreen').first().text()).to.contain('Unlocking')
+		expect(walletComponent.find('.unlock-status').first().text()).to.contain('Unlocking')
 		const poll = setInterval(() => {
 			if (walletComponent.find('.lockscreen').length === 0) {
 				clearInterval(poll)

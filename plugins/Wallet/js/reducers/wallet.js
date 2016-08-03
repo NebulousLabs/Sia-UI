@@ -16,7 +16,6 @@ const initialState = Map({
 })
 
 export default function walletReducer(state = initialState, action) {
-	console.log(action)
 	switch (action.type) {
 	case constants.SHOW_NEW_WALLET_DIALOG:
 		return state.set('showNewWalletDialog', true)

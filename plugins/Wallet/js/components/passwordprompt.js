@@ -5,7 +5,7 @@ const PasswordPrompt = ({password, error, unlocking, actions}) => {
 	const onUnlockClick = () => actions.unlockWallet(password)
 	if (unlocking) {
 		return (
-			<span> Unlocking your wallet, this may take a while (up to several minutes)... </span>
+			<span className="unlock-status"> Unlocking your wallet, this may take a while (up to several minutes)... </span>
 		)
 	}
 	return (

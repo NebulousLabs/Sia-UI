@@ -21,8 +21,5 @@ describe('wallet lock screen component', () => {
 	it('renders a new wallet button if the wallet is locked but not encrypted or unlocking', () => {
 		expect(lockedUnencryptedScreen.contains(<NewWalletButton />)).to.be.true
 	})
-	it('renders unlocking text if wallet is unlocking', () => {
-		expect(lockedEncryptedUnlockingScreen.text()).to.contain('Unlocking')
-	})
 })
 /* eslint-enable no-unused-expressions */
