@@ -96,4 +96,3 @@ export const showConfirmationDialog = () => ({
 export const hideConfirmationDialog = () => ({
 	type: constants.HIDE_CONFIRMATION_DIALOG,
 })
-\
