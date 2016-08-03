@@ -19,10 +19,6 @@ const LockScreen = ({unlocked, unlocking, encrypted}) => {
 		lockscreenContents = (
 			<NewWalletButton />
 		)
-	} else if (unlocking) {
-		lockscreenContents = (
-			<span> Unlocking your wallet, this may take a while (up to several minutes)... </span>
-		)
 	}
 	return (
 		<div className="modal">
