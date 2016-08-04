@@ -98,6 +98,9 @@ export default async function loadingScreen(initUI) {
 		siadProcess.on('error', (e) => showError('Siad couldnt start: ' + e.toString()))
 		siadProcess.on('close', () => showError('Siad unexpectedly closed.'))
 		siadProcess.on('exit', () => showError('Siad unexpectedly exited.'))
+
+		// Send the siadProcess a kill signal when Sia-UI is quit.
+		app.on('quit', () => siadProcess.kill('SIGKILL'))
 	} catch (e) {
 		showError(e.toString())
 		return
