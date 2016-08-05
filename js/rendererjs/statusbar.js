@@ -26,7 +26,7 @@ const StatusBar = ({synced, blockheight, peers}) => {
 	return (
 		<div className="status-bar">
 			<div style={syncStyle}>
-				<i className="fa fa-globe fa-2x"></i>
+				<i className="fa fa-globe fa-2x" />
 				{status}
 			</div>
 			<div className="status-bar-blockheight">Block Height: {blockheight}</div>

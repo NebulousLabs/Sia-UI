@@ -12,9 +12,9 @@ const WarningModalModal = ({ title, message, actions }) => {
 				<h3>{title}</h3>
 				<p>{message}</p>
 				<p>
-					<input className="button accept" type="button" value="Accept" onClick={handleAccept}></input>
+					<input className="button accept" type="button" value="Accept" onClick={handleAccept} />
 					<br />
-					<input className="button cancel" type="button" value="Cancel" onClick={handleDecline}></input>
+					<input className="button cancel" type="button" value="Cancel" onClick={handleDecline} />
 				</p>
 			</div>
 		</div>

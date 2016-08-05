@@ -4,7 +4,7 @@ const StoragePlan = ({storageSize, currentStorageSize, setStorageSize}) => {
 	const onPlanClick = () => setStorageSize(storageSize)
 	return (
 		<div className={storageSize === currentStorageSize ? 'plan selected' : 'plan'} onClick={onPlanClick}>
-			<i className="fa fa-hdd-o fa-3x"></i>
+			<i className="fa fa-hdd-o fa-3x" />
 			<p> {storageSize} GB </p>
 		</div>
 	)

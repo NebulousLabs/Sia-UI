@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react'
 const Directory = ({onClick, name}) => (
 	<li onClick={onClick}>
 		<div className="filename">
-			<i className="fa fa-folder"></i>
+			<i className="fa fa-folder" />
 			{name}
 		</div>
 	</li>

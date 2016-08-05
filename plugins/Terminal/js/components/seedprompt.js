@@ -33,7 +33,7 @@ export default class WalletSeedPrompt extends React.Component {
 				<div className="modal-message">
 					<h3>New seed</h3>
 					<p>Please type your new seed and press enter to continue.</p>
-					<input onKeyDown={handleKeyboardPress} type="password" id="seed-passwd" ref={(c) => this._seedPasswd = c}></input>
+					<input onKeyDown={handleKeyboardPress} type="password" id="seed-passwd" ref={(c) => this._seedPasswd = c} />
 				</div>
 			</div>
 		)

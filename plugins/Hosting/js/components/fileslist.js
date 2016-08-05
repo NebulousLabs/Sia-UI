@@ -25,10 +25,10 @@ const FilesList = ({ folders, folderPathToRemove, actions }) => {
 				<div>{folder.get('size').toString()} GB</div>
 			</div>
 			<div className="pure-u-1-24" onClick={onResizeStorageLocationClick(folder)}>
-				<div><i className="fa fa-edit button"></i></div>
+				<div><i className="fa fa-edit button" /></div>
 			</div>
 			<div className="pure-u-1-24" onClick={onRemoveStorageLocationClick(folder)}>
-				<div><i className="fa fa-remove button"></i></div>
+				<div><i className="fa fa-remove button" /></div>
 			</div>
 			{
 				folderPathToRemove && folderPathToRemove === folder.get('path') ?
@@ -44,15 +44,15 @@ const FilesList = ({ folders, folderPathToRemove, actions }) => {
 	return (
 		<div className="files section">
 			<div className="property row">
-				<div className="title"></div>
+				<div className="title" />
 				<div className="controls full">
 					<div className="button left" id="edit" onClick={addStorageLocation}>
-						<i className="fa fa-folder-open"></i>
+						<i className="fa fa-folder-open" />
 						Add Storage Folder
 					</div>
 					<div className="pure-u-1-12" style={{ 'textAlign': 'left' }}>Free</div>
 					<div className="pure-u-1-12" style={{ 'textAlign': 'left' }}>Max</div>
-					<div className="pure-u-1-12"></div>
+					<div className="pure-u-1-12" />
 				</div>
 			</div>
 			{FileList}

@@ -13,7 +13,7 @@ const Body = ({ actions }) => {
 					<div className="title">Help</div>
 					<div className="controls">
 						<div className="button" id="announce" onClick={announceHost}>
-							<i className="fa fa-bullhorn"></i>
+							<i className="fa fa-bullhorn" />
 							Announce
 						</div>
 					</div>
