@@ -7,7 +7,7 @@ const SearchButton = ({path, actions}) => {
 	}
 	return (
 		<div onClick={handleClick} className="search-button">
-			<i className="fa fa-search fa-2x"></i>
+			<i className="fa fa-search fa-2x" />
 			<span> Search Files </span>
 		</div>
 	)

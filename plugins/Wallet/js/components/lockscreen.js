@@ -6,7 +6,7 @@ const LockScreen = ({unlocked, unlocking, encrypted}) => {
 	if (unlocked && encrypted && !unlocking) {
 		// Wallet is unlocked and encrypted, return an empty lock screen.
 		return (
-			<div></div>
+			<div />
 		)
 	}
 	let lockscreenContents

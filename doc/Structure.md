@@ -48,7 +48,7 @@ Contains css, both imported and developed in house.
   denote buttons, particularly with the text to the right of the icon as so:
 ```html
 <div class='button'>
-	<i class='fa fa-arrow-circle-o-up'></i>
+	<i class='fa fa-arrow-circle-o-up' />
 	Update UI
 </div>
 ```

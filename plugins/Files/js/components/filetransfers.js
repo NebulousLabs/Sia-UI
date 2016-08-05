@@ -10,7 +10,7 @@ const FileTransfers = ({uploads, downloads, actions}) => {
 	return (
 		<div className="file-transfers">
 			<div className="close-button" onClick={onCloseClick}>
-				<i className="fa fa-times fa-2x"></i>
+				<i className="fa fa-times fa-2x" />
 			</div>
 			{downloads.size > 0 ? <DownloadList downloads={downloads} onDownloadClick={onDownloadClick} /> : null}
 			{uploads.size > 0 ? <UploadList uploads={uploads} /> : null}

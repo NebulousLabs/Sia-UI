@@ -5,7 +5,7 @@ const NewWalletButton = ({actions}) => {
 	return (
 		<div onClick={handleNewWalletClick} className="new-wallet-button">
 			<h3>Create a new Sia Wallet</h3>
-			<i className="fa fa-plus-circle fa-4x"></i>
+			<i className="fa fa-plus-circle fa-4x" />
 		</div>
 	)
 }

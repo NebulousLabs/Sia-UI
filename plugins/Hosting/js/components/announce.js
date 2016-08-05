@@ -27,11 +27,11 @@ const AnnounceDialogModal = ({ announceAddress, actions }) => {
 				<h3>Announce Host</h3>
 				<p>
 					<label>Address to announce.</label>
-					<input onChange={handleSettingInput} onKeyDown={handleSettingKeyDown} value={announceAddress || ''} type="text"></input>
+					<input onChange={handleSettingInput} onKeyDown={handleSettingKeyDown} value={announceAddress || ''} type="text" />
 				</p>
 				<span>Click to announce your host to the network. This will cost about 15 SC and only needs to be done once per host.</span>
 				<p>
-					<input className={'button accept' + ( announceAddress !== '' ? '' : ' disabled' )} type="button" value="Announce" onClick={handleSubmit}></input>
+					<input className={'button accept' + ( announceAddress !== '' ? '' : ' disabled' )} type="button" value="Announce" onClick={handleSubmit} />
 				</p>
 			</form>
 		</div>

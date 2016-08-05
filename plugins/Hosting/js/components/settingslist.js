@@ -34,7 +34,7 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 			</div>
 			<div className="pure-u-1-2">
 				<div className="value">
-					<input type="number" data-setting={key} onChange={handleSettingInput} className="value" value={setting.get('value')}></input>
+					<input type="number" data-setting={key} onChange={handleSettingInput} className="value" value={setting.get('value')} />
 				</div>
 			</div>
 			<div className={'error pure-u-1-1' + ( setting.get('value') <= Number(setting.get('min') || 0)  || isNaN(setting.get('value')) ? '' : ' hidden' )}>
@@ -49,11 +49,11 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 				<div className="title">Configurations</div>
 				<div className="controls">
 					<div className={'button' + ( saveEnabled() ? '' : ' disable' )} onClick={updateSettings}>
-						<i className="fa fa-save"></i>
+						<i className="fa fa-save" />
 						Save
 					</div>
 					<div className="button" onClick={resetSettings}>
-						<i className="fa fa-refresh"></i>
+						<i className="fa fa-refresh" />
 						Reset
 					</div>
 				</div>
@@ -67,7 +67,7 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 				<div className="pure-u-1-2">
 					<div className="value">
 						<div className={'toggle-switch' + (acceptingContracts ? '' : ' off')} onClick={showToggleAcceptingModal}>
-							<div className="toggle-inner"></div>
+							<div className="toggle-inner" />
 						</div>
 					</div>
 				</div>

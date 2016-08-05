@@ -4,7 +4,7 @@ const SetAllowanceButton = ({actions}) => {
 	const handleClick = () => actions.showAllowanceDialog()
 	return (
 		<div onClick={handleClick} className="set-allowance-button">
-			<i className="fa fa-credit-card fa-2x"></i>
+			<i className="fa fa-credit-card fa-2x" />
 			<span>Buy Storage</span>
 		</div>
 	)
