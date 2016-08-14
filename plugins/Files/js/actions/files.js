@@ -147,3 +147,15 @@ export const setContractCount = (count) => ({
 	type: constants.SET_CONTRACT_COUNT,
 	count,
 })
+export const renameFile = (siapath, newsiapath) => ({
+	type: constants.RENAME_FILE,
+	siapath,
+	newsiapath,
+})
+export const showRenameDialog = (siapath) => ({
+	type: constants.SHOW_RENAME_DIALOG,
+	siapath,
+})
+export const hideRenameDialog = () => ({
+	type: constants.HIDE_RENAME_DIALOG,
+})

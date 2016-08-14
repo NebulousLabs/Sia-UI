@@ -18,6 +18,7 @@ const initialState = Map({
 	showSearchField: false,
 	showFileTransfers: false,
 	showDeleteDialog: false,
+	showRenameDialog: false,
 	dragging: false,
 	contractCount: 0,
 })
@@ -68,6 +69,10 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('showFileTransfers', !state.get('showFileTransfers'))
 	case constants.SET_CONTRACT_COUNT:
 		return state.set('contractCount', action.count)
+	case constants.SHOW_RENAME_DIALOG:
+		return state.set('showRenameDialog', true)
+	case constants.HIDE_RENAME_DIALOG:
+		return state.set('showRenameDialog', false)
 	default:
 		return state
 	}

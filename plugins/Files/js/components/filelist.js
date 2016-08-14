@@ -30,6 +30,7 @@ const FileList = ({files, searchResults, path, showSearchField, actions}) => {
 				<Directory key={key} onClick={onDirectoryClick(file)} name={file.name} />
 			)
 		}
+		const onRenameClick = () => actions.showRenameDialog(file.siapath)
 		const onDownloadClick = () => {
 			const downloadpath = SiaAPI.openFile({
 				title: 'Where should we download this file?',
@@ -39,7 +40,7 @@ const FileList = ({files, searchResults, path, showSearchField, actions}) => {
 		}
 		const onDeleteClick = () => actions.showDeleteDialog(file.siapath)
 		return (
-			<File key={key} filename={file.name} filesize={file.size} onDownloadClick={onDownloadClick} onDeleteClick={onDeleteClick} />
+			<File key={key} filename={file.name} filesize={file.size} onRenameClick={onRenameClick} onDownloadClick={onDownloadClick} onDeleteClick={onDeleteClick} />
 		)
 	})
 	return (

@@ -5,12 +5,13 @@ import SearchButton from '../containers/searchbutton.js'
 import UploadDialog from '../containers/uploaddialog.js'
 import UploadButton from '../containers/uploadbutton.js'
 import DeleteDialog from '../containers/deletedialog.js'
+import RenameDialog from '../containers/renamedialog.js'
 import TransfersButton from '../containers/transfersbutton.js'
 import FileTransfers from '../containers/filetransfers.js'
 import UsageStats from '../containers/usagestats.js'
 import DragOverlay from './dragoverlay.js'
 
-const FileBrowser = ({dragging, showUploadDialog, showDeleteDialog, showFileTransfers, actions}) => {
+const FileBrowser = ({dragging, showRenameDialog, showUploadDialog, showDeleteDialog, showFileTransfers, actions}) => {
 	const onDragOver = (e) => {
 		e.preventDefault()
 		actions.setDragging()
@@ -28,6 +29,7 @@ const FileBrowser = ({dragging, showUploadDialog, showDeleteDialog, showFileTran
 	return (
 		<div className="file-browser-container">
 			<div className="file-browser" onDragOver={onDragOver} onMouseLeave={onDragLeave} onDrop={onDrop}>
+				{showRenameDialog ? <RenameDialog /> : null}
 				{showUploadDialog ? <UploadDialog /> : null}
 				{showDeleteDialog ? <DeleteDialog /> : null}
 				{dragging ? <DragOverlay /> : null}
@@ -49,6 +51,7 @@ const FileBrowser = ({dragging, showUploadDialog, showDeleteDialog, showFileTran
 
 FileBrowser.propTypes = {
 	dragging: PropTypes.bool.isRequired,
+	showRenameDialog: PropTypes.bool.isRequired,
 	showUploadDialog: PropTypes.bool.isRequired,
 	showDeleteDialog: PropTypes.bool.isRequired,
 	showFileTransfers: PropTypes.bool.isRequired,
