@@ -114,6 +114,7 @@ export const totalUsage = (files) => readableFilesize(files.reduce((sum, file) =
 // return a list of file uploads
 export const parseUploads = (files) => List(files)
 .filter((file) => file.uploadprogress < 100)
+.filter((file) => !file.available)
 .map((upload) => ({
 	siapath: upload.siapath,
 	name: Path.basename(upload.siapath),
