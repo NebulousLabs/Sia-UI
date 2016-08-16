@@ -1,7 +1,7 @@
 import FileListView from '../components/filelist.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { setPath, downloadFile, showDeleteDialog } from '../actions/files.js'
+import { setPath, downloadFile, showDeleteDialog, showRenameDialog } from '../actions/files.js'
 
 const mapStateToProps = (state) => ({
 	files: state.files.get('workingDirectoryFiles'),
@@ -10,7 +10,7 @@ const mapStateToProps = (state) => ({
 	showSearchField: state.files.get('showSearchField'),
 })
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ setPath, downloadFile, showDeleteDialog }, dispatch),
+	actions: bindActionCreators({ setPath, showRenameDialog, downloadFile, showDeleteDialog }, dispatch),
 })
 
 const FileList = connect(mapStateToProps, mapDispatchToProps)(FileListView)
