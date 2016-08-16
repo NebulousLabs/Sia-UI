@@ -117,7 +117,7 @@ export const parseUploads = (files) => List(files)
 .map((upload) => ({
 	siapath: upload.siapath,
 	name: Path.basename(upload.siapath),
-	progress: Math.floor(upload.uploadprogress),
+	progress: file.available ? 100 : Math.floor(upload.uploadprogress),
 	type: 'upload',
 }))
 .sortBy((upload) => upload.name)
