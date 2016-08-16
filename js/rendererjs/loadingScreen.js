@@ -51,7 +51,7 @@ const checkSiaPath = () => new Promise((resolve, reject) => {
 		if (!err) {
 			resolve(true)
 		} else {
-			reject(false)
+			resolve(false)
 		}
 	})
 })
