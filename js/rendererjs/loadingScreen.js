@@ -46,7 +46,7 @@ const startUI = (welcomeMsg, initUI) => {
 // checkSiaPath validates config's Sia path.
 // returns a promise that is resolved with `true` if siadConfig.path exists
 // or `false` if it does not exist.
-const checkSiaPath = () => new Promise((resolve, reject) => {
+const checkSiaPath = () => new Promise((resolve) => {
 	fs.stat(siadConfig.path, (err) => {
 		if (!err) {
 			resolve(true)

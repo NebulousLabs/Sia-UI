@@ -9,7 +9,7 @@ const defaultConfig = {
 		path: Path.join(__dirname, '../Sia/' + (process.platform === 'win32' ? 'siad.exe' : 'siad')),
 		datadir: Path.join(app.getPath('userData'), './sia'),
 		detached: false,
-		address: "localhost:9980",
+		address: 'localhost:9980',
 	},
 	closeToTray: process.platform === 'win32' || process.platform === 'darwin' ? true : false,
 	width:	   1024,
