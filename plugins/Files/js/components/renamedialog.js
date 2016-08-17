@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react'
 
 const RenameDialog = ({siapath, actions}) => {
-	const onYesClick = () => {
-		actions.renameFile(siapath, newsiapath)
+	const onYesClick = (e) => {
+		actions.renameFile(siapath, e.target.value)
 		actions.hideRenameDialog()
 	}
 	const onNoClick = () => actions.hideRenameDialog()
@@ -14,11 +14,11 @@ const RenameDialog = ({siapath, actions}) => {
 					Enter a new name for {siapath}:
 				</div>
 				<div className="rename-field">
-					<input required autoFocus />
+					<input type="text" required autoFocus />
 				</div>
 				<div className="rename-buttons">
-					<button onClick={onYesClick}>Yes</button>
-					<button onClick={onNoClick}>No</button>
+					<button onClick={onYesClick}>Confirm</button>
+					<button onClick={onNoClick}>Cancel</button>
 				</div>
 			</div>
 		</div>
@@ -27,7 +27,6 @@ const RenameDialog = ({siapath, actions}) => {
 
 RenameDialog.propTypes = {
 	siapath: PropTypes.string.isRequired,
-	//newsiapath: PropTypes.stringisRequired,
 }
 
 export default RenameDialog
