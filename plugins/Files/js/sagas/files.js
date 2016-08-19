@@ -219,8 +219,11 @@ function* getContractCountSaga() {
 function* renameFileSaga(action) {
 	try {
 		yield siadCall({
-			url: '/renter/rename/' + action.siapath + action.newsiapath,
+			url: '/renter/rename/' + action.siapath,
 			method: 'POST',
+			qs: {
+				newsiapath: action.newsiapath,
+			},
 		})
 		yield put(action.getFiles())
 	} catch (e) {

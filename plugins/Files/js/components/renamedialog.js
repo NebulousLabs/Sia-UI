@@ -13,13 +13,15 @@ const RenameDialog = ({siapath, actions}) => {
 				<div className="rename-text">
 					Enter a new name for {siapath}:
 				</div>
-				<div className="rename-field">
-					<input type="text" required autoFocus defaultValue={siapath} />
-				</div>
-				<div className="rename-buttons">
-					<button onClick={onYesClick}>Confirm</button>
-					<button onClick={onNoClick}>Cancel</button>
-				</div>
+				<form onSubmit={onYesClick}>
+					<div className="rename-field">
+						<input type="text" required autoFocus defaultValue={siapath} />
+					</div>
+					<div className="rename-buttons">
+						<button type="submit">Confirm</button>
+						<button type="button" onClick={onNoClick}>Cancel</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	)
