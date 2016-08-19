@@ -225,7 +225,7 @@ function* renameFileSaga(action) {
 				newsiapath: action.newsiapath,
 			},
 		})
-		yield put(action.getFiles())
+		yield put(actions.getFiles())
 	} catch (e) {
 		sendError(e)
 	}

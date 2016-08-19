@@ -409,7 +409,9 @@
 	height: 50%;
 }
 .rename-buttons {
+	margin: auto;
 	margin-top: 35px;
+	text-align: center;
 }
 .rename-buttons button {
 	margin-left: 10px;
@@ -433,6 +435,7 @@
 	margin: 10px 5px 5px 10px;
 }
 .rename-field {
+  margin: auto;
 	margin-top: 15px;
 	margin-bottom: 15px;
 	width: 80%;
@@ -445,4 +448,8 @@
 	width: 80%;
 	height: 25px;
 	border: 2px solid #00CBA0;
+}
+.rename-form {
+	display: inline-block;
+	width: 80%;
 }
