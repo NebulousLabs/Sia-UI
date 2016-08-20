@@ -3,7 +3,6 @@ import * as constants from '../constants/files.js'
 
 const initialState = Map({
 	siapath: '',
-	newsiapath: '',
 })
 
 export default function renamedialogReducer(state = initialState, action) {
