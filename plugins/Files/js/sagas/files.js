@@ -226,6 +226,7 @@ function* renameFileSaga(action) {
 			},
 		})
 		yield put(actions.getFiles())
+		yield put(actions.hideRenameDialog())
 	} catch (e) {
 		sendError(e)
 	}

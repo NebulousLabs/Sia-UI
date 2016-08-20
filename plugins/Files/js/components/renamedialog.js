@@ -4,7 +4,6 @@ const RenameDialog = ({siapath, actions}) => {
 	const onYesClick = (e) => {
 		e.preventDefault()
 		actions.renameFile(siapath, e.target.newsiapath.value)
-		actions.hideRenameDialog()
 	}
 	const onNoClick = () => actions.hideRenameDialog()
 	return (
