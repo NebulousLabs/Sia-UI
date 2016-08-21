@@ -4,7 +4,7 @@ import Path from 'path'
 const RenameDialog = ({siapath, actions}) => {
 	const onYesClick = (e) => {
 		e.preventDefault()
-		actions.renameFile(siapath, Path.join(Path.dirname(siapath), e.target.newsiapath.value))
+		actions.renameFile(siapath, Path.join(Path.dirname(siapath), e.target.newname.value))
 	}
 	const onNoClick = () => actions.hideRenameDialog()
 	return (
@@ -15,7 +15,7 @@ const RenameDialog = ({siapath, actions}) => {
 				</div>
 				<form className="rename-form" onSubmit={onYesClick}>
 					<div className="rename-field">
-						<input type="text" name="newsiapath" required autoFocus defaultValue={Path.basename(siapath)} />
+						<input type="text" name="newname" required autoFocus defaultValue={Path.basename(siapath)} />
 					</div>
 					<div className="rename-buttons">
 						<button type="submit">Confirm</button>
