@@ -42,6 +42,7 @@ const uploadSpy = spy()
 const setAllowanceSpy = spy()
 const downloadSpy = spy()
 const deleteSpy = spy()
+const renameSpy = spy()
 const testFunds = Siad.siacoinsToHastings(100000)
 const mockSiaAPI = {
 	call: (uri, callback) => {
@@ -85,6 +86,10 @@ const mockSiaAPI = {
 			}
 			if (uri.url.indexOf('/renter/upload') !== -1) {
 				uploadSpy(uri.url)
+				callback()
+			}
+			if (uri.url.indexOf('/renter/rename') !== -1) {
+				renameSpy(uri.url, uri.qs.newsiapath)
 				callback()
 			}
 			if (uri.url === '/renter') {
@@ -245,6 +250,12 @@ describe('files plugin sagas', () => {
 		store.dispatch(actions.getWalletBalance())
 		await sleep(10)
 		expect(store.getState().wallet.get('balance')).to.equal(Siad.hastingsToSiacoins(walletState.confirmedsiacoinbalance).round(2).toString())
+		expect(SiaAPI.showError.called).to.be.false
+	})
+	it('calls /renter/rename on renameFile', async () => {
+		store.dispatch(actions.renameFile('test/siapath', 'test/newsiapath'))
+		await sleep(10)
+		expect(renameSpy.calledWithExactly('/renter/rename/test/siapath', 'test/newsiapath')).to.be.true
 		expect(SiaAPI.showError.called).to.be.false
 	})
 })

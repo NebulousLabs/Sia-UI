@@ -216,6 +216,22 @@ function* getContractCountSaga() {
 	}
 }
 
+function* renameFileSaga(action) {
+	try {
+		yield siadCall({
+			url: '/renter/rename/' + action.siapath,
+			method: 'POST',
+			qs: {
+				newsiapath: action.newsiapath,
+			},
+		})
+		yield put(actions.getFiles())
+		yield put(actions.hideRenameDialog())
+	} catch (e) {
+		sendError(e)
+	}
+}
+
 export function* watchSetAllowance() {
 	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
 }
@@ -261,4 +277,7 @@ export function* watchDownloadFile() {
 }
 export function* watchGetStorageMetrics() {
 	yield *takeEvery(constants.GET_STORAGE_METRICS, getStorageMetricsSaga)
+}
+export function* watchRenameFile() {
+	yield *takeEvery(constants.RENAME_FILE, renameFileSaga)
 }

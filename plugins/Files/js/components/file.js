@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 
-const File = ({filename, filesize, onDownloadClick, onDeleteClick}) => (
+const File = ({filename, filesize, onRenameClick, onDownloadClick, onDeleteClick}) => (
 	<li>
 		<div className="filename">
 			<i className="fa fa-file" />
@@ -9,6 +9,9 @@ const File = ({filename, filesize, onDownloadClick, onDeleteClick}) => (
 		<div className="file-info">
 			<span className="filesize">{filesize}</span>
 			<div className="file-buttons">
+				<div onClick={onRenameClick} className="rename-button">
+					<i className="fa fa-pencil 2x" />
+				</div>
 				<div onClick={onDownloadClick} className="download-button">
 					<i className="fa fa-cloud-download 2x" />
 				</div>
@@ -23,6 +26,7 @@ const File = ({filename, filesize, onDownloadClick, onDeleteClick}) => (
 File.propTypes = {
 	filename: PropTypes.string.isRequired,
 	filesize: PropTypes.string.isRequired,
+	onRenameClick: PropTypes.func.isRequired,
 	onDownloadClick: PropTypes.func.isRequired,
 	onDeleteClick: PropTypes.func.isRequired,
 }
