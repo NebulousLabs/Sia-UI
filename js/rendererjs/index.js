@@ -1,14 +1,16 @@
 // Imported Electron modules
 import Path from 'path'
+import * as Siad from 'sia.js'
 import loadingScreen from './loadingScreen.js'
-import Electron from 'electron'
+import { remote } from 'electron'
 import { scanFolder, loadPlugin, setCurrentPlugin, getPluginName } from './plugins.js'
 
-const App = Electron.remote.app
-const Tray = Electron.remote.Tray
-const mainWindow = Electron.remote.getCurrentWindow()
+const App = remote.app
+const Tray = remote.Tray
+const mainWindow = remote.getCurrentWindow()
 const defaultPluginDirectory = Path.join(App.getAppPath(), './plugins')
 const defaultHomePlugin = 'Files'
+const config = remote.getGlobal('config')
 
 // Called at window.onload by the loading screen.
 // Wait for siad to load, then load the plugin system.
@@ -48,12 +50,35 @@ function init(callback) {
 	// wait for the home plugin to load before calling back
 	homePluginView.addEventListener('dom-ready', onHomeLoad)
 }
+
+// shutdown triggers a clean shutdown of siad.
+const shutdown = async () => {
+	const overlay = document.getElementsByClassName('overlay')[0]
+	const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByTagName('p')[0]
+	const siadConfig = config.attr('siad')
+
+	overlay.style.display = 'inline-flex'
+	overlayText.textContent = 'Quitting Sia...'
+
+	// Block, displaying Quitting Sia..., until Siad has stopped.
+	if (typeof window.siadProcess !== 'undefined') {
+		setTimeout(() => window.siadProcess.kill('SIGKILL'), 15000)
+		const sleep = (ms = 0) => new Promise((r) => setTimeout(r, ms))
+		while (await Siad.isRunning(siadConfig.address) === true) {
+			await sleep(200)
+		}
+	}
+
+	mainWindow.destroy()
+}
+
 // If closeToTray is set, hide the window and cancel the close.
 // On windows, display a balloon notification on first hide
-// to inform users that Sia-UI is still running.
+// to inform users that Sia-UI is still running.  NOTE: returning any value
+// other than `undefined` cancels the close.
 let hasClosed = false
-if (mainWindow.closeToTray) {
-	window.onbeforeunload = function() {
+window.onbeforeunload = async () => {
+	if (mainWindow.closeToTray) {
 		mainWindow.hide()
 		if (process.platform === 'win32' && !hasClosed) {
 			Tray.displayBalloon({
@@ -64,6 +89,8 @@ if (mainWindow.closeToTray) {
 		}
 		return false
 	}
+	await shutdown()
+	return undefined
 }
 
 // Once the main window loads, start the loading process.

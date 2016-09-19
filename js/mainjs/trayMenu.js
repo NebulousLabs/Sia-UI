@@ -15,7 +15,10 @@ export default function(window) {
 		{ type: 'separator' },
 		{
 			label: 'Quit Sia',
-			click: () => window.destroy(),
+			click: () => {
+				window.closeToTray = false
+				window.close()
+			},
 		},
 	]
 
