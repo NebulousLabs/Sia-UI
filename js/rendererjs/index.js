@@ -3,7 +3,7 @@ import Path from 'path'
 import * as Siad from 'sia.js'
 import loadingScreen from './loadingScreen.js'
 import { remote } from 'electron'
-import { scanFolder, loadPlugin, setCurrentPlugin, getPluginName } from './plugins.js'
+import { scanFolder, unloadPlugins, loadPlugin, setCurrentPlugin, getPluginName } from './plugins.js'
 
 const App = remote.app
 const Tray = remote.Tray
@@ -15,9 +15,8 @@ const config = remote.getGlobal('config')
 // Called at window.onload by the loading screen.
 // Wait for siad to load, then load the plugin system.
 function init(callback) {
-	// Initialize plugins
+	// Initialize plugins.
 	let plugins = scanFolder(defaultPluginDirectory)
-
 	// The home plugin should be first in the sidebar, and about should be last.
 	// We probably want a priority system for this instead.
 	plugins = plugins.sort((p1) => {
@@ -53,6 +52,8 @@ function init(callback) {
 
 // shutdown triggers a clean shutdown of siad.
 const shutdown = async () => {
+	unloadPlugins()
+
 	const overlay = document.getElementsByClassName('overlay')[0]
 	const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByTagName('p')[0]
 	const siadConfig = config.attr('siad')

@@ -91,6 +91,14 @@ export const loadPlugin = (pluginPath) => {
 	return viewElement
 }
 
+// unloadPlugins removes the mainbar and the sidebar from the document.
+export const unloadPlugins = () => {
+	const mainbar = document.getElementById('mainbar')
+	const sidebar = document.getElementById('sidebar')
+	mainbar.parentNode.removeChild(mainbar)
+	sidebar.parentNode.removeChild(sidebar)
+}
+
 // Scan a folder at `path` for plugins.
 // Return a list of folder paths that have a valid plugin structure.
 export const scanFolder = (path) => {
