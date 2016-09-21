@@ -60,7 +60,7 @@ describe('siad lifecycle behaviour', () => {
 		await pkillSiad()
 	})
 	describe('with no siad currently running', function() {
-		this.timeout(20000)
+		this.timeout(120000)
 		let app
 		before(async () => {
 			await pkillSiad()
@@ -102,7 +102,7 @@ describe('siad lifecycle behaviour', () => {
 		})
 	})
 	describe('with a siad running on start', function() {
-		this.timeout(20000)
+		this.timeout(120000)
 		let app
 		let siadProcess
 		before(async () => {
