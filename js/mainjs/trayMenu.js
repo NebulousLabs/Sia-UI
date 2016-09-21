@@ -16,8 +16,7 @@ export default function(window) {
 		{
 			label: 'Quit Sia',
 			click: () => {
-				window.closeToTray = false
-				window.close()
+				window.webContents.send('quit')
 			},
 		},
 	]

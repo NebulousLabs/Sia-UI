@@ -2,7 +2,7 @@
 import Path from 'path'
 import * as Siad from 'sia.js'
 import loadingScreen from './loadingScreen.js'
-import { remote } from 'electron'
+import { remote, ipcRenderer } from 'electron'
 import { scanFolder, unloadPlugins, loadPlugin, setCurrentPlugin, getPluginName } from './plugins.js'
 
 const App = remote.app
@@ -64,8 +64,17 @@ const shutdown = async () => {
 	// Block, displaying Quitting Sia..., until Siad has stopped.
 	if (typeof window.siadProcess !== 'undefined') {
 		setTimeout(() => window.siadProcess.kill('SIGKILL'), 15000)
+		await Siad.call(siadConfig.address, '/daemon/stop')
+		const running = (pid) => {
+			try {
+				process.kill(pid, 0)
+				return true
+			} catch (e) {
+				return false
+			}
+		}
 		const sleep = (ms = 0) => new Promise((r) => setTimeout(r, ms))
-		while (await Siad.isRunning(siadConfig.address) === true) {
+		while (running(window.siadProcess.pid)) {
 			await sleep(200)
 		}
 	}
@@ -73,13 +82,18 @@ const shutdown = async () => {
 	mainWindow.destroy()
 }
 
+// Register an IPC callback for triggering clean shutdown
+ipcRenderer.on('quit', async () => {
+	await shutdown()
+})
+
 // If closeToTray is set, hide the window and cancel the close.
 // On windows, display a balloon notification on first hide
 // to inform users that Sia-UI is still running.  NOTE: returning any value
 // other than `undefined` cancels the close.
-let hasClosed = false
-window.onbeforeunload = async () => {
-	if (mainWindow.closeToTray) {
+if (mainWindow.closeToTray) {
+	let hasClosed = false
+	window.onbeforeunload = () => {
 		mainWindow.hide()
 		if (process.platform === 'win32' && !hasClosed) {
 			Tray.displayBalloon({
@@ -90,11 +104,10 @@ window.onbeforeunload = async () => {
 		}
 		return false
 	}
-	await shutdown()
-	return undefined
 }
 
 // Once the main window loads, start the loading process.
 window.onload = function() {
 	loadingScreen(init)
 }
+
