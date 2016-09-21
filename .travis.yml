@@ -20,6 +20,7 @@ before_script:
 install:
   - wget https://github.com/NebulousLabs/Sia/releases/download/v1.0.1/Sia-v1.0.1-linux-amd64.zip
   - unzip Sia-v1.0.1-linux-amd64.zip
-  - export PATH=$PATH:`pwd`/Sia-v1.0.1-linux-amd64/
+  - mv Sia-v1.0.1-linux-amd64 Sia
+  - export PATH=$PATH:`pwd`/Sia/
   - npm install
 
