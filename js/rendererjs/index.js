@@ -64,7 +64,7 @@ const shutdown = async () => {
 	// Block, displaying Quitting Sia..., until Siad has stopped.
 	if (typeof window.siadProcess !== 'undefined') {
 		setTimeout(() => window.siadProcess.kill('SIGKILL'), 15000)
-		await Siad.call(siadConfig.address, '/daemon/stop')
+		Siad.call(siadConfig.address, '/daemon/stop')
 		const running = (pid) => {
 			try {
 				process.kill(pid, 0)
