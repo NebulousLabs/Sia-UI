@@ -18,8 +18,10 @@
     "glob": "^7.0.4",
     "mocha": "^3.0.1",
     "proxyquire": "^1.7.10",
+    "ps-tree": "^1.1.0",
     "react-addons-test-utils": "^15.1.0",
-    "sinon": "^1.17.4"
+    "sinon": "^1.17.4",
+    "spectron": "^3.4.0"
   },
   "dependencies": {
     "babel-loader": "^6.2.4",

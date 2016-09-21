@@ -98,9 +98,7 @@ export default async function loadingScreen(initUI) {
 		siadProcess.on('error', (e) => showError('Siad couldnt start: ' + e.toString()))
 		siadProcess.on('close', () => showError('Siad unexpectedly closed.'))
 		siadProcess.on('exit', () => showError('Siad unexpectedly exited.'))
-
-		// Send the siadProcess a kill signal when Sia-UI is quit.
-		app.on('quit', () => siadProcess.kill('SIGKILL'))
+		window.siadProcess = siadProcess
 	} catch (e) {
 		showError(e.toString())
 		return
@@ -110,5 +108,10 @@ export default async function loadingScreen(initUI) {
 	while (await Siad.isRunning(siadConfig.address) === false) {
 		await sleep(500)
 	}
+	// Unregister callbacks
+	window.siadProcess.removeAllListeners('error')
+	window.siadProcess.removeAllListeners('exit')
+	window.siadProcess.removeAllListeners('close')
+
 	startUI('Welcome to Sia', initUI)
 }

@@ -12,5 +12,15 @@ branches:
   only:
     - master
 
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3
+
 install:
+  - wget https://github.com/NebulousLabs/Sia/releases/download/v1.0.1/Sia-v1.0.1-linux-amd64.zip
+  - unzip Sia-v1.0.1-linux-amd64.zip
+  - mv Sia-v1.0.1-linux-amd64 Sia
+  - export PATH=$PATH:`pwd`/Sia/
   - npm install
+
