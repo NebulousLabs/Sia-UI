@@ -41,7 +41,8 @@ const pkillSiad = () => new Promise((resolve, reject) => {
 })
 
 // isProcessRunning leverages the semantics of `process.kill` to return true if
-// the input pid is a running process.
+// the input pid is a running process.  If process.kill is initiated with the
+// signal set to '0', no signal is sent, but error checking is still performed.
 const isProcessRunning = (pid) => {
 	try {
 		process.kill(pid, 0)
