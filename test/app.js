@@ -3,7 +3,6 @@ import { expect } from 'chai'
 import psTree from 'ps-tree'
 import * as Siad from 'sia.js'
 
-
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 // getSiadChild takes an input pid and looks at all the child process of that
@@ -60,7 +59,60 @@ describe('startup and shutdown behaviour', () => {
 		// never leave a dangling siad
 		await pkillSiad()
 	})
-	describe('with no siad currently running', function() {
+	describe('window closing behaviour', function() {
+		this.timeout(10000)
+		let app
+		beforeEach(async () => {
+			await pkillSiad()
+			app = new Application({
+				path: './node_modules/electron-prebuilt/dist/electron',
+				args: [
+					'.',
+				],
+			})
+			return app.start()
+		})
+		afterEach(async () => {
+			try {
+				app.webContents.send('quit')
+				await app.stop()
+			} catch (e) {
+			}
+		})
+		it('hides the window and persists in tray if closeToTray = true', async () => {
+			await app.client.waitUntilWindowLoaded()
+			app.webContents.executeJavaScript('window.closeToTray = true')
+			while (await app.client.getText('#overlay-text') !== 'Welcome to Sia') {
+				await sleep(200)
+			}
+			app.browserWindow.close()
+			await sleep(1000)
+			expect(await app.browserWindow.isDestroyed()).to.be.false
+		})
+		it('quits gracefully on close if closeToTray = false', async () => {
+			await app.client.waitUntilWindowLoaded()
+			app.webContents.executeJavaScript('window.closeToTray = false')
+			while (await app.client.getText('#overlay-text') !== 'Welcome to Sia') {
+				await sleep(200)
+			}
+			const pid = await app.mainProcess.pid()
+			const siadProcess = await getSiadChild(pid)
+			expect(siadProcess.exists).to.be.true
+
+			app.browserWindow.close()
+			while (await app.client.isVisible('#overlay-text') === false) {
+				await sleep(10)
+			}
+			while (await app.client.getText('#overlay-text') !== 'Quitting Sia...') {
+				await sleep(10)
+			}
+			while (isProcessRunning(pid)) {
+				await sleep(10)
+			}
+			expect(isProcessRunning(siadProcess.pid)).to.be.false
+		})
+	})
+	describe('startup with no siad currently running', function() {
 		this.timeout(120000)
 		let app
 		before(async () => {
@@ -102,7 +154,7 @@ describe('startup and shutdown behaviour', () => {
 			expect(isProcessRunning(siadProcess.pid)).to.be.false
 		})
 	})
-	describe('with a siad running on start', function() {
+	describe('startup with a siad already running', function() {
 		this.timeout(120000)
 		let app
 		let siadProcess
@@ -144,5 +196,6 @@ describe('startup and shutdown behaviour', () => {
 		})
 	})
 })
+
 /* eslint-enable no-invalid-this */
 /* eslint-enable no-unused-expressions */

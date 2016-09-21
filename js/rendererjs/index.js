@@ -11,6 +11,7 @@ const mainWindow = remote.getCurrentWindow()
 const defaultPluginDirectory = Path.join(App.getAppPath(), './plugins')
 const defaultHomePlugin = 'Files'
 const config = remote.getGlobal('config')
+window.closeToTray = mainWindow.closeToTray
 
 // Called at window.onload by the loading screen.
 // Wait for siad to load, then load the plugin system.
@@ -91,9 +92,9 @@ ipcRenderer.on('quit', async () => {
 // On windows, display a balloon notification on first hide
 // to inform users that Sia-UI is still running.  NOTE: returning any value
 // other than `undefined` cancels the close.
-if (mainWindow.closeToTray) {
-	let hasClosed = false
-	window.onbeforeunload = () => {
+let hasClosed = false
+window.onbeforeunload = () => {
+	if (window.closeToTray) {
 		mainWindow.hide()
 		if (process.platform === 'win32' && !hasClosed) {
 			Tray.displayBalloon({
@@ -104,6 +105,8 @@ if (mainWindow.closeToTray) {
 		}
 		return false
 	}
+	shutdown()
+	return false
 }
 
 // Once the main window loads, start the loading process.
