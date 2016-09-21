@@ -54,7 +54,7 @@ const isProcessRunning = (pid) => {
 // we need functions for mocha's `this` for setting timeouts.
 /* eslint-disable no-invalid-this */
 /* eslint-disable no-unused-expressions */
-describe('siad lifecycle behaviour', () => {
+describe('startup and shutdown behaviour', () => {
 	after(async () => {
 		// never leave a dangling siad
 		await pkillSiad()
