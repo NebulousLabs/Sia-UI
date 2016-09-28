@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# This script creates a Sia-UI release for all 3 platforms: osx (darwin),
+# linux, and windows.  it takes 3 arguments, each one a version.  The first
+# argument is the electron version to package, the second argument is the Sia
+# version to package, and the third argument is version used to label the
+# Sia-UI release.  The archives are written out to release/.
+
 electronVersion=${1:-v1.3.7}
 siaVersion=${2:-v1.0.1}
 uiVersion=${3:-v1.0.2}
@@ -36,6 +42,11 @@ cd release/osx
 wget $electronOSX 
 unzip ./electron*
 mv Electron.app Sia-UI.app
+mv Sia-UI.app/Contents/MacOS/Electron Sia-UI.app/Contents/MacOS/Sia-UI
+sed -i '' 's/\>Electron\</\>Sia-UI\</' Sia-UI.app/Contents/Info.plist > Sia-UI.app/Contents/Info.plist
+sed -i '' 's/\>com.github.electron\</\>com.nebulouslabs.siaui\</' Sia-UI.app/Contents/Info.plist > Sia-UI.app/Contents/Info.plist
+sed -i '' 's/\>electron.icns\</\>icon.icns\</' Sia-UI.app/Contents/Info.plist > Sia-UI.app/Contents/Info.plist
+cp ../../assets/icon.icns Sia-UI.app/Contents/Resources/
 rm -r Sia-UI.app/Contents/Resources/default_app.asar
 mkdir Sia-UI.app/Contents/Resources/app
 (
