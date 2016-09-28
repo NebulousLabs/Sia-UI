@@ -11,7 +11,6 @@
     "babel-register": "^6.16.3",
     "chai": "^3.4.1",
     "chai-as-promised": "^5.1.0",
-    "electron-packager": "^7.5.0",
     "enzyme": "^2.3.0",
     "eslint": "^3.2.0",
     "eslint-plugin-babel": "^3.3.0",
