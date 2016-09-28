@@ -100,7 +100,10 @@ rm -r electron*.zip
 cd ../../
 
 # make zip archives for each release
-zip -r release/Sia-UI-${uiVersion}-win32-x64.zip release/windows
-zip -r release/Sia-UI-${uiVersion}-darwin-x64.zip release/osx
-zip -r release/Sia-UI-${uiVersion}-linux-x64.zip release/linux
+cd release/windows
+zip -r ../Sia-UI-${uiVersion}-win32-x64.zip .
+cd ../osx
+zip -r ../Sia-UI-${uiVersion}-darwin-x64.zip .
+cd ../linux
+zip -r ../Sia-UI-${uiVersion}-linux-x64.zip .
 
