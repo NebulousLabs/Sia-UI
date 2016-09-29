@@ -71,7 +71,7 @@ export default function commandLineReducer(state = initialState, action) {
 		return state.set('currentCommand', action.command)
 
 	case constants.SET_WALLET_PASSWORD:
-		   return state.set('walletPassword', action.walletPassword)
+		return state.set('walletPassword', action.walletPassword)
 
 	case constants.SHOW_WALLET_PROMPT:
 		return state.set('showWalletPrompt', true)

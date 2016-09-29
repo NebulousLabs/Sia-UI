@@ -8,15 +8,15 @@ import * as constants from '../constants/helper.js'
 
 export const checkSiaPath = () => new Promise((resolve, reject) => {
 	fs.stat(SiaAPI.config.attr('siac').path, (err) => {
-		 if (!err) {
+		if (!err) {
 			if (Path.basename(SiaAPI.config.attr('siac').path).indexOf('siac') !== -1) {
 				resolve()
 			} else {
 				reject({ message: 'Invalid binary name.' })
 			}
-		 } else {
+		} else {
 			reject(err)
-		 }
+		}
 	})
 })
 
@@ -288,7 +288,7 @@ export const commandInputHelper = function(e, actions, currentCommand, showComma
 		default:
 			break
 		}
-	 } else if (e.keyCode === 38) {
+	} else if (e.keyCode === 38) {
 		//Up arrow.
 		actions.loadPrevCommand(eventTarget.value)
 		setTimeout( () => {
