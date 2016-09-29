@@ -6,6 +6,7 @@
   "description": "A UI application for interfacing with Sia",
   "license": "MIT",
   "devDependencies": {
+    "babel-core": "^6.16.0",
     "babel-eslint": "^6.0.4",
     "chai": "^3.4.1",
     "chai-as-promised": "^5.1.0",
