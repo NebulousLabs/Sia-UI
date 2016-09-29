@@ -11,7 +11,7 @@ export default function(window) {
 				{ type: 'separator' },
 				{ label: 'Hide Sia', accelerator: 'CmdOrCtrl+H', selector: 'hide:'},
 				{ type: 'separator' },
-				{ label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: () => window.destroy() },
+				{ label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: () => window.webContents.send('quit') },
 			],
 		},
 		{
