@@ -80,6 +80,9 @@ buildWindows() {
 	wget $electronWindows
 	unzip ./electron*
 	mv electron.exe Sia-UI.exe
+	wget https://github.com/electron/rcedit/releases/download/v0.1.0/rcedit.exe
+	wine rcedit.exe Sia-UI.exe --set-icon '../../assets/icon.ico'
+	rm -f rcedit.exe
 	rm resources/default_app.asar
 	mkdir resources/app
 	(
