@@ -4,14 +4,26 @@
 set -e
 
 # This script creates a Sia-UI release for all 3 platforms: osx (darwin),
-# linux, and windows.  it takes 3 arguments, each one a version.  The first
-# argument is the version used to label the Sia-UI release, the second argument
-# is the Sia version to package, and the third argument is the Electron version
-# to package.  The archives are written out to release/.
+# linux, and windows. It takes 5 arguments, the first two arguments are the
+# private and public key used to sign the release archives. The last three
+# arguments are semver strings, the first of which being the ui version, second
+# being the Sia version, and third being the electron version.
 
-uiVersion=${1:-v1.0.2}
-siaVersion=${2:-v1.0.1}
-electronVersion=${3:-v1.3.7}
+if [[ -z $1 || -z $2 ]]; then
+	echo "Usage: $0 privatekey publickey uiversion siaversion electronversion"
+	exit 1
+fi
+
+npm run build
+
+uiVersion=${3:-v1.0.2}
+siaVersion=${4:-v1.0.1}
+electronVersion=${5:-v1.3.7}
+
+# fourth argument is the public key file path.
+keyFile=`readlink -f $1`
+pubkeyFile=`readlink -f $2`
+
 
 electronOSX="https://github.com/electron/electron/releases/download/v1.3.7/electron-${electronVersion}-darwin-x64.zip"
 electronLinux="https://github.com/electron/electron/releases/download/v1.3.7/electron-${electronVersion}-linux-x64.zip"
@@ -22,7 +34,7 @@ siaLinux="https://github.com/NebulousLabs/Sia/releases/download/v1.0.1/Sia-${sia
 siaWindows="https://github.com/NebulousLabs/Sia/releases/download/v1.0.1/Sia-${siaVersion}-windows-amd64.zip"
 
 rm -rf release/
-mkdir -p release/{osx,linux,windows}
+mkdir -p release/{osx,linux,win32}
 
 # package copies all the required javascript, html, and assets into an electron package.
 package() {
@@ -76,7 +88,7 @@ buildLinux() {
 }
 
 buildWindows() {
-	cd release/windows
+	cd release/win32
 	wget $electronWindows
 	unzip ./electron*
 	mv electron.exe Sia-UI.exe
@@ -93,8 +105,8 @@ buildWindows() {
 		mv ./Sia-* ./Sia
 	)
 	package "../../" "resources/app"
-	cp ../../LICENSE .
 	rm -r electron*.zip
+	cp ../../LICENSE .
 }
 
 # make osx release
@@ -106,11 +118,17 @@ buildWindows() {
 # make windows release
 ( buildWindows )
 
-# make zip archives for each release
-cd release/windows
-zip -r ../Sia-UI-${uiVersion}-win32-x64.zip .
-cd ../osx
-zip -r ../Sia-UI-${uiVersion}-darwin-x64.zip .
-cd ../linux
-zip -r ../Sia-UI-${uiVersion}-linux-x64.zip .
+# make signed zip archives for each release
+for os in win32 linux osx; do 
+	(
+		cd release/${os}
+		zip -r ../Sia-UI-${uiVersion}-${os}-x64.zip .
+		cd ..
+		openssl dgst -sha256 -sign $keyFile -out Sia-UI-${uiVersion}-${os}-x64.zip.sig Sia-UI-${uiVersion}-${os}-x64.zip
+		if [[ -n $pubkeyFile ]]; then
+			openssl dgst -sha256 -verify $pubkeyFile -signature Sia-UI-${uiVersion}-${os}-x64.zip.sig Sia-UI-${uiVersion}-${os}-x64.zip
+		fi
+		rm -rf release/${os}
+	)
+done
 
