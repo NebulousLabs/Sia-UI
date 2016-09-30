@@ -6,7 +6,6 @@ import { remote, ipcRenderer } from 'electron'
 import { scanFolder, unloadPlugins, loadPlugin, setCurrentPlugin, getPluginName } from './plugins.js'
 
 const App = remote.app
-const Tray = remote.Tray
 const mainWindow = remote.getCurrentWindow()
 const defaultPluginDirectory = Path.join(App.getAppPath(), './plugins')
 const defaultHomePlugin = 'Files'
@@ -97,7 +96,7 @@ window.onbeforeunload = () => {
 	if (window.closeToTray) {
 		mainWindow.hide()
 		if (process.platform === 'win32' && !hasClosed) {
-			Tray.displayBalloon({
+			mainWindow.tray.displayBalloon({
 				title: 'Sia-UI information',
 				content: 'Sia is still running.  Right click this tray icon to quit or restore Sia.',
 			})

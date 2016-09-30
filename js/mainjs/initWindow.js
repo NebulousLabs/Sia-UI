@@ -1,5 +1,6 @@
-import { Menu, BrowserWindow, app } from 'electron'
+import { Menu, BrowserWindow, Tray, app } from 'electron'
 import appMenu from './appMenu.js'
+import appTray from './trayMenu.js'
 import Path from 'path'
 
 // Save window position and bounds every time the window is moved or resized.
@@ -22,6 +23,10 @@ export default function(config) {
 	// Set mainWindow's closeToTray flag from config.
 	// This should be used in the renderer to cancel close() events using window.onbeforeunload
 	mainWindow.closeToTray = config.closeToTray
+
+	mainWindow.tray = new Tray(Path.join(app.getAppPath(), 'assets', 'tray.png'))
+	mainWindow.tray.setToolTip('Sia - The Collaborative Cloud.')
+	mainWindow.tray.setContextMenu(appTray(mainWindow))
 
 	// Load the window's size and position
 	mainWindow.setBounds(config)
