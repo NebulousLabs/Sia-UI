@@ -50,9 +50,9 @@ buildOSX() {
 	mv Electron.app Sia-UI.app
 	mv Sia-UI.app/Contents/MacOS/Electron Sia-UI.app/Contents/MacOS/Sia-UI
 	# NOTE: this only works with GNU sed, other platforms (like OSX) may fail here
-	sed -i 's/\>Electron\</\>Sia-UI\</' Sia-UI.app/Contents/Info.plist 
-	sed -i 's/\>com.github.electron\</\>com.nebulouslabs.siaui\</' Sia-UI.app/Contents/Info.plist
-	sed -i  's/\>electron.icns\</\>icon.icns\</' Sia-UI.app/Contents/Info.plist
+	sed -i 's/>Electron</>Sia-UI</' Sia-UI.app/Contents/Info.plist 
+	sed -i 's/>com.github.electron\</>com.nebulouslabs.siaui</' Sia-UI.app/Contents/Info.plist
+	sed -i 's/>electron.icns</>icon.icns</' Sia-UI.app/Contents/Info.plist
 	cp ../../assets/icon.icns Sia-UI.app/Contents/Resources/
 	rm -r Sia-UI.app/Contents/Resources/default_app.asar
 	mkdir Sia-UI.app/Contents/Resources/app
