@@ -11,7 +11,6 @@
     "babel-register": "^6.16.3",
     "chai": "^3.4.1",
     "chai-as-promised": "^5.1.0",
-    "electron-packager": "^7.5.0",
     "enzyme": "^2.3.0",
     "eslint": "^3.2.0",
     "eslint-plugin-babel": "^3.3.0",
@@ -56,18 +55,7 @@
     "test-args": "mocha --require test/dom.setup.js --compilers js:babel-register --recursive ./test",
     "test": "npm run lint && npm run build && npm run test-args",
     "lint": "eslint --max-warnings 0 ./index.js ./plugins ./js ./test",
-    "lint-fix": "eslint --fix ./index.js ./plugins ./js ./test",
-    "sia-repo": "go get -u github.com/NebulousLabs/Sia/...",
-    "sia-import": "(test -d Sia || mkdir -p Sia) && (cp $GOPATH/bin/siad Sia & cp $GOPATH/bin/siac Sia)",
-    "sia-kill": "killall siad; while pgrep siad; do sleep .5; done;",
-    "sia-refresh": "npm run sia-kill && rm -rf Sia && npm run sia-import",
-    "release-args": "webpack && electron-packager . Sia-UI --app-version=1.0.2 --overwrite --prune --ignore='(node_modules|release|config.json|errors.log)' --out=release/v1.0.2 --icon=assets/icon",
-    "release": "npm run release-args -- --all",
-    "release-lin64": "npm run release-args -- --platform=linux --arch=x64 && ./.finalizeRelease.sh linux-x64",
-    "release-lin32": "npm run release-args -- --platform=linux --arch=ia32 && ./.finalizeRelease.sh linux-ia32",
-    "release-win64": "npm run release-args -- --platform=win32 --arch=x64 && ./.finalizeRelease.sh win32-x64",
-    "release-win32": "npm run release-args -- --platform=win32 --arch=ia32 && ./.finalizeRelease.sh win32-ia32",
-    "release-mac": "npm run release-args -- --platform=darwin --arch=x64 && ./.finalizeRelease.sh darwin-x64"
+    "lint-fix": "eslint --fix ./index.js ./plugins ./js ./test"
   },
   "repository": {
     "type": "git",
