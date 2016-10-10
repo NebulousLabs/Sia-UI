@@ -25,8 +25,8 @@ const TransactionList = ({transactions}) => {
 		}
 		return (
 			<tr key={key}>
-				<td>{valueData}</td>
-				<td>{txn.transactionid}</td>
+				<td className="txval">{valueData}</td>
+				<td className="txid">{txn.transactionid}</td>
 				<td>{txn.confirmed ? <i className="fa fa-check-square confirmed-icon"> Confirmed </i> : <i className="fa fa-clock-o unconfirmed-icon"> Unconfirmed </i>}</td>
 			</tr>
 		)
