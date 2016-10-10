@@ -33,9 +33,6 @@ export default function(config) {
 	mainWindow.on('move', onBoundsChange(mainWindow, config))
 	mainWindow.on('resize', onBoundsChange(mainWindow, config))
 
-	// Enforce minimum window size.
-	mainWindow.setMinimumSize(1024, 768)
-
 	// Load the index.html of the app.
 	mainWindow.loadURL(Path.join('file://', app.getAppPath(), 'index.html'))
 	// Choose not to show the menubar
