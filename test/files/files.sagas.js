@@ -193,6 +193,12 @@ describe('files plugin sagas', () => {
 		await sleep(10)
 		expect(store.getState().files.get('uploading')).to.deep.equal(testUploads)
 		expect(SiaAPI.showError.called).to.be.false
+		testUploads = [
+		]
+		store.dispatch(actions.getUploads())
+		await sleep(10)
+		expect(store.getState().files.get('uploading')).to.deep.equal(testUploads)
+		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('sets downloads on getDownloads', async () => {
 		testDownloads = [
