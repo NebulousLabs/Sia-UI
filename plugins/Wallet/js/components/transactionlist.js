@@ -25,6 +25,7 @@ const TransactionList = ({transactions}) => {
 		}
 		return (
 			<tr key={key}>
+				<td>{txn.confirmationtimestamp.toString()}</td>
 				<td>{valueData}</td>
 				<td className="txid">{txn.transactionid}</td>
 				<td>{txn.confirmed ? <i className="fa fa-check-square confirmed-icon"> Confirmed </i> : <i className="fa fa-clock-o unconfirmed-icon"> Unconfirmed </i>}</td>
@@ -37,6 +38,7 @@ const TransactionList = ({transactions}) => {
 			<table className="pure-table transaction-table">
 				<thead>
 					<tr>
+						<th>Timestamp</th>
 						<th>Net Value</th>
 						<th>Transaction ID</th>
 						<th>Confirmation Status</th>

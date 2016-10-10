@@ -135,13 +135,13 @@ describe('wallet transaction list component', () => {
 	it('renders transaction net values correctly', () => {
 		const txnnodes = txnlistComponent.find('.transaction-table tbody').children()
 		for (let nodeindex = 0; nodeindex < txnnodes.length; nodeindex++) {
-			expect(txnnodes.at(nodeindex).find('td').at(0).text()).to.equal(expectedValues.get(nodeindex))
+			expect(txnnodes.at(nodeindex).find('td').at(1).text()).to.equal(expectedValues.get(nodeindex))
 		}
 	})
 	it('renders transaction ids correctly', () => {
 		const txnnodes = txnlistComponent.find('.transaction-table tbody').children()
 		for (let nodeindex = 0; nodeindex < txnnodes.length; nodeindex++) {
-			expect(txnnodes.at(nodeindex).find('td').at(1).text()).to.equal(testTxns.get(nodeindex).transactionid)
+			expect(txnnodes.at(nodeindex).find('td').at(2).text()).to.equal(testTxns.get(nodeindex).transactionid)
 		}
 	})
 	it('renders transaction confirmation icon correctly', () => {
