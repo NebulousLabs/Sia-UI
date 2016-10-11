@@ -66,6 +66,9 @@
 .transaction-list table td {
 	font-size: 11px;
 }
+.txid {
+	font-family: monospace;
+}
 .transaction-list table th {
 	font-size: 14px;
 	text-align: center;
