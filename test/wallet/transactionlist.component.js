@@ -14,7 +14,7 @@ const testTxns = List([
 			totalMiner: new BigNumber(0),
 		},
 		transactionid: 'testid',
-		confirmationtimestamp: 1000,
+		confirmationtimestamp: new Date(),
 	},
 	{
 		confirmed: true,
@@ -24,7 +24,7 @@ const testTxns = List([
 			totalMiner: new BigNumber(0),
 		},
 		transactionid: 'testid1',
-		confirmationtimestamp: 1001,
+		confirmationtimestamp: new Date(),
 	},
 	{
 		confirmed: true,
@@ -34,7 +34,7 @@ const testTxns = List([
 			totalMiner: new BigNumber(10),
 		},
 		transactionid: 'testid2',
-		confirmationtimestamp: 1002,
+		confirmationtimestamp: new Date(),
 	},
 	{
 		confirmed: true,
@@ -44,7 +44,7 @@ const testTxns = List([
 			totalMiner: new BigNumber(0),
 		},
 		transactionid: 'testid3',
-		confirmationtimestamp: 1003,
+		confirmationtimestamp: new Date(),
 	},
 	{
 		confirmed: true,
@@ -54,7 +54,7 @@ const testTxns = List([
 			totalMiner: new BigNumber(0),
 		},
 		transactionid: 'testid4',
-		confirmationtimestamp: 1004,
+		confirmationtimestamp: new Date(),
 	},
 	{
 		confirmed: true,
@@ -64,7 +64,7 @@ const testTxns = List([
 			totalMiner: new BigNumber(-10),
 		},
 		transactionid: 'testid5',
-		confirmationtimestamp: 1005,
+		confirmationtimestamp: new Date(),
 	},
 	{
 		confirmed: false,
@@ -74,7 +74,7 @@ const testTxns = List([
 			totalMiner: new BigNumber(0),
 		},
 		transactionid: 'testid6',
-		confirmationtimestamp: 1006,
+		confirmationtimestamp: new Date(),
 	},
 	{
 		confirmed: false,
@@ -84,7 +84,7 @@ const testTxns = List([
 			totalMiner: new BigNumber(0),
 		},
 		transactionid: 'testid7',
-		confirmationtimestamp: 1007,
+		confirmationtimestamp: new Date(),
 	},
 	{
 		confirmed: false,
@@ -94,7 +94,7 @@ const testTxns = List([
 			totalMiner: new BigNumber(1),
 		},
 		transactionid: 'testid8',
-		confirmationtimestamp: 1008,
+		confirmationtimestamp: new Date(),
 	},
 	{
 		confirmed: false,
@@ -104,7 +104,7 @@ const testTxns = List([
 			totalMiner: new BigNumber(0),
 		},
 		transactionid: 'testid9',
-		confirmationtimestamp: 1009,
+		confirmationtimestamp: new Date(),
 	},
 ])
 

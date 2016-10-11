@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import { List } from 'immutable'
 
+
 const TransactionList = ({transactions}) => {
 	if (transactions.size === 0) {
 		return (
@@ -8,6 +9,14 @@ const TransactionList = ({transactions}) => {
 				<h3> No recent transactions </h3>
 			</div>
 		)
+	}
+	const prettyTimestamp = (timestamp) => {
+		const yesterday = new Date()
+		yesterday.setHours(yesterday.getHours() -24)
+		if (timestamp > yesterday) {
+			return 'Today at ' + timestamp.getHours() + ':' + timestamp.getMinutes()
+		}
+		return timestamp.getFullYear() + '-' + timestamp.getMonth() + '-' + timestamp.getDay() + ' ' + timestamp.getHours() + ':' + timestamp.getMinutes()
 	}
 	const transactionComponents = transactions.map((txn, key) => {
 		let valueData = ''
@@ -25,7 +34,7 @@ const TransactionList = ({transactions}) => {
 		}
 		return (
 			<tr key={key}>
-				<td>{txn.confirmationtimestamp.toString()}</td>
+				<td>{prettyTimestamp(txn.confirmationtimestamp)}</td>
 				<td>{valueData}</td>
 				<td className="txid">{txn.transactionid}</td>
 				<td>{txn.confirmed ? <i className="fa fa-check-square confirmed-icon"> Confirmed </i> : <i className="fa fa-clock-o unconfirmed-icon"> Unconfirmed </i>}</td>
