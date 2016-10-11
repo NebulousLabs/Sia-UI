@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { readableFilesize, ls } from '../../plugins/Files/js/sagas/helpers.js'
+import { parseUploads, readableFilesize, ls } from '../../plugins/Files/js/sagas/helpers.js'
 import { List } from 'immutable'
 
 describe('files plugin helper functions', () => {
@@ -60,4 +60,25 @@ describe('files plugin helper functions', () => {
 			expect(output.toObject()).to.deep.equal(expectedOutputs[path].toObject())
 		}
 	})
+	it('filters uploads correctly in parseUploads', () => {
+		expect(parseUploads([
+			{uploadprogress: 50, siapath: 'test', available: true},
+			{uploadprogress: 50, siapath: 'test', available: true},
+			{uploadprogress: 100, siapath: 'test', available: true},
+			{uploadprogress: 100, siapath: 'test', available: true},
+		]).size).to.equal(2)
+		expect(parseUploads([
+			{uploadprogress: 100, siapath: 'test', available: true},
+			{uploadprogress: 100, siapath: 'test', available: true},
+			{uploadprogress: 100, siapath: 'test', available: true},
+			{uploadprogress: 100, siapath: 'test', available: true},
+		]).size).to.equal(0)
+		expect(parseUploads([
+			{uploadprogress: 99.8, siapath: 'test', available: true},
+			{uploadprogress: 99.5, siapath: 'test', available: true},
+			{uploadprogress: 50, siapath: 'test', available: true},
+			{uploadprogress: 50, siapath: 'test', available: true},
+		]).size).to.equal(2)
+	})
 })
+
