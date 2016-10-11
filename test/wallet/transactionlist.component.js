@@ -144,6 +144,37 @@ describe('wallet transaction list component', () => {
 			expect(txnnodes.at(nodeindex).find('td').at(2).text()).to.equal(testTxns.get(nodeindex).transactionid)
 		}
 	})
+	it('renders timestamps correctly', () => {
+		const now = new Date()
+		const timestamps = [
+			now,
+			new Date(2016, 5, 10, 3, 10),
+			new Date(2015, 11, 5, 10, 30),
+			new Date(2016, 2, 25, 6, 50),
+		]
+		const expectedTimestamps = [
+			'Today at ' + now.getHours() + ':' + now.getMinutes(),
+			'2016-06-10 03:10',
+			'2015-12-05 10:30',
+			'2016-03-25 06:50',
+		]
+		const txns = List(timestamps.map((timestamp) => ({
+			confirmed: true,
+			transactionsums: {
+				totalSiacoin: new BigNumber(0),
+				totalSiafund: new BigNumber(0),
+				totalMiner: new BigNumber(0),
+			},
+			transactionid: 'testid',
+			confirmationtimestamp: timestamp,
+		})))
+
+		const component = shallow(<TransactionList transactions={txns} />)
+		const nodes = component.find('.transaction-table tbody').children()
+		for (let nodeindex = 0; nodeindex < nodes.length; nodeindex++) {
+			expect(nodes.at(nodeindex).find('td').at(0).text()).to.equal(expectedTimestamps[nodeindex])
+		}
+	})
 	it('renders transaction confirmation icon correctly', () => {
 		const txnnodes = txnlistComponent.find('.transaction-table tbody').children()
 		for (let nodeindex = 0; nodeindex < txnnodes.length; nodeindex++) {
