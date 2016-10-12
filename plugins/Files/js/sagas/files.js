@@ -227,9 +227,6 @@ export function* watchUploadFile() {
 export function* watchDownloadFile() {
 	yield *takeEvery(constants.DOWNLOAD_FILE, downloadFileSaga)
 }
-export function* watchGetStorageMetrics() {
-	yield *takeEvery(constants.GET_STORAGE_METRICS, getStorageMetricsSaga)
-}
 export function* watchRenameFile() {
 	yield *takeEvery(constants.RENAME_FILE, renameFileSaga)
 }
