@@ -56,6 +56,10 @@ function* getAllowanceSaga() {
 	try {
 		const response = yield siadCall('/renter')
 		const allowanceSC = SiaAPI.hastingsToSiacoins(response.settings.allowance.funds)
+
+		// remove contractspending from the spending calculation
+		delete response.financialmetrics.contractspending
+
 		const spendingSC = totalSpending(response.financialmetrics)
 		yield put(actions.receiveAllowance(allowanceSC.toString()))
 		yield put(actions.receiveSpending(spendingSC.toString()))

@@ -28,6 +28,8 @@ export const siadCall = (uri) => new Promise((resolve, reject) => {
 export const totalSpending = (financialmetrics) =>
 	Object.values(financialmetrics)
 	      .reduce((sum, spendingmetric) => sum.plus(SiaAPI.hastingsToSiacoins(spendingmetric)), new BigNumber(0))
+        .round(2)
+	      .toString()
 
 
 // Take a number of bytes and return a sane, human-readable size.
