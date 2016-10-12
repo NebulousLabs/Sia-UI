@@ -102,6 +102,49 @@ export const readdirRecursive = (path, files) => {
 	return filelist
 }
 
+const bytesPerGB = new BigNumber('1000000000')
+
+// Compute the estimated price per byte/hastings given a list of hosts.
+export const estimatedStoragePriceH = (hosts) => {
+	const hostPrices = List(hosts).map((host) => new BigNumber(host.storageprice))
+
+	// Compute the average host price.
+	// Multiply this average by 9 to assume a redundancy of 6 with 25% of the files being downloaded at 2x monthly price
+	// TODO: this functionality should be in the api.
+	const validHosts = hostPrices.sortBy((price) => price.toNumber())
+	                             .take(36)
+	                             .filter((price) => price.lt(SiaAPI.siacoinsToHastings(500000))) // filter outliers
+
+	return validHosts.reduce((sum, price) => sum.add(price), new BigNumber(0))
+	                 .dividedBy(validHosts.size)
+	                 .times(9)
+}
+
+// Maximum estimated storage is 1TB
+const maxEstimatedStorage = 1000000000000
+
+// Take an allowance and return a number of bytes this allowance
+// can be used to store, given a list of hosts to store data on.
+export const allowanceStorage = (funds, hosts, period) => {
+	const allowanceFunds = new BigNumber(funds)
+	let costPerB = estimatedStoragePriceH(hosts).times(period)
+	// If costPerB is zero, set it to some sane, low, amount instead
+	if (costPerB.isZero()) {
+		costPerB = new BigNumber('10000')
+	}
+	const storageBytes = Math.min(maxEstimatedStorage, allowanceFunds.dividedBy(costPerB).toNumber())
+	return readableFilesize(storageBytes)
+}
+
+// Compute the estimated price given a List of hosts, size to store, and duration.
+// `duration` is in blocks, size is in GB.
+// returns a `BigNumber` representing the average number of Siacoins per GB per duration
+export const estimatedStoragePriceGBSC = (hosts, size, duration) => {
+	const pricePerByteSC = SiaAPI.hastingsToSiacoins(estimatedStoragePriceH(hosts))
+	const averagePricePerGBBlock = pricePerByteSC.times(bytesPerGB)
+	return averagePricePerGBBlock.times(size).times(duration).add('2000')
+}
+
 // Parse a response from `/renter/downloads`
 // return a list of file downloads
 export const parseDownloads = (since, downloads) => List(downloads)

@@ -25,6 +25,14 @@ export const receiveSpending = (spending) => ({
 	type: constants.RECEIVE_SPENDING,
 	spending,
 })
+export const getStorageEstimate = (funds) => ({
+	type: constants.GET_STORAGE_ESTIMATE,
+	funds,
+})
+export const setStorageEstimate = (estimate) => ({
+	type: constants.SET_STORAGE_ESTIMATE,
+	estimate,
+})
 export const setAllowanceCompleted = () => ({
 	type: constants.SET_ALLOWANCE_COMPLETED,
 })

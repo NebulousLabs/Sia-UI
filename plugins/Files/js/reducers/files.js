@@ -23,6 +23,7 @@ const initialState = Map({
 	contractCount: 0,
 	allowance: '0',
 	spending: '0',
+	storageEstimate: '0 B',
 })
 
 export default function filesReducer(state = initialState, action) {
@@ -35,6 +36,8 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('allowance', action.allowance)
 	case constants.RECEIVE_SPENDING:
 		return state.set('spending', action.spending)
+	case constants.SET_STORAGE_ESTIMATE:
+		return state.set('storageEstimate', action.estimate)
 	case constants.RECEIVE_FILES:
 		return state.set('files', action.files)
 		            .set('workingDirectoryFiles', ls(action.files, state.get('path')))

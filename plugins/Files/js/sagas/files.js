@@ -4,7 +4,7 @@ import Path from 'path'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import { List } from 'immutable'
-import { totalSpending, sendError, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
+import { allowanceStorage, totalSpending, sendError, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
 
 const blockMonth = 4320
 const allowanceMonths = 3
@@ -30,6 +30,16 @@ function* getFilesSaga() {
 		yield put(actions.receiveFiles(files))
 	} catch (e) {
 		sendError(e)
+	}
+}
+
+function* getStorageEstimateSaga(action) {
+	try {
+		const response = yield siadCall('/hostdb/active')
+		const estimate = allowanceStorage(SiaAPI.siacoinsToHastings(action.funds), response.hosts, allowancePeriod)
+		yield put(actions.setStorageEstimate(estimate))
+	} catch (e) {
+		console.error(e)
 	}
 }
 
@@ -229,4 +239,7 @@ export function* watchDownloadFile() {
 }
 export function* watchRenameFile() {
 	yield *takeEvery(constants.RENAME_FILE, renameFileSaga)
+}
+export function* watchGetStorageEstimate() {
+	yield *takeEvery(constants.GET_STORAGE_ESTIMATE, getStorageEstimateSaga)
 }
