@@ -7,9 +7,7 @@ const ContractorStatus = ({settingAllowance, contractCount}) => (
 				<i className="fa fa-circle-o-notch fa-spin fa-2x fa-fw" />
 				<span>Forming Contracts...</span>
 			</div>
-			) : (
-			<span> {contractCount} contracts </span>
-			)
+			) : ( <span> {contractCount} contracts </span> )
 		}
 	</div>
 )
