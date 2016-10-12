@@ -5,7 +5,7 @@ import Directory from './directory.js'
 import Path from 'path'
 import SearchField from '../containers/searchfield.js'
 
-const FileList = ({files, searchResults, path, showSearchField, actions}) => {
+const FileList = ({files, selected, searchResults, path, showSearchField, actions}) => {
 	const onDirectoryClick = (directory) => () => actions.setPath(Path.join(path, directory.name))
 	const onBackClick = () => {
 		if (path === '') {
@@ -39,8 +39,10 @@ const FileList = ({files, searchResults, path, showSearchField, actions}) => {
 			actions.downloadFile(file.siapath, Path.join(downloadpath[0], Path.basename(file.siapath)))
 		}
 		const onDeleteClick = () => actions.showDeleteDialog(file.siapath)
+		const onFileClick = () => actions.selectFile(file.siapath)
+		console.log(selected.has(file.siapath))
 		return (
-			<File key={key} filename={file.name} filesize={file.size} onRenameClick={onRenameClick} onDownloadClick={onDownloadClick} onDeleteClick={onDeleteClick} />
+			<File key={key} selected={selected.includes(file.siapath)} filename={file.name} filesize={file.size} onRenameClick={onRenameClick} onDownloadClick={onDownloadClick} onDeleteClick={onDeleteClick} onSelect={onFileClick} />
 		)
 	})
 	return (
@@ -56,6 +58,7 @@ const FileList = ({files, searchResults, path, showSearchField, actions}) => {
 
 FileList.propTypes = {
 	files: PropTypes.instanceOf(List),
+	selected: PropTypes.instanceOf(List).isRequired,
 	searchResults: PropTypes.instanceOf(List),
 	path: PropTypes.string.isRequired,
 	showSearchField: PropTypes.bool.isRequired,

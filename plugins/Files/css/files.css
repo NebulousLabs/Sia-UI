@@ -32,6 +32,9 @@
 	height: 100%;
 	width: 100%;
 }
+.filebrowser-file .selected {
+	border: 1px solid #00CBA0;
+}
 .file-transfers {
 	width: 400px;
 	height: 100%;

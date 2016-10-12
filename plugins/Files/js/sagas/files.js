@@ -233,11 +233,10 @@ function* renameFileSaga(action) {
 }
 
 export function* watchSetAllowance() {
-	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
-}
-export function* watchSetAllowanceProgress() {
-	while (yield take(constants.SET_ALLOWANCE)) {
+	while (true) {
+		const allowance = yield take(constants.SET_ALLOWANCE)
 		const progressTask = yield fork(setAllowanceProgressBarSaga)
+		yield fork(setAllowanceSaga, allowance)
 		yield take(constants.SET_ALLOWANCE_COMPLETED)
 		yield cancel(progressTask)
 	}

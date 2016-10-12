@@ -10,6 +10,7 @@ const initialState = Map({
 	searchResults: List(),
 	uploading: List(),
 	downloading: List(),
+	selected: List(),
 	path: '',
 	searchText: '',
 	uploadSource: '',
@@ -38,6 +39,9 @@ export default function filesReducer(state = initialState, action) {
 	case constants.SET_PATH:
 		return state.set('path', action.path)
 		            .set('workingDirectoryFiles', ls(state.get('files'), action.path))
+								.set('selected', List())
+	case constants.SELECT_FILE:
+		return state.set('selected', state.get('selected').push(action.siapath))
 	case constants.SHOW_ALLOWANCE_DIALOG:
 		return state.set('showAllowanceDialog', true)
 	case constants.CLOSE_ALLOWANCE_DIALOG:
