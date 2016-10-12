@@ -18,6 +18,7 @@ const initialState = Map({
 	showFileTransfers: false,
 	showDeleteDialog: false,
 	showRenameDialog: false,
+	settingAllowance: false,
 	dragging: false,
 	contractCount: 0,
 	allowance: '0',
@@ -26,6 +27,10 @@ const initialState = Map({
 
 export default function filesReducer(state = initialState, action) {
 	switch (action.type) {
+	case constants.SET_ALLOWANCE:
+		return state.set('settingAllowance', true)
+	case constants.SET_ALLOWANCE_COMPLETED:
+		return state.set('settingAllowance', false)
 	case constants.RECEIVE_ALLOWANCE:
 		return state.set('allowance', action.allowance)
 	case constants.RECEIVE_SPENDING:

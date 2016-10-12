@@ -9,6 +9,7 @@ import RenameDialog from '../containers/renamedialog.js'
 import TransfersButton from '../containers/transfersbutton.js'
 import FileTransfers from '../containers/filetransfers.js'
 import UsageStats from '../containers/usagestats.js'
+import ContractorStatus from '../containers/contractorstatus.js'
 import DragOverlay from './dragoverlay.js'
 
 const FileBrowser = ({dragging, showRenameDialog, showUploadDialog, showDeleteDialog, showFileTransfers, actions}) => {
@@ -41,6 +42,7 @@ const FileBrowser = ({dragging, showRenameDialog, showUploadDialog, showDeleteDi
 				{dragging ? <DragOverlay /> : null}
 				<div className="files-toolbar">
 					<UsageStats />
+					<ContractorStatus />
 					<div className="buttons">
 						<SetAllowanceButton />
 						<SearchButton />

@@ -4,7 +4,7 @@ import Path from 'path'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import { List } from 'immutable'
-import { totalSpending, sendError, allowanceStorage, siadCall, totalUsage, readdirRecursive, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
+import { totalSpending, sendError, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
 
 const blockMonth = 4320
 const allowanceMonths = 3
@@ -33,24 +33,6 @@ function* getFilesSaga() {
 	}
 }
 
-// Get the storage usage as well as the available contract storage.
-function* getStorageMetricsSaga() {
-	try {
-		let response = yield siadCall('/renter/files')
-		const files = response.files
-		response = yield siadCall('/renter')
-		const funds = response.settings.allowance.funds
-		response = yield siadCall('/hostdb/active')
-		const hosts = response.hosts
-		const available = allowanceStorage(funds, hosts, allowancePeriod)
-		const usage = totalUsage(List(files))
-		yield put(actions.receiveStorageMetrics(usage, available))
-	} catch (e) {
-		yield put(actions.receiveStorageMetrics('-- MB', '-- MB'))
-		console.error(e)
-	}
-}
-
 // Get the renter's current allowance and spending.
 function* getAllowanceSaga() {
 	try {
@@ -72,6 +54,7 @@ function* getAllowanceSaga() {
 function* setAllowanceSaga(action) {
 	try {
 		const newAllowance = SiaAPI.siacoinsToHastings(action.funds)
+		yield put(actions.closeAllowanceDialog())
 		yield siadCall({
 			url: '/renter',
 			method: 'POST',
@@ -82,26 +65,10 @@ function* setAllowanceSaga(action) {
 			},
 		})
 		yield put(actions.setAllowanceCompleted())
-		yield put(actions.closeAllowanceDialog())
 	} catch (e) {
 		sendError(e)
 		yield put(actions.setAllowanceCompleted())
 		yield put(actions.closeAllowanceDialog())
-	}
-}
-
-// Calculate monthly storage cost from a requested monthly storage amount
-function* calculateStorageCostSaga(action) {
-	try {
-		const response = yield siadCall('/hostdb/active')
-		const cost = estimatedStoragePriceGBSC(response.hosts, action.size, allowancePeriod)
-		yield put(actions.setStorageCost(cost.round(3).toString()))
-		yield put(actions.setStorageSize(action.size))
-	} catch (e) {
-		yield put(actions.setStorageSize(''))
-		yield put(actions.setStorageCost('0'))
-		yield put(actions.closeAllowanceDialog())
-		sendError(e)
 	}
 }
 
@@ -250,9 +217,6 @@ export function* watchGetWalletBalance() {
 }
 export function* watchUploadFolder() {
 	yield *takeEvery(constants.UPLOAD_FOLDER, uploadFolderSaga)
-}
-export function* watchCalculateStorageCost() {
-	yield *takeEvery(constants.CALCULATE_STORAGE_COST, calculateStorageCostSaga)
 }
 export function* watchGetContractCount() {
 	yield *takeEvery(constants.GET_CONTRACT_COUNT, getContractCountSaga)
