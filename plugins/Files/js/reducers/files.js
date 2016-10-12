@@ -22,6 +22,7 @@ const initialState = Map({
 	showRenameDialog: false,
 	dragging: false,
 	contractCount: 0,
+	allowance: '0',
 })
 
 export default function filesReducer(state = initialState, action) {
@@ -34,6 +35,8 @@ export default function filesReducer(state = initialState, action) {
 		            .set('workingDirectoryFiles', ls(action.files, state.get('path')))
 								// ensure `selected` contains no nonexistant files.
 								.set('selected', state.get('selected').intersect(action.files.map((file) => file.siapath)))
+	case constants.SET_ALLOWANCE:
+		return state.set('allowance', action.funds)
 	case constants.SET_SEARCH_TEXT:
 		const results = searchFiles(state.get('files'), action.text, state.get('path'))
 		return state.set('searchResults', results)

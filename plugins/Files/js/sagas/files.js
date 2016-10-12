@@ -54,8 +54,7 @@ function* getStorageMetricsSaga() {
 // Set the user's renter allowance.
 function* setAllowanceSaga(action) {
 	try {
-		const response = yield siadCall('/renter')
-		const newAllowance = SiaAPI.siacoinsToHastings(action.funds).add(response.settings.allowance.funds)
+		const newAllowance = SiaAPI.siacoinsToHastings(action.funds)
 		yield siadCall({
 			url: '/renter',
 			method: 'POST',
