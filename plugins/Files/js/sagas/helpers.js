@@ -23,6 +23,13 @@ export const siadCall = (uri) => new Promise((resolve, reject) => {
 	})
 })
 
+// totalSpending takes a `financialmetrics` object returned from the /renter
+// API and returns the total combined spending.
+export const totalSpending = (financialmetrics) =>
+	Object.values(financialmetrics)
+	      .reduce((sum, spendingmetric) => sum.plus(SiaAPI.hastingsToSiacoins(spendingmetric)), new BigNumber(0))
+
+
 // Take a number of bytes and return a sane, human-readable size.
 export const readableFilesize = (bytes) => {
 	const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
@@ -137,6 +144,7 @@ export const searchFiles = (files, text, path) => {
 		uploadprogress: Math.floor(file.uploadprogress).toString(),
 	}))
 }
+
 
 const bytesPerGB = new BigNumber('1000000000')
 

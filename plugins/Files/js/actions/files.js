@@ -17,6 +17,14 @@ export const receiveFiles = (files) => ({
 export const getAllowance = () => ({
 	type: constants.GET_ALLOWANCE,
 })
+export const receiveAllowance = (allowance) => ({
+	type: constants.RECEIVE_ALLOWANCE,
+	allowance,
+})
+export const receiveSpending = (spending) => ({
+	type: constants.RECEIVE_SPENDING,
+	spending,
+})
 export const setAllowanceCompleted = () => ({
 	type: constants.SET_ALLOWANCE_COMPLETED,
 })

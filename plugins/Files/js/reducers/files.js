@@ -3,8 +3,6 @@ import * as constants from '../constants/files.js'
 import { ls, searchFiles } from '../sagas/helpers.js'
 
 const initialState = Map({
-	storageUsage: '0 MB',
-	storageAvailable: '0 MB',
 	files: List(),
 	workingDirectoryFiles: List(),
 	searchResults: List(),
@@ -23,13 +21,15 @@ const initialState = Map({
 	dragging: false,
 	contractCount: 0,
 	allowance: '0',
+	spending: '0',
 })
 
 export default function filesReducer(state = initialState, action) {
 	switch (action.type) {
-	case constants.RECEIVE_STORAGE_METRICS:
-		return state.set('storageUsage', action.usage)
-		            .set('storageAvailable', action.available)
+	case constants.RECEIVE_ALLOWANCE:
+		return state.set('allowance', action.allowance)
+	case constants.RECEIVE_SPENDING:
+		return state.set('spending', action.spending)
 	case constants.RECEIVE_FILES:
 		return state.set('files', action.files)
 		            .set('workingDirectoryFiles', ls(action.files, state.get('path')))

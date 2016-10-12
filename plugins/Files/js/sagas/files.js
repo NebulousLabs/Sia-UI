@@ -1,10 +1,10 @@
 import { takeEvery } from 'redux-saga'
-import { put, take, fork, cancel } from 'redux-saga/effects'
+import { put } from 'redux-saga/effects'
 import Path from 'path'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import { List } from 'immutable'
-import { sendError, allowanceStorage, siadCall, totalUsage, readdirRecursive, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
+import { totalSpending, sendError, allowanceStorage, siadCall, totalUsage, readdirRecursive, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
 
 const blockMonth = 4320
 const allowanceMonths = 3
@@ -47,6 +47,19 @@ function* getStorageMetricsSaga() {
 		yield put(actions.receiveStorageMetrics(usage, available))
 	} catch (e) {
 		yield put(actions.receiveStorageMetrics('-- MB', '-- MB'))
+		console.error(e)
+	}
+}
+
+// Get the renter's current allowance and spending.
+function* getAllowanceSaga() {
+	try {
+		const response = yield siadCall('/renter')
+		const allowanceSC = SiaAPI.hastingsToSiacoins(response.settings.allowance.funds)
+		const spendingSC = totalSpending(response.financialmetrics)
+		yield put(actions.receiveAllowance(allowanceSC.toString()))
+		yield put(actions.receiveSpending(spendingSC.toString()))
+	} catch (e) {
 		console.error(e)
 	}
 }
@@ -94,30 +107,6 @@ function* getWalletBalanceSaga() {
 		const response = yield siadCall('/wallet')
 		const confirmedBalance = SiaAPI.hastingsToSiacoins(response.confirmedsiacoinbalance).round(2).toString()
 		yield put(actions.receiveWalletBalance(confirmedBalance))
-	} catch (e) {
-		sendError(e)
-	}
-}
-
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-
-function* setAllowanceProgressBarSaga() {
-	try {
-		let response = yield siadCall('/renter/contracts')
-		if (!response.contracts) {
-			return
-		}
-		const initialContracts = response.contracts.length
-		while (true) {
-			response = yield siadCall('/renter/contracts')
-			const deltaContracts = response.contracts.length - initialContracts
-			if (deltaContracts >= allowanceHosts) {
-				break
-			}
-			const progress = Math.floor((deltaContracts / allowanceHosts) * 100)
-			yield put(actions.setAllowanceProgress(progress))
-			yield delay(500)
-		}
 	} catch (e) {
 		sendError(e)
 	}
@@ -232,13 +221,10 @@ function* renameFileSaga(action) {
 }
 
 export function* watchSetAllowance() {
-	while (true) {
-		const allowance = yield take(constants.SET_ALLOWANCE)
-		const progressTask = yield fork(setAllowanceProgressBarSaga)
-		yield fork(setAllowanceSaga, allowance)
-		yield take(constants.SET_ALLOWANCE_COMPLETED)
-		yield cancel(progressTask)
-	}
+	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
+}
+export function* watchGetAllowance() {
+	yield *takeEvery(constants.GET_ALLOWANCE, getAllowanceSaga)
 }
 export function* watchGetDownloads() {
 	yield *takeEvery(constants.GET_DOWNLOADS, getDownloadsSaga)
