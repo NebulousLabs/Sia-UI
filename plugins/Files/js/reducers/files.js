@@ -32,6 +32,8 @@ export default function filesReducer(state = initialState, action) {
 	case constants.RECEIVE_FILES:
 		return state.set('files', action.files)
 		            .set('workingDirectoryFiles', ls(action.files, state.get('path')))
+								// ensure `selected` contains no nonexistant files.
+								.set('selected', state.get('selected').intersect(action.files.map((file) => file.siapath)))
 	case constants.SET_SEARCH_TEXT:
 		const results = searchFiles(state.get('files'), action.text, state.get('path'))
 		return state.set('searchResults', results)

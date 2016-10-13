@@ -26,9 +26,15 @@ const FileBrowser = ({dragging, showRenameDialog, showUploadDialog, showDeleteDi
 		e.preventDefault()
 		actions.setNotDragging()
 	}
+	const onKeyDown = (e) => {
+		// Deselect all files when ESC is pressed.
+		if (e.keyCode === 27) {
+			actions.deselectAll()
+		}
+	}
 	return (
 		<div className="file-browser-container">
-			<div className="file-browser" onDragOver={onDragOver} onMouseLeave={onDragLeave} onDrop={onDrop}>
+			<div className="file-browser" onKeyDown={onKeyDown} tabIndex="1" onDragOver={onDragOver} onMouseLeave={onDragLeave} onDrop={onDrop}>
 				{showRenameDialog ? <RenameDialog /> : null}
 				{showUploadDialog ? <UploadDialog /> : null}
 				{showDeleteDialog ? <DeleteDialog /> : null}
