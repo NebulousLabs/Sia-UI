@@ -397,8 +397,7 @@ div[tabindex="1"]:focus {
 	margin-bottom: 10px;
 }
 .allowance-dialog {
-	margin-left: 15px;
-	margin-right: 15px;
+	padding: 10px 10px 10px 10px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
