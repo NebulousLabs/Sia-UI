@@ -102,8 +102,6 @@ export const readdirRecursive = (path, files) => {
 	return filelist
 }
 
-const bytesPerGB = new BigNumber('1000000000')
-
 // Compute the estimated price per byte/hastings given a list of hosts.
 export const estimatedStoragePriceH = (hosts) => {
 	const hostPrices = List(hosts).map((host) => new BigNumber(host.storageprice))
@@ -134,15 +132,6 @@ export const allowanceStorage = (funds, hosts, period) => {
 	}
 	const storageBytes = Math.min(maxEstimatedStorage, allowanceFunds.dividedBy(costPerB).toNumber())
 	return readableFilesize(storageBytes)
-}
-
-// Compute the estimated price given a List of hosts, size to store, and duration.
-// `duration` is in blocks, size is in GB.
-// returns a `BigNumber` representing the average number of Siacoins per GB per duration
-export const estimatedStoragePriceGBSC = (hosts, size, duration) => {
-	const pricePerByteSC = SiaAPI.hastingsToSiacoins(estimatedStoragePriceH(hosts))
-	const averagePricePerGBBlock = pricePerByteSC.times(bytesPerGB)
-	return averagePricePerGBBlock.times(size).times(duration).add('2000')
 }
 
 // Parse a response from `/renter/downloads`
