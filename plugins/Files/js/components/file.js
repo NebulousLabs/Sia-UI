@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 
-const File = ({filename, selected, filesize, onRenameClick, onDownloadClick, onDeleteClick, onSelect}) => (
-	<li className={selected ? 'filebrowser-file selected' : 'filebrowser-file'} onClick={onSelect}>
+const File = ({filename, selected, filesize, onRenameClick, onDownloadClick, onDeleteClick}) => (
+	<li className={selected ? 'filebrowser-file selected' : 'filebrowser-file'}>
 		<div className="filename">
 			<i className="fa fa-file" />
 			<div className="name">{filename}</div>
@@ -30,7 +30,6 @@ File.propTypes = {
 	onRenameClick: PropTypes.func.isRequired,
 	onDownloadClick: PropTypes.func.isRequired,
 	onDeleteClick: PropTypes.func.isRequired,
-	onSelect: PropTypes.func.isRequired,
 }
 
 export default File
