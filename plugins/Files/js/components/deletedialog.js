@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react'
+import { List } from 'immutable'
 
-const DeleteDialog = ({siapath, actions}) => {
+const DeleteDialog = ({files, actions}) => {
 	const onYesClick = () => {
-		actions.deleteFile(siapath)
+		files.map(actions.deleteFile)
 		actions.hideDeleteDialog()
 	}
 	const onNoClick = () => actions.hideDeleteDialog()
@@ -11,7 +12,7 @@ const DeleteDialog = ({siapath, actions}) => {
 			<div className="delete-dialog">
 				<h3> Confirm Deletion </h3>
 				<div className="delete-text">
-					Are you sure you want to delete {siapath}?
+					Are you sure you want to delete {files.size} {files.size === 1 ? ' file' : ' files'}
 				</div>
 				<div className="delete-buttons">
 					<button onClick={onYesClick}>Yes</button>
@@ -23,7 +24,7 @@ const DeleteDialog = ({siapath, actions}) => {
 }
 
 DeleteDialog.propTypes = {
-	siapath: PropTypes.string.isRequired,
+	files: PropTypes.instanceOf(List).isRequired,
 }
 
 export default DeleteDialog

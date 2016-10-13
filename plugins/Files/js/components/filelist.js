@@ -31,15 +31,22 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 				<Directory key={key} onClick={onDirectoryClick(file)} name={file.name} />
 			)
 		}
-		const onRenameClick = () => actions.showRenameDialog(file.siapath)
-		const onDownloadClick = () => {
+		const onRenameClick = (e) => {
+			e.stopPropagation()
+			actions.showRenameDialog(file.siapath)
+		}
+		const onDownloadClick = (e) => {
+			e.stopPropagation()
 			const downloadpath = SiaAPI.openFile({
 				title: 'Where should we download this file?',
 				properties: ['openDirectory', 'createDirectories'],
 			})
 			actions.downloadFile(file.siapath, Path.join(downloadpath[0], Path.basename(file.siapath)))
 		}
-		const onDeleteClick = () => actions.showDeleteDialog(file.siapath)
+		const onDeleteClick = (e) => {
+			e.stopPropagation()
+			actions.showDeleteDialog(List([file.siapath]))
+		}
 		const onFileClick = (e) => {
 			if (!e.shiftKey) {
 				actions.deselectAll()

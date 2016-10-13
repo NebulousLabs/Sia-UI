@@ -121,9 +121,9 @@ export const hideFileTransfers = () => ({
 export const toggleFileTransfers = () => ({
 	type: constants.TOGGLE_FILE_TRANSFERS,
 })
-export const showDeleteDialog = (siapath) => ({
+export const showDeleteDialog = (files) => ({
 	type: constants.SHOW_DELETE_DIALOG,
-	siapath,
+	files,
 })
 export const hideDeleteDialog = () => ({
 	type: constants.HIDE_DELETE_DIALOG,

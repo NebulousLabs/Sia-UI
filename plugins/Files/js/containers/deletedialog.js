@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { hideDeleteDialog, deleteFile } from '../actions/files.js'
 
 const mapStateToProps = (state) => ({
-	siapath: state.deletedialog.get('siapath'),
+	files: state.deletedialog.get('files'),
 })
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ hideDeleteDialog, deleteFile }, dispatch),

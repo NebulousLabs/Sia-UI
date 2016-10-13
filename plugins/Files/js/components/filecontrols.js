@@ -11,7 +11,7 @@ const FileControls = ({files, actions}) => {
 		files.forEach((file) => actions.downloadFile(file, Path.join(downloadpath[0], Path.basename(file))))
 	}
 	const onDeleteClick = () => {
-		actions.showDeleteDialog(files)
+		actions.showDeleteDialog(files.toList())
 	}
 	return (
 		<div className="file-controls">
