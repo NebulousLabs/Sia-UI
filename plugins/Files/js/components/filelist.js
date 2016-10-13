@@ -40,7 +40,6 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 		}
 		const onDeleteClick = () => actions.showDeleteDialog(file.siapath)
 		const onFileClick = () => actions.selectFile(file.siapath)
-		console.log(selected.has(file.siapath))
 		return (
 			<File key={key} selected={selected.includes(file.siapath)} filename={file.name} filesize={file.size} onRenameClick={onRenameClick} onDownloadClick={onDownloadClick} onDeleteClick={onDeleteClick} onSelect={onFileClick} />
 		)
