@@ -25,11 +25,12 @@ const File = ({filename, selected, filesize, onRenameClick, onDownloadClick, onD
 
 File.propTypes = {
 	filename: PropTypes.string.isRequired,
-	selected: PropTypes.bool.isRequired,
 	filesize: PropTypes.string.isRequired,
+	selected: PropTypes.bool.isRequired,
 	onRenameClick: PropTypes.func.isRequired,
 	onDownloadClick: PropTypes.func.isRequired,
 	onDeleteClick: PropTypes.func.isRequired,
+	onSelect: PropTypes.func.isRequired,
 }
 
 export default File

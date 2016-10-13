@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react'
-import { List } from 'immutable'
+import { List, Set } from 'immutable'
 import File from './file.js'
 import Directory from './directory.js'
 import Path from 'path'
 import SearchField from '../containers/searchfield.js'
+import FileControls from '../containers/filecontrols.js'
 
 const FileList = ({files, selected, searchResults, path, showSearchField, actions}) => {
 	const onDirectoryClick = (directory) => () => actions.setPath(Path.join(path, directory.name))
@@ -39,9 +40,14 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 			actions.downloadFile(file.siapath, Path.join(downloadpath[0], Path.basename(file.siapath)))
 		}
 		const onDeleteClick = () => actions.showDeleteDialog(file.siapath)
-		const onFileClick = () => actions.selectFile(file.siapath)
+		const onFileClick = (e) => {
+			if (!e.shiftKey) {
+				actions.deselectAll()
+			}
+			actions.selectFile(file.siapath)
+		}
 		return (
-			<File key={key} selected={selected.includes(file.siapath)} filename={file.name} filesize={file.size} onRenameClick={onRenameClick} onDownloadClick={onDownloadClick} onDeleteClick={onDeleteClick} onSelect={onFileClick} />
+			<File key={key} selected={selected.includes(file.siapath)} filename={file.name} filesize={file.size} onRenameClick={onRenameClick} onSelect={onFileClick} onDownloadClick={onDownloadClick} onDeleteClick={onDeleteClick} />
 		)
 	})
 	return (
@@ -51,13 +57,14 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 				{path !== '' ? <li onClick={onBackClick}><div><i className="fa fa-backward" />Back</div></li> : null}
 				{fileElements.size > 0 ? fileElements : (showSearchField ? <h2> No matching files </h2> : <h2> No files uploaded </h2>)}
 			</ul>
+			{selected.size > 0 ? <FileControls /> : null}
 		</div>
 	)
 }
 
 FileList.propTypes = {
 	files: PropTypes.instanceOf(List),
-	selected: PropTypes.instanceOf(List).isRequired,
+	selected: PropTypes.instanceOf(Set).isRequired,
 	searchResults: PropTypes.instanceOf(List),
 	path: PropTypes.string.isRequired,
 	showSearchField: PropTypes.bool.isRequired,

@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
-import { List } from 'immutable'
+import { Set } from 'immutable'
+import Path from 'path'
 
 const FileControls = ({files, actions}) => {
 	const onDownloadClick = () => {
@@ -7,25 +8,26 @@ const FileControls = ({files, actions}) => {
 			title: 'Where should we download?',
 			properties: ['openDirectory', 'createDirectories'],
 		})
-		files.forEach((file) => actions.downloadFile(file.siapath, Path.join(downloadpath[0], Path.basename(file.siapath))))
+		files.forEach((file) => actions.downloadFile(file, Path.join(downloadpath[0], Path.basename(file))))
 	}
 	const onDeleteClick = () => {
 		actions.showDeleteDialog(files)
 	}
 	return (
-		<div className="file-buttons">
+		<div className="file-controls">
+			{files.size} {files.size === 1 ? ' file' : ' files' } selected
 			<div onClick={onDownloadClick} className="download-button">
-				<i className="fa fa-cloud-download 2x" />
+				<i className="fa fa-cloud-download fa-2x" />
 			</div>
 			<div onClick={onDeleteClick} className="delete-button">
-				<i className="fa fa-trash 2x" />
+				<i className="fa fa-trash fa-2x" />
 			</div>
 		</div>
 	)
 }
 
 FileControls.propTypes = {
-	files: PropTypes.instanceOf(List).isRequired,
+	files: PropTypes.instanceOf(Set).isRequired,
 }
 
 export default FileControls
