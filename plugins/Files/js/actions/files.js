@@ -33,6 +33,10 @@ export const setStorageEstimate = (estimate) => ({
 	type: constants.SET_STORAGE_ESTIMATE,
 	estimate,
 })
+export const setFeeEstimate = (estimate) => ({
+	type: constants.SET_FEE_ESTIMATE,
+	estimate,
+})
 export const setAllowanceCompleted = () => ({
 	type: constants.SET_ALLOWANCE_COMPLETED,
 })

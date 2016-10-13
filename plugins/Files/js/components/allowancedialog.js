@@ -1,19 +1,21 @@
 import React, { PropTypes } from 'react'
 import UnlockWarning from './unlockwarning.js'
 
-const AllowanceDialog = ({unlocked, storageEstimate, actions}) => {
+const AllowanceDialog = ({unlocked, feeEstimate, storageEstimate, actions}) => {
 	const onCancelClick = () => actions.closeAllowanceDialog()
 	const onAcceptClick = (e) => {
 		e.preventDefault()
-		actions.setAllowance(e.target.value)
+		actions.setAllowance(e.target.allowance.value)
 	}
 	const onAllowanceChange = (e) => {
 		actions.getStorageEstimate(e.target.value)
+		actions.setFeeEstimate(Math.floor(1000 + 0.12 * parseInt(e.target.value)) || 0)
 	}
 	const dialogContents = (
 		<div className="allowance-dialog">
 			<h3> Buy storage on the Sia Decentralized Network</h3>
-			<p>Enter an amount of SC to allocate towards uploading, downloading, and storing data on the Sia network. This amount represents the maximum amount of funds the contractor will spend over a 12 week period. After 12 weeks, the contractor will renew the contracts it forms. Any allocated funds that are not used will be refunded.</p>
+			<p> Before you can upload to Sia, you have to form contracts with the hosts. This sets aside some money into a pool for you to spend on storage, uploading, and downloading. Funds will stay in the pool for 12 weeks. Funds not spent after 12 weeks will be returned to your wallet. Fees will not be returned. </p>
+			<p> The pool will refill automatically every 6 weeks, using the full 3 month budget. You will pay the fees again. Your computer must be online to refill the allowance, and if the allowance is unable to refill before the pool expires, you will lose all of your data.</p>
 			<form className="allowance-form" onSubmit={onAcceptClick}>
 				<input type="number" name="allowance" defaultValue="5000" onFocus={onAllowanceChange} onChange={onAllowanceChange} required autoFocus className="allowance-amount" />SC
 				<div className="allowance-buttons">
@@ -21,6 +23,7 @@ const AllowanceDialog = ({unlocked, storageEstimate, actions}) => {
 					<button type="button" onClick={onCancelClick} className="allowance-button-cancel">Cancel</button>
 				</div>
 			</form>
+			<span> Estimated Fees: {feeEstimate} SC </span>
 			<span> Estimated storage based on current prices: {storageEstimate} </span>
 		</div>
 	)
@@ -34,6 +37,7 @@ const AllowanceDialog = ({unlocked, storageEstimate, actions}) => {
 
 AllowanceDialog.propTypes = {
 	unlocked: PropTypes.bool.isRequired,
+	feeEstimate: PropTypes.number.isRequired,
 	storageEstimate: PropTypes.string.isRequired,
 }
 
