@@ -5,7 +5,6 @@ import { closeAllowanceDialog, setAllowance, getStorageEstimate } from '../actio
 
 const mapStateToProps = (state) => ({
 	unlocked: state.wallet.get('unlocked'),
-	allowance: state.files.get('allowance'),
 	storageEstimate: state.files.get('storageEstimate'),
 })
 const mapDispatchToProps = (dispatch) => ({

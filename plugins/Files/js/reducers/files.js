@@ -23,7 +23,7 @@ const initialState = Map({
 	contractCount: 0,
 	allowance: '0',
 	spending: '0',
-	storageEstimate: '0 B',
+	storageEstimate: '',
 })
 
 export default function filesReducer(state = initialState, action) {
