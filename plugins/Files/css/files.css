@@ -362,8 +362,7 @@ div[tabindex="1"]:focus {
 .allowance-dialog h3 {
 	padding: 0;
 	margin: 0;
-	margin-top: 30px;
-	margin-bottom: 10px;
+	margin-bottom: 15px;
 }
 .allowance-dialog.unlock-warning {
 	justify-content: center;
@@ -373,7 +372,7 @@ div[tabindex="1"]:focus {
 }
 .allowance-dialog p {
 	margin-top: 10px;
-	text-align: center;
+	text-align: left;
 }
 .allowance-warning {
 	color: #A71A18;
@@ -397,14 +396,14 @@ div[tabindex="1"]:focus {
 	margin-bottom: 10px;
 }
 .allowance-dialog {
-	padding: 10px 10px 10px 10px;
+	padding: 20px 20px 20px 20px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-around;
 	background-color: #ECECEC;
 	width: 80%;
-	height: 70%;
+	height: 400px;
 	z-index: 10;
 }
 .delete-dialog {

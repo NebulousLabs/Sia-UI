@@ -14,8 +14,9 @@ const AllowanceDialog = ({unlocked, feeEstimate, storageEstimate, actions}) => {
 	const dialogContents = (
 		<div className="allowance-dialog">
 			<h3> Buy storage on the Sia Decentralized Network</h3>
-			<p> Before you can upload to Sia, you have to form contracts with the hosts. This sets aside some money into a pool for you to spend on storage, uploading, and downloading. Funds will stay in the pool for 12 weeks. Funds not spent after 12 weeks will be returned to your wallet. Fees will not be returned. </p>
-			<p> The pool will refill automatically every 6 weeks, using the full 3 month budget. You will pay the fees again. Your computer must be online to refill the allowance, and if the allowance is unable to refill before the pool expires, you will lose all of your data.</p>
+			<p>You need to allocate funds to upload and download on Sia. Your allowance remains locked for 3 months. Unspent funds are then refunded*. You can increase your allowance at any time.</p>
+			<p>Your storage allowance automatically refills every 6 weeks. Your computer must be online with your wallet unlocked to complete the refill. If Sia fails to refill the allowance by the end of the lock-in period, your data may be lost.</p>
+			<p>*contract fees are non-refundable</p>
 			<form className="allowance-form" onSubmit={onAcceptClick}>
 				<input type="number" name="allowance" defaultValue="5000" onFocus={onAllowanceChange} onChange={onAllowanceChange} required autoFocus className="allowance-amount" />SC
 				<div className="allowance-buttons">
