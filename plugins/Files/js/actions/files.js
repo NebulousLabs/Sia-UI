@@ -166,3 +166,7 @@ export const selectFile = (siapath) => ({
 export const deselectAll = () => ({
 	type: constants.DESELECT_ALL,
 })
+export const deselectFile = (siapath) => ({
+	type: constants.DESELECT_FILE,
+	siapath,
+})

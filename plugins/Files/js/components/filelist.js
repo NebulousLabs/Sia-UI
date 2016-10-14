@@ -31,6 +31,7 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 				<Directory key={key} onClick={onDirectoryClick(file)} name={file.name} />
 			)
 		}
+		const isSelected = selected.includes(file.siapath)
 		const onRenameClick = (e) => {
 			e.stopPropagation()
 			actions.showRenameDialog(file.siapath)
@@ -51,10 +52,14 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 			if (!e.shiftKey) {
 				actions.deselectAll()
 			}
-			actions.selectFile(file.siapath)
+			if (e.shiftKey && isSelected) {
+				actions.deselectFile(file.siapath)
+			} else {
+				actions.selectFile(file.siapath)
+			}
 		}
 		return (
-			<File key={key} selected={selected.includes(file.siapath)} filename={file.name} filesize={file.size} onRenameClick={onRenameClick} onClick={onFileClick} onDownloadClick={onDownloadClick} onDeleteClick={onDeleteClick} />
+			<File key={key} selected={isSelected} filename={file.name} filesize={file.size} onRenameClick={onRenameClick} onClick={onFileClick} onDownloadClick={onDownloadClick} onDeleteClick={onDeleteClick} />
 		)
 	})
 	return (

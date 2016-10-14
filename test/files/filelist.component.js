@@ -19,10 +19,16 @@ const directories = testFiles.filter((file) => file.type === 'directory')
 const testActions = {
 	setPath: spy(),
 	selectFile: spy(),
+	deselectFile: spy(),
 	deselectAll: spy(),
 }
 
 describe('file list', () => {
+	beforeEach(() => {
+		for (const action in testActions) {
+			testActions[action].reset()
+		}
+	})
 	it('renders a ul with the correct number of file and directory children', () => {
 		const filelist = shallow(<FileList files={testFiles} selected={Set()} showSearchField={false} path="" />)
 		expect(filelist.find('File')).to.have.length(files.size)
@@ -38,7 +44,6 @@ describe('file list', () => {
 			for (let nodeindex = 0; nodeindex < filenodes.length; nodeindex++) {
 				filenodes.at(nodeindex).simulate('click', { shiftKey: false })
 				expect(testActions.deselectAll.called).to.equal(true)
-				testActions.deselectAll.reset()
 				expect(testActions.selectFile.calledWith(files.get(nodeindex).siapath)).to.equal(true)
 			}
 		})
@@ -51,6 +56,19 @@ describe('file list', () => {
 				testActions.deselectAll.reset()
 				expect(testActions.selectFile.calledWith(files.get(nodeindex).siapath)).to.equal(true)
 			}
+		})
+		it('deselects a file when selected and shift-clicked', () => {
+			const filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={Set([files.get(0).siapath, files.get(1).siapath])} path="" actions={testActions} />)
+			const filenodes = filelist.find('File')
+			filenodes.at(0).simulate('click', { shiftKey: true })
+			expect(testActions.deselectFile.calledWith(files.get(0).siapath)).to.equal(true)
+		})
+		it('exclusively selects a file with multiple selected and no shift click', () => {
+			const filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={Set([files.get(0).siapath, files.get(1).siapath])} path="" actions={testActions} />)
+			const filenodes = filelist.find('File')
+			filenodes.at(1).simulate('click', { shiftKey: false})
+			expect(testActions.deselectAll.called).to.equal(true)
+			expect(testActions.selectFile.calledWith(files.get(1).siapath)).to.equal(true)
 		})
 	})
 	it('navigates directories', () => {

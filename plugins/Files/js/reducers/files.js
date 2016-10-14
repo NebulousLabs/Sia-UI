@@ -42,6 +42,8 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('path', action.path)
 		            .set('workingDirectoryFiles', ls(state.get('files'), action.path))
 								.set('selected', Set())
+	case constants.DESELECT_FILE:
+		return state.set('selected', state.get('selected').delete(action.siapath))
 	case constants.SELECT_FILE:
 		return state.set('selected', state.get('selected').add(action.siapath))
 	case constants.DESELECT_ALL:
