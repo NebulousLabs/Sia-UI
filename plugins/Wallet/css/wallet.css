@@ -27,6 +27,10 @@
 .balance-info {
 	flex: 1;
 }
+.load-more-button {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
 .lockscreen {
 	display: flex;
 	align-items: center;

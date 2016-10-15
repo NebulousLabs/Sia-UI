@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react'
 import { List } from 'immutable'
 
-
-const TransactionList = ({transactions}) => {
+const TransactionList = ({transactions, ntransactions, actions}) => {
 	if (transactions.size === 0) {
 		return (
 			<div className="transaction-list">
@@ -20,7 +19,7 @@ const TransactionList = ({transactions}) => {
 		}
 		return timestamp.getFullYear() + '-' + pad((timestamp.getMonth()+1)) + '-' + pad(timestamp.getDate()) + ' ' + pad(timestamp.getHours()) + ':' + pad(timestamp.getMinutes())
 	}
-	const transactionComponents = transactions.map((txn, key) => {
+	const transactionComponents = transactions.take(ntransactions).map((txn, key) => {
 		let valueData = ''
 		if (txn.transactionsums.totalSiacoin.abs().gt(0)) {
 			valueData += txn.transactionsums.totalSiacoin.round(4).toString() + ' SC '
@@ -43,6 +42,7 @@ const TransactionList = ({transactions}) => {
 			</tr>
 		)
 	})
+	const onMoreClick = () => actions.showMoreTransactions()
 	return (
 		<div className="transaction-list">
 			<h2> Recent Transactions </h2>
@@ -59,12 +59,20 @@ const TransactionList = ({transactions}) => {
 					{transactionComponents}
 				</tbody>
 			</table>
+			{
+				transactions.size > ntransactions ? (
+					<div className="load-more">
+						<button className="load-more-button" onClick={onMoreClick}>More Transactions</button>
+					</div>
+				) : null
+			}
 		</div>
 	)
 }
 
 TransactionList.propTypes = {
 	transactions: PropTypes.instanceOf(List).isRequired,
+	ntransactions: PropTypes.number.isRequired,
 }
 
 export default TransactionList
