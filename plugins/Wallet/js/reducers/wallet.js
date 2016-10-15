@@ -10,7 +10,7 @@ const initialState = Map({
 	unconfirmedbalance: '0',
 	siafundbalance: '0',
 	transactions: List(),
-	ntransactions: 15,
+	ntransactions: 30,
 	showSendPrompt: false,
 	showReceivePrompt: false,
 	showNewWalletDialog: false,

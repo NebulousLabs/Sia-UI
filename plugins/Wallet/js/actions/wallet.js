@@ -96,7 +96,7 @@ export const showConfirmationDialog = () => ({
 export const hideConfirmationDialog = () => ({
 	type: constants.HIDE_CONFIRMATION_DIALOG,
 })
-export const showMoreTransactions = (increment = 15) => ({
+export const showMoreTransactions = (increment = 30) => ({
 	type: constants.SHOW_MORE_TRANSACTIONS,
 	increment,
 })
