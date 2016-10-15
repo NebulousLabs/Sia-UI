@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import { List } from 'immutable'
 
+
 const TransactionList = ({transactions}) => {
 	if (transactions.size === 0) {
 		return (
@@ -8,6 +9,16 @@ const TransactionList = ({transactions}) => {
 				<h3> No recent transactions </h3>
 			</div>
 		)
+	}
+	const prettyTimestamp = (timestamp) => {
+		const pad = (n) => String('0'+n).slice(-2)
+
+		const yesterday = new Date()
+		yesterday.setHours(yesterday.getHours() -24)
+		if (timestamp > yesterday) {
+			return 'Today at ' + timestamp.getHours() + ':' + timestamp.getMinutes()
+		}
+		return timestamp.getFullYear() + '-' + pad((timestamp.getMonth()+1)) + '-' + pad(timestamp.getDate()) + ' ' + pad(timestamp.getHours()) + ':' + pad(timestamp.getMinutes())
 	}
 	const transactionComponents = transactions.map((txn, key) => {
 		let valueData = ''
@@ -25,6 +36,7 @@ const TransactionList = ({transactions}) => {
 		}
 		return (
 			<tr key={key}>
+				<td>{prettyTimestamp(txn.confirmationtimestamp)}</td>
 				<td>{valueData}</td>
 				<td className="txid">{txn.transactionid}</td>
 				<td>{txn.confirmed ? <i className="fa fa-check-square confirmed-icon"> Confirmed </i> : <i className="fa fa-clock-o unconfirmed-icon"> Unconfirmed </i>}</td>
@@ -37,6 +49,7 @@ const TransactionList = ({transactions}) => {
 			<table className="pure-table transaction-table">
 				<thead>
 					<tr>
+						<th>Date</th>
 						<th>Net Value</th>
 						<th>Transaction ID</th>
 						<th>Confirmation Status</th>
