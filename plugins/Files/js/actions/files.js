@@ -121,9 +121,9 @@ export const hideFileTransfers = () => ({
 export const toggleFileTransfers = () => ({
 	type: constants.TOGGLE_FILE_TRANSFERS,
 })
-export const showDeleteDialog = (siapath) => ({
+export const showDeleteDialog = (files) => ({
 	type: constants.SHOW_DELETE_DIALOG,
-	siapath,
+	files,
 })
 export const hideDeleteDialog = () => ({
 	type: constants.HIDE_DELETE_DIALOG,
@@ -158,4 +158,15 @@ export const showRenameDialog = (siapath) => ({
 })
 export const hideRenameDialog = () => ({
 	type: constants.HIDE_RENAME_DIALOG,
+})
+export const selectFile = (siapath) => ({
+	type: constants.SELECT_FILE,
+	siapath,
+})
+export const deselectAll = () => ({
+	type: constants.DESELECT_ALL,
+})
+export const deselectFile = (siapath) => ({
+	type: constants.DESELECT_FILE,
+	siapath,
 })

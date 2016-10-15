@@ -32,6 +32,32 @@
 	height: 100%;
 	width: 100%;
 }
+div[tabindex="1"]:focus {
+	outline: 0;
+}
+.selected {
+	border-left: 5px solid #00CBA0;
+	background-color: #F5F5F5 !important;
+}
+.file-controls {
+	z-index: 5;
+	position: absolute;
+	bottom: 0;
+	height: 70px;
+	width: 250px;
+	margin-left: auto;
+	margin-right: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #fff;
+}
+.file-controls i {
+	color: #00CBA0;
+	cursor: pointer;
+	margin-left: 10px;
+	margin-right: 10px;
+}
 .file-transfers {
 	width: 400px;
 	height: 100%;
@@ -214,6 +240,7 @@
 	background-color: #C5C5C5;
 	margin: 0;
 	cursor: default;
+	-webkit-user-select: none;
 }
 .file-list ul {
 	margin: 0;
@@ -331,10 +358,6 @@
 	width: 100px;
 	height: 80px;
 	text-align: center;
-}
-.selected {
-	padding-bottom: 6px;
-	border-bottom: 3px solid #00CBA0;
 }
 .allowance-dialog h3 {
 	padding: 0;
