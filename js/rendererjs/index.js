@@ -3,7 +3,7 @@ import Path from 'path'
 import * as Siad from 'sia.js'
 import loadingScreen from './loadingScreen.js'
 import { remote, ipcRenderer } from 'electron'
-import { scanFolder, unloadPlugins, loadPlugin, setCurrentPlugin, getPluginName } from './plugins.js'
+import { unloadPlugins, loadPlugin, setCurrentPlugin, getOrderedPlugins, getPluginName } from './plugins.js'
 
 const App = remote.app
 const mainWindow = remote.getCurrentWindow()
@@ -16,23 +16,7 @@ window.closeToTray = mainWindow.closeToTray
 // Wait for siad to load, then load the plugin system.
 function init(callback) {
 	// Initialize plugins.
-	let plugins = scanFolder(defaultPluginDirectory)
-	// The home plugin should be first in the sidebar, and about should be last.
-	// We probably want a priority system for this instead.
-	plugins = plugins.sort((p1) => {
-		if (getPluginName(p1) === 'About') {
-			return 1
-		}
-		return 0
-	})
-
-	plugins = plugins.sort((p1, p2) => {
-		if (getPluginName(p2) === defaultHomePlugin) {
-			return 1
-		}
-		return 0
-	})
-
+	const plugins = getOrderedPlugins(defaultPluginDirectory, defaultHomePlugin)
 	let homePluginView
 	// Load each plugin element into the UI
 	for (let i = 0; i < plugins.size; i++) {
