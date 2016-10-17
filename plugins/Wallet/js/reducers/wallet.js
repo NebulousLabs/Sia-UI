@@ -10,6 +10,7 @@ const initialState = Map({
 	unconfirmedbalance: '0',
 	siafundbalance: '0',
 	transactions: List(),
+	ntransactions: 30,
 	showSendPrompt: false,
 	showReceivePrompt: false,
 	showNewWalletDialog: false,
@@ -46,6 +47,8 @@ export default function walletReducer(state = initialState, action) {
 		return state.set('confirmedbalance', action.confirmed)
                 .set('unconfirmedbalance', action.unconfirmed)
                 .set('siafundbalance', action.siafunds)
+	case constants.SHOW_MORE_TRANSACTIONS:
+		return state.set('ntransactions', state.get('ntransactions') + action.increment)
 	case constants.SET_TRANSACTIONS:
 		return state.set('transactions', action.transactions)
 	default:

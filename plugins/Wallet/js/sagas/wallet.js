@@ -108,9 +108,7 @@ function *getBalanceSaga() {
 function *getTransactionsSaga() {
 	try {
 		const response = yield siadCall('/wallet/transactions?startheight=0&endheight=-1')
-		// For now, display the latest 50 transacitons in the table.
-		// It may be useful to have pagination here.
-		const transactions = parseRawTransactions(response).take(50)
+		const transactions = parseRawTransactions(response)
 		yield put(actions.setTransactions(transactions))
 	} catch (e) {
 		yield sendError(e)

@@ -2,6 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { expect } from 'chai'
 import { List } from 'immutable'
+import { spy } from 'sinon'
 import TransactionList from '../../plugins/Wallet/js/components/transactionlist.js'
 import BigNumber from 'bignumber.js'
 
@@ -121,11 +122,15 @@ const expectedValues = List([
 	'0 SC',
 ])
 
-const txnlistComponent = shallow(<TransactionList transactions={testTxns} />)
+const testActions = {
+	showMoreTransactions: spy(),
+}
+
+const txnlistComponent = shallow(<TransactionList transactions={testTxns} ntransactions={testTxns.size} />)
 
 describe('wallet transaction list component', () => {
 	it('renders no recent transactions with an empty transaction list', () => {
-		const emptytxnlist = shallow(<TransactionList transactions={List()} />)
+		const emptytxnlist = shallow(<TransactionList transactions={List()} ntransactions={0} />)
 		expect(emptytxnlist.find('.transaction-list').children()).to.have.length(1)
 		expect(emptytxnlist.find('.transaction-list h3').first().text()).to.contain('No recent transactions')
 	})
@@ -184,5 +189,19 @@ describe('wallet transaction list component', () => {
 				expect(txnnodes.at(nodeindex).find('.unconfirmed-icon')).to.have.length(1)
 			}
 		}
+	})
+	describe('pagination', () => {
+		it('doesnt show load more transactions with transactions.size <= ntransactions', () => {
+			expect(txnlistComponent.find('load-more-button')).to.have.length(0)
+		})
+		it('shows load more button when transactions.size > ntransactions', () => {
+			const longtxnlist = shallow(<TransactionList ntransactions={5} transactions={testTxns} />)
+			expect(longtxnlist.find('.load-more-button')).to.have.length(1)
+		})
+		it('loads more transactions when More Transactions is clicked', () => {
+			const longtxnlist = shallow(<TransactionList ntransactions={5} transactions={testTxns} actions={testActions} />)
+			longtxnlist.find('.load-more-button').first().simulate('click')
+			expect(testActions.showMoreTransactions.called).to.equal(true)
+		})
 	})
 })
