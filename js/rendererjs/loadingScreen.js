@@ -7,7 +7,8 @@ import Path from 'path'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import StatusBar from './statusbar.js'
-
+import Update from './update.js'
+const currentVersion = require('../../package.json').version
 const dialog = remote.dialog
 const app = remote.app
 const fs = remote.require('fs')
@@ -27,6 +28,11 @@ const showError = (error) => {
 const startUI = (welcomeMsg, initUI) => {
 	// Display a welcome message, then initialize the ui
 	overlayText.innerHTML = welcomeMsg
+
+	// construct the autoupdater component and check for updates every 30 minutes.
+	const checkUpdate = async () => ReactDOM.render(await Update(currentVersion), document.getElementById('update-status-container'))
+	setInterval(checkUpdate, 18000000)
+	checkUpdate()
 
 	// Construct the status bar component and poll for updates from Siad
 	const updateSyncStatus = async function() {
