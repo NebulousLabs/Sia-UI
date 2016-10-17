@@ -1,9 +1,8 @@
 // This module handles the construction of Sia-UI plugins.
 import { List } from 'immutable'
 import Path from 'path'
-const remote = require('electron').remote
-const globalShortcut = remote.require('electron').globalShortcut
 import fs from 'fs'
+import { remote } from 'electron'
 
 const devtoolsShortcut = 'Ctrl+Shift+P'
 
@@ -53,8 +52,8 @@ export const setCurrentPlugin = (pluginName) => {
 	if (buttonElem !== null) {
 		buttonElem.classList.add('current')
 	}
-	globalShortcut.unregister(devtoolsShortcut)
-	globalShortcut.register(devtoolsShortcut, () => {
+	remote.globalShortcut.unregister(devtoolsShortcut)
+	remote.globalShortcut.register(devtoolsShortcut, () => {
 		viewElem.openDevTools()
 	})
 }
@@ -116,3 +115,37 @@ export const scanFolder = (path) => {
 	})
 	return pluginFolders
 }
+
+// Scan a folder at path and return an ordered list of plugins.
+// The plugin specified by `homePlugin` is always moved to the top of the list,
+// if it exists.
+export const getOrderedPlugins = (path, homePlugin) => {
+	let plugins = scanFolder(path)
+
+	// Push the Terminal plugin to the bottom
+	plugins = plugins.sort((p1) => {
+		if (getPluginName(p1) === 'Terminal') {
+			return 1
+		}
+		return 0
+	})
+
+	// Push the About plugin to the bottom
+	plugins = plugins.sort((p1) => {
+		if (getPluginName(p1) === 'About') {
+			return 1
+		}
+		return 0
+	})
+
+	// Push the home plugin to the top
+	plugins = plugins.sort((p1) => {
+		if (getPluginName(p1) === homePlugin) {
+			return -1
+		}
+		return 0
+	})
+
+	return plugins
+}
+
