@@ -26,8 +26,16 @@ const AllowanceDialog = ({unlocked, feeEstimate, storageEstimate, actions}) => {
 					<button type="button" onClick={onCancelClick} className="allowance-button-cancel">Cancel</button>
 				</div>
 			</form>
-			<span> Estimated Fees: {feeEstimate} SC </span>
-			<span> Estimated storage based on current prices: {storageEstimate} </span>
+			<table className="estimates">
+				<tr>
+					<th>Estimated Fees</th>
+					<th>Estimated Storage</th>
+				</tr>
+				<tr>
+					<td>{feeEstimate} SC</td>
+					<td>{storageEstimate}</td>
+				</tr>
+			</table>
 		</div>
 	)
 

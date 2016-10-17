@@ -131,7 +131,7 @@ export const allowanceStorage = (funds, hosts, period) => {
 		costPerB = new BigNumber('10000')
 	}
 	const storageBytes = Math.min(maxEstimatedStorage, allowanceFunds.dividedBy(costPerB).toNumber())
-	return readableFilesize(storageBytes)
+	return '~' + readableFilesize(storageBytes.toPrecision(1))
 }
 
 // Parse a response from `/renter/downloads`

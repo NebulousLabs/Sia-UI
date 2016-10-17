@@ -412,6 +412,10 @@ div[tabindex="1"]:focus {
 	height: 400px;
 	z-index: 10;
 }
+.estimates th, .estimates td {
+	padding-left: 3px;
+	padding-right: 3px;
+}
 .delete-dialog {
 	margin-left: 15px;
 	margin-right: 15px;

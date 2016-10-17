@@ -17,6 +17,7 @@
     "eslint-plugin-import": "^1.9.2",
     "eslint-plugin-react": "^6.0.0",
     "glob": "^7.0.4",
+    "jsdom": "^9.8.0",
     "mocha": "^3.0.1",
     "proxyquire": "^1.7.10",
     "ps-tree": "^1.1.0",
