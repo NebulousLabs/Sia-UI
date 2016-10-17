@@ -29,8 +29,6 @@ const initialState = Map({
 
 export default function filesReducer(state = initialState, action) {
 	switch (action.type) {
-	case constants.SET_ALLOWANCE:
-		return state.set('settingAllowance', true)
 	case constants.SET_ALLOWANCE_COMPLETED:
 		return state.set('settingAllowance', false)
 	case constants.RECEIVE_ALLOWANCE:
@@ -48,6 +46,8 @@ export default function filesReducer(state = initialState, action) {
 								.set('selected', state.get('selected').intersect(action.files.map((file) => file.siapath)))
 	case constants.SET_ALLOWANCE:
 		return state.set('allowance', action.funds)
+		            .set('settingAllowance', true)
+
 	case constants.SET_SEARCH_TEXT:
 		const results = searchFiles(state.get('files'), action.text, state.get('path'))
 		return state.set('searchResults', results)
