@@ -15,7 +15,7 @@ const TransactionList = ({transactions, ntransactions, actions}) => {
 		const yesterday = new Date()
 		yesterday.setHours(yesterday.getHours() -24)
 		if (timestamp > yesterday) {
-			return 'Today at ' + timestamp.getHours() + ':' + timestamp.getMinutes()
+			return 'Today at ' + pad(timestamp.getHours()) + ':' + pad(timestamp.getMinutes())
 		}
 		return timestamp.getFullYear() + '-' + pad((timestamp.getMonth()+1)) + '-' + pad(timestamp.getDate()) + ' ' + pad(timestamp.getHours()) + ':' + pad(timestamp.getMinutes())
 	}
