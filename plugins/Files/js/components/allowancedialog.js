@@ -19,23 +19,26 @@ const AllowanceDialog = ({unlocked, feeEstimate, storageEstimate, actions}) => {
 				<p>Your storage allowance automatically refills every 6 weeks. Your computer must be online with your wallet unlocked to complete the refill. If Sia fails to refill the allowance by the end of the lock-in period, your data may be lost.</p>
 				<p className="footnote">*contract fees are non-refundable. They will be subtracted from the allowance that you set.</p>
 			</div>
-			<form className="allowance-form" onSubmit={onAcceptClick}>
-				<input type="number" name="allowance" defaultValue="5000" onFocus={onAllowanceChange} onChange={onAllowanceChange} required autoFocus className="allowance-amount" /> SC
+			<form onSubmit={onAcceptClick}>
+				<div className="allowance-input">
+					<label>Allowance: <input type="number" name="allowance" defaultValue="5000" onFocus={onAllowanceChange} onChange={onAllowanceChange} required autoFocus className="allowance-amount" /></label>
+					<span> SC</span>
+				</div>
 				<div className="allowance-buttons">
 					<button type="submit" className="allowance-button-accept">Accept</button>
 					<button type="button" onClick={onCancelClick} className="allowance-button-cancel">Cancel</button>
 				</div>
+				<table className="estimates">
+					<tr>
+						<td className="estimate-label">Estimated Fees</td>
+						<td className="estimate-content">{feeEstimate} SC</td>
+					</tr>
+					<tr>
+						<td className="estimate-label">Estimated Storage</td>
+						<td className="estimate-content">{storageEstimate}</td>
+					</tr>
+				</table>
 			</form>
-			<table className="estimates">
-				<tr>
-					<td className="estimate-label">Estimated Fees</td>
-					<td className="estimate-content">{feeEstimate} SC</td>
-				</tr>
-				<tr>
-					<td className="estimate-label">Estimated Storage</td>
-					<td className="estimate-content">{storageEstimate}</td>
-				</tr>
-			</table>
 		</div>
 	)
 
