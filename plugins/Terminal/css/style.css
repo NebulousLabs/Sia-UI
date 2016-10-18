@@ -99,7 +99,7 @@ footer {
 .help-button {
 	position: absolute;
 	top: 0px;
-	right: 0px;
+	right: 15px;
 	background-color: #00CBA0;
 	color: #FFF;
 	cursor: pointer;
