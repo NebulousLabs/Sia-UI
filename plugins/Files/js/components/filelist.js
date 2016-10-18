@@ -49,10 +49,10 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 			actions.showDeleteDialog(List([file.siapath]))
 		}
 		const onFileClick = (e) => {
-			if (!e.shiftKey) {
+			if (!e.ctrlKey) {
 				actions.deselectAll()
 			}
-			if (e.shiftKey && isSelected) {
+			if (e.ctrlKey && isSelected) {
 				actions.deselectFile(file.siapath)
 			} else {
 				actions.selectFile(file.siapath)
