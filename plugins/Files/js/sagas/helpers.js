@@ -23,14 +23,13 @@ export const siadCall = (uri) => new Promise((resolve, reject) => {
 	})
 })
 
-// totalSpending takes a `financialmetrics` object returned from the /renter
-// API and returns the total combined spending.
-export const totalSpending = (financialmetrics) =>
-	Object.values(financialmetrics)
-	      .reduce((sum, spendingmetric) => sum.plus(SiaAPI.hastingsToSiacoins(spendingmetric)), new BigNumber(0))
-        .round(2)
-	      .toString()
-
+// totalSpending takes an allowance, and a list of contracts returned from the
+// API and returns the total that the user has spent out of their allowance,
+// including fees. Allowance should be a bignumber of SC.
+export const totalSpending = (allowance, contracts) => {
+	const totalRenterPayouts = contracts.reduce((sum, contract) => sum.plus(SiaAPI.hastingsToSiacoins(contract.renterfunds)), new BigNumber(0))
+	return allowance.minus(totalRenterPayouts)
+}
 
 // Take a number of bytes and return a sane, human-readable size.
 export const readableFilesize = (bytes) => {

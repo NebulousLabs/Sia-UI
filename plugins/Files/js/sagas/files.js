@@ -46,15 +46,15 @@ function* getStorageEstimateSaga(action) {
 // Get the renter's current allowance and spending.
 function* getAllowanceSaga() {
 	try {
-		const response = yield siadCall('/renter')
-		const allowanceSC = SiaAPI.hastingsToSiacoins(response.settings.allowance.funds)
+		let response = yield siadCall('/renter')
+		const allowance = SiaAPI.hastingsToSiacoins(response.settings.allowance.funds)
 
-		// remove contractspending from the spending calculation
-		delete response.financialmetrics.contractspending
+		response = yield siadCall('/renter/contracts')
+		const contracts = response.contracts
 
-		const spendingSC = totalSpending(response.financialmetrics)
-		yield put(actions.receiveAllowance(allowanceSC.toString()))
-		yield put(actions.receiveSpending(spendingSC.toString()))
+		const spendingSC = totalSpending(allowance, contracts)
+		yield put(actions.receiveAllowance(allowance.round(0).toString()))
+		yield put(actions.receiveSpending(spendingSC.round(0).toString()))
 	} catch (e) {
 		console.error(e)
 	}
