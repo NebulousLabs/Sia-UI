@@ -18,14 +18,6 @@ const siadCall = (uri) => new Promise((resolve, reject) => {
 	})
 })
 
-const isConnectionError = (e) =>
-	e.code !== 'undefined' &&
-		(e.code === 'ECONNREFUSED' ||
-		 e.code === 'ECONNRESET' ||
-		 e.code === 'ETIMEDOUT' ||
-		 e.code === 'EPIPE')
-
-
 const fetchStorageFiles = () => new Promise((resolve, reject) => {
 	siadCall({
 		url: '/host/storage',
@@ -48,6 +40,7 @@ function *announceHost(action) {
 		if (closeAction.address !== '') { //If size is zero just hide the dialog.
 			yield siadCall({
 				url: '/host/announce',
+				timeout: 30000, // 30 second timeout for host announcement
 				method: 'POST',
 				qs: { netaddress: closeAction.address },
 			})
@@ -177,11 +170,7 @@ function *fetchData(action) {
 
 		yield put( actions.fetchDataSuccess(data, settings, modals) )
 	} catch (e) {
-		if (isConnectionError(e)) {
-			console.error('siad communication error: ' + e.toString())
-			return
-		}
-		SiaAPI.showError({ title: 'Error Fetching Data', content: e.message })
+		console.error('error fetching host data: ' + e.toString())
 	}
 }
 

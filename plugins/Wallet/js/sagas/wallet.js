@@ -13,13 +13,6 @@ const sendError = (e) => {
 	})
 }
 
-const isConnectionError = (e) =>
-	e.code !== 'undefined' &&
-		(e.code === 'ECONNREFUSED' ||
-		 e.code === 'ECONNRESET' ||
-		 e.code === 'ETIMEDOUT' ||
-		 e.code === 'EPIPE')
-
 // Wallet plugin sagas
 // Sagas are an elegant way of handling asynchronous side effects.
 // All side effects logic is contained entirely in this file.
@@ -40,11 +33,7 @@ function *getLockStatusSaga() {
 			yield put(actions.setUnencrypted())
 		}
 	} catch (e) {
-		if (isConnectionError(e)) {
-			console.error('siad communication error: ' + e.toString())
-			return
-		}
-		sendError(e)
+		console.error('error fetching lock status: ' + e.toString())
 	}
 }
 
@@ -112,11 +101,7 @@ function *getBalanceSaga() {
 		const unconfirmed = unconfirmedIncoming.minus(unconfirmedOutgoing)
 		yield put(actions.setBalance(confirmed.round(2).toString(), unconfirmed.round(2).toString(), response.siafundbalance))
 	} catch (e) {
-		if (isConnectionError(e)) {
-			console.error('siad communication error: ' + e.toString())
-			return
-		}
-		sendError(e)
+		console.error('error fetching balance: ' + e.toString())
 	}
 }
 
@@ -127,11 +112,7 @@ function *getTransactionsSaga() {
 		const transactions = parseRawTransactions(response)
 		yield put(actions.setTransactions(transactions))
 	} catch (e) {
-		if (isConnectionError(e)) {
-			console.error('siad communication error: ' + e.toString())
-			return
-		}
-		sendError(e)
+		console.error('error fetching transactions: ' + e.toString())
 	}
 }
 // Call /wallet/address, set the receive address, and show the receive prompt.
