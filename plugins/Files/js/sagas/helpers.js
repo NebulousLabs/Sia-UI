@@ -37,7 +37,11 @@ export const siadCall = (uri) => new Promise((resolve, reject) => {
 // including fees. Allowance should be a bignumber of SC.
 export const totalSpending = (allowance, contracts) => {
 	const totalRenterPayouts = contracts.reduce((sum, contract) => sum.plus(SiaAPI.hastingsToSiacoins(contract.renterfunds)), new BigNumber(0))
-	return allowance.minus(totalRenterPayouts)
+	let spending = allowance.minus(totalRenterPayouts)
+	if (spending.lt(0)) {
+		spending = new BigNumber(0)
+	}
+	return spending
 }
 
 // Take a number of bytes and return a sane, human-readable size.
