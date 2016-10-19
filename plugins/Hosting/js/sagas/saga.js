@@ -18,6 +18,14 @@ const siadCall = (uri) => new Promise((resolve, reject) => {
 	})
 })
 
+const isConnectionError = (e) =>
+	e.code !== 'undefined' &&
+		(e.code === 'ECONNREFUSED' ||
+		 e.code === 'ECONNRESET' ||
+		 e.code === 'ETIMEDOUT' ||
+		 e.code === 'EPIPE')
+
+
 const fetchStorageFiles = () => new Promise((resolve, reject) => {
 	siadCall({
 		url: '/host/storage',
@@ -169,7 +177,8 @@ function *fetchData(action) {
 
 		yield put( actions.fetchDataSuccess(data, settings, modals) )
 	} catch (e) {
-		if (typeof e.code !== 'undefined' && e.code === 'ETIMEDOUT') {
+		if (isConnectionError(e)) {
+			console.error('siad communication error: ' + e.toString())
 			return
 		}
 		SiaAPI.showError({ title: 'Error Fetching Data', content: e.message })

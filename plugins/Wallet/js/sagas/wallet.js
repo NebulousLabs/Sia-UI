@@ -6,15 +6,19 @@ import * as constants from '../constants/wallet.js'
 import { walletUnlockError } from '../actions/error.js'
 
 // Send an error notification.
-const handleError = (e) => {
-	if (typeof e.code !== 'undefined' && e.code === 'ETIMEDOUT') {
-		return
-	}
+const sendError = (e) => {
 	SiaAPI.showError({
 		title: 'Sia-UI Wallet Error',
 		content: e.message,
 	})
 }
+
+const isConnectionError = (e) =>
+	e.code !== 'undefined' &&
+		(e.code === 'ECONNREFUSED' ||
+		 e.code === 'ECONNRESET' ||
+		 e.code === 'ETIMEDOUT' ||
+		 e.code === 'EPIPE')
 
 // Wallet plugin sagas
 // Sagas are an elegant way of handling asynchronous side effects.
@@ -36,7 +40,11 @@ function *getLockStatusSaga() {
 			yield put(actions.setUnencrypted())
 		}
 	} catch (e) {
-		handleError(e)
+		if (isConnectionError(e)) {
+			console.error('siad communication error: ' + e.toString())
+			return
+		}
+		sendError(e)
 	}
 }
 
@@ -71,7 +79,7 @@ function *walletLockSaga() {
 		yield put(actions.setEncrypted())
 		yield put(actions.setLocked())
 	} catch (e) {
-		handleError(e)
+		sendError(e)
 	}
 }
 
@@ -90,7 +98,7 @@ function *createWalletSaga() {
 		yield take(constants.SET_UNLOCKED)
 		yield put(actions.dismissNewWalletDialog())
 	} catch (e) {
-		handleError(e)
+		sendError(e)
 	}
 }
 
@@ -104,7 +112,11 @@ function *getBalanceSaga() {
 		const unconfirmed = unconfirmedIncoming.minus(unconfirmedOutgoing)
 		yield put(actions.setBalance(confirmed.round(2).toString(), unconfirmed.round(2).toString(), response.siafundbalance))
 	} catch (e) {
-		handleError(e)
+		if (isConnectionError(e)) {
+			console.error('siad communication error: ' + e.toString())
+			return
+		}
+		sendError(e)
 	}
 }
 
@@ -115,7 +127,11 @@ function *getTransactionsSaga() {
 		const transactions = parseRawTransactions(response)
 		yield put(actions.setTransactions(transactions))
 	} catch (e) {
-		handleError(e)
+		if (isConnectionError(e)) {
+			console.error('siad communication error: ' + e.toString())
+			return
+		}
+		sendError(e)
 	}
 }
 // Call /wallet/address, set the receive address, and show the receive prompt.
@@ -125,7 +141,7 @@ function *getNewReceiveAddressSaga() {
 		yield put(actions.setReceiveAddress(response.address))
 		yield put(actions.showReceivePrompt())
 	} catch (e) {
-		handleError(e)
+		sendError(e)
 	}
 }
 
@@ -152,7 +168,7 @@ function *sendCurrencySaga(action) {
 		yield put(actions.setSendAmount(''))
 		yield put(actions.setSendAddress(''))
 	} catch (e) {
-		handleError(e)
+		sendError(e)
 	}
 }
 
