@@ -17,7 +17,7 @@ export const siafundRate = 0.12
 export const sendError = (e) => {
 	SiaAPI.showError({
 		title: 'Sia-UI Files Error',
-		content: e.message,
+		content: typeof e.message !== 'undefined' ? e.message : e.toString(),
 	})
 }
 

@@ -77,11 +77,10 @@ buildLinux() {
 	mkdir resources/app
 	(
 		cd resources/app
-		mkdir Sia
-		cp `which siad` Sia/siad
-		cp `which siac` Sia/siac
-		chmod +x Sia/siad
-		chmod +x Sia/siac
+		wget $siaLinux
+		unzip ./Sia-*
+		rm ./Sia*.zip
+		mv ./Sia-* ./Sia
 	)
 	package "../../" "resources/app"
 	rm -r electron*.zip

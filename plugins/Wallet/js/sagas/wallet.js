@@ -8,8 +8,8 @@ import { walletUnlockError } from '../actions/error.js'
 // Send an error notification.
 const sendError = (e) => {
 	SiaAPI.showError({
-		title: 'Sia-UI Wallet Error',
-		content: e.message,
+	title: 'Sia-UI Wallet Error',
+		content: typeof e.message !== 'undefined' ? e.message : e.toString(),
 	})
 }
 
