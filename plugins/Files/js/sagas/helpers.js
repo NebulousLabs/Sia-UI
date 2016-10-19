@@ -13,7 +13,12 @@ export const baseRedundancy = 6
 export const baseFee = 240
 export const siafundRate = 0.12
 
-export const sendError = (e) => {
+// handleError handles an error given by e.
+export const handleError = (e) => {
+	if (typeof e.code !== 'undefined' && e.code === 'ETIMEDOUT') {
+		// NOP on timeouts.
+		return
+	}
 	SiaAPI.showError({
 		title: 'Sia-UI Files Error',
 		content: e.message,

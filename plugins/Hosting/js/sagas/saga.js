@@ -30,10 +30,7 @@ const fetchStorageFiles = () => new Promise((resolve, reject) => {
 				free: (new BigNumber(file.capacityremaining)).times('1e-9').toString(),
 			})
 		))))
-	}).catch( (e) => {
-		SiaAPI.showError({ title: 'Error Fetching Folders', content: e.message })
-		reject(e)
-	})
+	}).catch(reject)
 })
 
 function *announceHost(action) {
@@ -172,6 +169,9 @@ function *fetchData(action) {
 
 		yield put( actions.fetchDataSuccess(data, settings, modals) )
 	} catch (e) {
+		if (typeof e.code !== 'undefined' && e.code === 'ETIMEDOUT') {
+			return
+		}
 		SiaAPI.showError({ title: 'Error Fetching Data', content: e.message })
 	}
 }

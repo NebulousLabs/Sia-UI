@@ -6,7 +6,10 @@ import * as constants from '../constants/wallet.js'
 import { walletUnlockError } from '../actions/error.js'
 
 // Send an error notification.
-const sendError = (e) => {
+const handleError = (e) => {
+	if (typeof e.code !== 'undefined' && e.code === 'ETIMEDOUT') {
+		return
+	}
 	SiaAPI.showError({
 		title: 'Sia-UI Wallet Error',
 		content: e.message,
@@ -33,7 +36,7 @@ function *getLockStatusSaga() {
 			yield put(actions.setUnencrypted())
 		}
 	} catch (e) {
-		yield sendError(e)
+		handleError(e)
 	}
 }
 
@@ -45,6 +48,7 @@ function *walletUnlockSaga(action) {
 		yield siadCall({
 			url: '/wallet/unlock',
 			method: 'POST',
+			timeout: 12000000, // 20 minute timeout for unlocking
 			qs: {
 				encryptionpassword: action.password,
 			},
@@ -67,7 +71,7 @@ function *walletLockSaga() {
 		yield put(actions.setEncrypted())
 		yield put(actions.setLocked())
 	} catch (e) {
-		sendError(e)
+		handleError(e)
 	}
 }
 
@@ -86,7 +90,7 @@ function *createWalletSaga() {
 		yield take(constants.SET_UNLOCKED)
 		yield put(actions.dismissNewWalletDialog())
 	} catch (e) {
-		yield sendError(e)
+		handleError(e)
 	}
 }
 
@@ -100,7 +104,7 @@ function *getBalanceSaga() {
 		const unconfirmed = unconfirmedIncoming.minus(unconfirmedOutgoing)
 		yield put(actions.setBalance(confirmed.round(2).toString(), unconfirmed.round(2).toString(), response.siafundbalance))
 	} catch (e) {
-		yield sendError(e)
+		handleError(e)
 	}
 }
 
@@ -111,7 +115,7 @@ function *getTransactionsSaga() {
 		const transactions = parseRawTransactions(response)
 		yield put(actions.setTransactions(transactions))
 	} catch (e) {
-		yield sendError(e)
+		handleError(e)
 	}
 }
 // Call /wallet/address, set the receive address, and show the receive prompt.
@@ -121,7 +125,7 @@ function *getNewReceiveAddressSaga() {
 		yield put(actions.setReceiveAddress(response.address))
 		yield put(actions.showReceivePrompt())
 	} catch (e) {
-		yield sendError(e)
+		handleError(e)
 	}
 }
 
@@ -148,7 +152,7 @@ function *sendCurrencySaga(action) {
 		yield put(actions.setSendAmount(''))
 		yield put(actions.setSendAddress(''))
 	} catch (e) {
-		yield sendError(e)
+		handleError(e)
 	}
 }
 
