@@ -1,40 +1,47 @@
 import React, { PropTypes } from 'react'
-import StoragePlan from './storageplan.js'
-import ProgressBar from './progressbar.js'
 import UnlockWarning from './unlockwarning.js'
 
-const AllowanceDialog = ({unlocked, storageSize, storageCost, settingAllowance, allowanceProgress, actions}) => {
-	const setStorageSize = (size) => actions.calculateStorageCost(size)
+const AllowanceDialog = ({unlocked, feeEstimate, storageEstimate, actions}) => {
 	const onCancelClick = () => actions.closeAllowanceDialog()
-	const onAcceptClick = () => actions.setAllowance(storageCost)
-	let dialogContents
-	if (settingAllowance) {
-		dialogContents = (
-			<div className="allowance-dialog">
-				<div>
-					<h2> Buying {storageSize} GB of storage for a total of {storageCost} SC... </h2>
-					<ProgressBar progress={allowanceProgress} />
-				</div>
-			</div>
-		)
-	} else {
-		dialogContents = (
-			<div className="allowance-dialog">
-				<h3> Buy storage on the Sia Decentralized Network</h3>
-				<div className="storage-plans">
-					<StoragePlan storageSize={'10'} currentStorageSize={storageSize} setStorageSize={setStorageSize} />
-					<StoragePlan storageSize={'100'} currentStorageSize={storageSize} setStorageSize={setStorageSize} />
-					<StoragePlan storageSize={'250'} currentStorageSize={storageSize} setStorageSize={setStorageSize} />
-				</div>
-				<p> Estimated cost: {Math.floor(storageCost)} SC </p>
-				<p className="allowance-warning">Any unused funds will be refunded.</p>
-				<div className="allowance-buttons">
-					<button onClick={onCancelClick} className="allowance-button-cancel">Cancel</button>
-					<button onClick={onAcceptClick} className="allowance-button-accept">Accept</button>
-				</div>
-			</div>
-		)
+	const onAcceptClick = (e) => {
+		e.preventDefault()
+		actions.setAllowance(e.target.allowance.value)
 	}
+	const onAllowanceChange = (e) => {
+		actions.getStorageEstimate(e.target.value)
+		actions.setFeeEstimate(Math.floor(1000 + 0.12 * parseInt(e.target.value)) || 0)
+	}
+	const dialogContents = (
+		<div className="allowance-dialog">
+			<h3> Buy storage on the Sia Decentralized Network</h3>
+			<div className="allowance-message">
+				<p>You need to allocate funds to upload and download on Sia. Your allowance remains locked for 3 months. Unspent funds are then refunded*. You can increase your allowance at any time.</p>
+				<p>Your storage allowance automatically refills every 6 weeks. Your computer must be online with your wallet unlocked to complete the refill. If Sia fails to refill the allowance by the end of the lock-in period, your data may be lost.</p>
+				<p className="footnote">*contract fees are non-refundable. They will be subtracted from the allowance that you set.</p>
+			</div>
+			<form onSubmit={onAcceptClick}>
+				<div className="allowance-input">
+					<label>Allowance: <input type="number" name="allowance" defaultValue="5000" onFocus={onAllowanceChange} onChange={onAllowanceChange} required autoFocus className="allowance-amount" /></label>
+					<span> SC</span>
+				</div>
+				<div className="allowance-buttons">
+					<button type="submit" className="allowance-button-accept">Accept</button>
+					<button type="button" onClick={onCancelClick} className="allowance-button-cancel">Cancel</button>
+				</div>
+				<table className="estimates">
+					<tr>
+						<td className="estimate-label">Estimated Fees</td>
+						<td className="estimate-content">{feeEstimate} SC</td>
+					</tr>
+					<tr>
+						<td className="estimate-label">Estimated Storage</td>
+						<td className="estimate-content">{storageEstimate}</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	)
+
 	return (
 		<div className="modal">
 			{unlocked ? dialogContents : <UnlockWarning onClick={onCancelClick} />}
@@ -44,10 +51,8 @@ const AllowanceDialog = ({unlocked, storageSize, storageCost, settingAllowance, 
 
 AllowanceDialog.propTypes = {
 	unlocked: PropTypes.bool.isRequired,
-	storageSize: PropTypes.string.isRequired,
-	storageCost: PropTypes.string.isRequired,
-	allowanceProgress: PropTypes.number,
-	settingAllowance: PropTypes.bool.isRequired,
+	feeEstimate: PropTypes.number.isRequired,
+	storageEstimate: PropTypes.string.isRequired,
 }
 
 export default AllowanceDialog

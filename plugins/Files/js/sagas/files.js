@@ -1,15 +1,11 @@
 import { takeEvery } from 'redux-saga'
-import { put, take, fork, cancel } from 'redux-saga/effects'
+import { put } from 'redux-saga/effects'
 import Path from 'path'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import { List } from 'immutable'
-import { sendError, allowanceStorage, siadCall, totalUsage, readdirRecursive, parseDownloads, parseUploads, estimatedStoragePriceGBSC } from './helpers.js'
+import { allowancePeriod, allowanceHosts, estimatedStorage, totalSpending, sendError, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
 
-const blockMonth = 4320
-const allowanceMonths = 3
-const allowanceHosts = 24
-const allowancePeriod = blockMonth*allowanceMonths
 
 // Query siad for the state of the wallet.
 // dispatch `unlocked` in receiveWalletLockstate
@@ -33,20 +29,29 @@ function* getFilesSaga() {
 	}
 }
 
-// Get the storage usage as well as the available contract storage.
-function* getStorageMetricsSaga() {
+function* getStorageEstimateSaga(action) {
 	try {
-		let response = yield siadCall('/renter/files')
-		const files = response.files
-		response = yield siadCall('/renter')
-		const funds = response.settings.allowance.funds
-		response = yield siadCall('/hostdb/active')
-		const hosts = response.hosts
-		const available = allowanceStorage(funds, hosts, allowancePeriod)
-		const usage = totalUsage(List(files))
-		yield put(actions.receiveStorageMetrics(usage, available))
+		const response = yield siadCall('/hostdb/active')
+		const estimate = estimatedStorage(SiaAPI.siacoinsToHastings(action.funds), response.hosts)
+		yield put(actions.setStorageEstimate(estimate))
 	} catch (e) {
-		yield put(actions.receiveStorageMetrics('-- MB', '-- MB'))
+		console.error(e)
+	}
+}
+
+// Get the renter's current allowance and spending.
+function* getAllowanceSaga() {
+	try {
+		let response = yield siadCall('/renter')
+		const allowance = SiaAPI.hastingsToSiacoins(response.settings.allowance.funds)
+
+		response = yield siadCall('/renter/contracts')
+		const contracts = response.contracts
+
+		const spendingSC = totalSpending(allowance, contracts)
+		yield put(actions.receiveAllowance(allowance.round(0).toString()))
+		yield put(actions.receiveSpending(spendingSC.round(0).toString()))
+	} catch (e) {
 		console.error(e)
 	}
 }
@@ -54,8 +59,8 @@ function* getStorageMetricsSaga() {
 // Set the user's renter allowance.
 function* setAllowanceSaga(action) {
 	try {
-		const response = yield siadCall('/renter')
-		const newAllowance = SiaAPI.siacoinsToHastings(action.funds).add(response.settings.allowance.funds)
+		const newAllowance = SiaAPI.siacoinsToHastings(action.funds)
+		yield put(actions.closeAllowanceDialog())
 		yield siadCall({
 			url: '/renter',
 			method: 'POST',
@@ -66,26 +71,10 @@ function* setAllowanceSaga(action) {
 			},
 		})
 		yield put(actions.setAllowanceCompleted())
-		yield put(actions.closeAllowanceDialog())
 	} catch (e) {
 		sendError(e)
 		yield put(actions.setAllowanceCompleted())
 		yield put(actions.closeAllowanceDialog())
-	}
-}
-
-// Calculate monthly storage cost from a requested monthly storage amount
-function* calculateStorageCostSaga(action) {
-	try {
-		const response = yield siadCall('/hostdb/active')
-		const cost = estimatedStoragePriceGBSC(response.hosts, action.size, allowancePeriod)
-		yield put(actions.setStorageCost(cost.round(3).toString()))
-		yield put(actions.setStorageSize(action.size))
-	} catch (e) {
-		yield put(actions.setStorageSize(''))
-		yield put(actions.setStorageCost('0'))
-		yield put(actions.closeAllowanceDialog())
-		sendError(e)
 	}
 }
 
@@ -95,30 +84,6 @@ function* getWalletBalanceSaga() {
 		const response = yield siadCall('/wallet')
 		const confirmedBalance = SiaAPI.hastingsToSiacoins(response.confirmedsiacoinbalance).round(2).toString()
 		yield put(actions.receiveWalletBalance(confirmedBalance))
-	} catch (e) {
-		sendError(e)
-	}
-}
-
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-
-function* setAllowanceProgressBarSaga() {
-	try {
-		let response = yield siadCall('/renter/contracts')
-		if (!response.contracts) {
-			return
-		}
-		const initialContracts = response.contracts.length
-		while (true) {
-			response = yield siadCall('/renter/contracts')
-			const deltaContracts = response.contracts.length - initialContracts
-			if (deltaContracts >= allowanceHosts) {
-				break
-			}
-			const progress = Math.floor((deltaContracts / allowanceHosts) * 100)
-			yield put(actions.setAllowanceProgress(progress))
-			yield delay(500)
-		}
 	} catch (e) {
 		sendError(e)
 	}
@@ -233,13 +198,10 @@ function* renameFileSaga(action) {
 }
 
 export function* watchSetAllowance() {
-	while (true) {
-		const allowance = yield take(constants.SET_ALLOWANCE)
-		const progressTask = yield fork(setAllowanceProgressBarSaga)
-		yield fork(setAllowanceSaga, allowance)
-		yield take(constants.SET_ALLOWANCE_COMPLETED)
-		yield cancel(progressTask)
-	}
+	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
+}
+export function* watchGetAllowance() {
+	yield *takeEvery(constants.GET_ALLOWANCE, getAllowanceSaga)
 }
 export function* watchGetDownloads() {
 	yield *takeEvery(constants.GET_DOWNLOADS, getDownloadsSaga)
@@ -262,9 +224,6 @@ export function* watchGetWalletBalance() {
 export function* watchUploadFolder() {
 	yield *takeEvery(constants.UPLOAD_FOLDER, uploadFolderSaga)
 }
-export function* watchCalculateStorageCost() {
-	yield *takeEvery(constants.CALCULATE_STORAGE_COST, calculateStorageCostSaga)
-}
 export function* watchGetContractCount() {
 	yield *takeEvery(constants.GET_CONTRACT_COUNT, getContractCountSaga)
 }
@@ -274,9 +233,9 @@ export function* watchUploadFile() {
 export function* watchDownloadFile() {
 	yield *takeEvery(constants.DOWNLOAD_FILE, downloadFileSaga)
 }
-export function* watchGetStorageMetrics() {
-	yield *takeEvery(constants.GET_STORAGE_METRICS, getStorageMetricsSaga)
-}
 export function* watchRenameFile() {
 	yield *takeEvery(constants.RENAME_FILE, renameFileSaga)
+}
+export function* watchGetStorageEstimate() {
+	yield *takeEvery(constants.GET_STORAGE_ESTIMATE, getStorageEstimateSaga)
 }

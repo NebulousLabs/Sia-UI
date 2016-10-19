@@ -59,7 +59,16 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 			}
 		}
 		return (
-			<File key={key} selected={isSelected} filename={file.name} filesize={file.size} onRenameClick={onRenameClick} onClick={onFileClick} onDownloadClick={onDownloadClick} onDeleteClick={onDeleteClick} />
+			<File
+				key={key}
+				selected={isSelected}
+				filename={file.name}
+				filesize={file.size}
+				onRenameClick={onRenameClick}
+				onClick={onFileClick}
+				onDownloadClick={onDownloadClick}
+				onDeleteClick={onDeleteClick}
+			/>
 		)
 	})
 	return (

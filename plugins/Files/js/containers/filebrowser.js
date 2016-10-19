@@ -5,6 +5,7 @@ import { setDragging, deselectAll, setNotDragging, showUploadDialog } from '../a
 
 const mapStateToProps = (state) => ({
 	dragging: state.files.get('dragging'),
+	settingAllowance: state.files.get('settingAllowance'),
 	showRenameDialog: state.files.get('showRenameDialog'),
 	showUploadDialog: state.files.get('showUploadDialog'),
 	showFileTransfers: state.files.get('showFileTransfers'),

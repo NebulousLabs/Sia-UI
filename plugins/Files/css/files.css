@@ -165,7 +165,6 @@ div[tabindex="1"]:focus {
 	position: absolute;
 	left: 0px;
 	top: 55px;
-	z-index: 1;
 	overflow: hidden;
 	padding: 17px 0px 0px;
 	max-height: 0px;
@@ -362,8 +361,7 @@ div[tabindex="1"]:focus {
 .allowance-dialog h3 {
 	padding: 0;
 	margin: 0;
-	margin-top: 30px;
-	margin-bottom: 10px;
+	margin-bottom: 15px;
 }
 .allowance-dialog.unlock-warning {
 	justify-content: center;
@@ -371,15 +369,20 @@ div[tabindex="1"]:focus {
 .unlock-warning-head {
 	margin-top: 10px;
 }
+.allowance-message > .footnote {
+	font-size: 14px;
+}
+.allowance-message {
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-bottom: 25px;
+}
 .allowance-dialog p {
 	margin-top: 10px;
-	text-align: center;
+	text-align: left;
 }
 .allowance-warning {
 	color: #A71A18;
-}
-.allowance-buttons {
-	margin-bottom: 15px;
 }
 .allowance-buttons button {
 	width: 100px;
@@ -387,17 +390,65 @@ div[tabindex="1"]:focus {
 	margin-left: 5px;
 	margin-right: 5px;
 }
-.allowance-dialog {
-	margin-left: 15px;
-	margin-right: 15px;
+.allowance-dialog form {
+	width: 400px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: center;
+}
+.allowance-buttons {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.allowance-dialog form input {
+	display: inline-block;
+	text-align: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-right: 4px;
+	width: 187px;
+}
+.estimates {
+	margin-top: 35px;
+	width: 230px;
+}
+.allowance-dialog form {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.allowance-input {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding-right: 80px;
+}
+.allowance-dialog {
+	padding: 40px 40px 40px 40px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
 	background-color: #ECECEC;
 	width: 80%;
-	height: 70%;
+	height: 400px;
 	z-index: 10;
+}
+.allowance-input span {
+	display: inline-block;
+}
+.estimate-label {
+	text-align: left;
+}
+.estimate-content {
+	text-align: right;
+}
+.estimates td {
+	padding-left: 5px;
+	padding-right: 5px;
 }
 .delete-dialog {
 	margin-left: 15px;

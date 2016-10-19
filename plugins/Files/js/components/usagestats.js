@@ -1,14 +1,14 @@
 import React, { PropTypes } from 'react'
 
-const UsageStats = ({storageusage, storageavailable}) => (
+const UsageStats = ({allowance, spending}) => (
 	<div className="files-usage-info">
-		<span> {storageusage} Used / {storageavailable} Available </span>
+		<span> {spending} SC Spent / {allowance} SC Allocated </span>
 	</div>
 )
 
 UsageStats.propTypes = {
-	storageusage: PropTypes.string.isRequired,
-	storageavailable: PropTypes.string.isRequired,
+	allowance: PropTypes.string.isRequired,
+	spending: PropTypes.string.isRequired,
 }
 
 export default UsageStats

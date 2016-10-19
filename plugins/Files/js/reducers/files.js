@@ -3,8 +3,6 @@ import * as constants from '../constants/files.js'
 import { ls, searchFiles } from '../sagas/helpers.js'
 
 const initialState = Map({
-	storageUsage: '0 MB',
-	storageAvailable: '0 MB',
 	files: List(),
 	workingDirectoryFiles: List(),
 	searchResults: List(),
@@ -20,20 +18,36 @@ const initialState = Map({
 	showFileTransfers: false,
 	showDeleteDialog: false,
 	showRenameDialog: false,
+	settingAllowance: false,
 	dragging: false,
 	contractCount: 0,
+	allowance: '0',
+	spending: '0',
+	storageEstimate: '',
+	feeEstimate: 0,
 })
 
 export default function filesReducer(state = initialState, action) {
 	switch (action.type) {
-	case constants.RECEIVE_STORAGE_METRICS:
-		return state.set('storageUsage', action.usage)
-		            .set('storageAvailable', action.available)
+	case constants.SET_ALLOWANCE_COMPLETED:
+		return state.set('settingAllowance', false)
+	case constants.RECEIVE_ALLOWANCE:
+		return state.set('allowance', action.allowance)
+	case constants.RECEIVE_SPENDING:
+		return state.set('spending', action.spending)
+	case constants.SET_STORAGE_ESTIMATE:
+		return state.set('storageEstimate', action.estimate)
+	case constants.SET_FEE_ESTIMATE:
+		return state.set('feeEstimate', action.estimate)
 	case constants.RECEIVE_FILES:
 		return state.set('files', action.files)
 		            .set('workingDirectoryFiles', ls(action.files, state.get('path')))
 								// ensure `selected` contains no nonexistant files.
 								.set('selected', state.get('selected').intersect(action.files.map((file) => file.siapath)))
+	case constants.SET_ALLOWANCE:
+		return state.set('allowance', action.funds)
+		            .set('settingAllowance', true)
+
 	case constants.SET_SEARCH_TEXT:
 		const results = searchFiles(state.get('files'), action.text, state.get('path'))
 		return state.set('searchResults', results)

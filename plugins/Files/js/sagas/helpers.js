@@ -4,6 +4,15 @@ import BigNumber from 'bignumber.js'
 import Path from 'path'
 import fs from 'fs'
 
+export const blockMonth = 4320
+export const allowanceMonths = 3
+export const allowanceHosts = 24
+export const allowancePeriod = blockMonth*allowanceMonths
+export const ncontracts = 24
+export const baseRedundancy = 6
+export const baseFee = 240
+export const siafundRate = 0.12
+
 export const sendError = (e) => {
 	SiaAPI.showError({
 		title: 'Sia-UI Files Error',
@@ -22,6 +31,14 @@ export const siadCall = (uri) => new Promise((resolve, reject) => {
 		}
 	})
 })
+
+// totalSpending takes an allowance, and a list of contracts returned from the
+// API and returns the total that the user has spent out of their allowance,
+// including fees. Allowance should be a bignumber of SC.
+export const totalSpending = (allowance, contracts) => {
+	const totalRenterPayouts = contracts.reduce((sum, contract) => sum.plus(SiaAPI.hastingsToSiacoins(contract.renterfunds)), new BigNumber(0))
+	return allowance.minus(totalRenterPayouts)
+}
 
 // Take a number of bytes and return a sane, human-readable size.
 export const readableFilesize = (bytes) => {
@@ -93,6 +110,34 @@ export const readdirRecursive = (path, files) => {
 	return filelist
 }
 
+// avgHostMetric computes the average of the metric given by `metric` on the
+// list of `hosts`.
+const avgHostMetric = (hosts, metric) =>
+	hosts.reduce((sum, host) => sum.add(host[metric]), new BigNumber(0))
+	     .dividedBy(hosts.size)
+
+// avgStorageCost returns the average storage cost from a list of hosts given a
+// period (blocks) and redundancy.
+const avgStorageCost = (hosts, period, redundancy) =>
+	avgHostMetric(hosts, 'storageprice')
+	             .times(period)
+	             .plus(avgHostMetric(hosts, 'uploadbandwidthprice'))
+							 .times(redundancy)
+	             .plus(avgHostMetric(hosts, 'downloadbandwidthprice'))
+
+// Compute an estimated amount of storage from an amount of funds (Hastings)
+// and a list of hosts.
+export const estimatedStorage = (funds, hosts) => {
+	const validHosts = List(hosts).take(28)
+	const avgStorage = avgStorageCost(validHosts, allowancePeriod, baseRedundancy)
+
+	let fee = SiaAPI.siacoinsToHastings(baseFee)
+	fee = fee.plus(avgHostMetric(validHosts, 'contractprice').times(ncontracts))
+	fee = fee.plus(funds.minus(fee).times(siafundRate))
+
+	return '~' + readableFilesize(Math.max(0, funds.minus(fee).dividedBy(avgStorage).toNumber().toPrecision(1)))
+}
+
 // Parse a response from `/renter/downloads`
 // return a list of file downloads
 export const parseDownloads = (since, downloads) => List(downloads)
@@ -138,49 +183,3 @@ export const searchFiles = (files, text, path) => {
 	}))
 }
 
-const bytesPerGB = new BigNumber('1000000000')
-
-// Compute the estimated price per byte/hastings given a list of hosts.
-export const estimatedStoragePriceH = (hosts) => {
-	const minimumHosts = 14
-	const hostPrices = List(hosts).map((host) => new BigNumber(host.storageprice))
-	if (hostPrices.size < minimumHosts) {
-		throw { message: 'not enough hosts' }
-	}
-
-	// Compute the average host price.
-	// Multiply this average by 9 to assume a redundancy of 6 with 25% of the files being downloaded at 2x monthly price
-	// TODO: this functionality should be in the api.
-	const validHosts = hostPrices.sortBy((price) => price.toNumber())
-	                             .take(36)
-	                             .filter((price) => price.lt(SiaAPI.siacoinsToHastings(500000))) // filter outliers
-
-	return validHosts.reduce((sum, price) => sum.add(price), new BigNumber(0))
-	                 .dividedBy(validHosts.size)
-	                 .times(9)
-}
-
-// Maximum estimated storage is 1TB
-const maxEstimatedStorage = 1000000000000
-
-// Take an allowance and return a number of bytes this allowance
-// can be used to store, given a list of hosts to store data on.
-export const allowanceStorage = (funds, hosts, period) => {
-	const allowanceFunds = new BigNumber(funds)
-	let costPerB = estimatedStoragePriceH(hosts).times(period)
-	// If costPerB is zero, set it to some sane, low, amount instead
-	if (costPerB.isZero()) {
-		costPerB = new BigNumber('10000')
-	}
-	const storageBytes = Math.min(maxEstimatedStorage, allowanceFunds.dividedBy(costPerB).toNumber())
-	return readableFilesize(storageBytes)
-}
-
-// Compute the estimated price given a List of hosts, size to store, and duration.
-// `duration` is in blocks, size is in GB.
-// returns a `BigNumber` representing the average number of Siacoins per GB per duration
-export const estimatedStoragePriceGBSC = (hosts, size, duration) => {
-	const pricePerByteSC = SiaAPI.hastingsToSiacoins(estimatedStoragePriceH(hosts))
-	const averagePricePerGBBlock = pricePerByteSC.times(bytesPerGB)
-	return averagePricePerGBBlock.times(size).times(duration).add('2000')
-}

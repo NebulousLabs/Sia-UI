@@ -5,7 +5,7 @@ const SetAllowanceButton = ({actions}) => {
 	return (
 		<div onClick={handleClick} className="set-allowance-button">
 			<i className="fa fa-credit-card fa-2x" />
-			<span>Buy Storage</span>
+			<span>Create Allowance</span>
 		</div>
 	)
 }

@@ -8,7 +8,6 @@ import { spy } from 'sinon'
 import proxyquire from 'proxyquire'
 import { List } from 'immutable'
 import * as Siad from 'sia.js'
-import BigNumber from 'bignumber.js'
 import rootReducer from '../../plugins/Files/js/reducers/index.js'
 const sagaMiddleware = createSagaMiddleware()
 
@@ -217,33 +216,16 @@ describe('files plugin sagas', () => {
 		expect(deleteSpy.calledWithExactly('/renter/delete/test/siapath')).to.be.true
 		expect(SiaAPI.showError.called).to.be.false
 	})
-	it('calls receiveStorageMetrics on getStorageMetrics', async () => {
-		testUsage = '2 GB'
-		testAvailableStorage = '12 GB'
-		store.dispatch(actions.getStorageMetrics())
-		await sleep(10)
-		expect(store.getState().files.get('storageUsage')).to.equal(testUsage)
-		expect(store.getState().files.get('storageAvailable')).to.equal(testAvailableStorage)
-		expect(SiaAPI.showError.called).to.be.false
-	})
 	it('sets allowance with the correct allowance on setAllowance', async () => {
-		const buyAmount = '1000'
-		const expectedAllowance = testFunds.add(Siad.siacoinsToHastings(buyAmount)).toString()
+		const allowance = '10000' // SC
+		const expectedAllowance = Siad.siacoinsToHastings(allowance).toString()
 		const expectedPeriod = 3*4320
 		const expectedHosts = 24
-		store.dispatch(actions.setAllowance(buyAmount))
+		store.dispatch(actions.setAllowance(allowance))
 		await sleep(10)
 		expect(setAllowanceSpy.calledWithExactly(expectedAllowance, expectedHosts, expectedPeriod)).to.be.true
 		expect(store.getState().files.get('showAllowanceDialog')).to.be.false
-		expect(store.getState().allowancedialog.get('settingAllowance')).to.be.false
-		expect(SiaAPI.showError.called).to.be.false
-	})
-	it('sets storage cost and size on calculateStorageCost', async () => {
-		testCost = new BigNumber('1337')
-		store.dispatch(actions.calculateStorageCost('100'))
-		await sleep(10)
-		expect(store.getState().allowancedialog.get('storageSize')).to.equal('100')
-		expect(store.getState().allowancedialog.get('storageCost')).to.equal(testCost.round(3).toString())
+		expect(store.getState().files.get('settingAllowance')).to.be.false
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('sets the correct wallet balance on getWalletBalance', async () => {

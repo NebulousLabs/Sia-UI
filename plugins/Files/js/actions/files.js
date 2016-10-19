@@ -17,6 +17,26 @@ export const receiveFiles = (files) => ({
 export const getAllowance = () => ({
 	type: constants.GET_ALLOWANCE,
 })
+export const receiveAllowance = (allowance) => ({
+	type: constants.RECEIVE_ALLOWANCE,
+	allowance,
+})
+export const receiveSpending = (spending) => ({
+	type: constants.RECEIVE_SPENDING,
+	spending,
+})
+export const getStorageEstimate = (funds) => ({
+	type: constants.GET_STORAGE_ESTIMATE,
+	funds,
+})
+export const setStorageEstimate = (estimate) => ({
+	type: constants.SET_STORAGE_ESTIMATE,
+	estimate,
+})
+export const setFeeEstimate = (estimate) => ({
+	type: constants.SET_FEE_ESTIMATE,
+	estimate,
+})
 export const setAllowanceCompleted = () => ({
 	type: constants.SET_ALLOWANCE_COMPLETED,
 })
@@ -36,22 +56,6 @@ export const showAllowanceDialog = () => ({
 })
 export const closeAllowanceDialog = () => ({
 	type: constants.CLOSE_ALLOWANCE_DIALOG,
-})
-export const calculateStorageCost = (size) => ({
-	type: constants.CALCULATE_STORAGE_COST,
-	size,
-})
-export const setStorageCost = (cost) => ({
-	type: constants.SET_STORAGE_COST,
-	cost,
-})
-export const setStorageSize = (size) => ({
-	type: constants.SET_STORAGE_SIZE,
-	size,
-})
-export const setAllowanceProgress = (progress) => ({
-	type: constants.SET_ALLOWANCE_PROGRESS,
-	progress,
 })
 export const setPath = (path) => ({
 	type: constants.SET_PATH,
@@ -127,14 +131,6 @@ export const showDeleteDialog = (files) => ({
 })
 export const hideDeleteDialog = () => ({
 	type: constants.HIDE_DELETE_DIALOG,
-})
-export const getStorageMetrics = () => ({
-	type: constants.GET_STORAGE_METRICS,
-})
-export const receiveStorageMetrics = (usage, available) => ({
-	type: constants.RECEIVE_STORAGE_METRICS,
-	usage,
-	available,
 })
 export const openDownloadLocation = (location) => ({
 	type: constants.OPEN_DOWNLOAD_LOCATION,
