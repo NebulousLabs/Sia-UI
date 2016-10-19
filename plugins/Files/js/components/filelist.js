@@ -7,7 +7,7 @@ import FileControls from '../containers/filecontrols.js'
 import DirectoryInfoBar from './directoryinfobar.js'
 
 const FileList = ({files, selected, searchResults, path, showSearchField, actions}) => {
-	const onBackClick = () => {
+	const onBackClick = (e) => {
 		if (path === '') {
 			return
 		}
@@ -46,6 +46,7 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 			actions.showDeleteDialog(List([file]))
 		}
 		const onFileClick = (e) => {
+			e.stopPropagation()
 			const shouldMultiSelect = e.ctrlKey || e.metaKey
 			const shouldRangeSelect = e.shiftKey
 			if (!shouldMultiSelect && !shouldRangeSelect) {
@@ -60,6 +61,9 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 				actions.selectFile(file)
 			}
 		}
+		const onRedundancyClick = () => {
+			actions.showRedundancyInfo(file.siapath)
+		}
 		const onDoubleClick = (e) => {
 			e.stopPropagation()
 			if (file.type === 'directory') {
@@ -72,6 +76,8 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 				selected={isSelected}
 				filename={file.name}
 				filesize={file.size}
+				redundancy={file.redundancy}
+				available={file.available}
 				onDoubleClick={onDoubleClick}
 				type={file.type}
 				onRenameClick={onRenameClick}

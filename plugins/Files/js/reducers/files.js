@@ -59,8 +59,8 @@ export default function filesReducer(state = initialState, action) {
 		            .set('searchText', action.text)
 	case constants.SET_PATH:
 		return state.set('path', action.path)
-		            .set('workingDirectoryFiles', ls(state.get('files'), action.path))
 		            .set('selected', OrderedSet())
+		            .set('workingDirectoryFiles', ls(state.get('files'), action.path))
 		            .set('searchResults', searchFiles(state.get('workingDirectoryFiles'), state.get('searchText', state.get('path'))))
 	case constants.DESELECT_FILE:
 		return state.set('selected', state.get('selected').filter((file) => file.siapath !== action.file.siapath))
