@@ -76,7 +76,7 @@ export const parseRawTransactions = (response) => {
 			confirmed,
 			transactionsums,
 			transactionid: txn.transactionid,
-			confirmationtimestamp: txn.confirmed ? new Date(txn.confirmationtimestamp*1000) : new Date(),
+			confirmationtimestamp: new Date(txn.confirmationtimestamp*1000),
 		}
 	}))
 	// Return the transactions, sorted by timestamp.

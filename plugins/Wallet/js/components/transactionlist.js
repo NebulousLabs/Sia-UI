@@ -35,7 +35,7 @@ const TransactionList = ({transactions, ntransactions, actions}) => {
 		}
 		return (
 			<tr key={key}>
-				<td>{prettyTimestamp(txn.confirmationtimestamp)}</td>
+				<td>{txn.confirmed ? prettyTimestamp(txn.confirmationtimestamp) : 'Not Confirmed'}</td>
 				<td>{valueData}</td>
 				<td className="txid">{txn.transactionid}</td>
 				<td>{txn.confirmed ? <i className="fa fa-check-square confirmed-icon"> Confirmed </i> : <i className="fa fa-clock-o unconfirmed-icon"> Unconfirmed </i>}</td>
