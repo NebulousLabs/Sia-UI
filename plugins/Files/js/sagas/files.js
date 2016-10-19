@@ -4,12 +4,8 @@ import Path from 'path'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import { List } from 'immutable'
-import { allowanceStorage, totalSpending, sendError, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
+import { allowancePeriod, allowanceHosts, estimatedStorage, totalSpending, sendError, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
 
-const blockMonth = 4320
-const allowanceMonths = 3
-const allowanceHosts = 24
-const allowancePeriod = blockMonth*allowanceMonths
 
 // Query siad for the state of the wallet.
 // dispatch `unlocked` in receiveWalletLockstate
@@ -36,7 +32,7 @@ function* getFilesSaga() {
 function* getStorageEstimateSaga(action) {
 	try {
 		const response = yield siadCall('/hostdb/active')
-		const estimate = allowanceStorage(SiaAPI.siacoinsToHastings(action.funds), response.hosts, allowancePeriod)
+		const estimate = estimatedStorage(SiaAPI.siacoinsToHastings(action.funds), response.hosts)
 		yield put(actions.setStorageEstimate(estimate))
 	} catch (e) {
 		console.error(e)
