@@ -142,7 +142,7 @@ div[tabindex="1"]:focus {
 .files-toolbar {
 	width: 100%;
 	height: 70px;
-	min-width: 500px;
+	min-width: 700px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -397,12 +397,6 @@ div[tabindex="1"]:focus {
 	align-items: center;
 	justify-content: center;
 }
-.allowance-buttons {
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
 .allowance-dialog form input {
 	display: inline-block;
 	text-align: center;
@@ -420,10 +414,6 @@ div[tabindex="1"]:focus {
 	margin-bottom: 10px;
 }
 .allowance-input {
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	padding-right: 80px;
 }
 .allowance-dialog {
@@ -434,6 +424,7 @@ div[tabindex="1"]:focus {
 	justify-content: space-around;
 	background-color: #ECECEC;
 	width: 80%;
+	min-width: 650px;
 	height: 400px;
 	z-index: 10;
 }
