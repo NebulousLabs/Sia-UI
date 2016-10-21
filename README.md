@@ -19,7 +19,7 @@ the Sia network.
 - [siad](https://github.com/NebulousLabs/Sia)
 - [node & npm 6.9.0 LTS](https://nodejs.org/download/)
 Earlier node versions may work, but they do not have guarenteed support.
-- `libxss` is required for electron on some systems.
+- `libxss` is a required dependency for Electron on Debian, it can be installed with `sudo apt-get install libxss1`.
 
 ## Running
 
