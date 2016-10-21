@@ -16,7 +16,10 @@ the Sia network.
 
 ## Prerequisites
 
-- [node & npm (packaged together)](https://nodejs.org/download/)
+- [siad](https://github.com/NebulousLabs/Sia)
+- [node & npm 6.9.0 LTS](https://nodejs.org/download/)
+Earlier node versions may work, but they do not have guarenteed support.
+- `libxss` is required for electron on some systems.
 
 ## Running
 
@@ -26,6 +29,7 @@ the Sia network.
 
 Run from source
 
+0. Install dependencies mentioned above
 1. Download or `git clone` the repository
 2. npm install
 3. npm start
