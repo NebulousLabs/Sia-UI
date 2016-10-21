@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { PropTypes }  from 'react'
+import { List } from 'immutable'
 import Modal from './warningmodal.js'
 import Path from 'path'
 
@@ -19,10 +20,10 @@ const FilesList = ({ folders, folderPathToRemove, actions }) => {
 				<div className="name">{folder.get('path')}</div>
 			</div>
 			<div className="pure-u-1-12">
-				<div>{folder.get('free').toString()} GB</div>
+				<div>{Math.floor(folder.get('free')).toString()} GB</div>
 			</div>
 			<div className="pure-u-1-12">
-				<div>{folder.get('size').toString()} GB</div>
+				<div>{Math.floor(folder.get('size')).toString()} GB</div>
 			</div>
 			<div className="pure-u-1-24" onClick={onResizeStorageLocationClick(folder)}>
 				<div><i className="fa fa-edit button" /></div>
@@ -39,7 +40,7 @@ const FilesList = ({ folders, folderPathToRemove, actions }) => {
 					: null
 			}
 		</div>
-	)).toList()
+	))
 
 	return (
 		<div className="files section">
@@ -58,6 +59,11 @@ const FilesList = ({ folders, folderPathToRemove, actions }) => {
 			{FileList}
 		</div>
 	)
+}
+
+FilesList.propTypes = {
+	folderPathToRemove: PropTypes.string,
+	folders: PropTypes.instanceOf(List).isRequired,
 }
 
 export default FilesList
