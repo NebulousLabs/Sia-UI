@@ -8,7 +8,6 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const mapStateToProps = (state) => ({
-	acceptingContracts: state.hostingReducer.get('acceptingContracts'),
 	folders: state.hostingReducer.get('files'),
 	folderPathToRemove: state.modalReducer.get('folderPathToRemove'),
 })

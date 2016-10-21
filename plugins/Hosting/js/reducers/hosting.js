@@ -15,7 +15,6 @@ export default function hostingReducer(state = initialState, action) {
 	switch (action.type) {
 	case constants.FETCH_DATA_SUCCESS:
 		return state.merge(action.data)
-
 	default:
 		return state
 	}
