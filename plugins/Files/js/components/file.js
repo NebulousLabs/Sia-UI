@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react'
 
-const File = ({filename, selected, filesize, onRenameClick, onDownloadClick, onDeleteClick, onClick}) => (
+const File = ({filename, type, selected, filesize, onIconClick, onRenameClick, onDownloadClick, onDeleteClick, onClick}) => (
 	<li onClick={onClick} className={selected ? 'filebrowser-file selected' : 'filebrowser-file'}>
 		<div className="filename">
-			<i className="fa fa-file" />
+			{type === 'file' ? <i className="fa fa-file" /> : <i className="fa fa-folder" onClick={onIconClick} />}
 			<div className="name">{filename}</div>
 		</div>
 		<div className="file-info">
@@ -25,11 +25,13 @@ const File = ({filename, selected, filesize, onRenameClick, onDownloadClick, onD
 
 File.propTypes = {
 	filename: PropTypes.string.isRequired,
+	type: PropTypes.string.isRequired,
 	filesize: PropTypes.string.isRequired,
 	selected: PropTypes.bool.isRequired,
 	onRenameClick: PropTypes.func.isRequired,
 	onDownloadClick: PropTypes.func.isRequired,
 	onDeleteClick: PropTypes.func.isRequired,
+	onIconClick: PropTypes.func.isRequired,
 	onClick: PropTypes.func.isRequired,
 }
 

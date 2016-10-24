@@ -1,13 +1,11 @@
 import React, { PropTypes } from 'react'
 import { List, Set } from 'immutable'
 import File from './file.js'
-import Directory from './directory.js'
 import Path from 'path'
 import SearchField from '../containers/searchfield.js'
 import FileControls from '../containers/filecontrols.js'
 
 const FileList = ({files, selected, searchResults, path, showSearchField, actions}) => {
-	const onDirectoryClick = (directory) => () => actions.setPath(Path.join(path, directory.name))
 	const onBackClick = () => {
 		if (path === '') {
 			return
@@ -26,11 +24,6 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 		filelistFiles = files
 	}
 	const fileElements = filelistFiles.map((file, key) => {
-		if (file.type === 'directory') {
-			return (
-				<Directory key={key} onClick={onDirectoryClick(file)} name={file.name} />
-			)
-		}
 		const isSelected = selected.includes(file.siapath)
 		const onRenameClick = (e) => {
 			e.stopPropagation()
@@ -58,12 +51,19 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 				actions.selectFile(file.siapath)
 			}
 		}
+		const onIconClick = () => {
+			if (file.type === 'directory') {
+				actions.setPath(Path.join(path, file.name))
+			}
+		}
 		return (
 			<File
 				key={key}
 				selected={isSelected}
 				filename={file.name}
 				filesize={file.size}
+				onIconClick={onIconClick}
+				type={file.type}
 				onRenameClick={onRenameClick}
 				onClick={onFileClick}
 				onDownloadClick={onDownloadClick}
