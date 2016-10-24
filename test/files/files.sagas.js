@@ -204,14 +204,18 @@ describe('files plugin sagas', () => {
 		expect(store.getState().files.get('downloading')).to.deep.equal(testDownloads)
 		expect(SiaAPI.showError.called).to.be.false
 	})
+	const testFile = {
+		siapath: 'test/siapath',
+		type: 'file',
+	}
 	it('calls /renter/download on downloadFile', async () => {
-		store.dispatch(actions.downloadFile('test/siapath', '/test/downloadpath'))
+		store.dispatch(actions.downloadFile(testFile, '/test/downloadpath'))
 		await sleep(10)
 		expect(downloadSpy.calledWithExactly('/renter/download/test/siapath', '/test/downloadpath')).to.be.true
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('calls /renter/delete on deleteFile', async () => {
-		store.dispatch(actions.deleteFile('test/siapath'))
+		store.dispatch(actions.deleteFile(testFile))
 		await sleep(10)
 		expect(deleteSpy.calledWithExactly('/renter/delete/test/siapath')).to.be.true
 		expect(SiaAPI.showError.called).to.be.false
@@ -235,7 +239,7 @@ describe('files plugin sagas', () => {
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('calls /renter/rename on renameFile', async () => {
-		store.dispatch(actions.renameFile('test/siapath', 'test/newsiapath'))
+		store.dispatch(actions.renameFile(testFile, 'test/newsiapath'))
 		await sleep(10)
 		expect(renameSpy.calledWithExactly('/renter/rename/test/siapath', 'test/newsiapath')).to.be.true
 		expect(SiaAPI.showError.called).to.be.false

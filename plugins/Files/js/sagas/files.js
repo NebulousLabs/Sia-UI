@@ -1,10 +1,11 @@
 import { takeEvery } from 'redux-saga'
 import { put } from 'redux-saga/effects'
 import Path from 'path'
+import fs from 'fs'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import { List } from 'immutable'
-import { allowancePeriod, allowanceHosts, estimatedStorage, totalSpending, sendError, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
+import { ls, allowancePeriod, allowanceHosts, estimatedStorage, totalSpending, sendError, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
 
 
 // Query siad for the state of the wallet.
@@ -128,13 +129,24 @@ function *uploadFolderSaga(action) {
 
 function* downloadFileSaga(action) {
 	try {
-		yield siadCall({
-			url: '/renter/download/' + action.siapath,
-			method: 'GET',
-			qs: {
-				destination: action.downloadpath,
-			},
-		})
+		if (action.file.type === 'file') {
+			yield siadCall({
+				url: '/renter/download/' + action.file.siapath,
+				method: 'GET',
+				qs: {
+					destination: action.downloadpath,
+				},
+			})
+		}
+		if (action.file.type === 'directory') {
+			fs.mkdirSync(action.downloadpath)
+			const response = yield siadCall('/renter/files')
+			const siafiles = ls(List(response.files), action.file.siapath)
+			for (const siafile in siafiles.toArray()) {
+				const file = siafiles.get(siafile)
+				yield put(actions.downloadFile(file, Path.join(action.downloadpath, file.name)))
+			}
+		}
 	} catch (e) {
 		sendError(e)
 	}
@@ -162,10 +174,20 @@ function* getUploadsSaga() {
 
 function* deleteFileSaga(action) {
 	try {
-		yield siadCall({
-			url: '/renter/delete/' + action.siapath,
-			method: 'POST',
-		})
+		if (action.file.type === 'file') {
+			yield siadCall({
+				url: '/renter/delete/' + action.file.siapath,
+				method: 'POST',
+			})
+		}
+		if (action.file.type === 'directory') {
+			const response = yield siadCall('/renter/files')
+			const siafiles = ls(List(response.files), action.file.siapath)
+			for (const siafile in siafiles.toArray()) {
+				const file = siafiles.get(siafile)
+				yield put(actions.deleteFile(file))
+			}
+		}
 		yield put(actions.getFiles())
 	} catch (e) {
 		sendError(e)
@@ -183,15 +205,27 @@ function* getContractCountSaga() {
 
 function* renameFileSaga(action) {
 	try {
-		yield siadCall({
-			url: '/renter/rename/' + action.siapath,
-			method: 'POST',
-			qs: {
-				newsiapath: action.newsiapath,
-			},
-		})
-		yield put(actions.getFiles())
-		yield put(actions.hideRenameDialog())
+		if (action.file.type === 'file') {
+			yield siadCall({
+				url: '/renter/rename/' + action.file.siapath,
+				method: 'POST',
+				qs: {
+					newsiapath: action.newsiapath,
+				},
+			})
+			yield put(actions.getFiles())
+		}
+		if (action.file.type === 'directory') {
+			const directorypath = action.file.siapath
+			const response = yield siadCall('/renter/files')
+			const siafiles = ls(List(response.files), directorypath)
+			for (const i in siafiles.toArray()) {
+				const file = siafiles.get(i)
+				const newfilepath = Path.join(action.newsiapath, file.siapath.split(directorypath)[1])
+				yield put(actions.renameFile(file, newfilepath))
+			}
+			yield put(actions.hideRenameDialog())
+		}
 	} catch (e) {
 		sendError(e)
 	}

@@ -24,10 +24,10 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 		filelistFiles = files
 	}
 	const fileElements = filelistFiles.map((file, key) => {
-		const isSelected = selected.includes(file.name)
+		const isSelected = selected.map((selectedfile) => selectedfile.name).includes(file.name)
 		const onRenameClick = (e) => {
 			e.stopPropagation()
-			actions.showRenameDialog(file.siapath)
+			actions.showRenameDialog(file)
 		}
 		const onDownloadClick = (e) => {
 			e.stopPropagation()
@@ -35,23 +35,24 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 				title: 'Where should we download this file?',
 				properties: ['openDirectory', 'createDirectories'],
 			})
-			actions.downloadFile(file.siapath, Path.join(downloadpath[0], Path.basename(file.siapath)))
+			actions.downloadFile(file, Path.join(downloadpath[0], Path.basename(file.siapath)))
 		}
 		const onDeleteClick = (e) => {
 			e.stopPropagation()
-			actions.showDeleteDialog(List([file.siapath]))
+			actions.showDeleteDialog(List([file]))
 		}
 		const onFileClick = (e) => {
 			if (!e.ctrlKey) {
 				actions.deselectAll()
 			}
 			if (e.ctrlKey && isSelected) {
-				actions.deselectFile(file.name)
+				actions.deselectFile(file)
 			} else {
-				actions.selectFile(file.name)
+				actions.selectFile(file)
 			}
 		}
-		const onIconClick = () => {
+		const onIconClick = (e) => {
+			e.stopPropagation()
 			if (file.type === 'directory') {
 				actions.setPath(Path.join(path, file.name))
 			}

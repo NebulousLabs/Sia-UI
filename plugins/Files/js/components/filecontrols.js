@@ -8,14 +8,16 @@ const FileControls = ({files, actions}) => {
 			title: 'Where should we download?',
 			properties: ['openDirectory', 'createDirectories'],
 		})
-		files.forEach((file) => actions.downloadFile(file, Path.join(downloadpath[0], Path.basename(file))))
+		files.forEach((file) => {
+			actions.downloadFile(file, Path.join(downloadpath[0], Path.basename(file.siapath)))
+		})
 	}
 	const onDeleteClick = () => {
-		actions.showDeleteDialog(files.toList())
+		actions.showDeleteDialog(files.map((file) => file.siapath).toList())
 	}
 	return (
 		<div className="file-controls">
-			{files.size} {files.size === 1 ? ' file' : ' files' } selected
+			{files.size} {files.size === 1 ? ' item' : ' items' } selected
 			<div onClick={onDownloadClick} className="download-button">
 				<i className="fa fa-cloud-download fa-2x" />
 			</div>

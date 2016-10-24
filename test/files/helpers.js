@@ -38,9 +38,9 @@ describe('files plugin helper functions', () => {
 		])
 		const expectedOutputs = {
 			'': List([
-				{ size: '', name: 'doggos', siapath: 'doggos/', available: true, uploadprogress: 100, type: 'directory' },
-				{ size: '', name: 'folder', siapath: 'folder/', available: true, uploadprogress: 100, type: 'directory' },
-				{ size: '', name: 'memes', siapath: 'memes/', available: true, uploadprogress: 100, type: 'directory' },
+				{ size: readableFilesize(1331+1333), name: 'doggos', siapath: 'doggos/', available: true, uploadprogress: 100, type: 'directory' },
+				{ size: readableFilesize(1337+13117), name: 'folder', siapath: 'folder/', available: true, uploadprogress: 100, type: 'directory' },
+				{ size: readableFilesize(1317+1337+1337), name: 'memes', siapath: 'memes/', available: true, uploadprogress: 100, type: 'directory' },
 				{ size: readableFilesize(1237), name: 'rare_pepe.png', siapath: 'rare_pepe.png', available: true, uploadprogress: 100, type: 'file' },
 				{ size: readableFilesize(13117), name: 'sibyl_system.avi', siapath: 'sibyl_system.avi', available: true, uploadprogress: 100, type: 'file' },
 			]),
@@ -50,7 +50,7 @@ describe('files plugin helper functions', () => {
 			]),
 			'memes/': List([
 				{ size: readableFilesize(1337), name: 'itsdatboi.mov', siapath: 'memes/itsdatboi.mov', available: true, uploadprogress: 100, type: 'file' },
-				{ size: '', name: 'rares', siapath: 'memes/rares/', available: true, uploadprogress: 100, type: 'directory' },
+				{ size: readableFilesize(1337), name: 'rares', siapath: 'memes/rares/', available: true, uploadprogress: 100, type: 'directory' },
 				{ size: readableFilesize(1317), name: 'waddup.png', siapath: 'memes/waddup.png', available: true, uploadprogress: 100, type: 'file' },
 			]),
 		}

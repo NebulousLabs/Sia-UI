@@ -79,7 +79,9 @@ export const ls = (files, path) => {
 			type = 'directory'
 			filename = relativePath.split('/')[0]
 			siapath = Path.join(path, filename) + '/'
-			filesize = ''
+			const subfiles = files.filter((subfile) => subfile.siapath.indexOf(siapath) !== -1)
+			const totalFilesize = subfiles.reduce((sum, subfile) => sum + subfile.filesize, 0)
+			filesize = readableFilesize(totalFilesize)
 		}
 		parsedFiles = parsedFiles.set(filename, {
 			size: filesize,
@@ -177,13 +179,6 @@ export const searchFiles = (files, text, path) => {
 	let matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1)
 	matchingFiles = matchingFiles.filter((file) => file.available)
 	matchingFiles = matchingFiles.filter((file) => file.siapath.toLowerCase().indexOf(text.toLowerCase()) !== -1)
-	return matchingFiles.map((file) => ({
-		size: readableFilesize(file.filesize),
-		name: Path.basename(file.siapath),
-		siapath: file.siapath,
-		available: file.available,
-		type: 'file',
-		uploadprogress: Math.floor(file.uploadprogress).toString(),
-	}))
+	return matchingFiles
 }
 

@@ -82,9 +82,9 @@ export const showUploadDialog = (source) => ({
 export const hideUploadDialog = () => ({
 	type: constants.HIDE_UPLOAD_DIALOG,
 })
-export const downloadFile = (siapath, downloadpath) => ({
+export const downloadFile = (file, downloadpath) => ({
 	type: constants.DOWNLOAD_FILE,
-	siapath,
+	file,
 	downloadpath,
 })
 export const uploadFile = (siapath, source) => ({
@@ -92,9 +92,9 @@ export const uploadFile = (siapath, source) => ({
 	siapath,
 	source,
 })
-export const deleteFile = (siapath) => ({
+export const deleteFile = (file) => ({
 	type: constants.DELETE_FILE,
-	siapath,
+	file,
 })
 export const uploadFolder = (siapath, source) => ({
 	type: constants.UPLOAD_FOLDER,
@@ -142,28 +142,28 @@ export const setContractCount = (count) => ({
 	type: constants.SET_CONTRACT_COUNT,
 	count,
 })
-export const renameFile = (siapath, newsiapath) => ({
+export const renameFile = (file, newsiapath) => ({
 	type: constants.RENAME_FILE,
-	siapath,
+	file,
 	newsiapath,
 })
-export const showRenameDialog = (siapath) => ({
+export const showRenameDialog = (file) => ({
 	type: constants.SHOW_RENAME_DIALOG,
-	siapath,
+	file,
 })
 export const hideRenameDialog = () => ({
 	type: constants.HIDE_RENAME_DIALOG,
 })
-export const selectFile = (name) => ({
+export const selectFile = (file) => ({
 	type: constants.SELECT_FILE,
-	name,
+	file,
 })
 export const deselectAll = () => ({
 	type: constants.DESELECT_ALL,
 })
-export const deselectFile = (name) => ({
+export const deselectFile = (file) => ({
 	type: constants.DESELECT_FILE,
-	name,
+	file,
 })
 export const clearDownloads = () => ({
 	type: constants.CLEAR_DOWNLOADS,

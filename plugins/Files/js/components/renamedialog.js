@@ -1,21 +1,21 @@
 import React, { PropTypes } from 'react'
 import Path from 'path'
 
-const RenameDialog = ({siapath, actions}) => {
+const RenameDialog = ({file, actions}) => {
 	const onYesClick = (e) => {
 		e.preventDefault()
-		actions.renameFile(siapath, Path.join(Path.dirname(siapath), e.target.newname.value))
+		actions.renameFile(file, Path.join(Path.dirname(file.siapath), e.target.newname.value))
 	}
 	const onNoClick = () => actions.hideRenameDialog()
 	return (
 		<div className="modal">
 			<div className="rename-dialog">
 				<div className="rename-text">
-					Enter a new name for {Path.basename(siapath)}:
+					Enter a new name for {Path.basename(file.siapath)}:
 				</div>
 				<form className="rename-form" onSubmit={onYesClick}>
 					<div className="rename-field">
-						<input type="text" name="newname" required autoFocus defaultValue={Path.basename(siapath)} />
+						<input type="text" name="newname" required autoFocus defaultValue={Path.basename(file.siapath)} />
 					</div>
 					<div className="rename-buttons">
 						<button type="submit">Confirm</button>
@@ -28,7 +28,7 @@ const RenameDialog = ({siapath, actions}) => {
 }
 
 RenameDialog.propTypes = {
-	siapath: PropTypes.string.isRequired,
+	file: PropTypes.object.isRequired,
 }
 
 export default RenameDialog
