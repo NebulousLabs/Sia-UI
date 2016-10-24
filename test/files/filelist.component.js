@@ -40,7 +40,7 @@ describe('file list', () => {
 			for (let nodeindex = 0; nodeindex < filenodes.length; nodeindex++) {
 				filenodes.at(nodeindex).simulate('click', { ctrlKey: false })
 				expect(testActions.deselectAll.called).to.equal(true)
-				expect(testActions.selectFile.calledWith(testFiles.get(nodeindex).siapath)).to.equal(true)
+				expect(testActions.selectFile.calledWith(testFiles.get(nodeindex).name)).to.equal(true)
 			}
 		})
 		it('selects multiple files with ctrl key', () => {
@@ -50,21 +50,21 @@ describe('file list', () => {
 				filenodes.at(nodeindex).simulate('click', { ctrlKey: true })
 				expect(testActions.deselectAll.called).to.equal(false)
 				testActions.deselectAll.reset()
-				expect(testActions.selectFile.calledWith(testFiles.get(nodeindex).siapath)).to.equal(true)
+				expect(testActions.selectFile.calledWith(testFiles.get(nodeindex).name)).to.equal(true)
 			}
 		})
 		it('deselects a file when selected and ctrl-clicked', () => {
-			const filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={Set([testFiles.get(0).siapath, testFiles.get(1).siapath])} path="" actions={testActions} />)
+			const filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={Set([testFiles.get(0).name, testFiles.get(1).name])} path="" actions={testActions} />)
 			const filenodes = filelist.find('File')
 			filenodes.at(0).simulate('click', { ctrlKey: true })
-			expect(testActions.deselectFile.calledWith(testFiles.get(0).siapath)).to.equal(true)
+			expect(testActions.deselectFile.calledWith(testFiles.get(0).name)).to.equal(true)
 		})
 		it('exclusively selects a file with multiple selected and no ctrl click', () => {
-			const filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={Set([testFiles.get(0).siapath, testFiles.get(1).siapath])} path="" actions={testActions} />)
+			const filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={Set([testFiles.get(0).name, testFiles.get(1).name])} path="" actions={testActions} />)
 			const filenodes = filelist.find('File')
 			filenodes.at(1).simulate('click', { ctrlKey: false})
 			expect(testActions.deselectAll.called).to.equal(true)
-			expect(testActions.selectFile.calledWith(testFiles.get(1).siapath)).to.equal(true)
+			expect(testActions.selectFile.calledWith(testFiles.get(1).name)).to.equal(true)
 		})
 	})
 	it('navigates directories', () => {

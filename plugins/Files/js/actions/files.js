@@ -154,16 +154,16 @@ export const showRenameDialog = (siapath) => ({
 export const hideRenameDialog = () => ({
 	type: constants.HIDE_RENAME_DIALOG,
 })
-export const selectFile = (siapath) => ({
+export const selectFile = (name) => ({
 	type: constants.SELECT_FILE,
-	siapath,
+	name,
 })
 export const deselectAll = () => ({
 	type: constants.DESELECT_ALL,
 })
-export const deselectFile = (siapath) => ({
+export const deselectFile = (name) => ({
 	type: constants.DESELECT_FILE,
-	siapath,
+	name,
 })
 export const clearDownloads = () => ({
 	type: constants.CLEAR_DOWNLOADS,

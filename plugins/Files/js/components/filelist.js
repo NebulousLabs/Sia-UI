@@ -24,7 +24,7 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 		filelistFiles = files
 	}
 	const fileElements = filelistFiles.map((file, key) => {
-		const isSelected = selected.includes(file.siapath)
+		const isSelected = selected.includes(file.name)
 		const onRenameClick = (e) => {
 			e.stopPropagation()
 			actions.showRenameDialog(file.siapath)
@@ -46,9 +46,9 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 				actions.deselectAll()
 			}
 			if (e.ctrlKey && isSelected) {
-				actions.deselectFile(file.siapath)
+				actions.deselectFile(file.name)
 			} else {
-				actions.selectFile(file.siapath)
+				actions.selectFile(file.name)
 			}
 		}
 		const onIconClick = () => {

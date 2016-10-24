@@ -41,10 +41,11 @@ export default function filesReducer(state = initialState, action) {
 	case constants.SET_FEE_ESTIMATE:
 		return state.set('feeEstimate', action.estimate)
 	case constants.RECEIVE_FILES:
+		const workingDirectoryFiles = ls(action.files, state.get('path'))
 		return state.set('files', action.files)
-		            .set('workingDirectoryFiles', ls(action.files, state.get('path')))
+		            .set('workingDirectoryFiles', workingDirectoryFiles)
 								// ensure `selected` contains no nonexistant files.
-								.set('selected', state.get('selected').intersect(action.files.map((file) => file.siapath)))
+								.set('selected', state.get('selected').intersect(workingDirectoryFiles.map((file) => file.name)))
 	case constants.SET_ALLOWANCE:
 		return state.set('allowance', action.funds)
 		            .set('settingAllowance', true)
