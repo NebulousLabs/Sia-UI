@@ -158,6 +158,10 @@ export const selectFile = (file) => ({
 	type: constants.SELECT_FILE,
 	file,
 })
+export const selectUpTo = (file) => ({
+	type: constants.SELECT_UP_TO,
+	file,
+})
 export const deselectAll = () => ({
 	type: constants.DESELECT_ALL,
 })

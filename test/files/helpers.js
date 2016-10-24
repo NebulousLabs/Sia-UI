@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import { readableFilesize, ls } from '../../plugins/Files/js/sagas/helpers.js'
-import { List } from 'immutable'
+import { rangeSelect, readableFilesize, ls } from '../../plugins/Files/js/sagas/helpers.js'
+import { List, OrderedSet } from 'immutable'
 
 describe('files plugin helper functions', () => {
 	it('returns sane values from readableFilesize', () => {
@@ -23,6 +23,48 @@ describe('files plugin helper functions', () => {
 		for (const bytes in sizes) {
 			expect(readableFilesize(parseFloat(bytes))).to.equal(sizes[bytes])
 		}
+	})
+	describe('range selection', () => {
+		const testFiles = List([
+			{ siapath: 'test1' },
+			{ siapath: 'test2' },
+			{ siapath: 'test3' },
+			{ siapath: 'test4' },
+			{ siapath: 'test5' },
+		])
+		it('selects all from first -> last', () => {
+			const selected = OrderedSet([
+				{ siapath: 'test1' },
+			])
+			expect(rangeSelect(testFiles.last(), testFiles, selected).toArray()).to.deep.equal(testFiles.toArray())
+		})
+		it('selects all from last -> first', () => {
+			const selected = OrderedSet([
+				{ siapath: 'test5' },
+			])
+			expect(rangeSelect(testFiles.first(), testFiles, selected).toArray()).to.deep.equal(testFiles.toArray())
+		})
+		it('adds selections correctly top -> bottom', () => {
+			const selected = OrderedSet([
+				{ siapath: 'test2' },
+			])
+			const expectedSelection = [
+				{ siapath: 'test2' },
+				{ siapath: 'test3' },
+			]
+			expect(rangeSelect({ siapath: 'test3' }, testFiles, selected).toArray()).to.deep.equal(expectedSelection)
+		})
+		it('adds selections correctly bottom -> top', () => {
+			const selected = OrderedSet([
+				{ siapath: 'test4' },
+			])
+			const expectedSelection = [
+				{ siapath: 'test2' },
+				{ siapath: 'test3' },
+				{ siapath: 'test4' },
+			]
+			expect(rangeSelect({ siapath: 'test2' }, testFiles, selected).toArray()).to.deep.equal(expectedSelection)
+		})
 	})
 	it('should ls a file list correctly', () => {
 		const siapathInputs = List([

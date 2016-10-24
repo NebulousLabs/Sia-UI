@@ -182,3 +182,18 @@ export const searchFiles = (files, text, path) => {
 	return matchingFiles
 }
 
+// rangeSelect takes a file to select, a list of files, and a set of selected
+// files and returns a new set of selected files consisting of all the files
+// between the last selected file and the clicked `file`.
+export const rangeSelect = (file, files, selectedFiles) => {
+	const siapaths = files.map((f) => f.siapath)
+	const selectedSiapaths = selectedFiles.map((selectedfile) => selectedfile.siapath)
+	let endSelectionIndex = siapaths.indexOf(file.siapath)
+	let startSelectionIndex = siapaths.indexOf(selectedSiapaths.first())
+	if (startSelectionIndex > endSelectionIndex) {
+		startSelectionIndex = endSelectionIndex
+		endSelectionIndex = siapaths.indexOf(selectedSiapaths.last())
+	}
+
+	return files.slice(startSelectionIndex, endSelectionIndex + 1).toOrderedSet()
+}

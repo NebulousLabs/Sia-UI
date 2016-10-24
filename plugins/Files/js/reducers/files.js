@@ -1,6 +1,6 @@
-import { Map, Set, List } from 'immutable'
+import { Map, OrderedSet, List } from 'immutable'
 import * as constants from '../constants/files.js'
-import { ls, searchFiles } from '../sagas/helpers.js'
+import { ls, searchFiles, rangeSelect } from '../sagas/helpers.js'
 
 const initialState = Map({
 	files: List(),
@@ -8,7 +8,7 @@ const initialState = Map({
 	searchResults: List(),
 	uploading: List(),
 	downloading: List(),
-	selected: Set(),
+	selected: OrderedSet(),
 	path: '',
 	searchText: '',
 	uploadSource: '',
@@ -60,14 +60,16 @@ export default function filesReducer(state = initialState, action) {
 	case constants.SET_PATH:
 		return state.set('path', action.path)
 		            .set('workingDirectoryFiles', ls(state.get('files'), action.path))
-								.set('selected', Set())
+								.set('selected', OrderedSet())
 								.set('searchResults', searchFiles(state.get('workingDirectoryFiles'), state.get('searchText', state.get('path'))))
 	case constants.DESELECT_FILE:
-		return state.set('selected', state.get('selected').delete(action.file))
+		return state.set('selected', state.get('selected').filter((file) => file.siapath !== action.file.siapath))
 	case constants.SELECT_FILE:
 		return state.set('selected', state.get('selected').add(action.file))
 	case constants.DESELECT_ALL:
-		return state.set('selected', Set())
+		return state.set('selected', OrderedSet())
+	case constants.SELECT_UP_TO:
+		return state.set('selected', rangeSelect(action.file, state.get('workingDirectoryFiles'), state.get('selected')))
 	case constants.SHOW_ALLOWANCE_DIALOG:
 		return state.set('showAllowanceDialog', true)
 	case constants.CLOSE_ALLOWANCE_DIALOG:
