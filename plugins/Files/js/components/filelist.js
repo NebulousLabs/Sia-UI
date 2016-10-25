@@ -10,7 +10,7 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 		if (path === '') {
 			return
 		}
-		let newpath = Path.join(path, '../')
+		let newpath = Path.posix.join(path, '../')
 		if (newpath === './') {
 			newpath = ''
 		}
@@ -61,7 +61,7 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 		const onDoubleClick = (e) => {
 			e.stopPropagation()
 			if (file.type === 'directory') {
-				actions.setPath(Path.join(path, file.name))
+				actions.setPath(Path.posix.join(path, file.name))
 			}
 		}
 		return (

@@ -97,7 +97,7 @@ function* getWalletBalanceSaga() {
 function* uploadFileSaga(action) {
 	try {
 		const filename = Path.basename(action.source)
-		const destpath = Path.join(action.siapath, filename)
+		const destpath = Path.posix.join(action.siapath, filename)
 		yield siadCall({
 			url: '/renter/upload/' + destpath,
 			method: 'POST',

@@ -67,8 +67,8 @@ export const ls = (files, path) => {
 	let parsedFiles = Map()
 	fileList.forEach((file) => {
 		let type = 'file'
-		const relativePath = Path.relative(path, file.siapath)
-		let filename = Path.basename(relativePath)
+		const relativePath = Path.posix.relative(path, file.siapath)
+		let filename = Path.posix.basename(relativePath)
 		if (parsedFiles.has(filename)) {
 			return
 		}
@@ -78,7 +78,7 @@ export const ls = (files, path) => {
 		if (relativePath.indexOf('/') !== -1) {
 			type = 'directory'
 			filename = relativePath.split('/')[0]
-			siapath = Path.join(path, filename) + '/'
+			siapath = Path.posix.join(path, filename) + '/'
 			const subfiles = files.filter((subfile) => subfile.siapath.includes(siapath))
 			const totalFilesize = subfiles.reduce((sum, subfile) => sum + subfile.filesize, 0)
 			filesize = readableFilesize(totalFilesize)
