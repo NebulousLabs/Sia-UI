@@ -7,7 +7,7 @@ const Transfer = ({name, progress, onClick}) => (
 			<div className="transfername">{name}</div>
 			{
 				progress === 100 ? (
-					<span className="transfer-status">Completed, click to open</span>
+					<span className="transfer-status">Completed</span>
 				) : (
 					<ProgressBar progress={progress} />
 				)
