@@ -52,6 +52,10 @@ div[tabindex="1"]:focus {
 	justify-content: center;
 	background-color: #fff;
 }
+.transfer-status {
+	font-size: 12px;
+	text-align: center;
+}
 .file-controls i {
 	color: #00CBA0;
 	cursor: pointer;
@@ -77,6 +81,11 @@ div[tabindex="1"]:focus {
 	list-style-type: none;
 	justify-content: center;
 	align-items: center;
+}
+.clear-downloads {
+	float: right;
+	margin-right: 15px;
+	margin-top: 5px;
 }
 .filetransfer {
 	margin: 0;

@@ -101,9 +101,8 @@ export const uploadFolder = (siapath, source) => ({
 	siapath,
 	source,
 })
-export const getDownloads = (since) => ({
+export const getDownloads = () => ({
 	type: constants.GET_DOWNLOADS,
-	since,
 })
 export const getUploads = () => ({
 	type: constants.GET_UPLOADS,
@@ -165,4 +164,7 @@ export const deselectAll = () => ({
 export const deselectFile = (siapath) => ({
 	type: constants.DESELECT_FILE,
 	siapath,
+})
+export const clearDownloads = () => ({
+	type: constants.CLEAR_DOWNLOADS,
 })

@@ -7,12 +7,16 @@ import { shell } from 'electron'
 const FileTransfers = ({uploads, downloads, actions}) => {
 	const onCloseClick = () => actions.hideFileTransfers()
 	const onDownloadClick = (download) => () => shell.showItemInFolder(download.destination)
+	const onDownloadsClearClick = () => {
+		actions.clearDownloads()
+		actions.getDownloads()
+	}
 	return (
 		<div className="file-transfers">
 			<div className="close-button" onClick={onCloseClick}>
 				<i className="fa fa-times fa-2x" />
 			</div>
-			{downloads.size > 0 ? <DownloadList downloads={downloads} onDownloadClick={onDownloadClick} /> : null}
+			{downloads.size > 0 ? <DownloadList downloads={downloads} onClearClick={onDownloadsClearClick} onDownloadClick={onDownloadClick} /> : null}
 			{uploads.size > 0 ? <UploadList uploads={uploads} /> : null}
 		</div>
 	)

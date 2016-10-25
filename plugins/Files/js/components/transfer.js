@@ -5,7 +5,13 @@ const Transfer = ({name, progress, onClick}) => (
 	<li className="filetransfer" onClick={onClick}>
 		<div className="transfer-info">
 			<div className="transfername">{name}</div>
-			<ProgressBar progress={progress} />
+			{
+				progress === 100 ? (
+					<span className="transfer-status">Completed, click to open</span>
+				) : (
+					<ProgressBar progress={progress} />
+				)
+			}
 		</div>
 	</li>
 )

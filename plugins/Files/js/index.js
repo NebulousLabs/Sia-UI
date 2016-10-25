@@ -28,10 +28,8 @@ store.dispatch(getUploads())
 store.dispatch(getContractCount())
 store.dispatch(getAllowance())
 
-const downloadStart = Date.now()
-
 setInterval(() => {
-	store.dispatch(getDownloads(downloadStart))
+	store.dispatch(getDownloads())
 	store.dispatch(getUploads())
 	store.dispatch(getWalletLockstate())
 	store.dispatch(getFiles())
