@@ -82,6 +82,11 @@ div[tabindex="1"]:focus {
 	justify-content: center;
 	align-items: center;
 }
+.clear-downloads {
+	float: right;
+	margin-right: 15px;
+	margin-top: 5px;
+}
 .filetransfer {
 	margin: 0;
 	display: flex;

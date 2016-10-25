@@ -25,6 +25,7 @@ const initialState = Map({
 	spending: '0',
 	storageEstimate: '',
 	feeEstimate: 0,
+	showDownloadsSince: Date.now(),
 })
 
 export default function filesReducer(state = initialState, action) {
@@ -47,7 +48,8 @@ export default function filesReducer(state = initialState, action) {
 	case constants.SET_ALLOWANCE:
 		return state.set('allowance', action.funds)
 		            .set('settingAllowance', true)
-
+	case constants.CLEAR_DOWNLOADS:
+		return state.set('showDownloadsSince', Date.now())
 	case constants.SET_SEARCH_TEXT:
 		const results = searchFiles(state.get('files'), action.text, state.get('path'))
 		return state.set('searchResults', results)
@@ -84,7 +86,7 @@ export default function filesReducer(state = initialState, action) {
 	case constants.RECEIVE_UPLOADS:
 		return state.set('uploading', action.uploads)
 	case constants.RECEIVE_DOWNLOADS:
-		return state.set('downloading', action.downloads)
+		return state.set('downloading', action.downloads.filter((download) => Date.parse(download.starttime) > state.get('showDownloadsSince')))
 	case constants.SHOW_FILE_TRANSFERS:
 		return state.set('showFileTransfers', true)
 	case constants.HIDE_FILE_TRANSFERS:

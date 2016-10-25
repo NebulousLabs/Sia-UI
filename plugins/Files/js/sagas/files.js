@@ -140,10 +140,10 @@ function* downloadFileSaga(action) {
 	}
 }
 
-function* getDownloadsSaga(action) {
+function* getDownloadsSaga() {
 	try {
 		const response = yield siadCall('/renter/downloads')
-		const downloads = parseDownloads(action.since, response.downloads)
+		const downloads = parseDownloads(response.downloads)
 		yield put(actions.receiveDownloads(downloads))
 	} catch (e) {
 		sendError(e)
