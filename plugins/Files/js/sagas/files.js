@@ -145,6 +145,7 @@ function* downloadFileSaga(action) {
 			for (const siafile in siafiles.toArray()) {
 				const file = siafiles.get(siafile)
 				yield put(actions.downloadFile(file, Path.join(action.downloadpath, file.name)))
+				yield new Promise((resolve) => setTimeout(resolve, 300))
 			}
 		}
 	} catch (e) {

@@ -8,8 +8,9 @@ const FileControls = ({files, actions}) => {
 			title: 'Where should we download?',
 			properties: ['openDirectory', 'createDirectories'],
 		})
-		files.forEach((file) => {
+		files.forEach(async (file) => {
 			actions.downloadFile(file, Path.join(downloadpath[0], Path.basename(file.siapath)))
+			await new Promise((resolve) => setTimeout(resolve, 300))
 		})
 	}
 	const onDeleteClick = () => {
