@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { hideRenameDialog, renameFile } from '../actions/files.js'
 
 const mapStateToProps = (state) => ({
-	siapath: state.renamedialog.get('siapath'),
+	file: state.renamedialog.get('file'),
 })
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ hideRenameDialog, renameFile }, dispatch),

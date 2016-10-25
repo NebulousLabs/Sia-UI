@@ -1,6 +1,6 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import { List, Set } from 'immutable'
+import { shallow, mount } from 'enzyme'
+import { List, OrderedSet } from 'immutable'
 import { expect } from 'chai'
 import { spy } from 'sinon'
 import FileList from '../../plugins/Files/js/components/filelist.js'
@@ -13,14 +13,12 @@ const testFiles = List([
 	{size: '', name: 'dankpepes', type: 'directory'},
 ])
 
-const files = testFiles.filter((file) => file.type === 'file')
-const directories = testFiles.filter((file) => file.type === 'directory')
-
 const testActions = {
 	setPath: spy(),
 	selectFile: spy(),
 	deselectFile: spy(),
 	deselectAll: spy(),
+	selectUpTo: spy(),
 }
 
 describe('file list', () => {
@@ -30,59 +28,65 @@ describe('file list', () => {
 		}
 	})
 	it('renders a ul with the correct number of file and directory children', () => {
-		const filelist = shallow(<FileList files={testFiles} selected={Set()} showSearchField={false} path="" />)
-		expect(filelist.find('File')).to.have.length(files.size)
-		expect(filelist.find('Directory')).to.have.length(directories.size)
+		const filelist = shallow(<FileList files={testFiles} selected={OrderedSet()} showSearchField={false} path="" />)
+		expect(filelist.find('File')).to.have.length(testFiles.size)
 	})
 	it('renders a back button when path is set', () => {
-		expect(shallow(<FileList files={testFiles} showSearchField={false} selected={Set()} path="movies/" />).find('ul').children()).to.have.length(testFiles.size + 1)
+		expect(shallow(<FileList files={testFiles} showSearchField={false} selected={OrderedSet()} path="movies/" />).find('ul').children()).to.have.length(testFiles.size + 1)
 	})
 	describe('file selection', () => {
 		it('selects files', () => {
-			const filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={Set()} path="" actions={testActions} />)
+			const filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={OrderedSet()} path="" actions={testActions} />)
 			const filenodes = filelist.find('File')
 			for (let nodeindex = 0; nodeindex < filenodes.length; nodeindex++) {
 				filenodes.at(nodeindex).simulate('click', { ctrlKey: false })
 				expect(testActions.deselectAll.called).to.equal(true)
-				expect(testActions.selectFile.calledWith(files.get(nodeindex).siapath)).to.equal(true)
+				expect(testActions.selectFile.calledWith(testFiles.get(nodeindex))).to.equal(true)
 			}
 		})
-		it('selects multiple files with shift key', () => {
-			const filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={Set()} path="" actions={testActions} />)
+		it('selects multiple files with ctrl key', () => {
+			const filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={OrderedSet()} path="" actions={testActions} />)
 			const filenodes = filelist.find('File')
 			for (let nodeindex = 0; nodeindex < filenodes.length; nodeindex++) {
 				filenodes.at(nodeindex).simulate('click', { ctrlKey: true })
 				expect(testActions.deselectAll.called).to.equal(false)
 				testActions.deselectAll.reset()
-				expect(testActions.selectFile.calledWith(files.get(nodeindex).siapath)).to.equal(true)
+				expect(testActions.selectFile.calledWith(testFiles.get(nodeindex))).to.equal(true)
 			}
 		})
-		it('deselects a file when selected and shift-clicked', () => {
-			const filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={Set([files.get(0).siapath, files.get(1).siapath])} path="" actions={testActions} />)
+		it('deselects a file when selected and ctrl-clicked', () => {
+			const filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={OrderedSet([testFiles.get(0), testFiles.get(1)])} path="" actions={testActions} />)
 			const filenodes = filelist.find('File')
 			filenodes.at(0).simulate('click', { ctrlKey: true })
-			expect(testActions.deselectFile.calledWith(files.get(0).siapath)).to.equal(true)
+			expect(testActions.deselectFile.calledWith(testFiles.get(0))).to.equal(true)
 		})
-		it('exclusively selects a file with multiple selected and no shift click', () => {
-			const filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={Set([files.get(0).siapath, files.get(1).siapath])} path="" actions={testActions} />)
+		it('exclusively selects a file with multiple selected and no ctrl click', () => {
+			const filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={OrderedSet([testFiles.get(0), testFiles.get(1)])} path="" actions={testActions} />)
 			const filenodes = filelist.find('File')
 			filenodes.at(1).simulate('click', { ctrlKey: false})
 			expect(testActions.deselectAll.called).to.equal(true)
-			expect(testActions.selectFile.calledWith(files.get(1).siapath)).to.equal(true)
+			expect(testActions.selectFile.calledWith(testFiles.get(1))).to.equal(true)
+		})
+		it('selects ranges with the shift key', () => {
+			const filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={OrderedSet()} path="" actions={testActions} />)
+			const filenodes = filelist.find('File')
+			filenodes.first().simulate('click', { ctrlKey: false, shiftKey: false })
+			filenodes.last().simulate('click', { ctrlKey: false, shiftKey: true })
+			expect(testActions.selectUpTo.calledWith(testFiles.last())).to.equal(true)
 		})
 	})
 	it('navigates directories', () => {
-		let filelist = shallow(<FileList files={testFiles} selected={Set()} showSearchField={false} path="test1/test2/" actions={testActions} />)
+		let filelist = shallow(<FileList files={testFiles} selected={OrderedSet()} showSearchField={false} path="test1/test2/" actions={testActions} />)
 		filelist.find('ul').children().first().simulate('click')
 		expect(testActions.setPath.calledWith('test1/')).to.equal(true)
 
-		filelist = shallow(<FileList files={testFiles} showSearchField={false} selected={Set()} path="test1/" actions={testActions} />)
+		filelist = mount(<FileList files={testFiles} showSearchField={false} selected={OrderedSet()} path="test1/" actions={testActions} />)
 		filelist.find('ul').children().first().simulate('click')
 		expect(testActions.setPath.calledWith('')).to.equal(true)
 
-		const renderedDirectories = filelist.find('Directory')
+		const renderedDirectories = filelist.find('File [type="directory"]')
 		renderedDirectories.forEach((directory) => {
-			directory.simulate('click')
+			directory.find('i').first().simulate('click')
 			expect(testActions.setPath.calledWith('test1/' + directory.prop('name'))).to.equal(true)
 		})
 	})

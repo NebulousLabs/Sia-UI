@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import { readableFilesize, ls } from '../../plugins/Files/js/sagas/helpers.js'
-import { List } from 'immutable'
+import { rangeSelect, readableFilesize, ls } from '../../plugins/Files/js/sagas/helpers.js'
+import { List, OrderedSet } from 'immutable'
 
 describe('files plugin helper functions', () => {
 	it('returns sane values from readableFilesize', () => {
@@ -24,6 +24,48 @@ describe('files plugin helper functions', () => {
 			expect(readableFilesize(parseFloat(bytes))).to.equal(sizes[bytes])
 		}
 	})
+	describe('range selection', () => {
+		const testFiles = List([
+			{ siapath: 'test1' },
+			{ siapath: 'test2' },
+			{ siapath: 'test3' },
+			{ siapath: 'test4' },
+			{ siapath: 'test5' },
+		])
+		it('selects all from first -> last', () => {
+			const selected = OrderedSet([
+				{ siapath: 'test1' },
+			])
+			expect(rangeSelect(testFiles.last(), testFiles, selected).toArray()).to.deep.equal(testFiles.toArray())
+		})
+		it('selects all from last -> first', () => {
+			const selected = OrderedSet([
+				{ siapath: 'test5' },
+			])
+			expect(rangeSelect(testFiles.first(), testFiles, selected).toArray()).to.deep.equal(testFiles.toArray())
+		})
+		it('adds selections correctly top -> bottom', () => {
+			const selected = OrderedSet([
+				{ siapath: 'test2' },
+			])
+			const expectedSelection = [
+				{ siapath: 'test2' },
+				{ siapath: 'test3' },
+			]
+			expect(rangeSelect({ siapath: 'test3' }, testFiles, selected).toArray()).to.deep.equal(expectedSelection)
+		})
+		it('adds selections correctly bottom -> top', () => {
+			const selected = OrderedSet([
+				{ siapath: 'test4' },
+			])
+			const expectedSelection = [
+				{ siapath: 'test2' },
+				{ siapath: 'test3' },
+				{ siapath: 'test4' },
+			]
+			expect(rangeSelect({ siapath: 'test2' }, testFiles, selected).toArray()).to.deep.equal(expectedSelection)
+		})
+	})
 	it('should ls a file list correctly', () => {
 		const siapathInputs = List([
 			{ filesize: 1337, siapath: 'folder/file.jpg', available: true, uploadprogress: 100 },
@@ -38,9 +80,9 @@ describe('files plugin helper functions', () => {
 		])
 		const expectedOutputs = {
 			'': List([
-				{ size: '', name: 'doggos', siapath: 'doggos/', available: true, uploadprogress: 100, type: 'directory' },
-				{ size: '', name: 'folder', siapath: 'folder/', available: true, uploadprogress: 100, type: 'directory' },
-				{ size: '', name: 'memes', siapath: 'memes/', available: true, uploadprogress: 100, type: 'directory' },
+				{ size: readableFilesize(1331+1333), name: 'doggos', siapath: 'doggos/', available: true, uploadprogress: 100, type: 'directory' },
+				{ size: readableFilesize(1337+13117), name: 'folder', siapath: 'folder/', available: true, uploadprogress: 100, type: 'directory' },
+				{ size: readableFilesize(1317+1337+1337), name: 'memes', siapath: 'memes/', available: true, uploadprogress: 100, type: 'directory' },
 				{ size: readableFilesize(1237), name: 'rare_pepe.png', siapath: 'rare_pepe.png', available: true, uploadprogress: 100, type: 'file' },
 				{ size: readableFilesize(13117), name: 'sibyl_system.avi', siapath: 'sibyl_system.avi', available: true, uploadprogress: 100, type: 'file' },
 			]),
@@ -50,7 +92,7 @@ describe('files plugin helper functions', () => {
 			]),
 			'memes/': List([
 				{ size: readableFilesize(1337), name: 'itsdatboi.mov', siapath: 'memes/itsdatboi.mov', available: true, uploadprogress: 100, type: 'file' },
-				{ size: '', name: 'rares', siapath: 'memes/rares/', available: true, uploadprogress: 100, type: 'directory' },
+				{ size: readableFilesize(1337), name: 'rares', siapath: 'memes/rares/', available: true, uploadprogress: 100, type: 'directory' },
 				{ size: readableFilesize(1317), name: 'waddup.png', siapath: 'memes/waddup.png', available: true, uploadprogress: 100, type: 'file' },
 			]),
 		}

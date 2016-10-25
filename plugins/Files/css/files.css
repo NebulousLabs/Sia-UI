@@ -32,6 +32,9 @@
 	height: 100%;
 	width: 100%;
 }
+.filename .fa-folder {
+	cursor: pointer;
+}
 div[tabindex="1"]:focus {
 	outline: 0;
 }

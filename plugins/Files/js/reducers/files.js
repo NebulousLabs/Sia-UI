@@ -1,6 +1,6 @@
-import { Map, Set, List } from 'immutable'
+import { Map, OrderedSet, List } from 'immutable'
 import * as constants from '../constants/files.js'
-import { ls, searchFiles } from '../sagas/helpers.js'
+import { ls, searchFiles, rangeSelect } from '../sagas/helpers.js'
 
 const initialState = Map({
 	files: List(),
@@ -8,7 +8,7 @@ const initialState = Map({
 	searchResults: List(),
 	uploading: List(),
 	downloading: List(),
-	selected: Set(),
+	selected: OrderedSet(),
 	path: '',
 	searchText: '',
 	uploadSource: '',
@@ -41,29 +41,35 @@ export default function filesReducer(state = initialState, action) {
 	case constants.SET_FEE_ESTIMATE:
 		return state.set('feeEstimate', action.estimate)
 	case constants.RECEIVE_FILES:
+		const workingDirectoryFiles = ls(action.files, state.get('path'))
+		const workingDirectorySiapaths = workingDirectoryFiles.map((file) => file.siapath)
+		// filter out selected files that are no longer in the working directory
+		const selected = state.get('selected').filter((file) => workingDirectorySiapaths.includes(file.siapath))
 		return state.set('files', action.files)
-		            .set('workingDirectoryFiles', ls(action.files, state.get('path')))
-								// ensure `selected` contains no nonexistant files.
-								.set('selected', state.get('selected').intersect(action.files.map((file) => file.siapath)))
+	              .set('workingDirectoryFiles', workingDirectoryFiles)
+		            .set('selected', selected)
 	case constants.SET_ALLOWANCE:
 		return state.set('allowance', action.funds)
 		            .set('settingAllowance', true)
 	case constants.CLEAR_DOWNLOADS:
 		return state.set('showDownloadsSince', Date.now())
 	case constants.SET_SEARCH_TEXT:
-		const results = searchFiles(state.get('files'), action.text, state.get('path'))
+		const results = searchFiles(state.get('workingDirectoryFiles'), action.text, state.get('path'))
 		return state.set('searchResults', results)
 		            .set('searchText', action.text)
 	case constants.SET_PATH:
 		return state.set('path', action.path)
 		            .set('workingDirectoryFiles', ls(state.get('files'), action.path))
-								.set('selected', Set())
+		            .set('selected', OrderedSet())
+		            .set('searchResults', searchFiles(state.get('workingDirectoryFiles'), state.get('searchText', state.get('path'))))
 	case constants.DESELECT_FILE:
-		return state.set('selected', state.get('selected').delete(action.siapath))
+		return state.set('selected', state.get('selected').filter((file) => file.siapath !== action.file.siapath))
 	case constants.SELECT_FILE:
-		return state.set('selected', state.get('selected').add(action.siapath))
+		return state.set('selected', state.get('selected').add(action.file))
 	case constants.DESELECT_ALL:
-		return state.set('selected', Set())
+		return state.set('selected', OrderedSet())
+	case constants.SELECT_UP_TO:
+		return state.set('selected', rangeSelect(action.file, state.get('workingDirectoryFiles'), state.get('selected')))
 	case constants.SHOW_ALLOWANCE_DIALOG:
 		return state.set('showAllowanceDialog', true)
 	case constants.CLOSE_ALLOWANCE_DIALOG:

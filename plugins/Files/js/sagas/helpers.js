@@ -79,7 +79,9 @@ export const ls = (files, path) => {
 			type = 'directory'
 			filename = relativePath.split('/')[0]
 			siapath = Path.join(path, filename) + '/'
-			filesize = ''
+			const subfiles = files.filter((subfile) => subfile.siapath.includes(siapath))
+			const totalFilesize = subfiles.reduce((sum, subfile) => sum + subfile.filesize, 0)
+			filesize = readableFilesize(totalFilesize)
 		}
 		parsedFiles = parsedFiles.set(filename, {
 			size: filesize,
@@ -177,13 +179,20 @@ export const searchFiles = (files, text, path) => {
 	let matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1)
 	matchingFiles = matchingFiles.filter((file) => file.available)
 	matchingFiles = matchingFiles.filter((file) => file.siapath.toLowerCase().indexOf(text.toLowerCase()) !== -1)
-	return matchingFiles.map((file) => ({
-		size: readableFilesize(file.filesize),
-		name: Path.basename(file.siapath),
-		siapath: file.siapath,
-		available: file.available,
-		type: 'file',
-		uploadprogress: Math.floor(file.uploadprogress).toString(),
-	}))
+	return matchingFiles
 }
 
+// rangeSelect takes a file to select, a list of files, and a set of selected
+// files and returns a new set of selected files consisting of all the files
+// between the last selected file and the clicked `file`.
+export const rangeSelect = (file, files, selectedFiles) => {
+	const siapaths = files.map((f) => f.siapath)
+	const selectedSiapaths = selectedFiles.map((selectedfile) => selectedfile.siapath)
+	let endSelectionIndex = siapaths.indexOf(file.siapath)
+	let startSelectionIndex = siapaths.indexOf(selectedSiapaths.first())
+	if (startSelectionIndex > endSelectionIndex) {
+		[startSelectionIndex, endSelectionIndex] = [endSelectionIndex, siapaths.indexOf(selectedSiapaths.last())]
+	}
+
+	return files.slice(startSelectionIndex, endSelectionIndex + 1).toOrderedSet()
+}
