@@ -54,7 +54,7 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 				actions.selectFile(file)
 			}
 		}
-		const onIconClick = (e) => {
+		const onDoubleClick = (e) => {
 			e.stopPropagation()
 			if (file.type === 'directory') {
 				actions.setPath(Path.join(path, file.name))
@@ -66,7 +66,7 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 				selected={isSelected}
 				filename={file.name}
 				filesize={file.size}
-				onIconClick={onIconClick}
+				onDoubleClick={onDoubleClick}
 				type={file.type}
 				onRenameClick={onRenameClick}
 				onClick={onFileClick}
