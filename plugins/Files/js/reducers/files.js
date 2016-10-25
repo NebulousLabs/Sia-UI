@@ -46,8 +46,8 @@ export default function filesReducer(state = initialState, action) {
 		// filter out selected files that are no longer in the working directory
 		const selected = state.get('selected').filter((file) => workingDirectorySiapaths.includes(file.siapath))
 		return state.set('files', action.files)
-		            .set('workingDirectoryFiles', workingDirectoryFiles)
-								.set('selected', selected)
+	              .set('workingDirectoryFiles', workingDirectoryFiles)
+		            .set('selected', selected)
 	case constants.SET_ALLOWANCE:
 		return state.set('allowance', action.funds)
 		            .set('settingAllowance', true)
@@ -60,8 +60,8 @@ export default function filesReducer(state = initialState, action) {
 	case constants.SET_PATH:
 		return state.set('path', action.path)
 		            .set('workingDirectoryFiles', ls(state.get('files'), action.path))
-								.set('selected', OrderedSet())
-								.set('searchResults', searchFiles(state.get('workingDirectoryFiles'), state.get('searchText', state.get('path'))))
+		            .set('selected', OrderedSet())
+		            .set('searchResults', searchFiles(state.get('workingDirectoryFiles'), state.get('searchText', state.get('path'))))
 	case constants.DESELECT_FILE:
 		return state.set('selected', state.get('selected').filter((file) => file.siapath !== action.file.siapath))
 	case constants.SELECT_FILE:
