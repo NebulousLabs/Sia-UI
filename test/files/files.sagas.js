@@ -195,9 +195,9 @@ describe('files plugin sagas', () => {
 	})
 	it('sets downloads on getDownloads', async () => {
 		testDownloads = [
-			'upload4',
-			'upload5',
-			'upload6',
+			{ name: 'upload4', starttime: new Date() },
+			{ name: 'upload5', starttime: new Date() },
+			{ name: 'upload6', starttime: new Date() },
 		]
 		store.dispatch(actions.getDownloads())
 		await sleep(10)
