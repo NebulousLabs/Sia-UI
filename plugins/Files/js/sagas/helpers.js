@@ -191,8 +191,7 @@ export const rangeSelect = (file, files, selectedFiles) => {
 	let endSelectionIndex = siapaths.indexOf(file.siapath)
 	let startSelectionIndex = siapaths.indexOf(selectedSiapaths.first())
 	if (startSelectionIndex > endSelectionIndex) {
-		startSelectionIndex = endSelectionIndex
-		endSelectionIndex = siapaths.indexOf(selectedSiapaths.last())
+		[startSelectionIndex, endSelectionIndex] = [endSelectionIndex, siapaths.indexOf(selectedSiapaths.last())]
 	}
 
 	return files.slice(startSelectionIndex, endSelectionIndex + 1).toOrderedSet()
