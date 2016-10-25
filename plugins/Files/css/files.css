@@ -52,6 +52,10 @@ div[tabindex="1"]:focus {
 	justify-content: center;
 	background-color: #fff;
 }
+.transfer-status {
+	font-size: 12px;
+	text-align: center;
+}
 .file-controls i {
 	color: #00CBA0;
 	cursor: pointer;
