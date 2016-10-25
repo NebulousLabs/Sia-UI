@@ -79,7 +79,7 @@ export const ls = (files, path) => {
 			type = 'directory'
 			filename = relativePath.split('/')[0]
 			siapath = Path.join(path, filename) + '/'
-			const subfiles = files.filter((subfile) => subfile.siapath.indexOf(siapath) !== -1)
+			const subfiles = files.filter((subfile) => subfile.siapath.includes(siapath))
 			const totalFilesize = subfiles.reduce((sum, subfile) => sum + subfile.filesize, 0)
 			filesize = readableFilesize(totalFilesize)
 		}
