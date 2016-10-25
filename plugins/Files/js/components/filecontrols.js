@@ -13,7 +13,7 @@ const FileControls = ({files, actions}) => {
 		})
 	}
 	const onDeleteClick = () => {
-		actions.showDeleteDialog(files.map((file) => file.siapath).toList())
+		actions.showDeleteDialog(files)
 	}
 	return (
 		<div className="file-controls">
