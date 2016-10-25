@@ -35,6 +35,10 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 				title: 'Where should we download this file?',
 				properties: ['openDirectory', 'createDirectories'],
 			})
+			if (downloadpath.length === 0) {
+				// No files were selected, nop
+				return
+			}
 			actions.downloadFile(file, Path.join(downloadpath[0], Path.basename(file.siapath)))
 		}
 		const onDeleteClick = (e) => {

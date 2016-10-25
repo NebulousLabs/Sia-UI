@@ -8,6 +8,10 @@ const FileControls = ({files, actions}) => {
 			title: 'Where should we download?',
 			properties: ['openDirectory', 'createDirectories'],
 		})
+		if (downloadpath.length === 0) {
+			// No files selected, nop
+			return
+		}
 		files.forEach(async (file) => {
 			actions.downloadFile(file, Path.join(downloadpath[0], Path.basename(file.siapath)))
 			await new Promise((resolve) => setTimeout(resolve, 300))
