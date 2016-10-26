@@ -46,13 +46,15 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 			actions.showDeleteDialog(List([file]))
 		}
 		const onFileClick = (e) => {
-			if (!e.ctrlKey && !e.shiftKey) {
+			const shouldMultiSelect = e.ctrlKey || e.metaKey
+			const shouldRangeSelect = e.shiftKey
+			if (!shouldMultiSelect && !shouldRangeSelect) {
 				actions.deselectAll()
 			}
-			if (e.shiftKey) {
+			if (shouldRangeSelect) {
 				actions.selectUpTo(file)
 			}
-			if (e.ctrlKey && isSelected) {
+			if (shouldMultiSelect && isSelected) {
 				actions.deselectFile(file)
 			} else {
 				actions.selectFile(file)
