@@ -99,7 +99,7 @@ function* uploadFileSaga(action) {
 		const filename = Path.basename(action.source)
 		const destpath = Path.posix.join(action.siapath, filename)
 		yield siadCall({
-			url: '/renter/upload/' + destpath,
+			url: '/renter/upload/' + encodeURI(destpath),
 			method: 'POST',
 			qs: {
 				source: action.source,
@@ -116,7 +116,7 @@ function *uploadFolderSaga(action) {
 		const files = readdirRecursive(action.source)
 		const folderName = Path.basename(action.source)
 		const uploads = files.map((file) => ({
-			siapath: Path.join(action.siapath, file.substring(file.indexOf(folderName), file.lastIndexOf(Path.basename(file)))),
+			siapath: Path.posix.join(action.siapath, file.substring(file.indexOf(folderName), file.lastIndexOf(Path.basename(file))).replace(new RegExp('\\' + Path.win32.sep, 'g'), '/')),
 			source: file,
 		})).map((file) => actions.uploadFile(file.siapath, file.source))
 		for (const upload in uploads.toArray()) {
@@ -131,7 +131,7 @@ function* downloadFileSaga(action) {
 	try {
 		if (action.file.type === 'file') {
 			yield siadCall({
-				url: '/renter/download/' + action.file.siapath,
+				url: '/renter/download/' + encodeURI(action.file.siapath),
 				method: 'GET',
 				qs: {
 					destination: action.downloadpath,
@@ -177,7 +177,7 @@ function* deleteFileSaga(action) {
 	try {
 		if (action.file.type === 'file') {
 			yield siadCall({
-				url: '/renter/delete/' + action.file.siapath,
+				url: '/renter/delete/' + encodeURI(action.file.siapath),
 				method: 'POST',
 			})
 		}
@@ -208,7 +208,7 @@ function* renameFileSaga(action) {
 	try {
 		if (action.file.type === 'file') {
 			yield siadCall({
-				url: '/renter/rename/' + action.file.siapath,
+				url: '/renter/rename/' + encodeURI(action.file.siapath),
 				method: 'POST',
 				qs: {
 					newsiapath: action.newsiapath,
@@ -225,8 +225,8 @@ function* renameFileSaga(action) {
 				const newfilepath = Path.join(action.newsiapath, file.siapath.split(directorypath)[1])
 				yield put(actions.renameFile(file, newfilepath))
 			}
-			yield put(actions.hideRenameDialog())
 		}
+		yield put(actions.hideRenameDialog())
 	} catch (e) {
 		sendError(e)
 	}
