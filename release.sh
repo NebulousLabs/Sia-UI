@@ -25,13 +25,13 @@ keyFile=`readlink -f $1`
 pubkeyFile=`readlink -f $2`
 
 
-electronOSX="https://github.com/electron/electron/releases/download/v1.3.7/electron-${electronVersion}-darwin-x64.zip"
-electronLinux="https://github.com/electron/electron/releases/download/v1.3.7/electron-${electronVersion}-linux-x64.zip"
-electronWindows="https://github.com/electron/electron/releases/download/v1.3.7/electron-${electronVersion}-win32-x64.zip"
+electronOSX="https://github.com/electron/electron/releases/download/${electronVersion}/electron-${electronVersion}-darwin-x64.zip"
+electronLinux="https://github.com/electron/electron/releases/download/${electronVersion}/electron-${electronVersion}-linux-x64.zip"
+electronWindows="https://github.com/electron/electron/releases/download/${electronVersion}/electron-${electronVersion}-win32-x64.zip"
 
-siaOSX="https://github.com/NebulousLabs/Sia/releases/download/v1.0.1/Sia-${siaVersion}-darwin-amd64.zip"
-siaLinux="https://github.com/NebulousLabs/Sia/releases/download/v1.0.1/Sia-${siaVersion}-linux-amd64.zip"
-siaWindows="https://github.com/NebulousLabs/Sia/releases/download/v1.0.1/Sia-${siaVersion}-windows-amd64.zip"
+siaOSX="https://github.com/NebulousLabs/Sia/releases/download/${siaVersion}/Sia-${siaVersion}-darwin-amd64.zip"
+siaLinux="https://github.com/NebulousLabs/Sia/releases/download/${siaVersion}/Sia-${siaVersion}-linux-amd64.zip"
+siaWindows="https://github.com/NebulousLabs/Sia/releases/download/${siaVersion}/Sia-${siaVersion}-windows-amd64.zip"
 
 rm -rf release/
 mkdir -p release/{osx,linux,win32}
