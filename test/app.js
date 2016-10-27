@@ -1,4 +1,5 @@
 import { Application } from 'spectron'
+import { spawn } from 'child_process'
 import { expect } from 'chai'
 import psTree from 'ps-tree'
 import * as Siad from 'sia.js'
@@ -15,7 +16,7 @@ const getSiadChild = (pid) => new Promise((resolve, reject) => {
 			reject(err)
 		}
 		children.forEach((child) => {
-			if (child.COMMAND === 'siad') {
+			if (child.COMMAND === 'siad' || child.COMMAND === 'siad.exe') {
 				resolve({exists: true, pid: child.PID})
 			}
 		})
@@ -26,13 +27,17 @@ const getSiadChild = (pid) => new Promise((resolve, reject) => {
 // pkillSiad kills all siad processes running on the machine, used in these
 // tests to ensure a clean env
 const pkillSiad = () => new Promise((resolve, reject) => {
-	psTree(0, (err, children) => {
+	psTree(process.pid, (err, children) => {
 		if (err) {
 			reject(err)
 		}
 		children.forEach((child) => {
-			if (child.COMMAND === 'siad') {
-				process.kill(child.PID, 'SIGKILL')
+			if (child.COMMAND === 'siad' || child.COMMAND === 'siad.exe') {
+				if (process.platform === 'win32') {
+					spawn('taskkill', ['/pid', child.PID, '/f', '/t'])
+				} else {
+					process.kill(child.PID, 'SIGKILL')
+				}
 			}
 		})
 		resolve()
@@ -51,6 +56,8 @@ const isProcessRunning = (pid) => {
 	}
 }
 
+const electronBinary = process.platform === 'win32' ? 'node_modules\\electron-prebuilt\\dist\\electron.exe' : './node_modules/electron-prebuilt/dist/electron'
+
 // we need functions for mocha's `this` for setting timeouts.
 /* eslint-disable no-invalid-this */
 /* eslint-disable no-unused-expressions */
@@ -60,43 +67,46 @@ describe('startup and shutdown behaviour', () => {
 		await pkillSiad()
 	})
 	describe('window closing behaviour', function() {
-		this.timeout(10000)
+		this.timeout(200000)
 		let app
+		let siadProcess
 		beforeEach(async () => {
-			await pkillSiad()
 			app = new Application({
-				path: './node_modules/electron-prebuilt/dist/electron',
+				path: electronBinary,
 				args: [
 					'.',
 				],
 			})
-			return app.start()
+			await app.start()
+			await app.client.waitUntilWindowLoaded()
+			while (await app.client.isVisible('#overlay-text') === true) {
+				await sleep(10)
+			}
 		})
 		afterEach(async () => {
 			try {
+				await pkillSiad()
+				while (isProcessRunning(siadProcess.pid)) {
+					await sleep(10)
+				}
 				app.webContents.send('quit')
 				await app.stop()
+
 			} catch (e) {
 			}
 		})
 		it('hides the window and persists in tray if closeToTray = true', async () => {
-			await app.client.waitUntilWindowLoaded()
+			const pid = await app.mainProcess.pid()
+			siadProcess = await getSiadChild(pid)
 			app.webContents.executeJavaScript('window.closeToTray = true')
-			while (await app.client.getText('#overlay-text') !== 'Welcome to Sia') {
-				await sleep(200)
-			}
 			app.browserWindow.close()
 			await sleep(1000)
 			expect(await app.browserWindow.isDestroyed()).to.be.false
+			expect(isProcessRunning(siadProcess.pid)).to.be.true
 		})
 		it('quits gracefully on close if closeToTray = false', async () => {
-			await app.client.waitUntilWindowLoaded()
 			app.webContents.executeJavaScript('window.closeToTray = false')
-			while (await app.client.getText('#overlay-text') !== 'Welcome to Sia') {
-				await sleep(200)
-			}
 			const pid = await app.mainProcess.pid()
-			const siadProcess = await getSiadChild(pid)
 			expect(siadProcess.exists).to.be.true
 
 			app.browserWindow.close()
@@ -115,17 +125,25 @@ describe('startup and shutdown behaviour', () => {
 	describe('startup with no siad currently running', function() {
 		this.timeout(120000)
 		let app
+		let siadProcess
 		before(async () => {
-			await pkillSiad()
 			app = new Application({
-				path: './node_modules/electron-prebuilt/dist/electron',
+				path: electronBinary,
 				args: [
 					'.',
 				],
 			})
-			return app.start()
+			await app.start()
+			await app.client.waitUntilWindowLoaded()
+			while (await app.client.isVisible('#overlay-text') === true) {
+				await sleep(10)
+			}
 		})
-		after(() => {
+		after(async () => {
+			await pkillSiad()
+			while (isProcessRunning(siadProcess.pid)) {
+				await sleep(10)
+			}
 			if (app.isRunning()) {
 				app.webContents.send('quit')
 				app.stop()
@@ -134,22 +152,20 @@ describe('startup and shutdown behaviour', () => {
 		it('starts siad and loads correctly on launch', async () => {
 			const pid = await app.mainProcess.pid()
 			await app.client.waitUntilWindowLoaded()
-			while (await app.client.getText('#overlay-text') !== 'Welcome to Sia') {
-				await sleep(200)
-			}
-			const siadProcess = await getSiadChild(pid)
+			siadProcess = await getSiadChild(pid)
 			expect(siadProcess.exists).to.be.true
 		})
 		it('gracefully exits siad on quit', async () => {
 			const pid = await app.mainProcess.pid()
-			const siadProcess = await getSiadChild(pid)
-			expect(siadProcess.exists).to.be.true
 			app.webContents.send('quit')
+			while (await app.client.isVisible('#overlay-text') === false) {
+				await sleep(10)
+			}
 			while (await app.client.getText('#overlay-text') !== 'Quitting Sia...') {
-				await sleep(200)
+				await sleep(10)
 			}
 			while (isProcessRunning(pid)) {
-				await sleep(200)
+				await sleep(10)
 			}
 			expect(isProcessRunning(siadProcess.pid)).to.be.false
 		})
@@ -159,15 +175,23 @@ describe('startup and shutdown behaviour', () => {
 		let app
 		let siadProcess
 		before(async () => {
-			await pkillSiad()
-			siadProcess = Siad.launch('siad')
+			siadProcess = Siad.launch(process.platform === 'win32' ? 'Sia\\siad.exe' : './Sia/siad', {
+				'sia-directory': 'sia-testing',
+			})
+			while (await Siad.isRunning('localhost:9980') === false) {
+				await sleep(10)
+			}
 			app = new Application({
-				path: './node_modules/electron-prebuilt/dist/electron',
+				path: electronBinary,
 				args: [
 					'.',
 				],
 			})
-			return app.start()
+			await app.start()
+			await app.client.waitUntilWindowLoaded()
+			while (await app.client.isVisible('#overlay-text') === true) {
+				await sleep(10)
+			}
 		})
 		after(async () => {
 			await pkillSiad()
@@ -175,13 +199,13 @@ describe('startup and shutdown behaviour', () => {
 				app.webContents.send('quit')
 				app.stop()
 			}
+			while (isProcessRunning(siadProcess.pid)) {
+				await sleep(10)
+			}
 		})
 		it('connects and loads correctly to the running siad', async () => {
 			const pid = await app.mainProcess.pid()
 			await app.client.waitUntilWindowLoaded()
-			while (await app.client.getText('#overlay-text') !== 'Welcome back') {
-				await sleep(200)
-			}
 			const childSiad = await getSiadChild(pid)
 			expect(childSiad.exists).to.be.false
 		})
