@@ -65,7 +65,7 @@ function* setAllowanceSaga(action) {
 		yield siadCall({
 			url: '/renter',
 			method: 'POST',
-			timeout: 18000000, // 30 minute timeout for setting allowance
+			timeout: 7.2e6, // 120 minute timeout for setting allowance
 			qs: {
 				funds: newAllowance.toString(),
 				hosts: allowanceHosts,
@@ -134,7 +134,7 @@ function* downloadFileSaga(action) {
 		if (action.file.type === 'file') {
 			yield siadCall({
 				url: '/renter/download/' + encodeURI(action.file.siapath),
-				timeout: 600000000,
+				timeout: 6e8,
 				method: 'GET',
 				qs: {
 					destination: action.downloadpath,
