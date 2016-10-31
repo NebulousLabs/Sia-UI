@@ -134,7 +134,7 @@ function* downloadFileSaga(action) {
 		if (action.file.type === 'file') {
 			yield siadCall({
 				url: '/renter/download/' + encodeURI(action.file.siapath),
-				timeout: 60000,
+				timeout: 600000000,
 				method: 'GET',
 				qs: {
 					destination: action.downloadpath,
