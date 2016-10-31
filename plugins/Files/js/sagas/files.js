@@ -5,7 +5,7 @@ import fs from 'fs'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import { List } from 'immutable'
-import { ls, allowancePeriod, allowanceHosts, estimatedStorage, totalSpending, handleError, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
+import { ls, allowancePeriod, allowanceHosts, estimatedStorage, totalSpending, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
 
 
 // Query siad for the state of the wallet.
