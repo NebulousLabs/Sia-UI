@@ -81,7 +81,7 @@ describe('file list', () => {
 		expect(testActions.setPath.calledWith('test1/')).to.equal(true)
 
 		filelist = mount(<FileList files={testFiles} showSearchField={false} selected={OrderedSet()} path="test1/" actions={testActions} />)
-		filelist.find('ul').children().first().simulate('click')
+		filelist.find('.back-button').first().simulate('click')
 		expect(testActions.setPath.calledWith('')).to.equal(true)
 
 		const renderedDirectories = filelist.find('File [type="directory"]')
