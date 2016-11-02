@@ -4,6 +4,7 @@ import File from './file.js'
 import Path from 'path'
 import SearchField from '../containers/searchfield.js'
 import FileControls from '../containers/filecontrols.js'
+import DirectoryInfoBar from './directoryinfobar.js'
 
 const FileList = ({files, selected, searchResults, path, showSearchField, actions}) => {
 	const onBackClick = () => {
@@ -16,7 +17,6 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 		}
 		actions.setPath(newpath)
 	}
-
 	let filelistFiles
 	if (showSearchField) {
 		filelistFiles = searchResults
@@ -85,7 +85,7 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 		<div className="file-list">
 			{showSearchField ? <SearchField /> : null}
 			<ul>
-				{path !== '' ? <li onClick={onBackClick}><div><i className="fa fa-backward" />Back</div></li> : null}
+				<DirectoryInfoBar path={path} nfiles={files.size} onBackClick={onBackClick} />
 				{fileElements.size > 0 ? fileElements : (showSearchField ? <h2> No matching files </h2> : <h2> No files uploaded </h2>)}
 			</ul>
 			{selected.size > 0 ? <FileControls /> : null}

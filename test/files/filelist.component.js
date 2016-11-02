@@ -76,7 +76,7 @@ describe('file list', () => {
 		})
 	})
 	it('navigates directories', () => {
-		let filelist = shallow(<FileList files={testFiles} selected={OrderedSet()} showSearchField={false} path="test1/test2/" actions={testActions} />)
+		let filelist = mount(<FileList files={testFiles} selected={OrderedSet()} showSearchField={false} path="test1/test2/" actions={testActions} />)
 		filelist.find('ul').children().first().simulate('click')
 		expect(testActions.setPath.calledWith('test1/')).to.equal(true)
 
