@@ -13,8 +13,8 @@ const DirectoryInfoBar = ({path, nfiles, onBackClick}) => {
 		})(),
 	}
 	return (
-		<li onClick={onBackClick}>
-			<div>
+		<li className="directory-infobar">
+			<div style={{cursor: 'pointer'}} className="back-button" onClick={onBackClick}>
 				<i className="fa fa-backward" style={backButtonStyle} />
 				<span>Back</span>
 			</div>

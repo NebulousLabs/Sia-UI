@@ -77,7 +77,7 @@ describe('file list', () => {
 	})
 	it('navigates directories', () => {
 		let filelist = mount(<FileList files={testFiles} selected={OrderedSet()} showSearchField={false} path="test1/test2/" actions={testActions} />)
-		filelist.find('ul').children().first().simulate('click')
+		filelist.find('.back-button').first().simulate('click')
 		expect(testActions.setPath.calledWith('test1/')).to.equal(true)
 
 		filelist = mount(<FileList files={testFiles} showSearchField={false} selected={OrderedSet()} path="test1/" actions={testActions} />)
