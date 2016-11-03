@@ -23,6 +23,19 @@
 	width: 100%;
 	height: 100%;
 }
+.redundancy-text {
+	font-size: 12px;
+	margin-bottom: 5px;
+	margin-left: 1px;
+	margin-right: 8px;
+	padding: 0;
+}
+.redundancy-status {
+	display: flex;
+	flex-directory: column;
+	align-items: center;
+	justify-content: center;
+}
 .file-browser {
 	display: flex;
 	flex-direction: column;

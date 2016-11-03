@@ -7,7 +7,7 @@ import FileControls from '../containers/filecontrols.js'
 import DirectoryInfoBar from './directoryinfobar.js'
 
 const FileList = ({files, selected, searchResults, path, showSearchField, actions}) => {
-	const onBackClick = (e) => {
+	const onBackClick = () => {
 		if (path === '') {
 			return
 		}
@@ -60,9 +60,6 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 			} else {
 				actions.selectFile(file)
 			}
-		}
-		const onRedundancyClick = () => {
-			actions.showRedundancyInfo(file.siapath)
 		}
 		const onDoubleClick = (e) => {
 			e.stopPropagation()

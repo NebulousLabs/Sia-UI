@@ -13,8 +13,8 @@ const File = ({filename, type, selected, filesize, available, redundancy, onDoub
 			<div className="name">{filename}</div>
 		</div>
 		<div className="file-info">
-			<RedundancyStatus available={available} redundancy={redundancy} onRedundancyClick={onRedundancyClick} />
 			<span className="filesize">{filesize}</span>
+			{type === 'file' ? <RedundancyStatus available={available} redundancy={redundancy} onRedundancyClick={onRedundancyClick} /> : null}
 			<div className="file-buttons">
 				<div onClick={onRenameClick} className="rename-button">
 					<i className="fa fa-pencil 2x" />
@@ -42,7 +42,6 @@ File.propTypes = {
 	onDeleteClick: PropTypes.func.isRequired,
 	onDoubleClick: PropTypes.func.isRequired,
 	onClick: PropTypes.func.isRequired,
-	onRedundancyClick: PropTypes.func.isRequired,
 }
 
 export default File

@@ -1,29 +1,29 @@
 import React, { PropTypes } from 'react'
+import RedundancyInfo from './redundancyinfo.js'
 
 const colorNotAvailable = '#FF8080'
-const colorLowRedundancy = '#FFFC9E'
 const colorGoodRedundancy = '#00CBA0'
+const maxRedundancy = 6
 
-const RedundancyStatus = ({available, redundancy, showRedundancyInfo, onRedundancyClick}) => {
+const RedundancyStatus = ({available, redundancy}) => {
 	const indicatorStyle = {
+		opacity: (() => {
+			if (!available || redundancy < 1.0) {
+				return 1
+			}
+			return redundancy/maxRedundancy
+		})(),
 		color: (() => {
 			if (!available || redundancy < 1.0) {
 				return colorNotAvailable
 			}
-			if (redundancy < 2.5) {
-				return colorLowRedundancy
-			}
 			return colorGoodRedundancy
-		})()
-	}
-	const infoStyle = {
-		display: {showRedundancyInfo ? "hidden" : "inline-block"},
+		})(),
 	}
 	return (
 		<div className="redundancy-status">
-			<i className="fa fa-tachometer" onClick={onRedundancyClick} style={indicatorStyle} />
-			<div className="redundancy-info">
-			</div>
+			<i className="fa fa-cubes" style={indicatorStyle} />
+			<span className="redundancy-text">{redundancy}x</span>
 		</div>
 	)
 }
@@ -31,7 +31,6 @@ const RedundancyStatus = ({available, redundancy, showRedundancyInfo, onRedundan
 RedundancyStatus.propTypes = {
 	available: PropTypes.bool.isRequired,
 	redundancy: PropTypes.number.isRequired,
-	onRedundancyClick: PropTypes.func.isRequired,
 }
 
 export default RedundancyStatus
