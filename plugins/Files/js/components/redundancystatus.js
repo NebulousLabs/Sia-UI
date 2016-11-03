@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react'
-import RedundancyInfo from './redundancyinfo.js'
 
 const colorNotAvailable = '#FF8080'
 const colorGoodRedundancy = '#00CBA0'

@@ -150,6 +150,12 @@ export const estimatedStorage = (funds, hosts) => {
 export const parseDownloads = (downloads) =>
 	List(downloads)
 		.map((download) => ({
+			status: (() => {
+				if (Math.floor(download.received / download.filesize) === 1) {
+					return 'Completed'
+				}
+				return 'Downloading'
+			})(),
 			siapath: download.siapath,
 			name: Path.basename(download.siapath),
 			progress: Math.floor((download.received / download.filesize) * 100),
@@ -164,16 +170,24 @@ export const totalUsage = (files) => readableFilesize(files.reduce((sum, file) =
 
 // Parse a list of files from `/renter/files`
 // return a list of file uploads
-export const parseUploads = (files) => List(files)
-.filter((file) => file.uploadprogress < 100)
-.map((upload) => ({
-	siapath: upload.siapath,
-	name: Path.basename(upload.siapath),
-	progress: Math.floor(upload.uploadprogress),
-	type: 'upload',
-}))
-.sortBy((upload) => upload.name)
-.sortBy((upload) => -upload.progress)
+export const parseUploads = (files) =>
+	List(files)
+		.filter((file) => file.redundancy < 2.5)
+		.filter((file) => file.uploadprogress < 100)
+		.map((upload) => ({
+			status: (() => {
+				if (upload.redundancy < 1.0) {
+					return 'Uploading'
+				}
+				return 'Boosting Redundancy'
+			})(),
+			siapath: upload.siapath,
+			name: Path.basename(upload.siapath),
+			progress: Math.floor(upload.uploadprogress),
+			type: 'upload',
+		}))
+		.sortBy((upload) => upload.name)
+		.sortBy((upload) => -upload.progress)
 
 // Search `files` for `text`, excluding directories not in `path`
 export const searchFiles = (files, text, path) => {
