@@ -209,14 +209,38 @@ div[tabindex="1"]:focus {
 	width: 100px;
 	cursor: pointer;
 }
-.files-toolbar .buttons div {
-	text-align: center;
-	margin-bottom: 5px;
-	width: 100px;
-	cursor: pointer;
-}
 .transfers-button {
 	display: inline-block;
+}
+
+@keyframes notify-animation {
+	from {
+		right: 50%;
+		top: 50%;
+		width: 100px;
+		height: 100px;
+		font-size: 28px;
+		text-align: center;
+	}
+	to {
+		right: 25px;
+		top: 5px;
+		width: 13px;
+		height: 13px;
+		font-size: 12px;
+	}
+}
+
+.transfers-button > .badge {
+	background: rgba(255, 0, 0, 0.5);
+	border-radius: 50%;
+	position: absolute;
+	top: 5px;
+	right: 25px;
+	width: 13px;
+	height: 13px;
+	animation-name: notify-animation;
+	animation-duration: 0.5s;
 }
 .files-toolbar .buttons div[class$="button"]:hover {
 	opacity: 0.5;

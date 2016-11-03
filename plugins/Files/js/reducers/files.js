@@ -26,6 +26,7 @@ const initialState = Map({
 	storageEstimate: '',
 	feeEstimate: 0,
 	showDownloadsSince: Date.now(),
+	unreadTransfers: 0,
 })
 
 export default function filesReducer(state = initialState, action) {
@@ -40,6 +41,10 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('storageEstimate', action.estimate)
 	case constants.SET_FEE_ESTIMATE:
 		return state.set('feeEstimate', action.estimate)
+	case constants.DOWNLOAD_FILE:
+		return state.set('unreadTransfers', state.get('unreadTransfers') + 1)
+	case constants.UPLOAD_FILE:
+		return state.set('unreadTransfers', state.get('unreadTransfers') + 1)
 	case constants.RECEIVE_FILES:
 		const workingDirectoryFiles = ls(action.files, state.get('path'))
 		const workingDirectorySiapaths = workingDirectoryFiles.map((file) => file.siapath)
@@ -99,6 +104,7 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('showFileTransfers', false)
 	case constants.TOGGLE_FILE_TRANSFERS:
 		return state.set('showFileTransfers', !state.get('showFileTransfers'))
+		            .set('unreadTransfers', 0)
 	case constants.SET_CONTRACT_COUNT:
 		return state.set('contractCount', action.count)
 	case constants.SHOW_RENAME_DIALOG:

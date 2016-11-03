@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { toggleFileTransfers } from '../actions/files.js'
 
-const mapStateToProps = () => ({
+const mapStateToProps = (state) => ({
+	unread: state.files.get('unreadTransfers'),
 })
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ toggleFileTransfers }, dispatch),
