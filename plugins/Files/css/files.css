@@ -25,16 +25,14 @@
 }
 .redundancy-text {
 	font-size: 12px;
-	margin-bottom: 5px;
-	margin-left: 1px;
-	margin-right: 8px;
-	padding: 0;
+	margin-right: 3px;
 }
 .redundancy-status {
 	display: flex;
-	flex-directory: column;
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	padding-left: 10px;
 }
 .file-browser {
 	display: flex;

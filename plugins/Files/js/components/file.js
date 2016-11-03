@@ -35,7 +35,7 @@ File.propTypes = {
 	type: PropTypes.string.isRequired,
 	filesize: PropTypes.string.isRequired,
 	available: PropTypes.bool.isRequired,
-	redundancy: PropTypes.number.isRequired,
+	redundancy: PropTypes.number,
 	selected: PropTypes.bool.isRequired,
 	onRenameClick: PropTypes.func.isRequired,
 	onDownloadClick: PropTypes.func.isRequired,
