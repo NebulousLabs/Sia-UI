@@ -75,6 +75,7 @@ export const ls = (files, path) => {
 		const uploadprogress = Math.floor(file.uploadprogress)
 		let siapath = file.siapath
 		let filesize = readableFilesize(file.filesize)
+		let redundancy = file.redundancy
 		if (relativePath.indexOf('/') !== -1) {
 			type = 'directory'
 			filename = relativePath.split('/')[0]
@@ -82,13 +83,14 @@ export const ls = (files, path) => {
 			const subfiles = files.filter((subfile) => subfile.siapath.includes(siapath))
 			const totalFilesize = subfiles.reduce((sum, subfile) => sum + subfile.filesize, 0)
 			filesize = readableFilesize(totalFilesize)
+			redundancy = undefined
 		}
 		parsedFiles = parsedFiles.set(filename, {
 			size: filesize,
 			name: filename,
 			siapath: siapath,
 			available: file.available,
-			redundancy: file.redundancy,
+			redundancy: redundancy,
 			uploadprogress: uploadprogress,
 			type,
 		})

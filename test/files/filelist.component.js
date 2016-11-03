@@ -6,10 +6,10 @@ import { spy } from 'sinon'
 import FileList from '../../plugins/Files/js/components/filelist.js'
 
 const testFiles = List([
-	{size: '1337mb', name: 'hackers.mkv', siapath: 'movies/hackers.mkv', type: 'file'},
+	{size: '1337mb', available: true, redundancy: 1.0, name: 'hackers.mkv', siapath: 'movies/hackers.mkv', type: 'file'},
 	{size: '', name: 'movies', type: 'directory'},
-	{size: '137mb', name: 'test.jpg', siapath: 'test.jpg', type: 'file'},
-	{size: '137mb', name: 'meme.avi', siapath: 'meme.avi', type: 'file'},
+	{size: '137mb', available: true, redundancy: 1.5, name: 'test.jpg', siapath: 'test.jpg', type: 'file'},
+	{size: '137mb', available: true, redundancy: 2.0, name: 'meme.avi', siapath: 'meme.avi', type: 'file'},
 	{size: '', name: 'dankpepes', type: 'directory'},
 ])
 

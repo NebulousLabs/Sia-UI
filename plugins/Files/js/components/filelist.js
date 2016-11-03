@@ -46,7 +46,6 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 			actions.showDeleteDialog(List([file]))
 		}
 		const onFileClick = (e) => {
-			e.stopPropagation()
 			const shouldMultiSelect = e.ctrlKey || e.metaKey
 			const shouldRangeSelect = e.shiftKey
 			if (!shouldMultiSelect && !shouldRangeSelect) {

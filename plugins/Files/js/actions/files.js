@@ -172,11 +172,3 @@ export const deselectFile = (file) => ({
 export const clearDownloads = () => ({
 	type: constants.CLEAR_DOWNLOADS,
 })
-export const showRedundancyInfo = (siapath) => ({
-	type: constants.SHOW_REDUNDANCY_INFO,
-	siapath,
-})
-export const hideRedundancyInfo = (siapath) => ({
-	type: constants.HIDE_REDUNDANCY_INFO,
-	siapath,
-})

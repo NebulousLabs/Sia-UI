@@ -131,13 +131,13 @@ describe('files plugin sagas', () => {
 	})
 	it('sets files on getFiles', async () => {
 		testFiles = [
-			'testfile',
-			'testfile2',
-			'testfile3',
-			'testfile4',
+			{ siapath: 'testfile', available: true, redundancy: 6 },
+			{ siapath: 'testfile2', available: true, redundancy: 6 },
+			{ siapath: 'testfile3', available: true, redundancy: 6 },
+			{ siapath: 'testfile4', available: true, redundancy: 6 },
 		]
 		store.dispatch(actions.getFiles())
-		await sleep(10)
+		await sleep(500)
 		expect(store.getState().files.get('files').size).to.equal(testFiles.length)
 		expect(SiaAPI.showError.called).to.be.false
 	})
