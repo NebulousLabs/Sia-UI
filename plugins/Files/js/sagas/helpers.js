@@ -13,10 +13,11 @@ export const baseRedundancy = 6
 export const baseFee = 240
 export const siafundRate = 0.12
 
+// sendError sends the error given by e to the ui for display.
 export const sendError = (e) => {
 	SiaAPI.showError({
 		title: 'Sia-UI Files Error',
-		content: e.message,
+		content: typeof e.message !== 'undefined' ? e.message : e.toString(),
 	})
 }
 

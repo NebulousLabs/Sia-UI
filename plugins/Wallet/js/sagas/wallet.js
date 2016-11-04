@@ -9,7 +9,7 @@ import { walletUnlockError } from '../actions/error.js'
 const sendError = (e) => {
 	SiaAPI.showError({
 		title: 'Sia-UI Wallet Error',
-		content: e.message,
+		content: typeof e.message !== 'undefined' ? e.message : e.toString(),
 	})
 }
 
@@ -33,7 +33,7 @@ function *getLockStatusSaga() {
 			yield put(actions.setUnencrypted())
 		}
 	} catch (e) {
-		yield sendError(e)
+		console.error('error fetching lock status: ' + e.toString())
 	}
 }
 
@@ -45,6 +45,7 @@ function *walletUnlockSaga(action) {
 		yield siadCall({
 			url: '/wallet/unlock',
 			method: 'POST',
+			timeout: 12000000, // 20 minute timeout for unlocking
 			qs: {
 				encryptionpassword: action.password,
 			},
@@ -86,7 +87,7 @@ function *createWalletSaga() {
 		yield take(constants.SET_UNLOCKED)
 		yield put(actions.dismissNewWalletDialog())
 	} catch (e) {
-		yield sendError(e)
+		sendError(e)
 	}
 }
 
@@ -100,7 +101,7 @@ function *getBalanceSaga() {
 		const unconfirmed = unconfirmedIncoming.minus(unconfirmedOutgoing)
 		yield put(actions.setBalance(confirmed.round(2).toString(), unconfirmed.round(2).toString(), response.siafundbalance))
 	} catch (e) {
-		yield sendError(e)
+		console.error('error fetching balance: ' + e.toString())
 	}
 }
 
@@ -111,7 +112,7 @@ function *getTransactionsSaga() {
 		const transactions = parseRawTransactions(response)
 		yield put(actions.setTransactions(transactions))
 	} catch (e) {
-		yield sendError(e)
+		console.error('error fetching transactions: ' + e.toString())
 	}
 }
 // Call /wallet/address, set the receive address, and show the receive prompt.
@@ -121,7 +122,7 @@ function *getNewReceiveAddressSaga() {
 		yield put(actions.setReceiveAddress(response.address))
 		yield put(actions.showReceivePrompt())
 	} catch (e) {
-		yield sendError(e)
+		sendError(e)
 	}
 }
 
@@ -148,7 +149,7 @@ function *sendCurrencySaga(action) {
 		yield put(actions.setSendAmount(''))
 		yield put(actions.setSendAddress(''))
 	} catch (e) {
-		yield sendError(e)
+		sendError(e)
 	}
 }
 

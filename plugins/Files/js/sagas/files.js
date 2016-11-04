@@ -5,7 +5,7 @@ import fs from 'fs'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import { List } from 'immutable'
-import { ls, allowancePeriod, allowanceHosts, estimatedStorage, totalSpending, sendError, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
+import { ls, allowancePeriod, allowanceHosts, estimatedStorage, totalSpending, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
 
 
 // Query siad for the state of the wallet.
@@ -15,7 +15,7 @@ function* getWalletLockstateSaga() {
 		const response = yield siadCall('/wallet')
 		yield put(actions.receiveWalletLockstate(response.unlocked))
 	} catch (e) {
-		sendError(e)
+		console.error('error fetching wallet lock state: ' + e.toString())
 	}
 }
 
@@ -26,7 +26,7 @@ function* getFilesSaga() {
 		const files = List(response.files)
 		yield put(actions.receiveFiles(files))
 	} catch (e) {
-		sendError(e)
+		console.error('error fetching files: ' + e.toString())
 	}
 }
 
@@ -53,7 +53,7 @@ function* getAllowanceSaga() {
 		yield put(actions.receiveAllowance(allowance.round(0).toString()))
 		yield put(actions.receiveSpending(spendingSC.round(0).toString()))
 	} catch (e) {
-		console.error(e)
+		console.error('error getting allowance: ' + e.toString())
 	}
 }
 
@@ -65,6 +65,7 @@ function* setAllowanceSaga(action) {
 		yield siadCall({
 			url: '/renter',
 			method: 'POST',
+			timeout: 7.2e6, // 120 minute timeout for setting allowance
 			qs: {
 				funds: newAllowance.toString(),
 				hosts: allowanceHosts,
@@ -86,7 +87,7 @@ function* getWalletBalanceSaga() {
 		const confirmedBalance = SiaAPI.hastingsToSiacoins(response.confirmedsiacoinbalance).round(2).toString()
 		yield put(actions.receiveWalletBalance(confirmedBalance))
 	} catch (e) {
-		sendError(e)
+		console.error('error fetching wallet balance: ' + e.toString())
 	}
 }
 
@@ -100,6 +101,7 @@ function* uploadFileSaga(action) {
 		const destpath = Path.posix.join(action.siapath, filename)
 		yield siadCall({
 			url: '/renter/upload/' + encodeURI(destpath),
+			timeout: 20000, // 20 second timeout for upload calls
 			method: 'POST',
 			qs: {
 				source: action.source,
@@ -132,6 +134,7 @@ function* downloadFileSaga(action) {
 		if (action.file.type === 'file') {
 			yield siadCall({
 				url: '/renter/download/' + encodeURI(action.file.siapath),
+				timeout: 6e8,
 				method: 'GET',
 				qs: {
 					destination: action.downloadpath,
@@ -159,7 +162,7 @@ function* getDownloadsSaga() {
 		const downloads = parseDownloads(response.downloads)
 		yield put(actions.receiveDownloads(downloads))
 	} catch (e) {
-		sendError(e)
+		console.error('error fetching downloads: ' + e.toString())
 	}
 }
 
@@ -169,7 +172,7 @@ function* getUploadsSaga() {
 		const uploads = parseUploads(response.files)
 		yield put(actions.receiveUploads(uploads))
 	} catch (e) {
-		sendError(e)
+		console.error('error fetching uploads: ' + e.toString())
 	}
 }
 
@@ -178,6 +181,7 @@ function* deleteFileSaga(action) {
 		if (action.file.type === 'file') {
 			yield siadCall({
 				url: '/renter/delete/' + encodeURI(action.file.siapath),
+				timeout: 10000,
 				method: 'POST',
 			})
 		}
@@ -200,7 +204,7 @@ function* getContractCountSaga() {
 		const response = yield siadCall('/renter/contracts')
 		yield put(actions.setContractCount(response.contracts.length))
 	} catch (e) {
-		sendError(e)
+		console.error('error getting contract count: ' + e.toString())
 	}
 }
 

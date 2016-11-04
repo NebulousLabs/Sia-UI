@@ -30,10 +30,7 @@ const fetchStorageFiles = () => new Promise((resolve, reject) => {
 				free: (new BigNumber(file.capacityremaining)).times('1e-9').toString(),
 			})
 		))))
-	}).catch( (e) => {
-		SiaAPI.showError({ title: 'Error Fetching Folders', content: e.message })
-		reject(e)
-	})
+	}).catch(reject)
 })
 
 function *announceHost(action) {
@@ -43,6 +40,7 @@ function *announceHost(action) {
 		if (closeAction.address !== '') { //If size is zero just hide the dialog.
 			yield siadCall({
 				url: '/host/announce',
+				timeout: 30000, // 30 second timeout for host announcement
 				method: 'POST',
 				qs: { netaddress: closeAction.address },
 			})
@@ -172,7 +170,7 @@ function *fetchData(action) {
 
 		yield put( actions.fetchDataSuccess(data, settings, modals) )
 	} catch (e) {
-		SiaAPI.showError({ title: 'Error Fetching Data', content: e.message })
+		console.error('error fetching host data: ' + e.toString())
 	}
 }
 

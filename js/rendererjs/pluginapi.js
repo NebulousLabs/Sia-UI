@@ -47,18 +47,10 @@ window.onload = async function() {
 
 
 window.SiaAPI = {
-	call: async function(url, callback) {
-		const running = await Siad.isRunning(siadConfig.address)
-		if (running) {
-			let results
-			let error
-			try {
-				results = await Siad.call(siadConfig.address, url)
-			} catch (e) {
-				error = e
-			}
-			callback(error, results)
-		}
+	call: function(url, callback) {
+		Siad.call(siadConfig.address, url)
+		    .then((res) => callback(null, res))
+				.catch((err) => callback(err, null))
 	},
 	config: config,
 	hastingsToSiacoins: Siad.hastingsToSiacoins,
