@@ -1,0 +1,16 @@
+version: "{build}"
+ 
+platform: x64
+environment:
+  nodejs_version: "6.9.0"
+
+install:
+  - ps: wget https://github.com/NebulousLabs/Sia/releases/download/v1.0.3/Sia-v1.0.3-windows-amd64.zip -O Sia-v1.0.3-windows-amd64.zip
+  - ps: 7z.exe x Sia-v1.0.3-windows-amd64.zip
+  - rename Sia-v1.0.3-windows-amd64 Sia
+  - npm install
+
+test_script:
+  - npm test
+
+build: off
