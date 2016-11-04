@@ -5,7 +5,9 @@ const FileTransfersButton = ({unread, actions}) => {
 	return (
 		<div className="transfers-button" onClick={onTransfersClick}>
 			<i className="fa fa-bars fa-2x" />
-			{unread > 0 ? <span className="badge" key={unread}>{unread}</span> : null}
+			{unread > 0 ? (
+				<span className="badge" key={unread}>{unread > 10 ? '10+' : unread}</span>
+				) : null}
 			<span>File Transfers</span>
 		</div>
 	)
