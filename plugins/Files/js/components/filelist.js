@@ -25,26 +25,6 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 	}
 	const fileElements = filelistFiles.map((file, key) => {
 		const isSelected = selected.map((selectedfile) => selectedfile.name).includes(file.name)
-		const onRenameClick = (e) => {
-			e.stopPropagation()
-			actions.showRenameDialog(file)
-		}
-		const onDownloadClick = (e) => {
-			e.stopPropagation()
-			const downloadpath = SiaAPI.openFile({
-				title: 'Where should we download this file?',
-				properties: ['openDirectory', 'createDirectories'],
-			})
-			if (downloadpath.length === 0) {
-				// No files were selected, nop
-				return
-			}
-			actions.downloadFile(file, Path.join(downloadpath[0], Path.basename(file.siapath)))
-		}
-		const onDeleteClick = (e) => {
-			e.stopPropagation()
-			actions.showDeleteDialog(List([file]))
-		}
 		const onFileClick = (e) => {
 			const shouldMultiSelect = e.ctrlKey || e.metaKey
 			const shouldRangeSelect = e.shiftKey
@@ -76,10 +56,7 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 				available={file.available}
 				onDoubleClick={onDoubleClick}
 				type={file.type}
-				onRenameClick={onRenameClick}
 				onClick={onFileClick}
-				onDownloadClick={onDownloadClick}
-				onDeleteClick={onDeleteClick}
 			/>
 		)
 	})
