@@ -9,6 +9,7 @@
  *	Grey-Black: #4A4A4A
  *	Black:	  #000000
  *	Neon-Green: #00CBA0
+ *	Venetian-Red: #CC0033
  */
 
 .app {
@@ -225,7 +226,7 @@ div[tabindex="1"]:focus {
 }
 
 .transfers-button > .badge {
-	background: rgba(255, 0, 0, 0.8);
+	background: #CC0033;
 	border-radius: 50%;
 	position: absolute;
 	top: 5px;
