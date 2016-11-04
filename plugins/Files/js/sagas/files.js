@@ -1,5 +1,5 @@
 import { takeEvery } from 'redux-saga'
-import { put } from 'redux-saga/effects'
+import { put, actionChannel, take } from 'redux-saga/effects'
 import Path from 'path'
 import fs from 'fs'
 import * as actions from '../actions/files.js'
@@ -251,7 +251,11 @@ export function* watchGetFiles() {
 	yield *takeEvery(constants.GET_FILES, getFilesSaga)
 }
 export function* watchDeleteFile() {
-	yield *takeEvery(constants.DELETE_FILE, deleteFileSaga)
+	const deleteChan = yield actionChannel(constants.DELETE_FILE)
+	while (true) {
+		const deleteAction = yield take(deleteChan)
+		yield *deleteFileSaga(deleteAction)
+	}
 }
 export function* watchGetWalletBalance() {
 	yield *takeEvery(constants.GET_WALLET_BALANCE, getWalletBalanceSaga)
@@ -263,13 +267,21 @@ export function* watchGetContractCount() {
 	yield *takeEvery(constants.GET_CONTRACT_COUNT, getContractCountSaga)
 }
 export function* watchUploadFile() {
-	yield *takeEvery(constants.UPLOAD_FILE, uploadFileSaga)
+	const uploadChan = yield actionChannel(constants.UPLOAD_FILE)
+	while (true) {
+		const uploadAction = yield take(uploadChan)
+		yield *uploadFileSaga(uploadAction)
+	}
 }
 export function* watchDownloadFile() {
 	yield *takeEvery(constants.DOWNLOAD_FILE, downloadFileSaga)
 }
 export function* watchRenameFile() {
-	yield *takeEvery(constants.RENAME_FILE, renameFileSaga)
+	const renameChan = yield actionChannel(constants.RENAME_FILE)
+	while (true) {
+		const renameAction = yield take(renameChan)
+		yield *renameFileSaga(renameAction)
+	}
 }
 export function* watchGetStorageEstimate() {
 	yield *takeEvery(constants.GET_STORAGE_ESTIMATE, getStorageEstimateSaga)
