@@ -14,7 +14,7 @@ const File = ({filename, type, selected, filesize, available, redundancy, onDoub
 		</div>
 		<div className="file-info">
 			<span className="filesize">{filesize}</span>
-			{type === 'file' ? <RedundancyStatus available={available} redundancy={redundancy} onRedundancyClick={onRedundancyClick} /> : null}
+			<RedundancyStatus available={available} redundancy={redundancy} onRedundancyClick={onRedundancyClick} />
 			<div className="file-buttons">
 				<div onClick={onRenameClick} className="rename-button">
 					<i className="fa fa-pencil 2x" />

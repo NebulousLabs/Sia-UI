@@ -60,6 +60,16 @@ export const readableFilesize = (bytes) => {
 	return readablesize.toFixed().toString() + ' ' + readableunit
 }
 
+// minRedundancy takes a list of files and returns the minimum redundancy that
+// occurs in the list.
+export const minRedundancy = (files) =>
+	files.min((a, b) => {
+		if (a.redundancy > b.redundancy) {
+			return 1
+		}
+		return -1
+	}).redundancy
+
 // return a list of files filtered with path.
 // ... it's ls.
 export const ls = (files, path) => {
@@ -83,7 +93,7 @@ export const ls = (files, path) => {
 			const subfiles = files.filter((subfile) => subfile.siapath.includes(siapath))
 			const totalFilesize = subfiles.reduce((sum, subfile) => sum + subfile.filesize, 0)
 			filesize = readableFilesize(totalFilesize)
-			redundancy = undefined
+			redundancy = minRedundancy(subfiles)
 		}
 		parsedFiles = parsedFiles.set(filename, {
 			size: filesize,
