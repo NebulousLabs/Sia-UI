@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import RedundancyStatus from './redundancystatus.js'
 
 
-const File = ({filename, type, selected, filesize, available, redundancy, onDoubleClick, onRenameClick, onDownloadClick, onDeleteClick, onClick, onRedundancyClick}) => (
+const File = ({filename, type, selected, filesize, available, redundancy, onDoubleClick, onRenameClick, onDownloadClick, onDeleteClick, onClick}) => (
 	<li
 		onClick={onClick}
 		onDoubleClick={onDoubleClick}
@@ -14,7 +14,7 @@ const File = ({filename, type, selected, filesize, available, redundancy, onDoub
 		</div>
 		<div className="file-info">
 			<span className="filesize">{filesize}</span>
-			<RedundancyStatus available={available} redundancy={redundancy} onRedundancyClick={onRedundancyClick} />
+			<RedundancyStatus available={available} redundancy={redundancy} />
 			<div className="file-buttons">
 				<div onClick={onRenameClick} className="rename-button">
 					<i className="fa fa-pencil 2x" />
