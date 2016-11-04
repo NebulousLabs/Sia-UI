@@ -286,7 +286,7 @@ div[tabindex="1"]:focus {
 	align-items: center;
 	justify-content: flex-start;
 }
-.file-list li:hover {
+.filebrowser-file:hover {
 	background-color: #F5F5F5;
 }
 .file-list li i {
