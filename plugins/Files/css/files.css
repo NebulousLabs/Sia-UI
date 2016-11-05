@@ -23,6 +23,17 @@
 	width: 100%;
 	height: 100%;
 }
+.redundancy-text {
+	font-size: 12px;
+	margin-right: 3px;
+}
+.redundancy-status {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding-left: 10px;
+}
 .file-browser {
 	display: flex;
 	flex-direction: column;
@@ -57,7 +68,7 @@ div[tabindex="1"]:focus {
 }
 .transfer-status {
 	font-size: 12px;
-	text-align: center;
+	margin-top: 10px;
 }
 .file-controls i {
 	color: #00CBA0;

@@ -1,17 +1,12 @@
 import React, { PropTypes } from 'react'
 import ProgressBar from './progressbar.js'
 
-const Transfer = ({name, progress, onClick}) => (
+const Transfer = ({name, progress, status, onClick}) => (
 	<li className="filetransfer" onClick={onClick}>
 		<div className="transfer-info">
 			<div className="transfername">{name}</div>
-			{
-				progress === 100 ? (
-					<span className="transfer-status">Completed</span>
-				) : (
-					<ProgressBar progress={progress} />
-				)
-			}
+			<ProgressBar progress={progress} />
+			<span className="transfer-status">{status}</span>
 		</div>
 	</li>
 )
@@ -19,6 +14,7 @@ const Transfer = ({name, progress, onClick}) => (
 Transfer.propTypes = {
 	name: PropTypes.string.isRequired,
 	progress: PropTypes.number.isRequired,
+	status: PropTypes.string.isRequired,
 	onClick: PropTypes.func.isRequired,
 }
 

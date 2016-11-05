@@ -45,4 +45,3 @@ export const SELECT_UP_TO = 'SELECT_UP_TO'
 export const DESELECT_ALL = 'DESELECT_ALL'
 export const DESELECT_FILE = 'DESELECT_FILE'
 export const CLEAR_DOWNLOADS = 'CLEAR_DOWNLOADS'
-

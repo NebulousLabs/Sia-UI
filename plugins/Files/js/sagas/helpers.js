@@ -60,11 +60,20 @@ export const readableFilesize = (bytes) => {
 	return readablesize.toFixed().toString() + ' ' + readableunit
 }
 
+// minRedundancy takes a list of files and returns the minimum redundancy that
+// occurs in the list.
+export const minRedundancy = (files) =>
+	files.min((a, b) => {
+		if (a.redundancy > b.redundancy) {
+			return 1
+		}
+		return -1
+	}).redundancy
+
 // return a list of files filtered with path.
 // ... it's ls.
 export const ls = (files, path) => {
-	const fileList = files.filter((file) => file.available)
-	                      .filter((file) => file.siapath.indexOf(path) !== -1)
+	const fileList = files.filter((file) => file.siapath.includes(path))
 	let parsedFiles = Map()
 	fileList.forEach((file) => {
 		let type = 'file'
@@ -76,6 +85,7 @@ export const ls = (files, path) => {
 		const uploadprogress = Math.floor(file.uploadprogress)
 		let siapath = file.siapath
 		let filesize = readableFilesize(file.filesize)
+		let redundancy = file.redundancy
 		if (relativePath.indexOf('/') !== -1) {
 			type = 'directory'
 			filename = relativePath.split('/')[0]
@@ -83,12 +93,14 @@ export const ls = (files, path) => {
 			const subfiles = files.filter((subfile) => subfile.siapath.includes(siapath))
 			const totalFilesize = subfiles.reduce((sum, subfile) => sum + subfile.filesize, 0)
 			filesize = readableFilesize(totalFilesize)
+			redundancy = minRedundancy(subfiles)
 		}
 		parsedFiles = parsedFiles.set(filename, {
 			size: filesize,
 			name: filename,
 			siapath: siapath,
 			available: file.available,
+			redundancy: redundancy,
 			uploadprogress: uploadprogress,
 			type,
 		})
@@ -150,6 +162,12 @@ export const estimatedStorage = (funds, hosts) => {
 export const parseDownloads = (downloads) =>
 	List(downloads)
 		.map((download) => ({
+			status: (() => {
+				if (Math.floor(download.received / download.filesize) === 1) {
+					return 'Completed'
+				}
+				return 'Downloading'
+			})(),
 			siapath: download.siapath,
 			name: Path.basename(download.siapath),
 			progress: Math.floor((download.received / download.filesize) * 100),
@@ -164,21 +182,28 @@ export const totalUsage = (files) => readableFilesize(files.reduce((sum, file) =
 
 // Parse a list of files from `/renter/files`
 // return a list of file uploads
-export const parseUploads = (files) => List(files)
-.filter((file) => file.uploadprogress < 100)
-.map((upload) => ({
-	siapath: upload.siapath,
-	name: Path.basename(upload.siapath),
-	progress: upload.available ? 100 : Math.floor(upload.uploadprogress),
-	type: 'upload',
-}))
-.sortBy((upload) => upload.name)
-.sortBy((upload) => -upload.progress)
+export const parseUploads = (files) =>
+	List(files)
+		.filter((file) => file.redundancy < 2.5)
+		.filter((file) => file.uploadprogress < 100)
+		.map((upload) => ({
+			status: (() => {
+				if (upload.redundancy < 1.0) {
+					return 'Uploading'
+				}
+				return 'Boosting Redundancy'
+			})(),
+			siapath: upload.siapath,
+			name: Path.basename(upload.siapath),
+			progress: Math.floor(upload.uploadprogress),
+			type: 'upload',
+		}))
+		.sortBy((upload) => upload.name)
+		.sortBy((upload) => -upload.progress)
 
 // Search `files` for `text`, excluding directories not in `path`
 export const searchFiles = (files, text, path) => {
 	let matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1)
-	matchingFiles = matchingFiles.filter((file) => file.available)
 	matchingFiles = matchingFiles.filter((file) => file.siapath.toLowerCase().indexOf(text.toLowerCase()) !== -1)
 	return matchingFiles
 }

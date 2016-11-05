@@ -68,32 +68,32 @@ describe('files plugin helper functions', () => {
 	})
 	it('should ls a file list correctly', () => {
 		const siapathInputs = List([
-			{ filesize: 1337, siapath: 'folder/file.jpg', available: true, uploadprogress: 100 },
-			{ filesize: 13117, siapath: 'folder/file2.jpg', available: true, uploadprogress: 100 },
-			{ filesize: 1237, siapath: 'rare_pepe.png', available: true, uploadprogress: 100 },
-			{ filesize: 1317, siapath: 'memes/waddup.png', available: true, uploadprogress: 100 },
-			{ filesize: 1337, siapath: 'memes/itsdatboi.mov', available: true, uploadprogress: 100 },
-			{ filesize: 1337, siapath: 'memes/rares/lordkek.gif', available: true, uploadprogress: 100 },
-			{ filesize: 13117, siapath: 'sibyl_system.avi', available: true, uploadprogress: 100 },
-			{ filesize: 1331, siapath: 'doggos/borkborkdoggo.png', available: true, uploadprogress: 100 },
-			{ filesize: 1333, siapath: 'doggos/snip_snip_doggo_not_bork_bork_kind.jpg', available: true, uploadprogress: 100 },
+			{ filesize: 1337, siapath: 'folder/file.jpg', redundancy: 2.0, available: true, uploadprogress: 100 },
+			{ filesize: 13117, siapath: 'folder/file2.jpg', redundancy: 2.0, available: true, uploadprogress: 100 },
+			{ filesize: 1237, siapath: 'rare_pepe.png', redundancy: 2.0, available: true, uploadprogress: 100 },
+			{ filesize: 1317, siapath: 'memes/waddup.png', redundancy: 2.5, available: true, uploadprogress: 100 },
+			{ filesize: 1337, siapath: 'memes/itsdatboi.mov', redundancy: 2.0, available: true, uploadprogress: 100 },
+			{ filesize: 1337, siapath: 'memes/rares/lordkek.gif', redundancy: 1.6, available: true, uploadprogress: 100 },
+			{ filesize: 13117, siapath: 'sibyl_system.avi', redundancy: 1.0, available: true, uploadprogress: 100 },
+			{ filesize: 1331, siapath: 'doggos/borkborkdoggo.png', redundancy: 1.5, available: true, uploadprogress: 100 },
+			{ filesize: 1333, siapath: 'doggos/snip_snip_doggo_not_bork_bork_kind.jpg', redundancy: 1.0, available: true, uploadprogress: 100 },
 		])
 		const expectedOutputs = {
 			'': List([
-				{ size: readableFilesize(1331+1333), name: 'doggos', siapath: 'doggos/', available: true, uploadprogress: 100, type: 'directory' },
-				{ size: readableFilesize(1337+13117), name: 'folder', siapath: 'folder/', available: true, uploadprogress: 100, type: 'directory' },
-				{ size: readableFilesize(1317+1337+1337), name: 'memes', siapath: 'memes/', available: true, uploadprogress: 100, type: 'directory' },
-				{ size: readableFilesize(1237), name: 'rare_pepe.png', siapath: 'rare_pepe.png', available: true, uploadprogress: 100, type: 'file' },
-				{ size: readableFilesize(13117), name: 'sibyl_system.avi', siapath: 'sibyl_system.avi', available: true, uploadprogress: 100, type: 'file' },
+				{ size: readableFilesize(1331+1333), name: 'doggos', siapath: 'doggos/', redundancy: 1.0, available: true, uploadprogress: 100, type: 'directory' },
+				{ size: readableFilesize(1337+13117), name: 'folder', siapath: 'folder/', redundancy: 2.0, available: true, uploadprogress: 100, type: 'directory' },
+				{ size: readableFilesize(1317+1337+1337), name: 'memes', siapath: 'memes/', redundancy: 1.6, available: true, uploadprogress: 100, type: 'directory' },
+				{ size: readableFilesize(1237), name: 'rare_pepe.png', siapath: 'rare_pepe.png', redundancy: 2.0, available: true, uploadprogress: 100, type: 'file' },
+				{ size: readableFilesize(13117), name: 'sibyl_system.avi', siapath: 'sibyl_system.avi', redundancy: 1.0, available: true, uploadprogress: 100, type: 'file' },
 			]),
 			'doggos/': List([
-				{ size: readableFilesize(1331), name: 'borkborkdoggo.png', siapath: 'doggos/borkborkdoggo.png', available: true, uploadprogress: 100, type: 'file' },
-				{ size: readableFilesize(1333), name: 'snip_snip_doggo_not_bork_bork_kind.jpg', siapath: 'doggos/snip_snip_doggo_not_bork_bork_kind.jpg', available: true, uploadprogress: 100, type: 'file' },
+				{ size: readableFilesize(1331), name: 'borkborkdoggo.png', siapath: 'doggos/borkborkdoggo.png', redundancy: 1.5, available: true, uploadprogress: 100, type: 'file' },
+				{ size: readableFilesize(1333), name: 'snip_snip_doggo_not_bork_bork_kind.jpg', redundancy: 1.0, siapath: 'doggos/snip_snip_doggo_not_bork_bork_kind.jpg', available: true, uploadprogress: 100, type: 'file' },
 			]),
 			'memes/': List([
-				{ size: readableFilesize(1337), name: 'itsdatboi.mov', siapath: 'memes/itsdatboi.mov', available: true, uploadprogress: 100, type: 'file' },
-				{ size: readableFilesize(1337), name: 'rares', siapath: 'memes/rares/', available: true, uploadprogress: 100, type: 'directory' },
-				{ size: readableFilesize(1317), name: 'waddup.png', siapath: 'memes/waddup.png', available: true, uploadprogress: 100, type: 'file' },
+				{ size: readableFilesize(1337), name: 'itsdatboi.mov', siapath: 'memes/itsdatboi.mov', redundancy: 2.0, available: true, uploadprogress: 100, type: 'file' },
+				{ size: readableFilesize(1337), name: 'rares', siapath: 'memes/rares/', available: true, redundancy: 1.6, uploadprogress: 100, type: 'directory' },
+				{ size: readableFilesize(1317), name: 'waddup.png', siapath: 'memes/waddup.png', available: true, redundancy: 2.5, uploadprogress: 100, type: 'file' },
 			]),
 		}
 		for (const path in expectedOutputs) {
