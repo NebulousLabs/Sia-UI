@@ -183,11 +183,11 @@ describe('files plugin sagas', () => {
 		expect(uploadSpy.calledWithExactly('/renter/upload/test/testsiapath/testdir/testfile.app.png')).to.be.true
 	})
 	it('sets uploads on getUploads', async () => {
-		testUploads = [
-			'upload1',
-			'upload2',
-			'upload3',
-		]
+		testUploads = List([
+			{siapath: 'upload1'},
+			{siapath: 'upload2'},
+			{siapath: 'upload3'},
+		])
 		store.dispatch(actions.getUploads())
 		await sleep(10)
 		expect(store.getState().files.get('uploading')).to.deep.equal(testUploads)

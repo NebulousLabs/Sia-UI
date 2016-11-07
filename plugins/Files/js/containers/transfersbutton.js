@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { toggleFileTransfers } from '../actions/files.js'
 
 const mapStateToProps = (state) => ({
-	unread: state.files.get('unreadTransfers'),
+	unread: state.files.get('unreadTransfers').size,
 })
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ toggleFileTransfers }, dispatch),

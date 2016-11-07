@@ -1,4 +1,4 @@
-import { Map, OrderedSet, List } from 'immutable'
+import { Map, Set, OrderedSet, List } from 'immutable'
 import * as constants from '../constants/files.js'
 import { ls, searchFiles, rangeSelect } from '../sagas/helpers.js'
 
@@ -26,7 +26,7 @@ const initialState = Map({
 	storageEstimate: '',
 	feeEstimate: 0,
 	showDownloadsSince: Date.now(),
-	unreadTransfers: 0,
+	unreadTransfers: Set(),
 })
 
 export default function filesReducer(state = initialState, action) {
@@ -42,9 +42,9 @@ export default function filesReducer(state = initialState, action) {
 	case constants.SET_FEE_ESTIMATE:
 		return state.set('feeEstimate', action.estimate)
 	case constants.DOWNLOAD_FILE:
-		return state.set('unreadTransfers', state.get('unreadTransfers') + 1)
+		return state.set('unreadTransfers', state.get('unreadTransfers').add(action.file.siapath))
 	case constants.UPLOAD_FILE:
-		return state.set('unreadTransfers', state.get('unreadTransfers') + 1)
+		return state.set('unreadTransfers', state.get('unreadTransfers').add(action.siapath))
 	case constants.RECEIVE_FILES:
 		const workingDirectoryFiles = ls(action.files, state.get('path'))
 		const workingDirectorySiapaths = workingDirectoryFiles.map((file) => file.siapath)
@@ -95,16 +95,17 @@ export default function filesReducer(state = initialState, action) {
 	case constants.HIDE_UPLOAD_DIALOG:
 		return state.set('showUploadDialog', false)
 	case constants.RECEIVE_UPLOADS:
-		return state.set('uploading', action.uploads)
+		return state.set('unreadTransfers', state.get('unreadTransfers').intersect(action.uploads.map((upload) => upload.siapath).toSet()))
+		            .set('uploading', action.uploads)
 	case constants.RECEIVE_DOWNLOADS:
 		return state.set('downloading', action.downloads.filter((download) => Date.parse(download.starttime) > state.get('showDownloadsSince')))
 	case constants.SHOW_FILE_TRANSFERS:
 		return state.set('showFileTransfers', true)
+		            .set('unreadTransfers', Set())
 	case constants.HIDE_FILE_TRANSFERS:
 		return state.set('showFileTransfers', false)
 	case constants.TOGGLE_FILE_TRANSFERS:
 		return state.set('showFileTransfers', !state.get('showFileTransfers'))
-		            .set('unreadTransfers', 0)
 	case constants.SET_CONTRACT_COUNT:
 		return state.set('contractCount', action.count)
 	case constants.SHOW_RENAME_DIALOG:
