@@ -1,6 +1,9 @@
 import { expect } from 'chai'
-import { rangeSelect, readableFilesize, ls } from '../../plugins/Files/js/sagas/helpers.js'
+import { uploadDirectory, rangeSelect, readableFilesize, ls } from '../../plugins/Files/js/sagas/helpers.js'
 import { List, OrderedSet } from 'immutable'
+import proxyquire from 'proxyquire'
+import Path from 'path'
+import * as actions from '../../plugins/Files/js/actions/files.js'
 
 describe('files plugin helper functions', () => {
 	it('returns sane values from readableFilesize', () => {
@@ -23,6 +26,40 @@ describe('files plugin helper functions', () => {
 		for (const bytes in sizes) {
 			expect(readableFilesize(parseFloat(bytes))).to.equal(sizes[bytes])
 		}
+	})
+	describe('directory upload', () => {
+		const uploadDirectoryWin32 = proxyquire('../../plugins/Files/js/sagas/helpers.js', {
+			'path': Path.win32,
+		}).uploadDirectory
+
+		it('handles unix paths correctly', () => {
+			const directoryTree = List([
+				'/tmp/test/testfile.png',
+				'/tmp/test/test_file.pdf',
+				'/tmp/test/testdir/testfile.png',
+				'/tmp/test/testdir/test.png',
+			])
+			expect(uploadDirectory('/tmp/test', directoryTree, 'testsiapath')).to.deep.equal(List([
+				actions.uploadFile('testsiapath/test', '/tmp/test/testfile.png'),
+				actions.uploadFile('testsiapath/test', '/tmp/test/test_file.pdf'),
+				actions.uploadFile('testsiapath/test/testdir', '/tmp/test/testdir/testfile.png'),
+				actions.uploadFile('testsiapath/test/testdir', '/tmp/test/testdir/test.png'),
+			]))
+		})
+		it('handles windows paths correctly', () => {
+			const directoryTree = List([
+				'C:\\tmp\\test\\testfile.png',
+				'C:\\tmp\\test\\test_file.pdf',
+				'C:\\tmp\\test\\testdir\\testfile.png',
+				'C:\\tmp\\test\\testdir\\test.png',
+			])
+			expect(uploadDirectoryWin32('C:\\tmp\\test', directoryTree, 'testsiapath')).to.deep.equal(List([
+				actions.uploadFile('testsiapath/test', 'C:\\tmp\\test\\testfile.png'),
+				actions.uploadFile('testsiapath/test', 'C:\\tmp\\test\\test_file.pdf'),
+				actions.uploadFile('testsiapath/test/testdir', 'C:\\tmp\\test\\testdir\\testfile.png'),
+				actions.uploadFile('testsiapath/test/testdir', 'C:\\tmp\\test\\testdir\\test.png'),
+			]))
+		})
 	})
 	describe('range selection', () => {
 		const testFiles = List([
