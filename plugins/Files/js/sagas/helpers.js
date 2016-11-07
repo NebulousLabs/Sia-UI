@@ -79,9 +79,6 @@ export const ls = (files, path) => {
 		let type = 'file'
 		const relativePath = Path.posix.relative(path, file.siapath)
 		let filename = Path.posix.basename(relativePath)
-		if (parsedFiles.has(filename)) {
-			return
-		}
 		const uploadprogress = Math.floor(file.uploadprogress)
 		let siapath = file.siapath
 		let filesize = readableFilesize(file.filesize)
@@ -94,6 +91,9 @@ export const ls = (files, path) => {
 			const totalFilesize = subfiles.reduce((sum, subfile) => sum + subfile.filesize, 0)
 			filesize = readableFilesize(totalFilesize)
 			redundancy = minRedundancy(subfiles)
+		}
+		if (parsedFiles.has(filename) && parsedFiles.get(filename).type === type) {
+			return
 		}
 		parsedFiles = parsedFiles.set(filename, {
 			size: filesize,
