@@ -133,16 +133,15 @@ export const readdirRecursive = (path, files) => {
 // uploadDirectory takes a `directory`, a list of files inside the directory,
 // and a destination siapath and returns a List of upload actions that will
 // upload each file to `destpath/directoryname/`.
-export const uploadDirectory = (directory, files, destpath) => {
-	const uploads = files.map((file) => {
-		const siapath = Path.dirname(file.substring(directory.length + 1))
+export const uploadDirectory = (directory, files, destpath) =>
+	files.map((file) => {
+		const relativePath = Path.dirname(file.substring(directory.length + 1))
+		const siapath = Path.posix.join(destpath, Path.basename(directory), relativePath)
 		return {
 			source: file,
-			siapath: Path.posix.join(destpath, Path.basename(directory), siapath),
+			siapath,
 		}
-	})
-	return uploads.map((upload) => actions.uploadFile(upload.siapath, upload.source))
-}
+	}).map((upload) => actions.uploadFile(upload.siapath, upload.source))
 
 // avgHostMetric computes the average of the metric given by `metric` on the
 // list of `hosts`.
