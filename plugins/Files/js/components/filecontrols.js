@@ -20,12 +20,20 @@ const FileControls = ({files, actions}) => {
 	const onDeleteClick = () => {
 		actions.showDeleteDialog(files)
 	}
+	const onRenameClick = () => {
+		actions.showRenameDialog(files.first())
+	}
 	return (
 		<div className="file-controls">
 			{files.size} {files.size === 1 ? ' item' : ' items' } selected
 			<div onClick={onDownloadClick} className="download-button">
 				<i className="fa fa-cloud-download fa-2x" />
 			</div>
+			{files.size === 1 ? (
+				<div onClick={onRenameClick} className="rename-button">
+					<i className="fa fa-pencil fa-2x" />
+				</div>
+				) : null}
 			<div onClick={onDeleteClick} className="delete-button">
 				<i className="fa fa-trash fa-2x" />
 			</div>

@@ -58,7 +58,7 @@ div[tabindex="1"]:focus {
 	position: absolute;
 	bottom: 0;
 	height: 70px;
-	width: 250px;
+	width: 300px;
 	margin-left: auto;
 	margin-right: auto;
 	display: flex;
