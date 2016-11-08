@@ -137,11 +137,8 @@ export const uploadDirectory = (directory, files, destpath) =>
 	files.map((file) => {
 		const relativePath = Path.dirname(file.substring(directory.length + 1))
 		const siapath = Path.posix.join(destpath, Path.basename(directory), relativePath)
-		return {
-			source: file,
-			siapath,
-		}
-	}).map((upload) => actions.uploadFile(upload.siapath, upload.source))
+		return actions.uploadFile(siapath, file)
+	})
 
 // avgHostMetric computes the average of the metric given by `metric` on the
 // list of `hosts`.
