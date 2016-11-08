@@ -130,9 +130,9 @@ export const readdirRecursive = (path, files) => {
 	return filelist
 }
 
-// uploadDirectory takes a `source` and a `siapath` and returns a list of
-// upload actions that will upload every file located under `source`/ to
-// `siapath`/.
+// uploadDirectory takes a `directory`, a list of files inside the directory,
+// and a destination siapath and returns a List of upload actions that will
+// upload each file to `destpath/directoryname/`.
 export const uploadDirectory = (directory, files, destpath) => {
 	const uploads = files.map((file) => {
 		const siapath = Path.dirname(file.substring(directory.length + 1))
