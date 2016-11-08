@@ -98,7 +98,8 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('unreadTransfers', state.get('unreadTransfers').intersect(action.uploads.map((upload) => upload.siapath).toSet()))
 		            .set('uploading', action.uploads)
 	case constants.RECEIVE_DOWNLOADS:
-		return state.set('downloading', action.downloads.filter((download) => Date.parse(download.starttime) > state.get('showDownloadsSince')))
+		return state.set('unreadTransfers', state.get('unreadTransfers').intersect(action.downloads.map((download) => download.siapath).toSet()))
+		            .set('downloading', action.downloads.filter((download) => Date.parse(download.starttime) > state.get('showDownloadsSince')))
 	case constants.SHOW_FILE_TRANSFERS:
 		return state.set('showFileTransfers', true)
 		            .set('unreadTransfers', Set())
