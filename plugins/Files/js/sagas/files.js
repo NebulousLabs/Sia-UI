@@ -5,7 +5,7 @@ import fs from 'fs'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import { List } from 'immutable'
-import { ls, allowancePeriod, allowanceHosts, estimatedStorage, totalSpending, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
+import { ls, uploadDirectory, allowancePeriod, allowanceHosts, estimatedStorage, totalSpending, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
 
 
 // Query siad for the state of the wallet.
@@ -112,15 +112,13 @@ function* uploadFileSaga(action) {
 	}
 }
 
-// Recursively upload the folder at the directory `source`
+// uploadFolderSaga uploads a folder to the Sia network.
+// action.source: the source path of the folder
+// action.siapath: the working directory to upload the folder inside
 function *uploadFolderSaga(action) {
 	try {
 		const files = readdirRecursive(action.source)
-		const folderName = Path.basename(action.source)
-		const uploads = files.map((file) => ({
-			siapath: Path.posix.join(action.siapath, file.substring(file.indexOf(folderName), file.lastIndexOf(Path.basename(file))).replace(new RegExp('\\' + Path.win32.sep, 'g'), '/')),
-			source: file,
-		})).map((file) => actions.uploadFile(file.siapath, file.source))
+		const uploads = uploadDirectory(action.source, files, action.siapath)
 		for (const upload in uploads.toArray()) {
 			yield put(uploads.get(upload))
 		}

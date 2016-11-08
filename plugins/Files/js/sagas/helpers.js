@@ -3,6 +3,7 @@ import { List, Map } from 'immutable'
 import BigNumber from 'bignumber.js'
 import Path from 'path'
 import fs from 'fs'
+import * as actions from '../actions/files.js'
 
 export const blockMonth = 4320
 export const allowanceMonths = 3
@@ -128,6 +129,16 @@ export const readdirRecursive = (path, files) => {
 	})
 	return filelist
 }
+
+// uploadDirectory takes a `directory`, a list of files inside the directory,
+// and a destination siapath and returns a List of upload actions that will
+// upload each file to `destpath/directoryname/`.
+export const uploadDirectory = (directory, files, destpath) =>
+	files.map((file) => {
+		const relativePath = Path.dirname(file.substring(directory.length + 1))
+		const siapath = Path.posix.join(destpath, Path.basename(directory), relativePath)
+		return actions.uploadFile(siapath, file)
+	})
 
 // avgHostMetric computes the average of the metric given by `metric` on the
 // list of `hosts`.
