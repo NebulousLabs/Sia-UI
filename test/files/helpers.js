@@ -104,6 +104,9 @@ describe('files plugin helper functions', () => {
 		})
 	})
 	it('should ls a file list correctly', () => {
+		const lsWin32 = proxyquire('../../plugins/Files/js/sagas/helpers.js', {
+			'path': Path.win32,
+		}).ls
 		const siapathInputs = List([
 			{ filesize: 1337, siapath: 'folder/file.jpg', redundancy: 2.0, available: true, uploadprogress: 100 },
 			{ filesize: 13117, siapath: 'folder/file2.jpg', redundancy: 2.0, available: true, uploadprogress: 100 },
@@ -135,6 +138,8 @@ describe('files plugin helper functions', () => {
 		}
 		for (const path in expectedOutputs) {
 			const output = ls(siapathInputs, path)
+			const outputWin32 = lsWin32(siapathInputs, path)
+			expect(output).to.deep.equal(outputWin32)
 			expect(output.size).to.equal(expectedOutputs[path].size)
 			expect(output.toObject()).to.deep.equal(expectedOutputs[path].toObject())
 		}
