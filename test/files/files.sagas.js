@@ -183,25 +183,25 @@ describe('files plugin sagas', () => {
 		expect(uploadSpy.calledWithExactly('/renter/upload/test/testsiapath/testdir/testfile.app.png')).to.be.true
 	})
 	it('sets uploads on getUploads', async () => {
-		testUploads = [
-			'upload1',
-			'upload2',
-			'upload3',
-		]
+		testUploads = List([
+			{siapath: 'upload1'},
+			{siapath: 'upload2'},
+			{siapath: 'upload3'},
+		])
 		store.dispatch(actions.getUploads())
 		await sleep(10)
 		expect(store.getState().files.get('uploading')).to.deep.equal(testUploads)
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('sets downloads on getDownloads', async () => {
-		testDownloads = [
-			{ name: 'upload4', starttime: new Date() },
-			{ name: 'upload5', starttime: new Date() },
-			{ name: 'upload6', starttime: new Date() },
-		]
+		testDownloads = List([
+			{ siapath: 'upload4', name: 'upload4', starttime: new Date() },
+			{ siapath: 'upload5', name: 'upload5', starttime: new Date() },
+			{ siapath: 'upload6', name: 'upload6', starttime: new Date() },
+		])
 		store.dispatch(actions.getDownloads())
 		await sleep(10)
-		expect(store.getState().files.get('downloading')).to.deep.equal(testDownloads)
+		expect(store.getState().files.get('downloading').toObject()).to.deep.equal(testDownloads.toObject())
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	const testFile = {
