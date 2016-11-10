@@ -3,7 +3,7 @@ import { getPluginName, getOrderedPlugins } from '../js/rendererjs/plugins.js'
 import { expect } from 'chai'
 
 const pluginDir = Path.join(__dirname, '../plugins')
-const nPlugins = 5
+const nPlugins = 6
 
 describe('plugin system', () => {
 	describe('getOrderedPlugins', () => {

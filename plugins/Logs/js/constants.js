@@ -1,0 +1,2 @@
+export const ADD_LOG_FILTER = 'ADD_LOG_FILTER'
+export const REMOVE_LOG_FILTER = 'REMOVE_LOG_FILTER'
