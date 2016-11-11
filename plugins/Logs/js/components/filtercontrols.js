@@ -39,30 +39,23 @@ const filterControlsStyle = {
 	justifyContent: 'center',
 }
 
-const FilterControls = ({logFilters, actions}) => {
-	const onFilterClick = (filters) => (e) => {
-		if (e.target.checked) {
-			actions.addLogFilters(filters)
-			return
+const FilterControls = ({logFilters, actions}) => (
+	<div style={filterControlsStyle}>
+		{
+			filterButtons.map((filter, key) => (
+				<FilterControl
+					name={filter.name}
+					filters={filter.filters}
+					checked={filter.filters.reduce((isChecked, filtertext) => isChecked || logFilters.includes(filtertext), false)}
+					addLogFilters={actions.addLogFilters}
+					removeLogFilters={actions.removeLogFilters}
+					key={key}
+				/>
+			))
 		}
-		actions.removeLogFilters(filters)
-	}
-	return (
-		<div style={filterControlsStyle}>
-			{
-				filterButtons.map((filter, key) => (
-					<FilterControl
-						name={filter.name}
-						filters={filter.filters}
-						checked={filter.filters.reduce((isChecked, filtertext) => isChecked || logFilters.includes(filtertext), false)}
-						onFilterClick={onFilterClick}
-						key={key}
-					/>
-				))
-			}
-		</div>
-	)
-}
+	</div>
+)
+
 
 FilterControls.propTypes = {
 	logFilters: PropTypes.instanceOf(Set).isRequired,
