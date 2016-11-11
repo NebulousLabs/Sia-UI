@@ -1,10 +1,10 @@
 import * as constants from './constants.js'
 
-export const addLogFilter = (filter) => ({
-	type: constants.ADD_LOG_FILTER,
-	filter,
+export const addLogFilters = (filters) => ({
+	type: constants.ADD_LOG_FILTERS,
+	filters,
 })
-export const removeLogFilter = (filter) => ({
-	type: constants.REMOVE_LOG_FILTER,
-	filter,
+export const removeLogFilters = (filters) => ({
+	type: constants.REMOVE_LOG_FILTERS,
+	filters,
 })
