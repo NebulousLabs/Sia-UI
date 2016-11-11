@@ -1,14 +1,19 @@
 import React, { PropTypes } from 'react'
 
-const FilterControl = ({ name, filters, checked, onFilterClick }) => {
-	console.log(checked)
-	return (
-	<div className="filter-control">
-		<span> {name} </span>
-		<input type="checkbox" onChange={onFilterClick(filters)} checked={checked} />
-	</div>
-	)
+const filterControlStyle = {
+	width: '100px',
+	height: '50px',
+	display: 'flex',
+	alignItems: 'center',
+	justifyContent: 'center',
 }
+
+const FilterControl = ({ name, filters, checked, onFilterClick }) => (
+	<div style={filterControlStyle}>
+		<span> {name} </span>
+		<div style={filterButtonStyle} onChange={onFilterClick(filters)} checked={checked} />
+	</div>
+)
 
 FilterControl.propTypes = {
 	name: PropTypes.string.isRequired,
@@ -18,5 +23,4 @@ FilterControl.propTypes = {
 }
 
 export default FilterControl
-
 

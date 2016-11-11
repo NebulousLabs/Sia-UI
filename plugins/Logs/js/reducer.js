@@ -1,24 +1,13 @@
 import { Map, Set } from 'immutable'
 import * as constants from './constants.js'
-import { remote } from 'electron'
-import { findLogs, parseLogs } from './logparse.js'
+import { addLogFilters, removeLogFilters, parseLogs } from './logparse.js'
 
-const siadir = remote.getGlobal('config').siad.datadir
+const siadir = SiaAPI.config.siad.datadir
 
 const initialState = Map({
 	logFilters: Set(['consensus.log', 'gateway.log']),
-	logText: parseLogs(findLogs(siadir, ['consensus.log', 'gateway.log'])),
+	logText: parseLogs(siadir, ['consensus.log', 'gateway.log']),
 })
-
-const updateLogFilters = (state, filters) =>
-	state.set('logFilters', filters)
-	     .set('logText', parseLogs(findLogs(siadir, filters)))
-
-const addLogFilters = (state, filters) =>
-	updateLogFilters(state, state.get('logFilters').union(filters))
-
-const removeLogFilters = (state, filters) =>
-	updateLogFilters(state, state.get('logFilters').subtract(filters))
 
 export default function loggingReducer(state = initialState, action) {
 	switch (action.type) {

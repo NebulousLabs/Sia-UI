@@ -29,6 +29,16 @@ const filterButtons = [
 	},
 ]
 
+const filterControlsStyle = {
+	width: '100%',
+	height: '60px',
+	marginTop: '5px',
+	marginBottom: '5px',
+	display: 'flex',
+	alignItems: 'center',
+	justifyContent: 'center',
+}
+
 const FilterControls = ({logFilters, actions}) => {
 	const onFilterClick = (filters) => (e) => {
 		if (e.target.checked) {
@@ -38,7 +48,7 @@ const FilterControls = ({logFilters, actions}) => {
 		actions.removeLogFilters(filters)
 	}
 	return (
-		<div className="filter-controls">
+		<div style={filterControlsStyle}>
 			{
 				filterButtons.map((filter, key) => (
 					<FilterControl
