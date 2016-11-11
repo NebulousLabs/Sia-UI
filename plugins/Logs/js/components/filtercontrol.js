@@ -12,16 +12,16 @@ const FilterControl = ({ name, filters, checked, addLogFilters, removeLogFilters
 		cursor: 'pointer',
 		borderTop: checked ? '4px solid #00CBA0' : '1px solid #00CBA0',
 	}
-	const onFilterClick = (filters) => (e) => {
+	const onFilterClick = (clickedFilters) => (e) => {
 		if (!e.ctrlKey && !e.shiftKey) {
-			setLogFilters(filters)
+			setLogFilters(clickedFilters)
 			return
 		}
 		if (checked) {
-			removeLogFilters(filters)
+			removeLogFilters(clickedFilters)
 			return
 		}
-		addLogFilters(filters)
+		addLogFilters(clickedFilters)
 	}
 	return (
 		<div style={filterControlStyle} onClick={onFilterClick(filters)}>
