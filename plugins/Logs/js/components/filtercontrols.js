@@ -49,6 +49,7 @@ const FilterControls = ({logFilters, actions}) => (
 					checked={filter.filters.reduce((isChecked, filtertext) => isChecked || logFilters.includes(filtertext), false)}
 					addLogFilters={actions.addLogFilters}
 					removeLogFilters={actions.removeLogFilters}
+					setLogFilters={actions.setLogFilters}
 					key={key}
 				/>
 			))

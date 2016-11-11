@@ -1,6 +1,6 @@
 import { Map, Set } from 'immutable'
 import * as constants from './constants.js'
-import { addLogFilters, removeLogFilters, parseLogs } from './logparse.js'
+import { addLogFilters, removeLogFilters, updateLogFilters, parseLogs } from './logparse.js'
 
 const siadir = SiaAPI.config.siad.datadir
 
@@ -15,6 +15,8 @@ export default function loggingReducer(state = initialState, action) {
 		return addLogFilters(state, action.filters)
 	case constants.REMOVE_LOG_FILTERS:
 		return removeLogFilters(state, action.filters)
+	case constants.SET_LOG_FILTERS:
+		return updateLogFilters(state, Set(action.filters))
 	default:
 		return state
 	}
