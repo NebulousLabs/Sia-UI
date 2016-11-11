@@ -4,11 +4,13 @@ const FilterControl = ({ name, filters, checked, addLogFilters, removeLogFilters
 	const filterControlStyle = {
 		width: '100px',
 		height: '50px',
+		margin: '0',
+		padding: '0',
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
 		cursor: 'pointer',
-		borderTop: checked ? '3px solid #00CBA0' : '1px solid #00CBA0',
+		borderTop: checked ? '4px solid #00CBA0' : '1px solid #00CBA0',
 	}
 	const onFilterClick = (filters) => (e) => {
 		if (!e.ctrlKey && !e.shiftKey) {

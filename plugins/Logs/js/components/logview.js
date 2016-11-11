@@ -1,8 +1,13 @@
 import React, { PropTypes } from 'react'
 
 const logViewStyle = {
-	width: '100%',
-	height: '80%',
+	position: 'absolute',
+	top: '60px',
+	bottom: '50px',
+	left: '2px',
+	right: '0',
+	margin: '0',
+	padding: '0',
 	overflowY: 'scroll',
 	whiteSpace: 'pre',
 	fontSize: '12px',

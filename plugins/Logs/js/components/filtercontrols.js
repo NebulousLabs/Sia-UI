@@ -31,9 +31,11 @@ const filterButtons = [
 
 const filterControlsStyle = {
 	width: '100%',
-	height: '60px',
-	marginTop: '5px',
-	marginBottom: '5px',
+	position: 'absolute',
+	bottom: '0',
+	margin: '0',
+	padding: '0',
+	backgroundColor: '#ECECEC',
 	display: 'flex',
 	alignItems: 'center',
 	justifyContent: 'center',
