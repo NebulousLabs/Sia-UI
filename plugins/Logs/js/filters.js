@@ -1,5 +1,9 @@
 export const filters = [
 	{
+		name: 'Siad',
+		filters: ['siad-output.log'],
+	},
+	{
 		name: 'Consensus',
 		filters: ['consensus.log'],
 	},
