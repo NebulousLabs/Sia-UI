@@ -11,12 +11,5 @@ export const parseLogs = (logs) =>
 // findLogs takes a siadirectory and returns a list of logfiles inside the
 // directory.
 export const findLogs = (siadir, namefilters = ['.log']) =>
-	readdirRecursive(siadir).filter((file) => {
-		let matched = false
-		namefilters.forEach((filter) => {
-			if (file.includes(filter)) {
-				matched = true
-			}
-		})
-		return matched
-	})
+	readdirRecursive(siadir)
+		.filter((file) => namefilters.reduce((matches, filtername) => matches || file.includes(filtername), false))

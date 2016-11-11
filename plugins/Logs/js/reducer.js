@@ -7,7 +7,7 @@ const siadir = remote.getGlobal('config').siad.datadir
 
 const initialState = Map({
 	logFilters: Set(['consensus.log', 'gateway.log']),
-	logText: parseLogs(findLogs(siadir)),
+	logText: parseLogs(findLogs(siadir, ['consensus.log', 'gateway.log'])),
 })
 
 const updateLogFilters = (state, filters) =>
@@ -21,7 +21,6 @@ const removeLogFilters = (state, filters) =>
 	updateLogFilters(state, state.get('logFilters').subtract(filters))
 
 export default function loggingReducer(state = initialState, action) {
-	console.log(action)
 	switch (action.type) {
 	case constants.ADD_LOG_FILTERS:
 		return addLogFilters(state, action.filters)

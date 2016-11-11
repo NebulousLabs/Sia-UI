@@ -44,7 +44,7 @@ const FilterControls = ({logFilters, actions}) => {
 					<FilterControl
 						name={filter.name}
 						filters={filter.filters}
-						checked={filter.filters.reduce((isChecked, filtertext) => isChecked && logFilters.includes(filtertext), true)}
+						checked={filter.filters.reduce((isChecked, filtertext) => isChecked || logFilters.includes(filtertext), false)}
 						onFilterClick={onFilterClick}
 						key={key}
 					/>
