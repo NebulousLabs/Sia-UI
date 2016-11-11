@@ -16,9 +16,9 @@ describe('plugin system', () => {
 		it('has home plugin first', () => {
 			expect(getPluginName(getOrderedPlugins(pluginDir, 'Files').first())).to.equal('Files')
 		})
-		it('has terminal plugin second-to-last', () => {
+		it('has logs plugin second-to-last', () => {
 			const plugins = getOrderedPlugins(pluginDir, 'Files')
-			expect(getPluginName(plugins.get(plugins.size - 2))).to.equal('Terminal')
+			expect(getPluginName(plugins.get(plugins.size - 2))).to.equal('Logs')
 		})
 	})
 })
