@@ -14,7 +14,8 @@ if [[ -z $1 || -z $2 ]]; then
 	exit 1
 fi
 
-npm run build
+rm -rf ./dist
+npm run build-production
 
 uiVersion=${3:-v1.0.2}
 siaVersion=${4:-v1.0.1}

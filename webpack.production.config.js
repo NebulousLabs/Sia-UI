@@ -2,6 +2,7 @@
 
 const path = require('path')
 const glob = require('glob')
+const webpack = require('webpack')
 
 // Compute the entry-points for Sia-UI.
 let entrypoints = {}
@@ -17,6 +18,13 @@ entrypoints["pluginapi"] = ['babel-polyfill', path.resolve('./js/rendererjs/plug
 
 module.exports = {
 	entry: entrypoints,
+	plugins: [
+		new webpack.DefinePlugin({
+			"process.env": {
+				NODE_ENV: JSON.stringify("production")
+			}
+		})
+	],
 	output: {
 		path: path.resolve("./dist"),
 		filename: '[name].js'
