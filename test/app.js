@@ -3,6 +3,7 @@ import { spawn } from 'child_process'
 import { expect } from 'chai'
 import psTree from 'ps-tree'
 import * as Siad from 'sia.js'
+import fs from 'fs'
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -175,6 +176,9 @@ describe('startup and shutdown behaviour', () => {
 		let app
 		let siadProcess
 		before(async () => {
+			if (!fs.existsSync('sia-testing')) {
+				fs.mkdirSync('sia-testing')
+			}
 			siadProcess = Siad.launch(process.platform === 'win32' ? 'Sia\\siad.exe' : './Sia/siad', {
 				'sia-directory': 'sia-testing',
 			})
