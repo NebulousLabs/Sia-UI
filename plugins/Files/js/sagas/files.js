@@ -32,6 +32,10 @@ function* getFilesSaga() {
 function* getStorageEstimateSaga(action) {
 	try {
 		const response = yield siadCall('/hostdb/active')
+		if (response.hosts === null) {
+			yield put(actions.setStorageEstimate('No Hosts'))
+			return
+		}
 		const estimate = estimatedStorage(SiaAPI.siacoinsToHastings(action.funds), response.hosts)
 		yield put(actions.setStorageEstimate(estimate))
 	} catch (e) {
