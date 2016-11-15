@@ -14,6 +14,11 @@ if [[ -z $1 || -z $2 ]]; then
 	exit 1
 fi
 
+# ensure we have a clean node_modules
+rm -rf ./node_modules
+npm install
+
+# build the UI's js
 rm -rf ./dist
 npm run build-production
 
