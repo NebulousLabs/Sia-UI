@@ -79,7 +79,7 @@ describe('files plugin helper functions', () => {
 			const selected = OrderedSet([
 				{ siapath: 'test5' },
 			])
-			expect(rangeSelect(testFiles.first(), testFiles, selected).toArray()).to.deep.equal(testFiles.toArray())
+			expect(rangeSelect(testFiles.first(), testFiles, selected).toArray()).to.deep.equal(testFiles.reverse().toArray())
 		})
 		it('adds selections correctly top -> bottom', () => {
 			const selected = OrderedSet([
@@ -96,11 +96,45 @@ describe('files plugin helper functions', () => {
 				{ siapath: 'test4' },
 			])
 			const expectedSelection = [
-				{ siapath: 'test2' },
-				{ siapath: 'test3' },
 				{ siapath: 'test4' },
+				{ siapath: 'test3' },
+				{ siapath: 'test2' },
 			]
 			expect(rangeSelect({ siapath: 'test2' }, testFiles, selected).toArray()).to.deep.equal(expectedSelection)
+		})
+		it('adds selections correctly given subsequent shift clicks top -> bottom', () => {
+			let selected = OrderedSet([
+				{ siapath: 'test1' },
+			])
+			let expectedSelection = [
+				{ siapath: 'test1' },
+				{ siapath: 'test2' },
+				{ siapath: 'test3' },
+			]
+			expect(rangeSelect({ siapath: 'test3' }, testFiles, selected).toArray()).to.deep.equal(expectedSelection)
+			selected = OrderedSet(expectedSelection)
+			expectedSelection = [
+				{ siapath: 'test1' },
+				{ siapath: 'test2' },
+			]
+			expect(rangeSelect({ siapath: 'test2' }, testFiles, selected).toArray()).to.deep.equal(expectedSelection)
+		})
+		it('adds selections correctly given subsequent shift clicks bottom -> top', () => {
+			let selected = OrderedSet([
+				{ siapath: 'test5' },
+			])
+			let expectedSelection = [
+				{ siapath: 'test5' },
+				{ siapath: 'test4' },
+				{ siapath: 'test3' },
+			]
+			expect(rangeSelect({ siapath: 'test3' }, testFiles, selected).toArray()).to.deep.equal(expectedSelection)
+			selected = OrderedSet(expectedSelection)
+			expectedSelection = [
+				{ siapath: 'test5' },
+				{ siapath: 'test4' },
+			]
+			expect(rangeSelect({ siapath: 'test4' }, testFiles, selected).toArray()).to.deep.equal(expectedSelection)
 		})
 	})
 	it('should ls a file list correctly', () => {
