@@ -225,11 +225,11 @@ export const searchFiles = (files, text, path) => {
 export const rangeSelect = (file, files, selectedFiles) => {
 	const siapaths = files.map((f) => f.siapath)
 	const selectedSiapaths = selectedFiles.map((selectedfile) => selectedfile.siapath)
-	let endSelectionIndex = siapaths.indexOf(file.siapath)
-	let startSelectionIndex = siapaths.indexOf(selectedSiapaths.first())
-	if (startSelectionIndex > endSelectionIndex) {
-		[startSelectionIndex, endSelectionIndex] = [endSelectionIndex, siapaths.indexOf(selectedSiapaths.last())]
-	}
 
+	const endSelectionIndex = siapaths.indexOf(file.siapath)
+	const startSelectionIndex = siapaths.indexOf(selectedSiapaths.first())
+	if (startSelectionIndex > endSelectionIndex) {
+		return files.slice(endSelectionIndex, startSelectionIndex + 1).toOrderedSet().reverse()
+	}
 	return files.slice(startSelectionIndex, endSelectionIndex + 1).toOrderedSet()
 }
