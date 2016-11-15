@@ -50,6 +50,7 @@
   "scripts": {
     "start": "webpack && electron .",
     "debug": "webpack -d && electron .",
+    "build-production": "webpack -p --config ./webpack.production.config.js",
     "build": "webpack",
     "watch": "webpack --watch",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
