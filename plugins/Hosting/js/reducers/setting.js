@@ -21,7 +21,7 @@ export default function settingsReducer(state = initialState, action) {
 		            .set('settingsChanged', false)
 	case constants.RECEIVE_DEFAULT_SETTINGS:
 		return state.set('defaultsettings', action.settings)
-								.merge(action.settings)
+		            .merge(action.settings)
 	case constants.FETCH_DATA_SUCCESS:
 		return state.get('settingsChanged') ? state : state.merge(action.settings)
 	default:
