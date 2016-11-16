@@ -141,6 +141,14 @@ function *pushSettings(action) {
 	}
 }
 
+const parseSettings = (hostData) => Map({
+	maxduration: helper.blocksToWeeks(hostData.externalsettings.maxduration).toFixed(0),
+	collateral: helper.hastingsByteBlockToSCTBMonth(hostData.externalsettings.collateral).toFixed(0),
+	storageprice: helper.hastingsByteBlockToSCTBMonth(hostData.externalsettings.storageprice).toFixed(0),
+	downloadbandwidthprice: helper.hastingsByteToSCTB(hostData.externalsettings.downloadbandwidthprice).toString(),
+	acceptingContracts: hostData.externalsettings.acceptingcontracts,
+})
+
 function *fetchData() {
 	try {
 		const updatedData = yield siadCall({ url: '/host' })
@@ -160,13 +168,7 @@ function *fetchData() {
 			defaultAnnounceAddress: updatedData.externalsettings.netaddress,
 		})
 
-		const settings = Map({
-			maxduration: helper.blocksToWeeks(updatedData.externalsettings.maxduration).toFixed(0),
-			collateral: helper.hastingsByteBlockToSCTBMonth(updatedData.externalsettings.collateral).toFixed(0),
-			storageprice: helper.hastingsByteBlockToSCTBMonth(updatedData.externalsettings.storageprice).toFixed(0),
-			downloadbandwidthprice: helper.hastingsByteToSCTB(updatedData.externalsettings.downloadbandwidthprice).toString(),
-			acceptingContracts: updatedData.externalsettings.acceptingcontracts,
-		})
+		const settings = parseSettings(updatedData)
 
 		yield put( actions.fetchDataSuccess(data, settings, modals) )
 	} catch (e) {
@@ -177,13 +179,7 @@ function *fetchData() {
 function *requestDefaultSettingsSaga() {
 	try {
 		const hostData = yield siadCall('/host')
-		yield put(actions.receiveDefaultSettings(Map({
-			maxduration: helper.blocksToWeeks(hostData.externalsettings.maxduration).toFixed(0),
-			collateral: helper.hastingsByteBlockToSCTBMonth(hostData.externalsettings.collateral).toFixed(0),
-			storageprice: helper.hastingsByteBlockToSCTBMonth(hostData.externalsettings.storageprice).toFixed(0),
-			downloadbandwidthprice: helper.hastingsByteToSCTB(hostData.externalsettings.downloadbandwidthprice).toString(),
-			acceptingContracts: hostData.externalsettings.acceptingcontracts,
-		})))
+		yield put(actions.receiveDefaultSettings(parseSettings(hostData)))
 	} catch (e) {
 		console.error('error fetching defaults: ' + e.toString())
 	}
