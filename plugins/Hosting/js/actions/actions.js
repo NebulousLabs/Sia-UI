@@ -95,3 +95,13 @@ export const hideAnnounceDialog = (address) => ({
 	type: constants.HIDE_ANNOUNCE_DIALOG,
 	address,
 })
+
+export const requestDefaultSettings = () => ({
+	type: constants.REQUEST_DEFAULT_SETTINGS,
+})
+
+export const receiveDefaultSettings = (settings) => ({
+	type: constants.RECEIVE_DEFAULT_SETTINGS,
+	settings,
+})
+

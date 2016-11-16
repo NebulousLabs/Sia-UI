@@ -7,22 +7,23 @@ const initialState = Map({
 	storageprice: 0,
 	downloadbandwidthprice: 0,
 	acceptingContracts: false,
-	defaultsettings: undefined,
+	defaultsettings: Map(),
 	settingsChanged: false,
 })
 
 export default function settingsReducer(state = initialState, action) {
 	switch (action.type) {
-
 	case constants.UPDATE_SETTINGS:
-		return state.merge(action.settings).set('settingsChanged', true)
-
+		return state.merge(action.settings)
+		            .set('settingsChanged', true)
+	case constants.PUSH_SETTINGS:
+		return state.set('defaultsettings', action.settings)
+		            .set('settingsChanged', false)
+	case constants.RECEIVE_DEFAULT_SETTINGS:
+		return state.set('defaultsettings', action.settings)
+		            .merge(action.settings)
 	case constants.FETCH_DATA_SUCCESS:
-		return (action.settings === undefined ? state : state.merge(action.settings))
-			.set('defaultsettings', state.get('defaultsettings') === undefined
-				? action.settings : state.get('defaultsettings'))
-			.set('settingsChanged', action.settings === undefined ? state.get('settingsChanged') : false)
-
+		return state.get('settingsChanged') ? state : state.merge(action.settings)
 	default:
 		return state
 	}
