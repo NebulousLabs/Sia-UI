@@ -8,17 +8,15 @@ const fileSize = (logpath) =>
 
 // cleanLog removes partial lines.
 export const cleanLog = (logtext) =>
-	logtext.split('\n').slice(1).join('\n')
-
-const defaultNBytes = 512
+	logtext.slice(logtext.indexOf('\n') + 1, logtext.lastIndexOf('\n') + 1)
 
 // readLog takes a log path and returns a string representing the log data.
-export const readLog = (logpath, start = 0, nbytes) => {
-	const bytes = nbytes || fileSize(logpath)
-	const len = bytes - start
-	const buf = new Buffer(len)
+export const readLog = (logpath, nbytes) => {
+	const startPos = Math.max(0, fileSize(logpath) - nbytes)
+	const len = Math.min(fileSize(logpath), nbytes)
+	const buf = new Buffer(nbytes)
 	const fd = fs.openSync(logpath, 'r')
-	fs.readSync(fd, buf, 0, len, start)
+	fs.readSync(fd, buf, 0, len, startPos)
 
 	return cleanLog(buf.toString())
 }
@@ -26,24 +24,25 @@ export const readLog = (logpath, start = 0, nbytes) => {
 // parseLogs takes a sia directory and an array of log name filters to match,
 // and returns a concatenated, sorted log string composed of every log that
 // matched inside the sia directory.
-export const parseLogs = (datadir, namefilters = ['.log']) =>
+export const parseLogs = (datadir, nbytes, namefilters = ['.log']) =>
 	readdirRecursive(datadir)
 		.filter((file) => namefilters.reduce((matches, filtername) => matches || file.includes(filtername), false))
-		.map(readLog)
+		.map((log) => readLog(log, nbytes))
 		.join('')
 		.split('\n').sort().join('\n')
 
 // updateLogFilters updates the log plugin's state using the set of filters
 // passed in to `filters`.
-export const updateLogFilters = (state, filters) =>
+export const updateLogFilters = (state, size, filters) =>
 	state.set('logFilters', filters)
-	     .set('logText', parseLogs(siadir, filters))
+	     .set('logSize', size)
+	     .set('logText', parseLogs(siadir, size, filters))
 
 // addLogFilters adds an array of filters.
 export const addLogFilters = (state, filters) =>
-	updateLogFilters(state, state.get('logFilters').union(filters))
+	updateLogFilters(state, state.get('logSize'), state.get('logFilters').union(filters))
 
 // removeLogFilters removes an array of filters.
 export const removeLogFilters = (state, filters) =>
-	updateLogFilters(state, state.get('logFilters').subtract(filters))
+	updateLogFilters(state, state.get('logSize'), state.get('logFilters').subtract(filters))
 

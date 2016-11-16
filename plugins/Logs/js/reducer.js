@@ -6,7 +6,9 @@ const siadir = SiaAPI.config.siad.datadir
 
 const initialState = Map({
 	logFilters: Set(['consensus.log', 'gateway.log']),
-	logText: parseLogs(siadir, ['consensus.log', 'gateway.log']),
+	logText: parseLogs(siadir, 50000, ['consensus.log', 'gateway.log']),
+	
+	logSize: 50000,
 })
 
 export default function loggingReducer(state = initialState, action) {
@@ -16,7 +18,7 @@ export default function loggingReducer(state = initialState, action) {
 	case constants.REMOVE_LOG_FILTERS:
 		return removeLogFilters(state, action.filters)
 	case constants.SET_LOG_FILTERS:
-		return updateLogFilters(state, Set(action.filters))
+		return updateLogFilters(state, state.get('logSize'), Set(action.filters))
 	default:
 		return state
 	}
