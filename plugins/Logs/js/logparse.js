@@ -2,20 +2,23 @@ import fs from 'fs'
 import { readdirRecursive } from './utils.js'
 
 const siadir = SiaAPI.config.siad.datadir
-export const defaultLogSize = 512
 
 const fileSize = (logpath) =>
 	fs.statSync(logpath).size
 
-export const readLog = (logpath, start, end) => {
-	const startBytes = start || 0
+// cleanLog removes partial lines.
+export const cleanLog = (logtext) =>
+	logtext.split('\n').slice(1).join('\n')
+
+// readLog takes a log path and returns a string representing the log data.
+export const readLog = (logpath, start = 0, end) => {
 	const endBytes = end || fileSize(logpath)
-	const len = endBytes - startBytes
+	const len = endBytes - start
 	const buf = new Buffer(len)
 	const fd = fs.openSync(logpath, 'r')
-	fs.readSync(fd, buf, 0, len, startBytes)
+	fs.readSync(fd, buf, 0, len, start)
 
-	return buf.toString()
+	return cleanLog(buf.toString())
 }
 
 // parseLogs takes a sia directory and an array of log name filters to match,
