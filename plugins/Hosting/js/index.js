@@ -22,7 +22,10 @@ const rootElement = (
 ReactDOM.render(rootElement, document.getElementById('react-root'))
 sagaMiddleware.run(initSaga)
 
+store.dispatch(actions.requestDefaultSettings())
+store.dispatch(actions.fetchData())
+
 // Poll Siad for state changes.
 setInterval(() => {
-	store.dispatch(actions.fetchData({ ignoreSettings: true }))
+	store.dispatch(actions.fetchData())
 }, 5000)

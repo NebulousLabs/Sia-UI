@@ -141,7 +141,7 @@ function *pushSettings(action) {
 	}
 }
 
-function *fetchData(action) {
+function *fetchData() {
 	try {
 		const updatedData = yield siadCall({ url: '/host' })
 		const walletUnlocked = yield siadCall({ url: '/wallet' })
@@ -160,7 +160,7 @@ function *fetchData(action) {
 			defaultAnnounceAddress: updatedData.externalsettings.netaddress,
 		})
 
-		const settings = action.ignoreSettings ? undefined : Map({
+		const settings = Map({
 			maxduration: helper.blocksToWeeks(updatedData.externalsettings.maxduration).toFixed(0),
 			collateral: helper.hastingsByteBlockToSCTBMonth(updatedData.externalsettings.collateral).toFixed(0),
 			storageprice: helper.hastingsByteBlockToSCTBMonth(updatedData.externalsettings.storageprice).toFixed(0),
@@ -174,41 +174,55 @@ function *fetchData(action) {
 	}
 }
 
+function *requestDefaultSettingsSaga() {
+	try {
+		const hostData = yield siadCall('/host')
+		yield put(actions.receiveDefaultSettings(Map({
+			maxduration: helper.blocksToWeeks(hostData.externalsettings.maxduration).toFixed(0),
+			collateral: helper.hastingsByteBlockToSCTBMonth(hostData.externalsettings.collateral).toFixed(0),
+			storageprice: helper.hastingsByteBlockToSCTBMonth(hostData.externalsettings.storageprice).toFixed(0),
+			downloadbandwidthprice: helper.hastingsByteToSCTB(hostData.externalsettings.downloadbandwidthprice).toString(),
+			acceptingContracts: hostData.externalsettings.acceptingcontracts,
+		})))
+	} catch (e) {
+		console.error('error fetching defaults: ' + e.toString())
+	}
+}
+
 function *pushSettingsListener() {
-	yield *takeEvery('PUSH_SETTINGS', pushSettings)
+	yield *takeEvery(constants.PUSH_SETTINGS, pushSettings)
 }
 function *fetchSettingsListener() {
-	yield *takeEvery('FETCH_DATA', fetchData)
+	yield *takeEvery(constants.FETCH_DATA, fetchData)
 }
 function *addFolderListener() {
-	yield *takeEvery('ADD_FOLDER', addFolder)
+	yield *takeEvery(constants.ADD_FOLDER, addFolder)
 }
 function *addFolderAskListener() {
-	yield *takeEvery('ADD_FOLDER_ASK', addFolderAskPathSize)
+	yield *takeEvery(constants.ADD_FOLDER_ASK, addFolderAskPathSize)
 }
 function *removeFolderListener() {
-	yield *takeEvery('REMOVE_FOLDER', removeFolder)
+	yield *takeEvery(constants.REMOVE_FOLDER, removeFolder)
 }
 function *resizeFolderListener() {
-	yield *takeEvery('RESIZE_FOLDER', resizeFolder)
+	yield *takeEvery(constants.RESIZE_FOLDER, resizeFolder)
 }
 function *announceHostListener() {
-	yield *takeEvery('ANNOUNCE_HOST', announceHost)
+	yield *takeEvery(constants.ANNOUNCE_HOST, announceHost)
+}
+function *requestDefaultsListener() {
+	yield *takeEvery(constants.REQUEST_DEFAULT_SETTINGS, requestDefaultSettingsSaga)
 }
 
 export default function *initSaga() {
-	try {
-		yield [
-			fork(pushSettingsListener),
-			fork(fetchSettingsListener),
-			fork(addFolderListener),
-			fork(addFolderAskListener),
-			fork(removeFolderListener),
-			fork(resizeFolderListener),
-			fork(announceHostListener),
-		]
-		yield put(actions.fetchData())
-	} catch (e) {
-		SiadAPI.showError({ title: 'Init Saga Error', content: e.message })
-	}
+	yield [
+		fork(pushSettingsListener),
+		fork(fetchSettingsListener),
+		fork(addFolderListener),
+		fork(addFolderAskListener),
+		fork(removeFolderListener),
+		fork(resizeFolderListener),
+		fork(announceHostListener),
+		fork(requestDefaultsListener),
+	]
 }
