@@ -1,0 +1,36 @@
+2016/11/16 22:06:34.127136 gateway.go:245: STARTUP: Logging has started.
+2016/11/16 22:06:34.127224 gateway.go:343: INFO: gateway created, started logging
+2016/11/16 22:06:54.127531 nodes.go:212: ERROR: could not pick a random node for uptime check: no peers
+2016/11/16 22:07:03.604395 upnp.go:83: INFO: our address is 
+2016/11/16 22:07:11.928801 upnp.go:99: WARN: could not automatically forward port 9981: no UPnP-enabled devices found: no UPnP-enabled gateway found
+2016/11/16 22:07:14.127731 nodes.go:212: ERROR: could not pick a random node for uptime check: no peers
+2016/11/16 22:07:34.127862 nodes.go:212: ERROR: could not pick a random node for uptime check: no peers
+2016/11/16 22:08:55.731417 gateway.go:245: STARTUP: Logging has started.
+2016/11/16 22:08:55.731520 gateway.go:343: INFO: gateway created, started logging
+2016/11/16 22:09:15.731846 nodes.go:212: ERROR: could not pick a random node for uptime check: no peers
+2016/11/16 22:09:18.868129 upnp.go:99: WARN: could not automatically forward port 9981: no UPnP-enabled devices found: no UPnP-enabled gateway found
+2016/11/16 22:09:25.648820 gateway.go:245: STARTUP: Logging has started.
+2016/11/16 22:09:41.101616 gateway.go:245: STARTUP: Logging has started.
+2016/11/16 22:09:41.101746 gateway.go:343: INFO: gateway created, started logging
+2016/11/16 22:10:01.102159 nodes.go:212: ERROR: could not pick a random node for uptime check: no peers
+2016/11/16 22:10:14.106560 upnp.go:83: INFO: our address is 
+2016/11/16 22:10:21.102262 nodes.go:212: ERROR: could not pick a random node for uptime check: no peers
+2016/11/16 22:10:28.318469 upnp.go:99: WARN: could not automatically forward port 9981: no UPnP-enabled devices found: no UPnP-enabled gateway found
+2016/11/16 22:10:41.102382 nodes.go:212: ERROR: could not pick a random node for uptime check: no peers
+2016/11/16 22:10:57.455834 gateway.go:245: STARTUP: Logging has started.
+2016/11/16 22:10:57.455904 gateway.go:343: INFO: gateway created, started logging
+2016/11/16 22:11:11.429551 upnp.go:99: WARN: could not automatically forward port 9981: no UPnP-enabled devices found: no UPnP-enabled gateway found
+2016/11/16 22:11:17.456115 nodes.go:212: ERROR: could not pick a random node for uptime check: no peers
+2016/11/16 22:11:26.816145 upnp.go:83: INFO: our address is 
+2016/11/16 22:11:37.456257 nodes.go:212: ERROR: could not pick a random node for uptime check: no peers
+2016/11/16 22:11:58.929099 gateway.go:245: STARTUP: Logging has started.
+2016/11/16 22:11:58.929182 gateway.go:343: INFO: gateway created, started logging
+2016/11/16 22:12:18.929384 nodes.go:212: ERROR: could not pick a random node for uptime check: no peers
+2016/11/16 22:12:25.111329 upnp.go:83: INFO: our address is 
+2016/11/16 22:12:26.636689 upnp.go:99: WARN: could not automatically forward port 9981: no UPnP-enabled devices found: no UPnP-enabled gateway found
+2016/11/16 22:13:01.977501 gateway.go:245: STARTUP: Logging has started.
+2016/11/16 22:13:01.977580 gateway.go:343: INFO: gateway created, started logging
+2016/11/16 22:13:20.663332 upnp.go:83: INFO: our address is 
+2016/11/16 22:13:21.977854 nodes.go:212: ERROR: could not pick a random node for uptime check: no peers
+2016/11/16 22:13:29.300119 upnp.go:99: WARN: could not automatically forward port 9981: no UPnP-enabled devices found: no UPnP-enabled gateway found
+2016/11/16 22:13:41.978002 nodes.go:212: ERROR: could not pick a random node for uptime check: no peers

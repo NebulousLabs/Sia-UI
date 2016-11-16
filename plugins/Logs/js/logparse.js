@@ -2,6 +2,21 @@ import fs from 'fs'
 import { readdirRecursive } from './utils.js'
 
 const siadir = SiaAPI.config.siad.datadir
+export const defaultLogSize = 512
+
+const fileSize = (logpath) =>
+	fs.statSync(logpath).size
+
+export const readLog = (logpath, start, end) => {
+	const startBytes = start || 0
+	const endBytes = end || fileSize(logpath)
+	const len = endBytes - startBytes
+	const buf = new Buffer(len)
+	const fd = fs.openSync(logpath, 'r')
+	fs.readSync(fd, buf, 0, len, startBytes)
+
+	return buf.toString()
+}
 
 // parseLogs takes a sia directory and an array of log name filters to match,
 // and returns a concatenated, sorted log string composed of every log that
@@ -9,7 +24,7 @@ const siadir = SiaAPI.config.siad.datadir
 export const parseLogs = (datadir, namefilters = ['.log']) =>
 	readdirRecursive(datadir)
 		.filter((file) => namefilters.reduce((matches, filtername) => matches || file.includes(filtername), false))
-		.map((log) => fs.readFileSync(log, 'utf8'))
+		.map(readLog)
 		.join('')
 		.split('\n').sort().join('\n')
 
