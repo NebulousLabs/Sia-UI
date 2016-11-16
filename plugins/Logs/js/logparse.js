@@ -10,10 +10,12 @@ const fileSize = (logpath) =>
 export const cleanLog = (logtext) =>
 	logtext.split('\n').slice(1).join('\n')
 
+const defaultNBytes = 512
+
 // readLog takes a log path and returns a string representing the log data.
-export const readLog = (logpath, start = 0, end) => {
-	const endBytes = end || fileSize(logpath)
-	const len = endBytes - start
+export const readLog = (logpath, start = 0, nbytes) => {
+	const bytes = nbytes || fileSize(logpath)
+	const len = bytes - start
 	const buf = new Buffer(len)
 	const fd = fs.openSync(logpath, 'r')
 	fs.readSync(fd, buf, 0, len, start)
