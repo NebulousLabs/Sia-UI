@@ -12,9 +12,9 @@ export const cleanLog = (logtext) =>
 
 // readLog takes a log path and returns a string representing the log data.
 export const readLog = (logpath, nbytes) => {
-	const startPos = Math.max(0, fileSize(logpath) - nbytes)
-	const len = Math.min(fileSize(logpath), nbytes)
-	const buf = new Buffer(nbytes)
+	const len = nbytes || fileSize(logpath)
+	const startPos = Math.max(0, fileSize(logpath) - len)
+	const buf = new Buffer(len)
 	const fd = fs.openSync(logpath, 'r')
 	fs.readSync(fd, buf, 0, len, startPos)
 
