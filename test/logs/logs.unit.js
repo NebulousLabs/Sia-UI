@@ -16,6 +16,7 @@ describe('log parsing', () => {
 			expect(readLog(consensusLog, fs.statSync(consensusLog).size)).to.equal(consensusLogText)
 			expect(readLog(consensusLog, 2).indexOf('\n')).to.equal(-1)
 			expect(readLog(consensusLog, 144).indexOf('\n') > -1).to.equal(true)
+			expect(readLog(consensusLog, 5000000).length).to.equal(consensusLogText.length)
 		})
 	})
 })
