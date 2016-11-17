@@ -12,7 +12,7 @@ describe('log parsing', () => {
 			expect(readLog(consensusLog).length > 0).to.equal(true)
 			expect(readLog(consensusLog)).to.equal(consensusLogText)
 		})
-		it('reads logs given a log path and lastNBytes', () => {
+		it('reads logs given a log path and nbytes', () => {
 			expect(readLog(consensusLog, fs.statSync(consensusLog).size)).to.equal(consensusLogText)
 			expect(readLog(consensusLog, 2).indexOf('\n')).to.equal(-1)
 			expect(readLog(consensusLog, 144).indexOf('\n') > -1).to.equal(true)

@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react'
 const logViewStyle = {
 	position: 'absolute',
 	top: '60px',
-	bottom: '55px',
+	bottom: '60px',
 	left: '2px',
 	right: '0',
 	margin: '0',
@@ -15,11 +15,25 @@ const logViewStyle = {
 }
 
 export default class LogView extends React.Component {
-	componentDidUpdate() {
-		this._logView.scrollTop = this._logView.scrollHeight
-	}
 	componentDidMount() {
 		this._logView.scrollTop = this._logView.scrollHeight
+		this._logView.addEventListener('scroll', this.handleScroll.bind(this))
+	}
+	componentDidUpdate() {
+		if (!this.props.scrolling) {
+			this._logView.scrollTop = this._logView.scrollHeight
+		}
+	}
+	handleScroll() {
+		if (this._logView.scrollTop === 0) {
+			this.props.actions.incrementLogSize()
+			this._logView.scrollTop = 1
+		}
+		if (this._logView.scrollTop === this._logView.scrollHeight - this._logView.clientHeight) {
+			this.props.actions.setNotScrolling()
+		} else {
+			this.props.actions.setScrolling()
+		}
 	}
 	render() {
 		return (
@@ -32,5 +46,6 @@ export default class LogView extends React.Component {
 
 LogView.propTypes = {
 	logText: PropTypes.string.isRequired,
+	scrolling: PropTypes.bool.isRequired,
 }
 
