@@ -3,12 +3,10 @@ import { readdirRecursive } from './utils.js'
 
 const siadir = SiaAPI.config.siad.datadir
 
-const fileSize = (logpath) =>
-	fs.statSync(logpath).size
+const fileSize = (logpath) => fs.statSync(logpath).size
 
 // cleanLog removes partial lines.
-export const cleanLog = (logtext) =>
-	logtext.slice(logtext.indexOf('\n') + 1, logtext.lastIndexOf('\n') + 1)
+export const cleanLog = (logtext) => logtext.slice(logtext.indexOf('\n') + 1, logtext.lastIndexOf('\n') + 1)
 
 // readLog takes a log path and returns a string representing the log data.
 export const readLog = (logpath, nbytes) => {
