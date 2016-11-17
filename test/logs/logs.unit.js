@@ -3,7 +3,6 @@ import { expect } from 'chai'
 import Path from 'path'
 import fs from 'fs'
 
-
 describe('log parsing', () => {
 	const consensusLog = Path.join(SiaAPI.config.siad.datadir, './consensus/consensus.log')
 	const consensusLogText = cleanLog(fs.readFileSync(consensusLog, 'utf8'))
