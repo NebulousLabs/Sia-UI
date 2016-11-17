@@ -3,10 +3,19 @@ import { mount } from 'enzyme'
 import { expect } from 'chai'
 import { filters } from '../../plugins/Logs/js/filters.js'
 import { parseLogs } from '../../plugins/Logs/js/logparse.js'
+import { Set } from 'immutable'
+
+const sleep = (n) => new Promise((resolve) => setTimeout(resolve, n))
 
 describe('logs plugin', () => {
 	const siadir = SiaAPI.config.siad.datadir
 	const rootComponent = mount(logsPlugin())
+
+	before(() => {
+		// Set NODE_ENV to production to suppress react warnings
+		// caused by externally triggering events on mounted components
+		process.env.NODE_ENV = 'production'
+	})
 	it('has filters.length filtercomponents', () => {
 		expect(rootComponent.find('FilterControl')).to.have.length(filters.length)
 	})
@@ -29,12 +38,36 @@ describe('logs plugin', () => {
 	it('starts with consensus and gateway logs shown', () => {
 		expect(rootComponent.find('LogView').props().logText).to.equal(parseLogs(siadir, 50000, ['gateway.log', 'consensus.log']))
 	})
-	it('filters log view text when filter button is clicked', () => {
+	it('filters log view text when filter button is clicked', async () => {
 		const filterControlNodes = rootComponent.find('FilterControl')
-		filterControlNodes.forEach((node) => {
-			const filterFilters = filters.filter((f) => f.name === node.props().name)[0].filters
-			node.simulate('click')
-			expect(rootComponent.find('LogView').props().logText).to.equal(parseLogs(siadir, 50000, filterFilters))
+
+		// unclick the default filters
+		filterControlNodes.forEach((filter) => {
+			if (filter.props().name === 'Consensus' || filter.props().name === 'Gateway') {
+				filter.simulate('click')
+			}
 		})
+		await sleep(50)
+
+		let logfilters = Set()
+
+		// simulate clicks and verify each click results in the filters being added
+		for (let i = 0; i < filterControlNodes.length; i++) {
+			const node = filterControlNodes.at(i)
+			const filterFilters = filters.filter((f) => f.name === node.props().name)[0].filters
+			logfilters = logfilters.union(filterFilters)
+			node.simulate('click')
+			await sleep(50)
+			expect(rootComponent.find('LogView').props().logText).to.equal(parseLogs(siadir, 50000, logfilters))
+		}
+		// simulate clicks on each filter again and verify that the filter is removed
+		for (let i = 0; i < filterControlNodes.length; i++) {
+			const node = filterControlNodes.at(i)
+			const filterFilters = filters.filter((f) => f.name === node.props().name)[0].filters
+			logfilters = logfilters.subtract(filterFilters)
+			node.simulate('click')
+			await sleep(50)
+			expect(rootComponent.find('LogView').props().logText).to.equal(parseLogs(siadir, 50000, logfilters))
+		}
 	})
 })
