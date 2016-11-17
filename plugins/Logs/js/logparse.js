@@ -19,7 +19,12 @@ export const readLog = (logpath, nbytes) => {
 	const startPos = Math.max(0, fileSize(logpath) - len)
 	const buf = new Buffer(len)
 	const fd = fs.openSync(logpath, 'r')
-	fs.readSync(fd, buf, 0, len, startPos)
+
+	try {
+		fs.readSync(fd, buf, 0, len, startPos)
+	} catch (e) {
+		console.error(`error reading ${logpath}: ${e.toString()}`)
+	}
 
 	return cleanLog(buf.toString())
 }

@@ -5,6 +5,7 @@ import { filters } from '../../plugins/Logs/js/filters.js'
 import { parseLogs } from '../../plugins/Logs/js/logparse.js'
 
 describe('logs plugin', () => {
+	const siadir = SiaAPI.config.siad.datadir
 	const rootComponent = mount(logsPlugin())
 	it('has filters.length filtercomponents', () => {
 		expect(rootComponent.find('FilterControl')).to.have.length(filters.length)
@@ -26,14 +27,14 @@ describe('logs plugin', () => {
 		})
 	})
 	it('starts with consensus and gateway logs shown', () => {
-		expect(rootComponent.find('LogView').props().logText).to.equal(parseLogs(SiaAPI.config.siad.datadir, 50000, ['gateway.log', 'consensus.log']))
+		expect(rootComponent.find('LogView').props().logText).to.equal(parseLogs(siadir, 50000, ['gateway.log', 'consensus.log']))
 	})
 	it('filters log view text when filter button is clicked', () => {
 		const filterControlNodes = rootComponent.find('FilterControl')
 		filterControlNodes.forEach((node) => {
 			const filterFilters = filters.filter((f) => f.name === node.props().name)[0].filters
 			node.simulate('click')
-			expect(rootComponent.find('LogView').props().logText).to.equal(parseLogs(SiaAPI.config.siad.datadir, 50000, filterFilters))
+			expect(rootComponent.find('LogView').props().logText).to.equal(parseLogs(siadir, 50000, filterFilters))
 		})
 	})
 })
