@@ -1,0 +1,26 @@
+2016/11/16 22:06:34.152223 dependencies.go:105: STARTUP: Logging has started.
+2016/11/16 22:06:56.390850 upnp.go:109: WARN: could not automatically forward port 9982: no UPnP-enabled gateway found
+2016/11/16 22:06:56.390874 network.go:85: ERROR: failed to forward port: no UPnP-enabled gateway found
+2016/11/16 22:08:55.743878 dependencies.go:105: STARTUP: Logging has started.
+2016/11/16 22:08:55.750030 persist.go:173: WARN: AutoAddress '' loaded from persist is invalid: missing port in address
+2016/11/16 22:08:55.750135 persist.go:182: WARN: NetAddress '' loaded from persist is invalid: missing port in address
+2016/11/16 22:09:15.282408 upnp.go:109: WARN: could not automatically forward port 9982: no UPnP-enabled gateway found
+2016/11/16 22:09:15.282426 network.go:85: ERROR: failed to forward port: no UPnP-enabled gateway found
+2016/11/16 22:09:41.108772 dependencies.go:105: STARTUP: Logging has started.
+2016/11/16 22:09:41.116105 persist.go:173: WARN: AutoAddress '' loaded from persist is invalid: missing port in address
+2016/11/16 22:09:41.116121 persist.go:182: WARN: NetAddress '' loaded from persist is invalid: missing port in address
+2016/11/16 22:10:11.525918 upnp.go:109: WARN: could not automatically forward port 9982: no UPnP-enabled gateway found
+2016/11/16 22:10:11.525937 network.go:85: ERROR: failed to forward port: no UPnP-enabled gateway found
+2016/11/16 22:10:57.463405 dependencies.go:105: STARTUP: Logging has started.
+2016/11/16 22:10:57.471242 persist.go:173: WARN: AutoAddress '' loaded from persist is invalid: missing port in address
+2016/11/16 22:10:57.471291 persist.go:182: WARN: NetAddress '' loaded from persist is invalid: missing port in address
+2016/11/16 22:11:18.745863 upnp.go:109: WARN: could not automatically forward port 9982: no UPnP-enabled gateway found
+2016/11/16 22:11:18.745884 network.go:85: ERROR: failed to forward port: no UPnP-enabled gateway found
+2016/11/16 22:11:58.937577 dependencies.go:105: STARTUP: Logging has started.
+2016/11/16 22:11:58.943955 persist.go:173: WARN: AutoAddress '' loaded from persist is invalid: missing port in address
+2016/11/16 22:11:58.943969 persist.go:182: WARN: NetAddress '' loaded from persist is invalid: missing port in address
+2016/11/16 22:12:25.727525 upnp.go:109: WARN: could not automatically forward port 9982: no UPnP-enabled gateway found
+2016/11/16 22:12:25.727556 network.go:85: ERROR: failed to forward port: no UPnP-enabled gateway found
+2016/11/16 22:13:01.984375 dependencies.go:105: STARTUP: Logging has started.
+2016/11/16 22:13:01.990887 persist.go:173: WARN: AutoAddress '' loaded from persist is invalid: missing port in address
+2016/11/16 22:13:01.990904 persist.go:182: WARN: NetAddress '' loaded from persist is invalid: missing port in address

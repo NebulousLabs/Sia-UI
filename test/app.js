@@ -57,7 +57,7 @@ const isProcessRunning = (pid) => {
 	}
 }
 
-const electronBinary = process.platform === 'win32' ? 'node_modules\\electron-prebuilt\\dist\\electron.exe' : './node_modules/electron-prebuilt/dist/electron'
+const electronBinary = process.platform === 'win32' ? 'node_modules\\electron\\dist\\electron.exe' : './node_modules/electron/dist/electron'
 
 // we need functions for mocha's `this` for setting timeouts.
 /* eslint-disable no-invalid-this */

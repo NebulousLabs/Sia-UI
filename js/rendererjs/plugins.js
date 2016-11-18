@@ -76,7 +76,7 @@ export const getPluginName = (pluginPath) => Path.basename(pluginPath)
 // loadPlugin constructs plugin view and plugin button elements
 // and adds these elements to the main UI's mainbar/sidebar.
 // Returns the plugin's main view element.
-export const loadPlugin = (pluginPath) => {
+export const loadPlugin = (pluginPath, hidden = false, shortcut) => {
 	const name = getPluginName(pluginPath)
 	const markupPath = Path.join(pluginPath, 'index.html')
 	const iconPath = Path.join(pluginPath, 'assets', 'button.png')
@@ -84,7 +84,14 @@ export const loadPlugin = (pluginPath) => {
 	const viewElement = createPluginElement(markupPath, name)
 	const buttonElement = createPluginButtonElement(iconPath, name)
 
-	document.getElementById('sidebar').appendChild(buttonElement)
+	if (typeof shortcut !== 'undefined') {
+		remote.globalShortcut.register(shortcut, () => {
+			setCurrentPlugin(name)
+		})
+	}
+	if (!hidden) {
+		document.getElementById('sidebar').appendChild(buttonElement)
+	}
 	document.getElementById('mainbar').appendChild(viewElement)
 
 	return viewElement
@@ -116,6 +123,14 @@ export const scanFolder = (path) => {
 	return pluginFolders
 }
 
+// pushToBottom pushes a plugin to the bottom of a plugin list
+export const pushToBottom = (plugins, target) =>
+	plugins.sort((p) => getPluginName(p) === target ? 1 : 0)
+
+// pushToTop pushes a plugin to the top of a plugin list
+export const pushToTop = (plugins, target) =>
+	plugins.sort((p) => getPluginName(p) === target ? -1 : 0)
+
 // Scan a folder at path and return an ordered list of plugins.
 // The plugin specified by `homePlugin` is always moved to the top of the list,
 // if it exists.
@@ -123,28 +138,13 @@ export const getOrderedPlugins = (path, homePlugin) => {
 	let plugins = scanFolder(path)
 
 	// Push the Terminal plugin to the bottom
-	plugins = plugins.sort((p1) => {
-		if (getPluginName(p1) === 'Terminal') {
-			return 1
-		}
-		return 0
-	})
+	plugins = pushToBottom(plugins, 'Terminal')
 
 	// Push the About plugin to the bottom
-	plugins = plugins.sort((p1) => {
-		if (getPluginName(p1) === 'About') {
-			return 1
-		}
-		return 0
-	})
+	plugins = pushToBottom(plugins, 'About')
 
 	// Push the home plugin to the top
-	plugins = plugins.sort((p1) => {
-		if (getPluginName(p1) === homePlugin) {
-			return -1
-		}
-		return 0
-	})
+	plugins = pushToTop(plugins, homePlugin)
 
 	return plugins
 }

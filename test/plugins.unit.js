@@ -3,7 +3,7 @@ import { getPluginName, getOrderedPlugins } from '../js/rendererjs/plugins.js'
 import { expect } from 'chai'
 
 const pluginDir = Path.join(__dirname, '../plugins')
-const nPlugins = 5
+const nPlugins = 6
 
 describe('plugin system', () => {
 	describe('getOrderedPlugins', () => {
@@ -15,10 +15,6 @@ describe('plugin system', () => {
 		})
 		it('has home plugin first', () => {
 			expect(getPluginName(getOrderedPlugins(pluginDir, 'Files').first())).to.equal('Files')
-		})
-		it('has terminal plugin second-to-last', () => {
-			const plugins = getOrderedPlugins(pluginDir, 'Files')
-			expect(getPluginName(plugins.get(plugins.size - 2))).to.equal('Terminal')
 		})
 	})
 })
