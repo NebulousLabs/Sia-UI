@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 
 const logViewStyle = {
 	position: 'absolute',
-	top: '60px',
+	top: '55px',
 	bottom: '0',
 	left: '2px',
 	right: '0',

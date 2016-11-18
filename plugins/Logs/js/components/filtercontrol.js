@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 
-const FilterControl = ({ name, filters, checked, addLogFilters, removeLogFilters}) => {
+const FilterControl = ({ name, filters, checked, addLogFilters, removeLogFilters, setLogFilters}) => {
 	const filterControlStyle = {
 		width: '100px',
 		height: '50px',
@@ -12,7 +12,11 @@ const FilterControl = ({ name, filters, checked, addLogFilters, removeLogFilters
 		cursor: 'pointer',
 		borderBottom: checked ? '4px solid #00CBA0' : '1px solid #00CBA0',
 	}
-	const onFilterClick = (clickedFilters) => () => {
+	const onFilterClick = (clickedFilters) => (e) => {
+		if (!e.shiftKey && !e.ctrlKey) {
+			setLogFilters(clickedFilters)
+			return
+		}
 		if (checked) {
 			removeLogFilters(clickedFilters)
 			return
@@ -32,6 +36,7 @@ FilterControl.propTypes = {
 	checked: PropTypes.bool.isRequired,
 	addLogFilters: PropTypes.func.isRequired,
 	removeLogFilters: PropTypes.func.isRequired,
+	setLogFilters: PropTypes.func.isRequired,
 }
 
 export default FilterControl
