@@ -208,6 +208,24 @@ describe('files plugin sagas', () => {
 		siapath: 'test/siapath',
 		type: 'file',
 	}
+	it('can buffer lots of delete actions', () => {
+		for (let i = 0; i < 4096; i++) {
+			store.dispatch(actions.deleteFile(testFile))
+		}
+		expect(SiaAPI.showError.called).to.be.false
+	})
+	it('can buffer lots of upload actions', () => {
+		for (let i = 0; i < 4096; i++) {
+			store.dispatch(actions.uploadFile('testfile', ''))
+		}
+		expect(SiaAPI.showError.called).to.be.false
+	})
+	it('can buffer lots of download actions', () => {
+		for (let i = 0; i < 4096; i++) {
+			store.dispatch(actions.downloadFile('testfile', ''))
+		}
+		expect(SiaAPI.showError.called).to.be.false
+	})
 	it('calls /renter/download on downloadFile', async () => {
 		store.dispatch(actions.downloadFile(testFile, '/test/downloadpath'))
 		await sleep(10)
