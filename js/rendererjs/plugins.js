@@ -140,9 +140,6 @@ export const getOrderedPlugins = (path, homePlugin) => {
 	// Push the Terminal plugin to the bottom
 	plugins = pushToBottom(plugins, 'Terminal')
 
-	// Push the Logs plugin to the bottom
-	plugins = pushToBottom(plugins, 'Logs')
-
 	// Push the About plugin to the bottom
 	plugins = pushToBottom(plugins, 'About')
 

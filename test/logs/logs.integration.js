@@ -3,7 +3,6 @@ import { mount } from 'enzyme'
 import { expect } from 'chai'
 import { filters } from '../../plugins/Logs/js/filters.js'
 import { parseLogs } from '../../plugins/Logs/js/logparse.js'
-import { Set } from 'immutable'
 
 const sleep = (n) => new Promise((resolve) => setTimeout(resolve, n))
 
