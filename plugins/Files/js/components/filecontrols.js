@@ -18,7 +18,7 @@ const FileControls = ({files, actions}) => {
 		})
 	}
 	const onDeleteClick = () => {
-		actions.showDeleteDialog(files)
+		actions.showDeleteDialog(files.toList())
 	}
 	const onRenameClick = () => {
 		actions.showRenameDialog(files.first())

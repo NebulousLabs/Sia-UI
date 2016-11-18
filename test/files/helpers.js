@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { uploadDirectory, rangeSelect, readableFilesize, ls } from '../../plugins/Files/js/sagas/helpers.js'
+import { minRedundancy, uploadDirectory, rangeSelect, readableFilesize, ls } from '../../plugins/Files/js/sagas/helpers.js'
 import { List, OrderedSet } from 'immutable'
 import proxyquire from 'proxyquire'
 import Path from 'path'
@@ -177,5 +177,13 @@ describe('files plugin helper functions', () => {
 			expect(output.size).to.equal(expectedOutputs[path].size)
 			expect(output.toObject()).to.deep.equal(expectedOutputs[path].toObject())
 		}
+	})
+	describe('minRedundancy', () => {
+		it('returns correct values for list of size 0', () => {
+			expect(minRedundancy(List())).to.equal(0)
+		})
+		it('returns correct values given a list of files', () => {
+			expect(minRedundancy(List([{redundancy: 0.5}, {redundancy: 1.2}, {redundancy: 1.3}, {redundancy: 0.2}]))).to.equal(0.2)
+		})
 	})
 })

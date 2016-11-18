@@ -63,13 +63,17 @@ export const readableFilesize = (bytes) => {
 
 // minRedundancy takes a list of files and returns the minimum redundancy that
 // occurs in the list.
-export const minRedundancy = (files) =>
-	files.min((a, b) => {
+export const minRedundancy = (files) => {
+	if (files.size === 0) {
+		return 0
+	}
+	return files.min((a, b) => {
 		if (a.redundancy > b.redundancy) {
 			return 1
 		}
 		return -1
 	}).redundancy
+}
 
 // return a list of files filtered with path.
 // ... it's ls.

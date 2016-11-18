@@ -1,4 +1,4 @@
-import { takeEvery } from 'redux-saga'
+import { takeEvery, buffers } from 'redux-saga'
 import { put, actionChannel, take } from 'redux-saga/effects'
 import Path from 'path'
 import fs from 'fs'
@@ -256,7 +256,7 @@ export function* watchGetFiles() {
 	yield *takeEvery(constants.GET_FILES, getFilesSaga)
 }
 export function* watchDeleteFile() {
-	const deleteChan = yield actionChannel(constants.DELETE_FILE)
+	const deleteChan = yield actionChannel(constants.DELETE_FILE, buffers.expanding(24))
 	while (true) {
 		const deleteAction = yield take(deleteChan)
 		yield *deleteFileSaga(deleteAction)
@@ -272,7 +272,7 @@ export function* watchGetContractCount() {
 	yield *takeEvery(constants.GET_CONTRACT_COUNT, getContractCountSaga)
 }
 export function* watchUploadFile() {
-	const uploadChan = yield actionChannel(constants.UPLOAD_FILE)
+	const uploadChan = yield actionChannel(constants.UPLOAD_FILE, buffers.expanding(24))
 	while (true) {
 		const uploadAction = yield take(uploadChan)
 		yield *uploadFileSaga(uploadAction)
@@ -282,7 +282,7 @@ export function* watchDownloadFile() {
 	yield *takeEvery(constants.DOWNLOAD_FILE, downloadFileSaga)
 }
 export function* watchRenameFile() {
-	const renameChan = yield actionChannel(constants.RENAME_FILE)
+	const renameChan = yield actionChannel(constants.RENAME_FILE, buffers.expanding(24))
 	while (true) {
 		const renameAction = yield take(renameChan)
 		yield *renameFileSaga(renameAction)
