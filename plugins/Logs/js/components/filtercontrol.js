@@ -17,7 +17,7 @@ const FilterControl = ({ name, filters, checked, addLogFilters, removeLogFilters
 			setLogFilters(clickedFilters)
 			return
 		}
-		if (checked) {
+		if (checked && filters.size > 1) {
 			removeLogFilters(clickedFilters)
 			return
 		}
