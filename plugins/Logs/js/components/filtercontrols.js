@@ -6,7 +6,7 @@ import { filters } from '../filters.js'
 const filterControlsStyle = {
 	width: '100%',
 	position: 'absolute',
-	bottom: '0',
+	top: '0',
 	margin: '0',
 	padding: '0',
 	backgroundColor: '#ECECEC',

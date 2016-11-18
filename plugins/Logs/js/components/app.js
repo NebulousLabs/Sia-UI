@@ -4,8 +4,8 @@ import LogView from '../containers/logview.js'
 
 const App = () => (
 	<div>
-		<LogView />
 		<FilterControls />
+		<LogView />
 	</div>
 )
 
