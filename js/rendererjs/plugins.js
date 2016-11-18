@@ -76,7 +76,7 @@ export const getPluginName = (pluginPath) => Path.basename(pluginPath)
 // loadPlugin constructs plugin view and plugin button elements
 // and adds these elements to the main UI's mainbar/sidebar.
 // Returns the plugin's main view element.
-export const loadPlugin = (pluginPath) => {
+export const loadPlugin = (pluginPath, hidden = false, shortcut) => {
 	const name = getPluginName(pluginPath)
 	const markupPath = Path.join(pluginPath, 'index.html')
 	const iconPath = Path.join(pluginPath, 'assets', 'button.png')
@@ -84,7 +84,14 @@ export const loadPlugin = (pluginPath) => {
 	const viewElement = createPluginElement(markupPath, name)
 	const buttonElement = createPluginButtonElement(iconPath, name)
 
-	document.getElementById('sidebar').appendChild(buttonElement)
+	if (typeof shortcut !== 'undefined') {
+		remote.globalShortcut.register(shortcut, () => {
+			setCurrentPlugin(name)
+		})
+	}
+	if (!hidden) {
+		document.getElementById('sidebar').appendChild(buttonElement)
+	}
 	document.getElementById('mainbar').appendChild(viewElement)
 
 	return viewElement

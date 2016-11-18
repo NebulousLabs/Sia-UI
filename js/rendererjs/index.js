@@ -20,7 +20,13 @@ function init(callback) {
 	let homePluginView
 	// Load each plugin element into the UI
 	for (let i = 0; i < plugins.size; i++) {
-		const plugin = loadPlugin(plugins.get(i))
+		const plugin = (() => {
+			if (getPluginName(plugins.get(i)) === 'Logs') {
+				return loadPlugin(plugins.get(i), true, 'Ctrl+Shift+L')
+			}
+			return loadPlugin(plugins.get(i))
+		})()
+
 		if (getPluginName(plugins.get(i)) === defaultHomePlugin) {
 			homePluginView = plugin
 		}
