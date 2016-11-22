@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-expressions */
+/* eslint-disable no-invalid-this */
 import createSagaMiddleware from 'redux-saga'
 import { createStore, applyMiddleware } from 'redux'
 import * as actions from '../../plugins/Files/js/actions/files.js'
@@ -208,19 +209,22 @@ describe('files plugin sagas', () => {
 		siapath: 'test/siapath',
 		type: 'file',
 	}
-	it('can buffer lots of delete actions', () => {
+	it('can buffer lots of delete actions', function() {
+		this.timeout(20000)
 		for (let i = 0; i < 4096; i++) {
 			store.dispatch(actions.deleteFile(testFile))
 		}
 		expect(SiaAPI.showError.called).to.be.false
 	})
-	it('can buffer lots of upload actions', () => {
+	it('can buffer lots of upload actions', function() {
+		this.timeout(20000)
 		for (let i = 0; i < 4096; i++) {
 			store.dispatch(actions.uploadFile('testfile', ''))
 		}
 		expect(SiaAPI.showError.called).to.be.false
 	})
-	it('can buffer lots of download actions', () => {
+	it('can buffer lots of download actions', function() {
+		this.timeout(20000)
 		for (let i = 0; i < 4096; i++) {
 			store.dispatch(actions.downloadFile('testfile', ''))
 		}
@@ -264,3 +268,4 @@ describe('files plugin sagas', () => {
 	})
 })
 /* eslint-enable no-unused-expressions */
+/* eslint-disable no-invalid-this */
