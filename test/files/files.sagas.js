@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-expressions */
+/* eslint-disable no-invalid-this */
 import createSagaMiddleware from 'redux-saga'
 import { createStore, applyMiddleware } from 'redux'
 import * as actions from '../../plugins/Files/js/actions/files.js'
@@ -267,3 +268,4 @@ describe('files plugin sagas', () => {
 	})
 })
 /* eslint-enable no-unused-expressions */
+/* eslint-disable no-invalid-this */

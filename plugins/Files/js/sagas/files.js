@@ -1,5 +1,5 @@
 import { takeEvery } from 'redux-saga'
-import { put, actionChannel, take } from 'redux-saga/effects'
+import { put } from 'redux-saga/effects'
 import Path from 'path'
 import fs from 'fs'
 import * as actions from '../actions/files.js'
