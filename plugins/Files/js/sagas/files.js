@@ -182,7 +182,7 @@ function* deleteFileSaga(action) {
 		if (action.file.type === 'file') {
 			yield siadCall({
 				url: '/renter/delete/' + encodeURI(action.file.siapath),
-				timeout: 300000, // 5 minute timeout for deleting files
+				timeout: 3.6e6, // 60 minute timeout for deleting files
 				method: 'POST',
 			})
 		}
