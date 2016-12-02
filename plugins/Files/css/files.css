@@ -267,8 +267,8 @@ div[tabindex="1"]:focus {
 }
 .file-transfers .close-button {
 	position: absolute;
-	top: 2px;
-	right: 16px;
+	top: 12px;
+	right: 25px;
 	cursor: pointer;
 }
 .file-list h2 {
