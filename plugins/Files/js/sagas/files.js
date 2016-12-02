@@ -227,7 +227,7 @@ function* renameFileSaga(action) {
 			const siafiles = ls(List(response.files), directorypath)
 			for (const i in siafiles.toArray()) {
 				const file = siafiles.get(i)
-				const newfilepath = Path.join(action.newsiapath, file.siapath.split(directorypath)[1])
+				const newfilepath = Path.posix.join(action.newsiapath, file.siapath.split(directorypath)[1])
 				yield put(actions.renameFile(file, newfilepath))
 			}
 		}
