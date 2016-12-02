@@ -22,8 +22,8 @@ npm install
 rm -rf ./dist
 npm run build-production
 
-uiVersion=${3:-v1.0.2}
-siaVersion=${4:-v1.0.1}
+uiVersion=${3:-v1.0.4}
+siaVersion=${4:-v1.0.4}
 electronVersion=${5:-v1.3.7}
 
 # fourth argument is the public key file path.
