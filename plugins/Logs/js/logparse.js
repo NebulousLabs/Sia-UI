@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'graceful-fs'
 import { readdirRecursive } from './utils.js'
 
 const siadir = SiaAPI.config.siad.datadir
