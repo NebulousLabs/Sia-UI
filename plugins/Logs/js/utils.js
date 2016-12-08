@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'graceful-fs'
 import { List } from 'immutable'
 import Path from 'path'
 
