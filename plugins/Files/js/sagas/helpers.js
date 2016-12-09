@@ -2,7 +2,7 @@
 import { List, Map } from 'immutable'
 import BigNumber from 'bignumber.js'
 import Path from 'path'
-import fs from 'fs'
+import fs from 'graceful-fs'
 import * as actions from '../actions/files.js'
 
 export const blockMonth = 4320

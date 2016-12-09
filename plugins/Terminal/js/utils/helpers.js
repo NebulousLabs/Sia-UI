@@ -1,5 +1,5 @@
 import Path from 'path'
-import fs from 'fs'
+import fs from 'graceful-fs'
 import child_process from 'child_process'
 import { Map } from 'immutable'
 import http from 'http'

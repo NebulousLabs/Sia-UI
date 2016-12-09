@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'graceful-fs'
 import Path from 'path'
 import { app } from 'electron'
 

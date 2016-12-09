@@ -1,7 +1,7 @@
 // This module handles the construction of Sia-UI plugins.
 import { List } from 'immutable'
 import Path from 'path'
-import fs from 'fs'
+import fs from 'graceful-fs'
 import { remote } from 'electron'
 
 const devtoolsShortcut = 'Ctrl+Shift+P'

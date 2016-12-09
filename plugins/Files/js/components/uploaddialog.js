@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import fs from 'fs'
+import fs from 'graceful-fs'
 
 const UploadDialog = ({source, path, actions}) => {
 	const onUploadClick = () => {

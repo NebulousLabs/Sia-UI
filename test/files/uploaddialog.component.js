@@ -16,7 +16,7 @@ const testDialog = (files, isDir) => {
 		hideUploadDialog: hideUploadDialogSpy,
 	}
 	const UploadDialog = proxyquire('../../plugins/Files/js/components/uploaddialog.js', {
-		fs: { statSync: () => ({ isDirectory: () => isDir }), '@noCallThru': true },
+		'graceful-fs': { statSync: () => ({ isDirectory: () => isDir }), '@noCallThru': true },
 	}).default
 	const uploadDialog = shallow(<UploadDialog actions={testActions} source={files} path="" />)
 	uploadDialog.find('.upload-dialog-buttons').children().first().simulate('click')
