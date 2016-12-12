@@ -48,4 +48,16 @@ describe('logs plugin', () => {
 			expect(rootComponent.find('LogView').props().logText).to.equal(parseLogs(siadir, 50000, filterFilters))
 		}
 	})
+	it('deselects filter controls when selected and shift-clicked', async () => {
+		const filterControlNodes = rootComponent.find('FilterControl')
+		filterControlNodes.at(0).simulate('click')
+		await sleep(50)
+		filterControlNodes.at(1).simulate('click', { shiftKey: true })
+		await sleep(50)
+		filterControlNodes.at(1).simulate('click', { shiftKey: true })
+		await sleep(50)
+		const expectedFilters = filters.filter((f) => f.name === filterControlNodes.at(0).props().name)[0].filters
+		expect(filterControlNodes.at(1).props().checked).to.equal(false)
+		expect(rootComponent.find('LogView').props().logText).to.equal(parseLogs(siadir, 50000, expectedFilters))
+	})
 })

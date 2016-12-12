@@ -12,19 +12,19 @@ const FilterControl = ({ name, filters, checked, addLogFilters, removeLogFilters
 		cursor: 'pointer',
 		borderBottom: checked ? '4px solid #00CBA0' : '1px solid #00CBA0',
 	}
-	const onFilterClick = (clickedFilters) => (e) => {
+	const onFilterClick = (e) => {
 		if (!e.shiftKey && !e.ctrlKey) {
-			setLogFilters(clickedFilters)
+			setLogFilters(filters)
 			return
 		}
-		if (checked && filters.size > 1) {
-			removeLogFilters(clickedFilters)
+		if (checked) {
+			removeLogFilters(filters)
 			return
 		}
-		addLogFilters(clickedFilters)
+		addLogFilters(filters)
 	}
 	return (
-		<div style={filterControlStyle} onClick={onFilterClick(filters)}>
+		<div style={filterControlStyle} onClick={onFilterClick}>
 			<span style={{WebkitUserSelect: 'none'}}> {name} </span>
 		</div>
 	)
