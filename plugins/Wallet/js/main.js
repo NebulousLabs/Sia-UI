@@ -23,8 +23,10 @@ export const initWallet = () => {
 	// Poll Siad for state changes.
 	setInterval(() => {
 		store.dispatch(getLockStatus())
-		store.dispatch(getBalance())
-		store.dispatch(getTransactions())
+		if (store.getState().wallet.get('unlocked')) {
+			store.dispatch(getBalance())
+			store.dispatch(getTransactions())
+		}
 	}, 5000)
 	return (
 		<Provider store={store}>
