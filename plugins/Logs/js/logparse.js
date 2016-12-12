@@ -49,6 +49,12 @@ export const addLogFilters = (state, filters) =>
 	updateLogFilters(state, state.get('logSize'), state.get('logFilters').union(filters))
 
 // removeLogFilters removes an array of filters.
-export const removeLogFilters = (state, filters) =>
-	updateLogFilters(state, state.get('logSize'), state.get('logFilters').subtract(filters))
+export const removeLogFilters = (state, filters) => {
+	// no-op if remnoval results in no filters
+	const newFilters = state.get('logFilters').subtract(filters)
+	if (newFilters.size === 0) {
+		return state
+	}
+	return updateLogFilters(state, state.get('logSize'), newFilters)
+}
 
