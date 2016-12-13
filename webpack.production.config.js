@@ -8,7 +8,7 @@ const webpack = require('webpack')
 let entrypoints = {}
 const plugins = glob.sync("./plugins/*/js/index.js")
 plugins.forEach((plugin) => {
-	entrypoints[path.dirname(path.dirname(plugin))] = ['babel-polyfill', './js/rendererjs/pluginapi.js', plugin]
+	entrypoints[path.dirname(path.dirname(plugin))] = ['babel-polyfill', path.resolve('./js/rendererjs/pluginapi.js'), plugin]
 })
 
 entrypoints["renderer"] = ['babel-polyfill', path.resolve('./js/rendererjs/index.js')]
