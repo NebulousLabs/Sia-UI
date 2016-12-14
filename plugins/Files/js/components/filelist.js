@@ -17,6 +17,17 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 		}
 		actions.setPath(newpath)
 	}
+
+	if (files === null) {
+		return (
+			<div className="file-list">
+				<ul>
+					<h2> Loading files... </h2>
+				</ul>
+			</div>
+		)
+	}
+
 	let filelistFiles
 	if (showSearchField) {
 		filelistFiles = searchResults
@@ -60,12 +71,13 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 			/>
 		)
 	})
+
 	return (
 		<div className="file-list">
 			{showSearchField ? <SearchField /> : null}
 			<ul>
 				<DirectoryInfoBar path={path} nfiles={files.size} onBackClick={onBackClick} />
-				{fileElements.size > 0 ? fileElements : (showSearchField ? <h2> No matching files </h2> : <h2> No files uploaded </h2>)}
+				{ fileElements.size > 0 ? fileElements : <h2> No files uploaded </h2> }
 			</ul>
 			{selected.size > 0 ? <FileControls /> : null}
 		</div>
