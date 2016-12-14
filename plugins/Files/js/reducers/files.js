@@ -4,6 +4,7 @@ import { ls, searchFiles, rangeSelect } from '../sagas/helpers.js'
 
 const initialState = Map({
 	files: List(),
+	hasPolled: false,
 	workingDirectoryFiles: List(),
 	searchResults: List(),
 	uploading: List(),
@@ -52,8 +53,9 @@ export default function filesReducer(state = initialState, action) {
 		// filter out selected files that are no longer in the working directory
 		const selected = state.get('selected').filter((file) => workingDirectorySiapaths.includes(file.siapath))
 		return state.set('files', action.files)
-	              .set('workingDirectoryFiles', workingDirectoryFiles)
+		            .set('workingDirectoryFiles', workingDirectoryFiles)
 		            .set('selected', selected)
+		            .set('hasPolled', true)
 	case constants.SET_ALLOWANCE:
 		return state.set('allowance', action.funds)
 		            .set('settingAllowance', true)
