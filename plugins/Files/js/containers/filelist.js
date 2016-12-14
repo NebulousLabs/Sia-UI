@@ -5,7 +5,6 @@ import { setPath, selectUpTo, deselectFile, deselectAll, selectFile, downloadFil
 
 const mapStateToProps = (state) => ({
 	files: state.files.get('workingDirectoryFiles'),
-	hasPolled: state.files.get('hasPolled'),
 	selected: state.files.get('selected'),
 	searchResults: state.files.get('searchResults'),
 	path: state.files.get('path'),

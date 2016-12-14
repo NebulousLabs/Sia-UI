@@ -6,7 +6,7 @@ import SearchField from '../containers/searchfield.js'
 import FileControls from '../containers/filecontrols.js'
 import DirectoryInfoBar from './directoryinfobar.js'
 
-const FileList = ({files, hasPolled, selected, searchResults, path, showSearchField, actions}) => {
+const FileList = ({files, selected, searchResults, path, showSearchField, actions}) => {
 	const onBackClick = () => {
 		if (path === '') {
 			return
@@ -17,6 +17,17 @@ const FileList = ({files, hasPolled, selected, searchResults, path, showSearchFi
 		}
 		actions.setPath(newpath)
 	}
+
+	if (files === null) {
+		return (
+			<div className="file-list">
+				<ul>
+					<h2> Loading files... </h2>
+				</ul>
+			</div>
+		)
+	}
+
 	let filelistFiles
 	if (showSearchField) {
 		filelistFiles = searchResults
@@ -62,11 +73,6 @@ const FileList = ({files, hasPolled, selected, searchResults, path, showSearchFi
 	})
 
 	const fileListContents = (() => {
-		if (!hasPolled) {
-			return (
-				<h2> Loading files... </h2>
-			)
-		}
 		if (fileElements.size === 0) {
 			return (
 				<h2> No files uploaded </h2>
@@ -89,7 +95,6 @@ const FileList = ({files, hasPolled, selected, searchResults, path, showSearchFi
 
 FileList.propTypes = {
 	files: PropTypes.instanceOf(List),
-	hasPolled: PropTypes.bool.isRequired,
 	selected: PropTypes.instanceOf(Set).isRequired,
 	searchResults: PropTypes.instanceOf(List),
 	path: PropTypes.string.isRequired,

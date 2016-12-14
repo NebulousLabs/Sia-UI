@@ -4,8 +4,7 @@ import { ls, searchFiles, rangeSelect } from '../sagas/helpers.js'
 
 const initialState = Map({
 	files: List(),
-	hasPolled: false,
-	workingDirectoryFiles: List(),
+	workingDirectoryFiles: null,
 	searchResults: List(),
 	uploading: List(),
 	downloading: List(),
@@ -55,7 +54,6 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('files', action.files)
 		            .set('workingDirectoryFiles', workingDirectoryFiles)
 		            .set('selected', selected)
-		            .set('hasPolled', true)
 	case constants.SET_ALLOWANCE:
 		return state.set('allowance', action.funds)
 		            .set('settingAllowance', true)
