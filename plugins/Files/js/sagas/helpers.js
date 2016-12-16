@@ -74,7 +74,7 @@ export const minRedundancy = (files) => {
 		return -1
 	}
 
-	// ignore files that have negative redundancy
+	// return the minimum redundancy of all the files with redundancy >= 0
 	return redundantFiles.min((a, b) => {
 		if (a.redundancy > b.redundancy) {
 			return 1
