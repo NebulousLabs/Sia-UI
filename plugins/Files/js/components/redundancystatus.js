@@ -22,7 +22,7 @@ const RedundancyStatus = ({available, redundancy}) => {
 	return (
 		<div className="redundancy-status">
 			<i className="fa fa-cubes" style={indicatorStyle} />
-			<span className="redundancy-text">{redundancy}x</span>
+			<span className="redundancy-text">{redundancy > 0 ? redundancy + 'x' : '--'}</span>
 		</div>
 	)
 }
