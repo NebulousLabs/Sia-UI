@@ -10,6 +10,7 @@ const testFiles = List([
 	{size: '', name: 'movies', type: 'directory'},
 	{size: '137mb', available: true, redundancy: 1.5, name: 'test.jpg', siapath: 'test.jpg', type: 'file'},
 	{size: '137mb', available: true, redundancy: 2.0, name: 'meme.avi', siapath: 'meme.avi', type: 'file'},
+	{size: '137mb', available: true, redundancy: -1, name: 'test-0bytes', siapath: 'test-0bytes', type: 'file'},
 	{size: '', name: 'dankpepes', type: 'directory'},
 ])
 
