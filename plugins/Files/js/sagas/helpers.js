@@ -67,7 +67,15 @@ export const minRedundancy = (files) => {
 	if (files.size === 0) {
 		return 0
 	}
-	return files.min((a, b) => {
+	const redundantFiles = files.filter((file) => file.redundancy >= 0)
+
+	// if all the provided files have -1 redundancy, return -1.
+	if (redundantFiles.size === 0) {
+		return -1
+	}
+
+	// ignore files that have negative redundancy
+	return redundantFiles.min((a, b) => {
 		if (a.redundancy > b.redundancy) {
 			return 1
 		}

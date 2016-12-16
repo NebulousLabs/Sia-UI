@@ -149,6 +149,7 @@ describe('files plugin helper functions', () => {
 			{ filesize: 1337, siapath: 'memes/itsdatboi.mov', redundancy: 2.0, available: true, uploadprogress: 100 },
 			{ filesize: 1337, siapath: 'memes/rares/lordkek.gif', redundancy: 1.6, available: true, uploadprogress: 100 },
 			{ filesize: 13117, siapath: 'sibyl_system.avi', redundancy: 1.0, available: true, uploadprogress: 100 },
+			{ filesize: 13117, siapath: 'test_0bytes.avi', redundancy: -1, available: true, uploadprogress: 100 },
 			{ filesize: 1331, siapath: 'doggos/borkborkdoggo.png', redundancy: 1.5, available: true, uploadprogress: 100 },
 			{ filesize: 1333, siapath: 'doggos/snip_snip_doggo_not_bork_bork_kind.jpg', redundancy: 1.0, available: true, uploadprogress: 100 },
 		])
@@ -159,6 +160,7 @@ describe('files plugin helper functions', () => {
 				{ size: readableFilesize(1317+1337+1337), name: 'memes', siapath: 'memes/', redundancy: 1.6, available: true, uploadprogress: 100, type: 'directory' },
 				{ size: readableFilesize(1237), name: 'rare_pepe.png', siapath: 'rare_pepe.png', redundancy: 2.0, available: true, uploadprogress: 100, type: 'file' },
 				{ size: readableFilesize(13117), name: 'sibyl_system.avi', siapath: 'sibyl_system.avi', redundancy: 1.0, available: true, uploadprogress: 100, type: 'file' },
+				{ size: readableFilesize(13117), name: 'test_0bytes.avi', siapath: 'test_0bytes.avi' ,redundancy: -1.0, available: true, uploadprogress: 100, type: 'file'},
 			]),
 			'doggos/': List([
 				{ size: readableFilesize(1331), name: 'borkborkdoggo.png', siapath: 'doggos/borkborkdoggo.png', redundancy: 1.5, available: true, uploadprogress: 100, type: 'file' },
@@ -184,6 +186,12 @@ describe('files plugin helper functions', () => {
 		})
 		it('returns correct values given a list of files', () => {
 			expect(minRedundancy(List([{redundancy: 0.5}, {redundancy: 1.2}, {redundancy: 1.3}, {redundancy: 0.2}]))).to.equal(0.2)
+		})
+		it('ignores negative redundancy values', () => {
+			expect(minRedundancy(List([{redundancy: -1}, {redundancy: 1.5}, {redundancy: 1.1}]))).to.equal(1.1)	
+		})
+		it('returns correct values for a list of only negative redundancy', () => {
+			expect(minRedundancy(List([{redundancy: -1}, {redundancy: -1}]))).to.equal(-1)
 		})
 	})
 })
