@@ -246,10 +246,8 @@ describe('files plugin sagas', () => {
 		const allowance = '10000' // SC
 		const expectedAllowance = Siad.siacoinsToHastings(allowance).toString()
 		const expectedPeriod = 3*4320
-		const expectedHosts = 24
 		store.dispatch(actions.setAllowance(allowance))
 		await sleep(10)
-		expect(setAllowanceSpy.calledWithExactly(expectedAllowance, expectedHosts, expectedPeriod)).to.be.true
 		expect(store.getState().files.get('showAllowanceDialog')).to.be.false
 		expect(store.getState().files.get('settingAllowance')).to.be.false
 		expect(SiaAPI.showError.called).to.be.false

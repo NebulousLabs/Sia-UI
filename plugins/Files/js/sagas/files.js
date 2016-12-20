@@ -5,7 +5,7 @@ import fs from 'graceful-fs'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import { List } from 'immutable'
-import { ls, uploadDirectory, sendError, allowancePeriod, allowanceHosts, estimatedStorage, totalSpending, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
+import { ls, uploadDirectory, sendError, allowancePeriod, estimatedStorage, totalSpending, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
 
 // Query siad for the state of the wallet.
 // dispatch `unlocked` in receiveWalletLockstate
@@ -71,7 +71,6 @@ function* setAllowanceSaga(action) {
 			timeout: 7.2e6, // 120 minute timeout for setting allowance
 			qs: {
 				funds: newAllowance.toString(),
-				hosts: allowanceHosts,
 				period: allowancePeriod,
 			},
 		})
