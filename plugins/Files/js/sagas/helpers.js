@@ -207,6 +207,7 @@ export const totalUsage = (files) => readableFilesize(files.reduce((sum, file) =
 // return a list of file uploads
 export const parseUploads = (files) =>
 	List(files)
+		.filter((file) => file.redundancy >= 0)
 		.filter((file) => file.redundancy < 2.5)
 		.filter((file) => file.uploadprogress < 100)
 		.map((upload) => ({
