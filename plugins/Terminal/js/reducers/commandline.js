@@ -7,7 +7,7 @@ const initialState = Map({
 	commandIndex: 0,
 	showWalletPrompt: false,
 	showSeedPrompt: false,
-	showCommandOverview: true,
+	showCommandOverview: false,
 	commandRunning: false,
 	walletPassword: '',
 })
