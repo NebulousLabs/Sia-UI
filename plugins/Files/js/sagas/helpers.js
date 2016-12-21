@@ -7,7 +7,6 @@ import * as actions from '../actions/files.js'
 
 export const blockMonth = 4320
 export const allowanceMonths = 3
-export const allowanceHosts = 24
 export const allowancePeriod = blockMonth*allowanceMonths
 export const ncontracts = 24
 export const baseRedundancy = 6
