@@ -1,8 +1,5 @@
 'use strict'
 
-// Library for communicating with Sia-UI
-const electron = require('electron')
-
 // Set UI version via package.json.
 document.getElementById('uiversion').innerHTML = VERSION
 
