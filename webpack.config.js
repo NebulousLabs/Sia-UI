@@ -1,5 +1,6 @@
 'use strict'
 
+const webpack = require('webpack')
 const path = require('path')
 const glob = require('glob')
 
@@ -15,6 +16,11 @@ entrypoints["main"] = path.resolve('./js/mainjs/index.js')
 
 module.exports = {
 	entry: entrypoints,
+	plugins: [
+		new webpack.DefinePlugin({
+			VERSION: JSON.stringify(require("./package.json").version)
+		})
+	],
 	output: {
 		path: path.resolve("./dist"),
 		filename: '[name].js'

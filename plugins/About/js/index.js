@@ -1,10 +1,7 @@
 'use strict'
 
-// Library for communicating with Sia-UI
-const electron = require('electron')
-
 // Set UI version via package.json.
-document.getElementById('uiversion').innerHTML = require('../../package.json').version
+document.getElementById('uiversion').innerHTML = VERSION
 
 // Set daemon version via API call.
 SiaAPI.call('/daemon/version', (err, result) => {
@@ -16,7 +13,3 @@ SiaAPI.call('/daemon/version', (err, result) => {
 	}
 })
 
-// Make FAQ button launch the FAQ webpage.
-document.getElementById('faq').onclick = function() {
-	electron.shell.openExternal('http://sia.tech/faq')
-}
