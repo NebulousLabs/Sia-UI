@@ -172,3 +172,11 @@ export const deselectFile = (file) => ({
 export const clearDownloads = () => ({
 	type: constants.CLEAR_DOWNLOADS,
 })
+export const showAllowanceConfirmation = (allowance) => ({
+	type: constants.SHOW_ALLOWANCE_CONFIRMATION,
+	allowance,
+})
+export const hideAllowanceConfirmation = () => ({
+	type: constants.HIDE_ALLOWANCE_CONFIRMATION,
+})
+

@@ -23,8 +23,6 @@ const initialState = Map({
 	contractCount: 0,
 	allowance: '0',
 	spending: '0',
-	storageEstimate: '',
-	feeEstimate: 0,
 	showDownloadsSince: Date.now(),
 	unreadUploads: Set(),
 	unreadDownloads: Set(),
@@ -38,10 +36,6 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('allowance', action.allowance)
 	case constants.RECEIVE_SPENDING:
 		return state.set('spending', action.spending)
-	case constants.SET_STORAGE_ESTIMATE:
-		return state.set('storageEstimate', action.estimate)
-	case constants.SET_FEE_ESTIMATE:
-		return state.set('feeEstimate', action.estimate)
 	case constants.DOWNLOAD_FILE:
 		return state.set('unreadDownloads', state.get('unreadDownloads').add(action.file.siapath))
 	case constants.UPLOAD_FILE:
