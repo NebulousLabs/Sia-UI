@@ -1,11 +1,14 @@
 import React, { PropTypes } from 'react'
 import UnlockWarning from './unlockwarning.js'
+import ConfirmationDialog from './allowanceconfirmation.js'
 
-const AllowanceDialog = ({unlocked, feeEstimate, storageEstimate, actions}) => {
+const AllowanceDialog = ({confirming, confirmationAllowance, unlocked, feeEstimate, storageEstimate, actions}) => {
 	const onCancelClick = () => actions.closeAllowanceDialog()
+	const onConfirmationCancel = () => actions.hideAllowanceConfirmation()
+	const onConfirmClick = () => actions.setAllowance(confirmationAllowance)
 	const onAcceptClick = (e) => {
 		e.preventDefault()
-		actions.setAllowance(e.target.allowance.value)
+		actions.showAllowanceConfirmation(e.target.allowance.value)
 	}
 	const onAllowanceChange = (e) => {
 		actions.getStorageEstimate(e.target.value)
@@ -44,12 +47,15 @@ const AllowanceDialog = ({unlocked, feeEstimate, storageEstimate, actions}) => {
 
 	return (
 		<div className="modal">
+			{confirming ? <ConfirmationDialog allowance={confirmationAllowance} onConfirmClick={onConfirmClick} onCancelClick={onConfirmationCancel} /> : null}
 			{unlocked ? dialogContents : <UnlockWarning onClick={onCancelClick} />}
 		</div>
 	)
 }
 
 AllowanceDialog.propTypes = {
+	confirmationAllowance: PropTypes.string.isRequired,
+	confirming: PropTypes.bool.isRequired,
 	unlocked: PropTypes.bool.isRequired,
 	feeEstimate: PropTypes.number.isRequired,
 	storageEstimate: PropTypes.string.isRequired,
