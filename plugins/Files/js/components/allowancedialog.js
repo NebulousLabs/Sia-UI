@@ -14,7 +14,10 @@ const AllowanceDialog = ({confirming, confirmationAllowance, unlocked, feeEstima
 		actions.getStorageEstimate(e.target.value)
 		actions.setFeeEstimate(Math.floor(1000 + 0.12 * parseInt(e.target.value)) || 0)
 	}
-	const dialogContents = (
+	const confirmationDialog = () => (
+		<ConfirmationDialog allowance={confirmationAllowance} onConfirmClick={onConfirmClick} onCancelClick={onConfirmationCancel} />
+	)
+	const dialogContents = confirming ? confirmationDialog() : (
 		<div className="allowance-dialog">
 			<h3> Buy storage on the Sia Decentralized Network</h3>
 			<div className="allowance-message">
@@ -47,7 +50,6 @@ const AllowanceDialog = ({confirming, confirmationAllowance, unlocked, feeEstima
 
 	return (
 		<div className="modal">
-			{confirming ? <ConfirmationDialog allowance={confirmationAllowance} onConfirmClick={onConfirmClick} onCancelClick={onConfirmationCancel} /> : null}
 			{unlocked ? dialogContents : <UnlockWarning onClick={onCancelClick} />}
 		</div>
 	)

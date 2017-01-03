@@ -15,6 +15,8 @@ export default function allowancedialogReduceR(state = initialState, action) {
 		            .set('confirmationAllowance', action.allowance)
 	case constants.HIDE_ALLOWANCE_CONFIRMATION:
 		return state.set('confirming', false)
+	case constants.CLOSE_ALLOWANCE_DIALOG:
+		return state.set('confirming', false)
 	case constants.SET_FEE_ESTIMATE:
 		return state.set('feeEstimate', action.estimate)
 	case constants.SET_STORAGE_ESTIMATE:

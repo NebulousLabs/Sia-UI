@@ -2,19 +2,31 @@ import React, { PropTypes } from 'react'
 
 const ConfirmationDialog = ({allowance, onConfirmClick, onCancelClick}) => {
 	const confirmationStyle = {
+		'padding': '40px 40px 40px 40px',
+		'display': 'flex',
+		'flexDirection': 'column',
+		'alignItems': 'center',
+		'justifyContent': 'space-around',
+		'backgroundColor': '#ececec',
+		'width': '80%',
+		'height': '400px',
+	}
+	const buttonStyle = {
+		'marginLeft': '5px',
+		'marginRight': '5px',
 	}
 	const confirmationTextStyle = {
-	}
-	const confirmationButtonStyle = {
+		'marginBottom': '20px',
+		'fontSize': '24px',
 	}
 	return (
 		<div style={confirmationStyle}>
-			<span style={confirmationTextStyle}>
+			<h3 style={confirmationTextStyle}>
 				Please confirm that you would like to set aside {allowance} SC for storage on the Sia network.
-			</span>
-			<div style={confirmationButtonStyle}>
-				<button onClick={onConfirmClick}>Confirm</button>
-				<button onClick={onCancelClick}>Cancel</button>
+			</h3>
+			<div>
+				<button style={buttonStyle} onClick={onConfirmClick}>Confirm</button>
+				<button style={buttonStyle} onClick={onCancelClick}>Cancel</button>
 			</div>
 		</div>
 	)
