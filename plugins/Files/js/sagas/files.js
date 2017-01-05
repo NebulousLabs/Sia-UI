@@ -5,7 +5,7 @@ import fs from 'graceful-fs'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import { List } from 'immutable'
-import { ls, uploadDirectory, sendError, allowancePeriod, estimatedStorage, totalSpending, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
+import { ls, uploadDirectory, sendError, allowancePeriod, estimatedStorage, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
 
 // Query siad for the state of the wallet.
 // dispatch `unlocked` in receiveWalletLockstate
@@ -46,15 +46,12 @@ function* getStorageEstimateSaga(action) {
 // Get the renter's current allowance and spending.
 function* getAllowanceSaga() {
 	try {
-		let response = yield siadCall('/renter')
+		const response = yield siadCall('/renter')
 		const allowance = SiaAPI.hastingsToSiacoins(response.settings.allowance.funds)
+		const spending = allowance.minus(SiaAPI.hastingsToSiacoins(response.financialmetrics.unspent))
 
-		response = yield siadCall('/renter/contracts')
-		const contracts = response.contracts
-
-		const spendingSC = totalSpending(allowance, contracts)
 		yield put(actions.receiveAllowance(allowance.round(0).toString()))
-		yield put(actions.receiveSpending(spendingSC.round(0).toString()))
+		yield put(actions.receiveSpending(spending.round(0).toString()))
 	} catch (e) {
 		console.error('error getting allowance: ' + e.toString())
 	}

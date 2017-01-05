@@ -33,18 +33,6 @@ export const siadCall = (uri) => new Promise((resolve, reject) => {
 	})
 })
 
-// totalSpending takes an allowance, and a list of contracts returned from the
-// API and returns the total that the user has spent out of their allowance,
-// including fees. Allowance should be a bignumber of SC.
-export const totalSpending = (allowance, contracts) => {
-	const totalRenterPayouts = contracts.reduce((sum, contract) => sum.plus(SiaAPI.hastingsToSiacoins(contract.renterfunds)), new BigNumber(0))
-	let spending = allowance.minus(totalRenterPayouts)
-	if (spending.lt(0)) {
-		spending = new BigNumber(0)
-	}
-	return spending
-}
-
 // Take a number of bytes and return a sane, human-readable size.
 export const readableFilesize = (bytes) => {
 	const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
