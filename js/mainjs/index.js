@@ -7,16 +7,24 @@ import initWindow from './initWindow.js'
 global.config = loadConfig(Path.join(__dirname, '../config.json'))
 let mainWindow
 
+// Allow only one instance of Sia-UI
+const shouldQuit = app.makeSingleInstance(() => {
+	if (mainWindow) {
+		if (mainWindow.isMinimized()) {
+			mainWindow.restore()
+		}
+		mainWindow.focus()
+	}
+})
+
+if (shouldQuit) {
+	app.quit()
+}
+
 // When Electron loading has finished, start Sia-UI.
 app.on('ready', () => {
 	// Load mainWindow
 	mainWindow = initWindow(config)
-})
-
-// Allow only one instance of Sia-UI
-app.makeSingleInstance(() => {
-	mainWindow.restore()
-	mainWindow.focus()
 })
 
 // Quit once all windows have been closed.
