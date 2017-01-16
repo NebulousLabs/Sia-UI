@@ -90,11 +90,9 @@ export default function filesReducer(state = initialState, action) {
 	case constants.HIDE_UPLOAD_DIALOG:
 		return state.set('showUploadDialog', false)
 	case constants.RECEIVE_UPLOADS:
-		return state.set('unreadUploads', state.get('unreadUploads').intersect(action.uploads.map((upload) => upload.siapath).toSet()))
-		            .set('uploading', action.uploads)
+		return state.set('uploading', action.uploads)
 	case constants.RECEIVE_DOWNLOADS:
-		return state.set('unreadDownloads', state.get('unreadDownloads').intersect(action.downloads.map((download) => download.siapath).toSet()))
-		            .set('downloading', action.downloads.filter((download) => Date.parse(download.starttime) > state.get('showDownloadsSince')))
+		return state.set('downloading', action.downloads.filter((download) => Date.parse(download.starttime) > state.get('showDownloadsSince')))
 	case constants.SHOW_FILE_TRANSFERS:
 		return state.set('showFileTransfers', true)
 	case constants.HIDE_FILE_TRANSFERS:
