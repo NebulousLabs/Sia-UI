@@ -33,6 +33,18 @@ const createPluginElement = (markupPath, title) => {
 	return elem
 }
 
+// registerLocalShortcut registers an electron globalShortcut that is only
+// active when the app has focus.
+const registerLocalShortcut = (shortcut, action) => {
+	remote.app.on('browser-window-blur', () => {
+		remote.globalShortcut.unregister(shortcut)
+	})
+	remote.app.on('browser-window-focus', () => {
+		remote.globalShortcut.register(shortcut, action)
+	})
+	remote.globalShortcut.register(shortcut, action)
+}
+
 // Set a plugin as the visible plugin
 export const setCurrentPlugin = (pluginName) => {
 	const currentElements = document.querySelectorAll('.current')
@@ -51,7 +63,7 @@ export const setCurrentPlugin = (pluginName) => {
 		buttonElem.classList.add('current')
 	}
 	remote.globalShortcut.unregister(devtoolsShortcut)
-	remote.globalShortcut.register(devtoolsShortcut, () => {
+	registerLocalShortcut(devtoolsShortcut, () => {
 		viewElem.openDevTools()
 	})
 }
@@ -83,7 +95,7 @@ export const loadPlugin = (pluginPath, hidden = false, shortcut) => {
 	const buttonElement = createPluginButtonElement(iconPath, name)
 
 	if (typeof shortcut !== 'undefined') {
-		remote.globalShortcut.register(shortcut, () => {
+		registerLocalShortcut(shortcut, () => {
 			setCurrentPlugin(name)
 		})
 	}
