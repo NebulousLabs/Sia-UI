@@ -63,6 +63,8 @@ export const setCurrentPlugin = (pluginName) => {
 		buttonElem.classList.add('current')
 	}
 	remote.globalShortcut.unregister(devtoolsShortcut)
+	remote.app.removeAllListeners('browser-window-blur')
+	remote.app.removeAllListeners('browser-window-focus')
 	registerLocalShortcut(devtoolsShortcut, () => {
 		viewElem.openDevTools()
 	})
