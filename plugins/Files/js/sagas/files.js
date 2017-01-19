@@ -48,7 +48,13 @@ function* getAllowanceSaga() {
 	try {
 		const response = yield siadCall('/renter')
 		const allowance = SiaAPI.hastingsToSiacoins(response.settings.allowance.funds)
-		const spending = allowance.minus(SiaAPI.hastingsToSiacoins(response.financialmetrics.unspent))
+
+		// compute allowance spending. Set the spending to zero if it is negative,
+		// since negative spending is confusing to the user.
+		let spending = allowance.minus(SiaAPI.hastingsToSiacoins(response.financialmetrics.unspent))
+		if (spending.isNegative()) {
+			spending = new BigNumber(0)
+		}
 
 		yield put(actions.receiveAllowance(allowance.round(0).toString()))
 		yield put(actions.receiveSpending(spending.round(0).toString()))
