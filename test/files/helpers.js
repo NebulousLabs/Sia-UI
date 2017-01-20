@@ -167,8 +167,8 @@ describe('files plugin helper functions', () => {
 				{ size: readableFilesize(1333), name: 'snip_snip_doggo_not_bork_bork_kind.jpg', redundancy: 1.0, siapath: 'doggos/snip_snip_doggo_not_bork_bork_kind.jpg', available: true, uploadprogress: 100, type: 'file' },
 			]),
 			'memes/': List([
-				{ size: readableFilesize(1337), name: 'itsdatboi.mov', siapath: 'memes/itsdatboi.mov', redundancy: 2.0, available: true, uploadprogress: 100, type: 'file' },
 				{ size: readableFilesize(1337), name: 'rares', siapath: 'memes/rares/', available: true, redundancy: 1.6, uploadprogress: 100, type: 'directory' },
+				{ size: readableFilesize(1337), name: 'itsdatboi.mov', siapath: 'memes/itsdatboi.mov', redundancy: 2.0, available: true, uploadprogress: 100, type: 'file' },
 				{ size: readableFilesize(1317), name: 'waddup.png', siapath: 'memes/waddup.png', available: true, redundancy: 2.5, uploadprogress: 100, type: 'file' },
 			]),
 		}

@@ -70,6 +70,18 @@ export const minRedundancy = (files) => {
 	}).redundancy
 }
 
+// directoriesFirst is a comparator function used to sort files by type, where
+// the directories will always come first.
+const directoriesFirst = (file1, file2) => {
+	if (file1.type === 'directory' && file2.type === 'file') {
+		return -1
+	}
+	if (file1.type === 'file' && file2.type === 'directory') {
+		return 1
+	}
+	return 0
+}
+
 // return a list of files filtered with path.
 // ... it's ls.
 export const ls = (files, path) => {
@@ -105,7 +117,7 @@ export const ls = (files, path) => {
 			type,
 		})
 	})
-	return parsedFiles.toList().sortBy((file) => file.name)
+	return parsedFiles.toList().sortBy((file) => file.name).sort(directoriesFirst)
 }
 
 // recursive version of readdir
