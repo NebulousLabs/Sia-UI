@@ -149,6 +149,25 @@ const parseSettings = (hostData) => Map({
 	acceptingContracts: hostData.externalsettings.acceptingcontracts,
 })
 
+// parseExpectedRevenue takes a host's `financialmetrics` object and returns
+// the sum total expected revenue from contract compensation, storage revenue,
+// and bandwidth revenue.
+const parseExpectedRevenue = (financialmetrics) => {
+	const storagerevenue = new BigNumber(financialmetrics.potentialstoragerevenue)
+	const bwrevenue = new BigNumber(financialmetrics.potentialdownloadbandwidthrevenue).add(financialmetrics.potentialuploadbandwidthrevenue)
+	const contractrevenue = new BigNumber(financialmetrics.potentialcontractcompensation)
+	return storagerevenue.add(bwrevenue).add(contractrevenue)
+}
+
+// parseRevenue takes a host's `financialmetrics` object and returns the sum
+// total earned revenue.
+const parseRevenue = (financialmetrics) => {
+	const storagerevenue = new BigNumber(financialmetrics.storagerevenue)
+	const bwrevenue = new BigNumber(financialmetrics.downloadbandwidthrevenue).add(financialmetrics.uploadbandwidthrevenue)
+	const contractrevenue = new BigNumber(financialmetrics.contractcompensation)
+	return storagerevenue.add(bwrevenue).add(contractrevenue)
+}
+
 function *fetchData() {
 	try {
 		const updatedData = yield siadCall({ url: '/host' })
@@ -157,8 +176,8 @@ function *fetchData() {
 		const data = Map({
 			numContracts: updatedData.financialmetrics.contractcount,
 			storage: (new BigNumber(updatedData.externalsettings.totalstorage)).minus(new BigNumber(updatedData.externalsettings.remainingstorage)).toString(),
-			earned: SiaAPI.hastingsToSiacoins(updatedData.financialmetrics.contractcompensation).toString(),
-			expected: SiaAPI.hastingsToSiacoins(updatedData.financialmetrics.potentialcontractcompensation).toString(),
+			earned: SiaAPI.hastingsToSiacoins(parseRevenue(updatedData.financialmetrics)).toString(),
+			expected: SiaAPI.hastingsToSiacoins(parseExpectedRevenue(updatedData.financialmetrics)).toString(),
 			files: yield fetchStorageFiles(),
 			walletLocked: !walletUnlocked.unlocked,
 			walletsize: walletUnlocked.confirmedsiacoinbalance,
