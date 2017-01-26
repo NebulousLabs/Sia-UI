@@ -4,7 +4,10 @@ import child_process from 'child_process'
 import { Map } from 'immutable'
 import http from 'http'
 import url from 'url'
+import { remote } from 'electron'
 import * as constants from '../constants/helper.js'
+
+const app = remote.app
 
 export const checkSiaPath = () => new Promise((resolve, reject) => {
 	fs.stat(SiaAPI.config.attr('siac').path, (err) => {
@@ -115,7 +118,7 @@ export const spawnCommand = function(commandStr, actions, newid) {
 		args = args.concat([ '-a', SiaAPI.config.attr('address') ])
 	}
 
-	const siac = child_process.spawn('./siac', args, { cwd: Path.dirname(SiaAPI.config.attr('siac').path || '') })
+	const siac = child_process.spawn(SiaAPI.config.attr('siac').path, args, { cwd: app.getPath('downloads') })
 
 	//Update the UI when the process receives new ouput.
 	const consumeChunk = function(chunk) {
