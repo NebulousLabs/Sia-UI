@@ -176,8 +176,8 @@ function *fetchData() {
 		const data = Map({
 			numContracts: updatedData.financialmetrics.contractcount,
 			storage: (new BigNumber(updatedData.externalsettings.totalstorage)).minus(new BigNumber(updatedData.externalsettings.remainingstorage)).toString(),
-			earned: SiaAPI.hastingsToSiacoins(parseRevenue(updatedData.financialmetrics)).toString(),
-			expected: SiaAPI.hastingsToSiacoins(parseExpectedRevenue(updatedData.financialmetrics)).toString(),
+			earned: SiaAPI.hastingsToSiacoins(parseRevenue(updatedData.financialmetrics)).round(2).toString(),
+			expected: SiaAPI.hastingsToSiacoins(parseExpectedRevenue(updatedData.financialmetrics)).round(2).toString(),
 			files: yield fetchStorageFiles(),
 			walletLocked: !walletUnlocked.unlocked,
 			walletsize: walletUnlocked.confirmedsiacoinbalance,
