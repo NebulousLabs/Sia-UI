@@ -11,8 +11,8 @@ const Header = ({ numContracts, earned, expected, walletsize, walletLocked }) =>
 			<div className="pod" id="expected">{expected} SC expected</div>
 		</div>
 		{
-			(new BigNumber(walletsize)).lessThan('50000') && !walletLocked ?
-				<WarningBar title="Wallet balance too low." message="You must have at least 50,000 SC to host files." />
+			(new BigNumber(walletsize)).lessThan('20000') && !walletLocked ?
+				<WarningBar title="Wallet balance too low." message="You must have at least 20,000 SC to host files." />
 				: null
 		}
 	</header>
