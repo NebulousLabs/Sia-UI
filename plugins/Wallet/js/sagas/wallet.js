@@ -153,6 +153,17 @@ function *sendCurrencySaga(action) {
 	}
 }
 
+// getSyncState queries the API for the synchronization status of the node and
+// sets the wallet's `synced` state.
+function *getSyncStateSaga() {
+	try {
+		const response = yield siadCall('/consensus')
+		yield put(actions.setSyncState(response.synced))
+	} catch (e) {
+		console.error('error fetching sync status: ' + e.toString())
+	}
+}
+
 // These functions are run by the redux-saga middleware.
 export function* watchCreateNewWallet() {
 	yield *takeEvery(constants.CREATE_NEW_WALLET, createWalletSaga)
@@ -177,4 +188,7 @@ export function* watchGetNewReceiveAddress() {
 }
 export function* watchSendCurrency() {
 	yield *takeEvery(constants.SEND_CURRENCY, sendCurrencySaga)
+}
+export function* watchGetSyncState() {
+	yield *takeEvery(constants.GET_SYNCSTATE, getSyncStateSaga)
 }

@@ -100,3 +100,10 @@ export const showMoreTransactions = (increment = 30) => ({
 	type: constants.SHOW_MORE_TRANSACTIONS,
 	increment,
 })
+export const getSyncState = () => ({
+	type: constants.GET_SYNCSTATE,
+})
+export const setSyncState = (synced) => ({
+	type: constants.SET_SYNCSTATE,
+	synced,
+})
