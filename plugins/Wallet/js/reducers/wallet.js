@@ -3,6 +3,7 @@ import * as constants from '../constants/wallet.js'
 import { WALLET_UNLOCK_ERROR } from '../constants/error.js'
 
 const initialState = Map({
+	synced: false,
 	unlocked: false,
 	encrypted: true,
 	unlocking: false,
@@ -43,6 +44,8 @@ export default function walletReducer(state = initialState, action) {
 		return state.set('encrypted', true)
 	case constants.SET_UNENCRYPTED:
 		return state.set('encrypted', false)
+	case constants.SET_SYNCSTATE:
+		return state.set('synced', action.synced)
 	case constants.SET_BALANCE:
 		return state.set('confirmedbalance', action.confirmed)
                 .set('unconfirmedbalance', action.unconfirmed)

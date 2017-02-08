@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import rootReducer from './reducers/index.js'
 import rootSaga from './sagas/index.js'
-import { getLockStatus, getBalance, getTransactions } from './actions/wallet.js'
+import { getLockStatus, getSyncState, getBalance, getTransactions } from './actions/wallet.js'
 import WalletApp from './components/app.js'
 
 export const initWallet = () => {
@@ -19,6 +19,7 @@ export const initWallet = () => {
 	store.dispatch(getLockStatus())
 	store.dispatch(getBalance())
 	store.dispatch(getTransactions())
+	store.dispatch(getSyncState())
 
 	// Poll Siad for state changes.
 	setInterval(() => {
@@ -26,6 +27,7 @@ export const initWallet = () => {
 		if (store.getState().wallet.get('unlocked')) {
 			store.dispatch(getBalance())
 			store.dispatch(getTransactions())
+			store.dispatch(getSyncState())
 		}
 	}, 5000)
 	return (
