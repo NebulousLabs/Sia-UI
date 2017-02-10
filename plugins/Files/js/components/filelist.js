@@ -8,14 +8,20 @@ import DirectoryInfoBar from './directoryinfobar.js'
 
 const FileList = ({files, selected, searchResults, path, showSearchField, actions}) => {
 	const onBackClick = () => {
-		if (path === '') {
+		// remove a trailing slash if it exists
+		const cleanPath = path.replace(/\/$/, '')
+
+		if (cleanPath === '') {
 			return
 		}
-		let newpath = Path.posix.join(path, '../')
-		if (newpath === './') {
-			newpath = ''
+
+		// find the parent directory and set the new path
+		const pathComponents = cleanPath.split('/')
+		if (pathComponents.length < 2) {
+			actions.setPath('')
+		} else {
+			actions.setPath(pathComponents[pathComponents.length-2] + '/')
 		}
-		actions.setPath(newpath)
 	}
 
 	if (files === null) {

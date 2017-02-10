@@ -181,9 +181,9 @@ describe('files plugin helper functions', () => {
 				expect(output.toObject()).to.deep.equal(expectedOutputs[path].toObject())
 			}
 		})
-		it('should work with siapaths that have a folder ending in ..', () => {
+		it('should work with siapaths that have a folder or file ending in ..', () => {
 			const siapathInputs = List([
-				{ filesize: 1000, siapath: 'test/test.png', redundancy: 2.0, available: true, uploadprogress: 100 },
+				{ filesize: 1000, siapath: 'test/test/..test.png', redundancy: 2.0, available: true, uploadprogress: 100 },
 				{ filesize: 1000, siapath: 'test/test../test.png', redundancy: 2.0, available: true, uploadprogress: 100},
 			])
 			const expectedOutputs = {
@@ -191,9 +191,12 @@ describe('files plugin helper functions', () => {
 					{ size: readableFilesize(1000+1000), name: 'test', siapath: 'test/', redundancy: 2.0, available: true, uploadprogress: 100, type: 'directory' },
 				]),
 				'test': List([
+					{ size: readableFilesize(1000), name: 'test', siapath: 'test/test/', redundancy: 2.0, available: true, uploadprogress: 100, type: 'directory' },
 					{ size: readableFilesize(1000), name: 'test..', siapath: 'test/test../', redundancy: 2.0, available: true, uploadprogress: 100, type: 'directory' },
-					{ size: readableFilesize(1000), name: 'test.png', siapath: 'test/test.png', redundancy: 2.0, available: true, uploadprogress: 100, type: 'file' },
-				])
+				]),
+				'test/test': List([
+					{ size: readableFilesize(1000), name: '..test.png', siapath: 'test/test/..test.png', redundancy: 2.0, available: true, uploadprogress: 100, type: 'file' },
+				]),
 			}
 			for (const path in expectedOutputs) {
 				const output = ls(siapathInputs, path)

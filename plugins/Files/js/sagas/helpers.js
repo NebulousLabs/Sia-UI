@@ -98,6 +98,12 @@ export const ls = (files, path) => {
 		if (relativePath.indexOf('/') !== -1) {
 			type = 'directory'
 			filename = relativePath.split('/')[0]
+
+			// directories cannot be named '..'.
+			if (filename === '..') {
+				return
+			}
+
 			siapath = Path.posix.join(path, filename) + '/'
 			const subfiles = files.filter((subfile) => subfile.siapath.includes(siapath))
 			const totalFilesize = subfiles.reduce((sum, subfile) => sum + subfile.filesize, 0)
