@@ -84,7 +84,7 @@ ipcRenderer.on('quit', async () => {
 let hasClosed = false
 window.onbeforeunload = () => {
 	if (window.closeToTray) {
-		mainWindow.hide()
+		mainWindow.minimize()
 		if (process.platform === 'win32' && !hasClosed) {
 			mainWindow.tray.displayBalloon({
 				title: 'Sia-UI information',
