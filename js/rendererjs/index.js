@@ -84,7 +84,19 @@ ipcRenderer.on('quit', async () => {
 let hasClosed = false
 window.onbeforeunload = () => {
 	if (window.closeToTray) {
-		mainWindow.minimize()
+		if (mainWindow.isVisible() === false) {
+			shutdown()
+			return false
+		}
+
+		if (process.platform === 'linux') {
+			// minimize is not supported in all linux WM/DEs, so we hide instead
+			mainWindow.hide()
+		} else {
+			// minimize is supported by both windows and MacOS.
+			mainWindow.minimize()
+		}
+
 		if (process.platform === 'win32' && !hasClosed) {
 			mainWindow.tray.displayBalloon({
 				title: 'Sia-UI information',
