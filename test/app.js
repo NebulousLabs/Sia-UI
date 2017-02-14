@@ -103,6 +103,7 @@ describe('startup and shutdown behaviour', () => {
 			app.browserWindow.close()
 			await sleep(1000)
 			expect(await app.browserWindow.isDestroyed()).to.be.false
+			expect(await app.browserWindow.isVisible()).to.be.false
 			expect(isProcessRunning(siadProcess.pid)).to.be.true
 		})
 		it('quits gracefully on close if closeToTray = false', async () => {
@@ -117,6 +118,21 @@ describe('startup and shutdown behaviour', () => {
 			while (await app.client.getText('#overlay-text') !== 'Quitting Sia...') {
 				await sleep(10)
 			}
+			while (isProcessRunning(pid)) {
+				await sleep(10)
+			}
+			expect(isProcessRunning(siadProcess.pid)).to.be.false
+		})
+		it('quits gracefully on close if already minimized and closed again', async () => {
+			const pid = await app.mainProcess.pid()
+			siadProcess = await getSiadChild(pid)
+			app.webContents.executeJavaScript('window.closeToTray = true')
+			app.browserWindow.close()
+			await sleep(1000)
+			expect(await app.browserWindow.isDestroyed()).to.be.false
+			expect(await app.browserWindow.isVisible()).to.be.false
+			expect(isProcessRunning(siadProcess.pid)).to.be.true
+			app.browserWindow.close()
 			while (isProcessRunning(pid)) {
 				await sleep(10)
 			}
