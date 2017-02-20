@@ -85,6 +85,7 @@ let hasClosed = false
 window.onbeforeunload = () => {
 	if (window.closeToTray) {
 		if (mainWindow.isVisible() === false) {
+			mainWindow.restore()
 			shutdown()
 			return false
 		}
