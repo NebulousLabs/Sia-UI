@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import UnlockWarning from './unlockwarning.js'
 import ConfirmationDialog from './allowanceconfirmation.js'
 
-const AllowanceDialog = ({confirming, confirmationAllowance, unlocked, feeEstimate, storageEstimate, actions}) => {
+const AllowanceDialog = ({confirming, confirmationAllowance, unlocked, synced, feeEstimate, storageEstimate, actions}) => {
 	const onCancelClick = () => actions.closeAllowanceDialog()
 	const onConfirmationCancel = () => actions.hideAllowanceConfirmation()
 	const onConfirmClick = () => actions.setAllowance(confirmationAllowance)
@@ -49,7 +49,7 @@ const AllowanceDialog = ({confirming, confirmationAllowance, unlocked, feeEstima
 
 	return (
 		<div className="modal">
-			{unlocked ? dialogContents : <UnlockWarning onClick={onCancelClick} />}
+			{unlocked && synced ? dialogContents : <UnlockWarning onClick={onCancelClick} />}
 		</div>
 	)
 }
@@ -58,6 +58,7 @@ AllowanceDialog.propTypes = {
 	confirmationAllowance: PropTypes.string.isRequired,
 	confirming: PropTypes.bool.isRequired,
 	unlocked: PropTypes.bool.isRequired,
+	synced: PropTypes.bool.isRequired,
 	feeEstimate: PropTypes.number.isRequired,
 	storageEstimate: PropTypes.string.isRequired,
 }

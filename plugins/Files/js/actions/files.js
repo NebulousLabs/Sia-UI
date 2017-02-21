@@ -7,6 +7,13 @@ export const receiveWalletLockstate = (unlocked) => ({
 	type: constants.RECEIVE_WALLET_LOCKSTATE,
 	unlocked,
 })
+export const getWalletSyncstate = () => ({
+	type: constants.GET_WALLET_SYNCSTATE,
+})
+export const setWalletSyncstate = (synced) => ({
+	type: constants.SET_WALLET_SYNCSTATE,
+	synced,
+})
 export const getFiles = () => ({
 	type: constants.GET_FILES,
 })

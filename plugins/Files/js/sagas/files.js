@@ -18,6 +18,16 @@ function* getWalletLockstateSaga() {
 	}
 }
 
+// Query siad for the sync state of the wallet.
+function* getWaletSyncstateSaga() {
+	try {
+		const response = yield siadCall('/consensus')
+		yield put(actions.setWalletSyncstate(response.synced))
+	} catch (e) {
+		console.error('error fetching wallet sync state: ' + e.toString())
+	}
+}
+
 // Query siad for the user's files.
 function* getFilesSaga() {
 	try {
@@ -280,4 +290,7 @@ export function* watchRenameFile() {
 }
 export function* watchGetStorageEstimate() {
 	yield *takeEvery(constants.GET_STORAGE_ESTIMATE, getStorageEstimateSaga)
+}
+export function* watchGetWalletSyncstate() {
+	yield *takeEvery(constants.GET_WALLET_SYNCSTATE, getWaletSyncstateSaga)
 }

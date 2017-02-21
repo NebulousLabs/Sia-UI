@@ -5,6 +5,7 @@ import { showAllowanceConfirmation, hideAllowanceConfirmation, closeAllowanceDia
 
 const mapStateToProps = (state) => ({
 	unlocked: state.wallet.get('unlocked'),
+	synced: state.wallet.get('synced'),
 	storageEstimate: state.allowancedialog.get('storageEstimate'),
 	feeEstimate: state.allowancedialog.get('feeEstimate'),
 	confirmationAllowance: state.allowancedialog.get('confirmationAllowance'),

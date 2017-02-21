@@ -6,7 +6,7 @@ import { Provider } from 'react-redux'
 import rootReducer from './reducers/index.js'
 import rootSaga from './sagas/index.js'
 import App from './containers/app.js'
-import { getAllowance, getContractCount, getWalletLockstate, getUploads, getFiles, getDownloads } from './actions/files.js'
+import { getAllowance, getWalletSyncstate, getContractCount, getWalletLockstate, getUploads, getFiles, getDownloads } from './actions/files.js'
 
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(
@@ -26,6 +26,7 @@ store.dispatch(getWalletLockstate())
 store.dispatch(getFiles())
 store.dispatch(getUploads())
 store.dispatch(getContractCount())
+store.dispatch(getWalletSyncstate())
 store.dispatch(getAllowance())
 
 setInterval(() => {
@@ -33,6 +34,7 @@ setInterval(() => {
 	store.dispatch(getUploads())
 	store.dispatch(getWalletLockstate())
 	store.dispatch(getFiles())
+	store.dispatch(getWalletSyncstate())
 	store.dispatch(getContractCount())
 	store.dispatch(getAllowance())
 }, 3000)
