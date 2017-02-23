@@ -8,6 +8,8 @@ const defaultConfig = {
 	siad: {
 		path: Path.join(__dirname, '../Sia/' + (process.platform === 'win32' ? 'siad.exe' : 'siad')),
 		datadir: Path.join(app.getPath('userData'), './sia'),
+		rpcaddr: ':9981',
+		hostaddr: ':9982',
 		detached: false,
 		address: 'localhost:9980',
 	},
@@ -26,12 +28,14 @@ export default function configManager(filepath) {
 	let config
 
 	try {
-		// TODO: write load() function instead of global require
 		const data = fs.readFileSync(filepath)
 		config = JSON.parse(data)
 	} catch (err) {
 		config = defaultConfig
 	}
+
+	// fill out default values if config is incomplete
+	config = Object.assign(defaultConfig, config)
 
 	/**
 	 * Gets or sets a config attribute
