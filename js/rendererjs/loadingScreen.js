@@ -1,7 +1,7 @@
 // loadingScreen.js: display a loading screen until communication with Siad has been established.
 // if an available daemon is not running on the host,
 // launch an instance of siad using config.js.
-import { remote } from 'electron'
+import { remote, shell } from 'electron'
 import * as Siad from 'sia.js'
 import Path from 'path'
 import React from 'react'
@@ -106,6 +106,18 @@ export default async function loadingScreen(initUI) {
 		showError(e.toString())
 		return
 	}
+
+	// Set a timeout to display a warning message about long load times caused by rescan.
+	setTimeout(() => {
+		if (overlayText.textContent === 'Loading Sia...') {
+			overlayText.innerHTML= 'Loading can take a while after upgrading to a new version. Check the <a style="text-decoration: underline; cursor: pointer" id="releasenotelink">release notes</a> for more details.'
+
+			document.getElementById('releasenotelink').onclick = () => {
+				shell.openExternal('https://github.com/NebulousLabs/Sia/releases/tag/v1.1.1')
+			}
+		}
+	}, 30000)
+
 	// Wait for this process to become reachable before starting the UI.
 	const sleep = (ms = 0) => new Promise((r) => setTimeout(r, ms))
 	while (await Siad.isRunning(siadConfig.address) === false) {
