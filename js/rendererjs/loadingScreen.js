@@ -113,7 +113,7 @@ export default async function loadingScreen(initUI) {
 			overlayText.innerHTML= 'Loading can take a while after upgrading to a new version. Check the <a style="text-decoration: underline; cursor: pointer" id="releasenotelink">release notes</a> for more details.'
 
 			document.getElementById('releasenotelink').onclick = () => {
-				shell.openExternal('https://github.com/NebulousLabs/Sia/releases/tag/v1.1.1')
+				shell.openExternal('https://github.com/NebulousLabs/Sia/releases')
 			}
 		}
 	}, 30000)
