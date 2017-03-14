@@ -14,12 +14,14 @@ const fs = remote.require('fs')
 const config = remote.getGlobal('config')
 const siadConfig = config.attr('siad')
 
+const spinner = document.getElementById('loading-spinner')
 const overlay = document.getElementsByClassName('overlay')[0]
 const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByTagName('p')[0]
 overlayText.textContent = 'Loading Sia...'
 
 const showError = (error) => {
 	overlayText.textContent = 'A Sia-UI error has occured: ' + error
+	spinner.style.display = 'none'
 }
 
 // startUI starts a Sia UI instance using the given welcome message.
@@ -55,6 +57,17 @@ const checkSiaPath = () => new Promise((resolve) => {
 		}
 	})
 })
+
+// unexpectedExitHandler handles an unexpected siad exit, displaying the error
+// piped to siad-output.log.
+const unexpectedExitHandler = () => {
+	try {
+		const errorMsg = fs.readFileSync(Path.join(siadConfig.datadir, 'siad-output.log'))
+		showError('Siad unexpectedly exited. Error log: ' + errorMsg)
+	} catch (e) {
+		showError('Siad unexpectedly exited.')
+	}
+}
 
 // Check if Siad is already running on this host.
 // If it is, start the UI and display a welcome message to the user.
@@ -99,8 +112,8 @@ export default async function loadingScreen(initUI) {
 			'api-addr': siadConfig.address,
 		})
 		siadProcess.on('error', (e) => showError('Siad couldnt start: ' + e.toString()))
-		siadProcess.on('close', () => showError('Siad unexpectedly closed.'))
-		siadProcess.on('exit', () => showError('Siad unexpectedly exited.'))
+		siadProcess.on('close', unexpectedExitHandler)
+		siadProcess.on('exit', unexpectedExitHandler)
 		window.siadProcess = siadProcess
 	} catch (e) {
 		showError(e.toString())
