@@ -26,14 +26,14 @@
 }
 .redundancy-text {
 	font-size: 12px;
-	margin-right: 3px;
+	margin-right: 8px;
+	width: 35px;
 }
 .redundancy-status {
 	display: flex;
-	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	padding-left: 10px;
+	padding-left: 15px;
 }
 .file-browser {
 	display: flex;
@@ -58,8 +58,8 @@ div[tabindex="1"]:focus {
 	z-index: 5;
 	position: absolute;
 	bottom: 0;
-	height: 70px;
-	width: 300px;
+	height: 60px;
+	width: 260px;
 	margin-left: auto;
 	margin-right: auto;
 	display: flex;
@@ -165,7 +165,7 @@ div[tabindex="1"]:focus {
 }
 .files-toolbar {
 	width: 100%;
-	height: 70px;
+	height: 50px;
 	min-width: 700px;
 	display: flex;
 	align-items: center;
@@ -173,8 +173,9 @@ div[tabindex="1"]:focus {
 	background-color: #4a4a4a;
 	background: linear-gradient(to top, #5A5A5A 15%, #4A4A4A 85%);
 	color: #fff;
-	padding-bottom: 10px;
-	padding-top: 12px;
+	padding-bottom: 8px;
+	padding-top: 8px;
+	font-size: 16px;
 }
 .set-allowance-button {
 	display: inline-block;
@@ -188,9 +189,9 @@ div[tabindex="1"]:focus {
 .upload-button:last-of-type {
 	position: absolute;
 	left: 0px;
-	top: 55px;
+	top: 45px;
 	overflow: hidden;
-	padding: 17px 0px 0px;
+	padding: 5px 0px 0px;
 	max-height: 0px;
 	background-color: #575757;
 	transition: all 1s .1s;
@@ -206,9 +207,11 @@ div[tabindex="1"]:focus {
 }
 .files-toolbar .buttons div {
 	text-align: center;
-	margin-bottom: 5px;
 	width: 100px;
 	cursor: pointer;
+}
+.fa-2x {
+	font-size: 1.5em;
 }
 .transfers-button {
 	display: inline-block;
@@ -247,12 +250,6 @@ div[tabindex="1"]:focus {
 .files-usage-info {
 	margin-left: 15px;
 }
-.files-toolbar .buttons div {
-	text-align: center;
-	margin-bottom: 5px;
-	width: 100px;
-	cursor: pointer;
-}
 .files-toolbar .buttons div span {
 	display: block;
 	padding: 0;
@@ -286,6 +283,7 @@ div[tabindex="1"]:focus {
 	margin: 0;
 	cursor: default;
 	-webkit-user-select: none;
+	font-size: 14px;
 }
 .file-list ul {
 	margin: 0;
@@ -294,12 +292,15 @@ div[tabindex="1"]:focus {
 	width: 100%;
 	padding: 0;
 }
+.file-list .directory-infobar {
+	height: 35px;
+}
 .filesize {
 	font-size: 12px;
 }
 .file-list li {
 	display: flex;
-	height: 50px;
+	height: 22px;
 	align-items: center;
 	justify-content: space-between;
 	background-color: #ECECEC;
