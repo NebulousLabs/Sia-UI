@@ -1,6 +1,5 @@
 // Helper functions for the Files sagas.
 import { List, Map } from 'immutable'
-import BigNumber from 'bignumber.js'
 import Path from 'path'
 import fs from 'graceful-fs'
 import * as actions from '../actions/files.js'
@@ -156,34 +155,6 @@ export const uploadDirectory = (directory, files, destpath) =>
 		const siapath = Path.posix.join(destpath, Path.basename(directory), relativePath)
 		return actions.uploadFile(siapath, file)
 	})
-
-// avgHostMetric computes the average of the metric given by `metric` on the
-// list of `hosts`.
-const avgHostMetric = (hosts, metric) =>
-	hosts.reduce((sum, host) => sum.add(host[metric]), new BigNumber(0))
-	     .dividedBy(hosts.size)
-
-// avgStorageCost returns the average storage cost from a list of hosts given a
-// period (blocks) and redundancy.
-const avgStorageCost = (hosts, period, redundancy) =>
-	avgHostMetric(hosts, 'storageprice')
-	             .times(period)
-	             .plus(avgHostMetric(hosts, 'uploadbandwidthprice'))
-							 .times(redundancy)
-	             .plus(avgHostMetric(hosts, 'downloadbandwidthprice'))
-
-// Compute an estimated amount of storage from an amount of funds (Hastings)
-// and a list of hosts.
-export const estimatedStorage = (funds, hosts) => {
-	const validHosts = List(hosts).take(28)
-	const avgStorage = avgStorageCost(validHosts, allowancePeriod, baseRedundancy)
-
-	let fee = SiaAPI.siacoinsToHastings(baseFee)
-	fee = fee.plus(avgHostMetric(validHosts, 'contractprice').times(ncontracts))
-	fee = fee.plus(funds.minus(fee).times(siafundRate))
-
-	return '~' + readableFilesize(Math.max(0, funds.minus(fee).dividedBy(avgStorage).toNumber().toPrecision(1)))
-}
 
 // Parse a response from `/renter/downloads`
 // return a list of file downloads
