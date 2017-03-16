@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import PasswordPrompt from '../containers/passwordprompt.js'
-import NewWalletForm from '../containers/newwalletform.js'
+import UninitializedWalletDialog from '../containers/uninitializedwalletdialog.js'
 
 const LockScreen = ({unlocked, unlocking, encrypted}) => {
 	if (unlocked && encrypted && !unlocking) {
@@ -17,7 +17,7 @@ const LockScreen = ({unlocked, unlocking, encrypted}) => {
 	} else  if (!encrypted) {
 		// Wallet is not encrypted, return a lockScreen that initializes a new wallet.
 		lockscreenContents = (
-			<NewWalletForm />
+			<UninitializedWalletDialog />
 		)
 	}
 	return (

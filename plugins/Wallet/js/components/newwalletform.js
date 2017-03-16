@@ -5,11 +5,18 @@ const NewWalletForm = ({actions}) => {
 		e.preventDefault()
 		actions.createNewWallet(e.target.password.value)
 	}
+	const handleCancelClick = (e) => {
+		e.preventDefault()
+		actions.hideNewWalletForm()
+	}
 	return (
 		<form className="new-wallet-form" onSubmit={handleCreateWalletClick}>
 			<h3>Enter a password to encrypt your wallet. You can leave this empty to use a secure, automatically generated password.</h3>
 			<input type="password" name="password" autoFocus />
-			<button type="submit">Confirm</button>
+			<div className="new-wallet-form-buttons">
+				<button type="submit">Confirm</button>
+				<button onClick={handleCancelClick}>Cancel</button>
+			</div>
 		</form>
 	)
 }

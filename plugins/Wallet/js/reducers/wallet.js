@@ -15,6 +15,7 @@ const initialState = Map({
 	showSendPrompt: false,
 	showReceivePrompt: false,
 	showNewWalletDialog: false,
+	showNewWalletForm: false,
 })
 
 export default function walletReducer(state = initialState, action) {
@@ -23,6 +24,10 @@ export default function walletReducer(state = initialState, action) {
 		return state.set('showNewWalletDialog', true)
 	case constants.DISMISS_NEW_WALLET_DIALOG:
 		return state.set('showNewWalletDialog', false)
+	case constants.SHOW_NEW_WALLET_FORM:
+		return state.set('showNewWalletForm', true)
+	case constants.HIDE_NEW_WALLET_FORM:
+		return state.set('showNewWalletForm', false)
 	case constants.SHOW_RECEIVE_PROMPT:
 		return state.set('showReceivePrompt', true)
 	case constants.HIDE_RECEIVE_PROMPT:
