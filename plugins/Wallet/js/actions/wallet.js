@@ -27,8 +27,9 @@ export const unlockWallet = (password) => ({
 	type: constants.UNLOCK_WALLET,
 	password,
 })
-export const createNewWallet = () => ({
+export const createNewWallet = (password) => ({
 	type: constants.CREATE_NEW_WALLET,
+	password,
 })
 export const getBalance = () => ({
 	type: constants.GET_BALANCE,
@@ -107,3 +108,4 @@ export const setSyncState = (synced) => ({
 	type: constants.SET_SYNCSTATE,
 	synced,
 })
+

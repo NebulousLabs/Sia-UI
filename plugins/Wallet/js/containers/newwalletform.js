@@ -1,4 +1,4 @@
-import NewWalletButtonView from '../components/newwalletbutton.js'
+import NewWalletFormView from '../components/newwalletform.js'
 import { createNewWallet } from '../actions/wallet.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -9,5 +9,5 @@ const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ createNewWallet }, dispatch),
 })
 
-const NewWalletButton = connect(mapStateToProps, mapDispatchToProps)(NewWalletButtonView)
-export default NewWalletButton
+const NewWalletForm = connect(mapStateToProps, mapDispatchToProps)(NewWalletFormView)
+export default NewWalletForm
