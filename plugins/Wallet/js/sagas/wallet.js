@@ -85,7 +85,7 @@ function *createWalletSaga(action) {
 			},
 		})
 
-		if (action.password === '') {
+		if (typeof action.password === 'undefined' || action.password === '') {
 			yield put(actions.showNewWalletDialog(response.primaryseed, response.primaryseed))
 		} else {
 			yield put(actions.showNewWalletDialog(action.password, response.primaryseed))

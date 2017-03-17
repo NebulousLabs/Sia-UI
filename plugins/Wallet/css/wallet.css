@@ -203,6 +203,9 @@
 	padding-right: 100px;
 	z-index: 10;
 }
+.newwallet-seed, .newwallet-password {
+	font-size: 24px;
+}
 .confirmation-dialog {
 	display: flex;
 	padding: 10px 10px 10px 10px;
@@ -221,7 +224,6 @@
 }
 .newwallet-dialog span {
 	display: block;
-	font-size: 12px;
 	color: #000000;
 }
 .create-wallet-button i {

@@ -114,4 +114,7 @@ export const showNewWalletForm = () => ({
 export const hideNewWalletForm = () => ({
 	type: constants.HIDE_NEW_WALLET_FORM,
 })
-
+export const setUseCustomPassphrase = (useCustomPassphrase) => ({
+	type: constants.SET_USE_CUSTOM_PASSPHRASE,
+	useCustomPassphrase,
+})
