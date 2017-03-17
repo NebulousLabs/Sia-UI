@@ -118,3 +118,14 @@ export const setUseCustomPassphrase = (useCustomPassphrase) => ({
 	type: constants.SET_USE_CUSTOM_PASSPHRASE,
 	useCustomPassphrase,
 })
+export const showSeedRecoveryDialog = () => ({
+	type: constants.SHOW_SEED_RECOVERY_DIALOG,
+})
+export const hideSeedRecoveryDialog = () => ({
+	type: constants.HIDE_SEED_RECOVERY_DIALOG,
+})
+export const recoverSeed = (seed) => ({
+	type: constants.RECOVER_SEED,
+	seed,
+})
+
