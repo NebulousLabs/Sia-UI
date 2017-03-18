@@ -10,14 +10,16 @@ const RecoveryDialog = ({actions}) => {
 		actions.hideSeedRecoveryDialog()
 	}
 	return (
-		<form className="recovery-form" onSubmit={handleRecoverClick}>
-			<h3> Enter a seed to recover funds from. </h3>
-			<input type="text" name="seed" autoFocus />
-			<div className="recovery-form-buttons">
-				<button type="submit">Recover</button>
-				<button onClick={handleCancelClick}>Cancel</button>
-			</div>
-		</form>
+		<div className="modal">
+			<form className="recovery-form" onSubmit={handleRecoverClick}>
+				<h3> Enter a seed to recover funds from. </h3>
+				<input type="text" name="seed" autoFocus />
+				<div className="recovery-form-buttons">
+					<button type="submit">Recover</button>
+					<button onClick={handleCancelClick}>Cancel</button>
+				</div>
+			</form>
+		</div>
 	)
 }
 

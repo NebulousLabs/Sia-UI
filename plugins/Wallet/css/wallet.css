@@ -264,6 +264,23 @@
 	margin-left: 3px;
 	margin-right: 3px;
 }
-.new-wallet-form input {
+
+.recovery-form {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	width: 50%;
+	height: 300px;
+	background-color: #eee;
+}
+.recovery-form-buttons {
+	margin-top: 15px;
+}
+.recovery-form-buttons button {
+	margin-left: 2px;
+	margin-right: 2px;
+}
+.recovery-form input {
 	width: 50%;
 }
