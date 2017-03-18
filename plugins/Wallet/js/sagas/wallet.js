@@ -133,6 +133,23 @@ function *getNewReceiveAddressSaga() {
 	}
 }
 
+// call /wallet/sweep/seed to recover money from a seed
+function *recoverSeedSaga(action) {
+	try {
+		yield siadCall({
+			url: '/wallet/sweep/seed',
+			method: 'POST',
+			timeout: 2e8,
+			qs: {
+				seed: action.seed,
+			},
+		})
+		yield put(actions.hideSeedRecoveryDialog())
+	} catch (e) {
+		sendError(e)
+	}
+}
+
 function *sendCurrencySaga(action) {
 	try {
 		if (action.currencytype === undefined || action.amount === undefined || action.destination === undefined || action.amount === '' || action.currencytype === '' || action.destination === '') {
@@ -174,6 +191,9 @@ function *getSyncStateSaga() {
 // These functions are run by the redux-saga middleware.
 export function* watchCreateNewWallet() {
 	yield *takeEvery(constants.CREATE_NEW_WALLET, createWalletSaga)
+}
+export function* watchRecoverSeedSaga() {
+	yield *takeEvery(constants.RECOVER_SEED, recoverSeedSaga)
 }
 export function* watchGetLockStatus() {
 	yield *takeEvery(constants.GET_LOCK_STATUS, getLockStatusSaga)

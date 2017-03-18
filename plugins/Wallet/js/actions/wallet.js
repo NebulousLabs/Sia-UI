@@ -128,4 +128,10 @@ export const recoverSeed = (seed) => ({
 	type: constants.RECOVER_SEED,
 	seed,
 })
+export const seedRecoveryStarted = () => ({
+	type: constants.SEED_RECOVERY_STARTED,
+})
+export const seedRecoveryFinished = () => ({
+	type: constants.SEED_RECOVERY_FINISHED,
+})
 
