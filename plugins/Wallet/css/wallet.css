@@ -265,6 +265,10 @@
 	margin-right: 3px;
 }
 
+.new-wallet-form input {
+	width: 50%;
+}
+
 .recovery-form {
 	display: flex;
 	align-items: center;

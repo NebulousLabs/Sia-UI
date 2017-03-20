@@ -7,6 +7,7 @@ const initialState = Map({
 	unlocked: false,
 	encrypted: true,
 	unlocking: false,
+	recovering: false,
 	confirmedbalance: '0',
 	unconfirmedbalance: '0',
 	siafundbalance: '0',
@@ -22,6 +23,10 @@ const initialState = Map({
 
 export default function walletReducer(state = initialState, action) {
 	switch (action.type) {
+	case constants.SEED_RECOVERY_STARTED:
+		return state.set('recovering', true)
+	case constants.SEED_RECOVERY_FINISHED:
+		return state.set('recovering', false)
 	case constants.SHOW_NEW_WALLET_DIALOG:
 		return state.set('showNewWalletDialog', true)
 	case constants.DISMISS_NEW_WALLET_DIALOG:

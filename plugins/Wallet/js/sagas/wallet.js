@@ -136,6 +136,7 @@ function *getNewReceiveAddressSaga() {
 // call /wallet/sweep/seed to recover money from a seed
 function *recoverSeedSaga(action) {
 	try {
+		yield put(actions.seedRecoveryStarted())
 		yield siadCall({
 			url: '/wallet/sweep/seed',
 			method: 'POST',
@@ -144,8 +145,12 @@ function *recoverSeedSaga(action) {
 				seed: action.seed,
 			},
 		})
+		yield put(actions.seedRecoveryFinished())
+		yield new Promise((resolve) => setInterval(resolve, 1000))
 		yield put(actions.hideSeedRecoveryDialog())
 	} catch (e) {
+		yield put(actions.seedRecoveryFinished())
+		yield put(actions.hideSeedRecoveryDialog())
 		sendError(e)
 	}
 }
