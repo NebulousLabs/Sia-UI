@@ -5,7 +5,8 @@ import fs from 'graceful-fs'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import { List } from 'immutable'
-import { ls, uploadDirectory, sendError, allowancePeriod, estimatedStorage, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
+import BigNumber from 'bignumber.js'
+import { ls, uploadDirectory, sendError, allowancePeriod, readableFilesize, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
 
 // Query siad for the state of the wallet.
 // dispatch `unlocked` in receiveWalletLockstate
@@ -41,13 +42,14 @@ function* getFilesSaga() {
 
 function* getStorageEstimateSaga(action) {
 	try {
-		const response = yield siadCall('/hostdb/active')
-		if (response.hosts === null) {
+		const response = yield siadCall('/renter/prices')
+		if (response.storageterabytemonth === '0') {
 			yield put(actions.setStorageEstimate('No Hosts'))
 			return
 		}
-		const estimate = estimatedStorage(SiaAPI.siacoinsToHastings(action.funds), response.hosts)
-		yield put(actions.setStorageEstimate(estimate))
+		const estimate = new BigNumber(SiaAPI.siacoinsToHastings(action.funds)).dividedBy(response.storageterabytemonth).times(1e12)
+
+		yield put(actions.setStorageEstimate('~' + readableFilesize(estimate.toPrecision(1))))
 	} catch (e) {
 		console.error(e)
 	}
