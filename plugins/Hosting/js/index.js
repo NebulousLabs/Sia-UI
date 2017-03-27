@@ -24,8 +24,10 @@ sagaMiddleware.run(initSaga)
 
 store.dispatch(actions.requestDefaultSettings())
 store.dispatch(actions.fetchData())
+store.dispatch(actions.getHostStatus())
 
 // Poll Siad for state changes.
 setInterval(() => {
 	store.dispatch(actions.fetchData())
+	store.dispatch(actions.getHostStatus())
 }, 5000)

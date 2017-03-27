@@ -367,3 +367,16 @@
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
+
+.online-icon, .offline-icon {
+	margin-left: 5px;
+}
+
+.online-icon {
+	color: green;
+}
+
+.offline-icon {
+	color: red;
+}
+

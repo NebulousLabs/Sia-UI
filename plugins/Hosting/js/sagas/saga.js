@@ -213,6 +213,7 @@ function *requestDefaultSettingsSaga() {
 const getHostStatus = (hostAddr) => new Promise((resolve) => {
 	const hostUrl = url.parse(hostAddr)
 	const socket = net.connect(hostUrl.port, hostUrl.hostname)
+	socket.setTimeout(15e3) // 15 second host connectability timeout
 	socket.on('error', () => resolve(false))
 	socket.on('connect', () => {
 		socket.destroy()
