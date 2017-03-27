@@ -39,6 +39,7 @@ const mock = {
 				showMessageBox: sinon.spy(),
 				showErrorBox: sinon.spy(),
 			},
+			require: sinon.spy(),
 		},
 	},
 }
