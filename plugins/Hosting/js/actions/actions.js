@@ -105,3 +105,12 @@ export const receiveDefaultSettings = (settings) => ({
 	settings,
 })
 
+export const setHostStatus = (status) => ({
+	type: constants.SET_HOST_STATUS,
+	status,
+})
+
+export const getHostStatus = () => ({
+	type: constants.GET_HOST_STATUS,
+})
+

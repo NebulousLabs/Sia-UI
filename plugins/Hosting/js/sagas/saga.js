@@ -5,6 +5,8 @@ import * as constants from '../constants/constants.js'
 import * as helper from '../utils/host.js'
 import { Map, List } from 'immutable'
 import BigNumber from 'bignumber.js'
+import net from 'net'
+import url from 'url'
 
 // siadCall: promisify Siad API calls.  Resolve the promise with `response` if the call was successful,
 // otherwise reject the promise with `err`.
@@ -204,6 +206,32 @@ function *requestDefaultSettingsSaga() {
 	}
 }
 
+// getHostStatus returns a promise that resolves with `true` if the provided
+// netaddress is connectable, or `false` if it is not connectable. The input
+// 'hostAddr' must be an address in the URL format, eg:
+// tcp://123.456.789.0:9982
+const getHostStatus = (hostAddr) => new Promise((resolve) => {
+	const hostUrl = url.parse(hostAddr)
+	const socket = net.connect(hostUrl.port, hostUrl.hostname)
+	socket.on('error', () => resolve(false))
+	socket.on('connect', () => {
+		socket.destroy()
+		resolve(true)
+	})
+})
+
+function *hostStatusSaga() {
+	try {
+		const hostData = yield siadCall('/host')
+		const hostAddr = hostData.externalsettings.netaddress
+		const isUp = yield getHostStatus('tcp://' + hostAddr)
+		yield put(actions.setHostStatus(isUp))
+	} catch (e) {
+		console.error('error fetching host status: ' + e.toString())
+		yield put(actions.setHostStatus(false))
+	}
+}
+
 function *pushSettingsListener() {
 	yield *takeEvery(constants.PUSH_SETTINGS, pushSettings)
 }
@@ -228,6 +256,9 @@ function *announceHostListener() {
 function *requestDefaultsListener() {
 	yield *takeEvery(constants.REQUEST_DEFAULT_SETTINGS, requestDefaultSettingsSaga)
 }
+function *hostStatusListener() {
+	yield *takeEvery(constants.GET_HOST_STATUS, hostStatusSaga)
+}
 
 export default function *initSaga() {
 	yield [
@@ -239,5 +270,6 @@ export default function *initSaga() {
 		fork(resizeFolderListener),
 		fork(announceHostListener),
 		fork(requestDefaultsListener),
+		fork(hostStatusListener),
 	]
 }

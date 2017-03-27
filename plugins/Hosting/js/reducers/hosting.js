@@ -9,10 +9,13 @@ const initialState = Map({
 	walletLocked: true,
 	walletsize: 0,
 	files: List([]),
+	online: false,
 })
 
 export default function hostingReducer(state = initialState, action) {
 	switch (action.type) {
+	case constants.SET_HOST_STATUS:
+		return state.set('online', action.status)
 	case constants.FETCH_DATA_SUCCESS:
 		return state.merge(action.data)
 	default:
