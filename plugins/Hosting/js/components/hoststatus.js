@@ -1,6 +1,18 @@
 import React, { PropTypes } from 'react'
 
-const HostStatus = ({connectable, working}) => {
+const HostStatus = ({hasCheckedConnectability, connectable, working}) => {
+	if (!hasCheckedConnectability) {
+		return (
+			<div className="host-status">
+				<i className="fa fa-refresh inactive-icon" />
+				<span> Checking Host Status... </span>
+				<div className="host-status-info">
+					Sia-UI is determining the status of your Host.
+				</div>
+			</div>
+		)
+	}
+
 	if (!connectable) {
 		return (
 			<div className="host-status">
@@ -39,6 +51,7 @@ const HostStatus = ({connectable, working}) => {
 HostStatus.propTypes = {
 	connectable: PropTypes.bool.isRequired,
 	working: PropTypes.bool.isRequired,
+	hasCheckedConnectability: PropTypes.bool.isRequired,
 }
 
 export default HostStatus

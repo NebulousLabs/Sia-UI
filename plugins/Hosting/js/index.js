@@ -25,7 +25,6 @@ sagaMiddleware.run(initSaga)
 store.dispatch(actions.requestDefaultSettings())
 store.dispatch(actions.fetchData())
 store.dispatch(actions.getHostNSettingsCalls())
-store.dispatch(actions.getHostConnectabilityStatus())
 
 // Poll Siad for state changes.
 setInterval(() => {

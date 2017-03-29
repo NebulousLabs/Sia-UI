@@ -10,6 +10,7 @@ const mapStateToProps = (state) => ({
 	walletLocked: state.hostingReducer.get('walletLocked'),
 	connectable: state.hostingReducer.get('connectable'),
 	working: state.hostingReducer.get('working'),
+	hasCheckedConnectability: state.hostingReducer.get('hasCheckedConnectability'),
 })
 
 const Header = connect(mapStateToProps)(HeaderView)
