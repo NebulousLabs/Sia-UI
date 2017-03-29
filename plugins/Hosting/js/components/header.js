@@ -3,11 +3,11 @@ import BigNumber from 'bignumber.js'
 import WarningBar from './warningbar.js'
 import HostStatus from './hoststatus.js'
 
-const Header = ({ numContracts, earned, expected, walletsize, walletLocked, hostOnline }) => (
+const Header = ({ numContracts, earned, expected, walletsize, walletLocked, working, connectable }) => (
 	<header className="header">
 		<div className="title">Hosting</div>
 		<div className="capsule">
-			<div className="pod"><HostStatus online={hostOnline} /></div>
+			<div className="pod"><HostStatus working={working} connectable={connectable} /></div>
 			<div className="pod" id="contacts">{numContracts} active contracts</div>
 			<div className="pod" id="money">{earned} SC earned</div>
 			<div className="pod" id="expected">{expected} SC expected</div>
