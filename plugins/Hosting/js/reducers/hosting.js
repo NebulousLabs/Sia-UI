@@ -12,7 +12,7 @@ const initialState = Map({
 
 	nSettingsCalls: 0,
 	connectable: false,
-	working: true,
+	working: false,
 })
 
 export default function hostingReducer(state = initialState, action) {
