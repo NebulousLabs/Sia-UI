@@ -227,7 +227,7 @@ function *hostWorkingStatusSaga() {
 	try {
 		const hostData = yield siadCall('/host')
 		const nPreviousSettingsCalls = yield select((state) => state.hostingReducer.get('nSettingsCalls'))
-		if (nPreviousSettingsCalls >= hostData.networkmetrics.settingscalls) {
+		if (nPreviousSettingsCalls >= hostData.networkmetrics.settingscalls - 3) {
 			yield put(actions.setHostWorkingStatus(false))
 		} else {
 			yield put(actions.setHostWorkingStatus(true))
