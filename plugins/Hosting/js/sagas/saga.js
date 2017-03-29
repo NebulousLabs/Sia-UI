@@ -221,10 +221,12 @@ const getHostConnectabilityStatus = (hostAddr) => new Promise((resolve) => {
 	})
 })
 
+// hostWorkingStatusSaga compares the host's current `settingscalls` metric and
+// sets `working` to false if it has not increased.
 function *hostWorkingStatusSaga() {
 	try {
 		const hostData = yield siadCall('/host')
-		const nPreviousSettingsCalls = select((state) => state.hostingReducer.get('nSettingsCalls'))
+		const nPreviousSettingsCalls = yield select((state) => state.hostingReducer.get('nSettingsCalls'))
 		if (nPreviousSettingsCalls >= hostData.networkmetrics.settingscalls) {
 			yield put(actions.setHostWorkingStatus(false))
 		} else {
@@ -236,6 +238,8 @@ function *hostWorkingStatusSaga() {
 	}
 }
 
+// hostConnectabilityStatusSaga checks if the host is connectable at its
+// `netaddress` and sets `connectable` accordingly.
 function *hostConnectabilityStatusSaga() {
 	try {
 		const hostData = yield siadCall('/host')
@@ -248,6 +252,8 @@ function *hostConnectabilityStatusSaga() {
 	}
 }
 
+// getHostNSettingsSaga updates nSettingsCalls to the host's current
+// `settingscalls`.
 function *getHostNSettingsSaga() {
 	try {
 		const hostData = yield siadCall('/host')
