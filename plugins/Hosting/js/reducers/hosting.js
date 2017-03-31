@@ -9,10 +9,22 @@ const initialState = Map({
 	walletLocked: true,
 	walletsize: 0,
 	files: List([]),
+
+	nSettingsCalls: 0,
+	connectable: false,
+	working: false,
+	hasCheckedConnectability: false,
 })
 
 export default function hostingReducer(state = initialState, action) {
 	switch (action.type) {
+	case constants.SET_HOST_WORKING_STATUS:
+		return state.set('working', action.status)
+	case constants.SET_HOST_CONNECTABILITY_STATUS:
+		return state.set('connectable', action.status)
+		            .set('hasCheckedConnectability', true)
+	case constants.SET_HOST_NSETTINGSCALLS:
+		return state.set('nSettingsCalls', action.calls)
 	case constants.FETCH_DATA_SUCCESS:
 		return state.merge(action.data)
 	default:

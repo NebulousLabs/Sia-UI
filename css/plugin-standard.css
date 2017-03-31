@@ -87,7 +87,6 @@ select:hover {
 	border: 1px solid #00CBA0;
 
 	border-radius: 0;
-	overflow: hidden;
 }
 .capsule .pod {
 	display: inline-block;

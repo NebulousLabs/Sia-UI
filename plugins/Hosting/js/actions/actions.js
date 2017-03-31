@@ -105,3 +105,30 @@ export const receiveDefaultSettings = (settings) => ({
 	settings,
 })
 
+export const setHostConnectabilityStatus = (status) => ({
+	type: constants.SET_HOST_CONNECTABILITY_STATUS,
+	status,
+})
+
+export const getHostConnectabilityStatus = () => ({
+	type: constants.GET_HOST_CONNECTABILITY_STATUS,
+})
+
+export const getHostWorkingStatus = () => ({
+	type: constants.GET_HOST_WORKING_STATUS,
+})
+
+export const setHostWorkingStatus = (status) => ({
+	type: constants.SET_HOST_WORKING_STATUS,
+	status,
+})
+
+export const getHostNSettingsCalls = () => ({
+	type: constants.GET_HOST_NSETTINGSCALLS,
+})
+
+export const setHostNSettingsCalls = (calls) => ({
+	type: constants.SET_HOST_NSETTINGSCALLS,
+	calls,
+})
+

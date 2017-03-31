@@ -367,3 +367,75 @@
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
+
+.host-status {
+	position: relative;
+}
+
+.host-status i {
+	margin-right: 5px;
+}
+
+.online-icon {
+	color: green;
+}
+
+.offline-icon {
+	color: red;
+}
+
+.inactive-icon {
+	color: yellow;
+}
+
+.host-status-info {
+	display: none !important;
+}
+
+.host-status:hover .host-status-info {
+	display: inline-block !important;
+}
+
+.host-status:hover {
+	cursor: help;
+}
+
+.host-status-info {
+	display: none !important;
+	position: absolute;
+	right: -100px;
+	top: 45px;
+	background: #525252;
+	border: 1px solid #00CBA0;
+	font-size: 18px;
+	padding: 10px 10px 10px 10px;
+	width: 300px;
+	white-space: pre-wrap;
+	z-index: 100;
+}
+
+.host-status-info:after, .host-status-info:before {
+	bottom: 100%;
+	left: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.host-status-info:after {
+	border-color: rgba(82, 82, 82, 0);
+	border-bottom-color: #525252;
+	border-width: 30px;
+	margin-left: -30px;
+}
+
+.host-status-info:before {
+	border-color: rgba(0, 203, 160, 0);
+	border-bottom-color: #00CBA0;
+	border-width: 30px;
+	margin-left: -30px;
+}
+
