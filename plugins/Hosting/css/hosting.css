@@ -368,6 +368,10 @@
 	padding-bottom: 20px;
 }
 
+.host-status {
+	position: relative;
+}
+
 .host-status i {
 	margin-right: 5px;
 }
@@ -389,7 +393,7 @@
 }
 
 .host-status:hover .host-status-info {
-	display: block !important;
+	display: inline-block !important;
 }
 
 .host-status:hover {
@@ -398,15 +402,16 @@
 
 .host-status-info {
 	display: none !important;
-	position: fixed;
-	right: 315px;
-	top: 70px;
+	position: absolute;
+	right: -100px;
+	top: 45px;
 	background: #525252;
 	border: 1px solid #00CBA0;
 	font-size: 18px;
 	padding: 10px 10px 10px 10px;
 	width: 300px;
 	white-space: pre-wrap;
+	z-index: 100;
 }
 
 .host-status-info:after, .host-status-info:before {
