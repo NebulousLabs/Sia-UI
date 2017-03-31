@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import { shell } from 'electron'
 
 const containerStyle = {
 	display: 'flex',
@@ -10,14 +11,36 @@ const containerStyle = {
 	height: '100%',
 }
 
-const DisabledPlugin = ({startSiad}) => (
+const errorLogStyle = {
+	height: '300px',
+	width: '80%',
+	overflow: 'auto',
+	marginBottom: '15px',
+}
+
+const reportStyle = {
+	color: 'blue',
+	cursor: 'pointer',
+}
+
+const handleReport = () => {
+	shell.openExternal('https://github.com/NebulousLabs/Sia/issues')
+}
+
+
+const DisabledPlugin = ({errorMsg, startSiad}) => (
 	<div style={containerStyle}>
-		<h1>Siad has stopped.</h1>
+		<h2>Siad has exited unexpectedly. Please submit a bug report including the error log <a style={reportStyle} onClick={handleReport}>here.</a></h2>
+		<h2> Error Log: </h2>
+		<textarea style={errorLogStyle} readOnly>
+			{errorMsg}
+		</textarea>
 		<button onClick={startSiad}>Start Siad</button>
 	</div>
 )
 
 DisabledPlugin.propTypes = {
+	errorMsg: PropTypes.string.isRequired,
 	startSiad: PropTypes.func.isRequired,
 }
 

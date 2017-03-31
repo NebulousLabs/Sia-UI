@@ -4,10 +4,13 @@ import * as Siad from 'sia.js'
 import { remote } from 'electron'
 import React from 'react'
 import DisabledPlugin from './disabledplugin.js'
+import Path from 'path'
+
 const dialog = remote.dialog
 const mainWindow = remote.getCurrentWindow()
 const config = remote.getGlobal('config')
 const siadConfig = config.siad
+const fs = remote.require('fs')
 let disabled = false
 
 const sleep = (ms = 0) => new Promise((r) => setTimeout(r, ms))
@@ -22,9 +25,13 @@ window.onload = async function() {
 	/* eslint-enable global-require */
 
 	const startSiad = () => {
-		Siad.launch(siadConfig.path, {
+		const siadProcess = Siad.launch(siadConfig.path, {
 			'sia-directory': siadConfig.datadir,
+			'rpc-addr': siadConfig.rpcaddr,
+			'host-addr': siadConfig.hostaddr,
+			'api-addr': siadConfig.address,
 		})
+		window.siadProcess = siadProcess
 	}
 	// Continuously check (every 2000ms) if siad is running.
 	// If siad is not running, disable the plugin by mounting
@@ -39,7 +46,16 @@ window.onload = async function() {
 		}
 		if (!running && !disabled) {
 			disabled = true
-			ReactDOM.render(<DisabledPlugin startSiad={startSiad} />, document.body)
+
+			// load the error log and display it in the disabled plugin
+			let errorMsg = 'Siad exited unexpectedly for an unknown reason.'
+			try {
+				errorMsg = fs.readFileSync(Path.join(siadConfig.datadir, 'siad-output.log'), {'encoding': 'utf-8'})
+			} catch (e) {
+				console.error('error reading error log: ' +  e.toString())
+			}
+
+			ReactDOM.render(<DisabledPlugin errorMsg={errorMsg} startSiad={startSiad} />, document.body)
 		}
 		await sleep(2000)
 	}
