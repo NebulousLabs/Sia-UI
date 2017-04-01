@@ -40,16 +40,18 @@ const StatusBar = ({synced, blockheight, peers}) => {
 	}
 
 	const syncProgressContainerStyle = {
+		display: 'inline-block',
 		backgroundColor: '#eee',
 		height: '20px',
 		width: '150px',
 	}
 
 	const syncProgressInfoStyle = {
-		width: '200px',
-		position: 'relative',
-		right: '30px',
+		display: 'inline-block',
+		position: 'absolute',
 		fontSize: '12px',
+		height: '25px',
+		marginTop: '5px',
 	}
 
 	let status
@@ -73,8 +75,10 @@ const StatusBar = ({synced, blockheight, peers}) => {
 
 	if (!synced) {
 		syncStatus = (
-			<div style={syncProgressContainerStyle}>
-				<div style={syncProgressStyle} />
+			<div>
+				<div style={syncProgressContainerStyle}>
+					<div style={syncProgressStyle} />
+				</div>
 				<div style={syncProgressInfoStyle}>
 					{blockheight} / {currentEstimatedHeight()} blocks
 				</div>
