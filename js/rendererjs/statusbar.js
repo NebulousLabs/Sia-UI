@@ -6,7 +6,7 @@ import React, { PropTypes } from 'react'
 const currentEstimatedHeight = () => {
 	const knownBlockHeight = 98149
 	const knownBlockTime = new Date('March 31, 2017 23:30:30 UTC')
-	const blockTime = 10 //minutes
+	const blockTime = 9 //minutes
 	const diffMinutes = Math.abs(new Date() - knownBlockTime) / 1000 / 60 / 60
 
 	const estimatedHeight = knownBlockHeight + (diffMinutes / blockTime)
@@ -80,7 +80,7 @@ const StatusBar = ({synced, blockheight, peers}) => {
 					<div style={syncProgressStyle} />
 				</div>
 				<div style={syncProgressInfoStyle}>
-					{blockheight} / {currentEstimatedHeight()} blocks
+					{Math.floor(estimatedProgress(blockheight))}%
 				</div>
 			</div>
 		)
