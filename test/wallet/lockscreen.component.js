@@ -4,7 +4,7 @@ import { shallow } from 'enzyme'
 import { expect } from 'chai'
 import LockScreen from '../../plugins/Wallet/js/components/lockscreen.js'
 import PasswordPrompt from '../../plugins/Wallet/js/containers/passwordprompt.js'
-import NewWalletButton from '../../plugins/Wallet/js/containers/newwalletbutton.js'
+import UninitializedWalletDialog from '../../plugins/Wallet/js/containers/uninitializedwalletdialog.js'
 
 const lockedEncryptedScreen = shallow(<LockScreen unlocked={false} encrypted unlocking={false} />)
 const lockedUnencryptedScreen = shallow(<LockScreen unlocked={false} encrypted={false} unlocking={false} />)
@@ -18,7 +18,7 @@ describe('wallet lock screen component', () => {
 		expect(lockedEncryptedScreen.contains(<PasswordPrompt />)).to.be.true
 	})
 	it('renders a new wallet button if the wallet is locked but not encrypted or unlocking', () => {
-		expect(lockedUnencryptedScreen.contains(<NewWalletButton />)).to.be.true
+		expect(lockedUnencryptedScreen.contains(<UninitializedWalletDialog />)).to.be.true
 	})
 })
 /* eslint-enable no-unused-expressions */

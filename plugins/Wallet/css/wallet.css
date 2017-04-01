@@ -203,6 +203,18 @@
 	padding-right: 100px;
 	z-index: 10;
 }
+.newwallet-seed, .newwallet-password {
+	font-size: 24px;
+}
+
+.newwallet-password {
+	background-color: #000;
+}
+
+.newwallet-password:hover {
+	background-color: initial;
+}
+
 .confirmation-dialog {
 	display: flex;
 	padding: 10px 10px 10px 10px;
@@ -221,18 +233,37 @@
 }
 .newwallet-dialog span {
 	display: block;
-	font-size: 12px;
 	color: #000000;
 }
-.new-wallet-button i {
+.create-wallet-button i {
 	color: #00CBA0;
 }
-.new-wallet-button i:hover {
+.create-wallet-button i:hover {
 	color: #00A785;
 }
-.new-wallet-button {
+.create-wallet-button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
+}
+.new-wallet-form {
+	display: flex;
+	width: 75%;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.new-wallet-form h3 {
+	text-align: center;
+}
+.new-wallet-form-buttons {
+	margin-top: 25px;
+}
+.new-wallet-form-buttons button {
+	margin-left: 3px;
+	margin-right: 3px;
+}
+.new-wallet-form input {
+	width: 50%;
 }

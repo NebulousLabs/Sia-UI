@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import ConfirmationDialog from '../containers/confirmationdialog.js'
+
 const NewWalletDialog = ({password, seed, showConfirmationDialog, actions}) => {
 	const handleDismissClick = () => actions.showConfirmationDialog()
 	return (

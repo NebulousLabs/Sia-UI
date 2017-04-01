@@ -15,6 +15,8 @@ const initialState = Map({
 	showSendPrompt: false,
 	showReceivePrompt: false,
 	showNewWalletDialog: false,
+	showNewWalletForm: false,
+	useCustomPassphrase: false,
 })
 
 export default function walletReducer(state = initialState, action) {
@@ -23,6 +25,10 @@ export default function walletReducer(state = initialState, action) {
 		return state.set('showNewWalletDialog', true)
 	case constants.DISMISS_NEW_WALLET_DIALOG:
 		return state.set('showNewWalletDialog', false)
+	case constants.SHOW_NEW_WALLET_FORM:
+		return state.set('showNewWalletForm', true)
+	case constants.HIDE_NEW_WALLET_FORM:
+		return state.set('showNewWalletForm', false)
 	case constants.SHOW_RECEIVE_PROMPT:
 		return state.set('showReceivePrompt', true)
 	case constants.HIDE_RECEIVE_PROMPT:
@@ -54,6 +60,8 @@ export default function walletReducer(state = initialState, action) {
 		return state.set('ntransactions', state.get('ntransactions') + action.increment)
 	case constants.SET_TRANSACTIONS:
 		return state.set('transactions', action.transactions)
+	case constants.SET_USE_CUSTOM_PASSPHRASE:
+		return state.set('useCustomPassphrase', action.useCustomPassphrase)
 	default:
 		return state
 	}

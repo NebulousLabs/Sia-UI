@@ -27,8 +27,9 @@ export const unlockWallet = (password) => ({
 	type: constants.UNLOCK_WALLET,
 	password,
 })
-export const createNewWallet = () => ({
+export const createNewWallet = (password) => ({
 	type: constants.CREATE_NEW_WALLET,
+	password,
 })
 export const getBalance = () => ({
 	type: constants.GET_BALANCE,
@@ -106,4 +107,14 @@ export const getSyncState = () => ({
 export const setSyncState = (synced) => ({
 	type: constants.SET_SYNCSTATE,
 	synced,
+})
+export const showNewWalletForm = () => ({
+	type: constants.SHOW_NEW_WALLET_FORM,
+})
+export const hideNewWalletForm = () => ({
+	type: constants.HIDE_NEW_WALLET_FORM,
+})
+export const setUseCustomPassphrase = (useCustomPassphrase) => ({
+	type: constants.SET_USE_CUSTOM_PASSPHRASE,
+	useCustomPassphrase,
 })
