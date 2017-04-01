@@ -206,6 +206,15 @@
 .newwallet-seed, .newwallet-password {
 	font-size: 24px;
 }
+
+.newwallet-password {
+	background-color: #000;
+}
+
+.newwallet-password:hover {
+	background-color: initial;
+}
+
 .confirmation-dialog {
 	display: flex;
 	padding: 10px 10px 10px 10px;
