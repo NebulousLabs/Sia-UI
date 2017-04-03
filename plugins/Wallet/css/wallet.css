@@ -269,6 +269,16 @@
 	width: 50%;
 }
 
+.recovery-status {
+	width: 50%;
+	height: 50%;
+	background-color: #eee;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
 .recovery-form {
 	display: flex;
 	align-items: center;
