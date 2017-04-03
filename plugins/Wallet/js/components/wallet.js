@@ -6,8 +6,10 @@ import ReceiveButton from '../containers/receivebutton.js'
 import ReceivePrompt from '../containers/receiveprompt.js'
 import NewWalletDialog from '../containers/newwalletdialog.js'
 import LockButton from '../containers/lockbutton.js'
+import RecoverButton from '../containers/recoverbutton.js'
+import RecoveryDialog from '../containers/recoverydialog.js'
 
-const Wallet = ({synced, confirmedbalance, unconfirmedbalance, siafundbalance, showReceivePrompt, showSendPrompt, showNewWalletDialog, actions }) => {
+const Wallet = ({synced, confirmedbalance, unconfirmedbalance, siafundbalance, showReceivePrompt, showSendPrompt, showNewWalletDialog, showRecoveryDialog, actions }) => {
 	const onSendClick = (currencytype) => () => actions.startSendPrompt(currencytype)
 	return (
 		<div className="wallet">
@@ -22,6 +24,7 @@ const Wallet = ({synced, confirmedbalance, unconfirmedbalance, siafundbalance, s
 					}
 				</div>
 				<LockButton />
+				<RecoverButton />
 				{siafundbalance !== '0' ? <SendButton currencytype="Siafund" onClick={onSendClick('siafunds')} />: null}
 				<SendButton currencytype="Siacoin" onClick={onSendClick('siacoins')} />
 				<ReceiveButton />
@@ -29,6 +32,7 @@ const Wallet = ({synced, confirmedbalance, unconfirmedbalance, siafundbalance, s
 			{showNewWalletDialog ? <NewWalletDialog /> : null}
 			{showSendPrompt ? <SendPrompt /> : null}
 			{showReceivePrompt ? <ReceivePrompt /> : null}
+			{showRecoveryDialog ? <RecoveryDialog /> : null}
 			<TransactionList />
 		</div>
 	)
