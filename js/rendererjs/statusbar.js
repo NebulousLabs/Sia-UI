@@ -15,9 +15,9 @@ const currentEstimatedHeight = () => {
 }
 
 // estimatedProgress returns the estimated sync progress given the current
-// blockheight, as a number from 0 -> 100
+// blockheight, as a number from 0 -> 99
 const estimatedProgress = (currentHeight) =>
-	currentHeight / currentEstimatedHeight() * 100
+	Math.min(currentHeight / currentEstimatedHeight() * 100, 99)
 
 // -- components --
 
