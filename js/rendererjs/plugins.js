@@ -57,6 +57,7 @@ export const setCurrentPlugin = (pluginName) => {
 	if (viewElem !== null) {
 		viewElem.classList.add('current')
 	}
+	viewElem.focus()
 
 	const buttonElem = document.getElementById(pluginName + '-button')
 	if (buttonElem !== null) {

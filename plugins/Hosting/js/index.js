@@ -31,6 +31,11 @@ setInterval(() => {
 	store.dispatch(actions.fetchData())
 }, 5000)
 
+// update state immediately when this plugin is focused
+window.onfocus = () => {
+	store.dispatch(actions.fetchData())
+}
+
 // slightly longer poll for checking host connectability
 setInterval(() => {
 	store.dispatch(actions.getHostConnectabilityStatus())

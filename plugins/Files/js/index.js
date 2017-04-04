@@ -22,14 +22,7 @@ const rootElement = (
 )
 ReactDOM.render(rootElement, document.getElementById('react-root'))
 
-store.dispatch(getWalletLockstate())
-store.dispatch(getFiles())
-store.dispatch(getUploads())
-store.dispatch(getContractCount())
-store.dispatch(getWalletSyncstate())
-store.dispatch(getAllowance())
-
-setInterval(() => {
+const updateState = () => {
 	store.dispatch(getDownloads())
 	store.dispatch(getUploads())
 	store.dispatch(getWalletLockstate())
@@ -37,5 +30,14 @@ setInterval(() => {
 	store.dispatch(getWalletSyncstate())
 	store.dispatch(getContractCount())
 	store.dispatch(getAllowance())
-}, 3000)
+}
+
+// get initial state
+updateState()
+
+// update state every 3s
+setInterval(updateState, 3000)
+
+// update state when plugin is focused
+window.onfocus = updateState
 
