@@ -15,21 +15,23 @@ export const initWallet = () => {
 		applyMiddleware(sagaMiddleware)
 	)
 	sagaMiddleware.run(rootSaga)
-	// Get initial UI state
-	store.dispatch(getLockStatus())
-	store.dispatch(getBalance())
-	store.dispatch(getTransactions())
-	store.dispatch(getSyncState())
 
-	// Poll Siad for state changes.
-	setInterval(() => {
+	// Get initial UI state
+	const updateState = () => {
 		store.dispatch(getLockStatus())
 		if (store.getState().wallet.get('unlocked')) {
 			store.dispatch(getBalance())
 			store.dispatch(getTransactions())
 			store.dispatch(getSyncState())
 		}
-	}, 5000)
+	}
+
+	// Poll Siad for state changes
+	setInterval(updateState, 5000)
+
+	// update state when plugin is opened
+	window.onfocus = updateState
+
 	return (
 		<Provider store={store}>
 			<WalletApp />
