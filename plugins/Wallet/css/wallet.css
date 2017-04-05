@@ -287,6 +287,9 @@
 	width: 50%;
 	height: 300px;
 	background-color: #eee;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
 }
 .recovery-form-buttons {
 	margin-top: 15px;
