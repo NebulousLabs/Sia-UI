@@ -27,15 +27,26 @@ export const readLog = (logpath, nbytes) => {
 	return cleanLog(buf.toString())
 }
 
+// matchingLogs takes an array of filename filters and returns an array of logs
+// matching the filters.
+const matchingLogs = (namefilters, datadir) =>
+	readdirRecursive(datadir)
+		.filter((file) => namefilters.reduce((matches, filtername) => matches || file.includes(filtername), false))
+
 // parseLogs takes a sia directory and an array of log name filters to match,
 // and returns a concatenated, sorted log string composed of every log that
 // matched inside the sia directory.
-export const parseLogs = (datadir, nbytes, namefilters = ['.log']) =>
-	readdirRecursive(datadir)
-		.filter((file) => namefilters.reduce((matches, filtername) => matches || file.includes(filtername), false))
-		.map((log) => readLog(log, nbytes))
-		.join('')
-		.split('\n').sort().join('\n')
+export const parseLogs = (datadir, nbytes, namefilters = ['.log']) => {
+	const logFiles = matchingLogs(namefilters, datadir)
+	const unsortedLogLines = logFiles.map((log) => readLog(log, nbytes))
+
+	// only sort lines if more than one logfile is matched
+	if (logFiles.size > 1) {
+		return unsortedLogLines.join('').split('\n').sort().join('\n')
+	}
+
+	return unsortedLogLines.join('')
+}
 
 // updateLogFilters updates the log plugin's state using the set of filters
 // passed in to `filters`.
