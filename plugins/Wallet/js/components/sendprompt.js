@@ -17,8 +17,8 @@ const SendPrompt = ({currencytype, sendAddress, sendAmount, actions}) => {
 					<input onChange={handleSendAddressChange} value={sendAddress} />
 				</div>
 				<div className="send-prompt-buttons">
-					<button className="cancel-send-button" onClick={handleCancelClick}>Cancel</button>
 					<button className="send-siacoin-button" onClick={handleSendClick}>Send</button>
+					<button className="cancel-send-button" onClick={handleCancelClick}>Cancel</button>
 				</div>
 			</div>
 		</div>
