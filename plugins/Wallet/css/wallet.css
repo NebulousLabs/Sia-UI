@@ -125,6 +125,27 @@
 	font-size: 15px;
 	margin-bottom: 3px;
 }
+
+@keyframes modal-fadein {
+	from {opacity: 0}
+	to {opacity: 1}
+}
+
+@keyframes modal-popin {
+	0% {
+		width: 0%;
+		height: 0%;
+	}
+	60% {
+		width: 55%;
+		height: 55%;
+	}
+	100% {
+		width: 50%;
+		height: 50%;
+	}
+}
+
 .modal {
 	position: absolute;
 	top: 0;
@@ -135,7 +156,20 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
+	animation-name: modal-fadein;
+	animation-duration: 0.2s;
 }
+
+.modal > * {
+	animation-name: modal-popin;
+	animation-duration: 0.3s;
+
+	border-radius: 5px;
+	width: 50%;
+	height: 50%;
+}
+
 .sendprompt {
 	display: flex;
 	flex-direction: column;
@@ -284,8 +318,6 @@
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
-	width: 50%;
-	height: 300px;
 	background-color: #eee;
 	padding-left: 10px;
 	padding-right: 10px;
