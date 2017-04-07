@@ -82,6 +82,7 @@ function *createWalletSaga(action) {
 			response = yield siadCall({
 				url: '/wallet/init/seed',
 				method: 'POST',
+				timeout: 1.7e8, // two days
 				qs: {
 					dictionary: 'english',
 					encryptionpassword: action.password,
