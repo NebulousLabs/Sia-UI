@@ -69,6 +69,13 @@ function *addFolder(action) {
 	}
 }
 
+// bytesToStorageGB converts a number of bytes to a valid size of storage, in
+// GB rounded to the nearest 256MiB, as a BigNumber.
+const bytesToStorageGB = (bytes) => {
+	const roundedBytes = Math.max(bytes - (bytes % 2.684e8), 0)
+	return new BigNumber(roundedBytes).times(new BigNumber('1e9'))
+}
+
 function *addFolderAskPathSize() {
 	const newLocation = helper.chooseFileLocation()
 	if (newLocation) {
@@ -78,7 +85,7 @@ function *addFolderAskPathSize() {
 			if (closeAction.folder.get('size')) {
 				yield put( actions.addFolder(Map({
 					path: newLocation,
-					size: (new BigNumber(closeAction.folder.get('size'))).times(new BigNumber('1e9')).toString(),
+					size: bytesToStorageGB(closeAction.folder.get('size')).toString(),
 				})) )
 			}
 		} catch (e) {
