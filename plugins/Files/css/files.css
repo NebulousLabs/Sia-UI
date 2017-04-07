@@ -470,8 +470,7 @@ div[tabindex="1"]:focus {
 	align-items: center;
 	justify-content: space-around;
 	background-color: #ECECEC;
-	width: 80%;
-	min-width: 650px;
+	width: 50%;
 	height: 400px;
 	z-index: 10;
 }
