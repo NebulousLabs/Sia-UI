@@ -17,6 +17,7 @@ const initialState = Map({
 	showReceivePrompt: false,
 	showNewWalletDialog: false,
 	showNewWalletForm: false,
+	showInitSeedForm: false,
 	useCustomPassphrase: false,
 	showRecoveryDialog: false,
 })
@@ -72,6 +73,10 @@ export default function walletReducer(state = initialState, action) {
 		return state.set('showRecoveryDialog', true)
 	case constants.HIDE_SEED_RECOVERY_DIALOG:
 		return state.set('showRecoveryDialog', false)
+	case constants.SHOW_INIT_SEED_FORM:
+		return state.set('showInitSeedForm', true)
+	case constants.HIDE_INIT_SEED_FORM:
+		return state.set('showInitSeedForm', false)
 	default:
 		return state
 	}

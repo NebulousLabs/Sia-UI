@@ -75,19 +75,33 @@ function *walletLockSaga() {
 // Call /wallet/init to create a new wallet, show the user the newWalletDialog,
 // Wait for the user to close the dialog, then unlock the wallet using the primary seed.
 function *createWalletSaga(action) {
+	const initSeed = typeof action.seed !== 'undefined'
 	try {
-		const response = yield siadCall({
-			url: '/wallet/init',
-			method: 'POST',
-			qs: {
-				dictionary: 'english',
-				encryptionpassword: action.password,
-			},
-		})
-
-		if (typeof action.password === 'undefined' || action.password === '') {
-			yield put(actions.showNewWalletDialog(response.primaryseed, response.primaryseed))
+		let response
+		if (initSeed) {
+			response = yield siadCall({
+				url: '/wallet/init/seed',
+				method: 'POST',
+				qs: {
+					dictionary: 'english',
+					encryptionpassword: action.password,
+					seed: action.seed,
+				},
+			})
 		} else {
+			response = yield siadCall({
+				url: '/wallet/init',
+				method: 'POST',
+				qs: {
+					dictionary: 'english',
+					encryptionpassword: action.password,
+				},
+			})
+		}
+
+		if (!initSeed && typeof action.password === 'undefined' || action.password === '') {
+			yield put(actions.showNewWalletDialog(response.primaryseed, response.primaryseed))
+		} else if (!initSeed) {
 			yield put(actions.showNewWalletDialog(action.password, response.primaryseed))
 		}
 
@@ -224,3 +238,4 @@ export function* watchSendCurrency() {
 export function* watchGetSyncState() {
 	yield *takeEvery(constants.GET_SYNCSTATE, getSyncStateSaga)
 }
+
