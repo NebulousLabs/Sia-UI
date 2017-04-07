@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import NewWalletForm from '../containers/newwalletform.js'
 import InitSeedForm from './initseedform.js'
 
-const UninitializedWalletDialog = ({useCustomPassphrase, showInitSeedForm, showNewWalletForm, actions}) => {
+const UninitializedWalletDialog = ({initializingSeed, useCustomPassphrase, showInitSeedForm, showNewWalletForm, actions}) => {
 	if (showNewWalletForm && useCustomPassphrase) {
 		return (
 			<NewWalletForm />
@@ -11,6 +11,7 @@ const UninitializedWalletDialog = ({useCustomPassphrase, showInitSeedForm, showN
 	if (showInitSeedForm) {
 		return (
 			<InitSeedForm
+				initializingSeed={initializingSeed}
 				useCustomPassphrase={useCustomPassphrase}
 				hideInitSeedForm={actions.hideInitSeedForm}
 				createNewWallet={actions.createNewWallet}

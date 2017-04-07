@@ -79,6 +79,7 @@ function *createWalletSaga(action) {
 	try {
 		let response
 		if (initSeed) {
+			yield put(actions.initSeedStarted())
 			response = yield siadCall({
 				url: '/wallet/init/seed',
 				method: 'POST',
@@ -89,6 +90,7 @@ function *createWalletSaga(action) {
 					seed: action.seed,
 				},
 			})
+			yield put(actions.initSeedFinished())
 		} else {
 			response = yield siadCall({
 				url: '/wallet/init',

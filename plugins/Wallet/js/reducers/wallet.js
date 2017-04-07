@@ -20,6 +20,7 @@ const initialState = Map({
 	showInitSeedForm: false,
 	useCustomPassphrase: false,
 	showRecoveryDialog: false,
+	initializingSeed: false,
 })
 
 export default function walletReducer(state = initialState, action) {
@@ -77,6 +78,10 @@ export default function walletReducer(state = initialState, action) {
 		return state.set('showInitSeedForm', true)
 	case constants.HIDE_INIT_SEED_FORM:
 		return state.set('showInitSeedForm', false)
+	case constants.SEED_INIT_STARTED:
+		return state.set('initializingSeed', true)
+	case constants.SEED_INIT_FINISHED:
+		return state.set('initializingSeed', false)
 	default:
 		return state
 	}

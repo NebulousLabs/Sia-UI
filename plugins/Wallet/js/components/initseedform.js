@@ -1,6 +1,14 @@
 import React from 'react'
 
-const InitSeedForm = ({ useCustomPassphrase, hideInitSeedForm, createNewWallet }) => {
+const InitSeedForm = ({ initializingSeed, useCustomPassphrase, hideInitSeedForm, createNewWallet }) => {
+	if (initializingSeed) {
+		return (
+			<div className="new-wallet-form">
+				<h3> Initializing seed... </h3>
+				<i className="fa fa-circle-o-notch fa-spin fa-4x" />
+			</div>
+		)
+	}
 	const handleInitSeedClick = (e) => {
 		e.preventDefault()
 		if (useCustomPassphrase) {

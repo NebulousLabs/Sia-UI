@@ -141,4 +141,10 @@ export const showInitSeedForm = () => ({
 export const hideInitSeedForm = () => ({
 	type: constants.HIDE_INIT_SEED_FORM,
 })
+export const initSeedStarted = () => ({
+	type: constants.SEED_INIT_STARTED,
+})
+export const initSeedFinished = () => ({
+	type: constants.SEED_INIT_FINISHED,
+})
 
