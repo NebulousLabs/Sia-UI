@@ -8,7 +8,7 @@ const ConfirmationDialog = ({allowance, onConfirmClick, onCancelClick}) => {
 		'alignItems': 'center',
 		'justifyContent': 'space-around',
 		'backgroundColor': '#ececec',
-		'width': '80%',
+		'width': '50%',
 		'height': '400px',
 	}
 	const buttonStyle = {
