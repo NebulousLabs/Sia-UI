@@ -484,15 +484,8 @@ div[tabindex="1"]:focus {
 }
 
 @keyframes allowance-dialog-popin {
-	0% {
-		width: 60%;
-	}
-	60% {
-		width: 85%;
-	}
-	100% {
-		width: 80%;
-	}
+	from { transform: scale(0.2) }
+	to { transform: scale(1) }
 }
 
 .allowance-dialog {
@@ -507,7 +500,7 @@ div[tabindex="1"]:focus {
 	z-index: 10;
 
 	animation-name: allowance-dialog-popin;
-	animation-duration: 0.3s;
+	animation-duration: 0.2s;
 
 	border-radius: 4px;
 }
