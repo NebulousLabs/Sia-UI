@@ -17,7 +17,7 @@ const InitSeedForm = ({ useCustomPassphrase, hideInitSeedForm, createNewWallet }
 		<form className="new-wallet-form" onSubmit={handleInitSeedClick}>
 			<h3> Enter a seed to initialize your wallet from. </h3>
 			<input type="text" name="seed" placeholder="Seed" autoFocus />
-			{useCustomPassphrase ? <input type="password" placeholder="Password" name="password" /> : null}
+			{useCustomPassphrase ? <input type="password" placeholder="Desired password" name="password" /> : null}
 			<div className="new-wallet-form-buttons">
 				<button type="submit">Confirm</button>
 				<button onClick={handleCancelClick}>Cancel</button>
