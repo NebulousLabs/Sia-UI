@@ -57,6 +57,7 @@ function *addFolder(action) {
 		yield siadCall({
 			url: '/host/storage/folders/add',
 			method: 'POST',
+			timeout: 1.7e8, // two day timeout for adding storage folders
 			qs: {
 				path: action.folder.get('path'),
 				size: action.folder.get('size'), //Is given in GB.
