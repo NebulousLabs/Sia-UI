@@ -24,13 +24,31 @@ window.onload = async function() {
 	const ReactDOM = require('react-dom')
 	/* eslint-enable global-require */
 
-	const startSiad = () => {
+	let startSiad = () => {}
+
+	const renderSiadCrashlog = () => {
+		// load the error log and display it in the disabled plugin
+		let errorMsg = 'Siad exited unexpectedly for an unknown reason.'
+		try {
+			errorMsg = fs.readFileSync(Path.join(siadConfig.datadir, 'siad-output.log'), {'encoding': 'utf-8'})
+		} catch (e) {
+			console.error('error reading error log: ' +  e.toString())
+		}
+
+		document.body.innerHTML = '<div style="width:100%;height:100%;" id="crashdiv"></div>'
+		ReactDOM.render(<DisabledPlugin errorMsg={errorMsg} startSiad={startSiad} />, document.getElementById('crashdiv'))
+	}
+
+	startSiad = () => {
 		const siadProcess = Siad.launch(siadConfig.path, {
 			'sia-directory': siadConfig.datadir,
 			'rpc-addr': siadConfig.rpcaddr,
 			'host-addr': siadConfig.hostaddr,
 			'api-addr': siadConfig.address,
 		})
+		siadProcess.on('error', renderSiadCrashlog)
+		siadProcess.on('close', renderSiadCrashlog)
+		siadProcess.on('exit', renderSiadCrashlog)
 		window.siadProcess = siadProcess
 	}
 	// Continuously check (every 2000ms) if siad is running.
@@ -46,16 +64,7 @@ window.onload = async function() {
 		}
 		if (!running && !disabled) {
 			disabled = true
-
-			// load the error log and display it in the disabled plugin
-			let errorMsg = 'Siad exited unexpectedly for an unknown reason.'
-			try {
-				errorMsg = fs.readFileSync(Path.join(siadConfig.datadir, 'siad-output.log'), {'encoding': 'utf-8'})
-			} catch (e) {
-				console.error('error reading error log: ' +  e.toString())
-			}
-
-			ReactDOM.render(<DisabledPlugin errorMsg={errorMsg} startSiad={startSiad} />, document.body)
+			renderSiadCrashlog()
 		}
 		await sleep(2000)
 	}
