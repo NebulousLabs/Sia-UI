@@ -77,6 +77,12 @@ div[tabindex="1"]:focus {
 	margin-left: 10px;
 	margin-right: 10px;
 }
+
+@keyframes transfers-slidein {
+	from {width: 0}
+	to {width: 400px}
+}
+
 .file-transfers {
 	width: 400px;
 	height: 100%;
@@ -88,7 +94,11 @@ div[tabindex="1"]:focus {
 	align-items: center;
 	justify-content: flex-start;
 	background-color: #C5C5C5;
+
+	animation-name: transfers-slidein;
+	animation-duration: 0.3s;
 }
+
 .transfer-list {
 	width: 100%;
 	margin: 0;
@@ -144,6 +154,12 @@ div[tabindex="1"]:focus {
 .uploads h3, .downloads h3 {
 	margin-left: 25px;
 }
+
+@keyframes modal-fadein {
+	from {opacity: 0}
+	to {opacity: 1}
+}
+
 .modal {
 	position: absolute;
 	z-index: 1;
@@ -155,6 +171,9 @@ div[tabindex="1"]:focus {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
+	animation-name: modal-fadein;
+	animation-duration: 0.3s;
 }
 
 .files-toolbar h3 {
@@ -463,6 +482,12 @@ div[tabindex="1"]:focus {
 .allowance-input {
 	padding-right: 80px;
 }
+
+@keyframes allowance-dialog-popin {
+	from { transform: scale(0.2) }
+	to { transform: scale(1) }
+}
+
 .allowance-dialog {
 	padding: 40px 40px 40px 40px;
 	display: flex;
@@ -473,7 +498,13 @@ div[tabindex="1"]:focus {
 	width: 50%;
 	height: 400px;
 	z-index: 10;
+
+	animation-name: allowance-dialog-popin;
+	animation-duration: 0.2s;
+
+	border-radius: 4px;
 }
+
 .allowance-input span {
 	display: inline-block;
 }
