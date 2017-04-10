@@ -103,6 +103,7 @@ function *removeFolder(action) {
 	try {
 		yield siadCall({
 			url: '/host/storage/folders/remove',
+			timeout: 1.7e8, // two day timeout for removing storage folders
 			method: 'POST',
 			qs: {
 				path: action.folder.get('path'),
@@ -122,6 +123,7 @@ function *resizeFolder(action) {
 		if (closeAction.folder.get('size')) { //If size is zero just hide the dialog.
 			yield siadCall({
 				url: '/host/storage/folders/resize',
+				timeout: 1.7e8, // two day timeout for resizing storage folders
 				method: 'POST',
 				qs: {
 					path: closeAction.folder.get('path'),
