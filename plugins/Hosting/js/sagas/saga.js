@@ -52,6 +52,17 @@ function *announceHost(action) {
 	}
 }
 
+// bytesToStorage converts a BigNumber of GB to a valid size of storage, in
+// bytes, rounded to the nearest 256MiB (64 * SectorSize).
+const bytesToStorageBytes = (bytes) => {
+	const roundedBytes = bytes.minus(bytes.modulo(2.6843546e8))
+	if (roundedBytes.isNegative()) {
+		return '0'
+	}
+
+	return roundedBytes.toString()
+}
+
 function *addFolder(action) {
 	try {
 		yield siadCall({
@@ -60,7 +71,7 @@ function *addFolder(action) {
 			timeout: 1.7e8, // two day timeout for adding storage folders
 			qs: {
 				path: action.folder.get('path'),
-				size: action.folder.get('size'), //Is given in GB.
+				size: action.folder.get('size'), // bytes
 			},
 		})
 		yield put( actions.fetchData() )
@@ -75,10 +86,11 @@ function *addFolderAskPathSize() {
 		try {
 			yield put( actions.showResizeDialog(Map({ path: newLocation, size: 50 }), true) )
 			const closeAction = yield take( constants.HIDE_RESIZE_DIALOG )
+			const bytes = new BigNumber(closeAction.folder.get('size')).times(1e9)
 			if (closeAction.folder.get('size')) {
 				yield put( actions.addFolder(Map({
 					path: newLocation,
-					size: (new BigNumber(closeAction.folder.get('size'))).times(new BigNumber('1e9')).toString(),
+					size: bytesToStorageBytes(bytes),
 				})) )
 			}
 		} catch (e) {
@@ -106,13 +118,14 @@ function *resizeFolder(action) {
 	try {
 		yield put( actions.showResizeDialog(action.folder, action.ignoreInitial) )
 		const closeAction = yield take( constants.HIDE_RESIZE_DIALOG )
+		const bytes = new BigNumber(closeAction.folder.get('size')).times(1e9)
 		if (closeAction.folder.get('size')) { //If size is zero just hide the dialog.
 			yield siadCall({
 				url: '/host/storage/folders/resize',
 				method: 'POST',
 				qs: {
 					path: closeAction.folder.get('path'),
-					newsize: (new BigNumber(closeAction.folder.get('size'))).times('1e9').toString(),
+					newsize: bytesToStorageBytes(bytes),
 				},
 			})
 			yield put( actions.fetchData() )
@@ -313,3 +326,4 @@ export default function *initSaga() {
 		fork(hostNSettingsListener),
 	]
 }
+
