@@ -60,7 +60,7 @@ function *addFolder(action) {
 			timeout: 1.7e8, // two day timeout for adding storage folders
 			qs: {
 				path: action.folder.get('path'),
-				size: action.folder.get('size'), //Is given in GB.
+				size: action.folder.get('size'), // bytes
 			},
 		})
 		yield put( actions.fetchData() )
