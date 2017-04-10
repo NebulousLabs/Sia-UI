@@ -14,7 +14,10 @@ const FilesList = ({ folders, folderPathToRemove, actions }) => {
 	const onRemoveStorageLocationClick = (folder) => () => actions.updateFolderToRemove(folder.get('path'))
 	const hideRemoveStorageModal = () => actions.updateFolderToRemove()
 
-	const FileList = folders.map((folder, key) => (
+	// sort folders by their size
+	const sortedFolders = folders.sortBy((folder) => -folder.get('size'))
+
+	const FileList = sortedFolders.map((folder, key) => (
 		<div className="property pure-g" key={key}>
 			<div className="pure-u-3-4">
 				<div className="name">{folder.get('path')}</div>
