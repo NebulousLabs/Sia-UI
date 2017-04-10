@@ -146,7 +146,7 @@ function *recoverSeedSaga(action) {
 			},
 		})
 		yield put(actions.seedRecoveryFinished())
-		yield new Promise((resolve) => setInterval(resolve, 1000))
+		yield new Promise((resolve) => setTimeout(resolve, 1000))
 		yield put(actions.hideSeedRecoveryDialog())
 	} catch (e) {
 		yield put(actions.seedRecoveryFinished())
