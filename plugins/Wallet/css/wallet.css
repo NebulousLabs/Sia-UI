@@ -278,6 +278,9 @@
 	align-items: center;
 	justify-content: center;
 }
+.new-wallet-form p {
+	margin-bottom: 30px;
+}
 .new-wallet-form h3 {
 	text-align: center;
 }
