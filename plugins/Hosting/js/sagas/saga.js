@@ -248,7 +248,7 @@ function *hostConnectabilityStatusSaga() {
 		yield put(actions.setHostConnectabilityStatus(isConnectable))
 	} catch (e) {
 		console.error('error fetching host connectability status: ' + e.toString())
-		yield put(actions.setConnectabilityHostStatus(false))
+		yield put(actions.setHostConnectabilityStatus(false))
 	}
 }
 
