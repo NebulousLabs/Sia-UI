@@ -27,9 +27,10 @@ export const unlockWallet = (password) => ({
 	type: constants.UNLOCK_WALLET,
 	password,
 })
-export const createNewWallet = (password) => ({
+export const createNewWallet = (password, seed) => ({
 	type: constants.CREATE_NEW_WALLET,
 	password,
+	seed,
 })
 export const getBalance = () => ({
 	type: constants.GET_BALANCE,
@@ -133,5 +134,17 @@ export const seedRecoveryStarted = () => ({
 })
 export const seedRecoveryFinished = () => ({
 	type: constants.SEED_RECOVERY_FINISHED,
+})
+export const showInitSeedForm = () => ({
+	type: constants.SHOW_INIT_SEED_FORM,
+})
+export const hideInitSeedForm = () => ({
+	type: constants.HIDE_INIT_SEED_FORM,
+})
+export const initSeedStarted = () => ({
+	type: constants.SEED_INIT_STARTED,
+})
+export const initSeedFinished = () => ({
+	type: constants.SEED_INIT_FINISHED,
 })
 
