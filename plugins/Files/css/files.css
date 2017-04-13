@@ -496,6 +496,7 @@ div[tabindex="1"]:focus {
 	justify-content: space-around;
 	background-color: #ECECEC;
 	width: 50%;
+	min-width: 700px;
 	height: 400px;
 	z-index: 10;
 
