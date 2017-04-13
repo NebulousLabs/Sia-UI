@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 
-const HostStatus = ({hasCheckedConnectability, connectable, working}) => {
-	if (!hasCheckedConnectability) {
+const HostStatus = ({connectabilitystatus, workingstatus}) => {
+	if (connectabilitystatus === 'checking' && workingstatus === 'checking') {
 		return (
 			<div className="host-status">
 				<i className="fa fa-refresh inactive-icon" />
@@ -13,7 +13,7 @@ const HostStatus = ({hasCheckedConnectability, connectable, working}) => {
 		)
 	}
 
-	if (!connectable) {
+	if (connectabilitystatus === 'not connectable') {
 		return (
 			<div className="host-status">
 				<i className="fa fa-times offline-icon" />
@@ -25,7 +25,7 @@ const HostStatus = ({hasCheckedConnectability, connectable, working}) => {
 		)
 	}
 
-	if (connectable && !working) {
+	if (connectabilitystatus === 'connectable' && workingstatus === 'not working') {
 		return (
 			<div className="host-status">
 				<i className="fa fa-times inactive-icon" />
@@ -49,9 +49,8 @@ const HostStatus = ({hasCheckedConnectability, connectable, working}) => {
 }
 
 HostStatus.propTypes = {
-	connectable: PropTypes.bool.isRequired,
-	working: PropTypes.bool.isRequired,
-	hasCheckedConnectability: PropTypes.bool.isRequired,
+	connectabilitystatus: PropTypes.string.isRequired,
+	workingstatus: PropTypes.string.isRequired,
 }
 
 export default HostStatus

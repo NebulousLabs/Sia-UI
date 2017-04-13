@@ -24,25 +24,16 @@ sagaMiddleware.run(initSaga)
 
 store.dispatch(actions.requestDefaultSettings())
 store.dispatch(actions.fetchData())
-store.dispatch(actions.getHostNSettingsCalls())
 
 // Poll Siad for state changes.
 setInterval(() => {
 	store.dispatch(actions.fetchData())
+	store.dispatch(actions.getHostStatus())
 }, 5000)
 
 // update state immediately when this plugin is focused
 window.onfocus = () => {
 	store.dispatch(actions.fetchData())
+	store.dispatch(actions.getHostStatus())
 }
-
-// slightly longer poll for checking host connectability
-setInterval(() => {
-	store.dispatch(actions.getHostConnectabilityStatus())
-}, 6e4) // every 1 minute
-
-// longer poll for checking host working status
-setInterval(() => {
-	store.dispatch(actions.getHostWorkingStatus())
-}, 9e5) // every 15 minutes
 
