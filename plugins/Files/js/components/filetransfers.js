@@ -17,7 +17,7 @@ const FileTransfers = ({uploads, downloads, actions}) => {
 				<i className="fa fa-times fa-2x" />
 			</div>
 			{downloads.size === 0 && uploads.size === 0 ? (
-				<h3> No file transfers in progress. </h3>
+				<h3 style={{marginTop: '50px'}}> No file transfers in progress. </h3>
 				) : null
 			}
 			{downloads.size > 0 ? <DownloadList downloads={downloads} onClearClick={onDownloadsClearClick} onDownloadClick={onDownloadClick} /> : null}
