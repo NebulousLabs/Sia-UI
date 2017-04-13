@@ -1,12 +1,10 @@
 import { takeEvery } from 'redux-saga'
-import { put, take, fork, select } from 'redux-saga/effects'
+import { put, take, fork } from 'redux-saga/effects'
 import * as actions from '../actions/actions.js'
 import * as constants from '../constants/constants.js'
 import * as helper from '../utils/host.js'
 import { Map, List } from 'immutable'
 import BigNumber from 'bignumber.js'
-import net from 'net'
-import url from 'url'
 
 // siadCall: promisify Siad API calls.  Resolve the promise with `response` if the call was successful,
 // otherwise reject the promise with `err`.
@@ -222,60 +220,14 @@ function *requestDefaultSettingsSaga() {
 	}
 }
 
-// getHostConnectabilityStatus returns a promise that resolves with `true` if
-// the provided netaddress is connectable, or `false` if it is not connectable.
-// The input 'hostAddr' must be an address in the URL format, eg:
-// tcp://123.456.789.0:9982
-const getHostConnectabilityStatus = (hostAddr) => new Promise((resolve) => {
-	const hostUrl = url.parse(hostAddr)
-	const socket = net.connect(hostUrl.port, hostUrl.hostname)
-	socket.setTimeout(15e3) // 15 second host connectability timeout
-	socket.on('error', () => resolve(false))
-	socket.on('connect', () => {
-		socket.destroy()
-		resolve(true)
-	})
-})
-
-// hostWorkingStatusSaga compares the host's current `settingscalls` metric and
-// sets `working` to false if it has not increased.
-function *hostWorkingStatusSaga() {
+// hostStatusSaga pulls the host's connectability and working status from the
+// api and sets the UI's state accordingly.
+function *hostStatusSaga() {
 	try {
 		const hostData = yield siadCall('/host')
-		const nPreviousSettingsCalls = yield select((state) => state.hostingReducer.get('nSettingsCalls'))
-		if (nPreviousSettingsCalls >= hostData.networkmetrics.settingscalls - 3) {
-			yield put(actions.setHostWorkingStatus(false))
-		} else {
-			yield put(actions.setHostWorkingStatus(true))
-		}
-		yield put(actions.setHostNSettingsCalls(hostData.networkmetrics.settingscalls))
+		yield put(actions.setHostStatus(hostData.connectabilitystatus, hostData.workingstatus))
 	} catch (e) {
-		console.error('error fetching host working status: ' + e.toString())
-	}
-}
-
-// hostConnectabilityStatusSaga checks if the host is connectable at its
-// `netaddress` and sets `connectable` accordingly.
-function *hostConnectabilityStatusSaga() {
-	try {
-		const hostData = yield siadCall('/host')
-		const hostAddr = hostData.externalsettings.netaddress
-		const isConnectable = yield getHostConnectabilityStatus('tcp://' + hostAddr)
-		yield put(actions.setHostConnectabilityStatus(isConnectable))
-	} catch (e) {
-		console.error('error fetching host connectability status: ' + e.toString())
-		yield put(actions.setHostConnectabilityStatus(false))
-	}
-}
-
-// getHostNSettingsSaga updates nSettingsCalls to the host's current
-// `settingscalls`.
-function *getHostNSettingsSaga() {
-	try {
-		const hostData = yield siadCall('/host')
-		yield put(actions.setHostNSettingsCalls(hostData.networkmetrics.settingscalls))
-	} catch (e) {
-		console.error('error fetching the number of settings calls from the host: ' + e.toString())
+		console.error('error fetching host status: ' + e.toString())
 	}
 }
 
@@ -303,14 +255,8 @@ function *announceHostListener() {
 function *requestDefaultsListener() {
 	yield *takeEvery(constants.REQUEST_DEFAULT_SETTINGS, requestDefaultSettingsSaga)
 }
-function *hostConnectabilityStatusListener() {
-	yield *takeEvery(constants.GET_HOST_CONNECTABILITY_STATUS, hostConnectabilityStatusSaga)
-}
-function *hostWorkingStatusListener() {
-	yield *takeEvery(constants.GET_HOST_WORKING_STATUS, hostWorkingStatusSaga)
-}
-function *hostNSettingsListener() {
-	yield *takeEvery(constants.GET_HOST_NSETTINGSCALLS, getHostNSettingsSaga)
+function *hostStatusListener() {
+	yield *takeEvery(constants.GET_HOST_STATUS, hostStatusSaga)
 }
 
 export default function *initSaga() {
@@ -323,9 +269,7 @@ export default function *initSaga() {
 		fork(resizeFolderListener),
 		fork(announceHostListener),
 		fork(requestDefaultsListener),
-		fork(hostConnectabilityStatusListener),
-		fork(hostWorkingStatusListener),
-		fork(hostNSettingsListener),
+		fork(hostStatusListener),
 	]
 }
 
