@@ -52,8 +52,10 @@ function *announceHost(action) {
 
 // bytesToStorage converts a BigNumber of GB to a valid size of storage, in
 // bytes, rounded to the nearest 256MiB (64 * SectorSize).
-const bytesToStorageBytes = (bytes) => {
-	const roundedBytes = bytes.minus(bytes.modulo(2.6843546e8))
+const bytesToStorageBytes = async (bytes) => {
+	const settings = await siadCall('/host')
+
+	const roundedBytes = bytes.minus(bytes.modulo(64 * settings.externalsettings.sectorsize))
 	if (roundedBytes.isNegative()) {
 		return '0'
 	}
@@ -85,10 +87,11 @@ function *addFolderAskPathSize() {
 			yield put( actions.showResizeDialog(Map({ path: newLocation, size: 50 }), true) )
 			const closeAction = yield take( constants.HIDE_RESIZE_DIALOG )
 			const bytes = new BigNumber(closeAction.folder.get('size')).times(1e9)
+			const roundedBytes = yield bytesToStorageBytes(bytes)
 			if (closeAction.folder.get('size')) {
 				yield put( actions.addFolder(Map({
 					path: newLocation,
-					size: bytesToStorageBytes(bytes),
+					size: roundedBytes,
 				})) )
 			}
 		} catch (e) {
@@ -118,6 +121,7 @@ function *resizeFolder(action) {
 		yield put( actions.showResizeDialog(action.folder, action.ignoreInitial) )
 		const closeAction = yield take( constants.HIDE_RESIZE_DIALOG )
 		const bytes = new BigNumber(closeAction.folder.get('size')).times(1e9)
+		const roundedBytes = yield bytesToStorageBytes(bytes)
 		if (closeAction.folder.get('size')) { //If size is zero just hide the dialog.
 			yield siadCall({
 				url: '/host/storage/folders/resize',
@@ -125,7 +129,7 @@ function *resizeFolder(action) {
 				method: 'POST',
 				qs: {
 					path: closeAction.folder.get('path'),
-					newsize: bytesToStorageBytes(bytes),
+					newsize: roundedBytes,
 				},
 			})
 			yield put( actions.fetchData() )
