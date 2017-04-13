@@ -182,10 +182,12 @@ div[tabindex="1"]:focus {
 	margin: 0;
 	padding-bottom: 15px;
 }
+
 .files-toolbar {
 	width: 100%;
 	height: 50px;
-	min-width: 700px;
+	min-width: 800px;
+	white-space: nowrap;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
