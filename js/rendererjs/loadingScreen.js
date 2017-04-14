@@ -110,6 +110,7 @@ export default async function loadingScreen(initUI) {
 			'rpc-addr': siadConfig.rpcaddr,
 			'host-addr': siadConfig.hostaddr,
 			'api-addr': siadConfig.address,
+			'modules': 'cghrtw',
 		})
 		siadProcess.on('error', (e) => showError('Siad couldnt start: ' + e.toString()))
 		siadProcess.on('close', unexpectedExitHandler)

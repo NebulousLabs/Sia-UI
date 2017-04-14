@@ -45,6 +45,7 @@ window.onload = async function() {
 			'rpc-addr': siadConfig.rpcaddr,
 			'host-addr': siadConfig.hostaddr,
 			'api-addr': siadConfig.address,
+			'modules': 'cghrtw',
 		})
 		siadProcess.on('error', renderSiadCrashlog)
 		siadProcess.on('close', renderSiadCrashlog)
