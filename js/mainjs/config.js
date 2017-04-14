@@ -2,11 +2,13 @@ import fs from 'graceful-fs'
 import Path from 'path'
 import { app } from 'electron'
 
+const defaultSiadPath = Path.join(__dirname, '../Sia/' + (process.platform === 'win32' ? 'siad.exe' : 'siad'))
+
 // The default settings
 const defaultConfig = {
 	homePlugin:  'Overview',
 	siad: {
-		path: Path.join(__dirname, '../Sia/' + (process.platform === 'win32' ? 'siad.exe' : 'siad')),
+		path: defaultSiadPath,
 		datadir: Path.join(app.getPath('userData'), './sia'),
 		rpcaddr: ':9981',
 		hostaddr: ':9982',
@@ -67,8 +69,12 @@ export default function configManager(filepath) {
 		config = configManager(filepath)
 	}
 
+	// expose the default siad path
+	config.defaultSiadPath = defaultSiadPath
+
 	// Save to disk immediately when loaded
 	config.save()
+
 	// Return the config object with the above 3 member functions
 	return config
 }
