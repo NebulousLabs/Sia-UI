@@ -32,13 +32,19 @@ const startUI = (welcomeMsg, initUI) => {
 
 	// Construct the status bar component and poll for updates from Siad
 	const updateSyncStatus = async function() {
-		const consensusData = await Siad.call(siadConfig.address, '/consensus')
-		const gatewayData = await Siad.call(siadConfig.address, '/gateway')
-		ReactDOM.render(<StatusBar peers={gatewayData.peers.length} synced={consensusData.synced} blockheight={consensusData.height} />, document.getElementById('statusbar'))
+		try {
+			const consensusData = await Siad.call(siadConfig.address, {timeout: 500, url: '/consensus'})
+			const gatewayData = await Siad.call(siadConfig.address, {timeout: 500, url: '/gateway'})
+			ReactDOM.render(<StatusBar peers={gatewayData.peers.length} synced={consensusData.synced} blockheight={consensusData.height} />, document.getElementById('statusbar'))
+			await new Promise((resolve) => setTimeout(resolve, 5000))
+		} catch (e) {
+			await new Promise((resolve) => setTimeout(resolve, 500))
+			console.error('error updating sync status: ' + e.toString())
+		}
+		updateSyncStatus()
 	}
 
 	updateSyncStatus()
-	setInterval(updateSyncStatus, 1000)
 
 	initUI(() => {
 		overlay.style.display = 'none'
