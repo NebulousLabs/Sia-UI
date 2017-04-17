@@ -4,7 +4,7 @@ const HostStatus = ({connectabilitystatus, workingstatus}) => {
 	if (connectabilitystatus === 'checking' && workingstatus === 'checking') {
 		return (
 			<div className="host-status">
-				<i className="fa fa-refresh inactive-icon" />
+				<i className="fa fa-refresh fa-spin inactive-icon" />
 				<span> Checking Host Status... </span>
 				<div className="host-status-info">
 					Sia-UI is determining the status of your Host.
