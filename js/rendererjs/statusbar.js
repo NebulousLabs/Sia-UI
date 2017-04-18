@@ -15,9 +15,9 @@ const currentEstimatedHeight = () => {
 }
 
 // estimatedProgress returns the estimated sync progress given the current
-// blockheight, as a number from 0 -> 99.99
+// blockheight, as a number from 0 -> 99.9
 const estimatedProgress = (currentHeight) =>
-	Math.min(currentHeight / currentEstimatedHeight() * 100, 99.99)
+	Math.min(currentHeight / currentEstimatedHeight() * 100, 99.9)
 
 // -- components --
 
@@ -82,7 +82,7 @@ const StatusBar = ({synced, blockheight, peers}) => {
 					<div style={syncProgressStyle} />
 				</div>
 				<div style={syncProgressInfoStyle}>
-					{progress.toFixed(2)}%
+					{Math.floor(progress * 10) / 10}%
 				</div>
 			</div>
 		)
