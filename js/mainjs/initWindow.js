@@ -2,7 +2,7 @@ import { Menu, BrowserWindow, Tray, app } from 'electron'
 import appMenu from './appMenu.js'
 import appTray from './trayMenu.js'
 import Path from 'path'
-import { version } from '../../package.json'
+import { version, releaseName } from '../../package.json'
 
 // Save window position and bounds every time the window is moved or resized.
 const onBoundsChange = (mainWindow, config) => () => {
@@ -48,6 +48,7 @@ export default function(config) {
 			applicationName: 'Sia-UI',
 			applicationVersion: version,
 			copyright: 'Nebulous Labs',
+			version: releaseName,
 		})
 	}
 	return mainWindow

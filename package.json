@@ -1,6 +1,7 @@
 {
   "name": "Sia-UI",
   "version": "v1.2.0",
+  "releaseName": "Blue Moon",
   "main": "dist/main.js",
   "author": "NebulousLabs",
   "description": "A UI application for interfacing with Sia",
