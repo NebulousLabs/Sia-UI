@@ -2,6 +2,7 @@ import { Menu, BrowserWindow, Tray, app } from 'electron'
 import appMenu from './appMenu.js'
 import appTray from './trayMenu.js'
 import Path from 'path'
+import { version, releaseName } from '../../package.json'
 
 // Save window position and bounds every time the window is moved or resized.
 const onBoundsChange = (mainWindow, config) => () => {
@@ -41,6 +42,14 @@ export default function(config) {
 	} else {
 		// Create the Application's main menu - OSX version might feel weird without a menubar
 		Menu.setApplicationMenu(appMenu(mainWindow))
+
+		// Set the about panel's properties
+		app.setAboutPanelOptions({
+			applicationName: 'Sia-UI',
+			applicationVersion: version,
+			copyright: 'Nebulous Inc.',
+			version: releaseName,
+		})
 	}
 	return mainWindow
 }

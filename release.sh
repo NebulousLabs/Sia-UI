@@ -24,7 +24,7 @@ npm run build-production
 
 uiVersion=${3:-v1.2.0}
 siaVersion=${4:-v1.2.0}
-electronVersion=${5:-v1.4.15}
+electronVersion=${5:-v1.6.4}
 
 # fourth argument is the public key file path.
 keyFile=`readlink -f $1`
