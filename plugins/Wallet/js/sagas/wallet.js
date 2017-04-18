@@ -45,7 +45,7 @@ function *walletUnlockSaga(action) {
 		yield siadCall({
 			url: '/wallet/unlock',
 			method: 'POST',
-			timeout: 12000000, // 20 minute timeout for unlocking
+			timeout: 1.728e8, // two-day timeout, unlocking can take a long time
 			qs: {
 				encryptionpassword: action.password,
 			},
