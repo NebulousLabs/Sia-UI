@@ -4,8 +4,8 @@ import React, { PropTypes } from 'react'
 
 // currentEstimatedHeight returns the estimated block height for the current time.
 const currentEstimatedHeight = () => {
-	const knownBlockHeight = 98149
-	const knownBlockTime = new Date('March 31, 2017 23:30:30 UTC')
+	const knownBlockHeight = 1e5
+	const knownBlockTime = new Date(1492126189*1000) // timestamp for block 100000
 	const blockTime = 9 //minutes
 	const diffMinutes = Math.abs(new Date() - knownBlockTime) / 1000 / 60
 
@@ -75,7 +75,7 @@ const StatusBar = ({synced, blockheight, peers}) => {
 		<div className="status-bar-blockheight">Block Height: {blockheight}</div>
 	)
 
-	if (!synced) {
+	if (!synced && progress < 99.9) {
 		syncStatus = (
 			<div>
 				<div style={syncProgressContainerStyle}>
