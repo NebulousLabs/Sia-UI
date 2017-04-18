@@ -47,7 +47,7 @@ export default function(config) {
 		app.setAboutPanelOptions({
 			applicationName: 'Sia-UI',
 			applicationVersion: version,
-			copyright: 'Nebulous Labs',
+			copyright: 'Nebulous Inc.',
 			version: releaseName,
 		})
 	}
