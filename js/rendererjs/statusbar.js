@@ -7,7 +7,7 @@ const currentEstimatedHeight = () => {
 	const knownBlockHeight = 98149
 	const knownBlockTime = new Date('March 31, 2017 23:30:30 UTC')
 	const blockTime = 9 //minutes
-	const diffMinutes = Math.abs(new Date() - knownBlockTime) / 1000 / 60 / 60
+	const diffMinutes = Math.abs(new Date() - knownBlockTime) / 1000 / 60
 
 	const estimatedHeight = knownBlockHeight + (diffMinutes / blockTime)
 
@@ -15,13 +15,15 @@ const currentEstimatedHeight = () => {
 }
 
 // estimatedProgress returns the estimated sync progress given the current
-// blockheight, as a number from 0 -> 99
+// blockheight, as a number from 0 -> 99.99
 const estimatedProgress = (currentHeight) =>
-	Math.min(currentHeight / currentEstimatedHeight() * 100, 99)
+	Math.min(currentHeight / currentEstimatedHeight() * 100, 99.99)
 
 // -- components --
 
 const StatusBar = ({synced, blockheight, peers}) => {
+
+	const progress = estimatedProgress(blockheight)
 
 	const redColor = '#E0000B'
 	const greenColor = '#00CBA0'
@@ -32,7 +34,7 @@ const StatusBar = ({synced, blockheight, peers}) => {
 	}
 
 	const syncProgressStyle = {
-		width: estimatedProgress(blockheight).toString() + '%',
+		width: progress.toString() + '%',
 		height: '20px',
 		transition: 'width 200ms',
 		backgroundColor: '#00CBA0',
@@ -80,7 +82,7 @@ const StatusBar = ({synced, blockheight, peers}) => {
 					<div style={syncProgressStyle} />
 				</div>
 				<div style={syncProgressInfoStyle}>
-					{Math.floor(estimatedProgress(blockheight))}%
+					{progress.toFixed(2)}%
 				</div>
 			</div>
 		)
