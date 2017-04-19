@@ -4,10 +4,10 @@ import React, { PropTypes } from 'react'
 
 // currentEstimatedHeight returns the estimated block height for the current time.
 const currentEstimatedHeight = () => {
-	const knownBlockHeight = 98149
-	const knownBlockTime = new Date('March 31, 2017 23:30:30 UTC')
+	const knownBlockHeight = 100e3
+	const knownBlockTime = new Date(1492126189*1000) // timestamp for block 100000
 	const blockTime = 9 //minutes
-	const diffMinutes = Math.abs(new Date() - knownBlockTime) / 1000 / 60 / 60
+	const diffMinutes = Math.abs(new Date() - knownBlockTime) / 1000 / 60
 
 	const estimatedHeight = knownBlockHeight + (diffMinutes / blockTime)
 
@@ -15,13 +15,15 @@ const currentEstimatedHeight = () => {
 }
 
 // estimatedProgress returns the estimated sync progress given the current
-// blockheight, as a number from 0 -> 99
+// blockheight, as a number from 0 -> 99.9
 const estimatedProgress = (currentHeight) =>
-	Math.min(currentHeight / currentEstimatedHeight() * 100, 99)
+	Math.min(currentHeight / currentEstimatedHeight() * 100, 99.9)
 
 // -- components --
 
 const StatusBar = ({synced, blockheight, peers}) => {
+
+	const progress = estimatedProgress(blockheight)
 
 	const redColor = '#E0000B'
 	const greenColor = '#00CBA0'
@@ -32,7 +34,7 @@ const StatusBar = ({synced, blockheight, peers}) => {
 	}
 
 	const syncProgressStyle = {
-		width: estimatedProgress(blockheight).toString() + '%',
+		width: progress.toString() + '%',
 		height: '20px',
 		transition: 'width 200ms',
 		backgroundColor: '#00CBA0',
@@ -73,14 +75,14 @@ const StatusBar = ({synced, blockheight, peers}) => {
 		<div className="status-bar-blockheight">Block Height: {blockheight}</div>
 	)
 
-	if (!synced) {
+	if (!synced && progress < 99.9) {
 		syncStatus = (
 			<div>
 				<div style={syncProgressContainerStyle}>
 					<div style={syncProgressStyle} />
 				</div>
 				<div style={syncProgressInfoStyle}>
-					{Math.floor(estimatedProgress(blockheight))}%
+					{Math.floor(progress * 10) / 10}%
 				</div>
 			</div>
 		)
