@@ -51,9 +51,9 @@ const startUI = (welcomeMsg, initUI) => {
 	})
 }
 
-// checkSiaPath validates config's Sia path.
-// returns a promise that is resolved with `true` if siadConfig.path exists
-// or `false` if it does not exist.
+// checkSiaPath validates config's Sia path.  returns a promise that is
+// resolved with `true` if siadConfig.path exists or `false` if it does not
+// exist.
 const checkSiaPath = () => new Promise((resolve) => {
 	fs.stat(siadConfig.path, (err) => {
 		if (!err) {
@@ -92,9 +92,14 @@ export default async function loadingScreen(initUI) {
 		return
 	}
 
-	// Check siadConfig.path, and ask for a new path if siad doesn't exist.
-	const exists = await checkSiaPath(siadConfig.path)
-	if (!exists) {
+	// check siadConfig.path, if it doesn't exist optimistically set it to the
+	// default path
+	if (!await checkSiaPath(siadConfig.path)) {
+		siadConfig.path = config.defaultSiadPath
+	}
+
+	// check siadConfig.path, and ask for a new path if siad doesn't exist.
+	if (!await checkSiaPath(siadConfig.path)) {
 		// config.path doesn't exist.  Prompt the user for siad's location
 		dialog.showErrorBox('Siad not found', 'Sia-UI couldn\'t locate siad.  Please navigate to siad.')
 		const siadPath = dialog.showOpenDialog({
@@ -109,6 +114,7 @@ export default async function loadingScreen(initUI) {
 		}
 		siadConfig.path = siadPath[0]
 	}
+
 	// Launch the new Siad process
 	try {
 		const siadProcess = Siad.launch(siadConfig.path, {
