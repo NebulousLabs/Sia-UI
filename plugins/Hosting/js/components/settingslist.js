@@ -75,7 +75,7 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 			{
 				shouldShowToggleAcceptingModal && acceptingContracts ?
 					<Modal title="Stop accepting contracts?"
-						message="You must still keep Sia-UI open until the exisitng contracts have expired otherwise you will lose collateral."
+						message="You must still keep Sia-UI open until the existing contracts have expired otherwise you will lose collateral."
 						actions={{ acceptModal: toggleAcceptingContracts, declineModal: hideToggleAcceptingModal  }}
 					/>
 					: null
