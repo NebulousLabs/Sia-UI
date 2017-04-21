@@ -13,7 +13,7 @@ const HostStatus = ({connectabilitystatus, workingstatus}) => {
 		)
 	}
 
-	if (connectabilitystatus === 'not connectable') {
+	if (connectabilitystatus === 'not connectable' && workingstatus === 'not working') {
 		return (
 			<div className="host-status">
 				<i className="fa fa-times offline-icon" />
