@@ -246,6 +246,7 @@
 	background-color: #ECECEC;
 	width: 75%;
 	height: 75%;
+	min-height: 410px;
 }
 .newwallet-dialog button {
 	margin-top: 20px;
