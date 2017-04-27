@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react'
 
 const colorNotAvailable = '#FF8080'
 const colorGoodRedundancy = '#00CBA0'
-const maxRedundancy = 6
 
 const RedundancyStatus = ({available, redundancy}) => {
 	const indicatorStyle = {
@@ -10,7 +9,7 @@ const RedundancyStatus = ({available, redundancy}) => {
 			if (!available || redundancy < 1.0) {
 				return 1
 			}
-			return redundancy/maxRedundancy
+			return redundancy
 		})(),
 		color: (() => {
 			if (!available || redundancy < 1.0) {
