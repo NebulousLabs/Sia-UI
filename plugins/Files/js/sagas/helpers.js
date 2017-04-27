@@ -76,7 +76,7 @@ export const minUpload = (files) => {
 		return 0
 	}
 
-  // return the minimum upload progress of all the files
+	// return the minimum upload progress of all the files
 	return files.min((a, b) => {
 		if (a.uploadprogress > b.uploadprogress) {
 			return 1
