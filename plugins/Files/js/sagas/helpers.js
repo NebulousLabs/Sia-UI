@@ -69,6 +69,22 @@ export const minRedundancy = (files) => {
 	}).redundancy
 }
 
+// minUpload takes a list of files and returns the minimum upload progress that
+// occurs in the list.
+export const minUpload = (files) => {
+	if (files.size === 0) {
+		return 0
+	}
+
+  // return the minimum upload progress of all the files
+	return files.min((a, b) => {
+		if (a.uploadprogress > b.uploadprogress) {
+			return 1
+		}
+		return -1
+	}).uploadprogress
+}
+
 // directoriesFirst is a comparator function used to sort files by type, where
 // the directories will always come first.
 const directoriesFirst = (file1, file2) => {
@@ -90,7 +106,7 @@ export const ls = (files, path) => {
 		let type = 'file'
 		const relativePath = Path.posix.relative(path, file.siapath)
 		let filename = Path.posix.basename(relativePath)
-		const uploadprogress = Math.floor(file.uploadprogress)
+		let uploadprogress = Math.floor(file.uploadprogress)
 		let siapath = file.siapath
 		let filesize = readableFilesize(file.filesize)
 		let redundancy = file.redundancy
@@ -108,6 +124,7 @@ export const ls = (files, path) => {
 			const totalFilesize = subfiles.reduce((sum, subfile) => sum + subfile.filesize, 0)
 			filesize = readableFilesize(totalFilesize)
 			redundancy = minRedundancy(subfiles)
+			uploadprogress = minUpload(subfiles)
 		}
 		if (parsedFiles.has(filename) && parsedFiles.get(filename).type === type) {
 			return
