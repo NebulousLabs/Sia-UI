@@ -70,6 +70,7 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 				filename={file.name}
 				filesize={file.size}
 				redundancy={file.redundancy}
+				uploadprogress={file.uploadprogress}
 				available={file.available}
 				onDoubleClick={onDoubleClick}
 				type={file.type}

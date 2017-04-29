@@ -2,15 +2,17 @@ import React, { PropTypes } from 'react'
 
 const colorNotAvailable = '#FF8080'
 const colorGoodRedundancy = '#00CBA0'
-const maxRedundancy = 6
 
-const RedundancyStatus = ({available, redundancy}) => {
+const RedundancyStatus = ({available, redundancy, uploadprogress}) => {
 	const indicatorStyle = {
 		opacity: (() => {
 			if (!available || redundancy < 1.0) {
 				return 1
 			}
-			return redundancy/maxRedundancy
+			if (uploadprogress > 100) {
+				return 1
+			}
+			return uploadprogress/100
 		})(),
 		color: (() => {
 			if (!available || redundancy < 1.0) {
@@ -30,6 +32,7 @@ const RedundancyStatus = ({available, redundancy}) => {
 RedundancyStatus.propTypes = {
 	available: PropTypes.bool.isRequired,
 	redundancy: PropTypes.number.isRequired,
+	uploadprogress: PropTypes.number.isRequired,
 }
 
 export default RedundancyStatus
