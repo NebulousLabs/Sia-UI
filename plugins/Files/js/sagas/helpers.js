@@ -76,15 +76,8 @@ export const minUpload = (files) => {
 		return 0
 	}
 
-	// return the minimum upload progress of all the files
-	return files.min((a, b) => {
-		if (a.uploadprogress > b.uploadprogress) {
-			return 1
-		}
-		return -1
-	}).uploadprogress
+	return files.map((f) => f.uploadprogress).min()
 }
-
 // directoriesFirst is a comparator function used to sort files by type, where
 // the directories will always come first.
 const directoriesFirst = (file1, file2) => {
