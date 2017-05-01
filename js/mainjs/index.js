@@ -4,7 +4,7 @@ import loadConfig from './config.js'
 import initWindow from './initWindow.js'
 
 // load config.json manager
-global.config = loadConfig(Path.join(__dirname, '../config.json'))
+global.config = loadConfig(Path.join(app.getPath('userData'), 'config.json'))
 let mainWindow
 
 // Allow only one instance of Sia-UI
