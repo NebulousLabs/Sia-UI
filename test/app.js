@@ -112,12 +112,6 @@ describe('startup and shutdown behaviour', () => {
 			expect(siadProcess.exists).to.be.true
 
 			app.browserWindow.close()
-			while (await app.client.isVisible('#overlay-text') === false) {
-				await sleep(10)
-			}
-			while (await app.client.getText('#overlay-text') !== 'Quitting Sia...') {
-				await sleep(10)
-			}
 			while (isProcessRunning(pid)) {
 				await sleep(10)
 			}
