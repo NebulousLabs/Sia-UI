@@ -17,10 +17,13 @@ const siadConfig = config.attr('siad')
 const spinner = document.getElementById('loading-spinner')
 const overlay = document.getElementsByClassName('overlay')[0]
 const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByTagName('p')[0]
+const errorLog = document.getElementById('errorlog')
 overlayText.textContent = 'Loading Sia...'
 
 const showError = (error) => {
-	overlayText.textContent = 'A Sia-UI error has occured: ' + error
+	overlayText.style.display = 'none'
+	errorLog.textContent = 'A critical error loading Sia has occured: ' + error
+	errorLog.style.display = 'inline-block'
 	spinner.style.display = 'none'
 }
 
