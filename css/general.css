@@ -266,6 +266,19 @@ html,body {
 }
 
 /* Misc */
+#errorlog {
+	display: none;
+	color: #000;
+	font-size: 20px;
+	resize: none;
+	overflow: auto;
+	width: 700px;
+	height: 500px;
+	border: none;
+	outline: none;
+	box-shadow: none;
+}
+
 .overlay {
 	display: inline-flex;
   z-index: 10;
