@@ -19,10 +19,10 @@ export const initWallet = () => {
 	// Get initial UI state
 	const updateState = () => {
 		store.dispatch(getLockStatus())
+		store.dispatch(getSyncState())
 		if (store.getState().wallet.get('unlocked')) {
 			store.dispatch(getBalance())
 			store.dispatch(getTransactions())
-			store.dispatch(getSyncState())
 		}
 	}
 
