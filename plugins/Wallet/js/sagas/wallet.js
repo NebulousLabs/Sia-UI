@@ -111,6 +111,9 @@ function *createWalletSaga(action) {
 		yield take(constants.SET_UNLOCKED)
 		yield put(actions.dismissNewWalletDialog())
 	} catch (e) {
+		if (initSeed) {
+			yield put(actions.initSeedFinished())
+		}
 		sendError(e)
 	}
 }
