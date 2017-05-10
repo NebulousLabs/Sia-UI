@@ -49,6 +49,7 @@ const UninitializedWalletDialog = ({initializingSeed, useCustomPassphrase, showI
 UninitializedWalletDialog.propTypes = {
 	useCustomPassphrase: PropTypes.bool.isRequired,
 	showNewWalletForm: PropTypes.bool.isRequired,
+	initializingSeed: PropTypes.bool.isRequired,
 }
 
 export default UninitializedWalletDialog
