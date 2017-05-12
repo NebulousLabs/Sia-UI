@@ -3,7 +3,8 @@
     ["env", {
       "targets": {
         "electron": 1.6
-      }
+      },
+      "modules": false
     }],
     "react",
     "stage-3"
