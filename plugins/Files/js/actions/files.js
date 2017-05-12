@@ -138,10 +138,6 @@ export const showDeleteDialog = (files) => ({
 export const hideDeleteDialog = () => ({
 	type: constants.HIDE_DELETE_DIALOG,
 })
-export const openDownloadLocation = (location) => ({
-	type: constants.OPEN_DOWNLOAD_LOCATION,
-	location,
-})
 export const getContractCount = () => ({
 	type: constants.GET_CONTRACT_COUNT,
 })
@@ -186,4 +182,3 @@ export const showAllowanceConfirmation = (allowance) => ({
 export const hideAllowanceConfirmation = () => ({
 	type: constants.HIDE_ALLOWANCE_CONFIRMATION,
 })
-
