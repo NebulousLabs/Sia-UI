@@ -8,5 +8,18 @@
     }],
     "react",
     "stage-3"
-  ]
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        ["env", {
+          "targets": {
+            "electron": 1.6
+          }
+        }],
+        "react",
+        "stage-3"
+      ]
+    }
+  }
 }
