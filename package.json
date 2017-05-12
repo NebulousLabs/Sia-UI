@@ -9,6 +9,7 @@
   "devDependencies": {
     "babel-core": "^6.24.0",
     "babel-eslint": "^6.1.2",
+    "babel-loader": "^6.2.4",
     "babel-preset-env": "^1.4.0",
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-3": "^6.5.0",
@@ -29,34 +30,34 @@
     "react-addons-test-utils": "^15.4.2",
     "react-test-renderer": "^15.5.4",
     "sinon": "^1.17.7",
-    "spectron": "^3.6.0"
+    "spectron": "^3.6.0",
+    "uglify-js": "git://github.com/mishoo/UglifyJS2.git#harmony-v2.8.22",
+    "uglifyjs-webpack-plugin": "^0.4.3",
+    "webpack": "^2.5.1"
   },
   "dependencies": {
-    "babel-loader": "^6.2.4",
     "babel-polyfill": "^6.9.1",
     "bignumber.js": "^2.1.3",
     "electron": "^1.6.7",
     "graceful-fs": "^4.1.11",
     "immutable": "^3.8.1",
-    "json-loader": "^0.5.4",
     "mkdirp": "^0.5.1",
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "redux-saga": "^0.13.0",
-    "sia.js": "^0.4.0",
-    "webpack": "^1.13.1"
+    "sia.js": "^0.4.0"
   },
   "scripts": {
     "start": "webpack && electron .",
     "debug": "webpack -d && electron .",
-    "build-production": "webpack -p --config ./webpack.production.config.js",
+    "build-production": "webpack --config ./webpack.production.config.js",
     "build": "webpack",
     "watch": "webpack --watch",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
-    "test-args": "mocha --require test/dom.setup.js --compilers js:babel-register --recursive ./test",
+    "test-args": "BABEL_ENV=test mocha --require test/dom.setup.js --compilers js:babel-register --recursive ./test",
     "test": "npm run lint && npm run build && npm run test-args",
     "lint": "eslint --max-warnings 0 ./index.js ./plugins ./js ./test",
     "lint-fix": "eslint --fix ./index.js ./plugins ./js ./test"
