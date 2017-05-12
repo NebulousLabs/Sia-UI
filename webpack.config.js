@@ -27,7 +27,7 @@ module.exports = {
 	},
 	resolve: {
 		root: path.resolve('./node_modules')
-	}, 
+	},
 	resolveLoader: {
 		root: path.resolve('./node_modules'),
 	},
@@ -44,17 +44,14 @@ module.exports = {
 			{
 				test: /\.json$/,
 				loader: 'json-loader',
-			}
+			},
 		],
 		loaders: [
 			{
 				test: /\.js?$/,
 				loader: 'babel',
 				exclude: /node_modules/,
-				query: {
-					presets: ['react', 'es2015', 'stage-3']
-				}
-			}
-		]
-	}
+			},
+		],
+	},
 }
