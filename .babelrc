@@ -4,7 +4,8 @@
       "targets": {
         "electron": 1.6
       },
-      "modules": false
+      "modules": false,
+      "useBuiltIns": true
     }],
     "react",
     "stage-3"
