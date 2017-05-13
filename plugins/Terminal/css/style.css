@@ -1,6 +1,6 @@
-/*  Style Guide: 
+/*  Style Guide:
  *	Transparent: 70% Opacity
- *	
+ *
  *	White:	  #FFFFFF
  *	Grey-White: #F5F5F5
  *	Faint-Grey: #ECECEC
@@ -144,7 +144,6 @@ input {
 }
 
 .modal {
-	font-family: 'Roboto Condensed', sans-serif;
 	position: absolute;
 	top: 0;
 	left: 0;

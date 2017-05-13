@@ -161,7 +161,6 @@
 }
 
 .modal {
-	font-family: 'Roboto Condensed', sans-serif;
 	position: fixed;
 	z-index: 2;
 	overflow: scroll;
@@ -330,7 +329,7 @@
 	width: 522px;
 	letter-spacing: normal;
 	margin: auto;
-	padding: 20px;	
+	padding: 20px;
 }
 
 .error {
@@ -438,4 +437,3 @@
 	border-width: 30px;
 	margin-left: -30px;
 }
-
