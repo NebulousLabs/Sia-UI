@@ -1,7 +1,7 @@
 # Technologies
 
 We use three major tools in this application and they follow this hierarchy:
-Javascript -> Node/NPM -> Electron. 
+Javascript -> Node/NPM -> Electron.
 
 ### Javascript
 
@@ -33,16 +33,15 @@ tool](http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/)
 ### [Electron](http://electron.atom.io/)
 
 It's the core set of libararies that power the Atom text editor and is useful
-for creating cross-platform desktop applications. 
+for creating cross-platform desktop applications.
 
 Making this a desktop application instead of a webapp gives us libraries to
 access filepaths and other OS resources (via Node libraries) that a webapp
-would be limited from. 
+would be limited from.
 
 The code does not have to adhere to compatibility for all browsers (looking
 at you, Internet Explorer) because electron is run on chromium. This extends
-from JS to CSS (with the use of -webkit- rules when applicable).
+from JS to CSS.
 
 We do occasionally use ES2015 and ES2016 conventions and syntax in the code
 base with no worries for the same reason
-

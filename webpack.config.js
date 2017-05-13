@@ -4,6 +4,8 @@ const webpack = require('webpack')
 const path = require('path')
 const glob = require('glob')
 const version = require('./package.json').version
+const autoprefixer = require('autoprefixer')
+const cssnano = require('cssnano')
 
 function isVendor({ resource }) {
 	return resource &&
@@ -42,6 +44,21 @@ const common = {
 			{
 				test: /\.js?$/,
 				use: 'babel-loader',
+				exclude: /node_modules/,
+			},
+			{
+				test: /\.css$/,
+				use: [
+					{
+						loader: 'postcss-loader',
+						options: {
+							plugins: () => [
+								autoprefixer(),
+								cssnano({ autoprefixer: false }),
+							],
+						},
+					},
+				],
 				exclude: /node_modules/,
 			},
 		],
