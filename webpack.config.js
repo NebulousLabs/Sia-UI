@@ -5,6 +5,12 @@ const path = require('path')
 const glob = require('glob')
 const version = require('./package.json').version
 
+function isVendor({ resource }) {
+	return resource &&
+	resource.indexOf('node_modules') >= 0 &&
+	resource.match(/\.(js|json)$/)
+}
+
 // Compute the entry-points for Sia-UI.
 const entrypoints = {}
 const plugins = glob.sync('./plugins/*/js/index.js')
@@ -20,6 +26,14 @@ module.exports = {
 	plugins: [
 		new webpack.DefinePlugin({
 			VERSION: JSON.stringify(version),
+		}),
+		new webpack.optimize.CommonsChunkPlugin({
+			name: 'vendor',
+			minChunks: isVendor,
+		}),
+		new webpack.optimize.CommonsChunkPlugin({
+			name: 'manifest',
+			minChunks: Infinity,
 		}),
 	],
 	output: {
