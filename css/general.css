@@ -26,13 +26,14 @@ html,body {
 	width: 100%;
 
 	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
-	font-weight: 300;
+	font-weight: normal;
 	font-size: 18px;
 
 	-webkit-user-select: none;
 }
 .pure-g [class*="pure-u"] {
-	font-weight: 300;
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+	font-weight: normal;
 }
 ::-webkit-scrollbar {
 	display: none;

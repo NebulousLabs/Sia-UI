@@ -23,7 +23,7 @@ select, input, html, body {
 	margin: 0;
 	padding: 0;
 	border-spacing: 0;
-	font-weight: 300;
+	font-weight: normal;
 	font-size: 18px;
 }
 html, body {
