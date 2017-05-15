@@ -21,7 +21,7 @@ window.onload = async function() {
 	// therefore, we have to global require it inside the window.onload event.
 
 	/* eslint-disable global-require */
-	const ReactDOM = require('react-dom')
+	const ReactDOM = await import('react-dom')
 	/* eslint-enable global-require */
 
 	let startSiad = () => {}
