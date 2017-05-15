@@ -1,4 +1,3 @@
-import 'babel-polyfill'
 import { jsdom } from 'jsdom'
 import Path from 'path'
 
