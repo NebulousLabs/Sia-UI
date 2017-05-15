@@ -59,7 +59,7 @@
     "watch": "webpack --watch",
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
-    "test-args": "BABEL_ENV=test mocha --require test/dom.setup.js --compilers js:babel-register --recursive ./test",
+    "test-args": "BABEL_ENV=test mocha --require babel-polyfill --require test/dom.setup.js --compilers js:babel-register --recursive ./test",
     "test": "npm run lint && npm run build && npm run test-args",
     "lint": "eslint --max-warnings 0 ./index.js ./plugins ./js ./test",
     "lint-fix": "eslint --fix ./index.js ./plugins ./js ./test"

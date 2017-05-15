@@ -13,11 +13,7 @@
   "env": {
     "test": {
       "presets": [
-        ["env", {
-          "targets": {
-            "electron": 1.6
-          }
-        }],
+        "env",
         "react",
         "stage-3"
       ]
