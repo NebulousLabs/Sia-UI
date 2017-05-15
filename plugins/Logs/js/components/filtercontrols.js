@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Set } from 'immutable'
 import FilterControl from './filtercontrol'
 import { filters } from '../filters.js'

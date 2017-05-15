@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const PasswordPrompt = ({password, error, unlocking, actions}) => {
 	const onPasswordChange = (e) => actions.handlePasswordChange(e.target.value)

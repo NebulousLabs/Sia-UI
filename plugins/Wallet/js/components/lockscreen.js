@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import PropTypes from 'prop-types';
+import React from 'react';
 import PasswordPrompt from '../containers/passwordprompt.js'
 import UninitializedWalletDialog from '../containers/uninitializedwalletdialog.js'
 

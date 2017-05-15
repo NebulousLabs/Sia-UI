@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const colorBackDisabled = '#C5C5C5'
 const colorBackEnabled = '#00CBA0'
