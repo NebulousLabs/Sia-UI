@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import PropTypes from 'prop-types'
+import React from 'react'
 import FileBrowser from '../containers/filebrowser.js'
 import AllowanceDialog from '../containers/allowancedialog.js'
 

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import PropTypes from 'prop-types'
+import React from 'react'
 import { List } from 'immutable'
 import UploadList from './uploadlist.js'
 import DownloadList from './downloadlist.js'

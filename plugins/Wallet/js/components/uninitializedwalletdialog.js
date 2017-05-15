@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import PropTypes from 'prop-types'
+import React from 'react'
 import NewWalletForm from '../containers/newwalletform.js'
 import InitSeedForm from './initseedform.js'
 
