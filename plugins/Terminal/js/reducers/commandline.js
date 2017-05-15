@@ -21,9 +21,9 @@ export default function commandLineReducer(state = initialState, action) {
 			.set('commandIndex', 0).set('currentCommand', '').set('commandRunning', true)
 
 
-	case constants.UPDATE_COMMAND:
+	case constants.UPDATE_COMMAND: {
 		//Updates output of command given by command name and id.
-		let commandArray = state.get('commandHistory').findLastEntry(
+		const commandArray = state.get('commandHistory').findLastEntry(
 				(val) => (val.get('command') === action.command && val.get('id') === action.id)
 			)
 
@@ -31,12 +31,13 @@ export default function commandLineReducer(state = initialState, action) {
 			return state
 		}
 
-		let [commandIdx, newCommand] = commandArray
-		newCommand = newCommand.set('result', newCommand.get('result') + action.dataChunk)
+		const [commandIdx, command] = commandArray
+		const newCommand = command.set('result', command.get('result') + action.dataChunk)
 		return state.set('commandHistory', state.get('commandHistory').set(commandIdx, newCommand))
+	}
 
-	case constants.END_COMMAND:
-		commandArray = state.get('commandHistory').findLastEntry(
+	case constants.END_COMMAND: {
+		const commandArray = state.get('commandHistory').findLastEntry(
 				(val) => (val.get('command') === action.command && val.get('id') === action.id)
 			)
 
@@ -44,19 +45,21 @@ export default function commandLineReducer(state = initialState, action) {
 			return state
 		}
 
-		[commandIdx, newCommand] = commandArray
-		newCommand = newCommand.set('stat', 'done')
+		const [commandIdx, command] = commandArray
+		const newCommand = command.set('stat', 'done')
 		return state.set('commandHistory', state.get('commandHistory').set(commandIdx, newCommand)).set('commandRunning', false)
+	}
 
-	case constants.LOAD_PREV_COMMAND:
-		let newCommandIndex = Math.min(state.get('commandIndex')+1, state.get('commandHistory').size)
+	case constants.LOAD_PREV_COMMAND: {
+		const newCommandIndex = Math.min(state.get('commandIndex')+1, state.get('commandHistory').size)
 		return state.set('commandIndex', newCommandIndex).set('currentCommand',
 			state.get('commandHistory').get(
 				Math.min( state.get('commandHistory').size-newCommandIndex, state.get('commandHistory').size-1)
 			).get('command'))
+	}
 
-	case constants.LOAD_NEXT_COMMAND:
-		newCommandIndex = Math.max(state.get('commandIndex')-1, 0)
+	case constants.LOAD_NEXT_COMMAND: {
+		const newCommandIndex = Math.max(state.get('commandIndex')-1, 0)
 		if (newCommandIndex) {
 			return state.set('commandIndex', newCommandIndex).set('currentCommand',
 					state.get('commandHistory').get(
@@ -66,6 +69,7 @@ export default function commandLineReducer(state = initialState, action) {
 		} else {
 			return state.set('commandIndex', newCommandIndex).set('currentCommand', '')
 		}
+	}
 
 	case constants.SET_CURRENT_COMMAND:
 		return state.set('currentCommand', action.command)

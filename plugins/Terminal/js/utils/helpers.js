@@ -273,9 +273,8 @@ export const commandInputHelper = function(e, actions, currentCommand, showComma
 			break
 
 		case constants.HELP: //help
-			const text = 'help'
-		case constants.HELP_QMARK: //?
-			const newText = text || '?'
+		case constants.HELP_QMARK: {
+			const newText = 'help'
 			if (showCommandOverview) {
 				actions.hideCommandOverview()
 			} else {
@@ -287,7 +286,7 @@ export const commandInputHelper = function(e, actions, currentCommand, showComma
 			actions.addCommand(newCommand)
 			actions.endCommand(newCommand.get('command'), newCommand.get('id'))
 			break
-
+		}
 		default:
 			break
 		}

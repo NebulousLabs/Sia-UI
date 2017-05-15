@@ -40,7 +40,7 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('unreadDownloads', state.get('unreadDownloads').add(action.file.siapath))
 	case constants.UPLOAD_FILE:
 		return state.set('unreadUploads', state.get('unreadUploads').add(action.siapath))
-	case constants.RECEIVE_FILES:
+	case constants.RECEIVE_FILES: {
 		const workingDirectoryFiles = ls(action.files, state.get('path'))
 		const workingDirectorySiapaths = workingDirectoryFiles.map((file) => file.siapath)
 		// filter out selected files that are no longer in the working directory
@@ -48,15 +48,17 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('files', action.files)
 		            .set('workingDirectoryFiles', workingDirectoryFiles)
 		            .set('selected', selected)
+	}
 	case constants.SET_ALLOWANCE:
 		return state.set('allowance', action.funds)
 		            .set('settingAllowance', true)
 	case constants.CLEAR_DOWNLOADS:
 		return state.set('showDownloadsSince', Date.now())
-	case constants.SET_SEARCH_TEXT:
+	case constants.SET_SEARCH_TEXT: {
 		const results = searchFiles(state.get('workingDirectoryFiles'), action.text, state.get('path'))
 		return state.set('searchResults', results)
 		            .set('searchText', action.text)
+	}
 	case constants.SET_PATH:
 		return state.set('path', action.path)
 		            .set('selected', OrderedSet())
