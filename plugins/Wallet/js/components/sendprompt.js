@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 
 const SendPrompt = ({currencytype, sendAddress, sendAmount, actions}) => {
 	const handleSendAddressChange = (e) => actions.setSendAddress(e.target.value)

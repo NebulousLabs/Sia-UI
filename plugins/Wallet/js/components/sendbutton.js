@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 
 const SendButton = ({currencytype, onClick}) => (
 	<div onClick={onClick} className="send-button">

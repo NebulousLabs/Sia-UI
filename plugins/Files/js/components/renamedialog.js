@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 import Path from 'path'
 
 const RenameDialog = ({file, actions}) => {

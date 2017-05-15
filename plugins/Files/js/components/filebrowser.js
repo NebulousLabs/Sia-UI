@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 import FileList from '../containers/filelist.js'
 import SetAllowanceButton from '../containers/setallowancebutton.js'
 import SearchButton from '../containers/searchbutton.js'

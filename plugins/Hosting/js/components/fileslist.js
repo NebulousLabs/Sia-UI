@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 import { List } from 'immutable'
 import Modal from './warningmodal.js'
 import Path from 'path'

@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 import { List, Set } from 'immutable'
 import File from './file.js'
 import Path from 'path'

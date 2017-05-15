@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 
 const colorNotAvailable = '#FF8080'
 const colorGoodRedundancy = '#00CBA0'

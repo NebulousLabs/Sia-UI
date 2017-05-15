@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 
 const ContractorStatus = ({settingAllowance, contractCount}) => (
 	<div className="contractor-status">

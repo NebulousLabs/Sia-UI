@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 import RedundancyStatus from './redundancystatus.js'
 
 const File = ({filename, type, selected, filesize, available, redundancy, uploadprogress, onDoubleClick, onClick}) => (

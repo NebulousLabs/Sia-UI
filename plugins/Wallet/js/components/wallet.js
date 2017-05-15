@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 import TransactionList from '../containers/transactionlist.js'
 import SendButton from './sendbutton.js'
 import SendPrompt from '../containers/sendprompt.js'
