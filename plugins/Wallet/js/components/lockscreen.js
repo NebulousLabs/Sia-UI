@@ -12,18 +12,18 @@ const LockScreen = ({unlocked, unlocking, encrypted, rescanning}) => {
 		)
 	}
 	let lockscreenContents
-	if (!unlocked && encrypted && !rescanning && !unlocking) {
+	if (!unlocked && encrypted && !rescanning) {
 		lockscreenContents = (
 			<PasswordPrompt />
+		)
+	} else if (rescanning) {
+		lockscreenContents = (
+			<RescanDialog />
 		)
 	} else if (!encrypted) {
 		// Wallet is not encrypted, return a lockScreen that initializes a new wallet.
 		lockscreenContents = (
 			<UninitializedWalletDialog />
-		)
-	} else if (rescanning) {
-		lockscreenContents = (
-			<RescanDialog />
 		)
 	}
 	return (
