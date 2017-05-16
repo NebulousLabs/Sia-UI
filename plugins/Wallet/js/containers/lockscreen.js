@@ -5,7 +5,7 @@ const mapStateToProps = (state) => ({
 	unlocked: state.wallet.get('unlocked'),
 	unlocking: state.wallet.get('unlocking'),
 	encrypted: state.wallet.get('encrypted'),
-	initializingSeed: state.wallet.get('initializingSeed'),
+	rescanning: state.wallet.get('rescanning'),
 })
 
 const LockScreen = connect(mapStateToProps)(LockScreenView)

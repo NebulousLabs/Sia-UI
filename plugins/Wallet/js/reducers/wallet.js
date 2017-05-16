@@ -4,6 +4,7 @@ import { WALLET_UNLOCK_ERROR } from '../constants/error.js'
 
 const initialState = Map({
 	synced: false,
+	rescanning: false,
 	unlocked: false,
 	encrypted: true,
 	unlocking: false,
@@ -82,6 +83,8 @@ export default function walletReducer(state = initialState, action) {
 		return state.set('initializingSeed', true)
 	case constants.SEED_INIT_FINISHED:
 		return state.set('initializingSeed', false)
+	case constants.SET_RESCANNING:
+		return state.set('rescanning', action.rescanning)
 	default:
 		return state
 	}

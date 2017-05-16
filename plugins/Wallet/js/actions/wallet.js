@@ -147,4 +147,8 @@ export const initSeedStarted = () => ({
 export const initSeedFinished = () => ({
 	type: constants.SEED_INIT_FINISHED,
 })
+export const setRescanning = (rescanning) => ({
+	type: constants.SET_RESCANNING,
+	rescanning,
+})
 
