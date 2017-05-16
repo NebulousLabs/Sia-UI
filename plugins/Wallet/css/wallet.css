@@ -338,3 +338,12 @@
 .use-passphrase-checkbox {
 	margin-top: 20px;
 }
+.rescan-dialog {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+.rescan-dialog i {
+	margin-right: 25px;
+}
