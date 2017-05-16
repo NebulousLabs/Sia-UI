@@ -83,8 +83,21 @@ export default function walletReducer(state = initialState, action) {
 		return state.set('initializingSeed', true)
 	case constants.SEED_INIT_FINISHED:
 		return state.set('initializingSeed', false)
-	case constants.SET_RESCANNING:
-		return state.set('rescanning', action.rescanning)
+	case constants.SET_RESCANNING: {
+		let newstate = state.set('rescanning', action.rescanning)
+		// the `rescanning` state is mutually exclusive with `recovering`,
+		// `initializingSeed`, and `unlocking`. This makes sense for a user, they
+		// will see 'recovering' or 'initializing' change to 'rescanning', an
+		// accurate representation of what is happening on the backend.
+		if (action.rescanning) {
+			newstate = newstate.set('recovering', false)
+			                   .set('initializingSeed', false)
+			                   .set('unlocking', false)
+			                   .set('showRecoveryDialog', false)
+			                   .set('showInitSeedForm', false)
+		}
+		return newstate
+	}
 	default:
 		return state
 	}
