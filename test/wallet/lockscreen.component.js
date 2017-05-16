@@ -21,7 +21,7 @@ describe('wallet lock screen component', () => {
 		expect(lockedUnencryptedScreen.contains(<UninitializedWalletDialog />)).to.be.true
 	})
 	it('renders a passwordprompt if the wallet is unlocking', () => {
-		expect(shallow(<LockScreen unlocked={false} encrypted unlocking={true} rescanning={false} />).contains(<PasswordPrompt />)).to.be.true
+		expect(shallow(<LockScreen unlocked={false} encrypted unlocking rescanning={false} />).contains(<PasswordPrompt />)).to.be.true
 	})
 	it('renders a rescandialog if the wallet is rescanning', () => {
 		expect(shallow(<LockScreen unlocked={false} encrypted unlocking={false} rescanning />).contains(<RescanDialog />)).to.be.true
