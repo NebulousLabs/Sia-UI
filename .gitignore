@@ -7,6 +7,7 @@ Sia
 doc/Sia-UI
 errors.log
 dist
+sia-testing
 
 # Vim
 *.sw?
