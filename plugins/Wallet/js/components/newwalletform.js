@@ -2,8 +2,10 @@ import React from 'react'
 
 const NewWalletForm = ({actions}) => {
 	const handleCreateWalletClick = (e) => {
+		console.log(e.target.password.value)
 		e.preventDefault()
 		actions.createNewWallet(e.target.password.value)
+		actions.hideNewWalletForm()
 	}
 	const handleCancelClick = (e) => {
 		e.preventDefault()

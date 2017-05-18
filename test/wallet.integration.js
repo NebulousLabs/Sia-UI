@@ -75,7 +75,59 @@ describe('wallet creation', () => {
 		process.env.NODE_ENV = 'production'
 		setMockLockState({unlocked: false, encrypted: false, rescanning: false})
 	})
-	
+
+	describe('create wallet using custom password', () => {
+		let walletComponent
+		before(() => {
+			mockCreateWallet('testseed')
+			walletComponent = mount(initWallet())
+		})
+		it('shows an uninitialized wallet dialog initially', async () => {
+			await sleep(50)
+			expect(walletComponent.find('UninitializedWalletDialog')).to.have.length(1)
+		})
+		it('shows a newwalletform when custom passphrase is enabled', async () => {
+			walletComponent.find('.use-passphrase-checkbox').children().first().simulate('change')
+			await sleep(10)
+			walletComponent.find('.create-wallet-button').first().simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('NewWalletForm')).to.have.length(1)
+		})
+		it('creates a wallet correctly using newwalletform', async () => {
+			const passwordInput = walletComponent.find('.new-wallet-form input').first()
+			passwordInput.node.value = 'testpass'
+			walletComponent.find('.new-wallet-form-buttons').first().simulate('submit', { target: { password: passwordInput.node }})
+			await sleep(20)
+			expect(walletComponent.find('NewWalletForm')).to.have.length(0)
+		})
+		it('shows a newwalletdialog with the custom password', async () => {
+			expect(walletComponent.find('NewWalletDialog')).to.have.length(1)
+			expect(walletComponent.find('.newwallet-seed').text()).to.equal('testseed')
+			expect(walletComponent.find('.newwallet-password').text()).to.equal('testpass')
+		})
+		it('shows a confirmation dialog when NewWalletDialog is dismissed', async () => {
+			walletComponent.find('.newwallet-dismiss').first().simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('ConfirmationDialog')).to.have.length(1)
+		})
+		it('shows an error if user confirms the wrong seed', async () => {
+			const seedInput = walletComponent.find('.seed-confirmation-input').first()
+			seedInput.node.value = 'badseed'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node }})
+			await sleep(10)
+			expect(walletComponent.find('.seed-confirmation-error').first().text()).to.equal('seed did not match!')
+		})
+		it('dismisses confirmation dialog when correct seed is entered', async () => {
+			const seedInput = walletComponent.find('.seed-confirmation-input').first()
+			seedInput.node.value = 'testseed'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node }})
+			await sleep(10)
+			expect(walletComponent.find('ConfirmationDialog')).to.have.length(0)
+			expect(walletComponent.find('NewWalletDialog')).to.have.length(0)
+			expect(walletComponent.find('LockScreen')).to.have.length(1)
+		})
+	})
+
 	describe('create wallet using no custom password', () => {
 		let walletComponent
 		before(() => {
