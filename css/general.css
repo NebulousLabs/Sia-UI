@@ -299,3 +299,11 @@ html,body {
 .centered p {
 	margin: 0;
 }
+
+div#new-wallet-seed {
+	font-size: 24px;
+}
+
+div#new-wallet-password {
+	font-size: 24px;
+}
