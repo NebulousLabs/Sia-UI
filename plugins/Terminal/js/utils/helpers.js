@@ -197,6 +197,10 @@ export const httpCommand = function(commandStr, actions, newid) {
 		apiURL = '/wallet/033x'
 	} else if (commandString.includes('wallet load siag', 0)) {
 		apiURL = '/wallet/siagkey'
+	} else if (commandString === 'wallet init-seed --force') {
+		apiURL = '/wallet/init/seed?force=true'
+	} else if (commandString.includes('wallet init-seed', 0)) {
+		apiURL = '/wallet/init/seed'
 	} else {
 		return spawnCommand(commandString, actions).stdin
 	}
@@ -271,6 +275,10 @@ export const commandInputHelper = function(e, actions, currentCommand, showComma
 		case constants.WALLET_SEED: //wallet load seed
 			actions.showWalletPrompt()
 			break
+		case constants.WALLET_INIT_SEED:
+			actions.showSeedPrompt()
+			break
+
 
 		case constants.HELP: //help
 		case constants.HELP_QMARK: {

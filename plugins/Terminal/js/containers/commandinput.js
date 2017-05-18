@@ -2,7 +2,7 @@ import CommandInputView from '../components/commandinput.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addCommand, updateCommand, endCommand, loadPrevCommand, loadNextCommand,
-	setCurrentCommand, showWalletPrompt, hideWalletPrompt,
+	setCurrentCommand, showWalletPrompt, showSeedPrompt, hideSeedPrompt,  hideWalletPrompt,
 	showCommandOverview, hideCommandOverview } from '../actions/commandline.js'
 
 const mapStateToProps = (state) => ({
@@ -18,7 +18,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ addCommand, updateCommand, endCommand,
 		loadPrevCommand, loadNextCommand, setCurrentCommand,
-		showWalletPrompt, hideWalletPrompt, showCommandOverview,
+		showWalletPrompt, hideWalletPrompt, showSeedPrompt, hideSeedPrompt, showCommandOverview,
 		hideCommandOverview }, dispatch),
 })
 
