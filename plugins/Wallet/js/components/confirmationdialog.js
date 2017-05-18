@@ -15,7 +15,6 @@ const ConfirmationDialog = ({seed, error, actions}) => {
 		<div className="modal">
 			<div className="confirmation-dialog">
 				<h3> Please confirm your seed to continue </h3>
-				<span className="seed-confirmation-error">{error}</span>
 				<form className="seed-confirmation-form" onSubmit={onOkClick}>
 					<input className="seed-confirmation-input" type="text" name="seed" required autoFocus />
 					<div className="confirmation-buttons">
@@ -23,6 +22,7 @@ const ConfirmationDialog = ({seed, error, actions}) => {
 						<button className="seed-confirmation-button" type="submit">Confirm</button>
 					</div>
 				</form>
+				<span className="seed-confirmation-error">{error}</span>
 			</div>
 		</div>
 	)
