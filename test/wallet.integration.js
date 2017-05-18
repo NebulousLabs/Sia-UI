@@ -4,7 +4,6 @@ import { mount } from 'enzyme'
 import { initWallet } from '../plugins/Wallet/js/main.js'
 import * as Siad from 'sia.js'
 
-let walletComponent
 
 const mockSiaAPI = {
 	call: stub(),
@@ -49,6 +48,9 @@ const setMockReceiveAddress = (address) => {
 const mockSendSiacoin = () => {
 	SiaAPI.call.withArgs(match.has('url', '/wallet/siacoins')).callsArgWith(1, null)
 }
+const mockCreateWallet = (primaryseed) => {
+	SiaAPI.call.withArgs(match.has('url', '/wallet/init')).callsArgWith(1, null, {primaryseed: primaryseed})
+}
 
 // Set up default siad call mocks for the wallet.
 // Currently, wallet lock state, login, and send siacoin calls are mocked.
@@ -63,7 +65,62 @@ const setupMockCalls = () => {
 	mockSendSiacoin()
 }
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+describe('wallet creation', () => {
+	before(() => {
+		global.SiaAPI = mockSiaAPI
+		// Set NODE_ENV to production to suppress react warnings
+		// caused by externally triggering events on mounted components
+		process.env.NODE_ENV = 'production'
+		setMockLockState({unlocked: false, encrypted: false, rescanning: false})
+	})
+	
+	describe('create wallet using no custom password', () => {
+		let walletComponent
+		before(() => {
+			mockCreateWallet('testseed')
+			walletComponent = mount(initWallet())
+		})
+		it('shows an uninitialized wallet dialog initially', async () => {
+			await sleep(50)
+			expect(walletComponent.find('UninitializedWalletDialog')).to.have.length(1)
+		})
+		it('creates a new wallet and shows the seed', async () => {
+			walletComponent.find('.create-wallet-button').first().simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('NewWalletDialog')).to.have.length(1)
+			expect(walletComponent.find('.newwallet-seed').text()).to.equal('testseed')
+			expect(walletComponent.find('.newwallet-password').text()).to.equal('testseed')
+		})
+		it('shows a confirmation dialog when NewWalletDialog is dismissed', async () => {
+			walletComponent.find('.newwallet-dismiss').first().simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('ConfirmationDialog')).to.have.length(1)
+		})
+		// ugly hacks because enzyme doesnt support event propogation or testing
+		// forms... wtf
+		it('shows an error if user confirms the wrong seed', async () => {
+			const seedInput = walletComponent.find('.seed-confirmation-input').first()
+			seedInput.node.value = 'badseed'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node }})
+			await sleep(10)
+			expect(walletComponent.find('.seed-confirmation-error').first().text()).to.equal('seed did not match!')
+		})
+		it('dismisses confirmation dialog when correct seed is entered', async () => {
+			const seedInput = walletComponent.find('.seed-confirmation-input').first()
+			seedInput.node.value = 'testseed'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node }})
+			await sleep(10)
+			expect(walletComponent.find('ConfirmationDialog')).to.have.length(0)
+			expect(walletComponent.find('NewWalletDialog')).to.have.length(0)
+			expect(walletComponent.find('LockScreen')).to.have.length(1)
+		})
+	})
+})
+
 describe('wallet plugin integration tests', () => {
+	let walletComponent
 	before(() => {
 		global.SiaAPI = mockSiaAPI
 		// Set NODE_ENV to production to suppress react warnings

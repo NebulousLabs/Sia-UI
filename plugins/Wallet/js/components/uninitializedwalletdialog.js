@@ -30,8 +30,8 @@ const UninitializedWalletDialog = ({initializingSeed, useCustomPassphrase, showI
 	return (
 		<div className="uninitialized-wallet-dialog">
 			<div className="wallet-init-buttons">
-				<div className="create-wallet-button">
-					<i className="fa fa-plus-circle fa-4x" onClick={handleCreateWalletClick} />
+				<div onClick={handleCreateWalletClick} className="create-wallet-button">
+					<i className="fa fa-plus-circle fa-4x" />
 					<h3> Create a new wallet </h3>
 				</div>
 				<div className="create-wallet-button">

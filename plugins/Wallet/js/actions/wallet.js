@@ -151,4 +151,8 @@ export const setRescanning = (rescanning) => ({
 	type: constants.SET_RESCANNING,
 	rescanning,
 })
+export const setConfirmationError = (error) => ({
+	type: constants.SET_CONFIRMATION_ERROR,
+	error,
+})
 
