@@ -113,14 +113,27 @@ describe('wallet creation', () => {
 		it('shows an error if user confirms the wrong seed', async () => {
 			const seedInput = walletComponent.find('.seed-confirmation-input').first()
 			seedInput.node.value = 'badseed'
-			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node }})
+			const pwInput = walletComponent.find('.password-confirmation-input').first()
+			pwInput.node.value = 'testpass'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node, password: pwInput.node }})
 			await sleep(10)
 			expect(walletComponent.find('.seed-confirmation-error').first().text()).to.equal('seed did not match!')
 		})
-		it('dismisses confirmation dialog when correct seed is entered', async () => {
+		it('shows an error if user confirms the wrong password', async () => {
 			const seedInput = walletComponent.find('.seed-confirmation-input').first()
 			seedInput.node.value = 'testseed'
-			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node }})
+			const pwInput = walletComponent.find('.password-confirmation-input').first()
+			pwInput.node.value = 'badpass'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node, password: pwInput.node }})
+			await sleep(10)
+			expect(walletComponent.find('.seed-confirmation-error').first().text()).to.equal('password did not match!')
+		})
+		it('dismisses confirmation dialog when correct seed and password is entered', async () => {
+			const seedInput = walletComponent.find('.seed-confirmation-input').first()
+			seedInput.node.value = 'testseed'
+			const pwInput = walletComponent.find('.password-confirmation-input').first()
+			pwInput.node.value = 'testpass'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node, password: pwInput.node }})
 			await sleep(10)
 			expect(walletComponent.find('ConfirmationDialog')).to.have.length(0)
 			expect(walletComponent.find('NewWalletDialog')).to.have.length(0)
@@ -155,14 +168,27 @@ describe('wallet creation', () => {
 		it('shows an error if user confirms the wrong seed', async () => {
 			const seedInput = walletComponent.find('.seed-confirmation-input').first()
 			seedInput.node.value = 'badseed'
-			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node }})
+			const pwInput = walletComponent.find('.password-confirmation-input').first()
+			pwInput.node.value = 'testpass'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node, password: pwInput.node }})
 			await sleep(10)
 			expect(walletComponent.find('.seed-confirmation-error').first().text()).to.equal('seed did not match!')
+		})
+		it('shows an error if user confirms the wrong password', async () => {
+			const seedInput = walletComponent.find('.seed-confirmation-input').first()
+			seedInput.node.value = 'testseed'
+			const pwInput = walletComponent.find('.password-confirmation-input').first()
+			pwInput.node.value = 'badpass'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node, password: pwInput.node }})
+			await sleep(10)
+			expect(walletComponent.find('.seed-confirmation-error').first().text()).to.equal('password did not match!')
 		})
 		it('dismisses confirmation dialog when correct seed is entered', async () => {
 			const seedInput = walletComponent.find('.seed-confirmation-input').first()
 			seedInput.node.value = 'testseed'
-			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node }})
+			const pwInput = walletComponent.find('.password-confirmation-input').first()
+			pwInput.node.value = 'testseed'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node, password: pwInput.node }})
 			await sleep(10)
 			expect(walletComponent.find('ConfirmationDialog')).to.have.length(0)
 			expect(walletComponent.find('NewWalletDialog')).to.have.length(0)

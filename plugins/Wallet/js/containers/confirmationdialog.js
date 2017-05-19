@@ -5,6 +5,7 @@ import { hideConfirmationDialog, dismissNewWalletDialog, setConfirmationError } 
 
 const mapStateToProps = (state) => ({
 	seed: state.newwalletdialog.get('seed'),
+	password: state.newwalletdialog.get('password'),
 	error: state.newwalletdialog.get('confirmationerror'),
 })
 const mapDispatchToProps = (dispatch) => ({

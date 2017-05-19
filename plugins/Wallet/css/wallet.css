@@ -247,7 +247,13 @@
 	height: 300px;
 	width: 475px;
 }
-.seed-confirmation-input {
+.seed-confirmation-form {
+	display: flex;
+	flex-direction: column;
+}
+.seed-confirmation-form input {
+	text-align: center;
+	margin-bottom: 3px;
 	width: 300px;
 }
 .confirmation-dialog .confirmation-buttons {
