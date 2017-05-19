@@ -13,7 +13,7 @@ const defaultConfig = {
 		rpcaddr: ':9981',
 		hostaddr: ':9982',
 		detached: false,
-		address: 'localhost:9980',
+		address: '127.0.0.1:9980',
 	},
 	closeToTray: process.platform === 'win32' || process.platform === 'darwin' ? true : false,
 	width:	   1024,
