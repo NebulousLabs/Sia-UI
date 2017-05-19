@@ -28,6 +28,7 @@ export const initWallet = () => {
 
 	// Poll Siad for state changes
 	setInterval(updateState, 5000)
+	updateState()
 
 	// update state when plugin is opened
 	window.onfocus = updateState

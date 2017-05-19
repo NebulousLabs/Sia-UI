@@ -4,6 +4,7 @@ const NewWalletForm = ({actions}) => {
 	const handleCreateWalletClick = (e) => {
 		e.preventDefault()
 		actions.createNewWallet(e.target.password.value)
+		actions.hideNewWalletForm()
 	}
 	const handleCancelClick = (e) => {
 		e.preventDefault()
