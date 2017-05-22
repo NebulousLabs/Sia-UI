@@ -107,7 +107,7 @@
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	-webkit-animation: fadein 0.5s;
+	animation: fadein 0.5s;
 	background-color: #ffffff;
 	z-index: 2;
 	border: solid 1px #c5c5c5;
