@@ -4,6 +4,7 @@ import Path from 'path'
 const testdir = Path.resolve('./test/logs/testdir')
 const exposedProperties = ['window', 'navigator', 'document']
 
+global.HTMLElement = function() {}
 global.document = jsdom('')
 global.window = document.defaultView
 global.SiaAPI = {
