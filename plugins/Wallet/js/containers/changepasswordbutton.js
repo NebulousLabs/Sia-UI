@@ -10,4 +10,4 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const ChangePasswordButton = connect(mapStateToProps, mapDispatchToProps)(ChangePasswordButtonView)
-export default ChangePasswordButton 
+export default ChangePasswordButton

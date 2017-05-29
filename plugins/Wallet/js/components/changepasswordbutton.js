@@ -11,4 +11,3 @@ const ChangePasswordButton = ({actions}) => {
 }
 
 export default ChangePasswordButton
-

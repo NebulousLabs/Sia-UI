@@ -11,4 +11,4 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const ChangePasswordDialog = connect(mapStateToProps, mapDispatchToProps)(ChangePasswordDialogView)
-export default ChangePasswordDialog 
+export default ChangePasswordDialog

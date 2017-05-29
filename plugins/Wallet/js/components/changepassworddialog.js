@@ -14,7 +14,7 @@ const ChangePasswordDialog = ({changePasswordError, actions}) => {
 		e.preventDefault()
 		actions.hideChangePasswordDialog()
 	}
-	
+
 	return (
 		<div className="modal">
 			<form className="change-password-form" onSubmit={handleChangePasswordClick}>
