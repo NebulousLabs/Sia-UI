@@ -335,6 +335,7 @@
 	padding-left: 30px;
 	padding-right: 30px;
 	padding-bottom: 30px;
+	padding-top: 10px
 }
 .change-passowrd-buttons {
 	margin-top 15px;
@@ -352,7 +353,9 @@
 }
 
 .change-password-error {
-	margin-top: 30px;
+	height: 10px;
+	margin-top: 15px;
+	margin-bottom: 15px;
 }
 
 .recovery-form {
