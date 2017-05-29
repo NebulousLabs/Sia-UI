@@ -32,6 +32,7 @@ export default function walletReducer(state = initialState, action) {
 		return state.set('changePasswordError', action.error)
 	case constants.SHOW_CHANGE_PASSWORD_DIALOG:
 		return state.set('showChangePasswordDialog', true)
+		            .set('changePasswordError', '')
 	case constants.HIDE_CHANGE_PASSWORD_DIALOG:
 		return state.set('showChangePasswordDialog', false)
 	case constants.SEED_RECOVERY_STARTED:
