@@ -51,6 +51,10 @@ const mockSendSiacoin = () => {
 const mockCreateWallet = (primaryseed) => {
 	SiaAPI.call.withArgs(match.has('url', '/wallet/init')).callsArgWith(1, null, {primaryseed: primaryseed})
 }
+const mockChangePassword = (password, wrongpassword) => {
+	SiaAPI.call.withArgs(match((call) => callHasPassword(call, password))).callsArgWith(1, null)
+	SiaAPI.call.withArgs(match((call) => callHasPassword(call, wrongpassword))).callsArgWith(1,  {message: 'incorrect password'})
+}
 
 // Set up default siad call mocks for the wallet.
 // Currently, wallet lock state, login, and send siacoin calls are mocked.
@@ -66,6 +70,69 @@ const setupMockCalls = () => {
 }
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+describe('wallet change password functionality', () => {
+	let walletComponent
+	before(() => {
+		global.SiaAPI = mockSiaAPI
+		// Set NODE_ENV to production to suppress react warnings
+		// caused by externally triggering events on mounted components
+		process.env.NODE_ENV = 'production'
+		setMockLockState({unlocked: true, encrypted: true, rescanning: false})
+		mockChangePassword('correctpass', 'wrongpass')
+		walletComponent = mount(initWallet())
+	})
+	it('renders a changepasswordbutton', async () => {
+		await sleep(50)
+		expect(walletComponent.find('ChangePasswordButton')).to.have.length(1)
+	})
+	it('shows a changepassworddialog when changepasswordbutton is clicked', async () => {
+		walletComponent.find('.change-password-button').first().simulate('click')
+		await sleep(10)
+		expect(walletComponent.find('ChangePasswordDialog')).to.have.length(1)
+	})
+	it('shows an error if the two new passwords do not match', async () => {
+		const changePasswordForm = walletComponent.find('.change-password-form').first()
+		const currentPasswordInput = changePasswordForm.find('.currentpassword-input')
+		currentPasswordInput.node.value = 'oldpassword'
+		const newPasswordInput = changePasswordForm.find('.newpassword-input')
+		newPasswordInput.node.value = 'test'
+		const newPasswordInputAgain = changePasswordForm.find('.newpassword-again-input')
+		newPasswordInputAgain.node.value = 'test-different'
+		changePasswordForm.simulate('submit', { target: { currentpassword: currentPasswordInput.node, newpassword: newPasswordInput.node, 'newpassword-again': newPasswordInputAgain.node } })
+		await sleep(10)
+		expect(changePasswordForm.find('.change-password-error').first().text()).to.equal('passwords did not match!')
+	})
+	it('shows an error if the current password is incorrect', async () => {
+		const changePasswordForm = walletComponent.find('.change-password-form').first()
+		const currentPasswordInput = changePasswordForm.find('.currentpassword-input')
+		currentPasswordInput.node.value = 'wrongpass'
+		const newPasswordInput = changePasswordForm.find('.newpassword-input')
+		newPasswordInput.node.value = 'test'
+		const newPasswordInputAgain = changePasswordForm.find('.newpassword-again-input')
+		newPasswordInputAgain.node.value = 'test'
+		changePasswordForm.simulate('submit', { target: { currentpassword: currentPasswordInput.node, newpassword: newPasswordInput.node, 'newpassword-again': newPasswordInputAgain.node } })
+		await sleep(10)
+		expect(changePasswordForm.find('.change-password-error').first().text()).to.equal('incorrect password')
+	})
+	it('successfully changes wallet password using correct password', async () => {
+		const changePasswordForm = walletComponent.find('.change-password-form').first()
+		const currentPasswordInput = changePasswordForm.find('.currentpassword-input')
+		currentPasswordInput.node.value = 'correctpass'
+		const newPasswordInput = changePasswordForm.find('.newpassword-input')
+		newPasswordInput.node.value = 'test'
+		const newPasswordInputAgain = changePasswordForm.find('.newpassword-again-input')
+		newPasswordInputAgain.node.value = 'test'
+		changePasswordForm.simulate('submit', { target: { currentpassword: currentPasswordInput.node, newpassword: newPasswordInput.node, 'newpassword-again': newPasswordInputAgain.node } })
+		await sleep(10)
+		expect(changePasswordForm.find('.change-password-error').first().text()).to.equal('password changed successfully.')
+	})
+	it('hides when cancel is clicked', async () => {
+		walletComponent.find('.change-password-cancel').first().simulate('click')
+		await sleep(10)
+		expect(walletComponent.find('ChangePasswordDialog')).to.have.length(0)
+	})
+})
 
 describe('wallet creation', () => {
 	before(() => {

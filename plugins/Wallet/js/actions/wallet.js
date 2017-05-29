@@ -155,4 +155,18 @@ export const setConfirmationError = (error) => ({
 	type: constants.SET_CONFIRMATION_ERROR,
 	error,
 })
-
+export const showChangePasswordDialog = () => ({
+	type: constants.SHOW_CHANGE_PASSWORD_DIALOG,
+})
+export const hideChangePasswordDialog = () => ({
+	type: constants.HIDE_CHANGE_PASSWORD_DIALOG,
+})
+export const changePassword = (currentpassword, newpassword) => ({
+	type: constants.CHANGE_PASSWORD,
+	currentpassword,
+	newpassword,
+})
+export const setChangePasswordError = (error) => ({
+	type: constants.SET_CHANGE_PASSWORD_ERROR,
+	error,
+})

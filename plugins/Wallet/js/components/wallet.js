@@ -9,8 +9,10 @@ import NewWalletDialog from '../containers/newwalletdialog.js'
 import LockButton from '../containers/lockbutton.js'
 import RecoverButton from '../containers/recoverbutton.js'
 import RecoveryDialog from '../containers/recoverydialog.js'
+import ChangePasswordButton from '../containers/changepasswordbutton.js'
+import ChangePasswordDialog from '../containers/changepassworddialog.js'
 
-const Wallet = ({synced, confirmedbalance, unconfirmedbalance, siafundbalance, showReceivePrompt, showSendPrompt, showNewWalletDialog, showRecoveryDialog, actions }) => {
+const Wallet = ({synced, confirmedbalance, unconfirmedbalance, siafundbalance, showReceivePrompt, showChangePasswordDialog, showSendPrompt, showNewWalletDialog, showRecoveryDialog, actions }) => {
 	const onSendClick = (currencytype) => () => actions.startSendPrompt(currencytype)
 	return (
 		<div className="wallet">
@@ -24,6 +26,7 @@ const Wallet = ({synced, confirmedbalance, unconfirmedbalance, siafundbalance, s
 						) : null
 					}
 				</div>
+				<ChangePasswordButton />
 				<LockButton />
 				<RecoverButton />
 				{siafundbalance !== '0' ? <SendButton currencytype="Siafund" onClick={onSendClick('siafunds')} />: null}
@@ -34,6 +37,7 @@ const Wallet = ({synced, confirmedbalance, unconfirmedbalance, siafundbalance, s
 			{showSendPrompt ? <SendPrompt /> : null}
 			{showReceivePrompt ? <ReceivePrompt /> : null}
 			{showRecoveryDialog ? <RecoveryDialog /> : null}
+			{showChangePasswordDialog ? <ChangePasswordDialog /> : null}
 			<TransactionList />
 		</div>
 	)
@@ -47,6 +51,7 @@ Wallet.propTypes = {
 	showNewWalletDialog: PropTypes.bool,
 	showSendPrompt: PropTypes.bool,
 	showReceivePrompt: PropTypes.bool,
+	showChangePasswordDialog: PropTypes.bool,
 }
 
 export default Wallet
