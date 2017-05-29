@@ -138,6 +138,11 @@ describe('wallet change password functionality', () => {
 		expect(walletComponent.find('ChangePasswordDialog')).to.have.length(1)
 		expect(walletComponent.find('.change-password-error').first().text()).to.equal('')
 	})
+	it('hides when the background is clicked', async () => {
+		walletComponent.find('.modal').simulate('click')
+		await sleep(10)
+		expect(walletComponent.find('ChangePasswordDialog')).to.have.length(0)
+	})
 })
 
 describe('wallet creation', () => {
