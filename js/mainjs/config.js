@@ -76,7 +76,7 @@ export default function configManager(filepath) {
 	try {
 		config.save()
 	} catch (err) {
-		console.error("couldnt save config.json: " + err.toString())
+		console.error('couldnt save config.json: ' + err.toString())
 	}
 
 	// Return the config object with the above 3 member functions
