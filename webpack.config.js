@@ -5,7 +5,8 @@ const path = require('path')
 const glob = require('glob')
 const version = require('./package.json').version
 
-function isVendor({ resource }) {
+function isVendor(args) {
+	const resource = args.resource
 	return resource &&
 	resource.indexOf('node_modules') >= 0 &&
 	resource.match(/\.(js|json)$/)

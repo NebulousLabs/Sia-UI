@@ -2,7 +2,7 @@ version: "{build}"
  
 platform: x64
 environment:
-  nodejs_version: "6.9.0"
+  nodejs_version: "6.9.2"
 
 install:
   - ps: wget https://github.com/NebulousLabs/Sia/releases/download/v1.0.3/Sia-v1.0.3-windows-amd64.zip -O Sia-v1.0.3-windows-amd64.zip
