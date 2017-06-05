@@ -203,6 +203,25 @@ function *sendCurrencySaga(action) {
 	}
 }
 
+// changePasswordSaga listens for CHANGE_PASSWORD actions and performs the
+// necessary API calls.
+function *changePasswordSaga(action) {
+	try {
+		yield siadCall({
+			url: '/wallet/changepassword',
+			method: 'POST',
+			timeout: 2e8,
+			qs: {
+				encryptionpassword: action.currentpassword,
+				newpassword: action.newpassword,
+			},
+		})
+		yield put(actions.setChangePasswordError('password changed successfully.'))
+	} catch (e) {
+		yield put(actions.setChangePasswordError(e.message))
+	}
+}
+
 // getSyncState queries the API for the synchronization status of the node and
 // sets the wallet's `synced` state.
 function *getSyncStateSaga() {
@@ -244,5 +263,8 @@ export function* watchSendCurrency() {
 }
 export function* watchGetSyncState() {
 	yield *takeEvery(constants.GET_SYNCSTATE, getSyncStateSaga)
+}
+export function* watchChangePassword() {
+	yield *takeEvery(constants.CHANGE_PASSWORD, changePasswordSaga)
 }
 

@@ -18,14 +18,23 @@ const initialState = Map({
 	showReceivePrompt: false,
 	showNewWalletDialog: false,
 	showNewWalletForm: false,
+	showChangePasswordDialog: false,
 	showInitSeedForm: false,
 	useCustomPassphrase: false,
 	showRecoveryDialog: false,
 	initializingSeed: false,
+	changePasswordError: '',
 })
 
 export default function walletReducer(state = initialState, action) {
 	switch (action.type) {
+	case constants.SET_CHANGE_PASSWORD_ERROR:
+		return state.set('changePasswordError', action.error)
+	case constants.SHOW_CHANGE_PASSWORD_DIALOG:
+		return state.set('showChangePasswordDialog', true)
+		            .set('changePasswordError', '')
+	case constants.HIDE_CHANGE_PASSWORD_DIALOG:
+		return state.set('showChangePasswordDialog', false)
 	case constants.SEED_RECOVERY_STARTED:
 		return state.set('recovering', true)
 	case constants.SEED_RECOVERY_FINISHED:

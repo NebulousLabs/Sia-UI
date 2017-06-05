@@ -185,7 +185,7 @@
 	width: 250px;
 }
 
-.recover-button, .send-button, .receive-button, .lock-button {
+.recover-button, .send-button, .receive-button, .lock-button, .change-password-button {
 	padding-top: 5px;
 	padding-left: 10px;
 	padding-right: 10px;
@@ -194,10 +194,10 @@
 	width: 100px;
 	cursor: pointer;
 }
-.recover-button:hover, .send-button:hover, .receive-button:hover, .lock-button:hover {
+.recover-button:hover, .send-button:hover, .receive-button:hover, .lock-button:hover, .change-password-button:hover {
 	opacity: 0.5;
 }
-.send-button span, .receive-button span, .recover-button span, .lock-button span {
+.send-button span, .receive-button span, .recover-button span, .lock-button span, .change-password-button span {
 	display: block;
 	padding: 0;
 	margin-top: 2px;
@@ -205,7 +205,7 @@
 	font-size: 12px;
 	color: #f5f5f5;
 }
-.send-button i, .recover-button i, .receive-button i, .lock-button i {
+.send-button i, .recover-button i, .receive-button i, .lock-button i, .change-password-button i {
 	color: #00CBA0;
 }
 .newwallet-dialog {
@@ -324,6 +324,38 @@
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
+}
+
+.change-password-form {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	background-color: #eee;
+	padding-left: 30px;
+	padding-right: 30px;
+	padding-bottom: 30px;
+	padding-top: 10px
+}
+.change-passowrd-buttons {
+	margin-top 15px;
+}
+.change-password-buttons button {
+	margin-left: 2px;
+	margin-right: 2px;
+	margin-top: 10px;
+}
+.change-password-form input {
+	width: 50%;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	text-indent: 10px;
+}
+
+.change-password-error {
+	height: 10px;
+	margin-top: 15px;
+	margin-bottom: 15px;
 }
 
 .recovery-form {
