@@ -33,6 +33,7 @@ const mapStateToProps = (state) => ({
 			value: state.settingsReducer.get('downloadbandwidthprice'),
 		}),
 	}),
+	conversionRate: state.settingsReducer.get('conversionRate'),
 	acceptingContracts: state.settingsReducer.get('acceptingContracts'),
 	settingsChanged: state.settingsReducer.get('settingsChanged'),
 	defaultsettings: state.settingsReducer.get('defaultsettings'),

@@ -2,7 +2,7 @@ import React from 'react'
 import * as helper from '../utils/host.js'
 import Modal from './warningmodal.js'
 
-const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, settingsChanged, shouldShowToggleAcceptingModal, actions }) => {
+const SettingsList = ({ conversionRate, acceptingContracts, usersettings, defaultsettings, settingsChanged, shouldShowToggleAcceptingModal, actions }) => {
 
 	const handleSettingInput = (e) => {
 		if (e.target.value >= 0) {
@@ -46,7 +46,7 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 	return (
 		<div className="settings section">
 			<div className="property row">
-				<div className="title">Configurations</div>
+				<div className="title">Settings</div>
 				<div className="controls">
 					<div className={'button' + ( saveEnabled() ? '' : ' disable' )} onClick={updateSettings}>
 						<i className="fa fa-save" />
@@ -72,6 +72,17 @@ const SettingsList = ({ acceptingContracts, usersettings, defaultsettings, setti
 					</div>
 				</div>
 			</div>
+			<div className="property pure-g">
+				<div className="pure-u-1-2">
+					<div className="name">Conversion Rate</div>
+				</div>
+				<div className="pure-u-1-2">
+					<div className="value">
+						<div>{conversionRate}</div>
+					</div>
+				</div>
+			</div>
+
 			{
 				shouldShowToggleAcceptingModal && acceptingContracts ?
 					<Modal title="Stop accepting contracts?"

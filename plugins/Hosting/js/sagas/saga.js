@@ -188,6 +188,26 @@ const parseRevenue = (financialmetrics) => {
 	return storagerevenue.add(bwrevenue).add(contractrevenue)
 }
 
+// updateSettingsSaga watches for updateSettings actions and performs any async
+// tasks required.
+function *updateSettingsSaga(action) {
+	try {
+		const res = yield siadCall({
+			url: '/host/estimatescore',
+			method: 'POST',
+			qs: {
+				'maxduration': helper.weeksToBlocks(action.settings.get('maxduration')).toString(),
+				'collateral': helper.SCTBMonthToHastingsByteBlock(action.settings.get('collateral')).toString(),
+				'minstorageprice': helper.SCTBMonthToHastingsByteBlock(action.settings.get('storageprice')).toString(),
+				'mindownloadbandwidthprice': helper.SCTBToHastingsByte(action.settings.get('downloadbandwidthprice')).toString(),
+			}
+		})
+		yield put(actions.setEstimatedScore(res.estimatedscore, res.conversionrate))
+	} catch (e) {
+		console.error(e.toString())
+	}
+}
+
 function *fetchData() {
 	try {
 		const updatedData = yield siadCall({ url: '/host' })
@@ -209,7 +229,7 @@ function *fetchData() {
 
 		const settings = parseSettings(updatedData)
 
-		yield put( actions.fetchDataSuccess(data, settings, modals) )
+		yield put(actions.fetchDataSuccess(data, settings, modals))
 	} catch (e) {
 		console.error('error fetching host data: ' + e.toString())
 	}
@@ -219,6 +239,11 @@ function *requestDefaultSettingsSaga() {
 	try {
 		const hostData = yield siadCall('/host')
 		yield put(actions.receiveDefaultSettings(parseSettings(hostData)))
+		const res = yield siadCall({
+			url: '/host/estimatescore',
+			method: 'POST',
+		})
+		yield put(actions.setEstimatedScore(res.estimatedscore, res.conversionrate))
 	} catch (e) {
 		console.error('error fetching defaults: ' + e.toString())
 	}
@@ -262,6 +287,9 @@ function *requestDefaultsListener() {
 function *hostStatusListener() {
 	yield *takeEvery(constants.GET_HOST_STATUS, hostStatusSaga)
 }
+function *updateSettingsListener() {
+	yield *takeEvery(constants.UPDATE_SETTINGS, updateSettingsSaga)
+}
 
 export default function *initSaga() {
 	yield [
@@ -274,6 +302,7 @@ export default function *initSaga() {
 		fork(announceHostListener),
 		fork(requestDefaultsListener),
 		fork(hostStatusListener),
+		fork(updateSettingsListener),
 	]
 }
 

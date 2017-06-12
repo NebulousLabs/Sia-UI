@@ -115,3 +115,9 @@ export const setHostStatus = (connectable, working) => ({
 	working,
 })
 
+export const setEstimatedScore = (score, conversionRate) => ({
+	type: constants.SET_ESTIMATED_SCORE,
+	score,
+	conversionRate,
+})
+

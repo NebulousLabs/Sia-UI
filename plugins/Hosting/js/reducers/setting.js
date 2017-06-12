@@ -4,6 +4,7 @@ import * as constants from '../constants/constants.js'
 const initialState = Map({
 	maxduration: 0,
 	collateral: 0,
+	conversionRate: 0,
 	storageprice: 0,
 	downloadbandwidthprice: 0,
 	acceptingContracts: false,
@@ -24,6 +25,9 @@ export default function settingsReducer(state = initialState, action) {
 		            .merge(action.settings)
 	case constants.FETCH_DATA_SUCCESS:
 		return state.get('settingsChanged') ? state : state.merge(action.settings)
+	case constants.SET_ESTIMATED_SCORE:
+		console.log(action)
+		return state.set('conversionRate', action.conversionRate)
 	default:
 		return state
 	}
