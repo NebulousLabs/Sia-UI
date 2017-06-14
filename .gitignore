@@ -10,6 +10,9 @@ dist
 sia-testing
 package-lock.json
 
+#VSCode
+.vscode
+
 # Vim
 *.sw?
 

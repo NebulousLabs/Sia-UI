@@ -3,7 +3,6 @@ import React from 'react'
 import { List } from 'immutable'
 
 const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
-	console.log(filter)
 	if (transactions.size === 0) {
 		return (
 			<div className="transaction-list">
@@ -38,6 +37,12 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 	}
 	const transactionComponents = transactions
 		.take(ntransactions)
+		.filter((txn) => {
+			if (!filter) {
+				return true
+			}
+			return txn.transactionsums.totalSiacoin.abs().gt(0) || txn.transactionsums.totalSiafund.abs().gt(0) || txn.transactionsums.totalMiner.abs().gt(0)
+		})
 		.map((txn, key) => {
 			let valueData = ''
 			if (txn.transactionsums.totalSiacoin.abs().gt(0)) {
@@ -62,43 +67,22 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 			if (valueData === '') {
 				valueData = '0 SC'
 			}
-			if (filter) {
-				if (valueData !== '0 SC') {
-					return (
-						<tr key={key}>
-							<td>
-								{txn.confirmed
-									? prettyTimestamp(txn.confirmationtimestamp)
-									: 'Not Confirmed'}
-							</td>
-							<td>{valueData}</td>
-							<td className="txid">{txn.transactionid}</td>
-							<td>
-								{txn.confirmed
-									? <i className="fa fa-check-square confirmed-icon"> Confirmed </i>
-									: <i className="fa fa-clock-o unconfirmed-icon"> Unconfirmed </i>}
-							</td>
-						</tr>
-					)
-				}
-			} else {
-				return (
-					<tr key={key}>
-						<td>
-							{txn.confirmed
-								? prettyTimestamp(txn.confirmationtimestamp)
-								: 'Not Confirmed'}
-						</td>
-						<td>{valueData}</td>
-						<td className="txid">{txn.transactionid}</td>
-						<td>
-							{txn.confirmed
-								? <i className="fa fa-check-square confirmed-icon"> Confirmed </i>
-								: <i className="fa fa-clock-o unconfirmed-icon"> Unconfirmed </i>}
-						</td>
-					</tr>
-				)
-			}
+			return (
+				<tr key={key}>
+					<td>
+						{txn.confirmed
+							? prettyTimestamp(txn.confirmationtimestamp)
+							: 'Not Confirmed'}
+					</td>
+					<td>{valueData}</td>
+					<td className="txid">{txn.transactionid}</td>
+					<td>
+						{txn.confirmed
+							? <i className="fa fa-check-square confirmed-icon"> Confirmed </i>
+							: <i className="fa fa-clock-o unconfirmed-icon"> Unconfirmed </i>}
+					</td>
+				</tr>
+			)
 		})
 	const onMoreClick = () => actions.showMoreTransactions()
 	const onToggleFilter = () => actions.toggleFilter()
