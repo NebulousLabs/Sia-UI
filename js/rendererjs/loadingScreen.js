@@ -97,12 +97,12 @@ export default async function loadingScreen(initUI) {
 
 	// check siadConfig.path, if it doesn't exist optimistically set it to the
 	// default path
-	if (!await checkSiaPath(siadConfig.path)) {
+	if (!await checkSiaPath()) {
 		siadConfig.path = config.defaultSiadPath
 	}
 
 	// check siadConfig.path, and ask for a new path if siad doesn't exist.
-	if (!await checkSiaPath(siadConfig.path)) {
+	if (!await checkSiaPath()) {
 		// config.path doesn't exist.  Prompt the user for siad's location
 		dialog.showErrorBox('Siad not found', 'Sia-UI couldn\'t locate siad.  Please navigate to siad.')
 		const siadPath = dialog.showOpenDialog({
