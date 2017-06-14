@@ -77,11 +77,13 @@
 	font-size: 14px;
 	text-align: center;
 }
-.transaction-list h2 {
+.transaction-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	background-color: #C5C5C5;
 	margin: 0;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding: 10px;
 }
 .unconfirmed-icon {
 	color: #DC0025;

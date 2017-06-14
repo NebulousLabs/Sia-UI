@@ -170,6 +170,9 @@ export const setChangePasswordError = (error) => ({
 	type: constants.SET_CHANGE_PASSWORD_ERROR,
 	error,
 })
+export const toggleFilter = () => ({
+	type: constants.TOGGLE_FILTER,
+})
 export const fetchData = () => ({
 	type: constants.FETCH_DATA,
 })
