@@ -134,6 +134,13 @@ describe('wallet transaction list component', () => {
 		expect(emptytxnlist.find('.transaction-list').children()).to.have.length(1)
 		expect(emptytxnlist.find('.transaction-list h3').first().text()).to.contain('No recent transactions')
 	})
+	it('filters 0 SC transactions properly', () => {
+		const filteredTxnList = shallow(<TransactionList transactions={testTxns} ntransactions={testTxns.size} filter />)
+		const filteredNodes = filteredTxnList.find('.transaction-table tbody').children()
+		for (let nodeindex = 0; nodeindex < filteredNodes.length; nodeindex++) {
+			expect(filteredNodes.at(nodeindex).find('td').at(1).text()).to.not.equal('0 SC')
+		}
+	})
 	it('renders a table with the correct length', () => {
 		expect(txnlistComponent.find('.transaction-table tbody').children()).to.have.length(testTxns.size)
 	})
