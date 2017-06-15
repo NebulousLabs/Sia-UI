@@ -247,6 +247,7 @@ export function* dataFetcher() {
 		})
 	}
 }
+>>>>>>> 9d07691... saner, more robust data polling in files/wallet plugins
 export function* watchCreateNewWallet() {
 	yield *takeEvery(constants.CREATE_NEW_WALLET, createWalletSaga)
 }

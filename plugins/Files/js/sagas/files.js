@@ -1,13 +1,5 @@
-<<<<<<< HEAD
 import { takeEvery, delay } from 'redux-saga'
 import { fork, join, put, race, take, call } from 'redux-saga/effects'
-||||||| merged common ancestors
-import { takeEvery } from 'redux-saga'
-import { put } from 'redux-saga/effects'
-=======
-import { takeEvery, delay } from 'redux-saga'
-import { put, race, take, call } from 'redux-saga/effects'
->>>>>>> saner, more robust data polling in files/wallet plugins
 import Path from 'path'
 import fs from 'graceful-fs'
 import * as actions from '../actions/files.js'
@@ -259,7 +251,6 @@ function* renameFileSaga(action) {
 	}
 }
 
-<<<<<<< HEAD
 export function* dataFetcher() {
 	while (true) {
 		let tasks = []
@@ -278,24 +269,6 @@ export function* dataFetcher() {
 		})
 	}
 }
-||||||| merged common ancestors
-=======
-export function* dataFetcher() {
-	while (true) {
-		yield call(getDownloadsSaga)
-		yield call(getFilesSaga)
-		yield call(getUploadsSaga)
-		yield call(getContractCountSaga)
-		yield call(getWaletSyncstateSaga)
-		yield call(getWalletBalanceSaga)
-		yield call(getAllowanceSaga)
-		yield race({
-			task: call(delay, 8000),
-			cancel: take(constants.FETCH_DATA),
-		})
-	}
-}
->>>>>>> saner, more robust data polling in files/wallet plugins
 export function* watchSetAllowance() {
 	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
 }

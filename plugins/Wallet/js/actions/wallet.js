@@ -176,3 +176,4 @@ export const toggleFilter = () => ({
 export const fetchData = () => ({
 	type: constants.FETCH_DATA,
 })
+
