@@ -1,5 +1,5 @@
-import { takeEvery } from 'redux-saga'
-import { put } from 'redux-saga/effects'
+import { takeEvery, delay } from 'redux-saga'
+import { put, race, take, call } from 'redux-saga/effects'
 import Path from 'path'
 import fs from 'graceful-fs'
 import * as actions from '../actions/files.js'
@@ -251,6 +251,21 @@ function* renameFileSaga(action) {
 	}
 }
 
+export function* dataFetcher() {
+	while (true) {
+		yield call(getDownloadsSaga)
+		yield call(getFilesSaga)
+		yield call(getUploadsSaga)
+		yield call(getContractCountSaga)
+		yield call(getWaletSyncstateSaga)
+		yield call(getWalletBalanceSaga)
+		yield call(getAllowanceSaga)
+		yield race({
+			task: call(delay, 8000),
+			cancel: take(constants.FETCH_DATA),
+		})
+	}
+}
 export function* watchSetAllowance() {
 	yield *takeEvery(constants.SET_ALLOWANCE, setAllowanceSaga)
 }
