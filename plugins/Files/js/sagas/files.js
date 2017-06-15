@@ -1,5 +1,5 @@
 import { takeEvery, delay } from 'redux-saga'
-import { put, race, take, call } from 'redux-saga/effects'
+import { fork, join, put, race, take, call } from 'redux-saga/effects'
 import Path from 'path'
 import fs from 'graceful-fs'
 import * as actions from '../actions/files.js'
@@ -20,7 +20,7 @@ function* getWalletLockstateSaga() {
 }
 
 // Query siad for the sync state of the wallet.
-function* getWaletSyncstateSaga() {
+function* getWalletSyncstateSaga() {
 	try {
 		const response = yield siadCall('/consensus')
 		yield put(actions.setWalletSyncstate(response.synced))
@@ -253,13 +253,16 @@ function* renameFileSaga(action) {
 
 export function* dataFetcher() {
 	while (true) {
-		yield call(getDownloadsSaga)
-		yield call(getFilesSaga)
-		yield call(getUploadsSaga)
-		yield call(getContractCountSaga)
-		yield call(getWaletSyncstateSaga)
-		yield call(getWalletBalanceSaga)
-		yield call(getAllowanceSaga)
+		let tasks = []
+		tasks = tasks.concat(yield fork(getDownloadsSaga))
+		tasks = tasks.concat(yield fork(getFilesSaga))
+		tasks = tasks.concat(yield fork(getUploadsSaga))
+		tasks = tasks.concat(yield fork(getContractCountSaga))
+		tasks = tasks.concat(yield fork(getWalletBalanceSaga))
+		tasks = tasks.concat(yield fork(getWalletSyncstateSaga))
+		tasks = tasks.concat(yield fork(getAllowanceSaga))
+
+		yield join(...tasks)
 		yield race({
 			task: call(delay, 8000),
 			cancel: take(constants.FETCH_DATA),
@@ -309,5 +312,5 @@ export function* watchGetStorageEstimate() {
 	yield *takeEvery(constants.GET_STORAGE_ESTIMATE, getStorageEstimateSaga)
 }
 export function* watchGetWalletSyncstate() {
-	yield *takeEvery(constants.GET_WALLET_SYNCSTATE, getWaletSyncstateSaga)
+	yield *takeEvery(constants.GET_WALLET_SYNCSTATE, getWalletSyncstateSaga)
 }

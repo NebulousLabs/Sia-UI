@@ -1,4 +1,4 @@
-import { put, take, call, race } from 'redux-saga/effects'
+import { put, take, fork, call, join, race } from 'redux-saga/effects'
 import { takeEvery, delay } from 'redux-saga'
 import { siadCall, parseRawTransactions } from './helpers.js'
 import * as actions from '../actions/wallet.js'
@@ -235,13 +235,12 @@ function *getSyncStateSaga() {
 // exported redux-saga action watchers
 export function* dataFetcher() {
 	while (true) {
-		yield call(getLockStatusSaga)
-		yield call(getSyncState)
-		const unlocked = yield select((state) => state.wallet.get('unlocked') && state.wallet.get('encrypted'))
-		if (unlocked) {
-			yield call(getBalance)
-			yield call(getTransactions)
-		}
+		let tasks = []
+		tasks = tasks.concat(yield fork(getSyncStateSaga))
+		tasks = tasks.concat(yield fork(getLockStatusSaga))
+		tasks = tasks.concat(yield fork(getBalanceSaga))
+		tasks = tasks.concat(yield fork(getTransactionsSaga))
+		tasks = yield join(...tasks)
 		yield race({
 			task: call(delay, 8000),
 			cancel: take(constants.FETCH_DATA),
