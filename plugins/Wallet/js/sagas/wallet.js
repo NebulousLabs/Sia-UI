@@ -1,5 +1,5 @@
-import { takeEvery } from 'redux-saga'
-import { put, take } from 'redux-saga/effects'
+import { put, take, call, race } from 'redux-saga/effects'
+import { takeEvery, delay } from 'redux-saga'
 import { siadCall, parseRawTransactions } from './helpers.js'
 import * as actions from '../actions/wallet.js'
 import * as constants from '../constants/wallet.js'
@@ -32,7 +32,6 @@ function *getLockStatusSaga() {
 		} else {
 			yield put(actions.setUnencrypted())
 		}
-		yield put(actions.setRescanning(response.rescanning))
 	} catch (e) {
 		console.error('error fetching lock status: ' + e.toString())
 	}
@@ -233,7 +232,22 @@ function *getSyncStateSaga() {
 	}
 }
 
-// These functions are run by the redux-saga middleware.
+// exported redux-saga action watchers
+export function* dataFetcher() {
+	while (true) {
+		yield call(getLockStatusSaga)
+		yield call(getSyncState)
+		const unlocked = yield select((state) => state.wallet.get('unlocked') && state.wallet.get('encrypted'))
+		if (unlocked) {
+			yield call(getBalance)
+			yield call(getTransactions)
+		}
+		yield race({
+			task: call(delay, 8000),
+			cancel: take(constants.FETCH_DATA),
+		})
+	}
+}
 export function* watchCreateNewWallet() {
 	yield *takeEvery(constants.CREATE_NEW_WALLET, createWalletSaga)
 }
