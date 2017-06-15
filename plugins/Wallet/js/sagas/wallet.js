@@ -1,5 +1,5 @@
-import { takeEvery } from 'redux-saga'
-import { put, take } from 'redux-saga/effects'
+import { put, take, fork, call, join, race } from 'redux-saga/effects'
+import { takeEvery, delay } from 'redux-saga'
 import { siadCall, parseRawTransactions } from './helpers.js'
 import * as actions from '../actions/wallet.js'
 import * as constants from '../constants/wallet.js'
@@ -233,7 +233,21 @@ function *getSyncStateSaga() {
 	}
 }
 
-// These functions are run by the redux-saga middleware.
+// exported redux-saga action watchers
+export function* dataFetcher() {
+	while (true) {
+		let tasks = []
+		tasks = tasks.concat(yield fork(getSyncStateSaga))
+		tasks = tasks.concat(yield fork(getLockStatusSaga))
+		tasks = tasks.concat(yield fork(getBalanceSaga))
+		tasks = tasks.concat(yield fork(getTransactionsSaga))
+		tasks = yield join(...tasks)
+		yield race({
+			task: call(delay, 8000),
+			cancel: take(constants.FETCH_DATA),
+		})
+	}
+}
 export function* watchCreateNewWallet() {
 	yield *takeEvery(constants.CREATE_NEW_WALLET, createWalletSaga)
 }
