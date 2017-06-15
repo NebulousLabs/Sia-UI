@@ -32,7 +32,6 @@ function *getLockStatusSaga() {
 		} else {
 			yield put(actions.setUnencrypted())
 		}
-		yield put(actions.setRescanning(response.rescanning))
 	} catch (e) {
 		console.error('error fetching lock status: ' + e.toString())
 	}
