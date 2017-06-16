@@ -194,7 +194,7 @@ function *updateSettingsSaga(action) {
 	try {
 		const res = yield siadCall({
 			url: '/host/estimatescore',
-			method: 'POST',
+			method: 'GET',
 			qs: {
 				'maxduration': helper.weeksToBlocks(action.settings.get('maxduration')).toString(),
 				'collateral': helper.SCTBMonthToHastingsByteBlock(action.settings.get('collateral')).toString(),
@@ -241,7 +241,7 @@ function *requestDefaultSettingsSaga() {
 		yield put(actions.receiveDefaultSettings(parseSettings(hostData)))
 		const res = yield siadCall({
 			url: '/host/estimatescore',
-			method: 'POST',
+			method: 'GET',
 		})
 		yield put(actions.setEstimatedScore(res.estimatedscore, res.conversionrate))
 	} catch (e) {

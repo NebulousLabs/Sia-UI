@@ -78,7 +78,7 @@ const SettingsList = ({ conversionRate, acceptingContracts, usersettings, defaul
 				</div>
 				<div className="pure-u-1-2">
 					<div className="value">
-						<div>{conversionRate}</div>
+						<div className="value">{conversionRate}%</div>
 					</div>
 				</div>
 			</div>
