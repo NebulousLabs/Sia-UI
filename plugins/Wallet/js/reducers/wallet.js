@@ -14,7 +14,7 @@ const initialState = Map({
 	siafundbalance: '0',
 	transactions: List(),
 	ntransactions: 30,
-	filter: false,
+	filter: true,
 	showSendPrompt: false,
 	showReceivePrompt: false,
 	showNewWalletDialog: false,
