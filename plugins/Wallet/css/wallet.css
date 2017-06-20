@@ -86,6 +86,10 @@
 	margin: 0;
 	padding: 10px;
 }
+.transaction-header > h2 {
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
 .filter-toggle > input {
 	margin-right: 5px;
 }
