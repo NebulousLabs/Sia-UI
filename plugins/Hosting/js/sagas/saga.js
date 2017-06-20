@@ -200,7 +200,7 @@ function *updateSettingsSaga(action) {
 				'collateral': helper.SCTBMonthToHastingsByteBlock(action.settings.get('collateral')).toString(),
 				'minstorageprice': helper.SCTBMonthToHastingsByteBlock(action.settings.get('storageprice')).toString(),
 				'mindownloadbandwidthprice': helper.SCTBToHastingsByte(action.settings.get('downloadbandwidthprice')).toString(),
-			}
+			},
 		})
 		yield put(actions.setEstimatedScore(res.estimatedscore, res.conversionrate))
 	} catch (e) {
