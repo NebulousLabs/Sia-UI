@@ -1,6 +1,8 @@
 import fs from 'graceful-fs'
 import Path from 'path'
 import { app } from 'electron'
+import { version } from '../../package.json'
+import semver from 'semver'
 
 const defaultSiadPath = Path.join(__dirname, '../Sia/' + (process.platform === 'win32' ? 'siad.exe' : 'siad'))
 
@@ -20,6 +22,7 @@ const defaultConfig = {
 	height:	  768,
 	x:		   0,
 	y:		   0,
+	version: version,
 }
 
 /**
@@ -34,6 +37,15 @@ export default function configManager(filepath) {
 		config = JSON.parse(data)
 	} catch (err) {
 		config = defaultConfig
+	}
+
+	// always use the default siad path after an upgrade
+	if (typeof config.version === 'undefined') {
+		config.version = version
+	}
+	if (semver.lt(config.version, version)) {
+		config.version = version
+		config.siad.path = defaultSiadPath
 	}
 
 	// fill out default values if config is incomplete
