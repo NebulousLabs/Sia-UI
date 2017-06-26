@@ -222,6 +222,16 @@ function *changePasswordSaga(action) {
 	}
 }
 
+
+function *startSendPromptSaga() {
+	try {
+		const response = yield siadCall('/tpool/fee')
+		const feeEstimate = SiaAPI.hastingsToSiacoins(response.maximum).times(1e3).round(8).toString() + ' SC/TB'
+		yield put(actions.setFeeEstimate(feeEstimate))
+	} catch (e) {
+		console.error('error fetching fee estimate for send prompt: ' + e.toString())
+	}
+}
 // getSyncState queries the API for the synchronization status of the node and
 // sets the wallet's `synced` state.
 function *getSyncStateSaga() {
@@ -247,6 +257,9 @@ export function* dataFetcher() {
 			cancel: take(constants.FETCH_DATA),
 		})
 	}
+}
+export function* watchStartSendPrompt() {
+	yield *takeEvery(constants.START_SEND_PROMPT, startSendPromptSaga)
 }
 export function* watchCreateNewWallet() {
 	yield *takeEvery(constants.CREATE_NEW_WALLET, createWalletSaga)
