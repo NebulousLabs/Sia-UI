@@ -7,6 +7,7 @@ const mapStateToProps = (state) => ({
 	sendAddress: state.sendprompt.get('sendaddress'),
 	sendAmount: state.sendprompt.get('sendamount'),
 	currencytype: state.sendprompt.get('currencytype'),
+	feeEstimate: state.sendprompt.get('feeEstimate'),
 })
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ closeSendPrompt, setSendAddress, setSendAmount, sendCurrency }, dispatch),

@@ -164,8 +164,11 @@
 	align-items: center;
 	justify-content: center;
 	background-color: #ECECEC;
-	width: 50%;
-	height: 50%;
+	width: 400px;
+	height: 300px;
+}
+.sendprompt .fee-estimation {
+	margin-top: 6px;
 }
 .sendprompt button {
 	margin-left: 5px;
