@@ -210,14 +210,14 @@ describe('files plugin sagas', () => {
 		type: 'file',
 	}
 	it('can buffer lots of delete actions', function() {
-		this.timeout(20000)
+		this.timeout(40000)
 		for (let i = 0; i < 4096; i++) {
 			store.dispatch(actions.deleteFile(testFile))
 		}
 		expect(SiaAPI.showError.called).to.be.false
 	})
 	it('can buffer lots of upload actions', function() {
-		this.timeout(20000)
+		this.timeout(40000)
 		for (let i = 0; i < 4096; i++) {
 			store.dispatch(actions.uploadFile('testfile', ''))
 		}

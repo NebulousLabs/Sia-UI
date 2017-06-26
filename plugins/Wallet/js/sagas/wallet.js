@@ -226,7 +226,7 @@ function *changePasswordSaga(action) {
 function *startSendPromptSaga() {
 	try {
 		const response = yield siadCall('/tpool/fee')
-		const feeEstimate = SiaAPI.hastingsToSiacoins(response.maximum).times(1e3).round(8).toString() + ' SC/TB'
+		const feeEstimate = SiaAPI.hastingsToSiacoins(response.maximum).times(1e3).round(8).toString() + ' SC/KB'
 		yield put(actions.setFeeEstimate(feeEstimate))
 	} catch (e) {
 		console.error('error fetching fee estimate for send prompt: ' + e.toString())
