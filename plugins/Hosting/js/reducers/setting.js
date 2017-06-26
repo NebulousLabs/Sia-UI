@@ -26,7 +26,6 @@ export default function settingsReducer(state = initialState, action) {
 	case constants.FETCH_DATA_SUCCESS:
 		return state.get('settingsChanged') ? state : state.merge(action.settings)
 	case constants.SET_ESTIMATED_SCORE:
-		console.log(action)
 		return state.set('conversionRate', action.conversionRate)
 	default:
 		return state

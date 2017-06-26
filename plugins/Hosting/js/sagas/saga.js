@@ -202,7 +202,14 @@ function *updateSettingsSaga(action) {
 				'mindownloadbandwidthprice': helper.SCTBToHastingsByte(action.settings.get('downloadbandwidthprice')).toString(),
 			},
 		})
-		yield put(actions.setEstimatedScore(res.estimatedscore, res.conversionrate))
+		const conversionRate = (() => {
+			const rate = new BigNumber(res.conversionrate.toString())
+			if (rate.gt(50)) {
+				return '>50'
+			}
+			return rate.round(2).toString()
+		})()
+		yield put(actions.setEstimatedScore(res.estimatedscore, conversionRate))
 	} catch (e) {
 		console.error(e.toString())
 	}
