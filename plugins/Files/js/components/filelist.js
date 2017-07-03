@@ -21,7 +21,8 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 		if (pathComponents.length < 2) {
 			actions.setPath('')
 		} else {
-			actions.setPath(pathComponents[pathComponents.length-2] + '/')
+			pathComponents.pop()
+			actions.setPath(pathComponents.join('/'))
 		}
 	}
 
