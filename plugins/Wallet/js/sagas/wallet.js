@@ -243,6 +243,18 @@ function *getSyncStateSaga() {
 	}
 }
 
+// showBackupPromptSaga handles a SHOW_BACKUP_PROMPT action, asynchronously
+// fetching the primary seed from the sia API and setting the backup prompt's
+// state accordingly.
+function *showBackupPromptSaga() {
+	try {
+		const response = yield siadCall('/wallet/seeds')
+		yield put(actions.setPrimarySeed(response.primaryseed))
+	} catch (e) {
+		console.error(`error fetching primary seed for backup prompt: ${e.toString()}`)
+	}
+}
+
 // exported redux-saga action watchers
 export function* dataFetcher() {
 	while (true) {
@@ -251,7 +263,7 @@ export function* dataFetcher() {
 		tasks = tasks.concat(yield fork(getLockStatusSaga))
 		tasks = tasks.concat(yield fork(getBalanceSaga))
 		tasks = tasks.concat(yield fork(getTransactionsSaga))
-		tasks = yield join(...tasks)
+		yield join(...tasks)
 		yield race({
 			task: call(delay, 8000),
 			cancel: take(constants.FETCH_DATA),
@@ -294,4 +306,6 @@ export function* watchGetSyncState() {
 export function* watchChangePassword() {
 	yield *takeEvery(constants.CHANGE_PASSWORD, changePasswordSaga)
 }
-
+export function* watchShowBackupPrompt() {
+	yield *takeEvery(constants.SHOW_BACKUP_PROMPT, showBackupPromptSaga)
+}

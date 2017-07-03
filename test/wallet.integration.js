@@ -16,6 +16,8 @@ const mockSiaAPI = {
 	showError: () => spy(),
 }
 
+const testSeed = 'this is a seed used for testing env'
+
 const setMockLockState = (lockstate) => {
 	SiaAPI.call.withArgs('/wallet').callsArgWith(1, null, lockstate)
 }
@@ -63,6 +65,7 @@ const setupMockCalls = () => {
 		url: '/wallet/lock',
 		method: 'POST',
 	})).callsArgWith(1, null)
+	SiaAPI.call.withArgs('/wallet/seeds').callsArgWith(1, null, { 'primaryseed': testSeed })
 	setMockLockState({unlocked: false, encrypted: true})
 	setMockWalletPassword('testpass')
 	setMockIncorrectWalletPassword('wrongpass')
@@ -356,6 +359,22 @@ describe('wallet plugin integration tests', () => {
 			}
 		}, 50)
 	})
+
+	describe('wallet backup button', () => {
+		it('shows the primary seed when the backup wallet button is clicked', async () => {
+			walletComponent.find('.backup-button').simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('.backupprompt')).to.have.length(1)
+			expect(walletComponent.find('.primary-seed')).to.have.length(1)
+			expect(walletComponent.find('.primary-seed').first().text()).to.equal(testSeed)
+		})
+		it('hides when ok button is clicked', async () => {
+			walletComponent.find('.backupprompt > .ok-button').first().simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('.backupprompt')).to.have.length(0)
+		})
+	})
+
 	it('locks when the lock button is clicked', (done) => {
 		expect(walletComponent.find('.lockscreen')).to.have.length(0)
 		walletComponent.find('.lock-button').simulate('click')
