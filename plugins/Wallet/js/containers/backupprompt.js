@@ -11,4 +11,4 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const BackupPrompt = connect(mapStateToProps, mapDispatchToProps)(BackupPromptView)
-export default BackupPrompt 
+export default BackupPrompt
