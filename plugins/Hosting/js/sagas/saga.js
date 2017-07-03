@@ -250,7 +250,7 @@ function *requestDefaultSettingsSaga() {
 			url: '/host/estimatescore',
 			method: 'GET',
 		})
-		yield put(actions.setEstimatedScore(res.estimatedscore, res.conversionrate))
+		yield put(actions.setEstimatedScore(res.estimatedscore, new BigNumber(res.conversionrate).round(2).toString()))
 	} catch (e) {
 		console.error('error fetching defaults: ' + e.toString())
 	}
