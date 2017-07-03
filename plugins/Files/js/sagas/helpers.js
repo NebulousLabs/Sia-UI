@@ -106,7 +106,11 @@ export const ls = (files, path) => {
 		if (relativePath.indexOf('/') !== -1) {
 			type = 'directory'
 			filename = relativePath.split('/')[0]
-
+		}
+		if (parsedFiles.has(filename) && parsedFiles.get(filename).type === type) {
+			return
+		}
+		if (type === 'directory') {
 			// directories cannot be named '..'.
 			if (filename === '..') {
 				return
@@ -118,9 +122,6 @@ export const ls = (files, path) => {
 			filesize = readableFilesize(totalFilesize)
 			redundancy = minRedundancy(subfiles)
 			uploadprogress = minUpload(subfiles)
-		}
-		if (parsedFiles.has(filename) && parsedFiles.get(filename).type === type) {
-			return
 		}
 		parsedFiles = parsedFiles.set(filename, {
 			size: filesize,
