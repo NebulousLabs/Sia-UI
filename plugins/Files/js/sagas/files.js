@@ -50,6 +50,7 @@ function* getStorageEstimateSaga(action) {
 		const estimate = new BigNumber(SiaAPI.siacoinsToHastings(action.funds)).dividedBy(response.storageterabytemonth).times(1e12)
 
 		yield put(actions.setStorageEstimate('~' + readableFilesize(estimate.toPrecision(1))))
+		yield put(actions.setFeeEstimate(SiaAPI.hastingsToSiacoins(response.formcontracts).toString()))
 	} catch (e) {
 		console.error(e)
 	}
