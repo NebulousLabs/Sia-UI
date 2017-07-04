@@ -11,10 +11,7 @@ const AllowanceDialog = ({confirming, confirmationAllowance, unlocked, synced, f
 		e.preventDefault()
 		actions.showAllowanceConfirmation(e.target.allowance.value)
 	}
-	const onAllowanceChange = (e) => {
-		actions.getStorageEstimate(e.target.value)
-		actions.setFeeEstimate(Math.floor(1000 + 0.12 * parseInt(e.target.value)) || 0)
-	}
+	const onAllowanceChange = (e) => actions.getStorageEstimate(e.target.value)
 	const dialogContents = confirming ? (
 		<ConfirmationDialog allowance={confirmationAllowance} onConfirmClick={onConfirmClick} onCancelClick={onConfirmationCancel} />
 	) : (

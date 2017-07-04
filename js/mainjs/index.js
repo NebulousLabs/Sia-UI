@@ -7,6 +7,9 @@ import initWindow from './initWindow.js'
 global.config = loadConfig(Path.join(app.getPath('userData'), 'config.json'))
 let mainWindow
 
+// disable hardware accelerated rendering
+app.disableHardwareAcceleration()
+
 // Allow only one instance of Sia-UI
 const shouldQuit = app.makeSingleInstance(() => {
 	if (mainWindow) {
@@ -32,9 +35,9 @@ app.on('window-all-closed', () => {
 	app.quit()
 })
 
-// On quit, save the config.
-// There's no need to call siad.stop here, since if siad was launched by the UI,
-// it will be a descendant of the UI in the process tree and will therefore be killed.
+// On quit, save the config.  There's no need to call siad.stop here, since if
+// siad was launched by the UI, it will be a descendant of the UI in the
+// process tree and will therefore be killed.
 app.on('quit', () => {
 	config.save()
 })

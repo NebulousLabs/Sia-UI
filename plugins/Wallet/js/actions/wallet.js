@@ -176,4 +176,8 @@ export const toggleFilter = () => ({
 export const fetchData = () => ({
 	type: constants.FETCH_DATA,
 })
+export const setFeeEstimate = (estimate) => ({
+	type: constants.SET_FEE_ESTIMATE,
+	estimate,
+})
 
