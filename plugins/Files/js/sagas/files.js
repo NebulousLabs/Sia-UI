@@ -260,6 +260,7 @@ export function* dataFetcher() {
 		tasks = tasks.concat(yield fork(getContractCountSaga))
 		tasks = tasks.concat(yield fork(getWalletBalanceSaga))
 		tasks = tasks.concat(yield fork(getWalletSyncstateSaga))
+		tasks = tasks.concat(yield fork(getWalletLockstateSaga))
 		tasks = tasks.concat(yield fork(getAllowanceSaga))
 
 		yield join(...tasks)
