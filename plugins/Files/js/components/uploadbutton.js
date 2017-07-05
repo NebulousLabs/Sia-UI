@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-const minimumContracts = 14
+const minimumContracts = 2
 
 const UploadButton = ({contracts = minimumContracts, actions}) => {
 	const onUploadClick = (type) => () => {

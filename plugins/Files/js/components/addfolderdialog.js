@@ -9,7 +9,7 @@ const AddFolderDialog = ({actions}) => {
 	const onCancelClick = () => actions.hideAddFolderDialog()
 	return (
 		<div className="modal">
-			<div className="addfoldre-dialog">
+			<div className="addfolder-dialog">
 				<div className="addfolder-text">
 					Enter a name for the new folder:
 				</div>
