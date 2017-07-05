@@ -10,4 +10,4 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const AddFolderButton = connect(mapStateToProps, mapDispatchToProps)(AddFolderButtonView)
-export default AddFolderButton 
+export default AddFolderButton

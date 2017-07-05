@@ -10,4 +10,4 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const AddFolderDialog = connect(mapStateToProps, mapDispatchToProps)(AddFolderDialogView)
-export default AddFolderDialog 
+export default AddFolderDialog

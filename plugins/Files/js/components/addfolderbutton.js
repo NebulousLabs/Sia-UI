@@ -5,9 +5,9 @@ const AddFolderButton = ({actions}) => {
 	return (
 		<div onClick={handleClick} className="addfolder-button">
 			<i className="fa fa-folder fa-2x" />
-			<span> Add Folder </span>
+			<span> New Folder </span>
 		</div>
 	)
 }
 
-export default AddFolderButton 
+export default AddFolderButton

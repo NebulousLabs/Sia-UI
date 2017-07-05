@@ -32,7 +32,6 @@ const initialState = Map({
 })
 
 export default function filesReducer(state = initialState, action) {
-	console.log(action)
 	switch (action.type) {
 	case constants.SET_ALLOWANCE_COMPLETED:
 		return state.set('settingAllowance', false)
