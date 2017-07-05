@@ -1,9 +1,11 @@
 import { Map, Set, OrderedSet, List } from 'immutable'
 import * as constants from '../constants/files.js'
 import { ls, searchFiles, rangeSelect } from '../sagas/helpers.js'
+import Path from 'path'
 
 const initialState = Map({
 	files: List(),
+	folders: List(),
 	workingDirectoryFiles: null,
 	searchResults: List(),
 	uploading: List(),
@@ -13,6 +15,7 @@ const initialState = Map({
 	searchText: '',
 	uploadSource: '',
 	showAllowanceDialog: false,
+	showAddFolderDialog: false,
 	showUploadDialog: false,
 	showSearchField: false,
 	showFileTransfers: false,
@@ -29,6 +32,7 @@ const initialState = Map({
 })
 
 export default function filesReducer(state = initialState, action) {
+	console.log(action)
 	switch (action.type) {
 	case constants.SET_ALLOWANCE_COMPLETED:
 		return state.set('settingAllowance', false)
@@ -41,13 +45,26 @@ export default function filesReducer(state = initialState, action) {
 	case constants.UPLOAD_FILE:
 		return state.set('unreadUploads', state.get('unreadUploads').add(action.siapath))
 	case constants.RECEIVE_FILES: {
-		const workingDirectoryFiles = ls(action.files, state.get('path'))
+		const workingDirectoryFiles = ls(action.files.concat(state.get('folders')), state.get('path'))
 		const workingDirectorySiapaths = workingDirectoryFiles.map((file) => file.siapath)
 		// filter out selected files that are no longer in the working directory
 		const selected = state.get('selected').filter((file) => workingDirectorySiapaths.includes(file.siapath))
 		return state.set('files', action.files)
 		            .set('workingDirectoryFiles', workingDirectoryFiles)
 		            .set('selected', selected)
+	}
+	case constants.ADD_FOLDER: {
+		const folder = {
+			filesize: 0,
+			siapath: Path.join(state.get('path'), action.name),
+			available: false,
+			redundancy: 3,
+			uploadprogress: 100,
+			siaUIFolder: true,
+		}
+		const folders = state.get('folders').push(folder)
+		return state.set('folders', folders)
+		            .set('workingDirectoryFiles', ls(state.get('files').concat(folders), state.get('path')), folders, state.get('path'))
 	}
 	case constants.SET_ALLOWANCE:
 		return state.set('allowance', action.funds)
@@ -62,7 +79,7 @@ export default function filesReducer(state = initialState, action) {
 	case constants.SET_PATH:
 		return state.set('path', action.path)
 		            .set('selected', OrderedSet())
-		            .set('workingDirectoryFiles', ls(state.get('files'), action.path))
+		            .set('workingDirectoryFiles', ls(state.get('files').concat(state.get('folders')), action.path))
 		            .set('searchResults', searchFiles(state.get('workingDirectoryFiles'), state.get('searchText', state.get('path'))))
 	case constants.DESELECT_FILE:
 		return state.set('selected', state.get('selected').filter((file) => file.siapath !== action.file.siapath))
@@ -109,6 +126,10 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('showRenameDialog', true)
 	case constants.HIDE_RENAME_DIALOG:
 		return state.set('showRenameDialog', false)
+	case constants.SHOW_ADD_FOLDER_DIALOG:
+		return state.set('showAddFolderDialog', true)
+	case constants.HIDE_ADD_FOLDER_DIALOG:
+		return state.set('showAddFolderDialog', false)
 	default:
 		return state
 	}

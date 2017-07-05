@@ -599,3 +599,7 @@ div[tabindex="1"]:focus {
 	display: inline-block;
 	width: 80%;
 }
+.buttons {
+	width: 500px;
+	display: flex;
+}
