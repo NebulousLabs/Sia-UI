@@ -250,6 +250,9 @@ function *showBackupPromptSaga() {
 	try {
 		const response = yield siadCall('/wallet/seeds')
 		yield put(actions.setPrimarySeed(response.primaryseed))
+		if (response.allseeds.length > 1) {
+			yield put(actions.setAuxSeeds(response.allseeds.slice(1)))
+		}
 	} catch (e) {
 		console.error(`error fetching primary seed for backup prompt: ${e.toString()}`)
 	}

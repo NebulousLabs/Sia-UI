@@ -187,4 +187,7 @@ export const setPrimarySeed = (primarySeed) => ({
 	type: constants.SET_PRIMARY_SEED,
 	primarySeed,
 })
-
+export const setAuxSeeds = (seeds) => ({
+	type: constants.SET_AUX_SEEDS,
+	seeds,
+})

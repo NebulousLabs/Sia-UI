@@ -175,9 +175,7 @@
 	justify-content: center;
 	background-color: #ECECEC;
 	width: 500px;
-	height: 400px;
-	padding-left: 25px;
-	padding-right: 25px;
+	padding: 25px 25px 25px 25px;
 }
 .backupprompt > .ok-button {
 	margin-top: 25px;
@@ -418,4 +416,8 @@
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
+}
+.aux-seeds {
+	height: 180px;
+	overflow-y: scroll;
 }
