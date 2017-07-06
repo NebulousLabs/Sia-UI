@@ -177,4 +177,14 @@ export const setFeeEstimate = (estimate) => ({
 	type: constants.SET_FEE_ESTIMATE,
 	estimate,
 })
+export const showBackupPrompt = () => ({
+	type: constants.SHOW_BACKUP_PROMPT,
+})
+export const hideBackupPrompt = () => ({
+	type: constants.HIDE_BACKUP_PROMPT,
+})
+export const setPrimarySeed = (primarySeed) => ({
+	type: constants.SET_PRIMARY_SEED,
+	primarySeed,
+})
 

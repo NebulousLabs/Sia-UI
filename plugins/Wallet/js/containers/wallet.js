@@ -13,6 +13,7 @@ const mapStateToProps = (state) => ({
 	showNewWalletDialog: state.wallet.get('showNewWalletDialog'),
 	showRecoveryDialog: state.wallet.get('showRecoveryDialog'),
 	showChangePasswordDialog: state.wallet.get('showChangePasswordDialog'),
+	showBackupPrompt: state.wallet.get('showBackupPrompt'),
 })
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ startSendPrompt }, dispatch),
