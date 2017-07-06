@@ -12,8 +12,10 @@ import FileTransfers from '../containers/filetransfers.js'
 import UsageStats from '../containers/usagestats.js'
 import ContractorStatus from '../containers/contractorstatus.js'
 import DragOverlay from './dragoverlay.js'
+import AddFolderButton from '../containers/addfolderbutton.js'
+import AddFolderDialog from '../containers/addfolderdialog.js'
 
-const FileBrowser = ({dragging, settingAllowance, showRenameDialog, showUploadDialog, showDeleteDialog, showFileTransfers, actions}) => {
+const FileBrowser = ({dragging, settingAllowance, showAddFolderDialog, showRenameDialog, showUploadDialog, showDeleteDialog, showFileTransfers, actions}) => {
 	const onDragOver = (e) => {
 		e.preventDefault()
 		actions.setDragging()
@@ -40,6 +42,7 @@ const FileBrowser = ({dragging, settingAllowance, showRenameDialog, showUploadDi
 				{showRenameDialog ? <RenameDialog /> : null}
 				{showUploadDialog ? <UploadDialog /> : null}
 				{showDeleteDialog ? <DeleteDialog /> : null}
+				{showAddFolderDialog ? <AddFolderDialog /> : null}
 				{dragging ? <DragOverlay /> : null}
 				<div className="files-toolbar">
 					<UsageStats />
@@ -47,6 +50,7 @@ const FileBrowser = ({dragging, settingAllowance, showRenameDialog, showUploadDi
 					<div className="buttons">
 						{!settingAllowance ? <SetAllowanceButton /> : null}
 						<SearchButton />
+						<AddFolderButton />
 						<UploadButton />
 						<TransfersButton />
 					</div>

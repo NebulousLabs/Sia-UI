@@ -401,8 +401,22 @@ div[tabindex="1"]:focus {
 	align-items: center;
 	justify-content: center;
 	background-color: #ECECEC;
-	width: 50%;
-	height: 50%;
+	width: 280px;
+	height: 190px;
+}
+.addfolder-dialog {
+	padding: 25px 25px 25px 25px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: #ECECEC;
+	width: 300px;
+	height: 200px;
+	border-radius: 4px;
+}
+.upload_dialog-buttons {
+	margin-top: 20px;
 }
 .upload-dialog h1 {
 	margin: 0;
@@ -598,4 +612,8 @@ div[tabindex="1"]:focus {
 .rename-form {
 	display: inline-block;
 	width: 80%;
+}
+.buttons {
+	width: 500px;
+	display: flex;
 }

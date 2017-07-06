@@ -185,4 +185,13 @@ export const hideAllowanceConfirmation = () => ({
 export const fetchData = () => ({
 	type: constants.FETCH_DATA,
 })
-
+export const addFolder = (name) => ({
+	type: constants.ADD_FOLDER,
+	name,
+})
+export const showAddFolderDialog = () => ({
+	type: constants.SHOW_ADD_FOLDER_DIALOG,
+})
+export const hideAddFolderDialog = () => ({
+	type: constants.HIDE_ADD_FOLDER_DIALOG,
+})

@@ -90,10 +90,11 @@ const directoriesFirst = (file1, file2) => {
 	return 0
 }
 
+
 // return a list of files filtered with path.
 // ... it's ls.
 export const ls = (files, path) => {
-	const fileList = files.filter((file) => file.siapath.includes(path))
+	const fileList = files.filter((file) => file.siapath.includes(path) && file.siapath !== path)
 	let parsedFiles = Map()
 	fileList.forEach((file) => {
 		let type = 'file'
@@ -103,7 +104,7 @@ export const ls = (files, path) => {
 		let siapath = file.siapath
 		let filesize = readableFilesize(file.filesize)
 		let redundancy = file.redundancy
-		if (relativePath.indexOf('/') !== -1) {
+		if (relativePath.indexOf('/') !== -1 || file.siaUIFolder === true) {
 			type = 'directory'
 			filename = relativePath.split('/')[0]
 		}
