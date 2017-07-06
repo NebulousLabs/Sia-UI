@@ -21,10 +21,12 @@ const initialState = Map({
 	showNewWalletForm: false,
 	showChangePasswordDialog: false,
 	showInitSeedForm: false,
+	showBackupPrompt: false,
 	useCustomPassphrase: false,
 	showRecoveryDialog: false,
 	initializingSeed: false,
 	changePasswordError: '',
+	primarySeed: '',
 })
 
 export default function walletReducer(state = initialState, action) {
@@ -113,9 +115,15 @@ export default function walletReducer(state = initialState, action) {
 		}
 		return newstate
 	}
-	case constants.TOGGLE_FILTER: {
+	case constants.TOGGLE_FILTER:
 		return state.set('filter', !state.get('filter'))
-	}
+	case constants.SHOW_BACKUP_PROMPT:
+		return state.set('showBackupPrompt', true)
+	case constants.HIDE_BACKUP_PROMPT:
+		return state.set('showBackupPrompt', false)
+		            .set('primarySeed', '')
+	case constants.SET_PRIMARY_SEED:
+		return state.set('primarySeed', action.primarySeed)
 	default:
 		return state
 	}

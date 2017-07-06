@@ -10,6 +10,7 @@ const mapStateToProps = (state) => ({
 	showUploadDialog: state.files.get('showUploadDialog'),
 	showFileTransfers: state.files.get('showFileTransfers'),
 	showDeleteDialog: state.files.get('showDeleteDialog'),
+	showAddFolderDialog: state.files.get('showAddFolderDialog'),
 })
 
 const mapDispatchToProps = (dispatch) => ({

@@ -177,6 +177,27 @@
 	width: 400px;
 	height: 300px;
 }
+
+.backupprompt {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: #ECECEC;
+	width: 500px;
+	height: 400px;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+.backupprompt > .ok-button {
+	margin-top: 25px;
+}
+.backupprompt > h3 {
+	margin-top: 0;
+}
+.backupprompt > h4 {
+	margin-bottom: 5px;
+}
 .sendprompt .fee-estimation {
 	margin-top: 6px;
 }
@@ -198,7 +219,7 @@
 	width: 250px;
 }
 
-.recover-button, .send-button, .receive-button, .lock-button, .change-password-button {
+.wallet-toolbar > .wallet-button {
 	padding-top: 5px;
 	padding-left: 10px;
 	padding-right: 10px;
@@ -207,10 +228,10 @@
 	width: 100px;
 	cursor: pointer;
 }
-.recover-button:hover, .send-button:hover, .receive-button:hover, .lock-button:hover, .change-password-button:hover {
+.wallet-toolbar > .wallet-button:hover {
 	opacity: 0.5;
 }
-.send-button span, .receive-button span, .recover-button span, .lock-button span, .change-password-button span {
+.wallet-toolbar > .wallet-button > span {
 	display: block;
 	padding: 0;
 	margin-top: 2px;
@@ -218,7 +239,7 @@
 	font-size: 12px;
 	color: #f5f5f5;
 }
-.send-button i, .recover-button i, .receive-button i, .lock-button i, .change-password-button i {
+.wallet-toolbar > .wallet-button > i {
 	color: #00CBA0;
 }
 .newwallet-dialog {
