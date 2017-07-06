@@ -26,6 +26,7 @@ const initialState = Map({
 	initializingSeed: false,
 	changePasswordError: '',
 	primarySeed: '',
+	auxSeeds: [],
 })
 
 export default function walletReducer(state = initialState, action) {
@@ -114,8 +115,11 @@ export default function walletReducer(state = initialState, action) {
 	case constants.HIDE_BACKUP_PROMPT:
 		return state.set('showBackupPrompt', false)
 		            .set('primarySeed', '')
+		            .set('auxSeeds', [])
 	case constants.SET_PRIMARY_SEED:
 		return state.set('primarySeed', action.primarySeed)
+	case constants.SET_AUX_SEEDS:
+		return state.set('auxSeeds', action.seeds)
 	default:
 		return state
 	}

@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 
 const mapStateToProps = (state) => ({
 	primarySeed: state.wallet.get('primarySeed'),
+	auxSeeds: state.wallet.get('auxSeeds'),
 })
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ hideBackupPrompt }, dispatch),
