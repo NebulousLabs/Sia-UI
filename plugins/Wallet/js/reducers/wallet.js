@@ -14,6 +14,7 @@ const initialState = Map({
 	siafundbalance: '0',
 	transactions: List(),
 	ntransactions: 30,
+	filter: true,
 	showSendPrompt: false,
 	showReceivePrompt: false,
 	showNewWalletDialog: false,
@@ -34,8 +35,9 @@ export default function walletReducer(state = initialState, action) {
 	case constants.SET_CHANGE_PASSWORD_ERROR:
 		return state.set('changePasswordError', action.error)
 	case constants.SHOW_CHANGE_PASSWORD_DIALOG:
-		return state.set('showChangePasswordDialog', true)
-		            .set('changePasswordError', '')
+		return state
+			.set('showChangePasswordDialog', true)
+			.set('changePasswordError', '')
 	case constants.HIDE_CHANGE_PASSWORD_DIALOG:
 		return state.set('showChangePasswordDialog', false)
 	case constants.SEED_RECOVERY_STARTED:
@@ -65,8 +67,7 @@ export default function walletReducer(state = initialState, action) {
 	case constants.SET_LOCKED:
 		return state.set('unlocked', false)
 	case constants.SET_UNLOCKED:
-		return state.set('unlocked', true)
-                .set('unlocking', false)
+		return state.set('unlocked', true).set('unlocking', false)
 	case constants.SET_ENCRYPTED:
 		return state.set('encrypted', true)
 	case constants.SET_UNENCRYPTED:
@@ -74,11 +75,15 @@ export default function walletReducer(state = initialState, action) {
 	case constants.SET_SYNCSTATE:
 		return state.set('synced', action.synced)
 	case constants.SET_BALANCE:
-		return state.set('confirmedbalance', action.confirmed)
-                .set('unconfirmedbalance', action.unconfirmed)
-                .set('siafundbalance', action.siafunds)
+		return state
+			.set('confirmedbalance', action.confirmed)
+			.set('unconfirmedbalance', action.unconfirmed)
+			.set('siafundbalance', action.siafunds)
 	case constants.SHOW_MORE_TRANSACTIONS:
-		return state.set('ntransactions', state.get('ntransactions') + action.increment)
+		return state.set(
+			'ntransactions',
+			state.get('ntransactions') + action.increment
+		)
 	case constants.SET_TRANSACTIONS:
 		return state.set('transactions', action.transactions)
 	case constants.SET_USE_CUSTOM_PASSPHRASE:
@@ -102,14 +107,17 @@ export default function walletReducer(state = initialState, action) {
 		// will see 'recovering' or 'initializing' change to 'rescanning', an
 		// accurate representation of what is happening on the backend.
 		if (action.rescanning) {
-			newstate = newstate.set('recovering', false)
-			                   .set('initializingSeed', false)
-			                   .set('unlocking', false)
-			                   .set('showRecoveryDialog', false)
-			                   .set('showInitSeedForm', false)
+			newstate = newstate
+				.set('recovering', false)
+				.set('initializingSeed', false)
+				.set('unlocking', false)
+				.set('showRecoveryDialog', false)
+				.set('showInitSeedForm', false)
 		}
 		return newstate
 	}
+	case constants.TOGGLE_FILTER:
+		return state.set('filter', !state.get('filter'))
 	case constants.SHOW_BACKUP_PROMPT:
 		return state.set('showBackupPrompt', true)
 	case constants.HIDE_BACKUP_PROMPT:
