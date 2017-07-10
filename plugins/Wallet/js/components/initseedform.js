@@ -12,9 +12,9 @@ const InitSeedForm = ({ initializingSeed, useCustomPassphrase, hideInitSeedForm,
 	const handleInitSeedClick = (e) => {
 		e.preventDefault()
 		if (useCustomPassphrase) {
-			createNewWallet(e.target.password.value, e.target.seed.value)
+			createNewWallet(e.target.password.value.trim(), e.target.seed.value.trim())
 		} else {
-			createNewWallet(undefined, e.target.seed.value)
+			createNewWallet(undefined, e.target.seed.value.trim())
 		}
 	}
 	const handleCancelClick = (e) => {
