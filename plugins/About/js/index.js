@@ -8,7 +8,6 @@ document.getElementById('uiversion').innerHTML = VERSION
 SiaAPI.call('/daemon/version', (err, result) => {
 	if (err) {
 		SiaAPI.showError('Error', err.toString())
-		ipcRenderer.sendToHost('notification', err.toString(), 'error')
 	} else {
 		document.getElementById('siaversion').innerHTML = result.version
 	}
@@ -27,7 +26,6 @@ function updateCheck() {
 	SiaAPI.call('/daemon/update', (err, result) => {
 		if (err) {
 			SiaAPI.showError('Error', err.toString())
-			ipcRenderer.sendToHost('notification', err.toString(), 'error')
 		} else if (result.available) {
 			document.getElementById('newversion').innerHTML = result.version
 			document.getElementById('downloadlink').href = genDownloadLink(result.version, platform())
