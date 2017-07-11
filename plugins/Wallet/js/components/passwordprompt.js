@@ -3,9 +3,7 @@ import React from 'react'
 
 const PasswordPrompt = ({password, error, unlocking, actions}) => {
 	const onPasswordChange = (e) => actions.handlePasswordChange(e.target.value)
-	const onUnlockClick = () => {
-		actions.unlockWallet(password.trim())
-	}
+	const onUnlockClick = () => actions.unlockWallet(password)
 	if (unlocking) {
 		return (
 			<span className="unlock-status"> Unlocking your wallet, this may take a while (up to several minutes)... </span>
