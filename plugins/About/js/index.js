@@ -1,6 +1,5 @@
 'use strict'
 import { platform } from 'os'
-import { format } from 'util'
 
 // Set UI version via package.json.
 document.getElementById('uiversion').innerHTML = VERSION
@@ -15,13 +14,13 @@ SiaAPI.call('/daemon/version', (err, result) => {
 	}
 })
 
-function genDownloadLink(version, platform) {
-	let plat = platform
+function genDownloadLink(version, thePlatform) {
+	let plat = thePlatform
 	if (plat === 'darwin') {
 		plat = 'osx'
 	}
 
-	return format('https://github.com/NebulousLabs/Sia-UI/releases/download/v%s/Sia-UI-v%s-%s-x64.zip', version, version, plat)
+	return `https://github.com/NebulousLabs/Sia-UI/releases/download/v${version}/Sia-UI-v${version}-${plat}-x64.zip`
 }
 
 function updateCheck() {
