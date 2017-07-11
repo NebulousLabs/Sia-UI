@@ -1,6 +1,6 @@
 'use strict'
-const os = require('os')
-const util = require('util')
+import { platform } from 'os'
+import { format } from 'util'
 
 // Set UI version via package.json.
 document.getElementById('uiversion').innerHTML = VERSION
@@ -21,7 +21,7 @@ function genDownloadLink(version, platform) {
 		plat = 'osx'
 	}
 
-	return util.format('https://github.com/NebulousLabs/Sia-UI/releases/download/v%s/Sia-UI-v%s-%s-x64.zip', version, version, plat)
+	return format('https://github.com/NebulousLabs/Sia-UI/releases/download/v%s/Sia-UI-v%s-%s-x64.zip', version, version, plat)
 }
 
 function updateCheck() {
@@ -31,7 +31,7 @@ function updateCheck() {
 			ipcRenderer.sendToHost('notification', err.toString(), 'error')
 		} else if (result.available) {
 			document.getElementById('newversion').innerHTML = result.version
-			document.getElementById('downloadlink').href = genDownloadLink(result.version, os.platform())
+			document.getElementById('downloadlink').href = genDownloadLink(result.version, platform())
 			document.getElementById('nonew').style.display = 'none'
 			document.getElementById('yesnew').style.display = 'block'
 		} else {
