@@ -66,7 +66,7 @@ export default function filesReducer(state = initialState, action) {
 			filesize: 0,
 			siapath: Path.join(state.get('path'), action.name),
 			available: false,
-			redundancy: 3,
+			redundancy: -1,
 			uploadprogress: 100,
 			siaUIFolder: true,
 		}

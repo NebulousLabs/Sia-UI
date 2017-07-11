@@ -121,7 +121,11 @@ export const ls = (files, path) => {
 			const subfiles = files.filter((subfile) => subfile.siapath.includes(siapath))
 			const totalFilesize = subfiles.reduce((sum, subfile) => sum + subfile.filesize, 0)
 			filesize = readableFilesize(totalFilesize)
-			redundancy = minRedundancy(subfiles)
+			if (!file.siaUIFolder) {
+				redundancy = minRedundancy(subfiles)
+			} else {
+				redundancy = -1
+			}
 			uploadprogress = minUpload(subfiles)
 		}
 		parsedFiles = parsedFiles.set(filename, {

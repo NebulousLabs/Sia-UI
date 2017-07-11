@@ -3,6 +3,7 @@ import React from 'react'
 
 const colorNotAvailable = '#FF8080'
 const colorGoodRedundancy = '#00CBA0'
+const colorNegativeRedundancy = '#b7afaf'
 
 const RedundancyStatus = ({available, redundancy, uploadprogress}) => {
 	const indicatorStyle = {
@@ -16,6 +17,9 @@ const RedundancyStatus = ({available, redundancy, uploadprogress}) => {
 			return uploadprogress/100
 		})(),
 		color: (() => {
+			if (redundancy < 0) {
+				return colorNegativeRedundancy
+			}
 			if (!available || redundancy < 1.0) {
 				return colorNotAvailable
 			}
