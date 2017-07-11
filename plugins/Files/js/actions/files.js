@@ -195,3 +195,15 @@ export const showAddFolderDialog = () => ({
 export const hideAddFolderDialog = () => ({
 	type: constants.HIDE_ADD_FOLDER_DIALOG,
 })
+export const setDragUploadEnabled = (enabled) => ({
+	type: constants.SET_DRAG_UPLOAD_ENABLED,
+	enabled,
+})
+export const setDragFolderTarget = (target) => ({
+	type: constants.SET_DRAG_FOLDER_TARGET,
+	target,
+})
+export const setDragFileOrigin = (origin) => ({
+	type: constants.SET_DRAG_FILE_ORIGIN,
+	origin,
+})

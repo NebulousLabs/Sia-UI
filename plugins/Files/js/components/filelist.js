@@ -7,7 +7,7 @@ import SearchField from '../containers/searchfield.js'
 import FileControls from '../containers/filecontrols.js'
 import DirectoryInfoBar from './directoryinfobar.js'
 
-const FileList = ({files, selected, searchResults, path, showSearchField, actions}) => {
+const FileList = ({files, selected, searchResults, path, showSearchField, dragFileOrigin, dragFolderTarget, actions}) => {
 	const onBackClick = () => {
 		// remove a trailing slash if it exists
 		const cleanPath = path.replace(/\/$/, '')
@@ -65,10 +65,29 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 				actions.setPath(Path.posix.join(path, file.name))
 			}
 		}
+		const handleDragRename = () => {
+			if (dragFileOrigin === '' || dragFolderTarget === '') {
+				return
+			}
+			if (selected.size > 0) {
+				selected.forEach((selectedfile) => {
+					const destSiapath = Path.posix.join(path, dragFolderTarget, selectedfile.name)
+					actions.renameFile(selectedfile, destSiapath)
+				})
+			} else {
+				const sourceSiapath = Path.posix.join(path, dragFileOrigin)
+				const destSiapath = Path.posix.join(path, dragFolderTarget, dragFileOrigin)
+				actions.renameFile({type: 'file', siapath: sourceSiapath}, destSiapath)
+			}
+			actions.getFiles()
+			actions.setDragFolderTarget('')
+			actions.setDragFileOrigin('')
+		}
 		return (
 			<File
 				key={key}
 				selected={isSelected}
+				isDragTarget={dragFolderTarget === file.name}
 				filename={file.name}
 				filesize={file.size}
 				redundancy={file.redundancy}
@@ -77,6 +96,10 @@ const FileList = ({files, selected, searchResults, path, showSearchField, action
 				onDoubleClick={onDoubleClick}
 				type={file.type}
 				onClick={onFileClick}
+				setDragUploadEnabled={actions.setDragUploadEnabled}
+				setDragFolderTarget={actions.setDragFolderTarget}
+				setDragFileOrigin={actions.setDragFileOrigin}
+				handleDragRename={handleDragRename}
 			/>
 		)
 	})
@@ -99,6 +122,8 @@ FileList.propTypes = {
 	searchResults: PropTypes.instanceOf(List),
 	path: PropTypes.string.isRequired,
 	showSearchField: PropTypes.bool.isRequired,
+	dragFileOrigin: PropTypes.string.isRequired,
+	dragFolderTarget: PropTypes.string.isRequired,
 }
 
 export default FileList

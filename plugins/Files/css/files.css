@@ -54,6 +54,9 @@ div[tabindex="1"]:focus {
 	border-left: 5px solid #00CBA0;
 	background-color: #F5F5F5 !important;
 }
+.dragtarget {
+	background-color: #F5F5F5 !important;
+}
 .file-controls {
 	z-index: 5;
 	position: absolute;
@@ -415,8 +418,12 @@ div[tabindex="1"]:focus {
 	height: 200px;
 	border-radius: 4px;
 }
-.upload_dialog-buttons {
+.upload-dialog-buttons {
 	margin-top: 20px;
+}
+.upload-dialog-buttons > * {
+	margin-left: 5px;
+	margin-right: 5px;
 }
 .upload-dialog h1 {
 	margin: 0;

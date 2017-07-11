@@ -15,18 +15,27 @@ import DragOverlay from './dragoverlay.js'
 import AddFolderButton from '../containers/addfolderbutton.js'
 import AddFolderDialog from '../containers/addfolderdialog.js'
 
-const FileBrowser = ({dragging, settingAllowance, showAddFolderDialog, showRenameDialog, showUploadDialog, showDeleteDialog, showFileTransfers, actions}) => {
+const FileBrowser = ({dragging, dragUploadEnabled, settingAllowance, showAddFolderDialog, showRenameDialog, showUploadDialog, showDeleteDialog, showFileTransfers, actions}) => {
 	const onDragOver = (e) => {
+		if (!dragUploadEnabled) {
+			return
+		}
 		e.preventDefault()
 		actions.setDragging()
 	}
 	const onDrop = (e) => {
+		if (!dragUploadEnabled) {
+			return
+		}
 		e.preventDefault()
 		actions.setNotDragging()
 		// Convert file list into a list of file paths.
 		actions.showUploadDialog(Array.from(e.dataTransfer.files, (file) => file.path))
 	}
 	const onDragLeave = (e) => {
+		if (!dragUploadEnabled) {
+			return
+		}
 		e.preventDefault()
 		actions.setNotDragging()
 	}
@@ -69,6 +78,7 @@ FileBrowser.propTypes = {
 	showUploadDialog: PropTypes.bool.isRequired,
 	showDeleteDialog: PropTypes.bool.isRequired,
 	showFileTransfers: PropTypes.bool.isRequired,
+	dragUploadEnabled: PropTypes.bool.isRequired,
 }
 
 export default FileBrowser
