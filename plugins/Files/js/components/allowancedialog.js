@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import UnlockWarning from './unlockwarning.js'
 import ConfirmationDialog from './allowanceconfirmation.js'
+import BigNumber from 'bignumber.js'
 
 const AllowanceDialog = ({confirming, confirmationAllowance, unlocked, synced, feeEstimate, storageEstimate, actions}) => {
 	const onCancelClick = () => actions.closeAllowanceDialog()
@@ -34,7 +35,7 @@ const AllowanceDialog = ({confirming, confirmationAllowance, unlocked, synced, f
 				<table className="estimates">
 					<tr>
 						<td className="estimate-label">Estimated Fees</td>
-						<td className="estimate-content">{feeEstimate} SC</td>
+						<td className="estimate-content">{new BigNumber(feeEstimate).round(2).toString()} SC</td>
 					</tr>
 					<tr>
 						<td className="estimate-label">Estimated Storage</td>
