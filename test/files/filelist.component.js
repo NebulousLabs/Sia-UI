@@ -20,6 +20,7 @@ const testActions = {
 	deselectFile: spy(),
 	deselectAll: spy(),
 	selectUpTo: spy(),
+	setDragUploadEnabled: spy(),
 }
 
 describe('file list', () => {
@@ -29,11 +30,11 @@ describe('file list', () => {
 		}
 	})
 	it('renders a ul with the correct number of file and directory children', () => {
-		const filelist = shallow(<FileList files={testFiles} selected={OrderedSet()} showSearchField={false} path="" />)
+		const filelist = shallow(<FileList actions={testActions} files={testFiles} selected={OrderedSet()} showSearchField={false} path="" />)
 		expect(filelist.find('File')).to.have.length(testFiles.size)
 	})
 	it('renders a back button when path is set', () => {
-		expect(shallow(<FileList files={testFiles} showSearchField={false} selected={OrderedSet()} path="movies/" />).find('ul').children()).to.have.length(testFiles.size + 1)
+		expect(shallow(<FileList actions={testActions} files={testFiles} showSearchField={false} selected={OrderedSet()} path="movies/" />).find('ul').children()).to.have.length(testFiles.size + 1)
 	})
 	describe('file selection', () => {
 		it('selects files', () => {

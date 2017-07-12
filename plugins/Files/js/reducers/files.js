@@ -23,6 +23,9 @@ const initialState = Map({
 	showRenameDialog: false,
 	settingAllowance: false,
 	dragging: false,
+	dragUploadEnabled: true,
+	dragFolderTarget: '',
+	dragFileOrigin: '',
 	contractCount: 0,
 	allowance: '0',
 	spending: '0',
@@ -33,6 +36,12 @@ const initialState = Map({
 
 export default function filesReducer(state = initialState, action) {
 	switch (action.type) {
+	case constants.SET_DRAG_FILE_ORIGIN:
+		return state.set('dragFileOrigin', action.origin)
+	case constants.SET_DRAG_FOLDER_TARGET:
+		return state.set('dragFolderTarget', action.target)
+	case constants.SET_DRAG_UPLOAD_ENABLED:
+		return state.set('dragUploadEnabled', action.enabled)
 	case constants.SET_ALLOWANCE_COMPLETED:
 		return state.set('settingAllowance', false)
 	case constants.RECEIVE_ALLOWANCE:
@@ -57,7 +66,7 @@ export default function filesReducer(state = initialState, action) {
 			filesize: 0,
 			siapath: Path.join(state.get('path'), action.name),
 			available: false,
-			redundancy: 3,
+			redundancy: -1,
 			uploadprogress: 100,
 			siaUIFolder: true,
 		}

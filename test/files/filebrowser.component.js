@@ -14,7 +14,7 @@ const testDrag = (files) => {
 		showUploadDialog: uploadSpy,
 		setNotDragging: notDraggingSpy,
 	}
-	const fileBrowser = shallow(<FileBrowser settingAllowance={false} dragging={false} showRenameDialog={false} showUploadDialog={false} showDeleteDialog={false} showFileTransfers={false} actions={testActions} />)
+	const fileBrowser = shallow(<FileBrowser dragUploadEnabled settingAllowance={false} dragging={false} showRenameDialog={false} showUploadDialog={false} showDeleteDialog={false} showFileTransfers={false} actions={testActions} />)
 	fileBrowser.find('.file-browser').first().simulate('drop', {
 		dataTransfer: {
 			files: files.map((file) => ({ path: file })),
