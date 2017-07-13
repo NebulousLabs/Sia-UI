@@ -208,7 +208,7 @@ function* deleteFileSaga(action) {
 			for (const siafile in siafiles.toArray()) {
 				const file = siafiles.get(siafile)
 				yield siadCall({
-					url: '/renter/delete/' + encodeURI(action.file.siapath),
+					url: '/renter/delete/' + encodeURI(file.siapath),
 					timeout: 3.6e6, // 60 minute timeout for deleting files
 					method: 'POST',
 				})
