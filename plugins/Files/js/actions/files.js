@@ -207,3 +207,12 @@ export const setDragFileOrigin = (origin) => ({
 	type: constants.SET_DRAG_FILE_ORIGIN,
 	origin,
 })
+export const renameSiaUIFolder = (source, dest) => ({
+	type: constants.RENAME_SIA_UI_FOLDER,
+	source,
+	dest,
+})
+export const deleteSiaUIFolder = (siapath) => ({
+	type: constants.DELETE_SIA_UI_FOLDER,
+	siapath,
+})

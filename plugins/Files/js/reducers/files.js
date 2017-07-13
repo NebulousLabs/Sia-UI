@@ -25,7 +25,7 @@ const initialState = Map({
 	dragging: false,
 	dragUploadEnabled: true,
 	dragFolderTarget: '',
-	dragFileOrigin: '',
+	dragFileOrigin: {},
 	contractCount: 0,
 	allowance: '0',
 	spending: '0',
@@ -74,6 +74,15 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('folders', folders)
 		            .set('workingDirectoryFiles', ls(state.get('files').concat(folders), state.get('path')), folders, state.get('path'))
 	}
+	case constants.DELETE_SIA_UI_FOLDER:
+		return state.set('folders', state.get('folders').filter((folder) => folder.siapath !== action.siapath))
+	case constants.RENAME_SIA_UI_FOLDER:
+		return state.set('folders', state.get('folders').map((folder) => {
+			if (folder.siapath.indexOf(action.source) === 0) {
+				folder.siapath = action.dest
+			}
+			return folder
+		}))
 	case constants.SET_ALLOWANCE:
 		return state.set('allowance', action.funds)
 		            .set('settingAllowance', true)

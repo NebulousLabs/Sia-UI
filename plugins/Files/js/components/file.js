@@ -2,12 +2,12 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import RedundancyStatus from './redundancystatus.js'
 
-const File = ({filename, type, selected, isDragTarget, filesize, available, redundancy, uploadprogress, onDoubleClick, onClick, setDragUploadEnabled, setDragFolderTarget, setDragFileOrigin, handleDragRename }) => {
+const File = ({filename, type, selected, isDragTarget, filesize, available, redundancy, uploadprogress, onDoubleClick, onClick, setDragUploadEnabled, setDragFolderTarget, setDragFileOrigin, handleDragRename, isSiaUIFolder }) => {
 	const handleDrag = () => {
 	}
 	const handleDragStart = () => {
 		setDragUploadEnabled(false)
-		setDragFileOrigin(filename)
+		setDragFileOrigin({type: type, name: filename, isSiaUIFolder: isSiaUIFolder})
 		setDragFolderTarget('')
 	}
 	const handleDragEnd = () => {
