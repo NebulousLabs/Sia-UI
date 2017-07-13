@@ -4,7 +4,7 @@ import React from 'react'
 const colorBackDisabled = '#C5C5C5'
 const colorBackEnabled = '#00CBA0'
 
-const DirectoryInfoBar = ({path, nfiles, onBackClick}) => {
+const DirectoryInfoBar = ({path, nfiles, onBackClick, setDragFolderTarget}) => {
 	const backButtonStyle = {
 		color: (() => {
 			if (path === '') {
@@ -13,8 +13,13 @@ const DirectoryInfoBar = ({path, nfiles, onBackClick}) => {
 			return colorBackEnabled
 		})(),
 	}
+	// handle file drag onto the info bar: move the file into the parent
+	// directory
+	const handleDragOver = () => {
+		setDragFolderTarget('../')
+	}
 	return (
-		<li className="directory-infobar">
+		<li onDragOver={handleDragOver} className="directory-infobar">
 			<div style={{cursor: 'pointer'}} className="back-button" onClick={onBackClick}>
 				<i className="fa fa-backward" style={backButtonStyle} />
 				<span>Back</span>
@@ -31,6 +36,7 @@ DirectoryInfoBar.propTypes = {
 	path: PropTypes.string.isRequired,
 	nfiles: PropTypes.number.isRequired,
 	onBackClick: PropTypes.func.isRequired,
+	setDragFolderTarget: PropTypes.func.isRequired,
 }
 
 export default DirectoryInfoBar

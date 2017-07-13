@@ -200,16 +200,20 @@ function* deleteFileSaga(action) {
 				timeout: 3.6e6, // 60 minute timeout for deleting files
 				method: 'POST',
 			})
+			yield put(actions.getFiles())
 		}
 		if (action.file.type === 'directory') {
 			const response = yield siadCall('/renter/files')
 			const siafiles = ls(List(response.files), action.file.siapath)
 			for (const siafile in siafiles.toArray()) {
 				const file = siafiles.get(siafile)
-				yield put(actions.deleteFile(file))
+				yield siadCall({
+					url: '/renter/delete/' + encodeURI(action.file.siapath),
+					timeout: 3.6e6, // 60 minute timeout for deleting files
+					method: 'POST',
+				})
 			}
 		}
-		yield put(actions.getFiles())
 	} catch (e) {
 		sendError(e)
 	}
@@ -226,6 +230,9 @@ function* getContractCountSaga() {
 
 function* renameFileSaga(action) {
 	try {
+		if (action.file.isSiaUIFolder) {
+			yield put(actions.renameSiaUIFolder(action.file.siapath, action.newsiapath))
+		} else
 		if (action.file.type === 'file') {
 			yield siadCall({
 				url: '/renter/rename/' + encodeURI(action.file.siapath),
@@ -235,7 +242,7 @@ function* renameFileSaga(action) {
 				},
 			})
 			yield put(actions.getFiles())
-		}
+		} else
 		if (action.file.type === 'directory') {
 			const directorypath = action.file.siapath
 			const response = yield siadCall('/renter/files')

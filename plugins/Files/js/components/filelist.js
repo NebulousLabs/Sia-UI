@@ -69,25 +69,35 @@ const FileList = ({files, selected, searchResults, path, showSearchField, dragFi
 			if (dragFileOrigin === '' || dragFolderTarget === '') {
 				return
 			}
+			if (dragFolderTarget === '../' && path === '') {
+				return
+			}
 			if (selected.size > 0) {
 				selected.forEach((selectedfile) => {
 					const destSiapath = Path.posix.join(path, dragFolderTarget, selectedfile.name)
 					actions.renameFile(selectedfile, destSiapath)
+					if (selected.type === 'directory' && !selected.isSiaUIFolder) {
+						actions.deleteSiaUIFolder(sourceSiapath)
+					}
 				})
 			} else {
-				const sourceSiapath = Path.posix.join(path, dragFileOrigin)
-				const destSiapath = Path.posix.join(path, dragFolderTarget, dragFileOrigin)
-				actions.renameFile({type: 'file', siapath: sourceSiapath}, destSiapath)
+				const sourceSiapath = Path.posix.join(path, dragFileOrigin.name)
+				const destSiapath = Path.posix.join(path, dragFolderTarget, dragFileOrigin.name)
+				actions.renameFile({type: dragFileOrigin.type, siapath: sourceSiapath, isSiaUIFolder: dragFileOrigin.isSiaUIFolder}, destSiapath)
+				if (dragFileOrigin.type === 'directory' && !dragFileOrigin.isSiaUIFolder) {
+					actions.deleteSiaUIFolder(sourceSiapath)
+				}
 			}
 			actions.getFiles()
 			actions.setDragFolderTarget('')
-			actions.setDragFileOrigin('')
+			actions.setDragFileOrigin({})
 		}
 		return (
 			<File
 				key={key}
 				selected={isSelected}
 				isDragTarget={dragFolderTarget === file.name}
+				isSiaUIFolder={file.siaUIFolder}
 				filename={file.name}
 				filesize={file.size}
 				redundancy={file.redundancy}
@@ -108,7 +118,7 @@ const FileList = ({files, selected, searchResults, path, showSearchField, dragFi
 		<div className="file-list">
 			{showSearchField ? <SearchField /> : null}
 			<ul>
-				<DirectoryInfoBar path={path} nfiles={files.size} onBackClick={onBackClick} />
+				<DirectoryInfoBar path={path} nfiles={files.size} onBackClick={onBackClick} setDragFolderTarget={actions.setDragFolderTarget} />
 				{ fileElements.size > 0 ? fileElements : <h2> No files uploaded </h2> }
 			</ul>
 			{selected.size > 0 ? <FileControls /> : null}
@@ -122,7 +132,7 @@ FileList.propTypes = {
 	searchResults: PropTypes.instanceOf(List),
 	path: PropTypes.string.isRequired,
 	showSearchField: PropTypes.bool.isRequired,
-	dragFileOrigin: PropTypes.string.isRequired,
+	dragFileOrigin: PropTypes.object.isRequired,
 	dragFolderTarget: PropTypes.string.isRequired,
 }
 

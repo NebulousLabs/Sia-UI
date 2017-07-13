@@ -135,6 +135,7 @@ export const ls = (files, path) => {
 			available: file.available,
 			redundancy: redundancy,
 			uploadprogress: uploadprogress,
+			siaUIFolder: file.siaUIFolder === true,
 			type,
 		})
 	})

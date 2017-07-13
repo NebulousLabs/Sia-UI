@@ -1,7 +1,7 @@
 import FileListView from '../components/filelist.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { renameFile, getFiles, setDragFolderTarget, setDragFileOrigin, setDragUploadEnabled, setPath, selectUpTo, deselectFile, deselectAll, selectFile, downloadFile, showDeleteDialog, showRenameDialog } from '../actions/files.js'
+import { renameSiaUIFolder, deleteSiaUIFolder, renameFile, getFiles, setDragFolderTarget, setDragFileOrigin, setDragUploadEnabled, setPath, selectUpTo, deselectFile, deselectAll, selectFile, downloadFile, showDeleteDialog, showRenameDialog } from '../actions/files.js'
 
 const mapStateToProps = (state) => ({
 	files: state.files.get('workingDirectoryFiles'),
@@ -13,7 +13,7 @@ const mapStateToProps = (state) => ({
 	dragFileOrigin: state.files.get('dragFileOrigin'),
 })
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ getFiles, renameFile, setDragFileOrigin, setDragFolderTarget, setDragUploadEnabled, selectUpTo, setPath, deselectFile, deselectAll, selectFile, showRenameDialog, downloadFile, showDeleteDialog }, dispatch),
+	actions: bindActionCreators({ renameSiaUIFolder, deleteSiaUIFolder, getFiles, renameFile, setDragFileOrigin, setDragFolderTarget, setDragUploadEnabled, selectUpTo, setPath, deselectFile, deselectAll, selectFile, showRenameDialog, downloadFile, showDeleteDialog }, dispatch),
 })
 
 const FileList = connect(mapStateToProps, mapDispatchToProps)(FileListView)
