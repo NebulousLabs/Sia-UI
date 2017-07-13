@@ -232,8 +232,7 @@ function* renameFileSaga(action) {
 	try {
 		if (action.file.isSiaUIFolder) {
 			yield put(actions.renameSiaUIFolder(action.file.siapath, action.newsiapath))
-		} else
-		if (action.file.type === 'file') {
+		} else if (action.file.type === 'file') {
 			yield siadCall({
 				url: '/renter/rename/' + encodeURI(action.file.siapath),
 				method: 'POST',
@@ -242,8 +241,7 @@ function* renameFileSaga(action) {
 				},
 			})
 			yield put(actions.getFiles())
-		} else
-		if (action.file.type === 'directory') {
+		} else if (action.file.type === 'directory') {
 			const directorypath = action.file.siapath
 			const response = yield siadCall('/renter/files')
 			const siafiles = ls(List(response.files), directorypath)
