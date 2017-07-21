@@ -74,11 +74,17 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('folders', folders)
 		            .set('workingDirectoryFiles', ls(state.get('files').concat(folders), state.get('path')), folders, state.get('path'))
 	}
-	case constants.DELETE_SIA_UI_FOLDER:
-		return state.set('folders', state.get('folders').filter((folder) => folder.siapath !== action.siapath))
+	case constants.DELETE_SIA_UI_FOLDER: {
+		return state.set('folders', state.get('folders').filter((folder) => {
+			const cleanSiapath = action.siapath.replace(/\/$/, '')
+			const cleanSource = folder.siapath.replace(/\/$/, '')
+			return cleanSiapath !== cleanSource
+		}))
+	}
 	case constants.RENAME_SIA_UI_FOLDER:
 		return state.set('folders', state.get('folders').map((folder) => {
-			if (folder.siapath.indexOf(action.source) === 0) {
+			const cleanSource = action.source.replace(/\/$/, '')
+			if (folder.siapath.indexOf(cleanSource) === 0) {
 				folder.siapath = action.dest
 			}
 			return folder
