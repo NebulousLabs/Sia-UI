@@ -219,9 +219,35 @@ export const parseUploads = (files) =>
 
 // Search `files` for `text`, excluding directories not in `path`
 export const searchFiles = (files, text, path) => {
-	let matchingFiles = List(files).filter((file) => file.siapath.indexOf(path) !== -1)
-	matchingFiles = matchingFiles.filter((file) => file.siapath.toLowerCase().indexOf(text.toLowerCase()) !== -1)
-	return matchingFiles
+	const filteredFiles = List(files)
+	  .filter((file) => file.siapath.indexOf(path) === 0 && file.siapath !== path)
+	  .filter((file) => file.siapath.toLowerCase().includes(text.toLowerCase()))
+
+	let parsedFiles = Map()
+	filteredFiles.forEach((file) => {
+		let type = 'file'
+		let name = Path.posix.basename(file.siapath)
+		let siapath = file.siapath
+		const pathComponents = file.siapath.split('/')
+		if (!pathComponents[pathComponents.length - 1].toLowerCase().includes(text.toLowerCase()) || file.siaUIFolder) {
+			type = 'directory'
+			pathComponents.forEach((component, idx) => {
+				if (component.toLowerCase().includes(text.toLowerCase())) {
+					name = component
+					siapath = pathComponents.slice(0, idx+1).join('/') + '/'
+				}
+			})
+		}
+		if (!parsedFiles.has(siapath) && siapath !== path) {
+			const parsedFile = Object.assign({}, file)
+			parsedFile.siapath = siapath
+			parsedFile.type = type
+			parsedFile.name = name
+			parsedFiles = parsedFiles.set(siapath, parsedFile)
+		}
+	})
+
+	return parsedFiles.toList()
 }
 
 // rangeSelect takes a file to select, a list of files, and a set of selected
@@ -238,3 +264,7 @@ export const rangeSelect = (file, files, selectedFiles) => {
 	}
 	return files.slice(startSelectionIndex, endSelectionIndex + 1).toOrderedSet()
 }
+
+
+// allFiles returns all the files in the state, including Sia-UI folders
+export const allFiles = (state) => state.get('files').concat(state.get('folders'))
