@@ -62,7 +62,7 @@ const FileList = ({files, selected, searchResults, path, showSearchField, dragFi
 		const onDoubleClick = (e) => {
 			e.stopPropagation()
 			if (file.type === 'directory') {
-				actions.setPath(Path.posix.join(path, file.name))
+				actions.setPath(file.siapath)
 			}
 		}
 		const handleDragRename = () => {

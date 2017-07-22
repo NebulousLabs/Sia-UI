@@ -1,6 +1,6 @@
 import { Map, Set, OrderedSet, List } from 'immutable'
 import * as constants from '../constants/files.js'
-import { ls, searchFiles, rangeSelect } from '../sagas/helpers.js'
+import { ls, searchFiles, allFiles, rangeSelect } from '../sagas/helpers.js'
 import Path from 'path'
 
 const initialState = Map({
@@ -33,6 +33,7 @@ const initialState = Map({
 	unreadUploads: Set(),
 	unreadDownloads: Set(),
 })
+
 
 export default function filesReducer(state = initialState, action) {
 	switch (action.type) {
@@ -95,16 +96,16 @@ export default function filesReducer(state = initialState, action) {
 	case constants.CLEAR_DOWNLOADS:
 		return state.set('showDownloadsSince', Date.now())
 	case constants.SET_SEARCH_TEXT: {
-		const results = searchFiles(state.get('workingDirectoryFiles'), action.text, state.get('path'))
+		const results = searchFiles(allFiles(state), action.text, state.get('path'))
 		return state.set('searchResults', results)
 		            .set('searchText', action.text)
 	}
 	case constants.SET_PATH: {
-		const workingDirFiles = ls(state.get('files').concat(state.get('folders')), action.path)
+		const workingDirFiles = ls(allFiles(state), action.path)
 		return state.set('path', action.path)
 		            .set('selected', OrderedSet())
 		            .set('workingDirectoryFiles', workingDirFiles)
-		            .set('searchResults', searchFiles(workingDirFiles, state.get('searchText'), state.get('path')))
+		            .set('searchResults', searchFiles(allFiles(state), state.get('searchText'), action.path))
 	}
 	case constants.DESELECT_FILE:
 		return state.set('selected', state.get('selected').filter((file) => file.siapath !== action.file.siapath))

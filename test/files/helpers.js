@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { minRedundancy, minUpload, uploadDirectory, rangeSelect, readableFilesize, ls } from '../../plugins/Files/js/sagas/helpers.js'
+import { searchFiles, minRedundancy, minUpload, uploadDirectory, rangeSelect, readableFilesize, ls } from '../../plugins/Files/js/sagas/helpers.js'
 import { List, OrderedSet } from 'immutable'
 import proxyquire from 'proxyquire'
 import Path from 'path'
@@ -227,6 +227,44 @@ describe('files plugin helper functions', () => {
 		})
 		it('returns correct values given a list of files', () => {
 			expect(minUpload(List([{uploadprogress: 10}, {uploadprogress: 25}, {uploadprogress: 100}, {uploadprogress: 115}]))).to.equal(10)
+		})
+	})
+	describe('searchFiles', () => {
+		it('parses a file tree and returns expected search results', () => {
+			const files = List([
+				{ siapath: 'test/test1/testfile' },
+				{ siapath: 'test/test1/testaaa' },
+				{ siapath: 'test/test2/testfile2' },
+				{ siapath: 'test/test3/testfile3' },
+				{ siapath: 'test2/asdf.mov' },
+				{ siapath: 'test/testuifolder', siaUIFolder: true},
+			])
+
+			expect(searchFiles(files, '', 'test/testuifolder').size).to.equal(0)
+			expect(searchFiles(files, 'testuifolder', 'test/testuifolder/').size).to.equal(0)
+
+			expect(searchFiles(files, 'test1', 'test/').size).to.equal(1)
+			expect(searchFiles(files, 'test1', 'test/').get(0).type).to.equal('directory')
+			expect(searchFiles(files, 'test1', 'test/').get(0).name).to.equal('test1')
+
+			expect(searchFiles(files, 'test2', 'test/').size).to.equal(1)
+			expect(searchFiles(files, 'test2', 'test/').get(0).name).to.equal('test2')
+			expect(searchFiles(files, 'test2', 'test/').get(0).type).to.equal('directory')
+
+			expect(searchFiles(files, 'test3', 'test/').size).to.equal(1)
+			expect(searchFiles(files, 'test3', 'test/').get(0).type).to.equal('directory')
+
+			expect(searchFiles(files, 'testfile', 'test/').size).to.equal(3)
+			expect(searchFiles(files, 'testfile', 'test/').get(0).type).to.equal('file')
+			expect(searchFiles(files, 'testfile', 'test/').get(0).name).to.equal('testfile')
+			expect(searchFiles(files, 'testfile', 'test/').get(1).type).to.equal('file')
+			expect(searchFiles(files, 'testfile', 'test/').get(1).name).to.equal('testfile2')
+			expect(searchFiles(files, 'testfile', 'test/').get(2).type).to.equal('file')
+			expect(searchFiles(files, 'testfile', 'test/').get(2).name).to.equal('testfile3')
+
+			expect(searchFiles(files, 'testuifolder', 'test/').size).to.equal(1)
+			expect(searchFiles(files, 'testuifolder', 'test/').get(0).type).to.equal('directory')
+			expect(searchFiles(files, 'testuifolder', 'test/').get(0).name).to.equal('testuifolder')
 		})
 	})
 })
