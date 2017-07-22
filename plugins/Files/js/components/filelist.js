@@ -66,7 +66,10 @@ const FileList = ({files, selected, searchResults, path, showSearchField, dragFi
 			}
 		}
 		const handleDragRename = () => {
-			if (dragFileOrigin === '' || dragFolderTarget === '') {
+			if (typeof dragFileOrigin === 'undefined' || dragFolderTarget === '') {
+				return
+			}
+			if (dragFileOrigin.name === dragFolderTarget) {
 				return
 			}
 			if (dragFolderTarget === '../' && path === '') {
