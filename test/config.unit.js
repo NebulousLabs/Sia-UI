@@ -30,6 +30,16 @@ describe('config.js', () => {
 		const config2 = loadConfig('test.json')
 		expect(config2).to.deep.equal(config)
 	})
+	it('sets the default siad path if the config version is undefined', () => {
+		const config = loadConfig('test.json')
+		const defaultSiadPath = config.siad.path
+		config.version = undefined
+		config.siad.path = '/test/siad/path'
+		config.save()
+		const config2 = loadConfig('test.json')
+		expect(config2.siad.path).to.equal(defaultSiadPath)
+		expect(config2.version).to.equal(version)
+	})
 	it('sets the default siad path if the config version is outdated', () => {
 		const config = loadConfig('test.json')
 		const defaultSiadPath = config.siad.path
