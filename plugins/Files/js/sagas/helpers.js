@@ -229,7 +229,7 @@ export const searchFiles = (files, text, path) => {
 		let name = Path.posix.basename(file.siapath)
 		let siapath = file.siapath
 		const pathComponents = file.siapath.split('/')
-		if (!pathComponents[pathComponents.length - 1].toLowerCase().includes(text.toLowerCase()) || file.siaUIFolder) {
+		if (!Path.posix.basename(file.siapath).toLowerCase().includes(text.toLowerCase()) || file.siaUIFolder) {
 			type = 'directory'
 			pathComponents.forEach((component, idx) => {
 				if (component.toLowerCase().includes(text.toLowerCase())) {
