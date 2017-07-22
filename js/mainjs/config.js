@@ -42,8 +42,8 @@ export default function configManager(filepath) {
 	// always use the default siad path after an upgrade
 	if (typeof config.version === 'undefined') {
 		config.version = version
-	}
-	if (semver.lt(config.version, version)) {
+		config.siad.path = defaultSiadPath
+	} else if (semver.lt(config.version, version)) {
 		config.version = version
 		config.siad.path = defaultSiadPath
 	}
