@@ -22,8 +22,8 @@ npm install
 rm -rf ./dist
 npm run build-production
 
-uiVersion=${3:-v1.2.2}
-siaVersion=${4:-v1.2.1}
+uiVersion=${3:-v1.3.0}
+siaVersion=${4:-v1.3.0}
 electronVersion=${5:-v1.6.4}
 
 # fourth argument is the public key file path.
@@ -35,9 +35,9 @@ electronOSX="https://github.com/electron/electron/releases/download/${electronVe
 electronLinux="https://github.com/electron/electron/releases/download/${electronVersion}/electron-${electronVersion}-linux-x64.zip"
 electronWindows="https://github.com/electron/electron/releases/download/${electronVersion}/electron-${electronVersion}-win32-x64.zip"
 
-siaOSX="https://github.com/NebulousLabs/Sia/releases/download/${siaVersion}/Sia-${siaVersion}-darwin-amd64.zip"
-siaLinux="https://github.com/NebulousLabs/Sia/releases/download/${siaVersion}/Sia-${siaVersion}-linux-amd64.zip"
-siaWindows="https://github.com/NebulousLabs/Sia/releases/download/${siaVersion}/Sia-${siaVersion}-windows-amd64.zip"
+siaOSX="/home/luke/go/src/github.com/NebulousLabs/Sia/release/Sia-${siaVersion}-darwin-amd64.zip"
+siaLinux="/home/luke/go/src/github.com/NebulousLabs/Sia/release/Sia-${siaVersion}-linux-amd64.zip"
+siaWindows="/home/luke/go/src/github.com/NebulousLabs/Sia/release/Sia-${siaVersion}-windows-amd64.zip"
 
 rm -rf release/
 mkdir -p release/{osx,linux,win32}
@@ -65,7 +65,7 @@ buildOSX() {
 	mkdir Sia-UI.app/Contents/Resources/app
 	(
 		cd Sia-UI.app/Contents/Resources/app
-		wget $siaOSX
+		cp $siaOSX .
 		unzip ./Sia-*
 		rm ./Sia*.zip
 		mv ./Sia-* ./Sia
@@ -84,7 +84,7 @@ buildLinux() {
 	mkdir resources/app
 	(
 		cd resources/app
-		wget $siaLinux
+		cp $siaLinux .
 		unzip ./Sia-*
 		rm ./Sia*.zip
 		mv ./Sia-* ./Sia
@@ -106,7 +106,7 @@ buildWindows() {
 	mkdir resources/app
 	(
 		cd resources/app
-		wget $siaWindows
+		cp $siaWindows .
 		unzip ./Sia-*
 		rm ./Sia*.zip
 		mv ./Sia-* ./Sia
