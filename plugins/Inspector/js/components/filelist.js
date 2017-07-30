@@ -57,6 +57,9 @@ const FileList = ({files, selected, searchResults, path, showSearchField, dragFi
 		const isSelected = selected.map((selectedfile) => selectedfile.name).includes(file.name)
 		const onFileClick = (e) => {
 			// a show file detail action
+			if (file.type === 'directory') {
+				return
+			}
 			actions.showFileDetail(file.siapath)
 
 			// const shouldMultiSelect = e.ctrlKey || e.metaKey
