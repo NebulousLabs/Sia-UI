@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import FileList from '../containers/filelist.js'
-import TransfersButton from '../containers/transfersbutton.js'
 import FileTransfers from '../containers/filetransfers.js'
 import DragOverlay from './dragoverlay.js'
 
-const FileBrowser = ({dragging, dragUploadEnabled, settingAllowance, showAddFolderDialog, showRenameDialog, showUploadDialog, showDeleteDialog, showFileTransfers, actions}) => {
+const FileBrowser = ({dragging, dragUploadEnabled, showFileTransfers, actions}) => {
 	const onDragOver = (e) => {
 		if (!dragUploadEnabled) {
 			return

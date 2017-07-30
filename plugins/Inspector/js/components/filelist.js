@@ -3,7 +3,6 @@ import React from 'react'
 import { List, Set } from 'immutable'
 import File from './file.js'
 import Path from 'path'
-import SearchField from '../containers/searchfield.js'
 import FileControls from '../containers/filecontrols.js'
 import DirectoryInfoBar from './directoryinfobar.js'
 import FileDetail from './filedetail.js'
@@ -37,8 +36,8 @@ const FileList = ({files, selected, searchResults, path, showSearchField, dragFi
 		)
 	}
 
-	if(showDetailPath != null) {
-		const showDetailFile = files.find(file => file.siapath == showDetailPath)
+	if (showDetailPath !== null) {
+		const showDetailFile = files.find((file) => file.siapath === showDetailPath)
 		return (
 			<div className="file-list">
 				<FileDetail showDetailFile={showDetailFile} actions={actions} />
@@ -55,26 +54,12 @@ const FileList = ({files, selected, searchResults, path, showSearchField, dragFi
 	}
 	const fileElements = filelistFiles.map((file, key) => {
 		const isSelected = selected.map((selectedfile) => selectedfile.name).includes(file.name)
-		const onFileClick = (e) => {
+		const onFileClick = () => {
 			// a show file detail action
 			if (file.type === 'directory') {
 				return
 			}
 			actions.showFileDetail(file.siapath)
-
-			// const shouldMultiSelect = e.ctrlKey || e.metaKey
-			// const shouldRangeSelect = e.shiftKey
-			// if (!shouldMultiSelect && !shouldRangeSelect) {
-			// 	actions.deselectAll()
-			// }
-			// if (shouldRangeSelect) {
-			// 	actions.selectUpTo(file)
-			// }
-			// if (shouldMultiSelect && isSelected) {
-			// 	actions.deselectFile(file)
-			// } else {
-			// 	actions.selectFile(file)
-			// }
 		}
 		const onDoubleClick = (e) => {
 			e.stopPropagation()

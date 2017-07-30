@@ -11,7 +11,7 @@ const mapStateToProps = (state) => ({
 	showSearchField: state.files.get('showSearchField'),
 	dragFolderTarget: state.files.get('dragFolderTarget'),
 	dragFileOrigin: state.files.get('dragFileOrigin'),
-  showDetailPath: state.files.get('showDetailPath')
+	showDetailPath: state.files.get('showDetailPath'),
 })
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ renameSiaUIFolder, deleteSiaUIFolder, getFiles, renameFile, setDragFileOrigin, setDragFolderTarget, setDragUploadEnabled, selectUpTo, setPath, deselectFile, deselectAll, selectFile, showRenameDialog, downloadFile, showDeleteDialog, showFileDetail, closeFileDetail }, dispatch),
