@@ -35,7 +35,8 @@
     "spectron": "^3.6.0",
     "uglify-js": "git://github.com/mishoo/UglifyJS2.git#harmony-v2.8.22",
     "uglifyjs-webpack-plugin": "^0.4.3",
-    "webpack": "^2.5.1"
+    "webpack": "^2.5.1",
+    "rc-tooltip": "^3.4.7"
   },
   "dependencies": {
     "babel-polyfill": "^6.9.1",

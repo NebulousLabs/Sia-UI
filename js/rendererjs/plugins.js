@@ -151,6 +151,9 @@ export const getOrderedPlugins = (path, homePlugin) => {
 	let plugins = scanFolder(path)
 
 	// Push the Terminal plugin to the bottom
+	plugins = pushToBottom(plugins, 'Inspector')
+
+	// Push the Terminal plugin to the bottom
 	plugins = pushToBottom(plugins, 'Terminal')
 
 	// Push the About plugin to the bottom
