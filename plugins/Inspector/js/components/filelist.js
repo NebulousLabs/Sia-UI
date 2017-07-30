@@ -41,7 +41,7 @@ const FileList = ({files, selected, searchResults, path, showSearchField, dragFi
 		const showDetailFile = files.find(file => file.siapath == showDetailPath)
 		return (
 			<div className="file-list">
-				<FileDetail showDetailFile={showDetailFile} />
+				<FileDetail showDetailFile={showDetailFile} actions={actions} />
 			</div>
 		)
 	}

@@ -159,6 +159,8 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('showAddFolderDialog', false)
 	case constants.SHOW_FILE_DETAIL:
 		return state.set('showDetailPath', action.siapath)
+	case constants.CLOSE_FILE_DETAIL:
+		return state.delete('showDetailPath')
 	default:
 		return state
 	}

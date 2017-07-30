@@ -220,3 +220,6 @@ export const showFileDetail = (siapath) => ({
 	type: constants.SHOW_FILE_DETAIL,
 	siapath,
 })
+export const closeFileDetail = () => ({
+	type: constants.CLOSE_FILE_DETAIL,
+})

@@ -1,17 +1,19 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import Tooltip from 'rc-tooltip';
+import Tooltip from 'rc-tooltip'
+import { CloseButton } from 'react-svg-buttons'
 
-const FileDetail = ({showDetailFile}) => {
+const FileDetail = ({showDetailFile, actions}) => {
+    const closeDetail = actions.closeFileDetail
     const getChunkTooltip = chunk => chunk.map(
         (piece, i) => {
             var s;
             if(!piece.host) {
-                s = pieceEmpty
+                s = pieceEmptyStyle
             } else if(piece.isoffline) {
-                s = pieceOffline
+                s = pieceOfflineStyle
             } else {
-                s = pieceOnline
+                s = pieceOnlineStyle
             }
             return (<div style={s} key={i}>{piece.host ? piece.host : "Empty"}</div>)
         }
@@ -24,27 +26,31 @@ const FileDetail = ({showDetailFile}) => {
             return sum
         }, 0)
         if(onlineChunk == chunk.length) {
-            return repairChunkRepaired
+            return repairChunkRepairedStyle
         }
         if(onlineChunk == 0) {
-            return repairChunkQueued
+            return repairChunkQueuedStyle
         }
-        return repairChunkRepairing
+        return repairChunkRepairingStyle
     }
     const details = showDetailFile.details
     return (
         <div style={logViewStyle}>
+            <div style={closeButtonStyle}>
+                <CloseButton onClick={closeDetail} thickness={2} color="#ff0000" />
+            </div>
+            <div style={clearBothStyle}></div>
             <h4>
                 {showDetailFile.name}
             </h4>
-            <div style={reapirFileView}>
+            <div style={reapirFileViewStyle}>
                 {details.map((v,i) => (
                   <Tooltip placement="rightTop" overlay={getChunkTooltip(v)} key={i}>
                     <a style={getChunkStyle(v)}>
                     </a>
                   </Tooltip>)
                   )}
-                <div style={clearBoth}></div>
+                <div style={clearBothStyle}></div>
             </div>
         </div>
     )
@@ -58,7 +64,7 @@ export default FileDetail
 
 const logViewStyle = {
     position: 'absolute',
-    top: '55px',
+    top: '20px',
     bottom: '0',
     left: '20px',
     right: '20px',
@@ -74,44 +80,49 @@ const liViewStyle = {
     cursor: 'pointer',
 }
 
-const reapirFileView = {
+const reapirFileViewStyle = {
     margin: '10px 20px',
 }
 
-const repaireChunk = {
+const repaireChunkStyle = {
     width: '8px',
     height: '8px',
     float: 'left',
     border: 'solid 1px #001f3f',
 }
 
-const repairChunkRepaired = {
-    ...repaireChunk,
+const repairChunkRepairedStyle = {
+    ...repaireChunkStyle,
     background: '#01FF70',
 }
 
-const repairChunkRepairing = {
-    ...repaireChunk,
+const repairChunkRepairingStyle = {
+    ...repaireChunkStyle,
     background: '#FF851B',
 }
 
-const repairChunkQueued = {
-    ...repaireChunk,
+const repairChunkQueuedStyle = {
+    ...repaireChunkStyle,
     background: 'white',
 }
 
-const clearBoth = {
+const clearBothStyle = {
     clear: 'both',
 }
 
-const pieceOnline = {
-    color: '#01FF70'
+const pieceOnlineStyle = {
+    color: '#01FF70',
 }
 
-const pieceOffline = {
-    color: '#dc143c'
+const pieceOfflineStyle = {
+    color: '#dc143c',
 }
 
-const pieceEmpty = {
-    color: 'white'
+const pieceEmptyStyle = {
+    color: 'white',
+}
+
+const closeButtonStyle = {
+    float: 'right',
+    cursor: 'pointer',
 }
