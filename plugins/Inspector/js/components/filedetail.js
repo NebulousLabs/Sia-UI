@@ -67,25 +67,22 @@ const closeButtonStyle = {
 const FileDetail = ({showDetailFile, actions}) => {
 	const closeDetail = actions.closeFileDetail
 	const getChunkTooltip = (chunk) => chunk.map((piece, i) => {
-				if (piece.length == 0) {
-					return (<div style={pieceEmptyStyle} key={i}>Empty</div>)
-				}
-				const line = piece.map((ele, j) => {
-					let s
-					if (ele.isoffline) {
-						s = pieceOfflineStyle
-					} else {
-						s = pieceOnlineStyle
-					}
-					return (<div style={s} key={j}>{ele.host};</div>)
-				})
-				return (<div key={i}>{line}</div>)
+		if (piece.length === 0) {
+			return (<div style={pieceEmptyStyle} key={i}>Empty</div>)
+		}
+		const line = piece.map((ele, j) => {
+			let s
+			if (ele.isoffline) {
+				s = pieceOfflineStyle
+			} else {
+				s = pieceOnlineStyle
 			}
-	)
+			return (<div style={s} key={j}>{ele.host};</div>)
+		})
+		return (<div key={i}>{line}</div>)
+	})
 	const getChunkStyle = (chunk) => {
-		const onlinePiece = chunk.reduce((sum, piece) => {
-			return piece.some((ele) => ele.host && !ele.isoffline) ? sum+1: sum 
-		}, 0)
+		const onlinePiece = chunk.reduce((sum, piece) => piece.some((ele) => ele.host && !ele.isoffline) ? sum+1: sum, 0)
 		if (onlinePiece === chunk.length) {
 			return repairChunkRepairedStyle
 		}
