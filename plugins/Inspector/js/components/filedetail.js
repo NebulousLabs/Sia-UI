@@ -77,9 +77,9 @@ const FileDetail = ({showDetailFile, actions}) => {
 			} else {
 				s = pieceOnlineStyle
 			}
-			return (<div style={s} key={j}>{ele.host};</div>)
+			return (<span style={s} key={j}>{ele.host};</span>)
 		})
-		return (<div key={i}>{line}</div>)
+		return (<div key={i}>{i}: {line}</div>)
 	})
 	const getChunkStyle = (chunk) => {
 		const onlinePiece = chunk.reduce((sum, piece) => piece.some((ele) => ele.host && !ele.isoffline) ? sum+1: sum, 0)
