@@ -236,11 +236,33 @@ describe('files plugin sagas', () => {
 		expect(downloadSpy.calledWithExactly('/renter/download/test/siapath', '/test/downloadpath')).to.be.true
 		expect(SiaAPI.showError.called).to.be.false
 	})
-	it('calls /renter/delete on deleteFile', async () => {
-		store.dispatch(actions.deleteFile(testFile))
-		await sleep(10)
-		expect(deleteSpy.calledWithExactly('/renter/delete/test/siapath')).to.be.true
-		expect(SiaAPI.showError.called).to.be.false
+	describe('deletion sagas', () => {
+		it('calls /renter/delete on deleteFile', async () => {
+			store.dispatch(actions.deleteFile(testFile))
+			await sleep(10)
+			expect(deleteSpy.calledWithExactly('/renter/delete/test/siapath')).to.be.true
+			expect(SiaAPI.showError.called).to.be.false
+		})
+		it('calls /renter/delete for every file in a directory and subdirectories', async () => {
+			testFiles = [
+				{ siapath: 'testfile', available: true, redundancy: 6 },
+				{ siapath: 'testfile2', available: true, redundancy: 6 },
+				{ siapath: 'testfile3', available: true, redundancy: 6 },
+				{ siapath: 'testfile4', available: true, redundancy: 6 },
+				{ siapath: 'testdir/testfile', available: true, redundancy: 6 },
+				{ siapath: 'testdir/testfile2', available: true, redundancy: 6 },
+				{ siapath: 'testdir/testdir2/testfile2', available: true, redundancy: 6 },
+				{ siapath: 'testdir/testdir2/testdir3/testfile2', available: true, redundancy: 6 },
+			]
+			store.dispatch(actions.getFiles())
+			await sleep(10)
+			store.dispatch(actions.deleteFile({ type: 'directory', siapath: 'testdir' }))
+			await sleep(10)
+			expect(deleteSpy.calledWith('/renter/delete/testdir/testfile')).to.be.true
+			expect(deleteSpy.calledWith('/renter/delete/testdir/testfile2')).to.be.true
+			expect(deleteSpy.calledWith('/renter/delete/testdir/testdir2/testfile2')).to.be.true
+			expect(deleteSpy.calledWith('/renter/delete/testdir/testdir2/testdir3/testfile2')).to.be.true
+		})
 	})
 	it('sets allowance with the correct allowance on setAllowance', async () => {
 		const allowance = '10000' // SC
