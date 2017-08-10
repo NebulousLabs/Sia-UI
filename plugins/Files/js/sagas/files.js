@@ -192,6 +192,7 @@ function* getUploadsSaga() {
 	}
 }
 
+// deleteFileSaga handles DELETE_FILE actions, which can include directories.
 function* deleteFileSaga(action) {
 	try {
 		if (action.file.siaUIFolder) {
@@ -208,11 +209,7 @@ function* deleteFileSaga(action) {
 			const siafiles = ls(List(response.files), action.file.siapath)
 			for (const siafile in siafiles.toArray()) {
 				const file = siafiles.get(siafile)
-				yield siadCall({
-					url: '/renter/delete/' + encodeURI(file.siapath),
-					timeout: 3.6e6, // 60 minute timeout for deleting files
-					method: 'POST',
-				})
+				yield put(actions.deleteFile(file))
 			}
 		}
 	} catch (e) {
