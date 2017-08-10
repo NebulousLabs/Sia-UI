@@ -144,14 +144,34 @@ function* getTransactionsSaga() {
 		console.error('error fetching transactions: ' + e.toString())
 	}
 }
-// Call /wallet/address, set the receive address, and show the receive prompt.
+
+function* showReceivePromptSaga() {
+	try {
+		const cachedAddr = SiaAPI.config.attr('receiveAddress')
+		if (cachedAddr === null) {
+			yield put(actions.getNewReceiveAddress())
+			return
+		}
+		// validate the address. if this node has no record of the address,
+		// generate a new one to ensure the user always gets a valid address.
+		const response = yield siadCall('/wallet/addresses')
+		if (!response.addresses.includes(cachedAddr)) {
+			yield put(actions.getNewReceiveAddress())
+			return
+		}
+		yield put(actions.setReceiveAddress(cachedAddr))
+	} catch (e) {
+		sendError(e)
+	}
+}
+
 function* getNewReceiveAddressSaga() {
 	try {
 		const response = yield siadCall('/wallet/address')
+		SiaAPI.config.attr('receiveAddress', response.address)
 		yield put(actions.setReceiveAddress(response.address))
-		yield put(actions.showReceivePrompt())
 	} catch (e) {
-		sendError(e)
+		console.error(`error getting receive address: ${e.toString()}`)
 	}
 }
 
@@ -298,8 +318,8 @@ export function* watchGetBalance() {
 export function* watchGetTransactions() {
 	yield* takeEvery(constants.GET_TRANSACTIONS, getTransactionsSaga)
 }
-export function* watchGetNewReceiveAddress() {
-	yield* takeEvery(constants.GET_NEW_RECEIVE_ADDRESS, getNewReceiveAddressSaga)
+export function* watchShowReceivePromptSaga() {
+	yield* takeEvery(constants.SHOW_RECEIVE_PROMPT, showReceivePromptSaga)
 }
 export function* watchSendCurrency() {
 	yield* takeEvery(constants.SEND_CURRENCY, sendCurrencySaga)
@@ -312,4 +332,7 @@ export function* watchChangePassword() {
 }
 export function* watchShowBackupPrompt() {
 	yield *takeEvery(constants.SHOW_BACKUP_PROMPT, showBackupPromptSaga)
+}
+export function* watchGetNewReceiveAddress() {
+	yield *takeEvery(constants.GET_NEW_RECEIVE_ADDRESS, getNewReceiveAddressSaga)
 }
