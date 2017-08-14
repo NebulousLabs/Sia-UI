@@ -107,13 +107,15 @@
 	font-size: 11px;
 }
 .receive-prompt {
+	position: relative;
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
 	flex-direction: column;
-	width: 500px;
-	height: 180px;
+	width: 900px;
+	height: 550px;
 	background-color: #ECECEC;
+	padding-top: 50px;
 }
 .wallet-toolbar {
 	width: 100%;
@@ -454,4 +456,42 @@
 }
 .receiveprompt-dismissbtn {
 	margin-top: 20px;
+}
+.receive-form {
+	width: 80%;
+}
+.receive-form > .receive-form-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 25px;
+}
+.receive-form-item > p {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+.receive-buttons {
+	margin-top: 30px;
+	margin-bottom: 10px;
+}
+.receive-buttons > button {
+	margin-left: 3px;
+	margin-right: 3px;
+}
+.done-button {
+	position: absolute;
+	bottom: 20px;
+}
+.address-table {
+	display: inline-block;
+	height: 300px;
+	overflow: scroll;
+	width: 90%; 
+}
+.receive-address, .address-description {
+	width: 450px;
+}
+td {
+	padding-right: 5px;
+	font-size: 15px !important;
 }

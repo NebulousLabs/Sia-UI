@@ -147,22 +147,47 @@ function* getTransactionsSaga() {
 
 function* showReceivePromptSaga() {
 	try {
-		const cachedAddr = SiaAPI.config.attr('receiveAddress')
-		if (cachedAddr === null) {
-			yield put(actions.getNewReceiveAddress())
-			return
+		let cachedAddrs = SiaAPI.config.attr('receiveAddresses')
+		if (cachedAddrs === null) {
+			cachedAddrs = []
 		}
-		// validate the address. if this node has no record of the address,
-		// generate a new one to ensure the user always gets a valid address.
+		// validate the addresses. if this node has no record of an address, prune
+		// it.
 		const response = yield siadCall('/wallet/addresses')
-		if (!response.addresses.includes(cachedAddr)) {
-			yield put(actions.getNewReceiveAddress())
-			return
-		}
-		yield put(actions.setReceiveAddress(cachedAddr))
+		const validCachedAddrs = cachedAddrs.filter((addr) => response.addresses.includes(addr.address))
+		SiaAPI.config.attr('receiveAddresses', validCachedAddrs)
+		yield put(actions.setReceiveAddresses(validCachedAddrs))
+		yield put(actions.getNewReceiveAddress())
+		yield put(actions.setAddressDescription(''))
 	} catch (e) {
+		console.error(e)
 		sendError(e)
 	}
+}
+
+function* saveAddressSaga(action) {
+	let addrs = SiaAPI.config.attr('receiveAddresses')
+	if (addrs === null) {
+		addrs = []
+	}
+	// don't save duplicate addresses
+	for (const addr in addrs) {
+		if (addrs[addr].address === action.address.address) {
+			return
+		}
+	}
+	addrs.push(action.address)
+	SiaAPI.config.attr('receiveAddresses', addrs)
+	try {
+		SiaAPI.config.save()
+	} catch (e) {
+		console.error(`error saving config: ${e.toString()}`)
+	}
+	// validate the addresses. if this node has no record of an address, prune
+	// it.
+	const response = yield siadCall('/wallet/addresses')
+	const validAddrs = addrs.filter((addr) => response.addresses.includes(addr.address))
+	yield put(actions.setReceiveAddresses(validAddrs))
 }
 
 function* getNewReceiveAddressSaga() {
@@ -335,4 +360,7 @@ export function* watchShowBackupPrompt() {
 }
 export function* watchGetNewReceiveAddress() {
 	yield *takeEvery(constants.GET_NEW_RECEIVE_ADDRESS, getNewReceiveAddressSaga)
+}
+export function* watchSaveAddress() {
+	yield *takeEvery(constants.SAVE_ADDRESS, saveAddressSaga)
 }

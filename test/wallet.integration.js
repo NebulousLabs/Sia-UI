@@ -47,6 +47,12 @@ const setMockReceiveAddress = (address) => {
 		address,
 	})
 }
+const setMockAddresses = (addresses) => {
+	SiaAPI.call.withArgs('/wallet/addresses').callsArgWith(1, null, {
+		addresses: addresses,
+	})
+}
+
 const mockSendSiacoin = () => {
 	SiaAPI.call.withArgs(match.has('url', '/wallet/siacoins')).callsArgWith(1, null)
 }
@@ -308,63 +314,61 @@ describe('wallet plugin integration tests', () => {
 			}
 		}, 100)
 	})
-	it('shows a new wallet address when receive siacoins is clicked initially', (done) => {
-		setMockReceiveAddress('testaddress')
-		expect(walletComponent.find('.receive-prompt')).to.have.length(0)
-		walletComponent.find('.receive-button').first().simulate('click')
-		const poll = setInterval(() => {
-			if (walletComponent.find('.receive-prompt').length === 1 &&
-			    walletComponent.find('.wallet-address').text() === 'testaddress') {
-				walletComponent.find('.receive-prompt button').simulate('click')
-				done()
-				clearInterval(poll)
-			}
-		}, 100)
-	})
-	it('shows the same wallet address when receive siacoins is clicked', (done) => {
-		setMockReceiveAddress('testaddress-new')
-		walletComponent.find('.receive-button').first().simulate('click')
-		const poll = setInterval(() => {
-			if (walletComponent.find('.receive-prompt').length === 1 &&
-			    walletComponent.find('.wallet-address').text() === 'testaddress') {
-				walletComponent.find('.receive-prompt button').simulate('click')
-				done()
-				clearInterval(poll)
-			}
-		}, 100)
-	})
+
 	describe('wallet send prompt', () => {
-	it('generates a new wallet address when the generate button is clicked', async () => {
-		setMockReceiveAddress('testaddress-new')
-		walletComponent.find('.receive-button').first().simulate('click')
-		while (walletComponent.find('.receive-prompt').length !== 1 &&
-		       walletComponent.find('.wallet-address').text() !== 'testaddress') {
-			await sleep(10)
-		}
-		walletComponent.find('.generate-address-button > i').simulate('click')
-		while (walletComponent.find('.wallet-address').text() !== 'testaddress-new') {
-			await sleep(10)
-		}
-		expect(SiaAPI.config.attr('receiveAddress')).to.equal('testaddress-new')
-	})
-	it('shows a send prompt when send button is clicked', () => {
-		expect(walletComponent.find('.sendprompt')).to.have.length(0)
-		walletComponent.find('.send-button').first().simulate('click')
-		expect(walletComponent.find('.sendprompt')).to.have.length(1)
-	})
-	it('sends the correct amount of siacoins to the correct address', () => {
-		walletComponent.find('.sendamount input').simulate('change', { target: { value: '100' }})
-		walletComponent.find('.sendaddress input').simulate('change', { target: { value: 'testaddress'}})
-		walletComponent.find('.send-siacoin-button').simulate('click')
-		expect(SiaAPI.call.lastCall.args[0]).to.deep.equal({
-			url: '/wallet/siacoins',
-			method: 'POST',
-			qs: {
-				destination: 'testaddress',
-				amount: SiaAPI.siacoinsToHastings('100').toString(),
-			},
+		it('generates a new wallet address when the generate button is clicked', async () => {
+			setMockReceiveAddress('testaddress-new')
+			walletComponent.find('.receive-button').first().simulate('click')
+			while (walletComponent.find('.receive-prompt').length !== 1 &&
+				walletComponent.find('.wallet-address').text() !== 'testaddress') {
+				await sleep(10)
+				expect(walletComponent.find('.receive-prompt')).to.have.length(1)
+				expect(walletComponent.find('.receive-address').props().value).to.equal('testaddress')
+				expect(walletComponent.find('.prior-address')).to.have.length(0)
+			}
+		})
+		it('shows a send prompt when send button is clicked', () => {
+			expect(walletComponent.find('.sendprompt')).to.have.length(0)
+			walletComponent.find('.send-button').first().simulate('click')
+			expect(walletComponent.find('.sendprompt')).to.have.length(1)
+		})
+		it('sends the correct amount of siacoins to the correct address', () => {
+			walletComponent.find('.sendamount input').simulate('change', { target: { value: '100' }})
+			walletComponent.find('.sendaddress input').simulate('change', { target: { value: 'testaddress'}})
+			walletComponent.find('.send-siacoin-button').simulate('click')
+			expect(SiaAPI.call.lastCall.args[0]).to.deep.equal({
+				url: '/wallet/siacoins',
+				method: 'POST',
+				qs: {
+					destination: 'testaddress',
+					amount: SiaAPI.siacoinsToHastings('100').toString(),
+				},
+			})
 		})
 	})
+
+	describe('receive prompt', () => {
+		it('shows a new wallet address when receive siacoins is clicked initially', async () => {
+			setMockReceiveAddress('testaddress')
+			setMockAddresses(['testaddress'])
+			expect(walletComponent.find('.receive-prompt')).to.have.length(0)
+			walletComponent.find('.receive-button').first().simulate('click')
+		})
+		it('saves the address given a description', async () => {
+			walletComponent.find('.address-description').simulate('change', { target: { value: 'testdesc' } })
+			await sleep(10)
+			walletComponent.find('.save-address-button').simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('.prior-address')).to.have.length(1)
+		})
+		it('generates a new address when New is clicked', async () => {
+			setMockReceiveAddress('testaddress2')
+			setMockAddresses(['testaddress', 'testaddress2'])
+			walletComponent.find('.new-address-button').simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('.receive-address').props().value).to.equal('testaddress2')
+			expect(walletComponent.find('.prior-address')).to.have.length(1)
+		})
 	})
 	describe('wallet backup button', () => {
 		it('shows the primary seed when the backup wallet button is clicked', async () => {
