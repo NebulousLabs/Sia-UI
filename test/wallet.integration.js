@@ -315,6 +315,34 @@ describe('wallet plugin integration tests', () => {
 		}, 100)
 	})
 
+	describe('receive prompt', () => {
+		it('shows a new wallet address when receive siacoins is clicked initially', async () => {
+			setMockReceiveAddress('testaddress')
+			setMockAddresses(['testaddress'])
+			expect(walletComponent.find('.receive-prompt')).to.have.length(0)
+			walletComponent.find('.receive-button').first().simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('.receive-prompt')).to.have.length(1)
+			expect(walletComponent.find('.receive-address').props().value).to.equal('testaddress')
+			expect(walletComponent.find('.prior-address')).to.have.length(0)
+		})
+		it('saves the address given a description', async () => {
+			walletComponent.find('.address-description').simulate('change', { target: { value: 'testdesc' } })
+			await sleep(10)
+			walletComponent.find('.save-address-button').simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('.prior-address')).to.have.length(1)
+		})
+		it('generates a new address when New is clicked', async () => {
+			setMockReceiveAddress('testaddress2')
+			setMockAddresses(['testaddress', 'testaddress2'])
+			walletComponent.find('.new-address-button').simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('.receive-address').props().value).to.equal('testaddress2')
+			expect(walletComponent.find('.prior-address')).to.have.length(1)
+		})
+	})
+
 	describe('wallet send prompt', () => {
 		it('generates a new wallet address when the generate button is clicked', async () => {
 			setMockReceiveAddress('testaddress-new')
@@ -347,29 +375,6 @@ describe('wallet plugin integration tests', () => {
 		})
 	})
 
-	describe('receive prompt', () => {
-		it('shows a new wallet address when receive siacoins is clicked initially', async () => {
-			setMockReceiveAddress('testaddress')
-			setMockAddresses(['testaddress'])
-			expect(walletComponent.find('.receive-prompt')).to.have.length(0)
-			walletComponent.find('.receive-button').first().simulate('click')
-		})
-		it('saves the address given a description', async () => {
-			walletComponent.find('.address-description').simulate('change', { target: { value: 'testdesc' } })
-			await sleep(10)
-			walletComponent.find('.save-address-button').simulate('click')
-			await sleep(10)
-			expect(walletComponent.find('.prior-address')).to.have.length(1)
-		})
-		it('generates a new address when New is clicked', async () => {
-			setMockReceiveAddress('testaddress2')
-			setMockAddresses(['testaddress', 'testaddress2'])
-			walletComponent.find('.new-address-button').simulate('click')
-			await sleep(10)
-			expect(walletComponent.find('.receive-address').props().value).to.equal('testaddress2')
-			expect(walletComponent.find('.prior-address')).to.have.length(1)
-		})
-	})
 	describe('wallet backup button', () => {
 		it('shows the primary seed when the backup wallet button is clicked', async () => {
 			walletComponent.find('.backup-button').simulate('click')

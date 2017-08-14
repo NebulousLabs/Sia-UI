@@ -4,8 +4,8 @@ import React from 'react'
 const ReceivePrompt = ({addresses, address, description, actions}) => {
 	const handleDismissClick = () => actions.hideReceivePrompt()
 	const handleGenerateClick = () => {
-		actions.setAddressDescription('')
 		actions.getNewReceiveAddress()
+		actions.setAddressDescription('')
 	}
 	const handleDescriptionChange = (e) => actions.setAddressDescription(e.target.value)
 	const handleSaveClick = () => {
