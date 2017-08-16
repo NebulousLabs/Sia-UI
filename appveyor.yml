@@ -10,5 +10,7 @@ install:
   - rename Sia-v1.0.3-windows-amd64 Sia
   - npm install
 
+test_script:
+  - npm test
 
 build: off
