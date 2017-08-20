@@ -15,10 +15,6 @@ const store = createStore(
 )
 sagaMiddleware.run(rootSaga)
 
-setInterval(() => {
-	store.dispatch(fetchData())
-}, 2000)
-
 const rootElement = (
 	<Provider store={store}>
 		<App />
@@ -30,4 +26,3 @@ ReactDOM.render(rootElement, document.getElementById('react-root'))
 window.onfocus = () => {
 	store.dispatch(fetchData())
 }
-

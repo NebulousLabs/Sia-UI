@@ -7,7 +7,7 @@ import FileControls from '../containers/filecontrols.js'
 import DirectoryInfoBar from './directoryinfobar.js'
 import FileDetail from './filedetail.js'
 
-const FileList = ({files, selected, searchResults, path, showSearchField, dragFileOrigin, dragFolderTarget, showDetailPath, actions}) => {
+const FileList = ({files, selected, searchResults, path, showSearchField, dragFileOrigin, dragFolderTarget, showDetailPath, showDetailFile, actions}) => {
 	const onBackClick = () => {
 		// remove a trailing slash if it exists
 		const cleanPath = path.replace(/\/$/, '')
@@ -35,15 +35,14 @@ const FileList = ({files, selected, searchResults, path, showSearchField, dragFi
 			</div>
 		)
 	}
+
 	if (showDetailPath) {
-		const showDetailFile = files.find((file) => file.siapath === showDetailPath)
 		return (
-			<div className="file-list">
-				<FileDetail showDetailFile={showDetailFile} actions={actions} />
+			<div>
+				<FileDetail showDetailPath={showDetailPath} showDetailFile={showDetailFile} actions={actions} />
 			</div>
 		)
 	}
-
 
 	let filelistFiles
 	if (showSearchField) {

@@ -1,6 +1,6 @@
-/*  Style Guide: 
+/*  Style Guide:
  *	Transparent: 70% Opacity
- *	
+ *
  *	White:	  #FFFFFF
  *	Grey-White: #F5F5F5
  *	Faint-Grey: #ECECEC
@@ -223,7 +223,7 @@ div[tabindex="1"]:focus {
 .upload-button-container:hover .upload-button:last-of-type {
 	max-height: 100px;
 	padding: 23px 0px 5px;
-} 
+}
 .upload-button-container {
 	display: inline-block;
 	position: relative;
@@ -623,4 +623,18 @@ div[tabindex="1"]:focus {
 .buttons {
 	width: 500px;
 	display: flex;
+}
+
+#react-paginate ul {
+    display: inline-block;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#react-paginate li {
+    display: inline-block;
+}
+
+#react-paginate .break a {
+    cursor: default;
 }

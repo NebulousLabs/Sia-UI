@@ -159,8 +159,15 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('showAddFolderDialog', false)
 	case constants.SHOW_FILE_DETAIL:
 		return state.set('showDetailPath', action.siapath)
+	case constants.RECEIVE_FILE_DETAIL:
+		return state.set('pagingNum', action.pagingNum)
+		            .set('current', action.current)
+								.set('showDetailFile', action.file)
 	case constants.CLOSE_FILE_DETAIL:
 		return state.delete('showDetailPath')
+		            .delete('showDetailFile')
+								.delete('pagingNum')
+								.delete('current')
 	default:
 		return state
 	}

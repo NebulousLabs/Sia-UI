@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import * as constants from '../constants/files.js'
 import Tooltip from 'rc-tooltip'
 import { CloseButton } from 'react-svg-buttons'
+import Pagination from 'react-paginate'
+import Select from 'rc-select'
 
 const logViewStyle = {
 	position: 'absolute',
@@ -64,14 +67,41 @@ const closeButtonStyle = {
 	cursor: 'pointer',
 }
 
-const FileDetail = ({showDetailFile, actions}) => {
+const FileDetail = ({showDetailPath, showDetailFile, actions}) => {
 	const closeDetail = actions.closeFileDetail
+	const onChangeOrSizeChange = (current, pageSize) => {
+		actions.fetchFileDetail(showDetailPath, pageSize, current)
+	}
+	const onChange = (current) => {
+		actions.fetchFileDetail(showDetailPath, constants.DEFAULT_PAGE_SIZE, current)
+	}
+
+	if (!showDetailFile) {
+		actions.fetchFileDetail(showDetailPath, constants.DEFAULT_PAGE_SIZE, 1)
+		return (
+			<div className="file-list">
+				<div style={closeButtonStyle}>
+					<CloseButton onClick={closeDetail} thickness={2} color="#ff0000" />
+				</div>
+				<div style={clearBothStyle} />
+				<ul>
+					<h2> Loading file detail... </h2>
+				</ul>
+			</div>
+		)
+	}
+
+	const getHost = (idx) => {
+		return showDetailFile.details.hosts[idx]
+	}
+
 	const getChunkTooltip = (chunk) => chunk.map((piece, i) => {
-		if (piece.length === 0) {
+		if (!piece || piece.length === 0) {
 			return (<div style={pieceEmptyStyle} key={i}>Empty</div>)
 		}
 		const line = piece.map((ele, j) => {
 			let s
+			ele = getHost(ele)
 			if (ele.isoffline) {
 				s = pieceOfflineStyle
 			} else {
@@ -82,7 +112,7 @@ const FileDetail = ({showDetailFile, actions}) => {
 		return (<div key={i}>{i}: {line}</div>)
 	})
 	const getChunkStyle = (chunk) => {
-		const onlinePiece = chunk.reduce((sum, piece) => piece.some((ele) => ele.host && !ele.isoffline) ? sum+1: sum, 0)
+		const onlinePiece = chunk.reduce((sum, piece) => piece.some((ele) => getHost(ele).host && !getHost(ele).isoffline) ? sum+1: sum, 0)
 		if (onlinePiece === chunk.length) {
 			return repairChunkRepairedStyle
 		}
@@ -91,7 +121,7 @@ const FileDetail = ({showDetailFile, actions}) => {
 		}
 		return repairChunkRepairingStyle
 	}
-	const details = showDetailFile.details
+
 	return (
 		<div style={logViewStyle}>
 			<div style={closeButtonStyle}>
@@ -101,10 +131,20 @@ const FileDetail = ({showDetailFile, actions}) => {
 			<h4>
 				{showDetailFile.name}
 			</h4>
+			<Pagination
+		    selectComponentClass={Select}
+		    showQuickJumper
+		    showSizeChanger
+		    defaultPageSize={constants.DEFAULT_PAGE_SIZE}
+		    defaultCurrent={1}
+		    onShowSizeChange={onChangeOrSizeChange}
+		    onChange={onChangeOrSizeChange}
+		    total={showDetailFile.total}
+		  />
 			<div style={reapirFileViewStyle}>
-				{details.map((v, i) => (
-					<Tooltip placement="rightTop" overlay={getChunkTooltip(v)} key={i}>
-						<a style={getChunkStyle(v)} />
+				{showDetailFile.details.chunks.map((chunk, i) => (
+					<Tooltip placement="rightTop" overlay={getChunkTooltip(chunk)} key={i}>
+						<a style={getChunkStyle(chunk)} />
 					</Tooltip>)
 				)}
 				<div style={clearBothStyle} />
@@ -114,8 +154,7 @@ const FileDetail = ({showDetailFile, actions}) => {
 }
 
 FileDetail.propTypes = {
-	showDetailFile: PropTypes.object.isRequired,
+	showDetailPath: PropTypes.string.isRequired,
 }
 
 export default FileDetail
-

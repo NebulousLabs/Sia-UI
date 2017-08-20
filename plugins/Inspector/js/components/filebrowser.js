@@ -17,7 +17,6 @@ const FileBrowser = ({dragging, dragUploadEnabled, showFileTransfers, actions}) 
 			return
 		}
 		e.preventDefault()
-		actions.setNotDragging()
 		// Convert file list into a list of file paths.
 		actions.showUploadDialog(Array.from(e.dataTransfer.files, (file) => file.path))
 	}
@@ -26,7 +25,6 @@ const FileBrowser = ({dragging, dragUploadEnabled, showFileTransfers, actions}) 
 			return
 		}
 		e.preventDefault()
-		actions.setNotDragging()
 	}
 	const onKeyDown = (e) => {
 		// Deselect all files when ESC is pressed.
