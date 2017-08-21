@@ -162,12 +162,12 @@ export default function filesReducer(state = initialState, action) {
 	case constants.RECEIVE_FILE_DETAIL:
 		return state.set('pagingNum', action.pagingNum)
 		            .set('current', action.current)
-								.set('showDetailFile', action.file)
+					.set('showDetailFile', action.file)
 	case constants.CLOSE_FILE_DETAIL:
 		return state.delete('showDetailPath')
 		            .delete('showDetailFile')
-								.delete('pagingNum')
-								.delete('current')
+					.delete('pagingNum')
+					.delete('current')
 	default:
 		return state
 	}

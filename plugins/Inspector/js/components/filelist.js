@@ -5,9 +5,9 @@ import File from './file.js'
 import Path from 'path'
 import FileControls from '../containers/filecontrols.js'
 import DirectoryInfoBar from './directoryinfobar.js'
-import FileDetail from './filedetail.js'
+import FileDetail from '../containers/filedetail.js'
 
-const FileList = ({files, selected, searchResults, path, showSearchField, dragFileOrigin, dragFolderTarget, showDetailPath, showDetailFile, actions}) => {
+const FileList = ({files, selected, searchResults, path, showSearchField, dragFileOrigin, dragFolderTarget, showDetailPath, actions}) => {
 	const onBackClick = () => {
 		// remove a trailing slash if it exists
 		const cleanPath = path.replace(/\/$/, '')
@@ -39,7 +39,7 @@ const FileList = ({files, selected, searchResults, path, showSearchField, dragFi
 	if (showDetailPath) {
 		return (
 			<div>
-				<FileDetail showDetailPath={showDetailPath} showDetailFile={showDetailFile} actions={actions} />
+				<FileDetail />
 			</div>
 		)
 	}

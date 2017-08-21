@@ -1,12 +1,9 @@
 import { takeEvery, delay } from 'redux-saga'
 import { fork, join, put, race, take, call, select } from 'redux-saga/effects'
-import Path from 'path'
-import fs from 'graceful-fs'
 import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import { List } from 'immutable'
-import BigNumber from 'bignumber.js'
-import { ls, uploadDirectory, sendError, allowancePeriod, readableFilesize, siadCall, readdirRecursive, parseDownloads, parseUploads } from './helpers.js'
+import { siadCall } from './helpers.js'
 
 // Query siad for the user's files.
 function* getFilesSaga() {
@@ -26,7 +23,7 @@ function* getFileDetailSaga(action) {
 		({ siapath, pagingNum, current } = action)
 	} else {
 		({ siapath, pagingNum, current } = yield select((state) => ({
-				siapath: state.files.get('showDetailPath'), pagingNum: state.files.get('pagingNum'), current: state.files.get('current')
+			siapath: state.files.get('showDetailPath'), pagingNum: state.files.get('pagingNum'), current: state.files.get('current'),
 		})))
 		if (!siapath) {
 			return
@@ -36,8 +33,8 @@ function* getFileDetailSaga(action) {
 	try {
 		const response = yield siadCall('/renter/filedetail/'
 											+ encodeURI(siapath)
-										  + "?pagingNum=" + pagingNum
-											+ "&current=" + current)
+										    + '?pagingNum=' + pagingNum
+											+ '&current=' + current)
 		yield put(actions.receiveFileDetail({ pagingNum, current, file: response }))
 	} catch (e) {
 		console.error('error fetching file: ' + e.toString())

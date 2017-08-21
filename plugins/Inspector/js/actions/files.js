@@ -16,7 +16,7 @@ export const fetchData = () => ({
 })
 export const showFileDetail = (siapath) => ({
 	type: constants.SHOW_FILE_DETAIL,
-	siapath
+	siapath,
 })
 export const closeFileDetail = () => ({
 	type: constants.CLOSE_FILE_DETAIL,
@@ -30,4 +30,8 @@ export const fetchFileDetail = (siapath, pagingNum, current) => ({
 export const setDragFolderTarget = (target) => ({
 	type: constants.SET_DRAG_FOLDER_TARGET,
 	target,
+})
+export const setPath = (path) => ({
+	type: constants.SET_PATH,
+	path,
 })
