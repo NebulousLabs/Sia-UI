@@ -100,12 +100,12 @@ const FileDetail = ({showDetailPath, showDetailFile, current, actions}) => {
 				<CloseButton onClick={closeDetail} thickness={2} color="#ff0000" />
 			</div>
 			<div style={clearBothStyle} />
-			<h4>
-				{showDetailFile.name}
-			</h4>
+			<h3>
+				file: {showDetailPath}
+			</h3>
 
 			<div style={reapirFileViewStyle}>
-				{links}
+				Pages: {links}
 			</div>
 
 			<div style={reapirFileViewStyle}>
