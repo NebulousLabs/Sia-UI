@@ -273,6 +273,107 @@ div[tabindex="1"]:focus {
 }
 .files-usage-info {
 	margin-left: 15px;
+	margin-right: 15px;
+	display: flex;
+	align-items: center;
+	position: relative;
+}
+.files-usage-info > * {
+	display: inline-block;
+}
+.spending-bar {
+	height: 20px;
+	width: 300px;
+	background-color: #eee;
+	cursor: help;
+	position: relative;
+}
+.remaining-text {
+	color: #fff;
+	font-size: 12px;
+	margin-left: 5px;
+}
+
+.spending-breakdown {
+	display: none !important;
+	position: absolute;
+	top: 45px;
+	background: #808080;
+	border: 1px solid #00CBA0;
+	font-size: 18px;
+	padding: 10px 10px 10px 10px;
+	width: 300px;
+	white-space: pre-wrap;
+	z-index: 100;
+}
+
+.spending-breakdown:after, .spending-breakdown:before {
+	bottom: 100%;
+	left: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.spending-breakdown > ul {
+	list-style: none;
+}
+
+.spending-breakdown:after {
+	border-color: rgba(82, 82, 82, 0);
+	border-bottom-color: #808080;
+	border-width: 30px;
+	margin-left: -30px;
+}
+
+.spending-breakdown:before {
+	border-color: rgba(0, 203, 160, 0);
+	border-bottom-color: #00CBA0;
+	border-width: 30px;
+	margin-left: -30px;
+}
+
+.files-usage-info:hover .spending-breakdown {
+	display: inline-block !important;
+}
+
+.spending-bar > div {
+	height: 20px;
+	display: inline-block;
+	border-right: 1px solid #fff;
+}
+.spending-bar > div:last-of-type {
+	border-right: none;
+}
+.spending-bar > .download-spending {
+	background-color: #68ffdf;
+}
+.spending-bar > .upload-spending {
+	background-color: #13f1c1;
+}
+.spending-bar > .contract-spending {
+	background-color: #0c4a3d;
+}
+.spending-bar > .storage-spending {
+	background-color: #03654f;
+}
+.allowance-spending-breakdown {
+	margin-bottom: 25px;
+}
+.contract-spending-breakdown {
+	color: #0c4a3d;
+}
+.storage-spending-breakdown {
+	color: #03654f;
+}
+.upload-spending-breakdown {
+	color: #13f1c1;
+}
+.download-spending-breakdown {
+	color: #68ffdf;
 }
 .files-toolbar .buttons div span {
 	display: block;

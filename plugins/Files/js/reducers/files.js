@@ -27,8 +27,11 @@ const initialState = Map({
 	dragFolderTarget: '',
 	dragFileOrigin: {},
 	contractCount: 0,
-	allowance: '0',
-	spending: '0',
+	allowance: 0,
+	downloadspending: 0,
+	uploadspending: 0,
+	storagespending: 0,
+	contractspending: 0,
 	showDownloadsSince: Date.now(),
 	unreadUploads: Set(),
 	unreadDownloads: Set(),
@@ -48,7 +51,10 @@ export default function filesReducer(state = initialState, action) {
 	case constants.RECEIVE_ALLOWANCE:
 		return state.set('allowance', action.allowance)
 	case constants.RECEIVE_SPENDING:
-		return state.set('spending', action.spending)
+		return state.set('downloadspending', action.downloadspending)
+		            .set('uploadspending', action.uploadspending)
+		            .set('storagespending', action.storagespending)
+		            .set('contractspending', action.contractspending)
 	case constants.DOWNLOAD_FILE:
 		return state.set('unreadDownloads', state.get('unreadDownloads').add(action.file.siapath))
 	case constants.UPLOAD_FILE:
