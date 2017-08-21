@@ -60,7 +60,7 @@ const FileDetail = ({showDetailPath, showDetailFile, current, actions}) => {
 	if (!showDetailFile) {
 		actions.fetchFileDetail(showDetailPath, constants.DEFAULT_PAGE_SIZE, 1)
 		return (
-			<div className="file-list">
+			<div>
 				<div style={closeButtonStyle}>
 					<CloseButton onClick={closeDetail} thickness={2} color="#ff0000" />
 				</div>
