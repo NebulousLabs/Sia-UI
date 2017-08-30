@@ -18,22 +18,6 @@ describe('wallet component', () => {
 	afterEach(() => {
 		testActions.startSendPrompt.reset()
 	})
-	it('renders balance info', () => {
-		const walletComponent = shallow(<Wallet synced confirmedbalance="10" unconfirmedbalance="1" siafundbalance="0" />)
-		expect(walletComponent.find('.balance-info').children()).to.have.length(2)
-		expect(walletComponent.find('.balance-info').children().first().text()).to.contain('Confirmed Balance: 10 SC')
-		expect(walletComponent.find('.balance-info').children().last().text()).to.contain('Unconfirmed Delta: 1 SC')
-	})
-	it('renders siafund balance when it is non-zero', () => {
-		const walletComponent = shallow(<Wallet synced confirmedbalance="10" unconfirmedbalance="1" siafundbalance="1" />)
-		expect(walletComponent.find('.balance-info').children()).to.have.length(3)
-		expect(walletComponent.find('.balance-info').children().last().text()).to.contain('Siafund Balance: 1 SF')
-	})
-	it('renders a warning when not synced', () => {
-		const walletComponent = shallow(<Wallet synced={false} confirmedbalance="10" unconfirmedbalance="1" siafundbalance="0" />)
-		expect(walletComponent.find('.balance-info').children()).to.have.length(3)
-		expect(walletComponent.find('.balance-info').children().last().text()).to.contain('Your wallet is not synced, balances are not final.')
-	})
 	it('renders siacoin send button when siafund balance is zero', () => {
 		const walletComponent = shallow(<Wallet synced confirmedbalance="10" unconfirmedbalance="1" siafundbalance="0" />)
 		expect(walletComponent.find('SendButton')).to.have.length(1)
