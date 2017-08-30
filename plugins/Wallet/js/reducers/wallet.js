@@ -12,6 +12,7 @@ const initialState = Map({
 	confirmedbalance: '0',
 	unconfirmedbalance: '0',
 	siafundbalance: '0',
+	siacoinclaimbalance: '0',
 	transactions: List(),
 	ntransactions: 30,
 	filter: true,
