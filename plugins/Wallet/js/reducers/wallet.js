@@ -80,6 +80,7 @@ export default function walletReducer(state = initialState, action) {
 			.set('confirmedbalance', action.confirmed)
 			.set('unconfirmedbalance', action.unconfirmed)
 			.set('siafundbalance', action.siafunds)
+			.set('siacoinclaimbalance', action.siacoinclaimbalance)
 	case constants.SHOW_MORE_TRANSACTIONS:
 		return state.set(
 			'ntransactions',

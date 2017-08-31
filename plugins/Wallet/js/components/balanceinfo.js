@@ -6,6 +6,7 @@ const BalanceInfo = ({synced, confirmedbalance, unconfirmedbalance, siafundbalan
 		<span>Confirmed Balance: {confirmedbalance} SC </span>
 		<span>Unconfirmed Delta: {unconfirmedbalance} SC </span>
 		{siafundbalance !== '0' ? (<span> Siafund Balance: {siafundbalance} SF </span>) : null}
+		{siacoinclaimbalance !== '0' ? (<span> Siacoin Claim Balance: {siacoinclaimbalance} SC </span>) : null}
 		{!synced ? (
 			<span style={{marginRight: '40px', color: 'rgb(255, 93, 93)'}} className="fa fa-exclamation-triangle">Your wallet is not synced, balances are not final.</span>
 		) : null

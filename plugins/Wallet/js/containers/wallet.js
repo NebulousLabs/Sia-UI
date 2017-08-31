@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux'
 import { startSendPrompt } from '../actions/wallet.js'
 
 const mapStateToProps = (state) => ({
-	synced: state.wallet.get('synced'),
 	siafundbalance: state.wallet.get('siafundbalance'),
 	showReceivePrompt: state.wallet.get('showReceivePrompt'),
 	showSendPrompt: state.wallet.get('showSendPrompt'),

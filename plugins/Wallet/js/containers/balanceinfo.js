@@ -12,4 +12,4 @@ const mapDispatchToProps = () => ({
 })
 
 const BalanceInfo = connect(mapStateToProps, mapDispatchToProps)(BalanceInfoView)
-export default BalanceInfo 
+export default BalanceInfo
