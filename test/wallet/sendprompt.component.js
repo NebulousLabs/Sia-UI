@@ -10,10 +10,11 @@ const testActions = {
 	setSendAmount: spy(),
 	sendCurrency: spy(),
 	closeSendPrompt: spy(),
+	setSendError: spy(),
 }
 
-const sendpromptComponentSC = shallow(<SendPrompt currencytype="siacoins" sendAddress="testaddr" sendAmount="1" actions={testActions} />)
-const sendpromptComponentSF = shallow(<SendPrompt currencytype="siafunds" sendAddress="testaddr" sendAmount="1" actions={testActions} />)
+const sendpromptComponentSC = shallow(<SendPrompt currencytype="siacoins" sendAddress="testaddr" sendAmount="1" sendError="" actions={testActions} />)
+const sendpromptComponentSF = shallow(<SendPrompt currencytype="siafunds" sendAddress="testaddr" sendAmount="1" sendError="" actions={testActions} />)
 
 describe('wallet send prompt component', () => {
 	it('renders a modal with one child', () => {
@@ -45,8 +46,8 @@ describe('wallet send prompt component', () => {
 		expect(testActions.setSendAddress.calledWith('newaddress')).to.be.true
 	})
 	it('calls setSendAmount on sendamount change', () => {
-		sendpromptComponentSC.find('.sendamount input').first().simulate('change', {target: {value: 'newamount'}})
-		expect(testActions.setSendAmount.calledWith('newamount')).to.be.true
+		sendpromptComponentSC.find('.sendamount input').first().simulate('change', {target: {value: '100'}})
+		expect(testActions.setSendAmount.calledWith('100')).to.be.true
 	})
 })
 /* eslint-enable no-unused-expressions */

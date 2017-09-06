@@ -194,3 +194,8 @@ export const setAuxSeeds = (seeds) => ({
 	type: constants.SET_AUX_SEEDS,
 	seeds,
 })
+export const setSendError = (error) => ({
+	type: constants.SET_SEND_ERROR,
+	error,
+})
+

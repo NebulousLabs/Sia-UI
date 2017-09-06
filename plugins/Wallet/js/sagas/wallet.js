@@ -199,7 +199,7 @@ function* sendCurrencySaga(action) {
 		yield put(actions.setSendAmount(''))
 		yield put(actions.setSendAddress(''))
 	} catch (e) {
-		sendError(e)
+		yield put(actions.setSendError(e.message))
 	}
 }
 

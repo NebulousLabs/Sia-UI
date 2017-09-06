@@ -321,45 +321,47 @@ describe('wallet plugin integration tests', () => {
 			}
 		}, 100)
 	})
-	it('shows a send prompt when send button is clicked', () => {
-		expect(walletComponent.find('.sendprompt')).to.have.length(0)
-		walletComponent.find('.send-button').first().simulate('click')
-		expect(walletComponent.find('.sendprompt')).to.have.length(1)
-	})
-	it('sends the correct amount of siacoins to the correct address', () => {
-		walletComponent.find('.sendamount input').simulate('change', { target: { value: '100' }})
-		walletComponent.find('.sendaddress input').simulate('change', { target: { value: 'testaddress'}})
-		walletComponent.find('.send-siacoin-button').simulate('click')
-		expect(SiaAPI.call.lastCall.args[0]).to.deep.equal({
-			url: '/wallet/siacoins',
-			method: 'POST',
-			qs: {
-				destination: 'testaddress',
-				amount: SiaAPI.siacoinsToHastings('100').toString(),
-			},
+	describe('wallet send prompt', () => {
+		it('shows a send prompt when send button is clicked', () => {
+			expect(walletComponent.find('.sendprompt')).to.have.length(0)
+			walletComponent.find('.send-button').first().simulate('click')
+			expect(walletComponent.find('.sendprompt')).to.have.length(1)
 		})
-	})
-	it('closes the send prompt after sending', (done) => {
-		const poll = setInterval(() => {
-			if (walletComponent.find('.sendprompt').length === 0) {
-				clearInterval(poll)
-				done()
-			}
+		it('sends the correct amount of siacoins to the correct address', () => {
+			walletComponent.find('.sendamount input').simulate('change', { target: { value: '100' }})
+			walletComponent.find('.sendaddress input').simulate('change', { target: { value: 'testaddress'}})
+			walletComponent.find('.send-siacoin-button').simulate('click')
+			expect(SiaAPI.call.lastCall.args[0]).to.deep.equal({
+				url: '/wallet/siacoins',
+				method: 'POST',
+				qs: {
+					destination: 'testaddress',
+					amount: SiaAPI.siacoinsToHastings('100').toString(),
+				},
+			})
 		})
-	})
-	it('clears send amount and address after sending', (done) => {
-		walletComponent.find('.send-button').first().simulate('click')
-		const poll = setInterval(() => {
-			if (walletComponent.find('.sendamount input').length > 0) {
-				expect(walletComponent.find('.sendamount input').props().value).to.equal('')
-				expect(walletComponent.find('.sendaddress input').props().value).to.equal('')
-				walletComponent.find('.cancel-send-button').simulate('click')
-				clearInterval(poll)
-				done()
-			}
-		}, 50)
-	})
+		it('closes the send prompt after sending', (done) => {
+			const poll = setInterval(() => {
+				if (walletComponent.find('.sendprompt').length === 0) {
+					clearInterval(poll)
+					done()
+				}
+			})
+		})
+		it('clears send amount and address after sending', (done) => {
+			walletComponent.find('.send-button').first().simulate('click')
+			const poll = setInterval(() => {
+				if (walletComponent.find('.sendamount input').length > 0) {
+					expect(walletComponent.find('.sendamount input').props().value).to.equal('')
+					expect(walletComponent.find('.sendaddress input').props().value).to.equal('')
+					walletComponent.find('.cancel-send-button').simulate('click')
+					clearInterval(poll)
+					done()
+				}
+			}, 50)
+		})
 
+	})
 	describe('wallet backup button', () => {
 		it('shows the primary seed when the backup wallet button is clicked', async () => {
 			walletComponent.find('.backup-button').simulate('click')
