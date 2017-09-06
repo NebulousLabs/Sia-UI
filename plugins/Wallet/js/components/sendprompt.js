@@ -1,10 +1,19 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import BigNumber from 'bignumber.js'
 
-const SendPrompt = ({currencytype, sendAddress, sendAmount, feeEstimate, actions}) => {
+const SendPrompt = ({currencytype, sendAddress, sendAmount, feeEstimate, sendError, actions}) => {
 	const handleSendAddressChange = (e) => actions.setSendAddress(e.target.value)
 	const handleSendAmountChange = (e) => actions.setSendAmount(e.target.value)
-	const handleSendClick = () => actions.sendCurrency(sendAddress, sendAmount, currencytype)
+	const handleSendClick = () => {
+		try {
+			new BigNumber(sendAmount)
+			actions.setSendError('')
+			actions.sendCurrency(sendAddress, sendAmount, currencytype)
+		} catch (e) {
+			actions.setSendError('could not parse send amount')
+		}
+	}
 	const handleCancelClick = () => actions.closeSendPrompt()
 	return (
 		<div className="modal">
@@ -20,6 +29,7 @@ const SendPrompt = ({currencytype, sendAddress, sendAmount, feeEstimate, actions
 				<div className="fee-estimation">
 					Estimated fee: {feeEstimate}
 				</div>
+				<span className="send-error">{sendError}</span>
 				<div className="send-prompt-buttons">
 					<button className="send-siacoin-button" onClick={handleSendClick}>Send</button>
 					<button className="cancel-send-button" onClick={handleCancelClick}>Cancel</button>
@@ -30,6 +40,7 @@ const SendPrompt = ({currencytype, sendAddress, sendAmount, feeEstimate, actions
 }
 SendPrompt.propTypes = {
 	sendAddress: PropTypes.string.isRequired,
+	sendError: PropTypes.string.isRequired,
 	sendAmount: PropTypes.string.isRequired,
 	currencytype: PropTypes.string.isRequired,
 	feeEstimate: PropTypes.string.isRequired,

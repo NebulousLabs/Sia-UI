@@ -431,3 +431,8 @@
 	height: 180px;
 	overflow-y: scroll;
 }
+.send-error {
+	color: red;
+	margin-top: 10px;
+	width: 75%;
+}
