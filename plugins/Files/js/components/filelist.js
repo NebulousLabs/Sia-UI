@@ -122,7 +122,7 @@ const FileList = ({files, selected, searchResults, path, showSearchField, dragFi
 			{showSearchField ? <SearchField /> : null}
 			<ul>
 				<DirectoryInfoBar path={path} nfiles={files.size} onBackClick={onBackClick} setDragFolderTarget={actions.setDragFolderTarget} />
-				{ fileElements.size > 0 ? fileElements : <h2> No files uploaded </h2> }
+				{ fileElements.size > 0 ? fileElements : <h2> No files uploaded. Always backup uploaded files. SIA is not yet production ready. </h2> }
 			</ul>
 			{selected.size > 0 ? <FileControls /> : null}
 		</div>
