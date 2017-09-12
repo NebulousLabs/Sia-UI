@@ -12,6 +12,7 @@ const initialState = Map({
 	confirmedbalance: '0',
 	unconfirmedbalance: '0',
 	siafundbalance: '0',
+	siacoinclaimbalance: '0',
 	transactions: List(),
 	ntransactions: 30,
 	filter: true,
@@ -79,6 +80,7 @@ export default function walletReducer(state = initialState, action) {
 			.set('confirmedbalance', action.confirmed)
 			.set('unconfirmedbalance', action.unconfirmed)
 			.set('siafundbalance', action.siafunds)
+			.set('siacoinclaimbalance', action.siacoinclaimbalance)
 	case constants.SHOW_MORE_TRANSACTIONS:
 		return state.set(
 			'ntransactions',

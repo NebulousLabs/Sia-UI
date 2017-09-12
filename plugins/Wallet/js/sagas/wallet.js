@@ -124,10 +124,11 @@ function* getBalanceSaga() {
 	try {
 		const response = yield siadCall('/wallet')
 		const confirmed = SiaAPI.hastingsToSiacoins(response.confirmedsiacoinbalance)
+		const siacoinclaimbalance = SiaAPI.hastingsToSiacoins(response.siacoinclaimbalance)
 		const unconfirmedIncoming = SiaAPI.hastingsToSiacoins(response.unconfirmedincomingsiacoins)
 		const unconfirmedOutgoing = SiaAPI.hastingsToSiacoins(response.unconfirmedoutgoingsiacoins)
 		const unconfirmed = unconfirmedIncoming.minus(unconfirmedOutgoing)
-		yield put(actions.setBalance(confirmed.round(2).toString(), unconfirmed.round(2).toString(), response.siafundbalance))
+		yield put(actions.setBalance(confirmed.round(2).toString(), unconfirmed.round(2).toString(), response.siafundbalance, siacoinclaimbalance.round(2).toString()))
 	} catch (e) {
 		console.error('error fetching balance: ' + e.toString())
 	}
