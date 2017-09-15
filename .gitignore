@@ -8,7 +8,6 @@ doc/Sia-UI
 errors.log
 dist
 sia-testing
-package-lock.json
 
 #VSCode
 .vscode
