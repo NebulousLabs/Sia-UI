@@ -66,8 +66,16 @@ function* getAllowanceSaga() {
 		const contractspending = SiaAPI.hastingsToSiacoins(response.financialmetrics.contractspending)
 		const storagespending = SiaAPI.hastingsToSiacoins(response.financialmetrics.storagespending)
 
+		const consensus = yield siadCall('/consensus')
+		const renewheight = (() => {
+			if (response.settings.allowance.renewwindow === 0) {
+				return 0
+			}
+			return response.settings.allowance.renewwindow + consensus.height
+		})()
+
 		yield put(actions.receiveAllowance(allowance.round(0).toNumber()))
-		yield put(actions.receiveSpending(downloadspending.round(2).toNumber(), uploadspending.round(2).toNumber(), storagespending.round(2).toNumber(), contractspending.round(2).toNumber()))
+		yield put(actions.receiveSpending(downloadspending.round(2).toNumber(), uploadspending.round(2).toNumber(), storagespending.round(2).toNumber(), contractspending.round(2).toNumber(), renewheight))
 	} catch (e) {
 		console.error('error getting allowance: ' + e.toString())
 	}

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 // UsageStats defines the presentation component for displaying file spending.
-const UsageStats = ({allowance, downloadspending, uploadspending, storagespending, contractspending}) => {
+const UsageStats = ({allowance, downloadspending, uploadspending, storagespending, contractspending, renewheight}) => {
 	const unspent = () => allowance - (downloadspending+uploadspending+storagespending+contractspending)
 	return (
 		<div className="files-usage-info">
@@ -15,7 +15,8 @@ const UsageStats = ({allowance, downloadspending, uploadspending, storagespendin
 			<p className="remaining-text">{unspent()} SC remaining</p>
 			<div className="spending-breakdown">
 				<ul>
-					<li className="allowance-spending-breakdown"> Allowance: {allowance} SC </li>
+					<li className="allowance-spending-breakdown">Allowance: {allowance} SC </li>
+					<li className="renew-info">Renews at Block Height: {renewheight}</li>
 					<li className="contract-spending-breakdown"> Contract Spending: {contractspending} SC </li>
 					<li className="storage-spending-breakdown"> Storage Spending: {storagespending} SC </li>
 					<li className="upload-spending-breakdown"> Upload Spending: {uploadspending} SC </li>
@@ -32,6 +33,7 @@ UsageStats.propTypes = {
 	uploadspending: PropTypes.number.isRequired,
 	storagespending: PropTypes.number.isRequired,
 	contractspending: PropTypes.number.isRequired,
+	renewheight: PropTypes.number.isRequired,
 }
 
 export default UsageStats

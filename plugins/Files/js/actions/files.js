@@ -28,12 +28,13 @@ export const receiveAllowance = (allowance) => ({
 	type: constants.RECEIVE_ALLOWANCE,
 	allowance,
 })
-export const receiveSpending = (downloadspending, uploadspending, storagespending, contractspending) => ({
+export const receiveSpending = (downloadspending, uploadspending, storagespending, contractspending, renewheight) => ({
 	type: constants.RECEIVE_SPENDING,
 	downloadspending,
 	uploadspending,
 	storagespending,
 	contractspending,
+	renewheight,
 })
 export const getStorageEstimate = (funds) => ({
 	type: constants.GET_STORAGE_ESTIMATE,

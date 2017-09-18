@@ -361,7 +361,10 @@ div[tabindex="1"]:focus {
 	background-color: #03654f;
 }
 .allowance-spending-breakdown {
-	margin-bottom: 25px;
+	margin-bottom: 5px;
+}
+.renew-info {
+	margin-bottom: 20px;
 }
 .contract-spending-breakdown {
 	color: #0c4a3d;

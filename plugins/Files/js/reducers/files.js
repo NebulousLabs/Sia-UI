@@ -32,6 +32,7 @@ const initialState = Map({
 	uploadspending: 0,
 	storagespending: 0,
 	contractspending: 0,
+	renewheight: 0,
 	showDownloadsSince: Date.now(),
 	unreadUploads: Set(),
 	unreadDownloads: Set(),
@@ -55,6 +56,7 @@ export default function filesReducer(state = initialState, action) {
 		            .set('uploadspending', action.uploadspending)
 		            .set('storagespending', action.storagespending)
 		            .set('contractspending', action.contractspending)
+		            .set('renewheight', action.renewheight)
 	case constants.DOWNLOAD_FILE:
 		return state.set('unreadDownloads', state.get('unreadDownloads').add(action.file.siapath))
 	case constants.UPLOAD_FILE:
