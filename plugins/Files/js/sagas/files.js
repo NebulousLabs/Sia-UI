@@ -61,16 +61,21 @@ function* getAllowanceSaga() {
 	try {
 		const response = yield siadCall('/renter')
 		const allowance = SiaAPI.hastingsToSiacoins(response.settings.allowance.funds)
+		const downloadspending = SiaAPI.hastingsToSiacoins(response.financialmetrics.downloadspending)
+		const uploadspending = SiaAPI.hastingsToSiacoins(response.financialmetrics.uploadspending)
+		const contractspending = SiaAPI.hastingsToSiacoins(response.financialmetrics.contractspending)
+		const storagespending = SiaAPI.hastingsToSiacoins(response.financialmetrics.storagespending)
 
-		// compute allowance spending. Set the spending to zero if it is negative,
-		// since negative spending is confusing to the user.
-		let spending = allowance.minus(SiaAPI.hastingsToSiacoins(response.financialmetrics.unspent))
-		if (spending.isNegative()) {
-			spending = new BigNumber(0)
-		}
+		const consensus = yield siadCall('/consensus')
+		const renewheight = (() => {
+			if (response.settings.allowance.renewwindow === 0) {
+				return 0
+			}
+			return response.settings.allowance.renewwindow + consensus.height
+		})()
 
-		yield put(actions.receiveAllowance(allowance.round(0).toString()))
-		yield put(actions.receiveSpending(spending.round(0).toString()))
+		yield put(actions.receiveAllowance(allowance.round(0).toNumber()))
+		yield put(actions.receiveSpending(downloadspending.round(2).toNumber(), uploadspending.round(2).toNumber(), storagespending.round(2).toNumber(), contractspending.round(2).toNumber(), renewheight))
 	} catch (e) {
 		console.error('error getting allowance: ' + e.toString())
 	}
