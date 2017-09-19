@@ -3,7 +3,7 @@ import React from 'react'
 
 // UsageStats defines the presentation component for displaying file spending.
 const UsageStats = ({allowance, downloadspending, uploadspending, storagespending, contractspending, renewheight}) => {
-	const unspent = () => allowance - (downloadspending+uploadspending+storagespending+contractspending)
+	const unspent = allowance - (downloadspending+uploadspending+storagespending+contractspending)
 	return (
 		<div className="files-usage-info">
 			<div className="spending-bar">
@@ -12,7 +12,7 @@ const UsageStats = ({allowance, downloadspending, uploadspending, storagespendin
 				<div style={{width: (downloadspending/allowance)*100+ '%'}} className="download-spending" />
 				<div style={{width: (uploadspending/allowance)*100 + '%'}} className="upload-spending" />
 			</div>
-			<p className="remaining-text">{unspent()} SC remaining</p>
+			<p className="remaining-text">{unspent} SC remaining</p>
 			<div className="spending-breakdown">
 				<ul>
 					<li className="allowance-spending-breakdown">Allowance: {allowance} SC </li>
