@@ -163,22 +163,26 @@ function* showReceivePromptSaga() {
 	}
 }
 
+// saveAddressSaga handles SAVE_ADDRESS actions, adding the address object to
+// the collection of stored Sia-UI addresses and dispatching any necessary
+// resulting actions.
 function* saveAddressSaga(action) {
 	let addrs = List(SiaAPI.config.attr('receiveAddresses'))
 
-	// don't save duplicate addresses
-	
+	// save the address to the collection
+	addrs = addrs.filter((addr) => addr.address !== action.address.address)
 	addrs = addrs.push(action.address)
-	SiaAPI.config.attr('receiveAddresses', addrs.toArray())
+	// validate the addresses. if this node has no record of an address, prune
+	// it.
+	const response = yield siadCall('/wallet/addresses')
+	const validAddrs = addrs.filter((addr) => response.addresses.includes(addr.address))
+	SiaAPI.config.attr('receiveAddresses', validAddrs.toArray())
 	try {
 		SiaAPI.config.save()
 	} catch (e) {
 		console.error(`error saving config: ${e.toString()}`)
 	}
-	// validate the addresses. if this node has no record of an address, prune
-	// it.
-	const response = yield siadCall('/wallet/addresses')
-	const validAddrs = addrs.filter((addr) => response.addresses.includes(addr.address))
+
 	yield put(actions.setReceiveAddresses(validAddrs))
 }
 

@@ -333,6 +333,14 @@ describe('wallet plugin integration tests', () => {
 			await sleep(10)
 			expect(walletComponent.find('.prior-address')).to.have.length(1)
 		})
+		it('updates the description if a duplicate address is saved', async() => {
+			walletComponent.find('.address-description').simulate('change', { target: { value: 'testdesc-updated' } })
+			await sleep(10)
+			walletComponent.find('.save-address-button').simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('.prior-address')).to.have.length(1)
+			expect(walletComponent.find('.description').first().text()).to.equal('testdesc-updated')
+		})
 		it('generates a new address when New is clicked', async () => {
 			setMockReceiveAddress('testaddress2')
 			setMockAddresses(['testaddress', 'testaddress2'])
