@@ -381,6 +381,27 @@ describe('wallet plugin integration tests', () => {
 				},
 			})
 		})
+		it('closes the send prompt after sending', (done) => {
+			const poll = setInterval(() => {
+				if (walletComponent.find('.sendprompt').length === 0) {
+					clearInterval(poll)
+					done()
+				}
+			})
+		})
+		it('clears send amount and address after sending', (done) => {
+			walletComponent.find('.send-button').first().simulate('click')
+			const poll = setInterval(() => {
+				if (walletComponent.find('.sendamount input').length > 0) {
+					expect(walletComponent.find('.sendamount input').props().value).to.equal('')
+					expect(walletComponent.find('.sendaddress input').props().value).to.equal('')
+					walletComponent.find('.cancel-send-button').simulate('click')
+					clearInterval(poll)
+					done()
+				}
+			}, 50)
+		})
+
 	})
 
 	describe('wallet backup button', () => {
