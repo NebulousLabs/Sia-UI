@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { List } from 'immutable'
 
 const ReceivePrompt = ({addresses, address, description, actions}) => {
 	const handleDismissClick = () => actions.hideReceivePrompt()
@@ -31,13 +32,13 @@ const ReceivePrompt = ({addresses, address, description, actions}) => {
 					<button className="new-address-button" onClick={handleGenerateClick}>New</button>
 				</div>
 				<h3> Prior Addresses </h3>
-				{ addresses.length > 0 ? (
+				{ addresses.size > 0 ? (
 					<table className="pure-table address-table">
 						<tr>
 							<th>Description</th>
 							<th>Address</th>
 						</tr>
-						{ addresses.slice(0).reverse().map((oldAddress, key) => (
+						{ addresses.reverse().map((oldAddress, key) => (
 							<tr className="prior-address" key={key}>
 								<td className="description">{oldAddress.description}</td>
 								<td className="address">{oldAddress.address}</td>
@@ -52,8 +53,8 @@ const ReceivePrompt = ({addresses, address, description, actions}) => {
 	)
 }
 ReceivePrompt.propTypes = {
+	addresses: PropTypes.instanceOf(List),
 	address: PropTypes.string,
 	description: PropTypes.string,
-	addresses: PropTypes.array,
 }
 export default ReceivePrompt

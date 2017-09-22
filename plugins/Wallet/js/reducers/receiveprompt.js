@@ -1,10 +1,10 @@
-import { Map } from 'immutable'
+import { Map, List } from 'immutable'
 import { SET_RECEIVE_ADDRESS, SET_RECEIVE_ADDRESSES, SET_ADDRESS_DESCRIPTION } from '../constants/wallet.js'
 
 const initialState = Map({
 	address: '',
 	description: '',
-	addresses: [],
+	addresses: List([]),
 })
 export default function receivePromptReducer(state = initialState, action) {
 	switch (action.type) {

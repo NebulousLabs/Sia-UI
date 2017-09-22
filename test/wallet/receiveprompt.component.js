@@ -3,6 +3,7 @@ import { shallow } from 'enzyme'
 import { expect } from 'chai'
 import { spy } from 'sinon'
 import ReceivePrompt from '../../plugins/Wallet/js/components/receiveprompt.js'
+import { List } from 'immutable'
 
 const testActions = {
 	saveAddress: spy(),
@@ -27,7 +28,7 @@ describe('wallet receive prompt component', () => {
 			{ description: 'testdesc2', address: 'testaddr2' },
 			{ description: 'testdesc3', address: 'testaddr3' },
 		]
-		const component = shallow(<ReceivePrompt address="testaddress" addresses={testAddrs} />)
+		const component = shallow(<ReceivePrompt address="testaddress" addresses={List(testAddrs)} />)
 		expect(component.find('.prior-address')).to.have.length(testAddrs.length)
 		component.find('.prior-address').forEach((node, i) => {
 			expect(node.find('.description').text()).to.equal(testAddrs[(testAddrs.length-1)-i].description)

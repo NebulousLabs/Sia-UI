@@ -4,6 +4,7 @@ import { siadCall, parseRawTransactions } from './helpers.js'
 import * as actions from '../actions/wallet.js'
 import * as constants from '../constants/wallet.js'
 import { walletUnlockError } from '../actions/error.js'
+import { List } from 'immutable'
 
 // Send an error notification.
 const sendError = (e) => {
@@ -147,15 +148,12 @@ function* getTransactionsSaga() {
 
 function* showReceivePromptSaga() {
 	try {
-		let cachedAddrs = SiaAPI.config.attr('receiveAddresses')
-		if (cachedAddrs === null) {
-			cachedAddrs = []
-		}
+		const cachedAddrs = List(SiaAPI.config.attr('receiveAddresses'))
 		// validate the addresses. if this node has no record of an address, prune
 		// it.
 		const response = yield siadCall('/wallet/addresses')
 		const validCachedAddrs = cachedAddrs.filter((addr) => response.addresses.includes(addr.address))
-		SiaAPI.config.attr('receiveAddresses', validCachedAddrs)
+		SiaAPI.config.attr('receiveAddresses', validCachedAddrs.toArray())
 		yield put(actions.setReceiveAddresses(validCachedAddrs))
 		yield put(actions.getNewReceiveAddress())
 		yield put(actions.setAddressDescription(''))
@@ -166,18 +164,12 @@ function* showReceivePromptSaga() {
 }
 
 function* saveAddressSaga(action) {
-	let addrs = SiaAPI.config.attr('receiveAddresses')
-	if (addrs === null) {
-		addrs = []
-	}
+	let addrs = List(SiaAPI.config.attr('receiveAddresses'))
+
 	// don't save duplicate addresses
-	for (const addr in addrs) {
-		if (addrs[addr].address === action.address.address) {
-			return
-		}
-	}
-	addrs.push(action.address)
-	SiaAPI.config.attr('receiveAddresses', addrs)
+	
+	addrs = addrs.push(action.address)
+	SiaAPI.config.attr('receiveAddresses', addrs.toArray())
 	try {
 		SiaAPI.config.save()
 	} catch (e) {
