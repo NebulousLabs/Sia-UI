@@ -349,20 +349,21 @@ describe('wallet plugin integration tests', () => {
 			expect(walletComponent.find('.receive-address').props().value).to.equal('testaddress2')
 			expect(walletComponent.find('.prior-address')).to.have.length(1)
 		})
+		it('doesnt display addresses the node does not have', async() => {
+			// set our mock node's receiving addresses to empty, simulating the case
+			// where Sia-UI has a bunch of saved addresses which the node has no
+			// recolletion of. Sia-UI should not render any of the saved receiving
+			// addresses.
+			setMockAddresses([])
+			walletComponent.find('.done-button').simulate('click')
+			await sleep(10)
+			walletComponent.find('.receive-button').first().simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('.prior-address')).to.have.length(0)
+		})
 	})
 
 	describe('wallet send prompt', () => {
-		it('generates a new wallet address when the generate button is clicked', async () => {
-			setMockReceiveAddress('testaddress-new')
-			walletComponent.find('.receive-button').first().simulate('click')
-			while (walletComponent.find('.receive-prompt').length !== 1 &&
-				walletComponent.find('.wallet-address').text() !== 'testaddress') {
-				await sleep(10)
-				expect(walletComponent.find('.receive-prompt')).to.have.length(1)
-				expect(walletComponent.find('.receive-address').props().value).to.equal('testaddress')
-				expect(walletComponent.find('.prior-address')).to.have.length(0)
-			}
-		})
 		it('shows a send prompt when send button is clicked', () => {
 			expect(walletComponent.find('.sendprompt')).to.have.length(0)
 			walletComponent.find('.send-button').first().simulate('click')
