@@ -3,11 +3,11 @@ import { spy, stub, match } from 'sinon'
 import { mount } from 'enzyme'
 import { initWallet } from '../plugins/Wallet/js/main.js'
 import * as Siad from 'sia.js'
-
+import siaConfig from '../js/mainjs/config.js'
 
 const mockSiaAPI = {
 	call: stub(),
-	config: {},
+	config: siaConfig(''),
 	hastingsToSiacoins: Siad.hastingsToSiacoins,
 	siacoinsToHastings: Siad.siacoinsToHastings,
 	openFile: () => spy(),
@@ -47,6 +47,12 @@ const setMockReceiveAddress = (address) => {
 		address,
 	})
 }
+const setMockAddresses = (addresses) => {
+	SiaAPI.call.withArgs('/wallet/addresses').callsArgWith(1, null, {
+		addresses: addresses,
+	})
+}
+
 const mockSendSiacoin = () => {
 	SiaAPI.call.withArgs(match.has('url', '/wallet/siacoins')).callsArgWith(1, null)
 }
@@ -308,19 +314,55 @@ describe('wallet plugin integration tests', () => {
 			}
 		}, 100)
 	})
-	it('shows a new wallet address when receive siacoins is clicked', (done) => {
-		setMockReceiveAddress('testaddress')
-		expect(walletComponent.find('.receive-prompt')).to.have.length(0)
-		walletComponent.find('.receive-button').first().simulate('click')
-		const poll = setInterval(() => {
-			if (walletComponent.find('.receive-prompt').length === 1) {
-				expect(walletComponent.find('.wallet-address').first().text()).to.equal('testaddress')
-				walletComponent.find('.receive-prompt button').simulate('click')
-				done()
-				clearInterval(poll)
-			}
-		}, 100)
+
+	describe('receive prompt', () => {
+		it('shows a new wallet address when receive siacoins is clicked initially', async () => {
+			setMockReceiveAddress('testaddress')
+			setMockAddresses(['testaddress'])
+			expect(walletComponent.find('.receive-prompt')).to.have.length(0)
+			walletComponent.find('.receive-button').first().simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('.receive-prompt')).to.have.length(1)
+			expect(walletComponent.find('.receive-address').props().value).to.equal('testaddress')
+			expect(walletComponent.find('.prior-address')).to.have.length(0)
+		})
+		it('saves the address given a description', async () => {
+			walletComponent.find('.address-description').simulate('change', { target: { value: 'testdesc' } })
+			await sleep(10)
+			walletComponent.find('.save-address-button').simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('.prior-address')).to.have.length(1)
+		})
+		it('updates the description if a duplicate address is saved', async() => {
+			walletComponent.find('.address-description').simulate('change', { target: { value: 'testdesc-updated' } })
+			await sleep(10)
+			walletComponent.find('.save-address-button').simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('.prior-address')).to.have.length(1)
+			expect(walletComponent.find('.description').first().text()).to.equal('testdesc-updated')
+		})
+		it('generates a new address when New is clicked', async () => {
+			setMockReceiveAddress('testaddress2')
+			setMockAddresses(['testaddress', 'testaddress2'])
+			walletComponent.find('.new-address-button').simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('.receive-address').props().value).to.equal('testaddress2')
+			expect(walletComponent.find('.prior-address')).to.have.length(1)
+		})
+		it('doesnt display addresses the node does not have', async() => {
+			// set our mock node's receiving addresses to empty, simulating the case
+			// where Sia-UI has a bunch of saved addresses which the node has no
+			// recolletion of. Sia-UI should not render any of the saved receiving
+			// addresses.
+			setMockAddresses([])
+			walletComponent.find('.done-button').simulate('click')
+			await sleep(10)
+			walletComponent.find('.receive-button').first().simulate('click')
+			await sleep(10)
+			expect(walletComponent.find('.prior-address')).to.have.length(0)
+		})
 	})
+
 	describe('wallet send prompt', () => {
 		it('shows a send prompt when send button is clicked', () => {
 			expect(walletComponent.find('.sendprompt')).to.have.length(0)
@@ -362,6 +404,7 @@ describe('wallet plugin integration tests', () => {
 		})
 
 	})
+
 	describe('wallet backup button', () => {
 		it('shows the primary seed when the backup wallet button is clicked', async () => {
 			walletComponent.find('.backup-button').simulate('click')
@@ -388,3 +431,4 @@ describe('wallet plugin integration tests', () => {
 		}, 100)
 	})
 })
+

@@ -199,4 +199,16 @@ export const setSendError = (error) => ({
 	type: constants.SET_SEND_ERROR,
 	error,
 })
+export const saveAddress = (address) => ({
+	type: constants.SAVE_ADDRESS,
+	address,
+})
+export const setReceiveAddresses = (addresses) => ({
+	type: constants.SET_RECEIVE_ADDRESSES,
+	addresses,
+})
+export const setAddressDescription = (description) => ({
+	type: constants.SET_ADDRESS_DESCRIPTION,
+	description,
+})
 

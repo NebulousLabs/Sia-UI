@@ -4,6 +4,7 @@ import { siadCall, parseRawTransactions } from './helpers.js'
 import * as actions from '../actions/wallet.js'
 import * as constants from '../constants/wallet.js'
 import { walletUnlockError } from '../actions/error.js'
+import { List } from 'immutable'
 
 // Send an error notification.
 const sendError = (e) => {
@@ -144,14 +145,54 @@ function* getTransactionsSaga() {
 		console.error('error fetching transactions: ' + e.toString())
 	}
 }
-// Call /wallet/address, set the receive address, and show the receive prompt.
+
+function* showReceivePromptSaga() {
+	try {
+		const cachedAddrs = List(SiaAPI.config.attr('receiveAddresses'))
+		// validate the addresses. if this node has no record of an address, prune
+		// it.
+		const response = yield siadCall('/wallet/addresses')
+		const validCachedAddrs = cachedAddrs.filter((addr) => response.addresses.includes(addr.address))
+		SiaAPI.config.attr('receiveAddresses', validCachedAddrs.toArray())
+		yield put(actions.setReceiveAddresses(validCachedAddrs))
+		yield put(actions.getNewReceiveAddress())
+		yield put(actions.setAddressDescription(''))
+	} catch (e) {
+		console.error(e)
+		sendError(e)
+	}
+}
+
+// saveAddressSaga handles SAVE_ADDRESS actions, adding the address object to
+// the collection of stored Sia-UI addresses and dispatching any necessary
+// resulting actions.
+function* saveAddressSaga(action) {
+	let addrs = List(SiaAPI.config.attr('receiveAddresses'))
+
+	// save the address to the collection
+	addrs = addrs.filter((addr) => addr.address !== action.address.address)
+	addrs = addrs.push(action.address)
+	// validate the addresses. if this node has no record of an address, prune
+	// it.
+	const response = yield siadCall('/wallet/addresses')
+	const validAddrs = addrs.filter((addr) => response.addresses.includes(addr.address))
+	SiaAPI.config.attr('receiveAddresses', validAddrs.toArray())
+	try {
+		SiaAPI.config.save()
+	} catch (e) {
+		console.error(`error saving config: ${e.toString()}`)
+	}
+
+	yield put(actions.setReceiveAddresses(validAddrs))
+}
+
 function* getNewReceiveAddressSaga() {
 	try {
 		const response = yield siadCall('/wallet/address')
+		SiaAPI.config.attr('receiveAddress', response.address)
 		yield put(actions.setReceiveAddress(response.address))
-		yield put(actions.showReceivePrompt())
 	} catch (e) {
-		sendError(e)
+		console.error(`error getting receive address: ${e.toString()}`)
 	}
 }
 
@@ -298,8 +339,8 @@ export function* watchGetBalance() {
 export function* watchGetTransactions() {
 	yield* takeEvery(constants.GET_TRANSACTIONS, getTransactionsSaga)
 }
-export function* watchGetNewReceiveAddress() {
-	yield* takeEvery(constants.GET_NEW_RECEIVE_ADDRESS, getNewReceiveAddressSaga)
+export function* watchShowReceivePromptSaga() {
+	yield* takeEvery(constants.SHOW_RECEIVE_PROMPT, showReceivePromptSaga)
 }
 export function* watchSendCurrency() {
 	yield* takeEvery(constants.SEND_CURRENCY, sendCurrencySaga)
@@ -312,4 +353,10 @@ export function* watchChangePassword() {
 }
 export function* watchShowBackupPrompt() {
 	yield *takeEvery(constants.SHOW_BACKUP_PROMPT, showBackupPromptSaga)
+}
+export function* watchGetNewReceiveAddress() {
+	yield *takeEvery(constants.GET_NEW_RECEIVE_ADDRESS, getNewReceiveAddressSaga)
+}
+export function* watchSaveAddress() {
+	yield *takeEvery(constants.SAVE_ADDRESS, saveAddressSaga)
 }
