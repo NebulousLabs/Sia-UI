@@ -28,6 +28,7 @@ if (shouldQuit) {
 app.on('ready', () => {
 	// Load mainWindow
 	mainWindow = initWindow(config)
+	mainWindow.toggleDevTools()
 })
 
 // Quit once all windows have been closed.

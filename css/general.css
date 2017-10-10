@@ -15,6 +15,15 @@
 	display: none;
 }
 
+@font-face {
+	font-family: Montserrat-Regular;
+	src: url('../assets/Montserrat-Regular.ttf');
+}
+@font-face {
+	font-family: Montserrat-Medium;
+	src: url('../assets/Montserrat-Medium.ttf');
+}
+
 html,body {
 	position: relative;
 
@@ -53,7 +62,7 @@ html,body {
 	background-color: #191919;
 }
 .logo {
-	padding-left: 52px;
+	padding-left: 53px;
 	padding-top: 22px;
 	height: 35px;
 	pointer-events: none;
@@ -161,7 +170,7 @@ html,body {
 	padding: 4px;
 	padding-left: 8px;
 	text-transform: uppercase;
-	font-weight: bold;
+	font-family: "Montserrat-Medium";
 }
 
 /* Mainbar */
