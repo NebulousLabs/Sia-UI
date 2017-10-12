@@ -4,6 +4,9 @@ import React from 'react'
 // UsageStats defines the presentation component for displaying file spending.
 const UsageStats = ({allowance, downloadspending, uploadspending, storagespending, contractspending, renewheight}) => {
 	const unspent = allowance - (downloadspending+uploadspending+storagespending+contractspending)
+	if (allowance === 0) {
+		return null
+	}
 	return (
 		<div className="files-usage-info">
 			<div className="spending-bar">
