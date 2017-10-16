@@ -130,7 +130,7 @@ html,body {
 	font-size: 16px;
 	align-items: center;
 	position: relative;
-	height: 70px;
+	height: 63px;
 
 	transition: all .25s;
 	-webkit-animation: fadein .4s;
@@ -152,7 +152,11 @@ html,body {
 	cursor: default;
 	background-color: #333333;
 	color: #ffffff;
-	border-left: 3px solid #00cd9c;
+	background-position: left;
+	background-origin: padding-box;
+	background-size: 3px 63px;
+	background-repeat: no-repeat;
+	background-image: url('../assets/selectionbar.svg');
 }
 @keyframes fadeout {
 	from { opacity: default; }
@@ -163,8 +167,9 @@ html,body {
 	to   { opacity: default; }
 }
 .button .icon {
-	max-height: 30%;
 	padding-left: 10px;
+	width: 18px;
+	height: 18px;
 }
 .button .text {
 	padding: 4px;

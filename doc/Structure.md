@@ -53,7 +53,7 @@ Contains css, both imported and developed in house.
 </div>
 ```
 resulting in a button like this: ![This button is shown when the UI detects
-that it's out of date](/doc/assets/update-button.png).
+that it's out of date](/doc/assets/update-button.svg).
 * `roboto-condensed-min.css` - Most of the UI uses this font. It's minimalist
   and easy to read when small but not bulky when large
 

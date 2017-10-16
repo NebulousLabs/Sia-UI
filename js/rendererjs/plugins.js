@@ -92,7 +92,7 @@ export const getPluginName = (pluginPath) => Path.basename(pluginPath)
 export const loadPlugin = (pluginPath, hidden = false, shortcut) => {
 	const name = getPluginName(pluginPath)
 	const markupPath = Path.join(pluginPath, 'index.html')
-	const iconPath = Path.join(pluginPath, 'assets', 'button.png')
+	const iconPath = Path.join(pluginPath, 'assets', 'button.svg')
 
 	const viewElement = createPluginElement(markupPath, name)
 	const buttonElement = createPluginButtonElement(iconPath, name)
