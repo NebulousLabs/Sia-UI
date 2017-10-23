@@ -55,7 +55,7 @@
   },
   "scripts": {
     "start": "webpack && electron .",
-    "debug": "webpack -d && electron .",
+    "debug": "webpack -d && electron --remote-debugging-port=9222 .",
     "build-production": "webpack --config ./webpack.production.config.js",
     "build": "webpack",
     "watch": "webpack --watch",
