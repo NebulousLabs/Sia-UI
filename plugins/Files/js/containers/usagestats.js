@@ -7,6 +7,7 @@ const mapStateToProps = (state) => ({
 	uploadspending: state.files.get('uploadspending'),
 	storagespending: state.files.get('storagespending'),
 	contractspending: state.files.get('contractspending'),
+	unspent: state.files.get('unspent'),
 	renewheight: state.files.get('renewheight'),
 })
 
