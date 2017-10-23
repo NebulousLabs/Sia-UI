@@ -281,17 +281,22 @@ div[tabindex="1"]:focus {
 .files-usage-info > * {
 	display: inline-block;
 }
-.spending-bar {
+.spending-container{
 	height: 20px;
 	width: 300px;
+	max-width: 300px;
 	background-color: #eee;
 	cursor: help;
 	position: relative;
 }
+.spending-bar {
+	height: 20px;
+	max-width: 300px;
+}
 .remaining-text {
 	color: #fff;
 	font-size: 12px;
-	margin-left: 5px;
+	margin-left: 10px;
 }
 
 .spending-breakdown {
