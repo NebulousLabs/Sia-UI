@@ -1,5 +1,6 @@
 'use strict'
 import { platform } from 'os'
+import { shell } from 'electron'
 
 // Set UI version via package.json.
 document.getElementById('uiversion').innerHTML = VERSION
@@ -39,3 +40,6 @@ function updateCheck() {
 }
 
 document.getElementById('updatecheck').onclick = updateCheck
+document.getElementById('datadiropen').onclick = () => {
+	shell.showItemInFolder(SiaAPI.config.siad.datadir)
+}

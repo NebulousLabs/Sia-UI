@@ -188,6 +188,7 @@ div[tabindex="1"]:focus {
 
 .files-toolbar {
 	width: 100%;
+	padding-left: 20px;
 	height: 50px;
 	min-width: 800px;
 	white-space: nowrap;
