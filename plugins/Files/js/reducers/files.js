@@ -1,6 +1,6 @@
 import { Map, Set, OrderedSet, List } from 'immutable'
 import * as constants from '../constants/files.js'
-import { ls, searchFiles, allFiles, rangeSelect } from '../sagas/helpers.js'
+import { ls, searchFiles, allFiles, rangeSelect, buildTransferTimes, addTransferSpeeds } from '../sagas/helpers.js'
 import Path from 'path'
 
 const initialState = Map({
@@ -37,6 +37,7 @@ const initialState = Map({
 	showDownloadsSince: Date.now(),
 	unreadUploads: Set(),
 	unreadDownloads: Set(),
+	downloadTimes: Map(),
 })
 
 
@@ -146,8 +147,14 @@ export default function filesReducer(state = initialState, action) {
 		return state.set('showUploadDialog', false)
 	case constants.RECEIVE_UPLOADS:
 		return state.set('uploading', action.uploads)
-	case constants.RECEIVE_DOWNLOADS:
-		return state.set('downloading', action.downloads.filter((download) => Date.parse(download.starttime) > state.get('showDownloadsSince')))
+	case constants.RECEIVE_DOWNLOADS: {
+		const untimedDownloads = action.downloads.filter((download) => Date.parse(download.starttime) > state.get('showDownloadsSince'))
+		const previousDownloadTimes = state.get('downloadTimes')
+		const downloadTimes = buildTransferTimes(previousDownloadTimes, untimedDownloads)
+		const downloads = addTransferSpeeds(untimedDownloads, downloadTimes)
+		return state.set('downloading', downloads)
+			    .set('downloadTimes', downloadTimes)
+	}
 	case constants.SHOW_FILE_TRANSFERS:
 		return state.set('showFileTransfers', true)
 	case constants.HIDE_FILE_TRANSFERS:

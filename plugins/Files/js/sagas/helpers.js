@@ -186,12 +186,61 @@ export const parseDownloads = (downloads) =>
 			})(),
 			siapath: download.siapath,
 			name: Path.basename(download.siapath),
+			bytestransferred: download.received,
+			totalbytes: download.filesize,
 			progress: Math.floor((download.received / download.filesize) * 100),
 			destination: download.destination,
 			type: 'download',
 			starttime: download.starttime,
 		}))
 		.sortBy((download) => -download.starttime)
+
+export const buildTransferTimes = (previousTransferTimes, transfers) => {
+	// Need a finite lookback window, lest we leak memory. This is also the window over which
+	// we calculate our average speed. This number can be adjusted.
+	const lookbackCount = 5
+	return transfers.reduce((map, transfer) => {
+		const previousTransferTime = previousTransferTimes.get(transfer.siapath)
+		if (previousTransferTime) {
+			return map.set(transfer.siapath, {
+				timestamps: previousTransferTime.timestamps.concat(Date.now()).slice(-lookbackCount),
+				bytes: previousTransferTime.bytes.concat(transfer.bytestransferred).slice(-lookbackCount),
+			})
+		}
+		return map.set(transfer.siapath, {
+			timestamps: [Date.now()],
+			bytes: [transfer.bytestransferred],
+		})
+	}, Map())
+}
+
+const calculateSpeed = (transferTime) => {
+	const bytes = transferTime.bytes
+	const timestamps = transferTime.timestamps
+	if (bytes.length < 2) {
+		return 'initializing'
+	}
+	const windowBytes = bytes[bytes.length-1] - bytes[0]
+	if (windowBytes === 0) {
+		return 'stalled'
+	}
+	const windowSeconds = (timestamps[timestamps.length-1] - timestamps[0]) / 1000
+	const speed = windowBytes / windowSeconds
+	const readableSize = readableFilesize(speed)
+	const readableSpeed = readableSize + '/s'
+	return readableSpeed
+}
+
+export const addTransferSpeeds = (untimedTransfers, transferTimes) =>
+	untimedTransfers.map((transfer) => {
+		const transferTime = transferTimes.get(transfer.siapath)
+		if (transferTime) {
+			transfer.speed = calculateSpeed(transferTime)
+		} else {
+			transfer.speed = 'initializing'
+		}
+		return transfer
+	})
 
 // Parse a list of files and return the total filesize
 export const totalUsage = (files) => readableFilesize(files.reduce((sum, file) => sum + file.filesize, 0))

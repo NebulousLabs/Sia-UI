@@ -2,12 +2,13 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import ProgressBar from './progressbar.js'
 
-const Transfer = ({name, progress, status, onClick}) => (
+const Transfer = ({name, progress, status, speed, onClick}) => (
 	<li className="filetransfer" onClick={onClick}>
 		<div className="transfer-info">
 			<div className="transfername">{name}</div>
 			<ProgressBar progress={progress} />
-			<span className="transfer-status">{status}</span>
+			{status === 'Downloading' && <span className="transfer-status">{status} - {speed}</span>}
+			{status === 'Completed' && <span className="transfer-status">{status}</span>}
 		</div>
 	</li>
 )

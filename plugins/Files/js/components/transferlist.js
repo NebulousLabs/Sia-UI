@@ -7,7 +7,7 @@ const defaultTransferClick = () => () => {}
 
 const TransferList = ({transfers, onTransferClick = defaultTransferClick}) => {
 	const transferComponents = transfers.map((transfer, key) => (
-		<Transfer key={key} status={transfer.status} name={transfer.name} progress={transfer.progress} onClick={onTransferClick(transfer)} />
+		<Transfer key={key} status={transfer.status} name={transfer.name} progress={transfer.progress} speed={transfer.speed} onClick={onTransferClick(transfer)} />
 	))
 	return (
 		<ul className="transfer-list">
