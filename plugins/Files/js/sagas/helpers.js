@@ -195,6 +195,10 @@ export const parseDownloads = (downloads) =>
 		}))
 		.sortBy((download) => -download.starttime)
 
+// Take a map of our historical transfer times, keyed by siapath, along with our most recent transfers,
+// and return a new map with the most recent data appended. Beyond a threshold, old transfer time data
+// is also discarded, so the returned map represents windows of timestamped byte counts over which we
+// can calculate average transfer speeds.
 export const buildTransferTimes = (previousTransferTimes, transfers) => {
 	// Need a finite lookback window, lest we leak memory. This is also the window over which
 	// we calculate our average speed. This number can be adjusted.
@@ -214,6 +218,7 @@ export const buildTransferTimes = (previousTransferTimes, transfers) => {
 	}, Map())
 }
 
+// Take a transfer time window and return an average speed in human-readable form
 const calculateSpeed = (transferTime) => {
 	const bytes = transferTime.bytes
 	const timestamps = transferTime.timestamps
@@ -231,6 +236,7 @@ const calculateSpeed = (transferTime) => {
 	return readableSpeed
 }
 
+// Take a list of untimed transfers and a transfer time window map and return a list of timed transfers
 export const addTransferSpeeds = (untimedTransfers, transferTimes) =>
 	untimedTransfers.map((transfer) => {
 		const transferTime = transferTimes.get(transfer.siapath)
