@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import { searchFiles, minRedundancy, minUpload, uploadDirectory, rangeSelect, readableFilesize, ls } from '../../plugins/Files/js/sagas/helpers.js'
-import { List, OrderedSet } from 'immutable'
+import { searchFiles, minRedundancy, minUpload, uploadDirectory, rangeSelect, readableFilesize, ls, buildTransferTimes, addTransferSpeeds } from '../../plugins/Files/js/sagas/helpers.js'
+import { List, OrderedSet, Map } from 'immutable'
 import proxyquire from 'proxyquire'
 import Path from 'path'
 import * as actions from '../../plugins/Files/js/actions/files.js'
@@ -227,6 +227,49 @@ describe('files plugin helper functions', () => {
 		})
 		it('returns correct values given a list of files', () => {
 			expect(minUpload(List([{uploadprogress: 10}, {uploadprogress: 25}, {uploadprogress: 100}, {uploadprogress: 115}]))).to.equal(10)
+		})
+	})
+	describe('buildTransferTimes', () => {
+		it('correctly appends new transfers to a set of previous transfer times', () => {
+			const previousTransferTimes = Map({
+				'siapath1': { timestamps: [1, 2], bytes: [10, 20] },
+				'siapath2': { timestamps: [1, 2, 3, 4, 5], bytes: [10, 20, 30, 40, 50] },
+			})
+			const transfers = List([
+				{ siapath: 'siapath1', bytestransferred: 60 },
+				{ siapath: 'siapath2', bytestransferred: 70 },
+				{ siapath: 'siapath3', bytestransferred: 80 },
+			])
+			const transferTimes = buildTransferTimes(previousTransferTimes, transfers)
+			expect(transferTimes.get('siapath1').timestamps.length).to.equal(3)
+			expect(transferTimes.get('siapath1').bytes.length).to.equal(3)
+			expect(transferTimes.get('siapath1').bytes[2]).to.equal(60)
+			expect(transferTimes.get('siapath2').timestamps.length).to.equal(5)
+			expect(transferTimes.get('siapath2').bytes.length).to.equal(5)
+			expect(transferTimes.get('siapath2').timestamps[0]).to.equal(2)
+			expect(transferTimes.get('siapath2').bytes[0]).to.equal(20)
+			expect(transferTimes.get('siapath2').bytes[4]).to.equal(70)
+			expect(transferTimes.get('siapath3').timestamps.length).to.equal(1)
+			expect(transferTimes.get('siapath3').bytes.length).to.equal(1)
+			expect(transferTimes.get('siapath3').bytes[0]).to.equal(80)
+		})
+	})
+	describe('addTransferSpeeds', () => {
+		it('correctly appends speeds to a set of previous transfer times', () => {
+			const transferTimes = Map({
+				'siapath1': { timestamps: [1, 2000], bytes: [10, 4000000] },
+				'siapath2': { timestamps: [1, 2, 3, 4, 5000], bytes: [10, 20, 30, 40, 10000] },
+				'siapath3': { timestamps: [1000, 2000], bytes: [50, 60] },
+			})
+			const untimedTransfers = List([
+				{ siapath: 'siapath1', bytestransferred: 4000000 },
+				{ siapath: 'siapath2', bytestransferred: 10000 },
+				{ siapath: 'siapath3', bytestransferred: 60 },
+			])
+			const timedTransfers = addTransferSpeeds(untimedTransfers, transferTimes)
+			expect(timedTransfers.get(0).speed).to.equal('2 MB/s')
+			expect(timedTransfers.get(1).speed).to.equal('2 KB/s')
+			expect(timedTransfers.get(2).speed).to.equal('10 B/s')
 		})
 	})
 	describe('searchFiles', () => {
