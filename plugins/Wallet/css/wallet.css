@@ -112,8 +112,8 @@
 	align-items: center;
 	justify-content: flex-start;
 	flex-direction: column;
-	width: 900px;
-	height: 550px;
+	width: 700px;
+	height: 400px;
 	background-color: #ECECEC;
 	padding-top: 50px;
 }
@@ -484,12 +484,12 @@
 }
 .address-table {
 	display: inline-block;
-	height: 300px;
+	height: 150px;
 	overflow: scroll;
 	width: 90%; 
 }
 .receive-address, .address-description {
-	width: 450px;
+	width: 400px;
 }
 td {
 	padding-right: 5px;
