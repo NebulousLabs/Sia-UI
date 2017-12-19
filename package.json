@@ -1,6 +1,6 @@
 {
   "name": "Sia-UI",
-  "version": "v1.3.0",
+  "version": "v1.3.1",
   "releaseName": "Capricorn",
   "main": "dist/main.js",
   "author": "NebulousLabs",
