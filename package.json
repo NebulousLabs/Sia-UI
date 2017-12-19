@@ -35,8 +35,7 @@
     "spectron": "^3.6.0",
     "uglify-js": "git://github.com/mishoo/UglifyJS2.git#harmony-v2.8.22",
     "uglifyjs-webpack-plugin": "^0.4.3",
-    "webpack": "^2.5.1",
-    "snyk": "^1.41.1"
+    "webpack": "^2.5.1"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
@@ -62,11 +61,9 @@
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
     "test-args": "BABEL_ENV=test mocha --require babel-polyfill --require test/dom.setup.js --compilers js:babel-register --recursive ./test",
-    "test": "npm run lint && npm run build && npm run scan && npm run test-args",
+    "test": "npm run lint && npm run build && npm run test-args",
     "lint": "eslint --max-warnings 0 ./index.js ./plugins ./js ./test",
-    "lint-fix": "eslint --fix ./index.js ./plugins ./js ./test",
-    "prepare": "snyk protect",
-    "scan": "snyk test"
+    "lint-fix": "eslint --fix ./index.js ./plugins ./js ./test"
   },
   "repository": {
     "type": "git",
@@ -74,6 +71,5 @@
   },
   "bugs": {
     "url": "https://github.com/NebulousLabs/Sia-UI/issues"
-  },
-  "snyk": true
+  }
 }
