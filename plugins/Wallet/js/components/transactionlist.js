@@ -111,7 +111,7 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 				? <div className="load-more">
 					<button className="load-more-button" onClick={onMoreClick}>
 						More Transactions
-            </button>
+					</button>
 				</div>
 				: null}
 		</div>

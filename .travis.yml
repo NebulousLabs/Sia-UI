@@ -23,5 +23,4 @@ install:
   - mv Sia-v1.0.3-linux-amd64 Sia
   - export PATH=$PATH:`pwd`/Sia/
   - npm install
-  - npm run prepare
 
