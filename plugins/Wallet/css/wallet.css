@@ -299,7 +299,7 @@
 }
 .confirmation-dialog .confirmation-buttons button {
 	margin-left: 5px;
-	margin-right: 5x;
+	margin-right: 5px;
 }
 .newwallet-dialog button {
 	margin-top: 20px;
@@ -372,7 +372,7 @@
 	padding-top: 10px
 }
 .change-passowrd-buttons {
-	margin-top 15px;
+	margin-top: 15px;
 }
 .change-password-buttons button {
 	margin-left: 2px;
@@ -494,4 +494,19 @@
 td {
 	padding-right: 5px;
 	font-size: 15px !important;
+}
+
+button{
+	background-color: #00CAA2;
+	border: 0;
+	color: white;
+	border-radius: 10px;
+	padding: 8px;
+	font-size: 16px;
+	border: 2px solid transparent;
+}
+
+button:hover {
+	background-color: #00BAA2;
+	border: 2px solid gray;
 }
