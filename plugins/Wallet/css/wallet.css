@@ -32,6 +32,7 @@
 	margin-bottom: 10px;
 }
 .lockscreen {
+	z-index: 1;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -429,6 +430,7 @@
 	justify-content: center;
 	flex-direction: column;
 }
+
 .aux-seeds {
 	height: 180px;
 	overflow-y: scroll;
