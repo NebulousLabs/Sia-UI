@@ -22,6 +22,8 @@ export const readLog = (logpath, nbytes) => {
 		fs.readSync(fd, buf, 0, len, startPos)
 	} catch (e) {
 		console.error(`error reading ${logpath}: ${e.toString()}`)
+	} finally {
+		fs.close(fd)
 	}
 
 	return cleanLog(buf.toString())
