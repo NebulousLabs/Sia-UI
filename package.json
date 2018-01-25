@@ -40,7 +40,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "bignumber.js": "^4.1.0",
-    "electron": "^1.7.8",
+    "electron": "^1.7.11",
     "graceful-fs": "^4.1.11",
     "immutable": "^3.8.1",
     "mkdirp": "^0.5.1",
