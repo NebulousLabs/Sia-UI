@@ -11,6 +11,7 @@
  *    Neon-Green: #00CBA0
  */
 /* Overall rules */
+@import url('./vars.css');
 .blueprint {
 	display: none;
 }
@@ -79,7 +80,7 @@ html,body {
 	color: #E0000B;
 }
 .status-bar-synced {
-	color: #00CBA0;
+	color: var(--main-color);
 }
 .status-bar {
 	height: 100%;
@@ -102,15 +103,14 @@ html,body {
 	color: #AAAAAA;
 }
 .header-button:hover {
-	color: #00CBA0;
+	color: var(--main-color);
 	cursor: pointer;
 }
 
 /* Sidebar */
 #sidebar {
 	position: relative;
-
-	background-color: #D5D3D5;
+	background: white;
 	width: 80px;
 	z-index: 5;
 	height: 100%;
@@ -145,7 +145,7 @@ html,body {
 .button.current {
 	transition: all .25s;
 	cursor: default;
-	background-color: #00CBA0;
+	background-color: var(--main-color);
 	color: #F5F5F5;
 }
 .button.current .icon, .button:hover .icon {
@@ -242,7 +242,7 @@ html,body {
 	line-height: 80px;
 	font-size: 48px;
 	text-align: center;
-	color: #00CBA0;
+	color: var(--main-color);
 	background-color: #f5f5f5;
 	border-right: 1px solid #eeeeee;
 }
@@ -296,7 +296,7 @@ html,body {
 }
 .centered {
 	opacity: 1;
-	color: #00CBA0;
+	color: var(--main-color);
 	margin: auto;
 }
 .centered p {

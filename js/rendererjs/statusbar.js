@@ -27,7 +27,7 @@ const StatusBar = ({synced, blockheight, peers}) => {
 	const progress = estimatedProgress(blockheight)
 
 	const redColor = '#E0000B'
-	const greenColor = '#00CBA0'
+	const greenColor = 'var(--main-color)'
 	const yellowColor = '#E7D414'
 
 	const syncStyle = {

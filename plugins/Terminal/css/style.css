@@ -10,6 +10,7 @@
  *	Black:	  #000000
  *	Neon-Green: #00CBA0
  */
+@import url('../../../css/vars.css');
 .app {
 	font-family: 'Roboto Mono', sans-serif;
 	font-weight: 100;
@@ -68,7 +69,7 @@
 footer {
 	position: absolute;
 	bottom: 0px;
-	background-color: #00CBA0;
+	background-color: var(--main-color);
 	width: 100%;
 }
 
@@ -100,7 +101,7 @@ footer {
 	position: absolute;
 	top: 0px;
 	right: 25px;
-	background-color: #00CBA0;
+	background-color: var(--main-color);
 	color: #FFF;
 	cursor: pointer;
 	font-size: 1.4em;

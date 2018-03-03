@@ -6,7 +6,7 @@ const ProgressBar = ({progress}) => {
 		width: progress.toString() + '%',
 		height: '100%',
 		transition: 'width 200ms',
-		backgroundColor: '#00CBA0',
+		backgroundColor: 'var(--main-color)',
 	}
 	return (
 		<div className="progress-container">

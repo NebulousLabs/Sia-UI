@@ -11,7 +11,7 @@ const FilterControl = ({ name, filters, checked, addLogFilters, removeLogFilters
 		alignItems: 'center',
 		justifyContent: 'center',
 		cursor: 'pointer',
-		borderBottom: checked ? '4px solid #00CBA0' : '1px solid #00CBA0',
+		borderBottom: checked ? '4px solid var(--main-color)' : '1px solid var(--main-color)',
 	}
 	const onFilterClick = (e) => {
 		if (!e.shiftKey && !e.ctrlKey) {
