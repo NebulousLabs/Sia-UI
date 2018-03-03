@@ -69,7 +69,7 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 			}
 			return (
 				<tr key={key}>
-					<td>
+					<td className="tx-confirmation-status">
 						{txn.confirmed
 							? <i className="fa fa-check-square confirmed-icon" />
 							: <i className="fa fa-clock-o unconfirmed-icon" />}
@@ -89,9 +89,17 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 	return (
 		<div className="transaction-list">
 			<div className="transaction-header">
-				<h2> Recent Transactions </h2>
+				<h2>Recent Transactions </h2>
 				<div className="filter-toggle">
-					<input type="checkbox" onClick={onToggleFilter} checked={filter} />Hide 0SC Transactions
+					<label htmlFor="hide-small-transactions">
+						<input
+							id="hide-small-transactions"
+							type="checkbox"
+							onClick={onToggleFilter}
+							checked={filter}
+						/>
+						<span>Hide 0 SC Transactions</span>
+					</label>
 				</div>
 			</div>
 			<table className="transaction-table">

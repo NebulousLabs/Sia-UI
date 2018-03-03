@@ -64,38 +64,42 @@
 	width: 50%;
 	margin-bottom: 5px;
 }
-.transaction-list, .transaction-list table {
+.transaction-list, .transaction-table {
 	width: 100%;
 	text-align: center;
 	overflow-y: auto;
 }
 .transaction-table th {
 	background: #f7f7f7;
+	font-weight: 500;
 }
 .transaction-table td,
 .transaction-table th {
 	padding: 8px 4px;
+	text-align: left;
+}
+.transaction-table th {
+	font-size: 14px;
+}
+.transaction-table td {
+	font-size: 11px;
 }
 .transaction-table tr {
-	border: 1px solid #E9E9E9;
+	border-bottom: 1px solid #E9E9E9;
 }
 .transaction-table tr:hover {
 	background: #ecf4fe;
 }
-.transaction-list table td {
-	font-size: 11px;
+.transaction-table td.tx-confirmation-status {
+	text-align: center;
+	width: 40px;
 }
 .txid {
 	font-family: monospace;
 }
-.transaction-list table th {
-	font-size: 14px;
-	text-align: center;
-}
 .transaction-header {
 	display: flex;
 	align-items: center;
-	background-color: #C5C5C5;
 	margin: 0;
 	padding: 10px;
 }
@@ -103,8 +107,14 @@
 	margin-top: 3px;
 	margin-bottom: 3px;
 }
-.filter-toggle > input {
-	margin-right: 5px;
+.filter-toggle {
+	padding-left: 16px;
+}
+.filter-toggle > label > span {
+	padding-left: 3px;
+	font-size: 16px;
+  vertical-align: bottom;
+  position: relative;
 }
 .unconfirmed-icon {
 	color: #DC0025;
