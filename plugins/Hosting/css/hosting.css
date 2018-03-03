@@ -266,16 +266,10 @@
 }
 
 .warning-bar {
-	position: fixed;
-	top: 13px;
-	left: calc( 50% - 200px );
-	z-index: 1;
-	width: 400px;
 	background-color: var(--main-color);
-	border: 1px solid #fff;
-	padding: 10px 10px;
-	border-radius: 20px;
 	box-shadow: rgba(0, 0, 0, .7) 0px 0px 15px;
+	color: white;
+	padding: 10px 10px;
 	text-align: center;
 }
 
