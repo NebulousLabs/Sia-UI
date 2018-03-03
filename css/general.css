@@ -40,21 +40,24 @@ html,body {
 .body {
 	position: relative;
 
-	height: -webkit-calc(100% - 80px);
+	height: -webkit-calc(100% - 24px);
 	-webkit-box-sizing:border-box;
 }
 
 /* UI Header */
 .header {
-	height: 80px;
+	color: white;
+	font-size: 12px;
+	height: 24px;
 	width: 100%;
 
 	background-color: #313133;
 	background: linear-gradient(to left, #313133 15%, #0b0e16 85%);
 }
 .logo {
-	padding-left: 20px;
+	padding-left: 16px;
 	padding-top: 14px;
+	padding-bottom: 16px;
 	pointer-events: none;
 }
 .logo-container:hover {
@@ -83,7 +86,7 @@ html,body {
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
-	padding-right: 25px;
+	padding-right: 8px;
 	cursor: default;
 }
 .status-bar-blockheight {
