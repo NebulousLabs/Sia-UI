@@ -1,0 +1,8 @@
+:root {
+	--blinking: blink-animation 0.8s steps(5, start) infinite;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
