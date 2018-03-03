@@ -8,7 +8,7 @@ import { unloadPlugins, loadPlugin, setCurrentPlugin, getOrderedPlugins, getPlug
 const App = remote.app
 const mainWindow = remote.getCurrentWindow()
 const defaultPluginDirectory = Path.join(App.getAppPath(), './plugins')
-const defaultHomePlugin = 'Files'
+const defaultHomePlugin = 'Wallet'
 const config = remote.getGlobal('config')
 window.closeToTray = mainWindow.closeToTray
 
