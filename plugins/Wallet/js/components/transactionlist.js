@@ -71,16 +71,16 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 				<tr key={key}>
 					<td>
 						{txn.confirmed
+							? <i className="fa fa-check-square confirmed-icon" />
+							: <i className="fa fa-clock-o unconfirmed-icon" />}
+					</td>
+					<td>
+						{txn.confirmed
 							? prettyTimestamp(txn.confirmationtimestamp)
 							: 'Not Confirmed'}
 					</td>
 					<td>{valueData}</td>
 					<td className="txid">{txn.transactionid}</td>
-					<td>
-						{txn.confirmed
-							? <span><i className="fa fa-check-square confirmed-icon" /> Confirmed</span>
-							: <span><i className="fa fa-clock-o unconfirmed-icon" /> Unconfirmed</span>}
-					</td>
 				</tr>
 			)
 		})
@@ -97,10 +97,10 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 			<table className="pure-table transaction-table">
 				<thead>
 					<tr>
+						<th />
 						<th>Date</th>
 						<th>Net Value</th>
 						<th>Transaction ID</th>
-						<th>Confirmation Status</th>
 					</tr>
 				</thead>
 				<tbody>
