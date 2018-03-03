@@ -94,7 +94,7 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 					<input type="checkbox" onClick={onToggleFilter} checked={filter} />Hide 0SC Transactions
 				</div>
 			</div>
-			<table className="pure-table transaction-table">
+			<table className="transaction-table">
 				<thead>
 					<tr>
 						<th />

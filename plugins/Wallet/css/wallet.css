@@ -69,6 +69,19 @@
 	text-align: center;
 	overflow-y: auto;
 }
+.transaction-table th {
+	background: #f7f7f7;
+}
+.transaction-table td,
+.transaction-table th {
+	padding: 8px 4px;
+}
+.transaction-table tr {
+	border: 1px solid #E9E9E9;
+}
+.transaction-table tr:hover {
+	background: #ecf4fe;
+}
 .transaction-list table td {
 	font-size: 11px;
 }
@@ -81,8 +94,6 @@
 }
 .transaction-header {
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
 	align-items: center;
 	background-color: #C5C5C5;
 	margin: 0;
