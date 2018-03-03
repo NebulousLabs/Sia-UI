@@ -78,8 +78,8 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 					<td className="txid">{txn.transactionid}</td>
 					<td>
 						{txn.confirmed
-							? <i className="fa fa-check-square confirmed-icon"> Confirmed </i>
-							: <i className="fa fa-clock-o unconfirmed-icon"> Unconfirmed </i>}
+							? <span><i className="fa fa-check-square confirmed-icon" /> Confirmed</span>
+							: <span><i className="fa fa-clock-o unconfirmed-icon" /> Unconfirmed</span>}
 					</td>
 				</tr>
 			)
