@@ -3,24 +3,11 @@ import { List } from 'immutable'
 import Path from 'path'
 import fs from 'graceful-fs'
 import { remote } from 'electron'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import PluginButton from './components/PluginButton'
 
 const devtoolsShortcut = 'Ctrl+Shift+P'
-
-// Create an icon element for a plugin button.
-const createButtonIconElement = (path) => {
-	const i = document.createElement('img')
-	i.src = path
-	i.className = 'pure-u icon'
-	return i
-}
-
-// Create a text element for a plugin button.
-const createButtonTextElement = (name) => {
-	const t = document.createElement('div')
-	t.innerText = name
-	t.className = 'pure-u text'
-	return t
-}
 
 // Construct a plugin view element from a plugin path and title
 const createPluginElement = (markupPath, title) => {
@@ -71,15 +58,18 @@ export const setCurrentPlugin = (pluginName) => {
 	})
 }
 
-// Construct a plugin button element from an icon path and title
-const createPluginButtonElement = (iconPath, title) => {
+function createPluginButtonElement(iconPath, name) {
 	const elem = document.createElement('div')
-	elem.id = title + '-button'
-	elem.className = 'pure-u-1-1 button'
-	elem.appendChild(createButtonIconElement(iconPath))
-	elem.appendChild(createButtonTextElement(title))
-	// On click, set all other buttons and plugins to non-current except this one.
-	elem.onclick = () => setCurrentPlugin(title)
+
+	ReactDOM.render(
+		<PluginButton
+			title={name}
+			iconPath={iconPath}
+			onClick={() => setCurrentPlugin(name)}
+		/>,
+		elem
+	)
+
 	return elem
 }
 
