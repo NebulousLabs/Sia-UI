@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const BalanceInfo = ({synced, confirmedbalance, unconfirmedbalance, siafundbalance, siacoinclaimbalance}) => (
 	<div className="balance-info">
-		<span>Confirmed Balance: {confirmedbalance} SC </span>
+		<span>Balance: {confirmedbalance} SC </span>
 		<span>Unconfirmed Delta: {unconfirmedbalance} SC </span>
 		{siafundbalance !== '0' ? (<span> Siafund Balance: {siafundbalance} SF </span>) : null}
 		{siacoinclaimbalance !== '0' ? (<span> Siacoin Claim Balance: {siacoinclaimbalance} SC </span>) : null}
