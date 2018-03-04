@@ -25,7 +25,7 @@ const PasswordPrompt = ({password, error, unlocking, actions}) => {
 					value="Unlock"
 				/>
 			</form>
-			<div className="password-prompt-error">{error}</div>
+			<div className="password-prompt__error">{error}</div>
 		</div>
 	)
 }

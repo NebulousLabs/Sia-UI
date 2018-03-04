@@ -1,3 +1,25 @@
+:root {
+	--ease-in: cubic-bezier(0.4, 0, 1, 1);
+	--ease-out: cubic-bezier(0.0, 0, 0.2, 1);
+	--duration-in: 225ms;
+	--duration-out: 195ms;
+}
+
+.lockscreen-container-enter {
+  opacity: 0.01;
+}
+.lockscreen-container-enter.lockscreen-container-enter-active {
+  opacity: 1;
+  transition: opacity var(--duration-in) var(--ease-out);
+}
+.lockscreen-container-leave {
+  opacity: 1;
+}
+.lockscreen-container-leave.lockscreen-container-leave-active {
+  opacity: 0.01;
+  transition: opacity var(--duration-out) var(--ease-out);
+}
+
 .lockscreen {
 	position: absolute;
 	top: 0;
@@ -17,6 +39,7 @@
 .lockscreen span {
 	text-align: center;
 }
+
 .password-prompt {
 	margin-top: 5px;
 	margin-bottom: 8px;
@@ -48,4 +71,7 @@
 }
 .password-prompt input[type="submit"] {
 	display: block;
+}
+.password-prompt__error {
+	color: var(--danger-color);
 }
