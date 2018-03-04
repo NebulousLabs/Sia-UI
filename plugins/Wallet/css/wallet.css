@@ -213,9 +213,6 @@
 	width: 500px;
 	padding: 25px 25px 25px 25px;
 }
-.backupprompt > .ok-button {
-	margin-top: 25px;
-}
 .backupprompt > h3 {
 	margin-top: 0;
 }
@@ -519,19 +516,4 @@
 td {
 	padding-right: 5px;
 	font-size: 15px !important;
-}
-
-button{
-	background-color: #00CAA2;
-	border: 0;
-	color: white;
-	border-radius: 10px;
-	padding: 8px;
-	font-size: 16px;
-	border: 2px solid transparent;
-}
-
-button:hover {
-	background-color: #00BAA2;
-	border: 2px solid gray;
 }

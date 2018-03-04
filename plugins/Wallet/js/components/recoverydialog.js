@@ -30,8 +30,8 @@ const RecoveryDialog = ({recovering, actions}) => {
 				<p> After the scan completes, these outputs will be sent to your wallet. </p>
 				<input type="text" name="seed" autoFocus />
 				<div className="recovery-form-buttons">
-					<button type="submit">Recover</button>
-					<button onClick={handleCancelClick}>Cancel</button>
+					<button className="button" type="submit">Recover</button>
+					<button className="button" onClick={handleCancelClick}>Cancel</button>
 				</div>
 			</form>
 		</div>

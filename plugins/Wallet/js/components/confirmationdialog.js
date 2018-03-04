@@ -21,8 +21,8 @@ const ConfirmationDialog = ({seed, password, error, actions}) => {
 					<input className="seed-confirmation-input" placeholder="seed" type="text" name="seed" required />
 					<input className="password-confirmation-input" placeholder="password" type="text" name="password" required />
 					<div className="confirmation-buttons">
-						<button onClick={onCancelClick}>Go Back</button>
-						<button className="seed-confirmation-button" type="submit">Confirm</button>
+						<button className="button" onClick={onCancelClick}>Go Back</button>
+						<button className="button" type="submit">Confirm</button>
 					</div>
 				</form>
 				<span className="seed-confirmation-error">{error}</span>
