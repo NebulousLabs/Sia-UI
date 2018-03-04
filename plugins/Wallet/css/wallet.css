@@ -11,6 +11,7 @@
  *    Neon-Green: #00CBA0
  */
 @import url('../../../css/vars.css');
+@import url('./components/balanceinfo.css');
  .app {
  	position: absolute;
  	top: 0;
@@ -24,9 +25,6 @@
 	align-items: center;
 	justify-content: flex-start;
 	height: 100%;
-}
-.balance-info {
-	flex: 1;
 }
 .load-more-button {
 	margin-top: 10px;
@@ -150,16 +148,6 @@
 	padding-top: 10px;
 	padding-bottom: 10px;
 	min-height: 60px;
-}
-.balance-info {
-	padding-left: 10px;
-	padding-right: 10px;
-	color: black;
-}
-.balance-info span {
-	display: block;
-	font-size: 15px;
-	margin-bottom: 3px;
 }
 
 @keyframes modal-fadein {
