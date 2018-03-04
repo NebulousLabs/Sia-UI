@@ -21,6 +21,8 @@ export default function(config) {
 		icon:   iconPath,
 		title:  'Sia-UI',
 		titleBarStyle: 'hidden',
+		minHeight: 500,
+		minWidth: 600
 	})
 	// Set mainWindow's closeToTray flag from config.
 	// This should be used in the renderer to cancel close() events using window.onbeforeunload
