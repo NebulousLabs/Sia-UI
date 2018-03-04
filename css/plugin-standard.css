@@ -13,6 +13,10 @@
 /* Overall Effects */
 @import url('./vars.css');
 @import url('./lib/normalize.css');
+
+html, body { box-sizing: border-box; }
+* { box-sizing: inherit }
+
 @keyframes fadeout {
 	from { opacity: 1; }
 	to   { opacity: 0; }

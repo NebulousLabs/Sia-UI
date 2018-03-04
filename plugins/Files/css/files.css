@@ -13,6 +13,7 @@
  */
 
 @import url('../../../css/vars.css');
+* { box-sizing: initial; }
 .app {
 	position: absolute;
 	top: 0;

@@ -264,7 +264,7 @@
 }
 
 .section .row {
-	height: 29px;
+	height: calc(8 * var(--unit));
 }
 
 .property {

@@ -88,7 +88,7 @@ footer {
 	border: 1px;
 	padding: 0px 4em;
 	height: calc( 438px - 2.8em - 2px ); /* 438px is the size of the command section using the default window size of 800x600px */
-	width: calc( 100% - 8em );
+	width: calc( 100% - 8px );
 	margin-top: 0px;
 	white-space: pre-wrap;
 	max-height: 0px;
