@@ -27,7 +27,7 @@ const AnnounceDialogModal = ({ announceAddress, actions }) => {
 				<h3>Announce Host</h3>
 				<p>
 					<label>Address to announce.</label>
-					<input onChange={handleSettingInput} onKeyDown={handleSettingKeyDown} value={announceAddress || ''} type="text" />
+					<input className="input" onChange={handleSettingInput} onKeyDown={handleSettingKeyDown} value={announceAddress || ''} type="text" />
 				</p>
 				<span>Click to announce your host to the network. This will incur a small transaction fee and only needs to be done once per host.</span>
 				<p>

@@ -20,11 +20,11 @@ const SendPrompt = ({currencytype, sendAddress, sendAmount, feeEstimate, sendErr
 			<div className="sendprompt">
 				<div className="sendamount">
 					<h3>Send Amount {currencytype === 'siacoins' ? '(SC)' : '(SF)'} </h3>
-					<input onChange={handleSendAmountChange} value={sendAmount} />
+					<input className="input" onChange={handleSendAmountChange} value={sendAmount} />
 				</div>
 				<div className="sendaddress">
 					<h3> To Address </h3>
-					<input onChange={handleSendAddressChange} value={sendAddress} />
+					<input className="input" onChange={handleSendAddressChange} value={sendAddress} />
 				</div>
 				<div className="fee-estimation">
 					Estimated fee: {feeEstimate}

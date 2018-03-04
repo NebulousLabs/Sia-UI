@@ -29,7 +29,7 @@ const ResizeDialogModal = ({ resizePath, resizeSize, initialSize, actions }) => 
 				<h3>Resize &quot;{Path.basename(resizePath)}&quot;</h3>
 				<p>
 					<label>Size in GB (Min is 35 GB)</label>
-					<input type="number" onChange={handleSettingInput} onKeyDown={handleSettingKeyDown} value={resizeSize} min="35" />
+					<input className="input" type="number" onChange={handleSettingInput} onKeyDown={handleSettingKeyDown} value={resizeSize} min="35" />
 				</p>
 				<span className={'error' + ( resizeSize < 35 ? '' : ' hidden' )}>Storage folder must be at least 35 GB.</span>
 				<p>

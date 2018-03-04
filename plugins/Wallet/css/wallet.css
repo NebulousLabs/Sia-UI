@@ -474,11 +474,9 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	height: 25px;
 }
 .receive-form-item > p {
-	margin-left: 5px;
-	margin-right: 5px;
+	margin: 0;
 }
 .receive-buttons {
 	margin-top: 30px;

@@ -231,24 +231,6 @@
 	text-align: center;
 }
 
-.modal input[ type="number"],
-.modal input[ type="text"] {
-	display: block;
-	padding: 9px 10px;
-	margin: 10px;
-	border-radius: 0px;
-	border: 0px;
-	border: 1px solid #FFFFFF;
-	text-align: center;
-	cursor: pointer;
-	transition: all 0s;
-}
-
-.modal input[ type="number"]:hover,
-.modal input[ type="text"]:hover {
-	border: 1px solid #DDDDDD;
-}
-
 .hosting-options-modal .hosting-options {
 	text-align: center;
 	padding: 1em;
@@ -297,21 +279,6 @@
 	padding-bottom: 9px;
 	border-left: 1px solid #e0e0e0;
 	text-align: center;
-}
-
-.property .value input {
-	padding: 9px 10px;
-	margin: 0px;
-	border-radius: 0px;
-	border: 0px;
-	border: 1px solid #FFFFFF;
-	text-align: center;
-	cursor: pointer;
-	transition: all 0s;
-}
-
-.property .value input:hover {
-	border: 1px solid #DDDDDD;
 }
 
 .help.section .instructions {

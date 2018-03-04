@@ -19,9 +19,9 @@ const ChangePasswordDialog = ({changePasswordError, actions}) => {
 		<div className="modal">
 			<form className="change-password-form" onSubmit={handleChangePasswordClick}>
 				<h3> Enter your current password, and the new password you wish to replace it with. </h3>
-				<input className="currentpassword-input" type="password" placeholder="Current password" name="currentpassword" autoFocus />
-				<input className="newpassword-input" type="password" placeholder="New password" name="newpassword" />
-				<input className="newpassword-again-input" type="password" placeholder="New password again" name="newpassword-again" />
+				<input className="input currentpassword-input" type="password" placeholder="Current password" name="currentpassword" autoFocus />
+				<input className="input newpassword-input" type="password" placeholder="New password" name="newpassword" />
+				<input className="input newpassword-again-input" type="password" placeholder="New password again" name="newpassword-again" />
 				<div className="change-password-buttons">
 					<button className="button" type="submit">Change Password</button>
 					<button className="change-password-cancel button" onClick={handleCancelClick}>Done</button>

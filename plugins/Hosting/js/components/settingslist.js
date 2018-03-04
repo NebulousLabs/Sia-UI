@@ -34,7 +34,7 @@ const SettingsList = ({ conversionRate, acceptingContracts, usersettings, defaul
 			</div>
 			<div className="pure-u-1-2">
 				<div className="value">
-					<input type="number" data-setting={key} onChange={handleSettingInput} className="value" value={setting.get('value')} />
+					<input type="number" data-setting={key} onChange={handleSettingInput} className="input" value={setting.get('value')} />
 				</div>
 			</div>
 			<div className={'error pure-u-1-1' + ( setting.get('value') <= Number(setting.get('min') || 0)  || isNaN(setting.get('value')) ? '' : ' hidden' )}>

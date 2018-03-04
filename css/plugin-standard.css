@@ -36,21 +36,19 @@ html, body {
 h1, h2, h3, h4, h5, h6 {
 	font-weight: 300;
 }
-select, input {
+select {
 	position: relative;
 
 	box-shadow: none;
 	color:#4a4a4a;
 
+	background:#ffffff;
 	border: solid 1px #dddddd;
 	transition: box-shadow 0.3s, border 0.3s;
 	box-sizing: content-box;
 	border-radius: 4px;
 }
-select {
-	background:#ffffff;
-}
-select:focus, input:focus {
+select:focus {
 	outline: none;
 	border: solid 1px #4a4a4a;
 	box-shadow: 0 0 5px 1px #c5c5c5;
@@ -141,4 +139,19 @@ select:hover {
 .button:hover {
 	background-color: var(--dark-main-color);
 	cursor: pointer;
+}
+
+.input {
+	background: #ffffff;
+	border: 3px solid #ecf0f1;
+	padding-top: var(--unit);
+	padding-bottom: var(--unit);
+	padding-left: calc(1.5 * var(--unit));
+	padding-right: calc(1.5 * var(--unit));
+	transition: all 120ms cubic-bezier(0.64, 0, 0.35, 1);
+}
+
+.input:hover, input:focus {
+	border: 3px solid var(--main-color);
+	outline: none;
 }

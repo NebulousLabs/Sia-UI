@@ -20,11 +20,11 @@ const ReceivePrompt = ({addresses, address, description, actions}) => {
 				<div className="receive-form">
 					<div className="receive-form-item">
 						<p> Receiving Address </p>
-						<input className="receive-address" value={address} readOnly />
+						<input className="input receive-address" value={address} readOnly />
 					</div>
 					<div className="receive-form-item">
 						<p> Description </p>
-						<input className="address-description" onChange={handleDescriptionChange} value={description} />
+						<input className="input address-description" onChange={handleDescriptionChange} value={description} />
 					</div>
 				</div>
 				<div className="receive-buttons">
