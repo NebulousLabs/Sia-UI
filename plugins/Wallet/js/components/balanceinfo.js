@@ -9,7 +9,7 @@ const BalanceInfo = ({synced, confirmedbalance, unconfirmedbalance, siafundbalan
 				<span className="balance-info__main-balance">{confirmedbalance}</span>
 				<span className="balance-info__main-balance-currency">SC</span>
 			</div>
-			{unconfirmedbalance !== '0' || true
+			{unconfirmedbalance !== '0'
 				&& <span className="balance-info__unconfirmed-balance">{unconfirmedbalance}<sup> SC</sup></span>
 			}
 		</div>
