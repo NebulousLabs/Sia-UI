@@ -51,7 +51,7 @@ const FilesList = ({ folders, folderPathToRemove, actions }) => {
 			<div className="property row">
 				<div className="title" />
 				<div className="controls full">
-					<div className="button left" id="edit" onClick={addStorageLocation}>
+					<div className="button" id="edit" onClick={addStorageLocation}>
 						<i className="fa fa-folder-open" />
 						Add Storage Folder
 					</div>
