@@ -1,32 +1,40 @@
-:root {
+.lockscreen-container-enter,
+.lockscreen-container-leave {
 	--ease-in: cubic-bezier(0.4, 0, 1, 1);
 	--ease-out: cubic-bezier(0.0, 0, 0.2, 1);
-	--duration-in: 225ms;
-	--duration-out: 195ms;
+	--duration-in: 400ms;
+	--duration-out: 400ms;
 }
 
-.lockscreen-container-enter {
-  opacity: 0.01;
-}
-.lockscreen-container-enter.lockscreen-container-enter-active {
-  opacity: 1;
-  transition: opacity var(--duration-in) var(--ease-out);
-}
-.lockscreen-container-leave {
-  opacity: 1;
-}
-.lockscreen-container-leave.lockscreen-container-leave-active {
-  opacity: 0.01;
-  transition: opacity var(--duration-out) var(--ease-out);
-}
-
-.lockscreen {
+.lockscreen-container {
+	overflow: hidden;
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
+}
+.lockscreen-container-enter {
+	transform: translate3d(0, 100%, 0);
+}
+.lockscreen-container-enter.lockscreen-container-enter-active {
+	transform: translate3d(0, 0, 0);
+	transition:
+	  transform var(--duration-out) var(--ease-out);
+}
+.lockscreen-container-leave {
+	transform: translate3d(0, 0, 0);
+}
+.lockscreen-container-leave.lockscreen-container-leave-active {
+	transform: translate3d(0, 100%, 0);
+	transition:
+	  transform var(--duration-out) var(--ease-out);
+}
 
+.lockscreen {
+	overflow: auto;
+	height: 100%;
+	width: 100%;
 	z-index: 1;
 	display: flex;
 	align-items: center;

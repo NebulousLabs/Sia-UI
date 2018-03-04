@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { Portal } from 'react-portal'
 import Transition from 'react-addons-css-transition-group'
 import PasswordPrompt from '../containers/passwordprompt.js'
 import UninitializedWalletDialog from '../containers/uninitializedwalletdialog.js'
@@ -7,12 +8,14 @@ import RescanDialog from './rescandialog.js'
 
 const LockScreen = ({unlocked, unlocking, encrypted, rescanning}) => {
 	let lockscreenContents
+	let isEmpty = false
 
 	if (unlocked && encrypted && !unlocking && !rescanning) {
 		// Wallet is unlocked and encrypted, return an empty lock screen.
 		lockscreenContents = (
 			<div key="empty" />
 		)
+		isEmpty = true
 	} else if (!unlocked && encrypted && !rescanning) {
 		lockscreenContents = (
 			<div key="password" className="lockscreen">
@@ -34,13 +37,20 @@ const LockScreen = ({unlocked, unlocking, encrypted, rescanning}) => {
 		)
 	}
 	return (
-		<Transition
-			transitionName="lockscreen-container"
-			transitionEnterTimeout={225}
-			transitionLeaveTimeout={195}
-		>
-			{lockscreenContents}
-		</Transition>
+		<Portal>
+			<Transition
+				style={{
+					// make interaction pass through if empty
+					pointerEvents: isEmpty ?  "none" : "initial"
+				}}
+				className="lockscreen-container"
+				transitionName="lockscreen-container"
+				transitionEnterTimeout={400}
+				transitionLeaveTimeout={400}
+			>
+				{lockscreenContents}
+			</Transition>
+		</Portal>
 	)
 }
 LockScreen.propTypes = {
