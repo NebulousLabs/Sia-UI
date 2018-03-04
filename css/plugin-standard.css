@@ -11,6 +11,7 @@
  *    Neon-Green: #00CBA0
  */
 /* Overall Effects */
+@import url('./vars.css');
 @keyframes fadeout {
 	from { opacity: 1; }
 	to   { opacity: 0; }
@@ -119,10 +120,24 @@ select:hover {
 	width: 100%;
 	-webkit-animation: fadein 0.5s;
 }
+
 .button {
+	background-color: var(--main-color);
+	transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+	border: 0;
+	border-radius: calc(0.5 * var(--unit));
+	box-sizing: border-box;
+	color: white;
+	line-height: 1.4rem;
+	margin-bottom: 10px;
+	padding-top: var(--unit);
+	padding-bottom: var(--unit);
+	padding-right: calc(2 * var(--unit));
+	padding-left: calc(2 * var(--unit));
 	-webkit-user-select: none;
 }
+
 .button:hover {
-	color: #4a4a4a;
+	background-color: var(--dark-main-color);
 	cursor: pointer;
 }

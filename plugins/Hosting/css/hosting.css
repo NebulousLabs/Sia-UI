@@ -18,20 +18,13 @@
 
 .row {
 	background: #f5f5f5;
-	display: block;
 	border: 1px;
+	display: flex;
 	padding: 15px;
 }
 
 .row .title {
 	display: inline-block;
-	font-size: 26px;
-}
-
-.row .button {
-	display: inline-block;
-	font-size: 22px;
-	padding-left: 20px;
 }
 
 .row .button.disable {
@@ -137,17 +130,10 @@
 }
 
 .controls {
-	display: inline-block;
-	padding-top: 3px;
 }
 
 .controls.full {
 	width: 100%;
-}
-
-.controls .button:hover {
-	color: #4a4a4a;
-	cursor: pointer;
 }
 
 .button .fa {
