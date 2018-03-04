@@ -140,9 +140,15 @@ select:hover {
 	-webkit-user-select: none;
 }
 
-.button:hover {
+.button:hover:not([disabled]) {
 	background-color: var(--dark-main-color);
 	cursor: pointer;
+}
+
+.button:disabled,
+.button[disabled] {
+	color: rgba(0, 0, 0, 0.26);
+	background-color: #e0e0e0;
 }
 
 .input {

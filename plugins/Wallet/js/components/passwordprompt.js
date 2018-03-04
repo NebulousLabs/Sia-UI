@@ -23,6 +23,7 @@ const PasswordPrompt = ({password, error, unlocking, actions}) => {
 					className="unlock-button button"
 					type="submit"
 					value="Unlock"
+					disabled={!(password && password.length > 0)}
 				/>
 			</form>
 			<div className="password-prompt__error">{error}</div>
