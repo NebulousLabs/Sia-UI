@@ -1,0 +1,31 @@
+@keyframes intro--logo-translate {
+  to {
+    transform: translateY($logoEndY) scale(1);
+  }
+}
+
+@keyframes intro--stroke-offset {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes intro--stroke-fill {
+  to {
+    fill: var(--main-color);
+    stroke: var(--main-color);
+  }
+}
+
+.logo-loading {
+}
+.logo-loading path {
+  fill: transparent;
+  stroke: black;
+  stroke-width: 1px;
+  stroke-dasharray: 120px;
+  stroke-dashoffset: 120px;
+  animation:
+    intro--stroke-offset 1s .2s both ease-in-out,
+    intro--stroke-fill .4s 1s both ease;
+}
