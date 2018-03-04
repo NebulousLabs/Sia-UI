@@ -12,6 +12,7 @@
  */
 @import url('../../../css/vars.css');
 @import url('./components/balanceinfo.css');
+@import url('./components/lockscreen.css');
  .app {
  	position: absolute;
  	top: 0;
@@ -29,38 +30,6 @@
 .load-more-button {
 	margin-top: 10px;
 	margin-bottom: 10px;
-}
-.lockscreen {
-	z-index: 1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	width: 50%;
-	height: 50%;
-	font-size: 18px;
-	background-color: #ECECEC;
-}
-.lockscreen span {
-	text-align: center;
-}
-.password-prompt {
-	margin-top: 5px;
-	margin-bottom: 8px;
-}
-.password-prompt i {
-	color: var(--main-color);
-}
-.password-prompt {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	width: 100%;
-}
-.password-prompt input {
-	width: 50%;
-	margin-bottom: 5px;
 }
 .transaction-list, .transaction-table {
 	width: 100%;

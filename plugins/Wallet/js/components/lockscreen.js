@@ -27,10 +27,8 @@ const LockScreen = ({unlocked, unlocking, encrypted, rescanning}) => {
 		)
 	}
 	return (
-		<div className="modal">
-			<div className="lockscreen">
-				{lockscreenContents}
-			</div>
+		<div className="lockscreen">
+			{lockscreenContents}
 		</div>
 	)
 }

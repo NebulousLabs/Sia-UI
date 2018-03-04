@@ -11,11 +11,20 @@ const PasswordPrompt = ({password, error, unlocking, actions}) => {
 	}
 	return (
 		<div className="password-prompt">
-			<h2> Wallet Locked </h2>
-			<span> Enter your wallet password to unlock the wallet. </span>
-			<i className="fa fa-lock fa-4x" />
-			<input type="password" value={password} className="input password-input" onChange={onPasswordChange} />
-			<button className="unlock-button button" onClick={onUnlockClick}>Unlock</button>
+			<h2>Your wallet has been secured</h2>
+			<p className="password-prompt__description">
+				Enter your wallet password to access your wallet.
+			</p>
+			<form
+				onSubmit={onUnlockClick}
+			>
+				<input type="password" value={password} className="input password-input" onChange={onPasswordChange} />
+				<input
+					className="unlock-button button"
+					type="submit"
+					value="Unlock"
+				/>
+			</form>
 			<div className="password-prompt-error">{error}</div>
 		</div>
 	)
