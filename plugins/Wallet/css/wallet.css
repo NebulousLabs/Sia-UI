@@ -147,8 +147,6 @@
 .modal > * {
 	animation-name: modal-popin;
 	animation-duration: 0.2s;
-
-	border-radius: 5px;
 }
 
 .sendprompt {
@@ -161,18 +159,6 @@
 	height: 300px;
 }
 
-.backupprompt {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	background-color: #ECECEC;
-	width: 500px;
-	padding: 25px 25px 25px 25px;
-}
-.backupprompt > h3 {
-	margin-top: 0;
-}
 .backupprompt > h4 {
 	margin-bottom: 5px;
 }
