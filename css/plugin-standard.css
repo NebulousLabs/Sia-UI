@@ -12,6 +12,7 @@
  */
 /* Overall Effects */
 @import url('./vars.css');
+@import url('./lib/normalize.css');
 @keyframes fadeout {
 	from { opacity: 1; }
 	to   { opacity: 0; }
