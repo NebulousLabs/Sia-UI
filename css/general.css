@@ -13,6 +13,7 @@
 /* Overall rules */
 @import url('./vars.css');
 @import url('./components/loading.css');
+@import url('./components/sidebar.css');
 .blueprint {
 	display: none;
 }
@@ -40,10 +41,9 @@ html,body {
 	display: none; 
 }
 .body {
+	display: flex;
+	height: calc(100% - 24px);
 	position: relative;
-
-	height: -webkit-calc(100% - 24px);
-	-webkit-box-sizing:border-box;
 }
 
 /* UI Header */
@@ -108,51 +108,6 @@ html,body {
 	color: var(--main-color);
 	cursor: pointer;
 }
-
-/* Sidebar */
-#sidebar {
-	position: relative;
-	background: #F6F6F6;
-	width: 80px;
-	z-index: 5;
-	height: 100%;
-
-	-webkit-box-sizing:border-box;
-	border-left: 0 solid #F5F5F5;
-	border-right: 1px solid #EEEEEE;
-}
-.button {
-	display: flex;
-	flex-direction: column;
-	font-size: 16px;
-	align-items: center;
-	justify-content: center;
-	position: relative;
-	height: 80px;
-
-	transition: all .25s;
-	-webkit-animation: fadein .4s;
-	-webkit-box-sizing:border-box;
-
-	color: #606060;
-}
-.button:hover {
-	cursor: pointer;
-	background-color: #C5C3C5;
-	color: #F5F5F5;
-}
-.button:active {
-	background-color: ;
-}
-.button.current {
-	transition: all .25s;
-	cursor: default;
-	background-color: var(--main-color);
-	color: #F5F5F5;
-}
-.button.current .icon, .button:hover .icon {
-	-webkit-filter: invert(100%);
-}
 @keyframes fadeout {
 	from { opacity: default; }
 	to   { opacity: 0; }
@@ -160,13 +115,6 @@ html,body {
 @keyframes fadein {
 	from { opacity: 0; }
 	to   { opacity: default; }
-}
-.button .icon {
-	max-height: 30%;
-}
-.button .text {
-	letter-spacing: 0;
-	padding-top: 8px;
 }
 
 /* Mainbar */
