@@ -46,6 +46,7 @@
     "immutable": "^3.8.1",
     "mkdirp": "^0.5.1",
     "react": "^16.2.0",
+    "react-addons-css-transition-group": "^15.6.2",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
