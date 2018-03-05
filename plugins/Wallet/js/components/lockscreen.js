@@ -41,7 +41,7 @@ const LockScreen = ({unlocked, unlocking, encrypted, rescanning}) => {
 			<Transition
 				style={{
 					// make interaction pass through if empty
-					pointerEvents: isEmpty ?  "none" : "initial"
+					pointerEvents: isEmpty ?  'none' : 'initial',
 				}}
 				className="lockscreen-container"
 				transitionName="lockscreen-container"

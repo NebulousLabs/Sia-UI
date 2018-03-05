@@ -5,7 +5,7 @@ export default (props) => (
 	<Transition
 		style={{
 			// make interaction pass through if empty
-			pointerEvents: !props.open ?  "none" : "initial"
+			pointerEvents: !props.open ?  'none' : 'initial',
 		}}
 		className="modal"
 		transitionName="modal"
