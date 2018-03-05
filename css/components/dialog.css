@@ -1,3 +1,40 @@
+.modal {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: var(--z-modal);
+}
+
+.modal-enter {
+	opacity: 0.01;
+}
+.modal-enter.modal-enter-active {
+	opacity: 1;
+	transition: opacity var(--duration-in) var(--opacity-transition) 0ms;
+}
+.modal-leave {
+	opacity: 1;
+}
+.modal-leave.modal-leave-active {
+	opacity: 0.01;
+	transition: opacity var(--duration-out) var(--opacity-transition) 0ms;
+}
+
+.modal__backdrop {
+	background-color: rgba(0, 0, 0, 0.5);
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: -1;
+}
+
 .dialog {
 	--padding: calc(3 * var(--unit));
 	--padding-bottom: calc(2.5 * var(--unit));

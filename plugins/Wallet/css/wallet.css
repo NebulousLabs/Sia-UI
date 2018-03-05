@@ -119,36 +119,6 @@
 	min-height: 60px;
 }
 
-@keyframes modal-fadein {
-	from {opacity: 0}
-	to {opacity: 1}
-}
-
-@keyframes modal-popin {
-	from { transform: scale(0.2) }
-	to { transform: scale(1) }
-}
-
-.modal {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: rgba(0, 0, 0, 0.5);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	animation-name: modal-fadein;
-	animation-duration: 0.2s;
-}
-
-.modal > * {
-	animation-name: modal-popin;
-	animation-duration: 0.2s;
-}
-
 .backupprompt > h4 {
 	margin-bottom: 5px;
 }
