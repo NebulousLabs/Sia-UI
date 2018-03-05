@@ -20,7 +20,7 @@ const PasswordPrompt = ({password, error, unlocking, actions}) => {
 			>
 				<input type="password" value={password} className="input password-input" onChange={onPasswordChange} />
 				<input
-					className="unlock-button button"
+					className="unlock-button button button--primary"
 					type="submit"
 					value="Unlock"
 					disabled={!(password && password.length > 0)}

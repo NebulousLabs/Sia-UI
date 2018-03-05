@@ -27,8 +27,8 @@ const ReceivePrompt = ({addresses, address, description, actions}) => {
 				</div>
 			</div>
 			<div className="receive-buttons">
-				<button className="save-address-button button" onClick={handleSaveClick}>Save</button>
-				<button className="new-address-button button" onClick={handleGenerateClick}>New</button>
+				<button className="save-address-button button button--primary" onClick={handleSaveClick}>Save</button>
+				<button className="new-address-button button button--primary" onClick={handleGenerateClick}>New</button>
 			</div>
 			<h3> Prior Addresses </h3>
 			{ addresses.size > 0 ? (
@@ -46,7 +46,7 @@ const ReceivePrompt = ({addresses, address, description, actions}) => {
 				</table>
 			) : ( <p> No prior addresses </p>)
 			}
-			<button className="done-button button" onClick={handleDismissClick}>Done</button>
+			<button className="done-button button button--primary" onClick={handleDismissClick}>Done</button>
 		</div>
 	)
 }

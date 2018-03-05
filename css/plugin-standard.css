@@ -13,6 +13,7 @@
 /* Overall Effects */
 @import url('./vars.css');
 @import url('./lib/normalize.css');
+@import url('./components/button.css');
 @import url('./components/dialog.css');
 
 html, body { box-sizing: border-box; }
@@ -123,33 +124,6 @@ select:hover {
 	position: relative;
 	width: 100%;
 	-webkit-animation: fadein 0.5s;
-}
-
-.button {
-	background-color: var(--main-color);
-	transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-	border: 0;
-	border-radius: calc(0.5 * var(--unit));
-	box-sizing: border-box;
-	color: white;
-	line-height: 1.4em;
-	margin-bottom: 10px;
-	padding-top: var(--unit);
-	padding-bottom: var(--unit);
-	padding-right: calc(2 * var(--unit));
-	padding-left: calc(2 * var(--unit));
-	-webkit-user-select: none;
-}
-
-.button:hover:not([disabled]) {
-	background-color: var(--dark-main-color);
-	cursor: pointer;
-}
-
-.button:disabled,
-.button[disabled] {
-	color: rgba(0, 0, 0, 0.26);
-	background-color: #e0e0e0;
 }
 
 .input {

@@ -33,8 +33,8 @@ const SendPrompt = ({currencytype, sendAddress, sendAmount, feeEstimate, sendErr
 			</div>
 			<span className="send-error">{sendError}</span>
 			<div className="dialog__actions send-prompt-buttons">
-				<button className="send-siacoin-button button" onClick={handleSendClick}>Send</button>
 				<button className="cancel-send-button button" onClick={handleCancelClick}>Cancel</button>
+				<button className="send-siacoin-button button button--primary" onClick={handleSendClick}>Send</button>
 			</div>
 		</div>
 	)

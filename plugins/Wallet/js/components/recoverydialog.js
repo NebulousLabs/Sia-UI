@@ -32,8 +32,8 @@ const RecoveryDialog = ({recovering, actions}) => {
 					<input className="input" type="text" name="seed" autoFocus />
 				</div>
 				<div className="dialog__actions recovery-form-buttons">
-					<button className="button" type="submit">Recover</button>
 					<button className="button" onClick={handleCancelClick}>Cancel</button>
+					<button className="button button--primary" type="submit">Recover</button>
 				</div>
 			</form>
 		</div>
