@@ -1,5 +1,6 @@
 .dialog {
 	--padding: calc(3 * var(--unit));
+	--padding-bottom: calc(2.5 * var(--unit));
 }
 
 .dialog {
@@ -11,18 +12,28 @@
 		0px 9px 46px 8px rgba(0, 0, 0, 0.12);
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	min-width: 400px;
-	max-width: 90%;
+	margin: calc(4 * var(--unit));
+	max-width: 600px;
 }
 
 .dialog__title {
-	padding: var(--padding);
+	font-weight: 400;
 	margin: 0;
+	padding: var(--padding);
+	padding-bottom: var(--padding-bottom);
 }
 
 .dialog__content {
 	padding: var(--padding);
 	padding-top: 0;
+}
+
+.dialog__actions {
+	display: flex;
+	justify-content: flex-end;
+	margin: var(--unit) calc(.5 * var(--unit));
+}
+
+.dialog__actions > .button {
+	margin: 0 calc(.5 * var(--unit));
 }
