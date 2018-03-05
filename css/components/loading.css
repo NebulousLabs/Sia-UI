@@ -21,7 +21,7 @@
 }
 .logo-loading path {
   fill: transparent;
-  stroke: black;
+  stroke: var(--main-color);
   stroke-width: 1px;
   stroke-dasharray: 120px;
   stroke-dashoffset: 120px;
