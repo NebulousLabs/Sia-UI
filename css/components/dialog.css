@@ -28,6 +28,10 @@
 	padding-top: 0;
 }
 
+.dialog__content-text {
+	margin: 0;
+}
+
 .dialog__actions {
 	display: flex;
 	justify-content: flex-end;

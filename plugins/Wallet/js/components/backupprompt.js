@@ -27,6 +27,9 @@ const BackupPrompt = ({primarySeed, auxSeeds, actions}) => {
 							))}
 						</div>
 					) : null}
+				</div>
+
+				<div className="dialog__actions">
 					<button className="button ok-button" onClick={handleOkClick}>OK</button>
 				</div>
 			</div>

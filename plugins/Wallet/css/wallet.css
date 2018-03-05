@@ -149,26 +149,11 @@
 	animation-duration: 0.2s;
 }
 
-.sendprompt {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	background-color: #ECECEC;
-	width: 400px;
-	height: 300px;
-}
-
 .backupprompt > h4 {
 	margin-bottom: 5px;
 }
 .sendprompt .fee-estimation {
 	margin-top: 6px;
-}
-.sendprompt button {
-	margin-left: 5px;
-	margin-right: 5px;
-	margin-top: 15px;
 }
 .sendamount, .sendaddress { 
 	text-align: center;
@@ -324,17 +309,6 @@
 	flex-direction: column;
 }
 
-.change-password-form {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	background-color: #eee;
-	padding-left: 30px;
-	padding-right: 30px;
-	padding-bottom: 30px;
-	padding-top: 10px
-}
 .change-passowrd-buttons {
 	margin-top: 15px;
 }
@@ -344,10 +318,10 @@
 	margin-top: 10px;
 }
 .change-password-form input {
-	width: 50%;
-	margin-top: 8px;
-	margin-bottom: 8px;
+	display: block;
+	margin: var(--unit) auto;
 	text-indent: 10px;
+	width: 50%;
 }
 
 .change-password-error {
@@ -356,24 +330,9 @@
 	margin-bottom: 15px;
 }
 
-.recovery-form {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	background-color: #eee;
-	padding-left: 30px;
-	padding-right: 30px;
-	padding-bottom: 30px;
-}
-.recovery-form-buttons {
-	margin-top: 15px;
-}
-.recovery-form-buttons button {
-	margin-left: 2px;
-	margin-right: 2px;
-}
 .recovery-form input {
+	display: block;
+	margin: 0 auto;
 	width: 50%;
 }
 .uninitialized-wallet-dialog {

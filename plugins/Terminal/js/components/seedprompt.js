@@ -29,7 +29,7 @@ export default class WalletSeedPrompt extends React.Component {
 		}
 
 		return (
-			<div id="seed-prompt" className={'modal' + (this.props.showSeedPrompt ? '' : 'hidden')}>
+			<div id="seed-prompt" className={'modal ' + (this.props.showSeedPrompt ? '' : 'hidden')}>
 				<div className="modal-message">
 					<h3>New seed</h3>
 					<p>Please type your new seed and press enter to continue.</p>

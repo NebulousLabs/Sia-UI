@@ -24,16 +24,22 @@ const RecoveryDialog = ({recovering, actions}) => {
 
 	return (
 		<div className="modal">
-			<form className="recovery-form" onSubmit={handleRecoverClick}>
-				<h3> Enter a seed to recover funds from. </h3>
-				<p> The entire blockchain will be scanned for outputs belonging to the seed. This takes a while. </p>
-				<p> After the scan completes, these outputs will be sent to your wallet. </p>
-				<input className="input" type="text" name="seed" autoFocus />
-				<div className="recovery-form-buttons">
-					<button className="button" type="submit">Recover</button>
-					<button className="button" onClick={handleCancelClick}>Cancel</button>
-				</div>
-			</form>
+			<div className="dialog">
+				<form className="recovery-form" onSubmit={handleRecoverClick}>
+					<h3 className="dialog__title"> Enter a seed to recover funds from. </h3>
+					<div className="dialog__content">
+						<p className="dialog__content-text">
+							The entire blockchain will be scanned for outputs belonging to the seed. This takes a while.
+						</p>
+						<p> After the scan completes, these outputs will be sent to your wallet. </p>
+						<input className="input" type="text" name="seed" autoFocus />
+					</div>
+					<div className="dialog__actions recovery-form-buttons">
+						<button className="button" type="submit">Recover</button>
+						<button className="button" onClick={handleCancelClick}>Cancel</button>
+					</div>
+				</form>
+			</div>
 		</div>
 	)
 }

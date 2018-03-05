@@ -17,20 +17,23 @@ const SendPrompt = ({currencytype, sendAddress, sendAmount, feeEstimate, sendErr
 	const handleCancelClick = () => actions.closeSendPrompt()
 	return (
 		<div className="modal">
-			<div className="sendprompt">
-				<div className="sendamount">
-					<h3>Send Amount {currencytype === 'siacoins' ? '(SC)' : '(SF)'} </h3>
-					<input className="input" onChange={handleSendAmountChange} value={sendAmount} />
-				</div>
-				<div className="sendaddress">
-					<h3> To Address </h3>
-					<input className="input" onChange={handleSendAddressChange} value={sendAddress} />
-				</div>
-				<div className="fee-estimation">
-					Estimated fee: {feeEstimate}
+			<div className="dialog sendprompt">
+				<div className="dialog__title" />
+				<div className="dialog__content">
+					<div className="sendamount">
+						<h3>Send Amount {currencytype === 'siacoins' ? '(SC)' : '(SF)'} </h3>
+						<input className="input" onChange={handleSendAmountChange} value={sendAmount} />
+					</div>
+					<div className="sendaddress">
+						<h3> To Address </h3>
+						<input className="input" onChange={handleSendAddressChange} value={sendAddress} />
+					</div>
+					<div className="fee-estimation">
+						Estimated fee: {feeEstimate}
+					</div>
 				</div>
 				<span className="send-error">{sendError}</span>
-				<div className="send-prompt-buttons">
+				<div className="dialog__actions send-prompt-buttons">
 					<button className="send-siacoin-button button" onClick={handleSendClick}>Send</button>
 					<button className="cancel-send-button button" onClick={handleCancelClick}>Cancel</button>
 				</div>
