@@ -49,8 +49,9 @@ const startUI = (welcomeMsg, initUI) => {
 
 	updateSyncStatus()
 
-	initUI(() => {
+	initUI((cb) => {
 		overlay.classList.add('overlay--hidden')
+		cb()
 	})
 }
 

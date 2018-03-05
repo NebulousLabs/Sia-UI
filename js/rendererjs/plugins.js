@@ -93,7 +93,7 @@ export const loadPlugin = (pluginPath, hidden = false, shortcut) => {
 		})
 	}
 	if (!hidden) {
-		document.getElementById('sidebar').appendChild(buttonElement)
+		document.getElementById('sidebar__plugins').appendChild(buttonElement)
 	}
 	document.getElementById('mainbar').appendChild(viewElement)
 

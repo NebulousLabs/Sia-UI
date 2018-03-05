@@ -14,7 +14,6 @@
 	border-right: 1px solid #EEEEEE;
 }
 
-
 .button {
 	display: flex;
 	flex-direction: column;
@@ -24,11 +23,17 @@
 	position: relative;
 	height: 80px;
 
-	transition: all .25s;
+	transform: translateX(-100%);
+	transition:
+		all .25s,
+		transform var(--duration-in) var(--opacity-transition);
 	-webkit-animation: fadein .4s;
 	-webkit-box-sizing:border-box;
 
 	color: #606060;
+}
+.button--in {
+	transform: translateX(0);
 }
 .button:hover {
 	cursor: pointer;

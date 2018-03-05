@@ -34,7 +34,18 @@ function init(callback) {
 	const onHomeLoad = () => {
 		setCurrentPlugin(defaultHomePlugin)
 		homePluginView.removeEventListener('dom-ready', onHomeLoad)
-		callback()
+		callback(() => {
+			document
+				.getElementById('sidebar__plugins')
+				.childNodes
+				.forEach((node, i) => {
+					if (node.classList) {
+						// stagger animations
+						node.children[0].style['transition-delay'] = `${i * 25}ms`
+						node.children[0].classList.add('button--in')
+					}
+				})
+		})
 	}
 	// wait for the home plugin to load before calling back
 	homePluginView.addEventListener('dom-ready', onHomeLoad)
