@@ -6,6 +6,9 @@
 	--danger-color: #E25141;
 	--light-danger-color: #FC6B5B;
 	--dark-danger-color: #C93828;
+	--mute-color: #ECF0F1;
+	--light-mute-color: #F3F6F6;
+	--dark-mute-color: #D3D7D8;
 	--unit: 8px;
 
 	--ease-in: cubic-bezier(0.4, 0, 1, 1);
