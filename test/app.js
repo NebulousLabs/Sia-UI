@@ -9,6 +9,8 @@ import Adapter from 'enzyme-adapter-react-16'
 
 Enzyme.configure({ adapter: new Adapter() })
 
+require.extensions['.svg'] = () => 1
+
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 // getSiadChild takes an input pid and looks at all the child process of that
