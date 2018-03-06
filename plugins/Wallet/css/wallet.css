@@ -295,6 +295,7 @@
 }
 
 .change-password-error {
+	color: var(--danger-color);
 	height: 10px;
 	margin-top: 15px;
 	margin-bottom: 15px;
