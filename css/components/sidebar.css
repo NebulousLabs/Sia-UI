@@ -41,8 +41,7 @@
 }
 .button:hover {
 	cursor: pointer;
-	background-color: #C5C3C5;
-	color: #F5F5F5;
+	background-color: rgba(0, 0, 0, 0.05);
 }
 .button:active {
 	background-color: ;
@@ -67,9 +66,6 @@
 }
 .button.current > icon {
 	opacity: 1;
-}
-.button:hover .icon {
-	-webkit-filter: invert(100%);
 }
 .button .icon {
 	width: 14px;
