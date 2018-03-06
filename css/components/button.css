@@ -1,9 +1,13 @@
 .button {
+	--text-color: black;
+}
+
+.button {
 	background-color: white;
 	border-radius: calc(0.5 * var(--unit));
 	border: 3px solid #ECF0F1;
 	box-sizing: border-box;
-	color: black;
+	color: var(--text-color);
 	font-weight: 400;
 	line-height: 1.4em;
 	margin-bottom: 10px;
@@ -39,6 +43,10 @@
 	border-color: var(--dark-main-color);
 }
 
+.button--danger {
+	--text-color: var(--danger-color);
+}
+
 .button:disabled,
 .button[disabled] {
 	background-color: #e0e0e0;
@@ -47,3 +55,12 @@
 	color: rgba(0, 0, 0, 0.26);
 }
 
+.button--tertiary {
+	border: 0;
+	background-color: transparent;
+}
+
+.button--tertiary:hover,
+.button--tertiary:focus {
+	text-decoration: underline;
+}

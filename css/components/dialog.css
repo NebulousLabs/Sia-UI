@@ -51,6 +51,7 @@
 	flex-direction: column;
 	margin: calc(4 * var(--unit));
 	max-width: 600px;
+	overflow: hidden;
 }
 
 .dialog__title {
@@ -70,9 +71,10 @@
 }
 
 .dialog__actions {
+	background: #F9F9F9;
 	display: flex;
 	justify-content: flex-end;
-	margin: var(--unit) calc(.5 * var(--unit));
+	padding: var(--unit) calc(.5 * var(--unit));
 }
 
 .dialog__actions > .button {

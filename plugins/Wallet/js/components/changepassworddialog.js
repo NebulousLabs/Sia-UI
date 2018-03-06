@@ -28,7 +28,12 @@ const ChangePasswordDialog = ({changePasswordError, actions}) => {
 					<div className="change-password-error">{changePasswordError}</div>
 				</div>
 				<div className="dialog__actions change-password-buttons">
-					<button className="change-password-cancel button" onClick={handleCancelClick}>Cancel</button>
+					<button
+						className="change-password-cancel button button--danger button--tertiary"
+						onClick={handleCancelClick}
+					>
+						Cancel
+					</button>
 					<button className="button button--primary" type="submit">Change Password</button>
 				</div>
 			</form>
