@@ -12,6 +12,9 @@
 
 @import url('../../../css/vars.css');
 @import url('./components/toggle.css');
+.dialog {
+	min-width: 600px;
+}
 .row {
 	background: #f5f5f5;
 	border: 1px;
@@ -169,9 +172,7 @@
 .error {
 	text-align: center;
 	padding: 10px;
-	color: red;
-	border-top: 1px solid #eee;
-	background-color: #eee;
+	color: var(--danger-color);
 }
 
 .host-status {
