@@ -35,14 +35,14 @@ const FilesList = ({ folders, folderPathToRemove, actions }) => {
 			<div className="pure-u-1-8" onClick={onRemoveStorageLocationClick(folder)}>
 				<div><i className="fa fa-remove button" /></div>
 			</div>
-			{
-				folderPathToRemove && folderPathToRemove === folder.get('path') ?
-					<Modal title={`Remove "${ Path.basename(folder.get('path')) }"?`}
-						message="No longer use this folder for storage? You may lose collateral if you do not have enough space to fill all contracts."
-						actions={{ acceptModal: removeStorageLocation(folder), declineModal: hideRemoveStorageModal  }}
-					/>
-					: null
-			}
+			<Modal
+				title={`Remove "${ Path.basename(folder.get('path')) }"?`}
+				message="No longer use this folder for storage? You may lose collateral if you do not have enough space to fill all contracts."
+				actions={{ acceptModal: removeStorageLocation(folder), declineModal: hideRemoveStorageModal  }}
+				open={
+					folderPathToRemove && folderPathToRemove === folder.get('path')
+				}
+			/>
 		</div>
 	))
 
