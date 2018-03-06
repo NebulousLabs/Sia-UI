@@ -4,14 +4,14 @@
 
 #sidebar {
 	position: relative;
-	background: #F6F6F6;
+	background: #F3F4F5;
+	box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
 	width: var(--sidebar-width);
 	z-index: 5;
 	height: 100%;
 
 	-webkit-box-sizing:border-box;
 	border-left: 0 solid #F5F5F5;
-	border-right: 1px solid #EEEEEE;
 }
 
 .button {
