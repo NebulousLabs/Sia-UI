@@ -121,7 +121,7 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 			</table>
 			{transactions.size > ntransactions
 				? <div className="load-more">
-					<button className="load-more-button" onClick={onMoreClick}>
+					<button className="button load-more-button" onClick={onMoreClick}>
 						More Transactions
 					</button>
 				</div>
