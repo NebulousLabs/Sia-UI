@@ -36,6 +36,24 @@
 	text-align: center;
 	overflow-y: auto;
 }
+.transaction-list--empty {
+  background: rgba(0, 0, 0, 0.05);
+  pointer-events: none;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.3;
+  user-select: none;
+}
+.transaction-list__empty-logo {
+  margin: 0 auto;
+  width: 200px;
+}
+.transaction-list__empty-title {
+  font-weight: 400;
+}
 .transaction-table th {
 	background: #f7f7f7;
 	font-weight: 500;

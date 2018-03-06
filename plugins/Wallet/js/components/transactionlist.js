@@ -1,12 +1,16 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { List } from 'immutable'
+import CoinIcon from '../../../../assets/siaLogoOnboarding.svg'
 
 const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 	if (transactions.size === 0) {
 		return (
-			<div className="transaction-list">
-				<h3> No recent transactions </h3>
+			<div className="transaction-list transaction-list--empty">
+				<div className="transaction-list__empty-logo">
+					<span dangerouslySetInnerHTML={{__html: CoinIcon}} />
+				</div>
+				<h2 className="transaction-list__empty-title"> No recent transactions </h2>
 			</div>
 		)
 	}

@@ -53,7 +53,8 @@
     "redux": "^3.7.2",
     "redux-saga": "^0.15.6",
     "semver": "^5.4.1",
-    "sia.js": "^0.4.2"
+    "sia.js": "^0.4.2",
+    "svg-inline-loader": "^0.8.0"
   },
   "scripts": {
     "start": "webpack && electron .",
