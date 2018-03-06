@@ -62,7 +62,6 @@ const FileList = ({files, selected, searchResults, path, showSearchField, dragFi
 		const onDoubleClick = (e) => {
 			e.stopPropagation()
 			if (file.type === 'directory') {
-				console.log('forfucksake', file.siapath)
 				actions.setPath(file.siapath)
 			}
 		}
