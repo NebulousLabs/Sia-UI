@@ -20,12 +20,14 @@ const Wallet = ({showBackupPrompt, siafundbalance, showReceivePrompt, showChange
 	const onSendClick = (currencytype) => () => actions.startSendPrompt(currencytype)
 	return (
 		<div className="wallet">
-			<div className="wallet-toolbar">
-				<BalanceInfo />
+			<div className="wallet__actions">
 				<BackupButton />
 				<ChangePasswordButton />
 				<LockButton />
 				<RecoverButton />
+			</div>
+			<div className="wallet-toolbar">
+				<BalanceInfo />
 				{siafundbalance !== '0' ? <SendButton currencytype="Siafund" onClick={onSendClick('siafunds')} />: null}
 				<SendButton currencytype="Siacoin" onClick={onSendClick('siacoins')} />
 				<ReceiveButton />

@@ -1,0 +1,33 @@
+.wallet {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	height: 100%;
+}
+.wallet__actions {
+	display: flex;
+	justify-content: flex-end;
+}
+.wallet__actions {
+	background-color: var(--mute-color);
+	width: 100%;
+}
+.wallet__actions .button {
+	background-color: var(--mute-color);
+	border: 0;
+	border-radius: 0;
+	margin-bottom: 0;
+}
+.wallet__actions .button:hover {
+	background-color: var(--dark-mute-color);
+	border: 0;
+	border-radius: 0;
+}
+.wallet__actions .button:focus {
+	background-color: var(--light-mute-color);
+}
+.wallet__actions .button i.fa {
+	font-size: 1em;
+	margin-right: var(--unit);
+}

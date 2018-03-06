@@ -1,4 +1,4 @@
-/*  Style Guide: 
+/*  Sllet.csstyle Guide: 
  *    Transparent: 70% Opacity
  *    
  *    White:      #FFFFFF
@@ -12,6 +12,7 @@
  */
 @import url('../../../css/vars.css');
 @import url('./components/balanceinfo.css');
+@import url('./components/wallet.css');
 @import url('./components/lockscreen.css');
  .app {
  	position: absolute;
@@ -20,13 +21,6 @@
  	left: 0;
  	right: 0;
  }
-.wallet {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: flex-start;
-	height: 100%;
-}
 .load-more-button {
 	margin-top: 10px;
 	margin-bottom: 10px;
@@ -127,7 +121,6 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	background-color: #F4F4F4;
 	border-bottom: 1px solid #EDEDED;
 	padding-top: 10px;
 	padding-bottom: 10px;
