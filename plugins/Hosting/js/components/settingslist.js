@@ -66,9 +66,14 @@ const SettingsList = ({ conversionRate, acceptingContracts, usersettings, defaul
 				</div>
 				<div className="pure-u-1-2">
 					<div className="value">
-						<div className={'toggle-switch' + (acceptingContracts ? '' : ' off')} onClick={showToggleAcceptingModal}>
-							<div className="toggle-inner" />
-						</div>
+						<label className="toggle-switch">
+							<input
+								type="checkbox"
+								checked={!!acceptingContracts}
+								onClick={showToggleAcceptingModal}
+							/>
+							<span className="toggle-switch__inner"></span>
+						</label>
 					</div>
 				</div>
 			</div>
