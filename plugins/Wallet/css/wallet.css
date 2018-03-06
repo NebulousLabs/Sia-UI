@@ -60,7 +60,7 @@
 }
 .transaction-table td,
 .transaction-table th {
-	padding: 8px 4px;
+	padding: calc(1.75 * var(--unit));
 	text-align: left;
 }
 .transaction-table th {
@@ -68,9 +68,6 @@
 }
 .transaction-table td {
 	font-size: 11px;
-}
-.transaction-table tr {
-	border-bottom: 1px solid #E9E9E9;
 }
 .transaction-table tr:hover {
 	background: #ecf4fe;
