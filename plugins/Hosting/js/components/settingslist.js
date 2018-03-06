@@ -69,10 +69,10 @@ const SettingsList = ({ conversionRate, acceptingContracts, usersettings, defaul
 						<label className="toggle-switch">
 							<input
 								type="checkbox"
-								checked={!!acceptingContracts}
+								checked={Boolean(acceptingContracts)}
 								onClick={showToggleAcceptingModal}
 							/>
-							<span className="toggle-switch__inner"></span>
+							<span className="toggle-switch__inner" />
 						</label>
 					</div>
 				</div>
