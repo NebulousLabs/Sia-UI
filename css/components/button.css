@@ -27,6 +27,16 @@
 	cursor: pointer;
 }
 
+.button--danger {
+	--main-color: var(--danger-color);
+	--light-main-color: var(--light-danger-color);
+	--dark-main-color: var(--dark-danger-color);
+}
+
+.button--mute {
+	--main-color: black;
+}
+
 .button--primary {
 	background-color: var(--main-color);
 	border-color: var(--main-color);
@@ -43,10 +53,6 @@
 	border-color: var(--dark-main-color);
 }
 
-.button--danger {
-	--text-color: var(--danger-color);
-}
-
 .button:disabled,
 .button[disabled] {
 	background-color: #e0e0e0;
@@ -56,11 +62,13 @@
 }
 
 .button--tertiary {
+	--text-color: var(--main-color);
 	border: 0;
 	background-color: transparent;
 }
 
 .button--tertiary:hover,
 .button--tertiary:focus {
+	border: 0;
 	text-decoration: underline;
 }
