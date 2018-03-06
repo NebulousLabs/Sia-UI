@@ -54,7 +54,7 @@
 }
 
 .dialog__title {
-	font-weight: 400;
+	font-weight: 600;
 	margin: 0;
 	padding: var(--padding);
 	padding-bottom: var(--padding-bottom);
