@@ -12,7 +12,7 @@ const lockedUnencryptedScreen = shallow(<LockScreen unlocked={false} encrypted={
 const unlockedEncryptedScreen = shallow(<LockScreen unlocked encrypted unlocking={false} rescanning={false} />)
 describe('wallet lock screen component', () => {
 	it('renders an empty div if the wallet is unlocked and encrypted and not unlocking', () => {
-		expect(unlockedEncryptedScreen.equals(<div />)).to.be.true
+		expect(unlockedEncryptedScreen.children().children().children()).to.have.length(0)
 	})
 	it('renders a password prompt modal if wallet is encrypted and not unlocked or unlocking', () => {
 		expect(lockedEncryptedScreen.contains(<PasswordPrompt />)).to.be.true
