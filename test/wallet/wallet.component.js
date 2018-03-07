@@ -42,7 +42,7 @@ describe('wallet component', () => {
 	})
 	it('does not render show new wallet dialog unless showNewWalletDialog', () => {
 		const walletComponent = shallow(<Wallet synced showNewWalletDialog={false} confirmedbalance="10" unconfirmedbalance="1" siafundbalance="0" actions={testActions} />)
-		expect(walletComponent.contains(<NewWalletDialog />)).to.be.false
+		expect(walletComponent.find(NewWalletDialog).closest('Modal').prop('open')).to.equal(false)
 	})
 	it('renders show new wallet dialog when showNewWalletDialog', () => {
 		const walletComponent = shallow(<Wallet synced showNewWalletDialog confirmedbalance="10" unconfirmedbalance="1" siafundbalance="0" actions={testActions} />)
@@ -50,7 +50,7 @@ describe('wallet component', () => {
 	})
 	it('does not render show send prompt unless showSendPrompt', () => {
 		const walletComponent = shallow(<Wallet synced showSendPrompt={false} confirmedbalance="10" unconfirmedbalance="1" siafundbalance="0" actions={testActions} />)
-		expect(walletComponent.contains(<SendPrompt />)).to.be.false
+		expect(walletComponent.find(SendPrompt).closest('Modal').prop('open')).to.equal(false)
 	})
 	it('renders show send prompt when showSendPrompt', () => {
 		const walletComponent = shallow(<Wallet synced showSendPrompt confirmedbalance="10" unconfirmedbalance="1" siafundbalance="0" actions={testActions} />)
@@ -58,7 +58,7 @@ describe('wallet component', () => {
 	})
 	it('does not render show receive prompt unless showReceivePrompt', () => {
 		const walletComponent = shallow(<Wallet synced showReceivePrompt={false} confirmedbalance="10" unconfirmedbalance="1" siafundbalance="0" actions={testActions} />)
-		expect(walletComponent.contains(<ReceivePrompt />)).to.be.false
+		expect(walletComponent.find(ReceivePrompt).closest('Modal').prop('open')).to.equal(false)
 	})
 	it('renders show receive prompt when showReceivePrompt', () => {
 		const walletComponent = shallow(<Wallet synced showReceivePrompt confirmedbalance="10" unconfirmedbalance="1" siafundbalance="0" actions={testActions} />)

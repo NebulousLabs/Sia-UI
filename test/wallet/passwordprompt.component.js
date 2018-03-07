@@ -23,7 +23,7 @@ describe('wallet password prompt component', () => {
 		expect(erroredComponent.find('.password-prompt__error').first().text()).to.equal('testerror')
 	})
 	it('calls unlockWallet with password on unlock button click', () => {
-		passwordpromptComponent.find('.unlock-button').first().simulate('click')
+		passwordpromptComponent.find('form').simulate('submit', { preventDefault() {} })
 		expect(testActions.unlockWallet.calledWith('testpw')).to.be.true
 	})
 	it('calls handlePasswordChange with new password on password input change', () => {

@@ -140,7 +140,7 @@ describe('wallet change password functionality', () => {
 	it('hides when cancel is clicked', async () => {
 		walletComponent.find('.change-password-cancel').first().simulate('click')
 		await sleep(10)
-		expect(walletComponent.find('ChangePasswordDialog')).to.have.length(0)
+		expect(walletComponent.find('ChangePasswordDialog').closest('Modal').prop('open')).to.equal(false)
 	})
 	it('clears the error field when reopened', async () => {
 		walletComponent.find('.change-password-button').first().simulate('click')

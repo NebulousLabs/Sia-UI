@@ -29,8 +29,8 @@ const txnlistComponent = shallow(<TransactionList transactions={testTxns} ntrans
 describe('wallet transaction list component', () => {
 	it('renders no recent transactions with an empty transaction list', () => {
 		const emptytxnlist = shallow(<TransactionList transactions={List()} ntransactions={0} />)
-		expect(emptytxnlist.find('.transaction-list').children()).to.have.length(1)
-		expect(emptytxnlist.find('.transaction-list h3').first().text()).to.contain('No recent transactions')
+		expect(emptytxnlist.find('.transaction-list').children()).to.have.length(2)
+		expect(emptytxnlist.find('.transaction-list h2').first().text()).to.contain('No recent transactions')
 	})
 	it('filters 0 SC transactions properly', () => {
 		const filteredTxnList = shallow(<TransactionList transactions={testTxns} ntransactions={testTxns.size} filter />)
