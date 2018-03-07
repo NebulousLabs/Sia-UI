@@ -241,9 +241,6 @@
 .create-wallet-button i {
 	color: var(--main-color);
 }
-.create-wallet-button i:hover {
-	color: #00A785;
-}
 .create-wallet-button {
 	display: flex;
 	align-items: center;
