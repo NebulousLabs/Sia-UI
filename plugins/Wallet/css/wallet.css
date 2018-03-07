@@ -169,26 +169,6 @@
 .wallet-toolbar > .wallet-button > i {
 	color: var(--main-color);
 }
-.newwallet-dialog {
-	position: absolute;
-	top: 0;
-	right: 0;
-	left: 0;
-	bottom: 0;
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	flex-direction: column;
-	background-color: #ECECEC;
-	padding-top: 50px;
-	padding-bottom: 50px;
-	padding-left: 100px;
-	padding-right: 100px;
-	z-index: 10;
-}
-.newwallet-seed, .newwallet-password {
-	font-size: 24px;
-}
 
 .newwallet-password {
 	background-color: #000;
@@ -198,16 +178,6 @@
 	background-color: initial;
 }
 
-.confirmation-dialog {
-	display: flex;
-	padding: 10px 10px 10px 10px;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	background-color: #ECECEC;
-	height: 300px;
-	width: 475px;
-}
 .seed-confirmation-form {
 	display: flex;
 	flex-direction: column;
@@ -217,26 +187,19 @@
 	margin-bottom: 3px;
 	width: 300px;
 }
-.confirmation-dialog .confirmation-buttons {
-	margin-top: 5px;
-	text-align: center;
-}
 .seed-confirmation-error {
 	margin-top: 10px;
-}
-.confirmation-dialog .confirmation-buttons button {
-	margin-left: 5px;
-	margin-right: 5px;
 }
 .newwallet-dialog button {
 	margin-top: 20px;
 }
+.confirmation-dialog input {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
 .newwallet-dialog p {
 	font-size: 18px;
-}
-.newwallet-dialog span {
-	display: block;
-	color: #000000;
 }
 .create-wallet-button i {
 	color: var(--main-color);
@@ -260,6 +223,23 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+}
+.newwallet-dialog {
+	--padding: calc(3 * var(--unit));
+	--padding-bottom: calc(2.5 * var(--unit));
+	background: white;
+	border-radius: 2px;
+	display: flex;
+	height: 100%;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	z-index: 10;
+}
+.newwallet-dialog > .dialog {
+	box-shadow: none;
+
 }
 .new-wallet-form input {
 	display: block;

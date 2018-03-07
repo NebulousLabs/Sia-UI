@@ -16,9 +16,7 @@ const Modal = (props) => (
 			&& <div key="backdrop" className="modal__backdrop" aria-hidden="true" />}
 		{props.open
 			&& (
-				<div key="content">
-					{React.cloneElement(props.children)}
-				</div>
+				React.cloneElement(props.children, { key: 'content' })
 			)
 		}
 	</Transition>
