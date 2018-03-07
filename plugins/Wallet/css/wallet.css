@@ -249,8 +249,11 @@
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
-	margin-left: 20px;
-	margin-right: 20px;
+	padding: calc(2.5 * var(--unit));
+	margin: calc(var(--unit));
+}
+.create-wallet-button h4 {
+	margin: 0;
 }
 .new-wallet-form {
 	--padding: calc(3 * var(--unit));
