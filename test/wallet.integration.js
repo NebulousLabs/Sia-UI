@@ -441,9 +441,9 @@ describe('wallet plugin integration tests', () => {
 			expect(walletComponent.find('.primary-seed').first().text()).to.equal(testSeed)
 		})
 		it('hides when ok button is clicked', async () => {
-			walletComponent.find('.backupprompt > .ok-button').first().simulate('click')
+			walletComponent.find('.backupprompt .ok-button').first().simulate('click')
 			await sleep(10)
-			expect(walletComponent.find('.backupprompt')).to.have.length(0)
+			expect(walletComponent.find('BackupPrompt').closest('Modal').prop('open')).to.equal(false)
 		})
 	})
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import Transition from 'react-addons-css-transition-group'
 
-export default (props) => (
+const Modal = (props) => (
 	<Transition
 		style={{
 			// make interaction pass through if empty
@@ -23,3 +23,5 @@ export default (props) => (
 		}
 	</Transition>
 )
+
+export default Modal
