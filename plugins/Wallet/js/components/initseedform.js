@@ -23,10 +23,10 @@ const InitSeedForm = ({ initializingSeed, useCustomPassphrase, hideInitSeedForm,
 	}
 	return (
 		<form className="new-wallet-form" onSubmit={handleInitSeedClick}>
-			<h3 className="dialog__title"> Enter a seed to initialize your wallet from. </h3>
+			<h3 className="dialog__title"> Recover your wallet from your seed and password </h3>
 			<div className="dialog__content">
 				<p className="dialog__content-text">
-					This will initialize your wallet from the provided seed, rescanning the blockchain to find all your money. This rescan process can take a while. The blockchain must also be synced.
+					This will recover your wallet from the provided seed, rescanning the blockchain to find all your money. This rescan process can take a while.
 				</p>
 				<input className="input" type="text" name="seed" placeholder="Seed" autoFocus />
 				{useCustomPassphrase
