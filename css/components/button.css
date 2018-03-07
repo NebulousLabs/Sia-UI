@@ -72,3 +72,12 @@
 	border: 0;
 	text-decoration: underline;
 }
+
+.button h1,
+.button h2,
+.button h3,
+.button h4,
+.button h5,
+.button h6 {
+	font-weight: 300;
+}
