@@ -222,8 +222,7 @@ describe('wallet creation', () => {
 			pwInput.instance().value = 'testpass'
 			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.instance(), password: pwInput.instance() }})
 			await sleep(10)
-			expect(walletComponent.find('ConfirmationDialog')).to.have.length(0)
-			expect(walletComponent.find('NewWalletDialog')).to.have.length(0)
+			expect(walletComponent.find('NewWalletDialog').closest('Modal').prop('open')).to.equal(false)
 			expect(walletComponent.find('LockScreen')).to.have.length(1)
 		})
 	})
@@ -279,8 +278,7 @@ describe('wallet creation', () => {
 			pwInput.instance().value = 'testseed'
 			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.instance(), password: pwInput.instance() }})
 			await sleep(10)
-			expect(walletComponent.find('ConfirmationDialog')).to.have.length(0)
-			expect(walletComponent.find('NewWalletDialog')).to.have.length(0)
+			expect(walletComponent.find('NewWalletDialog').closest('Modal').prop('open')).to.equal(false)
 			expect(walletComponent.find('LockScreen')).to.have.length(1)
 		})
 	})
@@ -305,7 +303,7 @@ describe('wallet plugin integration tests', () => {
 		const poll = setInterval(() => {
 			if (walletComponent.find('.lockscreen').length > 0) {
 				walletComponent.update()
-				expect(walletComponent.find('.password-prompt-error').first().text()).to.contain('incorrect password')
+				expect(walletComponent.find('.password-prompt__error').first().text()).to.contain('incorrect password')
 				clearInterval(poll)
 				done()
 			}
