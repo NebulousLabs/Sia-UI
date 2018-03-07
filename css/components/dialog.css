@@ -1,4 +1,5 @@
 .modal {
+	--accent-color: #F9F9F9;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -71,7 +72,7 @@
 }
 
 .dialog__actions {
-	background: #F9F9F9;
+	background: var(--accent-color);
 	display: flex;
 	justify-content: flex-end;
 	padding: var(--unit) calc(.5 * var(--unit));

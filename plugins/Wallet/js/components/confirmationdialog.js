@@ -14,19 +14,21 @@ const ConfirmationDialog = ({seed, password, error, actions}) => {
 		}
 	}
 	return (
-		<div className="dialog confirmation-dialog">
-			<h3 className="dialog__title"> Please confirm your password and seed to continue </h3>
-			<form className="seed-confirmation-form" onSubmit={onOkClick}>
-				<div className="dialog__content">
-					<input className="input seed-confirmation-input" placeholder="seed" type="text" name="seed" required />
-					<input className="input password-confirmation-input" placeholder="password" type="text" name="password" required />
-					<span className="seed-confirmation-error">{error}</span>
-				</div>
-				<div className="dialog__actions confirmation-buttons">
-					<button className="button" onClick={onCancelClick}>Go Back and Review</button>
-					<button className="button button--primary seed-confirmation-button" type="submit">Confirm</button>
-				</div>
-			</form>
+		<div className="confirmation-dialog">
+			<div className="dialog">
+				<h3 className="dialog__title"> Please input your password and seed to continue </h3>
+				<form className="seed-confirmation-form" onSubmit={onOkClick}>
+					<div className="dialog__content">
+						<input className="input seed-confirmation-input" placeholder="seed" type="text" name="seed" required />
+						<input className="input password-confirmation-input" placeholder="password" type="text" name="password" required />
+						<span className="seed-confirmation-error">{error}</span>
+					</div>
+					<div className="dialog__actions confirmation-buttons">
+						<button className="button" onClick={onCancelClick}>Go Back and Review</button>
+						<button className="button button--primary seed-confirmation-button" type="submit">Confirm</button>
+					</div>
+				</form>
+			</div>
 		</div>
 	)
 }

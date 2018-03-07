@@ -14,6 +14,7 @@
 @import url('./components/balanceinfo.css');
 @import url('./components/wallet.css');
 @import url('./components/lockscreen.css');
+@import url('./components/pagestepper.css');
  .app {
  	position: absolute;
  	top: 0;
@@ -79,7 +80,7 @@
 	margin: 0;
 	padding: 10px;
 }
-.transaction-header > h2 {
+.transaction-header > h4 {
 	margin-top: 3px;
 	margin-bottom: 3px;
 }
@@ -224,6 +225,7 @@
 	align-items: center;
 	justify-content: center;
 }
+.confirmation-dialog,
 .newwallet-dialog {
 	--padding: calc(3 * var(--unit));
 	--padding-bottom: calc(2.5 * var(--unit));
@@ -237,9 +239,10 @@
 	flex-direction: column;
 	z-index: 10;
 }
+.confirmation-dialog > .dialog,
 .newwallet-dialog > .dialog {
+	--accent-color: white;
 	box-shadow: none;
-
 }
 .new-wallet-form input {
 	display: block;
