@@ -300,6 +300,7 @@ describe('wallet plugin integration tests', () => {
 	it('shows an error when unlocking with an incorrect password', (done) => {
 		walletComponent.find('PasswordPrompt').find('.password-input').simulate('change', {target: {value: 'wrongpass'}})
 		walletComponent.find('PasswordPrompt').find('.unlock-button').simulate('click')
+		walletComponent.find('PasswordPrompt').find('form').simulate('submit', { preventDefault() {} })
 		const poll = setInterval(() => {
 			if (walletComponent.find('.lockscreen').length > 0) {
 				walletComponent.update()
@@ -311,9 +312,9 @@ describe('wallet plugin integration tests', () => {
 	})
 	it('unlocks given the correct password', (done) => {
 		walletComponent.find('PasswordPrompt').find('.password-input').simulate('change', {target: {value: 'testpass'}})
-		walletComponent.find('PasswordPrompt').find('.unlock-button').simulate('click')
+		walletComponent.find('PasswordPrompt').find('form').simulate('submit', { preventDefault() {} })
 		walletComponent.update()
-		expect(walletComponent.find('.unlock-status').first().text()).to.contain('Unlocking')
+		expect(walletComponent.find('PasswordPrompt').find('.unlock-status').first().text()).to.contain('Unlocking')
 		const poll = setInterval(() => {
 			walletComponent.update()
 			if (walletComponent.find('.lockscreen').length === 0) {
@@ -446,7 +447,7 @@ describe('wallet plugin integration tests', () => {
 	})
 
 	it('locks when the lock button is clicked', (done) => {
-		expect(walletComponent.find('.lockscreen')).to.have.length(0)
+		expect(walletComponent.find('LockScreen').find('div').children()).to.have.length(0)
 		walletComponent.find('.lock-button').simulate('click')
 		const poll = setInterval(() => {
 			walletComponent.update()
