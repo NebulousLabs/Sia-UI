@@ -20,7 +20,7 @@ const ConfirmationDialog = ({seed, password, error, actions}) => {
 				<form className="seed-confirmation-form" onSubmit={onOkClick}>
 					<div className="dialog__content">
 						<input className="input seed-confirmation-input" placeholder="seed" type="text" name="seed" required />
-						<input className="input password-confirmation-input" placeholder="password" type="text" name="password" required />
+						<input className="input password-confirmation-input" placeholder="password" type="password" name="password" required />
 						<span className="seed-confirmation-error">{error}</span>
 					</div>
 					<div className="dialog__actions confirmation-buttons">
