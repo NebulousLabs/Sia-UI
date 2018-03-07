@@ -12,11 +12,12 @@ const NewWalletForm = ({actions}) => {
 	}
 	return (
 		<form className="new-wallet-form" onSubmit={handleCreateWalletClick}>
-			<h3>Enter a password to encrypt your wallet. You can leave this empty to use a secure, automatically generated password.</h3>
-			<input type="password" name="password" autoFocus />
+			<h3>Enter a password to encrypt your wallet.</h3>
+			<p>Not entering a password will make your wallet seed the password</p>
+			<input className="input" type="password" name="password" autoFocus />
 			<div className="new-wallet-form-buttons">
-				<button type="submit">Confirm</button>
-				<button onClick={handleCancelClick}>Cancel</button>
+				<button className="button" onClick={handleCancelClick}>Cancel</button>
+				<button className="button button--primary" type="submit">Confirm</button>
 			</div>
 		</form>
 	)

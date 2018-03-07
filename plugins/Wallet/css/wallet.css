@@ -249,12 +249,15 @@
 	margin: 0 auto;
 }
 .new-wallet-form p {
-	margin-bottom: 30px;
+	text-align: center;
+	font-size: 0.8em;
 }
 .new-wallet-form h3 {
 	text-align: center;
+	margin: 0;
 }
 .new-wallet-form-buttons {
+	margin-top: var(--unit);
 }
 .new-wallet-form-buttons button {
 	margin-left: 3px;
