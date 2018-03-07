@@ -171,7 +171,6 @@ describe('wallet creation', () => {
 			expect(walletComponent.find('UninitializedWalletDialog')).to.have.length(1)
 		})
 		it('shows a newwalletform when custom passphrase is enabled', async () => {
-			walletComponent.find('.use-passphrase-checkbox').children().first().simulate('change')
 			await sleep(10)
 			walletComponent.find('.create-wallet-button').first().simulate('click')
 			await sleep(10)
@@ -239,6 +238,7 @@ describe('wallet creation', () => {
 			expect(walletComponent.find('UninitializedWalletDialog')).to.have.length(1)
 		})
 		it('creates a new wallet and shows the seed', async () => {
+			walletComponent.find('.use-passphrase-checkbox').find('input').simulate('change')
 			walletComponent.find('.create-wallet-button').first().simulate('click')
 			await sleep(10)
 			walletComponent.update()

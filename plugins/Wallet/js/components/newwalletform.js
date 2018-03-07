@@ -16,7 +16,7 @@ const NewWalletForm = ({actions}) => {
 			<p>Not entering a password will make your wallet seed the password</p>
 			<input className="input" type="password" name="password" autoFocus />
 			<div className="new-wallet-form-buttons">
-				<button className="button" onClick={handleCancelClick}>Cancel</button>
+				<button className="button button--danger button--tertiary" onClick={handleCancelClick}>Cancel</button>
 				<button className="button button--primary" type="submit">Confirm</button>
 			</div>
 		</form>

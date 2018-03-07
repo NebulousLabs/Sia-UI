@@ -46,8 +46,14 @@ const UninitializedWalletDialog = ({initializingSeed, useCustomPassphrase, showI
 				</button>
 			</div>
 			<div className="use-passphrase-checkbox">
-				<input type="checkbox" checked={useCustomPassphrase} onChange={handleCustomPasswordClick} />
-				<span> Use custom passphrase </span>
+				<label>
+					<input
+						type="checkbox"
+						checked={useCustomPassphrase}
+						onChange={handleCustomPasswordClick}
+					/>
+					<span> Use custom passphrase</span>
+				</label>
 			</div>
 		</div>
 	)

@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import Modal from './modal'
 import ConfirmationDialog from '../containers/confirmationdialog.js'
 import PageStepper from './PageStepper'
 

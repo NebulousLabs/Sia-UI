@@ -1,7 +1,7 @@
 import React from 'react'
 
 class PageStepper extends React.Component {
-	render () {
+	render() {
 		const { props } = this
 
 		return (
