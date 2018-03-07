@@ -246,7 +246,7 @@
 }
 .new-wallet-form input {
 	display: block;
-	margin: 0 auto;
+	margin: var(--unit) auto;
 }
 .new-wallet-form p {
 	text-align: center;
