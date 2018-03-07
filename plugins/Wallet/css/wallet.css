@@ -253,11 +253,17 @@
 	margin-right: 20px;
 }
 .new-wallet-form {
+	--padding: calc(3 * var(--unit));
+	--padding-bottom: calc(2.5 * var(--unit));
 	display: flex;
 	width: 75%;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+}
+.new-wallet-form input {
+	display: block;
+	margin: 0 auto;
 }
 .new-wallet-form p {
 	margin-bottom: 30px;
@@ -266,7 +272,6 @@
 	text-align: center;
 }
 .new-wallet-form-buttons {
-	margin-top: 25px;
 }
 .new-wallet-form-buttons button {
 	margin-left: 3px;
@@ -321,6 +326,9 @@
 }
 .wallet-init-buttons {
 	display: flex;
+}
+.wallet-init-buttons > .button > h3 {
+	margin-bottom: 0;
 }
 .use-passphrase-checkbox {
 	margin-top: 20px;
