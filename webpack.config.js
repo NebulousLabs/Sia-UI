@@ -52,7 +52,7 @@ const common = {
 			},
 			{
 				test: /\.svg$/,
-				loader: 'svg-inline-loader'
+				loader: 'svg-react-loader'
 			},
 		],
 	},

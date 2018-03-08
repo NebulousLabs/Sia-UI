@@ -46,6 +46,9 @@
   margin: 0 auto;
   width: 200px;
 }
+.transaction-list__empty-logo svg {
+  width: 200px;
+}
 .transaction-list__empty-title {
   font-weight: 400;
 }

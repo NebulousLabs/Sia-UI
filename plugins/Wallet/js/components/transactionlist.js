@@ -9,7 +9,7 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 		return (
 			<div className="transaction-list transaction-list--empty">
 				<div className="transaction-list__empty-logo">
-					<span dangerouslySetInnerHTML={{__html: CoinIcon}} />
+					<span><CoinIcon /></span>
 				</div>
 				<h2 className="transaction-list__empty-title"> No recent transactions </h2>
 			</div>
