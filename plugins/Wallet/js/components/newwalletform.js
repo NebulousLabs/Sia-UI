@@ -17,7 +17,7 @@ const NewWalletForm = ({actions}) => {
 			<input className="input" type="password" name="password" autoFocus />
 			<div className="new-wallet-form-buttons">
 				<button className="button button--danger button--tertiary" onClick={handleCancelClick}>Cancel</button>
-				<button className="button button--primary" type="submit">Confirm</button>
+				<input className="button button--primary" type="submit" value="Confirm" />
 			</div>
 		</form>
 	)
