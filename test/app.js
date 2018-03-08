@@ -63,6 +63,10 @@ const electronBinary = process.platform === 'win32' ? 'node_modules\\electron\\d
 /* eslint-disable no-invalid-this */
 /* eslint-disable no-unused-expressions */
 describe('startup and shutdown behaviour', () => {
+	before(async () => {
+		// Set for production to trigger sia close
+		process.env.NODE_ENV = 'production'
+	})
 	after(async () => {
 		// never leave a dangling siad
 		await pkillSiad()
