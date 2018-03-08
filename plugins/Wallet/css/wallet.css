@@ -47,6 +47,7 @@
   width: 200px;
 }
 .transaction-list__empty-logo svg {
+  height: auto;
   width: 200px;
 }
 .transaction-list__empty-title {
