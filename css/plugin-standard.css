@@ -27,7 +27,7 @@ html, body { box-sizing: border-box; }
 	from { opacity: 0; }
 	to   { opacity: 1; }
 }
-select, input, html, body {
+select, button, input, html, body {
 	margin: 0;
 	padding: 0;
 	border-spacing: 0;

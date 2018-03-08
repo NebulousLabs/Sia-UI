@@ -214,7 +214,9 @@
 	margin: calc(var(--unit));
 }
 .create-wallet-button h4 {
+	font-size: 1.2rem;
 	margin: 0;
+	padding-top: var(--unit);
 }
 .new-wallet-form {
 	--padding: calc(3 * var(--unit));
@@ -259,9 +261,11 @@
 .new-wallet-form-buttons {
 	margin-top: var(--unit);
 }
-.new-wallet-form-buttons button {
+.new-wallet-form-buttons .button {
+	display: inline-block;
 	margin-left: 3px;
 	margin-right: 3px;
+	width: auto;
 }
 
 .new-wallet-form input {
