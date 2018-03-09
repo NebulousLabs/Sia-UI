@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Portal } from 'react-portal'
-import Transition from 'react-addons-css-transition-group'
+import { CSSTransitionGroup as Transition } from 'react-transition-group'
 import PasswordPrompt from '../containers/passwordprompt.js'
 import UninitializedWalletDialog from '../containers/uninitializedwalletdialog.js'
 import RescanDialog from './rescandialog.js'

@@ -1,5 +1,5 @@
 import React from 'react'
-import Transition from 'react-addons-css-transition-group'
+import { CSSTransitionGroup as Transition } from 'react-transition-group'
 import { Portal } from 'react-portal'
 
 export default (props) => (
