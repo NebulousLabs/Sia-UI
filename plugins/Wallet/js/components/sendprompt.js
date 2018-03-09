@@ -17,7 +17,6 @@ const SendPrompt = ({currencytype, sendAddress, sendAmount, feeEstimate, sendErr
 	const handleCancelClick = () => actions.closeSendPrompt()
 	return (
 		<div className="dialog sendprompt">
-			<div className="dialog__title" />
 			<div className="dialog__content">
 				<div className="sendamount">
 					<h3>Send Amount {currencytype === 'siacoins' ? '(SC)' : '(SF)'} </h3>
