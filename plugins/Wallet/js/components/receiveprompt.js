@@ -15,8 +15,8 @@ const ReceivePrompt = ({addresses, address, description, actions}) => {
 		actions.saveAddress({ description: description, address: address })
 	}
 	return (
-		<div className="receive-prompt">
-			<div className="receive-form">
+		<div className="dialog receive-prompt">
+			<div className="dialog__content receive-form">
 				<div className="receive-form-item">
 					<p> Receiving Address </p>
 					<input className="input receive-address" value={address} readOnly />
@@ -25,28 +25,30 @@ const ReceivePrompt = ({addresses, address, description, actions}) => {
 					<p> Description </p>
 					<input className="input address-description" onChange={handleDescriptionChange} value={description} />
 				</div>
+				<div className="receive-buttons">
+					<button className="save-address-button button button--primary" onClick={handleSaveClick}>Save</button>
+					<button className="new-address-button button button--primary" onClick={handleGenerateClick}>New</button>
+				</div>
 			</div>
-			<div className="receive-buttons">
-				<button className="save-address-button button button--primary" onClick={handleSaveClick}>Save</button>
-				<button className="new-address-button button button--primary" onClick={handleGenerateClick}>New</button>
-			</div>
-			<h3> Prior Addresses </h3>
-			{ addresses.size > 0 ? (
-				<table className="pure-table address-table">
-					<tr>
-						<th>Description</th>
-						<th>Address</th>
-					</tr>
-					{ addresses.reverse().map((oldAddress, key) => (
-						<tr className="prior-address" key={key}>
-							<td className="description">{oldAddress.description}</td>
-							<td className="address">{oldAddress.address}</td>
+			<div className="dialog__content">
+				<h3> Prior Addresses </h3>
+				{ addresses.size > 0 ? (
+					<table className="pure-table address-table">
+						<tr>
+							<th>Description</th>
+							<th>Address</th>
 						</tr>
-					))}
-				</table>
-			) : ( <p> No prior addresses </p>)
-			}
-			<button className="done-button button button--primary" onClick={handleDismissClick}>Done</button>
+						{ addresses.reverse().map((oldAddress, key) => (
+							<tr className="prior-address" key={key}>
+								<td className="description">{oldAddress.description}</td>
+								<td className="address">{oldAddress.address}</td>
+							</tr>
+						))}
+					</table>
+				) : ( <p> No prior addresses </p>)
+				}
+				<button className="done-button button button--primary" onClick={handleDismissClick}>Done</button>
+			</div>
 		</div>
 	)
 }

@@ -1,6 +1,6 @@
 .modal {
 	--accent-color: #F9F9F9;
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
@@ -51,8 +51,9 @@
 	display: flex;
 	flex-direction: column;
 	margin: calc(4 * var(--unit));
+	max-height: 100%;
 	max-width: 600px;
-	overflow: hidden;
+	overflow: auto;
 }
 
 .dialog__title {
@@ -64,6 +65,9 @@
 
 .dialog__content {
 	padding: var(--padding);
+}
+
+.dialog__content:not(:first-child) {
 	padding-top: 0;
 }
 

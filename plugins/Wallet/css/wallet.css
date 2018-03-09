@@ -110,17 +110,6 @@
 	margin-top: 10px;
 	font-size: 11px;
 }
-.receive-prompt {
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	flex-direction: column;
-	width: 700px;
-	height: 400px;
-	background-color: #ECECEC;
-	padding-top: 50px;
-}
 .wallet-toolbar {
 	width: 100%;
 	display: flex;
@@ -362,13 +351,11 @@
 .receiveprompt-dismissbtn {
 	margin-top: 20px;
 }
-.receive-form {
-	width: 80%;
-}
 .receive-form > .receive-form-item {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	margin: var(--unit) 0;
 }
 .receive-form-item > p {
 	margin: 0;
@@ -381,15 +368,11 @@
 	margin-left: 3px;
 	margin-right: 3px;
 }
-.done-button {
-	position: absolute;
-	bottom: 20px;
-}
 .address-table {
 	display: inline-block;
 	height: 150px;
 	overflow: scroll;
-	width: 90%; 
+	width: 100%;
 }
 .receive-address, .address-description {
 	width: 400px;
