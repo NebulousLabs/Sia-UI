@@ -18,3 +18,6 @@ sia-testing
 # IntelliJ
 .idea
 *.iml
+
+#MAC
+.DS*
