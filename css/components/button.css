@@ -5,7 +5,7 @@
 .button {
 	background-color: white;
 	border-radius: calc(0.5 * var(--unit));
-	border: 3px solid #ECF0F1;
+	border: 1px solid #ECF0F1;
 	box-sizing: border-box;
 	color: var(--text-color);
 	font-weight: 400;
