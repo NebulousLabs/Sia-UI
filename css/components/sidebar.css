@@ -1,8 +1,4 @@
 #sidebar {
-	--sidebar-width: calc(10 * var(--unit));
-}
-
-#sidebar {
 	position: relative;
 	background: #F3F4F5;
 	box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
@@ -21,7 +17,8 @@
 	align-items: center;
 	justify-content: center;
 	position: relative;
-	height: 80px;
+	font-size: 12px;
+	height: var(--sidebar-width);
 	overflow: hidden;
 
 	transform: translateX(-100%);

@@ -11,6 +11,8 @@
 	--dark-mute-color: #D3D7D8;
 	--unit: 8px;
 
+	--sidebar-width: calc(8 * var(--unit));
+
 	--ease-in: cubic-bezier(0.4, 0, 1, 1);
 	--ease-out: cubic-bezier(0.0, 0, 0.2, 1);
 	--opacity-transition: cubic-bezier(0.4, 0, 0.2, 1);
