@@ -1,6 +1,6 @@
-/*  Style Guide: 
+/*  Style Guide:
  *	Transparent: 70% Opacity
- *	
+ *
  *	White:	  #FFFFFF
  *	Grey-White: #F5F5F5
  *	Faint-Grey: #ECECEC
@@ -28,6 +28,9 @@
 	font-size: 12px;
 	margin-right: 8px;
 	width: 35px;
+}
+.warning-text {
+	color:  red;	
 }
 .redundancy-status {
 	display: flex;
@@ -224,7 +227,7 @@ div[tabindex="1"]:focus {
 .upload-button-container:hover .upload-button:last-of-type {
 	max-height: 100px;
 	padding: 23px 0px 5px;
-} 
+}
 .upload-button-container {
 	display: inline-block;
 	position: relative;
