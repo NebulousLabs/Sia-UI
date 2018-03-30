@@ -31,8 +31,8 @@ const Body = ({ actions }) => {
 				</div>
 			</div>
 
-			<SettingsList />
 			<FilesList />
+			<SettingsList />
 		</div>
 	)
 }

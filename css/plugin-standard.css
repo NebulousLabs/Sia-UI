@@ -11,6 +11,14 @@
  *    Neon-Green: #00CBA0
  */
 /* Overall Effects */
+@import url('./vars.css');
+@import url('./lib/normalize.css');
+@import url('./components/button.css');
+@import url('./components/dialog.css');
+
+html, body { box-sizing: border-box; }
+* { box-sizing: inherit }
+
 @keyframes fadeout {
 	from { opacity: 1; }
 	to   { opacity: 0; }
@@ -19,33 +27,42 @@
 	from { opacity: 0; }
 	to   { opacity: 1; }
 }
-select, input, html, body {
+select, button, input, html, body {
 	margin: 0;
 	padding: 0;
 	border-spacing: 0;
-	font-family: 'Roboto Condensed', sans-serif;
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
 	font-weight: 300;
-	font-size: 18px;
+	font-size: 14px;
+}
+.app {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	overflow: auto;
 }
 html, body {
 	height: 100%;
 	min-width: 100%;
 }
-select, input {
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 600;
+}
+select {
 	position: relative;
 
 	box-shadow: none;
 	color:#4a4a4a;
 
+	background:#ffffff;
 	border: solid 1px #dddddd;
 	transition: box-shadow 0.3s, border 0.3s;
 	box-sizing: content-box;
 	border-radius: 4px;
 }
-select {
-	background:#ffffff;
-}
-select:focus, input:focus {
+select:focus {
 	outline: none;
 	border: solid 1px #4a4a4a;
 	box-shadow: 0 0 5px 1px #c5c5c5;
@@ -116,10 +133,19 @@ select:hover {
 	width: 100%;
 	-webkit-animation: fadein 0.5s;
 }
-.button {
-	-webkit-user-select: none;
+
+.input {
+	background: #ffffff;
+	border: 1px solid #ecf0f1;
+	border-radius: calc(0.5 * var(--unit));
+	padding-top: var(--unit);
+	padding-bottom: var(--unit);
+	padding-left: calc(1.5 * var(--unit));
+	padding-right: calc(1.5 * var(--unit));
+	transition: all 120ms cubic-bezier(0.64, 0, 0.35, 1);
 }
-.button:hover {
-	color: #4a4a4a;
-	cursor: pointer;
+
+.input:hover, input:focus {
+	border: 1px solid var(--main-color);
+	outline: none;
 }

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 const colorNotAvailable = '#FF8080'
-const colorGoodRedundancy = '#00CBA0'
+const colorGoodRedundancy = 'var(--main-color)'
 const colorNegativeRedundancy = '#b7afaf'
 
 const RedundancyStatus = ({available, redundancy, uploadprogress}) => {

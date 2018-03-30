@@ -11,6 +11,9 @@
  *    Neon-Green: #00CBA0
  */
 /* Overall rules */
+@import url('./vars.css');
+@import url('./components/loading.css');
+@import url('./components/sidebar.css');
 .blueprint {
 	display: none;
 }
@@ -25,38 +28,40 @@ html,body {
 	height: 100%;
 	width: 100%;
 
-	font-family: 'Roboto Condensed', sans-serif;
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
 	font-weight: 300;
 	font-size: 18px;
 
 	-webkit-user-select: none;
 }
 .pure-g [class*="pure-u"] {
-	font-family: 'Roboto Condensed', sans-serif;
 	font-weight: 300;
 }
 ::-webkit-scrollbar { 
 	display: none; 
 }
 .body {
+	display: flex;
+	height: calc(100% - 24px);
 	position: relative;
-
-	height: -webkit-calc(100% - 80px);
-	-webkit-box-sizing:border-box;
 }
 
 /* UI Header */
 .header {
-	height: 80px;
+	color: white;
+	font-size: 12px;
+	height: 24px;
 	width: 100%;
 
 	background-color: #313133;
 	background: linear-gradient(to left, #313133 15%, #0b0e16 85%);
 }
 .logo {
-	padding-left: 20px;
-	padding-top: 14px;
+	padding: calc(1.5 * var(--unit));
 	pointer-events: none;
+}
+.logo svg {
+	width: 100%;
 }
 .logo-container:hover {
 	cursor: pointer;
@@ -77,14 +82,14 @@ html,body {
 	color: #E0000B;
 }
 .status-bar-synced {
-	color: #00CBA0;
+	color: var(--main-color);
 }
 .status-bar {
 	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
-	padding-right: 25px;
+	padding-right: 8px;
 	cursor: default;
 }
 .status-bar-blockheight {
@@ -100,52 +105,8 @@ html,body {
 	color: #AAAAAA;
 }
 .header-button:hover {
-	color: #00CBA0;
+	color: var(--main-color);
 	cursor: pointer;
-}
-
-/* Sidebar */
-#sidebar {
-	position: relative;
-
-	background-color: #D5D3D5;
-	width: 160px;
-	z-index: 5;
-	height: 100%;
-
-	-webkit-box-sizing:border-box;
-	border-left: 0 solid #F5F5F5;
-	border-right: 1px solid #B5B5B5;
-}
-.button {
-	display: flex;
-	font-size: 16px;
-	align-items: center;
-	position: relative;
-	height: 60px;
-
-	transition: all .25s;
-	-webkit-animation: fadein .4s;
-	-webkit-box-sizing:border-box;
-
-	color: #606060;
-}
-.button:hover {
-	cursor: pointer;
-	background-color: #C5C3C5;
-	color: #F5F5F5;
-}
-.button:active {
-	background-color: ;
-}
-.button.current {
-	transition: all .25s;
-	cursor: default;
-	background-color: #00CBA0;
-	color: #F5F5F5;
-}
-.button.current .icon, .button:hover .icon {
-	-webkit-filter: invert(100%);
 }
 @keyframes fadeout {
 	from { opacity: default; }
@@ -154,14 +115,6 @@ html,body {
 @keyframes fadein {
 	from { opacity: 0; }
 	to   { opacity: default; }
-}
-.button .icon {
-	max-height: 30%;
-	padding-left: 16px;
-}
-.button .text {
-	padding: 4px;
-	padding-left: 8px;
 }
 
 /* Mainbar */
@@ -179,7 +132,7 @@ html,body {
 .webview {
 	position: absolute;
 	height: 100%;
-	min-width: calc(100% - 160px);
+	min-width: calc(100% - var(--sidebar-width));
 	right: 0;
 	opacity: 0;
 	z-index: -1;
@@ -239,7 +192,7 @@ html,body {
 	line-height: 80px;
 	font-size: 48px;
 	text-align: center;
-	color: #00CBA0;
+	color: var(--main-color);
 	background-color: #f5f5f5;
 	border-right: 1px solid #eeeeee;
 }
@@ -280,6 +233,7 @@ html,body {
 }
 
 .overlay {
+	transition: opacity var(--duration-in) var(--opacity-transition) 0ms;
 	display: inline-flex;
   z-index: 10;
   position: absolute;
@@ -289,11 +243,15 @@ html,body {
 	text-align: center;
 	font-size: 35px;
 	background-color: #fff;
-	opacity: .5;
+	opacity: 1;
+}
+.overlay--hidden {
+	opacity: 0;
+	pointer-events: none;
 }
 .centered {
 	opacity: 1;
-	color: #00CBA0;
+	color: var(--main-color);
 	margin: auto;
 }
 .centered p {

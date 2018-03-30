@@ -23,7 +23,7 @@ const initialState = Map({
 	showChangePasswordDialog: false,
 	showInitSeedForm: false,
 	showBackupPrompt: false,
-	useCustomPassphrase: false,
+	useCustomPassphrase: true,
 	showRecoveryDialog: false,
 	initializingSeed: false,
 	changePasswordError: '',

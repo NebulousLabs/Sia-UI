@@ -5,109 +5,7 @@ import { List } from 'immutable'
 import { spy } from 'sinon'
 import TransactionList from '../../plugins/Wallet/js/components/transactionlist.js'
 import BigNumber from 'bignumber.js'
-
-const testTxns = List([
-	{
-		confirmed: true,
-		transactionsums: {
-			totalSiacoin: new BigNumber(10),
-			totalSiafund: new BigNumber(0),
-			totalMiner: new BigNumber(0),
-		},
-		transactionid: 'testid',
-		confirmationtimestamp: new Date(),
-	},
-	{
-		confirmed: true,
-		transactionsums: {
-			totalSiacoin: new BigNumber(0),
-			totalSiafund: new BigNumber(10),
-			totalMiner: new BigNumber(0),
-		},
-		transactionid: 'testid1',
-		confirmationtimestamp: new Date(),
-	},
-	{
-		confirmed: true,
-		transactionsums: {
-			totalSiacoin: new BigNumber(0),
-			totalSiafund: new BigNumber(0),
-			totalMiner: new BigNumber(10),
-		},
-		transactionid: 'testid2',
-		confirmationtimestamp: new Date(),
-	},
-	{
-		confirmed: true,
-		transactionsums: {
-			totalSiacoin: new BigNumber(-10),
-			totalSiafund: new BigNumber(0),
-			totalMiner: new BigNumber(0),
-		},
-		transactionid: 'testid3',
-		confirmationtimestamp: new Date(),
-	},
-	{
-		confirmed: true,
-		transactionsums: {
-			totalSiacoin: new BigNumber(0),
-			totalSiafund: new BigNumber(-10),
-			totalMiner: new BigNumber(0),
-		},
-		transactionid: 'testid4',
-		confirmationtimestamp: new Date(),
-	},
-	{
-		confirmed: true,
-		transactionsums: {
-			totalSiacoin: new BigNumber(0),
-			totalSiafund: new BigNumber(0),
-			totalMiner: new BigNumber(-10),
-		},
-		transactionid: 'testid5',
-		confirmationtimestamp: new Date(),
-	},
-	{
-		confirmed: false,
-		transactionsums: {
-			totalSiacoin: new BigNumber(1),
-			totalSiafund: new BigNumber(0),
-			totalMiner: new BigNumber(0),
-		},
-		transactionid: 'testid6',
-		confirmationtimestamp: new Date(),
-	},
-	{
-		confirmed: false,
-		transactionsums: {
-			totalSiacoin: new BigNumber(10),
-			totalSiafund: new BigNumber(-5),
-			totalMiner: new BigNumber(0),
-		},
-		transactionid: 'testid7',
-		confirmationtimestamp: new Date(),
-	},
-	{
-		confirmed: false,
-		transactionsums: {
-			totalSiacoin: new BigNumber(10),
-			totalSiafund: new BigNumber(1),
-			totalMiner: new BigNumber(1),
-		},
-		transactionid: 'testid8',
-		confirmationtimestamp: new Date(),
-	},
-	{
-		confirmed: false,
-		transactionsums: {
-			totalSiacoin: new BigNumber(0),
-			totalSiafund: new BigNumber(0),
-			totalMiner: new BigNumber(0),
-		},
-		transactionid: 'testid9',
-		confirmationtimestamp: new Date(),
-	},
-])
+import testTxns from './__fixtures__/transactions'
 
 const expectedValues = List([
 	'10 SC ',
@@ -131,8 +29,8 @@ const txnlistComponent = shallow(<TransactionList transactions={testTxns} ntrans
 describe('wallet transaction list component', () => {
 	it('renders no recent transactions with an empty transaction list', () => {
 		const emptytxnlist = shallow(<TransactionList transactions={List()} ntransactions={0} />)
-		expect(emptytxnlist.find('.transaction-list').children()).to.have.length(1)
-		expect(emptytxnlist.find('.transaction-list h3').first().text()).to.contain('No recent transactions')
+		expect(emptytxnlist.find('.transaction-list').children()).to.have.length(2)
+		expect(emptytxnlist.find('.transaction-list h2').first().text()).to.contain('No recent transactions')
 	})
 	it('filters 0 SC transactions properly', () => {
 		const filteredTxnList = shallow(<TransactionList transactions={testTxns} ntransactions={testTxns.size} filter />)
@@ -147,13 +45,13 @@ describe('wallet transaction list component', () => {
 	it('renders transaction net values correctly', () => {
 		const txnnodes = txnlistComponent.find('.transaction-table tbody').children()
 		for (let nodeindex = 0; nodeindex < txnnodes.length; nodeindex++) {
-			expect(txnnodes.at(nodeindex).find('td').at(1).text()).to.equal(expectedValues.get(nodeindex))
+			expect(txnnodes.at(nodeindex).find('td').at(2).text()).to.equal(expectedValues.get(nodeindex))
 		}
 	})
 	it('renders transaction ids correctly', () => {
 		const txnnodes = txnlistComponent.find('.transaction-table tbody').children()
 		for (let nodeindex = 0; nodeindex < txnnodes.length; nodeindex++) {
-			expect(txnnodes.at(nodeindex).find('td').at(2).text()).to.equal(testTxns.get(nodeindex).transactionid)
+			expect(txnnodes.at(nodeindex).find('td').at(3).text()).to.equal(testTxns.get(nodeindex).transactionid)
 		}
 	})
 	it('renders timestamps correctly', () => {
@@ -184,7 +82,7 @@ describe('wallet transaction list component', () => {
 		const component = shallow(<TransactionList transactions={txns} />)
 		const nodes = component.find('.transaction-table tbody').children()
 		for (let nodeindex = 0; nodeindex < nodes.length; nodeindex++) {
-			expect(nodes.at(nodeindex).find('td').at(0).text()).to.equal(expectedTimestamps[nodeindex])
+			expect(nodes.at(nodeindex).find('td').at(2).text()).to.equal(expectedTimestamps[nodeindex])
 		}
 	})
 	it('renders transaction confirmation icon correctly', () => {

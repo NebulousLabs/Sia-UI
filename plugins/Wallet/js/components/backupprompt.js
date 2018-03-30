@@ -4,14 +4,18 @@ import React from 'react'
 const BackupPrompt = ({primarySeed, auxSeeds, actions}) => {
 	const handleOkClick = () => actions.hideBackupPrompt()
 	return (
-		<div className="modal">
-			<div className="backupprompt">
-				{ auxSeeds.length === 0 ? (
-					<h3> Write down your seed to back up your wallet. You can restore your wallet using only this seed. </h3>
-				) : (
-					<h3> Write down your seeds to back up your wallet. You can restore your wallet using only these seeds. </h3>
-				)}
+		<div className="backupprompt dialog">
+			{ auxSeeds.length === 0 ? (
+				<h3 className="dialog__title">
+					Write down your seed to back up your wallet. You can restore your wallet using only this seed.
+				</h3>
+			) : (
+				<h3 className="dialog__title">
+					Write down your seeds to back up your wallet. You can restore your wallet using only these seeds.
+				</h3>
+			)}
 
+			<div className="dialog__content">
 				<h4> Primary Seed: </h4>
 				<p className="primary-seed">{primarySeed}</p>
 				{auxSeeds.length > 0 ? ( <h4> Auxiliary Seeds: </h4> ) : null}
@@ -22,7 +26,10 @@ const BackupPrompt = ({primarySeed, auxSeeds, actions}) => {
 						))}
 					</div>
 				) : null}
-				<button className="ok-button" onClick={handleOkClick}>OK</button>
+			</div>
+
+			<div className="dialog__actions">
+				<button className="button button--primary ok-button" onClick={handleOkClick}>OK</button>
 			</div>
 		</div>
 	)

@@ -27,46 +27,23 @@ const StatusBar = ({synced, blockheight, peers}) => {
 	const progress = estimatedProgress(blockheight)
 
 	const redColor = '#E0000B'
-	const greenColor = '#00CBA0'
+	const greenColor = 'var(--main-color)'
 	const yellowColor = '#E7D414'
 
 	const syncStyle = {
 		color: redColor,
 	}
 
-	const syncProgressStyle = {
-		width: progress.toString() + '%',
-		height: '20px',
-		transition: 'width 200ms',
-		backgroundColor: '#00CBA0',
-		margin: '0',
-	}
-
-	const syncProgressContainerStyle = {
-		display: 'inline-block',
-		backgroundColor: '#eee',
-		height: '20px',
-		width: '150px',
-	}
-
-	const syncProgressInfoStyle = {
-		display: 'inline-block',
-		position: 'absolute',
-		fontSize: '12px',
-		height: '25px',
-		marginTop: '5px',
-	}
-
 	let status
 	if (!synced && peers === 0) {
 		syncStyle.color = redColor
-		status = 'Not Synchronizing'
+		status = 'Not Syncing'
 	} else if (!synced && peers > 0) {
 		syncStyle.color = yellowColor
-		status = 'Synchronizing'
+		status = 'Syncing'
 	} else if (synced && peers === 0) {
 		syncStyle.color = redColor
-		status = 'No Peers'
+		status = 'Not Syncing: No Peers'
 	} else if (synced) {
 		syncStyle.color = greenColor
 		status = 'Synchronized'
@@ -79,12 +56,7 @@ const StatusBar = ({synced, blockheight, peers}) => {
 	if (!synced && progress < 99.9) {
 		syncStatus = (
 			<div>
-				<div style={syncProgressContainerStyle}>
-					<div style={syncProgressStyle} />
-				</div>
-				<div style={syncProgressInfoStyle}>
-					{Math.floor(progress * 10) / 10}%
-				</div>
+				{Math.floor(progress * 10) / 10}%
 			</div>
 		)
 	}
@@ -92,7 +64,7 @@ const StatusBar = ({synced, blockheight, peers}) => {
 	return (
 		<div className="status-bar">
 			<div style={syncStyle}>
-				<i className="fa fa-globe fa-2x" />
+				<i className="fa fa-refresh" />
 				{status}
 			</div>
 			{syncStatus}

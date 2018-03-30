@@ -14,18 +14,20 @@ const ConfirmationDialog = ({seed, password, error, actions}) => {
 		}
 	}
 	return (
-		<div className="modal">
-			<div className="confirmation-dialog">
-				<h3> Please confirm your password and seed to continue </h3>
+		<div className="confirmation-dialog">
+			<div className="dialog">
+				<h3 className="dialog__title"> Please input your password and seed to continue </h3>
 				<form className="seed-confirmation-form" onSubmit={onOkClick}>
-					<input className="seed-confirmation-input" placeholder="seed" type="text" name="seed" required />
-					<input className="password-confirmation-input" placeholder="password" type="text" name="password" required />
-					<div className="confirmation-buttons">
-						<button onClick={onCancelClick}>Go Back</button>
-						<button className="seed-confirmation-button" type="submit">Confirm</button>
+					<div className="dialog__content">
+						<input className="input seed-confirmation-input" placeholder="seed" type="text" name="seed" required />
+						<input className="input password-confirmation-input" placeholder="password" type="password" name="password" required />
+						<span className="seed-confirmation-error">{error}</span>
+					</div>
+					<div className="dialog__actions confirmation-buttons">
+						<button className="button" onClick={onCancelClick}>Go Back and Review</button>
+						<button className="button button--primary seed-confirmation-button" type="submit">Confirm</button>
 					</div>
 				</form>
-				<span className="seed-confirmation-error">{error}</span>
 			</div>
 		</div>
 	)

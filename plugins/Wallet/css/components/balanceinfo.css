@@ -1,0 +1,31 @@
+.balance-info {
+	color: black;
+	flex: 1;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+.balance-info__main-label {
+	font-size: 12px;
+	display: block;
+	margin-bottom: calc(.5 * var(--unit));
+}
+.balance-info__main-balance {
+	font-size: 24px;
+}
+.balance-info__main-balance-currency {
+	font-size: 12px;
+	color: var(--secondary-text-color);
+	margin-left: 2px;
+	vertical-align: super;
+}
+.balance-info__unconfirmed-balance {
+	font-size: 12px;
+	color: var(--secondary-text-color);
+	margin-left: 2px;
+}
+
+/** TODO: Proper styles for misc balances **/
+.balance-info__addendum {
+	margin-top: var(--unit);
+	font-size: 12px;
+}

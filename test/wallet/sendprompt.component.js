@@ -17,9 +17,6 @@ const sendpromptComponentSC = shallow(<SendPrompt currencytype="siacoins" sendAd
 const sendpromptComponentSF = shallow(<SendPrompt currencytype="siafunds" sendAddress="testaddr" sendAmount="1" sendError="" actions={testActions} />)
 
 describe('wallet send prompt component', () => {
-	it('renders a modal with one child', () => {
-		expect(sendpromptComponentSC.find('.modal')).to.have.length(1)
-	})
 	it('renders send amount with the correct currency', () => {
 		expect(sendpromptComponentSC.find('.sendamount h3').first().text()).to.contain('Send Amount (SC)')
 		expect(sendpromptComponentSF.find('.sendamount h3').first().text()).to.contain('Send Amount (SF)')

@@ -103,43 +103,44 @@ describe('wallet change password functionality', () => {
 	it('shows an error if the two new passwords do not match', async () => {
 		const changePasswordForm = walletComponent.find('.change-password-form').first()
 		const currentPasswordInput = changePasswordForm.find('.currentpassword-input')
-		currentPasswordInput.node.value = 'oldpassword'
+		currentPasswordInput.instance().value = 'oldpassword'
+		currentPasswordInput.instance().value = 'oldpassword'
 		const newPasswordInput = changePasswordForm.find('.newpassword-input')
-		newPasswordInput.node.value = 'test'
+		newPasswordInput.instance().value = 'test'
 		const newPasswordInputAgain = changePasswordForm.find('.newpassword-again-input')
-		newPasswordInputAgain.node.value = 'test-different'
-		changePasswordForm.simulate('submit', { target: { currentpassword: currentPasswordInput.node, newpassword: newPasswordInput.node, 'newpassword-again': newPasswordInputAgain.node } })
+		newPasswordInputAgain.instance().value = 'test-different'
+		changePasswordForm.simulate('submit', { target: { currentpassword: currentPasswordInput.instance(), newpassword: newPasswordInput.instance(), 'newpassword-again': newPasswordInputAgain.instance() } })
 		await sleep(10)
 		expect(changePasswordForm.find('.change-password-error').first().text()).to.equal('passwords did not match!')
 	})
 	it('shows an error if the current password is incorrect', async () => {
 		const changePasswordForm = walletComponent.find('.change-password-form').first()
 		const currentPasswordInput = changePasswordForm.find('.currentpassword-input')
-		currentPasswordInput.node.value = 'wrongpass'
+		currentPasswordInput.instance().value = 'wrongpass'
 		const newPasswordInput = changePasswordForm.find('.newpassword-input')
-		newPasswordInput.node.value = 'test'
+		newPasswordInput.instance().value = 'test'
 		const newPasswordInputAgain = changePasswordForm.find('.newpassword-again-input')
-		newPasswordInputAgain.node.value = 'test'
-		changePasswordForm.simulate('submit', { target: { currentpassword: currentPasswordInput.node, newpassword: newPasswordInput.node, 'newpassword-again': newPasswordInputAgain.node } })
+		newPasswordInputAgain.instance().value = 'test'
+		changePasswordForm.simulate('submit', { target: { currentpassword: currentPasswordInput.instance(), newpassword: newPasswordInput.instance(), 'newpassword-again': newPasswordInputAgain.instance() } })
 		await sleep(10)
 		expect(changePasswordForm.find('.change-password-error').first().text()).to.equal('incorrect password')
 	})
 	it('successfully changes wallet password using correct password', async () => {
 		const changePasswordForm = walletComponent.find('.change-password-form').first()
 		const currentPasswordInput = changePasswordForm.find('.currentpassword-input')
-		currentPasswordInput.node.value = 'correctpass'
+		currentPasswordInput.instance().value = 'correctpass'
 		const newPasswordInput = changePasswordForm.find('.newpassword-input')
-		newPasswordInput.node.value = 'test'
+		newPasswordInput.instance().value = 'test'
 		const newPasswordInputAgain = changePasswordForm.find('.newpassword-again-input')
-		newPasswordInputAgain.node.value = 'test'
-		changePasswordForm.simulate('submit', { target: { currentpassword: currentPasswordInput.node, newpassword: newPasswordInput.node, 'newpassword-again': newPasswordInputAgain.node } })
+		newPasswordInputAgain.instance().value = 'test'
+		changePasswordForm.simulate('submit', { target: { currentpassword: currentPasswordInput.instance(), newpassword: newPasswordInput.instance(), 'newpassword-again': newPasswordInputAgain.instance() } })
 		await sleep(10)
 		expect(changePasswordForm.find('.change-password-error').first().text()).to.equal('password changed successfully.')
 	})
 	it('hides when cancel is clicked', async () => {
 		walletComponent.find('.change-password-cancel').first().simulate('click')
 		await sleep(10)
-		expect(walletComponent.find('ChangePasswordDialog')).to.have.length(0)
+		expect(walletComponent.find('ChangePasswordDialog').closest('Modal').prop('open')).to.equal(false)
 	})
 	it('clears the error field when reopened', async () => {
 		walletComponent.find('.change-password-button').first().simulate('click')
@@ -165,11 +166,11 @@ describe('wallet creation', () => {
 			walletComponent = mount(initWallet())
 		})
 		it('shows an uninitialized wallet dialog initially', async () => {
-			await sleep(50)
+			await sleep(100)
+			walletComponent.update()
 			expect(walletComponent.find('UninitializedWalletDialog')).to.have.length(1)
 		})
 		it('shows a newwalletform when custom passphrase is enabled', async () => {
-			walletComponent.find('.use-passphrase-checkbox').children().first().simulate('change')
 			await sleep(10)
 			walletComponent.find('.create-wallet-button').first().simulate('click')
 			await sleep(10)
@@ -177,12 +178,15 @@ describe('wallet creation', () => {
 		})
 		it('creates a wallet correctly using newwalletform', async () => {
 			const passwordInput = walletComponent.find('.new-wallet-form input').first()
-			passwordInput.node.value = 'testpass'
-			walletComponent.find('.new-wallet-form-buttons').first().simulate('submit', { target: { password: passwordInput.node }})
+			passwordInput.instance().value = 'testpass'
+			walletComponent.update()
+			walletComponent.find('.new-wallet-form-buttons').first().simulate('submit', { target: { password: passwordInput.instance() }})
+			walletComponent.update()
 			await sleep(20)
 			expect(walletComponent.find('NewWalletForm')).to.have.length(0)
 		})
 		it('shows a newwalletdialog with the custom password', async () => {
+			walletComponent.update()
 			expect(walletComponent.find('NewWalletDialog')).to.have.length(1)
 			expect(walletComponent.find('.newwallet-seed').text()).to.equal('testseed')
 			expect(walletComponent.find('.newwallet-password').text()).to.equal('testpass')
@@ -194,31 +198,30 @@ describe('wallet creation', () => {
 		})
 		it('shows an error if user confirms the wrong seed', async () => {
 			const seedInput = walletComponent.find('.seed-confirmation-input').first()
-			seedInput.node.value = 'badseed'
+			seedInput.instance().value = 'badseed'
 			const pwInput = walletComponent.find('.password-confirmation-input').first()
-			pwInput.node.value = 'testpass'
-			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node, password: pwInput.node }})
+			pwInput.instance().value = 'testpass'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.instance(), password: pwInput.instance() }})
 			await sleep(10)
 			expect(walletComponent.find('.seed-confirmation-error').first().text()).to.equal('seed did not match!')
 		})
 		it('shows an error if user confirms the wrong password', async () => {
 			const seedInput = walletComponent.find('.seed-confirmation-input').first()
-			seedInput.node.value = 'testseed'
+			seedInput.instance().value = 'testseed'
 			const pwInput = walletComponent.find('.password-confirmation-input').first()
-			pwInput.node.value = 'badpass'
-			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node, password: pwInput.node }})
+			pwInput.instance().value = 'badpass'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.instance(), password: pwInput.instance() }})
 			await sleep(10)
 			expect(walletComponent.find('.seed-confirmation-error').first().text()).to.equal('password did not match!')
 		})
 		it('dismisses confirmation dialog when correct seed and password is entered', async () => {
 			const seedInput = walletComponent.find('.seed-confirmation-input').first()
-			seedInput.node.value = 'testseed'
+			seedInput.instance().value = 'testseed'
 			const pwInput = walletComponent.find('.password-confirmation-input').first()
-			pwInput.node.value = 'testpass'
-			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node, password: pwInput.node }})
+			pwInput.instance().value = 'testpass'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.instance(), password: pwInput.instance() }})
 			await sleep(10)
-			expect(walletComponent.find('ConfirmationDialog')).to.have.length(0)
-			expect(walletComponent.find('NewWalletDialog')).to.have.length(0)
+			expect(walletComponent.find('NewWalletDialog').closest('Modal').prop('open')).to.equal(false)
 			expect(walletComponent.find('LockScreen')).to.have.length(1)
 		})
 	})
@@ -231,11 +234,14 @@ describe('wallet creation', () => {
 		})
 		it('shows an uninitialized wallet dialog initially', async () => {
 			await sleep(50)
+			walletComponent.update()
 			expect(walletComponent.find('UninitializedWalletDialog')).to.have.length(1)
 		})
 		it('creates a new wallet and shows the seed', async () => {
+			walletComponent.find('.use-passphrase-checkbox').find('input').simulate('change')
 			walletComponent.find('.create-wallet-button').first().simulate('click')
 			await sleep(10)
+			walletComponent.update()
 			expect(walletComponent.find('NewWalletDialog')).to.have.length(1)
 			expect(walletComponent.find('.newwallet-seed').text()).to.equal('testseed')
 			expect(walletComponent.find('.newwallet-password').text()).to.equal('testseed')
@@ -249,31 +255,30 @@ describe('wallet creation', () => {
 		// forms... wtf
 		it('shows an error if user confirms the wrong seed', async () => {
 			const seedInput = walletComponent.find('.seed-confirmation-input').first()
-			seedInput.node.value = 'badseed'
+			seedInput.instance().value = 'badseed'
 			const pwInput = walletComponent.find('.password-confirmation-input').first()
-			pwInput.node.value = 'testpass'
-			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node, password: pwInput.node }})
+			pwInput.instance().value = 'testpass'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.instance(), password: pwInput.instance() }})
 			await sleep(10)
 			expect(walletComponent.find('.seed-confirmation-error').first().text()).to.equal('seed did not match!')
 		})
 		it('shows an error if user confirms the wrong password', async () => {
 			const seedInput = walletComponent.find('.seed-confirmation-input').first()
-			seedInput.node.value = 'testseed'
+			seedInput.instance().value = 'testseed'
 			const pwInput = walletComponent.find('.password-confirmation-input').first()
-			pwInput.node.value = 'badpass'
-			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node, password: pwInput.node }})
+			pwInput.instance().value = 'badpass'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.instance(), password: pwInput.instance() }})
 			await sleep(10)
 			expect(walletComponent.find('.seed-confirmation-error').first().text()).to.equal('password did not match!')
 		})
 		it('dismisses confirmation dialog when correct seed is entered', async () => {
 			const seedInput = walletComponent.find('.seed-confirmation-input').first()
-			seedInput.node.value = 'testseed'
+			seedInput.instance().value = 'testseed'
 			const pwInput = walletComponent.find('.password-confirmation-input').first()
-			pwInput.node.value = 'testseed'
-			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.node, password: pwInput.node }})
+			pwInput.instance().value = 'testseed'
+			walletComponent.find('.seed-confirmation-button').simulate('submit', { target: { seed: seedInput.instance(), password: pwInput.instance() }})
 			await sleep(10)
-			expect(walletComponent.find('ConfirmationDialog')).to.have.length(0)
-			expect(walletComponent.find('NewWalletDialog')).to.have.length(0)
+			expect(walletComponent.find('NewWalletDialog').closest('Modal').prop('open')).to.equal(false)
 			expect(walletComponent.find('LockScreen')).to.have.length(1)
 		})
 	})
@@ -295,9 +300,11 @@ describe('wallet plugin integration tests', () => {
 	it('shows an error when unlocking with an incorrect password', (done) => {
 		walletComponent.find('PasswordPrompt').find('.password-input').simulate('change', {target: {value: 'wrongpass'}})
 		walletComponent.find('PasswordPrompt').find('.unlock-button').simulate('click')
+		walletComponent.find('PasswordPrompt').find('form').simulate('submit', { preventDefault() {} })
 		const poll = setInterval(() => {
 			if (walletComponent.find('.lockscreen').length > 0) {
-				expect(walletComponent.find('.password-prompt-error').first().text()).to.contain('incorrect password')
+				walletComponent.update()
+				expect(walletComponent.find('.password-prompt__error').first().text()).to.contain('incorrect password')
 				clearInterval(poll)
 				done()
 			}
@@ -305,9 +312,11 @@ describe('wallet plugin integration tests', () => {
 	})
 	it('unlocks given the correct password', (done) => {
 		walletComponent.find('PasswordPrompt').find('.password-input').simulate('change', {target: {value: 'testpass'}})
-		walletComponent.find('PasswordPrompt').find('.unlock-button').simulate('click')
-		expect(walletComponent.find('.unlock-status').first().text()).to.contain('Unlocking')
+		walletComponent.find('PasswordPrompt').find('form').simulate('submit', { preventDefault() {} })
+		walletComponent.update()
+		expect(walletComponent.find('PasswordPrompt').find('.unlock-status').first().text()).to.contain('Unlocking')
 		const poll = setInterval(() => {
+			walletComponent.update()
 			if (walletComponent.find('.lockscreen').length === 0) {
 				clearInterval(poll)
 				done()
@@ -318,19 +327,26 @@ describe('wallet plugin integration tests', () => {
 	describe('receive prompt', () => {
 		it('shows a new wallet address when receive siacoins is clicked initially', async () => {
 			setMockReceiveAddress('testaddress')
+			walletComponent.update()
 			setMockAddresses(['testaddress'])
+			walletComponent.update()
 			expect(walletComponent.find('.receive-prompt')).to.have.length(0)
 			walletComponent.find('.receive-button').first().simulate('click')
+			walletComponent.update()
 			await sleep(10)
+			walletComponent.update()
 			expect(walletComponent.find('.receive-prompt')).to.have.length(1)
 			expect(walletComponent.find('.receive-address').props().value).to.equal('testaddress')
 			expect(walletComponent.find('.prior-address')).to.have.length(0)
 		})
 		it('saves the address given a description', async () => {
 			walletComponent.find('.address-description').simulate('change', { target: { value: 'testdesc' } })
+			walletComponent.update()
 			await sleep(10)
 			walletComponent.find('.save-address-button').simulate('click')
+			walletComponent.update()
 			await sleep(10)
+			walletComponent.update()
 			expect(walletComponent.find('.prior-address')).to.have.length(1)
 		})
 		it('updates the description if a duplicate address is saved', async() => {
@@ -343,9 +359,13 @@ describe('wallet plugin integration tests', () => {
 		})
 		it('generates a new address when New is clicked', async () => {
 			setMockReceiveAddress('testaddress2')
+			walletComponent.update()
 			setMockAddresses(['testaddress', 'testaddress2'])
+			walletComponent.update()
 			walletComponent.find('.new-address-button').simulate('click')
+			walletComponent.update()
 			await sleep(10)
+			walletComponent.update()
 			expect(walletComponent.find('.receive-address').props().value).to.equal('testaddress2')
 			expect(walletComponent.find('.prior-address')).to.have.length(1)
 		})
@@ -355,10 +375,15 @@ describe('wallet plugin integration tests', () => {
 			// recolletion of. Sia-UI should not render any of the saved receiving
 			// addresses.
 			setMockAddresses([])
+			walletComponent.update()
 			walletComponent.find('.done-button').simulate('click')
+			walletComponent.update()
 			await sleep(10)
+			walletComponent.update()
 			walletComponent.find('.receive-button').first().simulate('click')
+			walletComponent.update()
 			await sleep(10)
+			walletComponent.update()
 			expect(walletComponent.find('.prior-address')).to.have.length(0)
 		})
 	})
@@ -384,6 +409,7 @@ describe('wallet plugin integration tests', () => {
 		})
 		it('closes the send prompt after sending', (done) => {
 			const poll = setInterval(() => {
+				walletComponent.update()
 				if (walletComponent.find('.sendprompt').length === 0) {
 					clearInterval(poll)
 					done()
@@ -414,16 +440,17 @@ describe('wallet plugin integration tests', () => {
 			expect(walletComponent.find('.primary-seed').first().text()).to.equal(testSeed)
 		})
 		it('hides when ok button is clicked', async () => {
-			walletComponent.find('.backupprompt > .ok-button').first().simulate('click')
+			walletComponent.find('.backupprompt .ok-button').first().simulate('click')
 			await sleep(10)
-			expect(walletComponent.find('.backupprompt')).to.have.length(0)
+			expect(walletComponent.find('BackupPrompt').closest('Modal').prop('open')).to.equal(false)
 		})
 	})
 
 	it('locks when the lock button is clicked', (done) => {
-		expect(walletComponent.find('.lockscreen')).to.have.length(0)
+		expect(walletComponent.find('LockScreen').find('div').children()).to.have.length(0)
 		walletComponent.find('.lock-button').simulate('click')
 		const poll = setInterval(() => {
+			walletComponent.update()
 			if (walletComponent.find('.lockscreen').length === 1) {
 				clearInterval(poll)
 				done()

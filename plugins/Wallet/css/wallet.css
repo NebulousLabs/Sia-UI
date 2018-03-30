@@ -1,4 +1,4 @@
-/*  Style Guide: 
+/*  Sllet.csstyle Guide: 
  *    Transparent: 70% Opacity
  *    
  *    White:      #FFFFFF
@@ -10,6 +10,11 @@
  *    Black:      #000000
  *    Neon-Green: #00CBA0
  */
+@import url('../../../css/vars.css');
+@import url('./components/balanceinfo.css');
+@import url('./components/wallet.css');
+@import url('./components/lockscreen.css');
+@import url('./components/pagestepper.css');
  .app {
  	position: absolute;
  	top: 0;
@@ -17,88 +22,86 @@
  	left: 0;
  	right: 0;
  }
-.wallet {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: flex-start;
-	height: 100%;
-}
-.balance-info {
-	flex: 1;
-}
 .load-more-button {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
-.lockscreen {
-	z-index: 1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	width: 50%;
-	height: 50%;
-	font-size: 18px;
-	background-color: #ECECEC;
-}
-.lockscreen span {
-	text-align: center;
-}
-.password-prompt {
-	margin-top: 5px;
-	margin-bottom: 8px;
-}
-.password-prompt i {
-	color: #00CBA0;
-}
-.password-prompt {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	width: 100%;
-}
-.password-prompt input {
-	width: 50%;
-	margin-bottom: 5px;
-}
-.transaction-list, .transaction-list table {
+.transaction-list, .transaction-table {
 	width: 100%;
 	text-align: center;
 	overflow-y: auto;
 }
-.transaction-list table td {
+.transaction-list--empty {
+  background: rgba(0, 0, 0, 0.05);
+  pointer-events: none;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.3;
+  user-select: none;
+}
+.transaction-list__empty-logo {
+  margin: 0 auto;
+  width: 200px;
+}
+.transaction-list__empty-logo svg {
+  height: auto;
+  width: 200px;
+}
+.transaction-list__empty-title {
+  font-weight: 400;
+}
+.transaction-table th {
+	background: #f7f7f7;
+	font-weight: 500;
+}
+.transaction-table td,
+.transaction-table th {
+	padding: calc(1.75 * var(--unit));
+	text-align: left;
+}
+.transaction-table th {
+	font-size: 14px;
+}
+.transaction-table td {
 	font-size: 11px;
+}
+.transaction-table tr:hover {
+	background: #ecf4fe;
+}
+.transaction-table td.tx-confirmation-status {
+	text-align: center;
+	width: 40px;
 }
 .txid {
 	font-family: monospace;
 }
-.transaction-list table th {
-	font-size: 14px;
-	text-align: center;
-}
 .transaction-header {
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
 	align-items: center;
-	background-color: #C5C5C5;
 	margin: 0;
 	padding: 10px;
 }
-.transaction-header > h2 {
+.transaction-header > h4 {
 	margin-top: 3px;
 	margin-bottom: 3px;
 }
-.filter-toggle > input {
-	margin-right: 5px;
+.filter-toggle {
+	padding-left: 16px;
+}
+.filter-toggle > label > span {
+	padding-left: 3px;
+	font-size: 16px;
+  vertical-align: bottom;
+  position: relative;
 }
 .unconfirmed-icon {
 	color: #DC0025;
 }
 .confirmed-icon {
-	color: #00CBA0;
+	color: var(--main-color);
 }
 .wallet-address {
 	display: block;
@@ -107,105 +110,22 @@
 	margin-top: 10px;
 	font-size: 11px;
 }
-.receive-prompt {
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	flex-direction: column;
-	width: 700px;
-	height: 400px;
-	background-color: #ECECEC;
-	padding-top: 50px;
-}
 .wallet-toolbar {
 	width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	background-color: #4A4A4A;
+	border-bottom: 1px solid #EDEDED;
 	padding-top: 10px;
 	padding-bottom: 10px;
 	min-height: 60px;
 }
-.balance-info {
-	padding-left: 10px;
-	padding-right: 10px;
-	color: #DDDDDD;
-}
-.balance-info span {
-	display: block;
-	font-size: 15px;
-	margin-bottom: 3px;
-}
 
-@keyframes modal-fadein {
-	from {opacity: 0}
-	to {opacity: 1}
-}
-
-@keyframes modal-popin {
-	from { transform: scale(0.2) }
-	to { transform: scale(1) }
-}
-
-.modal {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: rgba(0, 0, 0, 0.5);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	animation-name: modal-fadein;
-	animation-duration: 0.2s;
-}
-
-.modal > * {
-	animation-name: modal-popin;
-	animation-duration: 0.2s;
-
-	border-radius: 5px;
-}
-
-.sendprompt {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	background-color: #ECECEC;
-	width: 400px;
-	height: 300px;
-}
-
-.backupprompt {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	background-color: #ECECEC;
-	width: 500px;
-	padding: 25px 25px 25px 25px;
-}
-.backupprompt > .ok-button {
-	margin-top: 25px;
-}
-.backupprompt > h3 {
-	margin-top: 0;
-}
 .backupprompt > h4 {
 	margin-bottom: 5px;
 }
 .sendprompt .fee-estimation {
 	margin-top: 6px;
-}
-.sendprompt button {
-	margin-left: 5px;
-	margin-right: 5px;
-	margin-top: 15px;
 }
 .sendamount, .sendaddress { 
 	text-align: center;
@@ -238,30 +158,10 @@
 	margin-top: 2px;
 	margin-bottom: 2px;
 	font-size: 12px;
-	color: #f5f5f5;
+	color: black;
 }
 .wallet-toolbar > .wallet-button > i {
-	color: #00CBA0;
-}
-.newwallet-dialog {
-	position: absolute;
-	top: 0;
-	right: 0;
-	left: 0;
-	bottom: 0;
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	flex-direction: column;
-	background-color: #ECECEC;
-	padding-top: 50px;
-	padding-bottom: 50px;
-	padding-left: 100px;
-	padding-right: 100px;
-	z-index: 10;
-}
-.newwallet-seed, .newwallet-password {
-	font-size: 24px;
+	color: var(--main-color);
 }
 
 .newwallet-password {
@@ -272,16 +172,6 @@
 	background-color: initial;
 }
 
-.confirmation-dialog {
-	display: flex;
-	padding: 10px 10px 10px 10px;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	background-color: #ECECEC;
-	height: 300px;
-	width: 475px;
-}
 .seed-confirmation-form {
 	display: flex;
 	flex-direction: column;
@@ -291,60 +181,84 @@
 	margin-bottom: 3px;
 	width: 300px;
 }
-.confirmation-dialog .confirmation-buttons {
-	margin-top: 5px;
-	text-align: center;
-}
 .seed-confirmation-error {
 	margin-top: 10px;
-}
-.confirmation-dialog .confirmation-buttons button {
-	margin-left: 5px;
-	margin-right: 5px;
 }
 .newwallet-dialog button {
 	margin-top: 20px;
 }
+.confirmation-dialog input {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
 .newwallet-dialog p {
 	font-size: 18px;
 }
-.newwallet-dialog span {
-	display: block;
-	color: #000000;
-}
 .create-wallet-button i {
-	color: #00CBA0;
-}
-.create-wallet-button i:hover {
-	color: #00A785;
+	color: var(--main-color);
 }
 .create-wallet-button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
-	margin-left: 20px;
-	margin-right: 20px;
+	padding: calc(2.5 * var(--unit));
+	margin: calc(var(--unit));
+}
+.create-wallet-button h4 {
+	font-size: 1.2rem;
+	margin: 0;
+	padding-top: var(--unit);
 }
 .new-wallet-form {
+	--padding: calc(3 * var(--unit));
+	--padding-bottom: calc(2.5 * var(--unit));
 	display: flex;
 	width: 75%;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 }
+.confirmation-dialog,
+.newwallet-dialog {
+	--padding: calc(3 * var(--unit));
+	--padding-bottom: calc(2.5 * var(--unit));
+	background: white;
+	border-radius: 2px;
+	display: flex;
+	height: 100%;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	z-index: 10;
+}
+.confirmation-dialog > .dialog,
+.newwallet-dialog > .dialog {
+	--accent-color: white;
+	box-shadow: none;
+}
+.new-wallet-form input {
+	display: block;
+	margin: var(--unit) auto;
+}
 .new-wallet-form p {
-	margin-bottom: 30px;
+	text-align: center;
+	font-size: 0.8em;
 }
 .new-wallet-form h3 {
 	text-align: center;
+	margin: 0;
 }
 .new-wallet-form-buttons {
-	margin-top: 25px;
+	margin-top: var(--unit);
 }
-.new-wallet-form-buttons button {
+.new-wallet-form-buttons .button {
+	display: inline-block;
 	margin-left: 3px;
 	margin-right: 3px;
+	width: auto;
 }
 
 .new-wallet-form input {
@@ -361,17 +275,6 @@
 	flex-direction: column;
 }
 
-.change-password-form {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	background-color: #eee;
-	padding-left: 30px;
-	padding-right: 30px;
-	padding-bottom: 30px;
-	padding-top: 10px
-}
 .change-passowrd-buttons {
 	margin-top: 15px;
 }
@@ -381,36 +284,22 @@
 	margin-top: 10px;
 }
 .change-password-form input {
-	width: 50%;
-	margin-top: 8px;
-	margin-bottom: 8px;
+	display: block;
+	margin: var(--unit) auto;
 	text-indent: 10px;
+	width: 50%;
 }
 
 .change-password-error {
+	color: var(--danger-color);
 	height: 10px;
 	margin-top: 15px;
 	margin-bottom: 15px;
 }
 
-.recovery-form {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	background-color: #eee;
-	padding-left: 30px;
-	padding-right: 30px;
-	padding-bottom: 30px;
-}
-.recovery-form-buttons {
-	margin-top: 15px;
-}
-.recovery-form-buttons button {
-	margin-left: 2px;
-	margin-right: 2px;
-}
 .recovery-form input {
+	display: block;
+	margin: 0 auto;
 	width: 50%;
 }
 .uninitialized-wallet-dialog {
@@ -420,6 +309,9 @@
 }
 .wallet-init-buttons {
 	display: flex;
+}
+.wallet-init-buttons > .button > h3 {
+	margin-bottom: 0;
 }
 .use-passphrase-checkbox {
 	margin-top: 20px;
@@ -459,18 +351,14 @@
 .receiveprompt-dismissbtn {
 	margin-top: 20px;
 }
-.receive-form {
-	width: 80%;
-}
 .receive-form > .receive-form-item {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	height: 25px;
+	margin: var(--unit) 0;
 }
 .receive-form-item > p {
-	margin-left: 5px;
-	margin-right: 5px;
+	margin: 0;
 }
 .receive-buttons {
 	margin-top: 30px;
@@ -480,15 +368,11 @@
 	margin-left: 3px;
 	margin-right: 3px;
 }
-.done-button {
-	position: absolute;
-	bottom: 20px;
-}
 .address-table {
 	display: inline-block;
 	height: 150px;
 	overflow: scroll;
-	width: 90%; 
+	width: 100%;
 }
 .receive-address, .address-description {
 	width: 400px;
@@ -496,19 +380,4 @@
 td {
 	padding-right: 5px;
 	font-size: 15px !important;
-}
-
-button{
-	background-color: #00CAA2;
-	border: 0;
-	color: white;
-	border-radius: 10px;
-	padding: 8px;
-	font-size: 16px;
-	border: 2px solid transparent;
-}
-
-button:hover {
-	background-color: #00BAA2;
-	border: 2px solid gray;
 }

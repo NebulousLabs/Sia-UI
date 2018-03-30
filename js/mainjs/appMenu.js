@@ -26,6 +26,34 @@ export default function(window) {
 				{ label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' },
 			],
 		},
+		{
+			label: 'Developer',
+			submenu: [
+				{
+					label: 'Reload',
+					accelerator: 'CmdOrCtrl+R',
+					click: function(item, focusedWindow) {
+						if (focusedWindow) {
+							focusedWindow.reload()
+						}
+					},
+				}, {
+					label: 'Toggle Developer Tools',
+					accelerator: (function() {
+						if (process.platform ==='darwin') {
+							return 'Alt+Command+I'
+						} else {
+							return 'Ctrl+Shift+I'
+						}
+					})(),
+					click: function(item, focusedWindow) {
+						if (focusedWindow) {
+							focusedWindow.webContents.toggleDevTools()
+						}
+					},
+				},
+			],
+		},
 	]
 
 	return Menu.buildFromTemplate(menutemplate)

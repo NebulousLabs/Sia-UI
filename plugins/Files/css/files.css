@@ -12,6 +12,8 @@
  *	Venetian-Red: #CC0033
  */
 
+@import url('../../../css/vars.css');
+* { box-sizing: initial; }
 .app {
 	position: absolute;
 	top: 0;
@@ -51,7 +53,7 @@ div[tabindex="1"]:focus {
 	outline: 0;
 }
 .selected {
-	border-left: 5px solid #00CBA0;
+	border-left: 5px solid var(--main-color);
 	background-color: #F5F5F5 !important;
 }
 .dragtarget {
@@ -75,7 +77,7 @@ div[tabindex="1"]:focus {
 	margin-top: 10px;
 }
 .file-controls i {
-	color: #00CBA0;
+	color: var(--main-color);
 	cursor: pointer;
 	margin-left: 10px;
 	margin-right: 10px;
@@ -89,7 +91,7 @@ div[tabindex="1"]:focus {
 .file-transfers {
 	width: 400px;
 	height: 100%;
-	box-shadow:inset 0px 0px 0px 1px #00CBA0;
+	box-shadow:inset 0px 0px 0px 1px var(--main-color);
 	overflow-y: auto;
 	overflow-x: hidden;
 	display: flex;
@@ -305,7 +307,7 @@ div[tabindex="1"]:focus {
 	position: absolute;
 	top: 45px;
 	background: #808080;
-	border: 1px solid #00CBA0;
+	border: 1px solid var(--main-color);
 	font-size: 18px;
 	padding: 10px 10px 10px 10px;
 	width: 300px;
@@ -337,7 +339,7 @@ div[tabindex="1"]:focus {
 
 .spending-breakdown:before {
 	border-color: rgba(0, 203, 160, 0);
-	border-bottom-color: #00CBA0;
+	border-bottom-color: var(--main-color);
 	border-width: 30px;
 	margin-left: -30px;
 }
@@ -394,7 +396,7 @@ div[tabindex="1"]:focus {
 	user-select: none;
 }
 .files-toolbar .buttons div i {
-	color: #00CBA0;
+	color: var(--main-color);
 }
 .file-transfers .close-button {
 	position: absolute;
@@ -459,7 +461,7 @@ div[tabindex="1"]:focus {
 	background-color: #F5F5F5;
 }
 .file-list li i {
-	color: #00CBA0;
+	color: var(--main-color);
 	margin-left: 10px;
 	margin-right: 10px;
 }
@@ -480,7 +482,7 @@ div[tabindex="1"]:focus {
 	display: inline-block;
 	width: 80%;
 	height: 25px;
-	border: 2px solid #00CBA0;
+	border: 2px solid var(--main-color);
 }
 .drag-overlay {
 	position: absolute;
@@ -499,7 +501,7 @@ div[tabindex="1"]:focus {
 	text-align: center;
 }
 .drag-overlay i {
-	color: #00CBA0;
+	color: var(--main-color);
 }
 .drag-overlay h3 {
 	margin-top: .2em;
@@ -698,7 +700,7 @@ div[tabindex="1"]:focus {
 	display: flex;
 }
 .file-buttons i {
-	color: #00CBA0;
+	color: var(--main-color);
 }
 .unlock-dialog {
 	width: 100%;
@@ -724,7 +726,7 @@ div[tabindex="1"]:focus {
 	display: inline-block;
 	width: 80%;
 	height: 25px;
-	border: 2px solid #00CBA0;
+	border: 2px solid var(--main-color);
 }
 .rename-form {
 	display: inline-block;

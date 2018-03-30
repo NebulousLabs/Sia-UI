@@ -8,7 +8,7 @@ import { unloadPlugins, loadPlugin, setCurrentPlugin, getOrderedPlugins, getPlug
 const App = remote.app
 const mainWindow = remote.getCurrentWindow()
 const defaultPluginDirectory = Path.join(App.getAppPath(), './plugins')
-const defaultHomePlugin = 'Files'
+const defaultHomePlugin = 'Wallet'
 const config = remote.getGlobal('config')
 window.closeToTray = mainWindow.closeToTray
 
@@ -34,7 +34,18 @@ function init(callback) {
 	const onHomeLoad = () => {
 		setCurrentPlugin(defaultHomePlugin)
 		homePluginView.removeEventListener('dom-ready', onHomeLoad)
-		callback()
+		callback(() => {
+			document
+				.getElementById('sidebar__plugins')
+				.childNodes
+				.forEach((node, i) => {
+					if (node.classList) {
+						// stagger animations
+						node.children[0].style['transition-delay'] = `${i * 25}ms`
+						node.children[0].classList.add('button--in')
+					}
+				})
+		})
 	}
 	// wait for the home plugin to load before calling back
 	homePluginView.addEventListener('dom-ready', onHomeLoad)
@@ -83,32 +94,38 @@ ipcRenderer.on('quit', async () => {
 // other than `undefined` cancels the close.
 let hasClosed = false
 window.onbeforeunload = () => {
-	if (window.closeToTray) {
-		if (mainWindow.isVisible() === false) {
-			mainWindow.restore()
-			shutdown()
+	if (process.env.NODE_ENV === 'production') {
+		if (window.closeToTray) {
+			if (mainWindow.isVisible() === false) {
+				mainWindow.restore()
+				shutdown()
+				return false
+			}
+
+			if (process.platform === 'linux') {
+				// minimize is not supported in all linux WM/DEs, so we hide instead
+				mainWindow.hide()
+			} else {
+				// minimize is supported by both windows and MacOS.
+				mainWindow.minimize()
+			}
+
+			if (process.platform === 'win32' && !hasClosed) {
+				mainWindow.tray.displayBalloon({
+					title: 'Sia-UI information',
+					content: 'Sia is still running.  Right click this tray icon to quit or restore Sia.',
+				})
+				hasClosed = true
+			}
 			return false
 		}
-
-		if (process.platform === 'linux') {
-			// minimize is not supported in all linux WM/DEs, so we hide instead
-			mainWindow.hide()
-		} else {
-			// minimize is supported by both windows and MacOS.
-			mainWindow.minimize()
-		}
-
-		if (process.platform === 'win32' && !hasClosed) {
-			mainWindow.tray.displayBalloon({
-				title: 'Sia-UI information',
-				content: 'Sia is still running.  Right click this tray icon to quit or restore Sia.',
-			})
-			hasClosed = true
-		}
+		shutdown()
 		return false
+	} else {
+		// don't shutdown on dev so we can refresh
+		// TODO: sia should be properly closed
+		return null
 	}
-	shutdown()
-	return false
 }
 
 // Once the main window loads, start the loading process.

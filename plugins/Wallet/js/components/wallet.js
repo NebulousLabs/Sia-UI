@@ -14,27 +14,42 @@ import ChangePasswordDialog from '../containers/changepassworddialog.js'
 import BackupButton from '../containers/backupbutton.js'
 import BackupPrompt from '../containers/backupprompt.js'
 import BalanceInfo from '../containers/balanceinfo.js'
+import Modal from './modal'
 
 const Wallet = ({showBackupPrompt, siafundbalance, showReceivePrompt, showChangePasswordDialog, showSendPrompt, showNewWalletDialog, showRecoveryDialog, actions }) => {
 	const onSendClick = (currencytype) => () => actions.startSendPrompt(currencytype)
 	return (
 		<div className="wallet">
-			<div className="wallet-toolbar">
-				<BalanceInfo />
+			<div className="wallet__actions">
 				<BackupButton />
 				<ChangePasswordButton />
 				<LockButton />
 				<RecoverButton />
+			</div>
+			<div className="wallet-toolbar">
+				<BalanceInfo />
 				{siafundbalance !== '0' ? <SendButton currencytype="Siafund" onClick={onSendClick('siafunds')} />: null}
 				<SendButton currencytype="Siacoin" onClick={onSendClick('siacoins')} />
 				<ReceiveButton />
 			</div>
-			{showNewWalletDialog ? <NewWalletDialog /> : null}
-			{showSendPrompt ? <SendPrompt /> : null}
-			{showReceivePrompt ? <ReceivePrompt /> : null}
-			{showRecoveryDialog ? <RecoveryDialog /> : null}
-			{showChangePasswordDialog ? <ChangePasswordDialog /> : null}
-			{showBackupPrompt ? <BackupPrompt /> : null}
+			<Modal open={showNewWalletDialog}>
+				<NewWalletDialog />
+			</Modal>
+			<Modal open={showSendPrompt}>
+				<SendPrompt />
+			</Modal>
+			<Modal open={showReceivePrompt}>
+				<ReceivePrompt />
+			</Modal>
+			<Modal open={showRecoveryDialog}>
+				<RecoveryDialog />
+			</Modal>
+			<Modal open={showChangePasswordDialog}>
+				<ChangePasswordDialog />
+			</Modal>
+			<Modal open={showBackupPrompt}>
+				<BackupPrompt />
+			</Modal>
 			<TransactionList />
 		</div>
 	)

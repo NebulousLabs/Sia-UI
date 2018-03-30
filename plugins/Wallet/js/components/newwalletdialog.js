@@ -1,23 +1,40 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import ConfirmationDialog from '../containers/confirmationdialog.js'
+import PageStepper from './PageStepper'
 
 const NewWalletDialog = ({password, seed, showConfirmationDialog, actions}) => {
 	const handleDismissClick = () => actions.showConfirmationDialog()
 	return (
-		<div className="newwallet-dialog">
+		<PageStepper>
+			{!showConfirmationDialog && (
+				<div className="newwallet-dialog">
+					<div className="dialog">
+						<h2 className="dialog__title">
+							Congratulations, your wallet has been created!
+						</h2>
+						<div className="dialog__content">
+							<p className="dialog__content-text"> Please write down the seed and password in a safe place.  If you forget your password, you won't be able to access your wallet. </p>
+							<h4> Seed: </h4>
+							<div className="newwallet-seed">
+								{seed}
+							</div>
+							<h4> Password: </h4>
+							<div className="newwallet-password">
+								{password}
+							</div>
+						</div>
+						<button
+							className="newwallet-dismiss button"
+							onClick={handleDismissClick}
+						>
+							I have written these down in a safe place
+						</button>
+					</div>
+				</div>
+			)}
 			{showConfirmationDialog ? <ConfirmationDialog /> : null}
-			<p> You have created a new wallet!  Please write down the seed and password in a safe place.  If you forget your password, you won't be able to access your wallet. </p>
-			<h2> Seed: </h2>
-			<span className="newwallet-seed">
-				{seed}
-			</span>
-			<h2> Password: </h2>
-			<span className="newwallet-password">
-				{password}
-			</span>
-			<button className="newwallet-dismiss" onClick={handleDismissClick}> I have written these down in a safe place </button>
-		</div>
+		</PageStepper>
 	)
 }
 

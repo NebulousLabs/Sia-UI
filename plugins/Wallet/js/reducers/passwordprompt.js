@@ -10,7 +10,9 @@ const initialState = Map({
 export default function passwordpromptReducer(state = initialState, action) {
 	switch (action.type) {
 	case constants.HANDLE_PASSWORD_CHANGE:
-		return state.set('password', action.password)
+		return state
+						.set('password', action.password)
+						.set('error')
 	case WALLET_UNLOCK_ERROR:
 		return state.set('error', action.err)
 	default:

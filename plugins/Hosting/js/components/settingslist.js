@@ -34,7 +34,7 @@ const SettingsList = ({ conversionRate, acceptingContracts, usersettings, defaul
 			</div>
 			<div className="pure-u-1-2">
 				<div className="value">
-					<input type="number" data-setting={key} onChange={handleSettingInput} className="value" value={setting.get('value')} />
+					<input type="number" data-setting={key} onChange={handleSettingInput} className="input" value={setting.get('value')} />
 				</div>
 			</div>
 			<div className={'error pure-u-1-1' + ( setting.get('value') <= Number(setting.get('min') || 0)  || isNaN(setting.get('value')) ? '' : ' hidden' )}>
@@ -66,9 +66,14 @@ const SettingsList = ({ conversionRate, acceptingContracts, usersettings, defaul
 				</div>
 				<div className="pure-u-1-2">
 					<div className="value">
-						<div className={'toggle-switch' + (acceptingContracts ? '' : ' off')} onClick={showToggleAcceptingModal}>
-							<div className="toggle-inner" />
-						</div>
+						<label className="toggle-switch">
+							<input
+								type="checkbox"
+								checked={Boolean(acceptingContracts)}
+								onClick={showToggleAcceptingModal}
+							/>
+							<span className="toggle-switch__inner" />
+						</label>
 					</div>
 				</div>
 			</div>
@@ -83,22 +88,38 @@ const SettingsList = ({ conversionRate, acceptingContracts, usersettings, defaul
 				</div>
 			</div>
 
-			{
-				shouldShowToggleAcceptingModal && acceptingContracts ?
-					<Modal title="Stop accepting contracts?"
-						message="You must still keep Sia-UI open until the existing contracts have expired otherwise you will lose collateral."
-						actions={{ acceptModal: toggleAcceptingContracts, declineModal: hideToggleAcceptingModal  }}
-					/>
-					: null
-			}
-			{
-				shouldShowToggleAcceptingModal && !acceptingContracts ?
-					<Modal title="Start accepting contracts?"
-						message="To host files you must keep the Sia-UI open. Collateral will also be locked and you will be unable to spend that SC until the contract is expired."
-						actions={{ acceptModal: toggleAcceptingContracts, declineModal: hideToggleAcceptingModal  }}
-					/>
-					: null
-			}
+			<Modal
+				title="Stop accepting contracts?"
+				message="You must still keep Sia-UI open until the existing contracts have expired otherwise you will lose collateral."
+				open={
+					shouldShowToggleAcceptingModal && acceptingContracts
+				}
+				actions={{ acceptModal: toggleAcceptingContracts, declineModal: hideToggleAcceptingModal  }}
+				renderActions={({ handleAccept, handleDecline }) => (
+					<React.Fragment>
+						<input
+							className="button button--mute button--tertiary cancel"
+							type="button"
+							value="Cancel"
+							onClick={handleDecline}
+						/>
+						<input
+							className="button button--primary button--danger accept"
+							type="button"
+							value="Stop Accepting Contracts"
+							onClick={handleAccept}
+						/>
+					</React.Fragment>
+				)}
+			/>
+			<Modal
+				title="Start accepting contracts?"
+				message="To host files you must keep the Sia-UI open. Collateral will also be locked and you will be unable to spend that SC until the contract is expired."
+				actions={{ acceptModal: toggleAcceptingContracts, declineModal: hideToggleAcceptingModal  }}
+				open={
+					shouldShowToggleAcceptingModal && !acceptingContracts
+				}
+			/>
 		</div>
 	)
 }

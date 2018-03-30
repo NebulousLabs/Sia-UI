@@ -15,22 +15,22 @@ const ReceivePrompt = ({addresses, address, description, actions}) => {
 		actions.saveAddress({ description: description, address: address })
 	}
 	return (
-		<div className="modal">
-			<div className="receive-prompt">
-				<div className="receive-form">
-					<div className="receive-form-item">
-						<p> Receiving Address </p>
-						<input className="receive-address" value={address} readOnly />
-					</div>
-					<div className="receive-form-item">
-						<p> Description </p>
-						<input className="address-description" onChange={handleDescriptionChange} value={description} />
-					</div>
+		<div className="dialog receive-prompt">
+			<div className="dialog__content receive-form">
+				<div className="receive-form-item">
+					<p> Receiving Address </p>
+					<input className="input receive-address" value={address} readOnly />
+				</div>
+				<div className="receive-form-item">
+					<p> Description </p>
+					<input className="input address-description" onChange={handleDescriptionChange} value={description} />
 				</div>
 				<div className="receive-buttons">
-					<button className="save-address-button" onClick={handleSaveClick}>Save</button>
-					<button className="new-address-button" onClick={handleGenerateClick}>New</button>
+					<button className="save-address-button button button--primary" onClick={handleSaveClick}>Save</button>
+					<button className="new-address-button button button--primary" onClick={handleGenerateClick}>New</button>
 				</div>
+			</div>
+			<div className="dialog__content">
 				<h3> Prior Addresses </h3>
 				{ addresses.size > 0 ? (
 					<table className="pure-table address-table">
@@ -47,7 +47,7 @@ const ReceivePrompt = ({addresses, address, description, actions}) => {
 					</table>
 				) : ( <p> No prior addresses </p>)
 				}
-				<button className="done-button" onClick={handleDismissClick}>Done</button>
+				<button className="done-button button button--primary" onClick={handleDismissClick}>Done</button>
 			</div>
 		</div>
 	)

@@ -1,12 +1,17 @@
+/* eslint-disable react/no-danger */
 import PropTypes from 'prop-types'
 import React from 'react'
 import { List } from 'immutable'
+import CoinIcon from '../../../../assets/siaLogoOnboarding.svg'
 
 const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 	if (transactions.size === 0) {
 		return (
-			<div className="transaction-list">
-				<h3> No recent transactions </h3>
+			<div className="transaction-list transaction-list--empty">
+				<div className="transaction-list__empty-logo">
+					<span><CoinIcon /></span>
+				</div>
+				<h2 className="transaction-list__empty-title"> No recent transactions </h2>
 			</div>
 		)
 	}
@@ -69,6 +74,11 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 			}
 			return (
 				<tr key={key}>
+					<td className="tx-confirmation-status">
+						{txn.confirmed
+							? <i className="fa fa-check-square confirmed-icon" />
+							: <i className="fa fa-clock-o unconfirmed-icon" />}
+					</td>
 					<td>
 						{txn.confirmed
 							? prettyTimestamp(txn.confirmationtimestamp)
@@ -76,11 +86,6 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 					</td>
 					<td>{valueData}</td>
 					<td className="txid">{txn.transactionid}</td>
-					<td>
-						{txn.confirmed
-							? <i className="fa fa-check-square confirmed-icon"> Confirmed </i>
-							: <i className="fa fa-clock-o unconfirmed-icon"> Unconfirmed </i>}
-					</td>
 				</tr>
 			)
 		})
@@ -89,18 +94,26 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 	return (
 		<div className="transaction-list">
 			<div className="transaction-header">
-				<h2> Recent Transactions </h2>
+				<h2>Recent Transactions </h2>
 				<div className="filter-toggle">
-					<input type="checkbox" onClick={onToggleFilter} checked={filter} />Hide 0SC Transactions
+					<label htmlFor="hide-small-transactions">
+						<input
+							id="hide-small-transactions"
+							type="checkbox"
+							onClick={onToggleFilter}
+							checked={filter}
+						/>
+						<span>Hide 0 SC Transactions</span>
+					</label>
 				</div>
 			</div>
-			<table className="pure-table transaction-table">
+			<table className="transaction-table">
 				<thead>
 					<tr>
+						<th />
 						<th>Date</th>
 						<th>Net Value</th>
 						<th>Transaction ID</th>
-						<th>Confirmation Status</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -109,7 +122,7 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 			</table>
 			{transactions.size > ntransactions
 				? <div className="load-more">
-					<button className="load-more-button" onClick={onMoreClick}>
+					<button className="button load-more-button" onClick={onMoreClick}>
 						More Transactions
 					</button>
 				</div>

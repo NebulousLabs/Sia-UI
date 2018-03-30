@@ -1,0 +1,73 @@
+#sidebar {
+	position: relative;
+	background: #F3F4F5;
+	box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
+	width: var(--sidebar-width);
+	z-index: 5;
+	height: 100%;
+
+	-webkit-box-sizing:border-box;
+	border-left: 0 solid #F5F5F5;
+}
+
+.button {
+	display: flex;
+	flex-direction: column;
+	font-size: 16px;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	font-size: 12px;
+	height: var(--sidebar-width);
+	overflow: hidden;
+
+	transform: translateX(-100%);
+	transition:
+		all .25s,
+		transform var(--duration-in) var(--opacity-transition);
+	-webkit-animation: fadein .4s;
+	-webkit-box-sizing:border-box;
+
+	color: #606060;
+}
+.button > icon {
+	opacity: 0.5;
+}
+.button--in {
+	transform: translateX(0);
+}
+.button:hover {
+	cursor: pointer;
+	background-color: rgba(0, 0, 0, 0.05);
+}
+.button:active {
+	background-color: ;
+}
+.button::before {
+	background-color: var(--main-color);
+	content: "";
+	position: absolute;
+	pointer-events: none;
+	left: 0;
+	height: 80px;
+	width: 3px;
+	transform: translateX(-100%);
+	transition: transform 195ms var(--opacity-transition);
+}
+.button.current::before {
+	transform: translateX(0);
+}
+.button.current {
+	cursor: default;
+	transition: all .25s;
+}
+.button.current > icon {
+	opacity: 1;
+}
+.button .icon {
+	width: 14px;
+}
+.button .text {
+	letter-spacing: 0;
+	padding-top: 8px;
+}

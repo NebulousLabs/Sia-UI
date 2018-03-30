@@ -12,9 +12,9 @@ export default class CommandHistoryList extends React.Component {
 			(command) => command.get('command') === 'help' || command.get('command') === '?'
 		).map((command, key) => (
 			<li key={key}>
-				<h3>{command.get('command')}
+				<p>$ {command.get('command')}
 					<i className={'fa fa-cog fa-spin ' + ( command.get('stat') === 'running' ? '' : 'hide')} />
-				</h3>
+				</p>
 				<p>{command.get('result')}</p>
 			</li>
 	   	))
@@ -23,6 +23,9 @@ export default class CommandHistoryList extends React.Component {
 			<div className="command-history-list" ref={(c) => this._commandHistoryList = c}>
 				<ul>
 					{CommandHistoryComponents}
+					<li>
+						<p>$ <span className="command-history-list__cursor" /></p>
+					</li>
 				</ul>
 			</div>
 		)

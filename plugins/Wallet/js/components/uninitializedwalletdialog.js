@@ -30,18 +30,30 @@ const UninitializedWalletDialog = ({initializingSeed, useCustomPassphrase, showI
 	return (
 		<div className="uninitialized-wallet-dialog">
 			<div className="wallet-init-buttons">
-				<div onClick={handleCreateWalletClick} className="create-wallet-button">
+				<button
+					className="create-wallet-button button"
+					onClick={handleCreateWalletClick}
+				>
 					<i className="fa fa-plus-circle fa-4x" />
-					<h3> Create a new wallet </h3>
-				</div>
-				<div className="create-wallet-button">
-					<i className="fa fa-key fa-4x" onClick={handleCreateWalletFromSeedClick} />
-					<h3> Load a wallet from a seed </h3>
-				</div>
+					<h4> Create a new Sia wallet </h4>
+				</button>
+				<button
+					className="create-wallet-button button"
+					onClick={handleCreateWalletFromSeedClick}
+				>
+					<i className="fa fa-key fa-4x" />
+					<h4> Recover wallet from seed </h4>
+				</button>
 			</div>
 			<div className="use-passphrase-checkbox">
-				<input type="checkbox" checked={useCustomPassphrase} onChange={handleCustomPasswordClick} />
-				<span> Use custom passphrase </span>
+				<label>
+					<input
+						type="checkbox"
+						checked={useCustomPassphrase}
+						onChange={handleCustomPasswordClick}
+					/>
+					<span> Use custom passphrase</span>
+				</label>
 			</div>
 		</div>
 	)

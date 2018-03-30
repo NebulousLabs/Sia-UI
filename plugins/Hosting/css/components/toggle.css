@@ -1,0 +1,53 @@
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  height: calc(3 * var(--unit));
+  width: calc(5 * var(--unit));
+}
+
+/* Hide default HTML checkbox */
+.toggle-switch input {display:none;}
+
+/* The slider */
+.toggle-switch__inner {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 225ms;
+}
+
+.toggle-switch__inner:before {
+  position: absolute;
+  content: "";
+  height: calc(2.5 * var(--unit));
+  width: calc(2.5 * var(--unit));
+  top: 2px;
+  left: 2px;
+  background-color: white;
+  transition: 225ms;
+}
+
+input:checked + .toggle-switch__inner {
+  background-color: var(--main-color);
+}
+
+input:focus + .toggle-switch__inner {
+  box-shadow: 0 0 1px var(--main-color);
+}
+
+input:checked + .toggle-switch__inner:before {
+  transform: translateX(calc(2 * var(--unit)));
+}
+
+/* Rounded toggle-switch__inner */
+.toggle-switch__inner {
+  border-radius: 25px;
+}
+
+.toggle-switch__inner:before {
+  border-radius: 50%;
+}

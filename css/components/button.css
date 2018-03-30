@@ -1,0 +1,83 @@
+.button {
+	--text-color: black;
+}
+
+.button {
+	background-color: white;
+	border-radius: calc(0.5 * var(--unit));
+	border: 1px solid #ECF0F1;
+	box-sizing: border-box;
+	color: var(--text-color);
+	font-weight: 400;
+	line-height: 1.4em;
+	margin-bottom: 10px;
+	outline: none;
+	padding-bottom: var(--unit);
+	padding-left: calc(2 * var(--unit));
+	padding-right: calc(2 * var(--unit));
+	padding-top: var(--unit);
+	transition:
+		background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+		border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+	-webkit-user-select: none;
+}
+
+.button:focus, .button:hover:not([disabled]) {
+	border-color: var(--main-color);
+	cursor: pointer;
+}
+
+.button--danger {
+	--main-color: var(--danger-color);
+	--light-main-color: var(--light-danger-color);
+	--dark-main-color: var(--dark-danger-color);
+}
+
+.button--mute {
+	--main-color: black;
+}
+
+.button--primary {
+	background-color: var(--main-color);
+	border-color: var(--main-color);
+	color: white;
+}
+
+.button--primary:focus {
+	background-color: var(--light-main-color);
+	border-color: var(--light-main-color);
+}
+
+.button--primary:hover:not([disabled]) {
+	background-color: var(--dark-main-color);
+	border-color: var(--dark-main-color);
+}
+
+.button:disabled,
+.button[disabled] {
+	background-color: #e0e0e0;
+	border-color: #e0e0e0;
+	border: 3px solid #e0e0e0;
+	color: rgba(0, 0, 0, 0.26);
+}
+
+.button--tertiary {
+	--text-color: var(--main-color);
+	border: 0;
+	background-color: transparent;
+}
+
+.button--tertiary:hover,
+.button--tertiary:focus {
+	border: 0;
+	text-decoration: underline;
+}
+
+.button h1,
+.button h2,
+.button h3,
+.button h4,
+.button h5,
+.button h6 {
+	font-weight: 300;
+}
