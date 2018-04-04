@@ -34,7 +34,7 @@ The plugin directory should now be:
 ```diff
  Sia-UI/plugins/Overview/
  └── assets/
-     └── button.png
+     └── button.svg
 ```
 
 The Overview uses the 'bars' [font awesome icon in png form](http://fa2png.io/).
@@ -99,7 +99,7 @@ The plugin directory should now be:
  Sia-UI/plugins/Overview/
 +├── index.html
  └── assets/
-     └── button.png
+     └── button.svg
 ```
 Loading up Sia-UI again, we'll see: ![Impressive plugin ain't it?](/doc/assets/basic-overview.png)
 
@@ -296,7 +296,7 @@ The plugin directory should reflect our css files:
  Sia-UI/plugins/Overview/
  ├── index.html
  ├── assets/
- │   └── button.png
+ │   └── button.svg
 +└── css/
 +    └── overview.css
 ```
@@ -572,7 +572,7 @@ function stop() {
  Sia-UI/plugins/Overview/
  ├── index.html
  ├── assets/
- │   └── button.png
+ │   └── button.svg
  ├── css/
  │   └── overview.css
 +└── js/

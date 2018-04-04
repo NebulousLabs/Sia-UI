@@ -15,6 +15,15 @@
 	display: none;
 }
 
+@font-face {
+	font-family: Montserrat-Regular;
+	src: url('../assets/Montserrat-Regular.ttf');
+}
+@font-face {
+	font-family: Montserrat-Medium;
+	src: url('../assets/Montserrat-Medium.ttf');
+}
+
 html,body {
 	position: relative;
 
@@ -50,12 +59,12 @@ html,body {
 	height: 80px;
 	width: 100%;
 
-	background-color: #313133;
-	background: linear-gradient(to left, #313133 15%, #0b0e16 85%);
+	background-color: #191919;
 }
 .logo {
-	padding-left: 20px;
-	padding-top: 14px;
+	padding-left: 53px;
+	padding-top: 22px;
+	height: 35px;
 	pointer-events: none;
 }
 .logo-container:hover {
@@ -108,32 +117,32 @@ html,body {
 #sidebar {
 	position: relative;
 
-	background-color: #D5D3D5;
-	width: 160px;
+	background-color: #212121;
+	width: 180px;
 	z-index: 5;
 	height: 100%;
 
 	-webkit-box-sizing:border-box;
 	border-left: 0 solid #F5F5F5;
-	border-right: 1px solid #B5B5B5;
 }
 .button {
 	display: flex;
 	font-size: 16px;
 	align-items: center;
 	position: relative;
-	height: 60px;
+	height: 63px;
 
 	transition: all .25s;
 	-webkit-animation: fadein .4s;
 	-webkit-box-sizing:border-box;
 
-	color: #606060;
+	color: #999999;
+	padding-left: 20px;
 }
 .button:hover {
 	cursor: pointer;
-	background-color: #C5C3C5;
-	color: #F5F5F5;
+	background-color: #333333;
+	color: #ffffff;
 }
 .button:active {
 	background-color: ;
@@ -141,11 +150,13 @@ html,body {
 .button.current {
 	transition: all .25s;
 	cursor: default;
-	background-color: #00CBA0;
-	color: #F5F5F5;
-}
-.button.current .icon, .button:hover .icon {
-	-webkit-filter: invert(100%);
+	background-color: #333333;
+	color: #ffffff;
+	background-position: left;
+	background-origin: padding-box;
+	background-size: 3px 63px;
+	background-repeat: no-repeat;
+	background-image: url('../assets/selectionbar.svg');
 }
 @keyframes fadeout {
 	from { opacity: default; }
@@ -156,12 +167,15 @@ html,body {
 	to   { opacity: default; }
 }
 .button .icon {
-	max-height: 30%;
-	padding-left: 16px;
+	padding-left: 10px;
+	width: 18px;
+	height: 18px;
 }
 .button .text {
 	padding: 4px;
 	padding-left: 8px;
+	text-transform: uppercase;
+	font-family: "Montserrat-Medium";
 }
 
 /* Mainbar */
@@ -179,7 +193,7 @@ html,body {
 .webview {
 	position: absolute;
 	height: 100%;
-	min-width: calc(100% - 160px);
+	min-width: calc(100% - 180px);
 	right: 0;
 	opacity: 0;
 	z-index: -1;
@@ -298,4 +312,19 @@ html,body {
 }
 .centered p {
 	margin: 0;
+}
+.bottom-logo {
+	position: absolute;
+	bottom: 25px;
+	width: 180px;
+	z-index: 5;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.bottom-logo > img {
+	width: 40px;
+}
+.bottom-logo > p {
+	color: #333333;
 }
