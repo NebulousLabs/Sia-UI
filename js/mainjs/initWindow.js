@@ -1,16 +1,8 @@
-import {
-	Menu,
-	BrowserWindow,
-	Tray,
-	app
-} from 'electron'
+import { Menu, BrowserWindow, Tray, app } from 'electron'
 import appMenu from './appMenu.js'
 import appTray from './trayMenu.js'
 import Path from 'path'
-import {
-	version,
-	releaseName
-} from '../../package.json'
+import { version, releaseName } from '../../package.json'
 
 // Save window position and bounds every time the window is moved or resized.
 const onBoundsChange = (mainWindow, config) => () => {
@@ -22,12 +14,12 @@ const onBoundsChange = (mainWindow, config) => () => {
 
 // Main process logic partitioned to other files
 // Creates the window and loads index.html
-export default function (config) {
+export default function(config) {
 	// Create the browser
 	const iconPath = Path.join(__dirname, '../', 'assets', 'icon.png')
 	const mainWindow = new BrowserWindow({
 		icon: iconPath,
-		title: 'Sia-UI'
+		title: 'Sia-UI',
 	})
 	// Set mainWindow's closeToTray flag from config.
 	// This should be used in the renderer to cancel close() events using window.onbeforeunload
@@ -64,7 +56,7 @@ export default function (config) {
 			applicationName: 'Sia-UI',
 			applicationVersion: version,
 			copyright: 'Nebulous Inc.',
-			version: releaseName
+			version: releaseName,
 		})
 	}
 	return mainWindow
