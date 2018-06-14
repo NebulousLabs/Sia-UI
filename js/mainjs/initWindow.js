@@ -18,14 +18,22 @@ export default function(config) {
 	// Create the browser
 	const iconPath = Path.join(__dirname, '../', 'assets', 'icon.png')
 	const mainWindow = new BrowserWindow({
-		icon:   iconPath,
-		title:  'Sia-UI',
+		icon: iconPath,
+		title: 'Sia-UI',
 	})
 	// Set mainWindow's closeToTray flag from config.
 	// This should be used in the renderer to cancel close() events using window.onbeforeunload
 	mainWindow.closeToTray = config.closeToTray
 
-	mainWindow.tray = new Tray(Path.join(app.getAppPath(), 'assets', 'tray.png'))
+	if (process.platform === 'win32') {
+		mainWindow.tray = new Tray(
+			Path.join(app.getAppPath(), 'assets', 'trayWin.png')
+		)
+	} else {
+		mainWindow.tray = new Tray(
+			Path.join(app.getAppPath(), 'assets', 'tray.png')
+		)
+	}
 	mainWindow.tray.setToolTip('Sia - The Collaborative Cloud.')
 	mainWindow.tray.setContextMenu(appTray(mainWindow))
 
