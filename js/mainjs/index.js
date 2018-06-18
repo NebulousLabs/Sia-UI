@@ -10,6 +10,10 @@ let mainWindow
 // disable hardware accelerated rendering
 app.disableHardwareAcceleration()
 
+// Fixes Chrome bug to render correct colors:
+// https://github.com/electron/electron/issues/10732
+app.commandLine.appendSwitch('force-color-profile', 'srgb')
+
 // Allow only one instance of Sia-UI
 const shouldQuit = app.makeSingleInstance(() => {
 	if (mainWindow) {
