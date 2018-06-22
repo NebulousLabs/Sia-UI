@@ -8,7 +8,7 @@ const UploadButton = ({contracts = minimumContracts, actions}) => {
 		if (contracts < minimumContracts) {
 			SiaAPI.showError({
 				title: 'Sia-UI files error',
-				content: 'Not enough contracts to upload.  You must buy storage before uploading, or wait for contracts to form.',
+				content: 'Not enough contracts to upload. A minimum of 12 contracts is required. You must buy storage before uploading, or wait for contracts to form.',
 			})
 			return
 		}
