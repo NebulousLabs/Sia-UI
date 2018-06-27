@@ -3,11 +3,12 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { showBackupPrompt } from '../actions/wallet.js'
 
-const mapStateToProps = () => ({
-})
+const mapStateToProps = () => ({})
 const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ showBackupPrompt }, dispatch),
 })
 
-const BackupButton = connect(mapStateToProps, mapDispatchToProps)(BackupButtonView)
+const BackupButton = connect(mapStateToProps, mapDispatchToProps)(
+	BackupButtonView
+)
 export default BackupButton

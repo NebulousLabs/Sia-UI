@@ -10,5 +10,7 @@ const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ showUploadDialog }, dispatch),
 })
 
-const UploadButton = connect(mapStateToProps, mapDispatchToProps)(UploadButtonView)
+const UploadButton = connect(mapStateToProps, mapDispatchToProps)(
+	UploadButtonView
+)
 export default UploadButton

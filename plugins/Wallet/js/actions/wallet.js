@@ -35,7 +35,12 @@ export const createNewWallet = (password, seed) => ({
 export const getBalance = () => ({
 	type: constants.GET_BALANCE,
 })
-export const setBalance = (confirmed, unconfirmed, siafunds, siacoinclaimbalance) => ({
+export const setBalance = (
+	confirmed,
+	unconfirmed,
+	siafunds,
+	siacoinclaimbalance
+) => ({
 	type: constants.SET_BALANCE,
 	confirmed,
 	unconfirmed,
@@ -211,4 +216,3 @@ export const setAddressDescription = (description) => ({
 	type: constants.SET_ADDRESS_DESCRIPTION,
 	description,
 })
-

@@ -30,7 +30,10 @@ export default class LogView extends React.Component {
 			this.props.actions.incrementLogSize()
 			this._logView.scrollTop = 1
 		}
-		if (this._logView.scrollTop === this._logView.scrollHeight - this._logView.clientHeight) {
+		if (
+			this._logView.scrollTop ===
+			this._logView.scrollHeight - this._logView.clientHeight
+		) {
 			this.props.actions.setNotScrolling()
 		} else {
 			this.props.actions.setScrolling()
@@ -38,7 +41,7 @@ export default class LogView extends React.Component {
 	}
 	render() {
 		return (
-			<div style={logViewStyle} ref={(lv) => this._logView = lv}>
+			<div style={logViewStyle} ref={(lv) => (this._logView = lv)}>
 				{this.props.logText}
 			</div>
 		)
@@ -49,4 +52,3 @@ LogView.propTypes = {
 	logText: PropTypes.string.isRequired,
 	scrolling: PropTypes.bool.isRequired,
 }
-

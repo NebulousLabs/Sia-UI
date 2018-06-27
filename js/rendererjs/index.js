@@ -3,7 +3,13 @@ import Path from 'path'
 import * as Siad from 'sia.js'
 import loadingScreen from './loadingScreen.js'
 import { remote, ipcRenderer } from 'electron'
-import { unloadPlugins, loadPlugin, setCurrentPlugin, getOrderedPlugins, getPluginName } from './plugins.js'
+import {
+	unloadPlugins,
+	loadPlugin,
+	setCurrentPlugin,
+	getOrderedPlugins,
+	getPluginName,
+} from './plugins.js'
 
 const App = remote.app
 const mainWindow = remote.getCurrentWindow()
@@ -45,7 +51,9 @@ const shutdown = async () => {
 	unloadPlugins()
 
 	const overlay = document.getElementsByClassName('overlay')[0]
-	const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByTagName('p')[0]
+	const overlayText = overlay
+		.getElementsByClassName('centered')[0]
+		.getElementsByTagName('p')[0]
 	const siadConfig = config.attr('siad')
 
 	overlay.style.display = 'inline-flex'
@@ -101,7 +109,8 @@ window.onbeforeunload = () => {
 		if (process.platform === 'win32' && !hasClosed) {
 			mainWindow.tray.displayBalloon({
 				title: 'Sia-UI information',
-				content: 'Sia is still running.  Right click this tray icon to quit or restore Sia.',
+				content:
+					'Sia is still running.  Right click this tray icon to quit or restore Sia.',
 			})
 			hasClosed = true
 		}
@@ -115,4 +124,3 @@ window.onbeforeunload = () => {
 window.onload = function() {
 	loadingScreen(init)
 }
-

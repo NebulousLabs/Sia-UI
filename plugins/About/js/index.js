@@ -29,7 +29,10 @@ function updateCheck() {
 			SiaAPI.showError('Error', err.toString())
 		} else if (result.available) {
 			document.getElementById('newversion').innerHTML = result.version
-			document.getElementById('downloadlink').href = genDownloadLink(result.version, platform())
+			document.getElementById('downloadlink').href = genDownloadLink(
+				result.version,
+				platform()
+			)
 			document.getElementById('nonew').style.display = 'none'
 			document.getElementById('yesnew').style.display = 'block'
 		} else {

@@ -1,9 +1,20 @@
 import CommandInputView from '../components/commandinput.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { addCommand, updateCommand, endCommand, loadPrevCommand, loadNextCommand,
-	setCurrentCommand, showWalletPrompt, showSeedPrompt, hideSeedPrompt,  hideWalletPrompt,
-	showCommandOverview, hideCommandOverview } from '../actions/commandline.js'
+import {
+	addCommand,
+	updateCommand,
+	endCommand,
+	loadPrevCommand,
+	loadNextCommand,
+	setCurrentCommand,
+	showWalletPrompt,
+	showSeedPrompt,
+	hideSeedPrompt,
+	hideWalletPrompt,
+	showCommandOverview,
+	hideCommandOverview,
+} from '../actions/commandline.js'
 
 const mapStateToProps = (state) => ({
 	currentCommand: state.commandLineReducer.get('currentCommand'),
@@ -16,11 +27,26 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ addCommand, updateCommand, endCommand,
-		loadPrevCommand, loadNextCommand, setCurrentCommand,
-		showWalletPrompt, hideWalletPrompt, showSeedPrompt, hideSeedPrompt, showCommandOverview,
-		hideCommandOverview }, dispatch),
+	actions: bindActionCreators(
+		{
+			addCommand,
+			updateCommand,
+			endCommand,
+			loadPrevCommand,
+			loadNextCommand,
+			setCurrentCommand,
+			showWalletPrompt,
+			hideWalletPrompt,
+			showSeedPrompt,
+			hideSeedPrompt,
+			showCommandOverview,
+			hideCommandOverview,
+		},
+		dispatch
+	),
 })
 
-const CommandInput = connect(mapStateToProps, mapDispatchToProps)(CommandInputView)
+const CommandInput = connect(mapStateToProps, mapDispatchToProps)(
+	CommandInputView
+)
 export default CommandInput

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-const SearchField = ({searchText, path, actions}) => {
+const SearchField = ({ searchText, path, actions }) => {
 	const onSearchChange = (e) => actions.setSearchText(e.target.value, path)
 	return (
 		<div className="search-field">

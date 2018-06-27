@@ -10,5 +10,7 @@ const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ hideRenameDialog, renameFile }, dispatch),
 })
 
-const RenameDialog = connect(mapStateToProps, mapDispatchToProps)(RenameDialogView)
+const RenameDialog = connect(mapStateToProps, mapDispatchToProps)(
+	RenameDialogView
+)
 export default RenameDialog

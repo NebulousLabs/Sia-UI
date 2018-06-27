@@ -13,5 +13,7 @@ const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ hideResizeDialog, updateModal }, dispatch),
 })
 
-const ResizeDialog = connect(mapStateToProps, mapDispatchToProps)(ResizeDialogView)
+const ResizeDialog = connect(mapStateToProps, mapDispatchToProps)(
+	ResizeDialogView
+)
 export default ResizeDialog

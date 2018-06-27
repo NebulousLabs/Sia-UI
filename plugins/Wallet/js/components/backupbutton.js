@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BackupButton = ({actions}) => {
+const BackupButton = ({ actions }) => {
 	const handleClick = () => actions.showBackupPrompt()
 	return (
 		<div onClick={handleClick} className="wallet-button backup-button">

@@ -14,21 +14,21 @@ const initialState = Map({
 
 export default function settingsReducer(state = initialState, action) {
 	switch (action.type) {
-	case constants.UPDATE_SETTINGS:
-		return state.merge(action.settings)
-		            .set('settingsChanged', true)
-	case constants.PUSH_SETTINGS:
-		return state.set('defaultsettings', action.settings)
-		            .set('settingsChanged', false)
-	case constants.RECEIVE_DEFAULT_SETTINGS:
-		return state.set('defaultsettings', action.settings)
-		            .merge(action.settings)
-	case constants.FETCH_DATA_SUCCESS:
-		return state.get('settingsChanged') ? state : state.merge(action.settings)
-	case constants.SET_ESTIMATED_SCORE:
-		return state.set('conversionRate', action.conversionRate)
-	default:
-		return state
+		case constants.UPDATE_SETTINGS:
+			return state.merge(action.settings).set('settingsChanged', true)
+		case constants.PUSH_SETTINGS:
+			return state
+				.set('defaultsettings', action.settings)
+				.set('settingsChanged', false)
+		case constants.RECEIVE_DEFAULT_SETTINGS:
+			return state
+				.set('defaultsettings', action.settings)
+				.merge(action.settings)
+		case constants.FETCH_DATA_SUCCESS:
+			return state.get('settingsChanged') ? state : state.merge(action.settings)
+		case constants.SET_ESTIMATED_SCORE:
+			return state.set('conversionRate', action.conversionRate)
+		default:
+			return state
 	}
 }
-

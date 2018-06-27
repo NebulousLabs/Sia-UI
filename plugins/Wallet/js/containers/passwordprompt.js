@@ -12,5 +12,7 @@ const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ handlePasswordChange, unlockWallet }, dispatch),
 })
 
-const PasswordPrompt = connect(mapStateToProps, mapDispatchToProps)(PasswordPromptView)
+const PasswordPrompt = connect(mapStateToProps, mapDispatchToProps)(
+	PasswordPromptView
+)
 export default PasswordPrompt

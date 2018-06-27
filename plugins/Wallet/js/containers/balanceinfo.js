@@ -8,8 +8,9 @@ const mapStateToProps = (state) => ({
 	siafundbalance: state.wallet.get('siafundbalance'),
 	siacoinclaimbalance: state.wallet.get('siacoinclaimbalance'),
 })
-const mapDispatchToProps = () => ({
-})
+const mapDispatchToProps = () => ({})
 
-const BalanceInfo = connect(mapStateToProps, mapDispatchToProps)(BalanceInfoView)
+const BalanceInfo = connect(mapStateToProps, mapDispatchToProps)(
+	BalanceInfoView
+)
 export default BalanceInfo

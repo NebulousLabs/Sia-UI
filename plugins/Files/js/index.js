@@ -9,10 +9,7 @@ import App from './containers/app.js'
 import { fetchData } from './actions/files.js'
 
 const sagaMiddleware = createSagaMiddleware()
-const store = createStore(
-	rootReducer,
-	applyMiddleware(sagaMiddleware)
-)
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
 sagaMiddleware.run(rootSaga)
 
 const rootElement = (
@@ -26,4 +23,3 @@ ReactDOM.render(rootElement, document.getElementById('react-root'))
 window.onfocus = () => {
 	store.dispatch(fetchData())
 }
-

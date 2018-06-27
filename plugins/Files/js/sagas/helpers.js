@@ -6,7 +6,7 @@ import * as actions from '../actions/files.js'
 
 export const blockMonth = 4320
 export const allowanceMonths = 3
-export const allowancePeriod = blockMonth*allowanceMonths
+export const allowancePeriod = blockMonth * allowanceMonths
 export const ncontracts = 24
 export const baseRedundancy = 6
 export const baseFee = 240
@@ -22,15 +22,16 @@ export const sendError = (e) => {
 
 // siadCall: promisify Siad API calls.  Resolve the promise with `response` if the call was successful,
 // otherwise reject the promise with `err`.
-export const siadCall = (uri) => new Promise((resolve, reject) => {
-	SiaAPI.call(uri, (err, response) => {
-		if (err) {
-			reject(err)
-		} else {
-			resolve(response)
-		}
+export const siadCall = (uri) =>
+	new Promise((resolve, reject) => {
+		SiaAPI.call(uri, (err, response) => {
+			if (err) {
+				reject(err)
+			} else {
+				resolve(response)
+			}
+		})
 	})
-})
 
 // Take a number of bytes and return a sane, human-readable size.
 export const readableFilesize = (bytes) => {
@@ -90,11 +91,12 @@ const directoriesFirst = (file1, file2) => {
 	return 0
 }
 
-
 // return a list of files filtered with path.
 // ... it's ls.
 export const ls = (files, path) => {
-	const fileList = files.filter((file) => file.siapath.includes(path) && file.siapath !== path)
+	const fileList = files.filter(
+		(file) => file.siapath.includes(path) && file.siapath !== path
+	)
 	let parsedFiles = Map()
 	fileList.forEach((file) => {
 		let type = 'file'
@@ -118,8 +120,13 @@ export const ls = (files, path) => {
 			}
 
 			siapath = Path.posix.join(path, filename) + '/'
-			const subfiles = files.filter((subfile) => subfile.siapath.includes(siapath))
-			const totalFilesize = subfiles.reduce((sum, subfile) => sum + subfile.filesize, 0)
+			const subfiles = files.filter((subfile) =>
+				subfile.siapath.includes(siapath)
+			)
+			const totalFilesize = subfiles.reduce(
+				(sum, subfile) => sum + subfile.filesize,
+				0
+			)
 			filesize = readableFilesize(totalFilesize)
 			if (!file.siaUIFolder) {
 				redundancy = minRedundancy(subfiles)
@@ -139,7 +146,10 @@ export const ls = (files, path) => {
 			type,
 		})
 	})
-	return parsedFiles.toList().sortBy((file) => file.name).sort(directoriesFirst)
+	return parsedFiles
+		.toList()
+		.sortBy((file) => file.name)
+		.sort(directoriesFirst)
 }
 
 // recursive version of readdir
@@ -169,7 +179,11 @@ export const readdirRecursive = (path, files) => {
 export const uploadDirectory = (directory, files, destpath) =>
 	files.map((file) => {
 		const relativePath = Path.dirname(file.substring(directory.length + 1))
-		const siapath = Path.posix.join(destpath, Path.basename(directory), relativePath)
+		const siapath = Path.posix.join(
+			destpath,
+			Path.basename(directory),
+			relativePath
+		)
 		return actions.uploadFile(siapath, file)
 	})
 
@@ -188,7 +202,7 @@ export const parseDownloads = (downloads) =>
 			name: Path.basename(download.siapath),
 			bytestransferred: download.received,
 			totalbytes: download.filesize,
-			progress: Math.floor((download.received / download.filesize) * 100),
+			progress: Math.floor(download.received / download.filesize * 100),
 			destination: download.destination,
 			type: 'download',
 			starttime: download.starttime,
@@ -207,8 +221,12 @@ export const buildTransferTimes = (previousTransferTimes, transfers) => {
 		const previousTransferTime = previousTransferTimes.get(transfer.siapath)
 		if (previousTransferTime) {
 			return map.set(transfer.siapath, {
-				timestamps: previousTransferTime.timestamps.concat(Date.now()).slice(-lookbackCount),
-				bytes: previousTransferTime.bytes.concat(transfer.bytestransferred).slice(-lookbackCount),
+				timestamps: previousTransferTime.timestamps
+					.concat(Date.now())
+					.slice(-lookbackCount),
+				bytes: previousTransferTime.bytes
+					.concat(transfer.bytestransferred)
+					.slice(-lookbackCount),
 			})
 		}
 		return map.set(transfer.siapath, {
@@ -225,11 +243,12 @@ const calculateSpeed = (transferTime) => {
 	if (bytes.length < 2) {
 		return 'initializing'
 	}
-	const windowBytes = bytes[bytes.length-1] - bytes[0]
+	const windowBytes = bytes[bytes.length - 1] - bytes[0]
 	if (windowBytes === 0) {
 		return 'stalled'
 	}
-	const windowSeconds = (timestamps[timestamps.length-1] - timestamps[0]) / 1000
+	const windowSeconds =
+		(timestamps[timestamps.length - 1] - timestamps[0]) / 1000
 	const speed = windowBytes / windowSeconds
 	const readableSize = readableFilesize(speed)
 	const readableSpeed = readableSize + '/s'
@@ -249,7 +268,8 @@ export const addTransferSpeeds = (untimedTransfers, transferTimes) =>
 	})
 
 // Parse a list of files and return the total filesize
-export const totalUsage = (files) => readableFilesize(files.reduce((sum, file) => sum + file.filesize, 0))
+export const totalUsage = (files) =>
+	readableFilesize(files.reduce((sum, file) => sum + file.filesize, 0))
 
 // Parse a list of files from `/renter/files`
 // return a list of file uploads
@@ -275,8 +295,8 @@ export const parseUploads = (files) =>
 // Search `files` for `text`, excluding directories not in `path`
 export const searchFiles = (files, text, path) => {
 	const filteredFiles = List(files)
-	  .filter((file) => file.siapath.indexOf(path) === 0 && file.siapath !== path)
-	  .filter((file) => file.siapath.toLowerCase().includes(text.toLowerCase()))
+		.filter((file) => file.siapath.indexOf(path) === 0 && file.siapath !== path)
+		.filter((file) => file.siapath.toLowerCase().includes(text.toLowerCase()))
 
 	let parsedFiles = Map()
 	filteredFiles.forEach((file) => {
@@ -284,12 +304,18 @@ export const searchFiles = (files, text, path) => {
 		let name = Path.posix.basename(file.siapath)
 		let siapath = file.siapath
 		const pathComponents = file.siapath.split('/')
-		if (!Path.posix.basename(file.siapath).toLowerCase().includes(text.toLowerCase()) || file.siaUIFolder) {
+		if (
+			!Path.posix
+				.basename(file.siapath)
+				.toLowerCase()
+				.includes(text.toLowerCase()) ||
+			file.siaUIFolder
+		) {
 			type = 'directory'
 			pathComponents.forEach((component, idx) => {
 				if (component.toLowerCase().includes(text.toLowerCase())) {
 					name = component
-					siapath = pathComponents.slice(0, idx+1).join('/') + '/'
+					siapath = pathComponents.slice(0, idx + 1).join('/') + '/'
 				}
 			})
 		}
@@ -310,16 +336,20 @@ export const searchFiles = (files, text, path) => {
 // between the last selected file and the clicked `file`.
 export const rangeSelect = (file, files, selectedFiles) => {
 	const siapaths = files.map((f) => f.siapath)
-	const selectedSiapaths = selectedFiles.map((selectedfile) => selectedfile.siapath)
+	const selectedSiapaths = selectedFiles.map(
+		(selectedfile) => selectedfile.siapath
+	)
 
 	const endSelectionIndex = siapaths.indexOf(file.siapath)
 	const startSelectionIndex = siapaths.indexOf(selectedSiapaths.first())
 	if (startSelectionIndex > endSelectionIndex) {
-		return files.slice(endSelectionIndex, startSelectionIndex + 1).toOrderedSet().reverse()
+		return files
+			.slice(endSelectionIndex, startSelectionIndex + 1)
+			.toOrderedSet()
+			.reverse()
 	}
 	return files.slice(startSelectionIndex, endSelectionIndex + 1).toOrderedSet()
 }
-
 
 // allFiles returns all the files in the state, including Sia-UI folders
 export const allFiles = (state) => state.get('files').concat(state.get('folders'))

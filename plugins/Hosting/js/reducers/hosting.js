@@ -16,12 +16,13 @@ const initialState = Map({
 
 export default function hostingReducer(state = initialState, action) {
 	switch (action.type) {
-	case constants.SET_HOST_STATUS:
-		return state.set('workingstatus', action.working)
-		            .set('connectabilitystatus', action.connectable)
-	case constants.FETCH_DATA_SUCCESS:
-		return state.merge(action.data)
-	default:
-		return state
+		case constants.SET_HOST_STATUS:
+			return state
+				.set('workingstatus', action.working)
+				.set('connectabilitystatus', action.connectable)
+		case constants.FETCH_DATA_SUCCESS:
+			return state.merge(action.data)
+		default:
+			return state
 	}
 }

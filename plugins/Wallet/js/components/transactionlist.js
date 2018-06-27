@@ -41,7 +41,11 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 			if (!filter) {
 				return true
 			}
-			return txn.transactionsums.totalSiacoin.abs().gt(0) || txn.transactionsums.totalSiafund.abs().gt(0) || txn.transactionsums.totalMiner.abs().gt(0)
+			return (
+				txn.transactionsums.totalSiacoin.abs().gt(0) ||
+				txn.transactionsums.totalSiafund.abs().gt(0) ||
+				txn.transactionsums.totalMiner.abs().gt(0)
+			)
 		})
 		.map((txn, key) => {
 			let valueData = ''
@@ -61,8 +65,10 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 			}
 			if (txn.transactionsums.totalMiner.abs().gt(0)) {
 				valueData +=
-					txn.transactionsums.totalMiner.round(4).toNumber().toLocaleString() +
-					' SC (miner) '
+					txn.transactionsums.totalMiner
+						.round(4)
+						.toNumber()
+						.toLocaleString() + ' SC (miner) '
 			}
 			if (valueData === '') {
 				valueData = '0 SC'
@@ -77,9 +83,11 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 					<td>{valueData}</td>
 					<td className="txid">{txn.transactionid}</td>
 					<td>
-						{txn.confirmed
-							? <i className="fa fa-check-square confirmed-icon"> Confirmed </i>
-							: <i className="fa fa-clock-o unconfirmed-icon"> Unconfirmed </i>}
+						{txn.confirmed ? (
+							<i className="fa fa-check-square confirmed-icon"> Confirmed </i>
+						) : (
+							<i className="fa fa-clock-o unconfirmed-icon"> Unconfirmed </i>
+						)}
 					</td>
 				</tr>
 			)
@@ -91,7 +99,8 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 			<div className="transaction-header">
 				<h2> Recent Transactions </h2>
 				<div className="filter-toggle">
-					<input type="checkbox" onClick={onToggleFilter} checked={filter} />Hide 0SC Transactions
+					<input type="checkbox" onClick={onToggleFilter} checked={filter} />Hide
+					0SC Transactions
 				</div>
 			</div>
 			<table className="pure-table transaction-table">
@@ -103,17 +112,15 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
 						<th>Confirmation Status</th>
 					</tr>
 				</thead>
-				<tbody>
-					{transactionComponents}
-				</tbody>
+				<tbody>{transactionComponents}</tbody>
 			</table>
-			{transactions.size > ntransactions
-				? <div className="load-more">
+			{transactions.size > ntransactions ? (
+				<div className="load-more">
 					<button className="load-more-button" onClick={onMoreClick}>
 						More Transactions
 					</button>
 				</div>
-				: null}
+			) : null}
 		</div>
 	)
 }

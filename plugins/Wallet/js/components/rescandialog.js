@@ -8,4 +8,3 @@ const RescanDialog = () => (
 )
 
 export default RescanDialog
-

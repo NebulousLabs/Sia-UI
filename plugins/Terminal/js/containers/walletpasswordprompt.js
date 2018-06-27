@@ -1,7 +1,15 @@
 import WalletPasswordPromptView from '../components/walletpasswordprompt.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { addCommand, updateCommand, endCommand, setWalletPassword, hideWalletPrompt, showSeedPrompt, hideCommandOverview } from '../actions/commandline.js'
+import {
+	addCommand,
+	updateCommand,
+	endCommand,
+	setWalletPassword,
+	hideWalletPrompt,
+	showSeedPrompt,
+	hideCommandOverview,
+} from '../actions/commandline.js'
 
 const mapStateToProps = (state) => ({
 	showWalletPrompt: state.commandLineReducer.get('showWalletPrompt'),
@@ -11,8 +19,21 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ addCommand, updateCommand, endCommand, setWalletPassword, hideWalletPrompt, showSeedPrompt, hideCommandOverview }, dispatch),
+	actions: bindActionCreators(
+		{
+			addCommand,
+			updateCommand,
+			endCommand,
+			setWalletPassword,
+			hideWalletPrompt,
+			showSeedPrompt,
+			hideCommandOverview,
+		},
+		dispatch
+	),
 })
 
-const WalletPasswordPrompt = connect(mapStateToProps, mapDispatchToProps)(WalletPasswordPromptView)
+const WalletPasswordPrompt = connect(mapStateToProps, mapDispatchToProps)(
+	WalletPasswordPromptView
+)
 export default WalletPasswordPrompt

@@ -8,36 +8,47 @@ import BigNumber from 'bignumber.js'
 
 // siadCall: promisify Siad API calls.  Resolve the promise with `response` if the call was successful,
 // otherwise reject the promise with `err`.
-const siadCall = (uri) => new Promise((resolve, reject) => {
-	SiaAPI.call(uri, (err, response) => {
-		if (err) {
-			reject(err)
-		} else {
-			resolve(response)
-		}
+const siadCall = (uri) =>
+	new Promise((resolve, reject) => {
+		SiaAPI.call(uri, (err, response) => {
+			if (err) {
+				reject(err)
+			} else {
+				resolve(response)
+			}
+		})
 	})
-})
 
-const fetchStorageFiles = () => new Promise((resolve, reject) => {
-	siadCall({
-		url: '/host/storage',
-		method: 'GET',
-	}).then((fetchedFiles) => {
-		resolve(List((fetchedFiles.folders || []).map((file) => (
-			Map({
-				path: file.path,
-				size: (new BigNumber(file.capacity)).times('1e-9').toString(),
-				free: (new BigNumber(file.capacityremaining)).times('1e-9').toString(),
+const fetchStorageFiles = () =>
+	new Promise((resolve, reject) => {
+		siadCall({
+			url: '/host/storage',
+			method: 'GET',
+		})
+			.then((fetchedFiles) => {
+				resolve(
+					List(
+						(fetchedFiles.folders || []).map((file) =>
+							Map({
+								path: file.path,
+								size: new BigNumber(file.capacity).times('1e-9').toString(),
+								free: new BigNumber(file.capacityremaining)
+									.times('1e-9')
+									.toString(),
+							})
+						)
+					)
+				)
 			})
-		))))
-	}).catch(reject)
-})
+			.catch(reject)
+	})
 
-function *announceHost(action) {
+function * announceHost(action) {
 	try {
-		yield put( actions.showAnnounceDialog(action.address) )
-		const closeAction = yield take( constants.HIDE_ANNOUNCE_DIALOG )
-		if (closeAction.address !== '') { //If size is zero just hide the dialog.
+		yield put(actions.showAnnounceDialog(action.address))
+		const closeAction = yield take(constants.HIDE_ANNOUNCE_DIALOG)
+		if (closeAction.address !== '') {
+			// If size is zero just hide the dialog.
 			yield siadCall({
 				url: '/host/announce',
 				timeout: 30000, // 30 second timeout for host announcement
@@ -55,7 +66,9 @@ function *announceHost(action) {
 const bytesToStorageBytes = async (bytes) => {
 	const settings = await siadCall('/host')
 
-	const roundedBytes = bytes.minus(bytes.modulo(64 * settings.externalsettings.sectorsize))
+	const roundedBytes = bytes.minus(
+		bytes.modulo(64 * settings.externalsettings.sectorsize)
+	)
 	if (roundedBytes.isNegative()) {
 		return '0'
 	}
@@ -63,7 +76,7 @@ const bytesToStorageBytes = async (bytes) => {
 	return roundedBytes.toString()
 }
 
-function *addFolder(action) {
+function * addFolder(action) {
 	try {
 		yield siadCall({
 			url: '/host/storage/folders/add',
@@ -74,25 +87,31 @@ function *addFolder(action) {
 				size: action.folder.get('size'), // bytes
 			},
 		})
-		yield put( actions.fetchData() )
+		yield put(actions.fetchData())
 	} catch (e) {
 		SiaAPI.showError({ title: 'Error Adding Folder', content: e.message })
 	}
 }
 
-function *addFolderAskPathSize() {
+function * addFolderAskPathSize() {
 	const newLocation = helper.chooseFileLocation()
 	if (newLocation) {
 		try {
-			yield put( actions.showResizeDialog(Map({ path: newLocation, size: 50 }), true) )
-			const closeAction = yield take( constants.HIDE_RESIZE_DIALOG )
+			yield put(
+				actions.showResizeDialog(Map({ path: newLocation, size: 50 }), true)
+			)
+			const closeAction = yield take(constants.HIDE_RESIZE_DIALOG)
 			const bytes = new BigNumber(closeAction.folder.get('size')).times(1e9)
 			const roundedBytes = yield bytesToStorageBytes(bytes)
 			if (closeAction.folder.get('size')) {
-				yield put( actions.addFolder(Map({
-					path: newLocation,
-					size: roundedBytes,
-				})) )
+				yield put(
+					actions.addFolder(
+						Map({
+							path: newLocation,
+							size: roundedBytes,
+						})
+					)
+				)
 			}
 		} catch (e) {
 			SiaAPI.showError({ title: 'Error Adding Folder', content: e.message })
@@ -100,7 +119,7 @@ function *addFolderAskPathSize() {
 	}
 }
 
-function *removeFolder(action) {
+function * removeFolder(action) {
 	try {
 		yield siadCall({
 			url: '/host/storage/folders/remove',
@@ -110,19 +129,20 @@ function *removeFolder(action) {
 				path: action.folder.get('path'),
 			},
 		})
-		yield put( actions.fetchData() )
+		yield put(actions.fetchData())
 	} catch (e) {
 		SiaAPI.showError({ title: 'Error Removing Folder', content: e.message })
 	}
 }
 
-function *resizeFolder(action) {
+function * resizeFolder(action) {
 	try {
-		yield put( actions.showResizeDialog(action.folder, action.ignoreInitial) )
-		const closeAction = yield take( constants.HIDE_RESIZE_DIALOG )
+		yield put(actions.showResizeDialog(action.folder, action.ignoreInitial))
+		const closeAction = yield take(constants.HIDE_RESIZE_DIALOG)
 		const bytes = new BigNumber(closeAction.folder.get('size')).times(1e9)
 		const roundedBytes = yield bytesToStorageBytes(bytes)
-		if (closeAction.folder.get('size')) { //If size is zero just hide the dialog.
+		if (closeAction.folder.get('size')) {
+			// If size is zero just hide the dialog.
 			yield siadCall({
 				url: '/host/storage/folders/resize',
 				timeout: 1.7e8, // two day timeout for resizing storage folders
@@ -132,50 +152,68 @@ function *resizeFolder(action) {
 					newsize: roundedBytes,
 				},
 			})
-			yield put( actions.fetchData() )
+			yield put(actions.fetchData())
 		}
 	} catch (e) {
 		SiaAPI.showError({ title: 'Error Resizing Folder', content: e.message })
 	}
 }
 
-function *pushSettings(action) {
+function * pushSettings(action) {
 	try {
 		yield siadCall({
 			url: '/host',
 			method: 'POST',
 			qs: {
-				'acceptingcontracts': action.settings.get('acceptingContracts'),
-				'maxduration': helper.weeksToBlocks(action.settings.get('maxduration')).toString(),
-				'collateral':
-					helper.SCTBMonthToHastingsByteBlock(action.settings.get('collateral')).toString(),
-				'minstorageprice':
-					helper.SCTBMonthToHastingsByteBlock(action.settings.get('storageprice')).toString(), //bytes->TB, blocks -> month
-				'mindownloadbandwidthprice':
-					helper.SCTBToHastingsByte(action.settings.get('downloadbandwidthprice')).toString(),
+				acceptingcontracts: action.settings.get('acceptingContracts'),
+				maxduration: helper
+					.weeksToBlocks(action.settings.get('maxduration'))
+					.toString(),
+				collateral: helper
+					.SCTBMonthToHastingsByteBlock(action.settings.get('collateral'))
+					.toString(),
+				minstorageprice: helper
+					.SCTBMonthToHastingsByteBlock(action.settings.get('storageprice'))
+					.toString(), // bytes->TB, blocks -> month
+				mindownloadbandwidthprice: helper
+					.SCTBToHastingsByte(action.settings.get('downloadbandwidthprice'))
+					.toString(),
 			},
 		})
-		yield put( actions.fetchData() )
+		yield put(actions.fetchData())
 	} catch (e) {
 		SiaAPI.showError({ title: 'Error Updating Settings', content: e.message })
 	}
 }
 
-const parseSettings = (hostData) => Map({
-	maxduration: helper.blocksToWeeks(hostData.externalsettings.maxduration).toFixed(0),
-	collateral: helper.hastingsByteBlockToSCTBMonth(hostData.externalsettings.collateral).toFixed(0),
-	storageprice: helper.hastingsByteBlockToSCTBMonth(hostData.externalsettings.storageprice).toFixed(0),
-	downloadbandwidthprice: helper.hastingsByteToSCTB(hostData.externalsettings.downloadbandwidthprice).toString(),
-	acceptingContracts: hostData.externalsettings.acceptingcontracts,
-})
+const parseSettings = (hostData) =>
+	Map({
+		maxduration: helper
+			.blocksToWeeks(hostData.externalsettings.maxduration)
+			.toFixed(0),
+		collateral: helper
+			.hastingsByteBlockToSCTBMonth(hostData.externalsettings.collateral)
+			.toFixed(0),
+		storageprice: helper
+			.hastingsByteBlockToSCTBMonth(hostData.externalsettings.storageprice)
+			.toFixed(0),
+		downloadbandwidthprice: helper
+			.hastingsByteToSCTB(hostData.externalsettings.downloadbandwidthprice)
+			.toString(),
+		acceptingContracts: hostData.externalsettings.acceptingcontracts,
+	})
 
 // parseExpectedRevenue takes a host's `financialmetrics` object and returns
 // the sum total expected revenue from contract compensation, storage revenue,
 // and bandwidth revenue.
 const parseExpectedRevenue = (financialmetrics) => {
 	const storagerevenue = new BigNumber(financialmetrics.potentialstoragerevenue)
-	const bwrevenue = new BigNumber(financialmetrics.potentialdownloadbandwidthrevenue).add(financialmetrics.potentialuploadbandwidthrevenue)
-	const contractrevenue = new BigNumber(financialmetrics.potentialcontractcompensation)
+	const bwrevenue = new BigNumber(
+		financialmetrics.potentialdownloadbandwidthrevenue
+	).add(financialmetrics.potentialuploadbandwidthrevenue)
+	const contractrevenue = new BigNumber(
+		financialmetrics.potentialcontractcompensation
+	)
 	return storagerevenue.add(bwrevenue).add(contractrevenue)
 }
 
@@ -183,23 +221,33 @@ const parseExpectedRevenue = (financialmetrics) => {
 // total earned revenue.
 const parseRevenue = (financialmetrics) => {
 	const storagerevenue = new BigNumber(financialmetrics.storagerevenue)
-	const bwrevenue = new BigNumber(financialmetrics.downloadbandwidthrevenue).add(financialmetrics.uploadbandwidthrevenue)
+	const bwrevenue = new BigNumber(
+		financialmetrics.downloadbandwidthrevenue
+	).add(financialmetrics.uploadbandwidthrevenue)
 	const contractrevenue = new BigNumber(financialmetrics.contractcompensation)
 	return storagerevenue.add(bwrevenue).add(contractrevenue)
 }
 
 // updateSettingsSaga watches for updateSettings actions and performs any async
 // tasks required.
-function *updateSettingsSaga(action) {
+function * updateSettingsSaga(action) {
 	try {
 		const res = yield siadCall({
 			url: '/host/estimatescore',
 			method: 'GET',
 			qs: {
-				'maxduration': helper.weeksToBlocks(action.settings.get('maxduration')).toString(),
-				'collateral': helper.SCTBMonthToHastingsByteBlock(action.settings.get('collateral')).toString(),
-				'minstorageprice': helper.SCTBMonthToHastingsByteBlock(action.settings.get('storageprice')).toString(),
-				'mindownloadbandwidthprice': helper.SCTBToHastingsByte(action.settings.get('downloadbandwidthprice')).toString(),
+				maxduration: helper
+					.weeksToBlocks(action.settings.get('maxduration'))
+					.toString(),
+				collateral: helper
+					.SCTBMonthToHastingsByteBlock(action.settings.get('collateral'))
+					.toString(),
+				minstorageprice: helper
+					.SCTBMonthToHastingsByteBlock(action.settings.get('storageprice'))
+					.toString(),
+				mindownloadbandwidthprice: helper
+					.SCTBToHastingsByte(action.settings.get('downloadbandwidthprice'))
+					.toString(),
 			},
 		})
 		const conversionRate = (() => {
@@ -215,16 +263,26 @@ function *updateSettingsSaga(action) {
 	}
 }
 
-function *fetchData() {
+function * fetchData() {
 	try {
 		const updatedData = yield siadCall({ url: '/host' })
 		const walletUnlocked = yield siadCall({ url: '/wallet' })
 
 		const data = Map({
 			numContracts: updatedData.financialmetrics.contractcount,
-			storage: (new BigNumber(updatedData.externalsettings.totalstorage)).minus(new BigNumber(updatedData.externalsettings.remainingstorage)).toString(),
-			earned: SiaAPI.hastingsToSiacoins(parseRevenue(updatedData.financialmetrics)).round(2).toString(),
-			expected: SiaAPI.hastingsToSiacoins(parseExpectedRevenue(updatedData.financialmetrics)).round(2).toString(),
+			storage: new BigNumber(updatedData.externalsettings.totalstorage)
+				.minus(new BigNumber(updatedData.externalsettings.remainingstorage))
+				.toString(),
+			earned: SiaAPI.hastingsToSiacoins(
+				parseRevenue(updatedData.financialmetrics)
+			)
+				.round(2)
+				.toString(),
+			expected: SiaAPI.hastingsToSiacoins(
+				parseExpectedRevenue(updatedData.financialmetrics)
+			)
+				.round(2)
+				.toString(),
 			files: yield fetchStorageFiles(),
 			walletLocked: !walletUnlocked.unlocked,
 			walletsize: walletUnlocked.confirmedsiacoinbalance,
@@ -242,7 +300,7 @@ function *fetchData() {
 	}
 }
 
-function *requestDefaultSettingsSaga() {
+function * requestDefaultSettingsSaga() {
 	try {
 		const hostData = yield siadCall('/host')
 		yield put(actions.receiveDefaultSettings(parseSettings(hostData)))
@@ -250,7 +308,12 @@ function *requestDefaultSettingsSaga() {
 			url: '/host/estimatescore',
 			method: 'GET',
 		})
-		yield put(actions.setEstimatedScore(res.estimatedscore, new BigNumber(res.conversionrate).round(2).toString()))
+		yield put(
+			actions.setEstimatedScore(
+				res.estimatedscore,
+				new BigNumber(res.conversionrate).round(2).toString()
+			)
+		)
 	} catch (e) {
 		console.error('error fetching defaults: ' + e.toString())
 	}
@@ -258,47 +321,55 @@ function *requestDefaultSettingsSaga() {
 
 // hostStatusSaga pulls the host's connectability and working status from the
 // api and sets the UI's state accordingly.
-function *hostStatusSaga() {
+function * hostStatusSaga() {
 	try {
 		const hostData = yield siadCall('/host')
-		yield put(actions.setHostStatus(hostData.connectabilitystatus, hostData.workingstatus))
+		yield put(
+			actions.setHostStatus(
+				hostData.connectabilitystatus,
+				hostData.workingstatus
+			)
+		)
 	} catch (e) {
 		console.error('error fetching host status: ' + e.toString())
 	}
 }
 
-function *pushSettingsListener() {
-	yield *takeEvery(constants.PUSH_SETTINGS, pushSettings)
+function * pushSettingsListener() {
+	yield * takeEvery(constants.PUSH_SETTINGS, pushSettings)
 }
-function *fetchSettingsListener() {
-	yield *takeEvery(constants.FETCH_DATA, fetchData)
+function * fetchSettingsListener() {
+	yield * takeEvery(constants.FETCH_DATA, fetchData)
 }
-function *addFolderListener() {
-	yield *takeEvery(constants.ADD_FOLDER, addFolder)
+function * addFolderListener() {
+	yield * takeEvery(constants.ADD_FOLDER, addFolder)
 }
-function *addFolderAskListener() {
-	yield *takeEvery(constants.ADD_FOLDER_ASK, addFolderAskPathSize)
+function * addFolderAskListener() {
+	yield * takeEvery(constants.ADD_FOLDER_ASK, addFolderAskPathSize)
 }
-function *removeFolderListener() {
-	yield *takeEvery(constants.REMOVE_FOLDER, removeFolder)
+function * removeFolderListener() {
+	yield * takeEvery(constants.REMOVE_FOLDER, removeFolder)
 }
-function *resizeFolderListener() {
-	yield *takeEvery(constants.RESIZE_FOLDER, resizeFolder)
+function * resizeFolderListener() {
+	yield * takeEvery(constants.RESIZE_FOLDER, resizeFolder)
 }
-function *announceHostListener() {
-	yield *takeEvery(constants.ANNOUNCE_HOST, announceHost)
+function * announceHostListener() {
+	yield * takeEvery(constants.ANNOUNCE_HOST, announceHost)
 }
-function *requestDefaultsListener() {
-	yield *takeEvery(constants.REQUEST_DEFAULT_SETTINGS, requestDefaultSettingsSaga)
+function * requestDefaultsListener() {
+	yield * takeEvery(
+		constants.REQUEST_DEFAULT_SETTINGS,
+		requestDefaultSettingsSaga
+	)
 }
-function *hostStatusListener() {
-	yield *takeEvery(constants.GET_HOST_STATUS, hostStatusSaga)
+function * hostStatusListener() {
+	yield * takeEvery(constants.GET_HOST_STATUS, hostStatusSaga)
 }
-function *updateSettingsListener() {
-	yield *takeEvery(constants.UPDATE_SETTINGS, updateSettingsSaga)
+function * updateSettingsListener() {
+	yield * takeEvery(constants.UPDATE_SETTINGS, updateSettingsSaga)
 }
 
-export default function *initSaga() {
+export default function * initSaga() {
 	yield [
 		fork(pushSettingsListener),
 		fork(fetchSettingsListener),
@@ -312,4 +383,3 @@ export default function *initSaga() {
 		fork(updateSettingsListener),
 	]
 }
-

@@ -8,22 +8,32 @@ export default class CommandHistoryList extends React.Component {
 	}
 
 	render() {
-		const CommandHistoryComponents = this.props.commandHistory.filterNot(
-			(command) => command.get('command') === 'help' || command.get('command') === '?'
-		).map((command, key) => (
-			<li key={key}>
-				<h3>{command.get('command')}
-					<i className={'fa fa-cog fa-spin ' + ( command.get('stat') === 'running' ? '' : 'hide')} />
-				</h3>
-				<p>{command.get('result')}</p>
-			</li>
-	   	))
+		const CommandHistoryComponents = this.props.commandHistory
+			.filterNot(
+				(command) =>
+					command.get('command') === 'help' || command.get('command') === '?'
+			)
+			.map((command, key) => (
+				<li key={key}>
+					<h3>
+						{command.get('command')}
+						<i
+							className={
+								'fa fa-cog fa-spin ' +
+								(command.get('stat') === 'running' ? '' : 'hide')
+							}
+						/>
+					</h3>
+					<p>{command.get('result')}</p>
+				</li>
+			))
 
 		return (
-			<div className="command-history-list" ref={(c) => this._commandHistoryList = c}>
-				<ul>
-					{CommandHistoryComponents}
-				</ul>
+			<div
+				className="command-history-list"
+				ref={(c) => (this._commandHistoryList = c)}
+			>
+				<ul>{CommandHistoryComponents}</ul>
 			</div>
 		)
 	}

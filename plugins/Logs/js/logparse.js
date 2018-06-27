@@ -6,7 +6,8 @@ const siadir = SiaAPI.config.siad.datadir
 const fileSize = (logpath) => fs.statSync(logpath).size
 
 // cleanLog removes partial lines.
-export const cleanLog = (logtext) => logtext.slice(logtext.indexOf('\n') + 1, logtext.lastIndexOf('\n') + 1)
+export const cleanLog = (logtext) =>
+	logtext.slice(logtext.indexOf('\n') + 1, logtext.lastIndexOf('\n') + 1)
 
 // readLog takes a log path and returns a string representing the log data.
 export const readLog = (logpath, nbytes) => {
@@ -30,8 +31,12 @@ export const readLog = (logpath, nbytes) => {
 // matchingLogs takes an array of filename filters and returns an array of logs
 // matching the filters.
 const matchingLogs = (namefilters, datadir) =>
-	readdirRecursive(datadir)
-		.filter((file) => namefilters.reduce((matches, filtername) => matches || file.includes(filtername), false))
+	readdirRecursive(datadir).filter((file) =>
+		namefilters.reduce(
+			(matches, filtername) => matches || file.includes(filtername),
+			false
+		)
+	)
 
 // parseLogs takes a sia directory and an array of log name filters to match,
 // and returns a concatenated, sorted log string composed of every log that
@@ -42,7 +47,11 @@ export const parseLogs = (datadir, nbytes, namefilters = ['.log']) => {
 
 	// only sort lines if more than one logfile is matched
 	if (logFiles.size > 1) {
-		return unsortedLogLines.join('').split('\n').sort().join('\n')
+		return unsortedLogLines
+			.join('')
+			.split('\n')
+			.sort()
+			.join('\n')
 	}
 
 	return unsortedLogLines.join('')
@@ -51,13 +60,18 @@ export const parseLogs = (datadir, nbytes, namefilters = ['.log']) => {
 // updateLogFilters updates the log plugin's state using the set of filters
 // passed in to `filters`.
 export const updateLogFilters = (state, size, filters) =>
-	state.set('logFilters', filters)
-	     .set('logSize', size)
-	     .set('logText', parseLogs(siadir, size, filters))
+	state
+		.set('logFilters', filters)
+		.set('logSize', size)
+		.set('logText', parseLogs(siadir, size, filters))
 
 // addLogFilters adds an array of filters.
 export const addLogFilters = (state, filters) =>
-	updateLogFilters(state, state.get('logSize'), state.get('logFilters').union(filters))
+	updateLogFilters(
+		state,
+		state.get('logSize'),
+		state.get('logFilters').union(filters)
+	)
 
 // removeLogFilters removes an array of filters.
 export const removeLogFilters = (state, filters) => {
@@ -68,4 +82,3 @@ export const removeLogFilters = (state, filters) => {
 	}
 	return updateLogFilters(state, state.get('logSize'), newFilters)
 }
-

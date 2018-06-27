@@ -10,19 +10,19 @@ const initialState = Map({
 
 export default function allowancedialogReduceR(state = initialState, action) {
 	switch (action.type) {
-	case constants.SHOW_ALLOWANCE_CONFIRMATION:
-		return state.set('confirming', true)
-		            .set('confirmationAllowance', action.allowance)
-	case constants.HIDE_ALLOWANCE_CONFIRMATION:
-		return state.set('confirming', false)
-	case constants.CLOSE_ALLOWANCE_DIALOG:
-		return state.set('confirming', false)
-	case constants.SET_FEE_ESTIMATE:
-		return state.set('feeEstimate', action.estimate)
-	case constants.SET_STORAGE_ESTIMATE:
-		return state.set('storageEstimate', action.estimate)
-	default:
-		return state
+		case constants.SHOW_ALLOWANCE_CONFIRMATION:
+			return state
+				.set('confirming', true)
+				.set('confirmationAllowance', action.allowance)
+		case constants.HIDE_ALLOWANCE_CONFIRMATION:
+			return state.set('confirming', false)
+		case constants.CLOSE_ALLOWANCE_DIALOG:
+			return state.set('confirming', false)
+		case constants.SET_FEE_ESTIMATE:
+			return state.set('feeEstimate', action.estimate)
+		case constants.SET_STORAGE_ESTIMATE:
+			return state.set('storageEstimate', action.estimate)
+		default:
+			return state
 	}
 }
-

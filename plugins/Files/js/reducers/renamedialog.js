@@ -7,9 +7,9 @@ const initialState = Map({
 
 export default function renamedialogReducer(state = initialState, action) {
 	switch (action.type) {
-	case constants.SHOW_RENAME_DIALOG:
-		return state.set('file', action.file)
-	default:
-		return state
+		case constants.SHOW_RENAME_DIALOG:
+			return state.set('file', action.file)
+		default:
+			return state
 	}
 }

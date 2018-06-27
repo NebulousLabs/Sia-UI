@@ -138,11 +138,11 @@ export const scanFolder = (path) => {
 
 // pushToBottom pushes a plugin to the bottom of a plugin list
 export const pushToBottom = (plugins, target) =>
-	plugins.sort((p) => getPluginName(p) === target ? 1 : 0)
+	plugins.sort((p) => (getPluginName(p) === target ? 1 : 0))
 
 // pushToTop pushes a plugin to the top of a plugin list
 export const pushToTop = (plugins, target) =>
-	plugins.sort((p) => getPluginName(p) === target ? -1 : 0)
+	plugins.sort((p) => (getPluginName(p) === target ? -1 : 0))
 
 // Scan a folder at path and return an ordered list of plugins.
 // The plugin specified by `homePlugin` is always moved to the top of the list,
@@ -161,4 +161,3 @@ export const getOrderedPlugins = (path, homePlugin) => {
 
 	return plugins
 }
-

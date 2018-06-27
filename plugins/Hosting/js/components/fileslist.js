@@ -11,8 +11,10 @@ const FilesList = ({ folders, folderPathToRemove, actions }) => {
 		actions.updateFolderToRemove()
 	}
 
-	const onResizeStorageLocationClick = (folder) => () => actions.resizeFolder(folder)
-	const onRemoveStorageLocationClick = (folder) => () => actions.updateFolderToRemove(folder.get('path'))
+	const onResizeStorageLocationClick = (folder) => () =>
+		actions.resizeFolder(folder)
+	const onRemoveStorageLocationClick = (folder) => () =>
+		actions.updateFolderToRemove(folder.get('path'))
 	const hideRemoveStorageModal = () => actions.updateFolderToRemove()
 
 	// sort folders by their name
@@ -29,20 +31,32 @@ const FilesList = ({ folders, folderPathToRemove, actions }) => {
 			<div className="pure-u-1-12">
 				<div>{Math.floor(folder.get('size')).toString()} GB</div>
 			</div>
-			<div className="pure-u-1-24" onClick={onResizeStorageLocationClick(folder)}>
-				<div><i className="fa fa-edit button" /></div>
+			<div
+				className="pure-u-1-24"
+				onClick={onResizeStorageLocationClick(folder)}
+			>
+				<div>
+					<i className="fa fa-edit button" />
+				</div>
 			</div>
-			<div className="pure-u-1-24" onClick={onRemoveStorageLocationClick(folder)}>
-				<div><i className="fa fa-remove button" /></div>
+			<div
+				className="pure-u-1-24"
+				onClick={onRemoveStorageLocationClick(folder)}
+			>
+				<div>
+					<i className="fa fa-remove button" />
+				</div>
 			</div>
-			{
-				folderPathToRemove && folderPathToRemove === folder.get('path') ?
-					<Modal title={`Remove "${ Path.basename(folder.get('path')) }"?`}
-						message="No longer use this folder for storage? You may lose collateral if you do not have enough space to fill all contracts."
-						actions={{ acceptModal: removeStorageLocation(folder), declineModal: hideRemoveStorageModal  }}
-					/>
-					: null
-			}
+			{folderPathToRemove && folderPathToRemove === folder.get('path') ? (
+				<Modal
+					title={`Remove "${Path.basename(folder.get('path'))}"?`}
+					message="No longer use this folder for storage? You may lose collateral if you do not have enough space to fill all contracts."
+					actions={{
+						acceptModal: removeStorageLocation(folder),
+						declineModal: hideRemoveStorageModal,
+					}}
+				/>
+			) : null}
 		</div>
 	))
 
@@ -55,8 +69,12 @@ const FilesList = ({ folders, folderPathToRemove, actions }) => {
 						<i className="fa fa-folder-open" />
 						Add Storage Folder
 					</div>
-					<div className="pure-u-1-12" style={{ 'textAlign': 'left' }}>Free</div>
-					<div className="pure-u-1-12" style={{ 'textAlign': 'left' }}>Max</div>
+					<div className="pure-u-1-12" style={{ textAlign: 'left' }}>
+						Free
+					</div>
+					<div className="pure-u-1-12" style={{ textAlign: 'left' }}>
+						Max
+					</div>
 					<div className="pure-u-1-12" />
 				</div>
 			</div>

@@ -8,9 +8,13 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ setLogFilters, addLogFilters, removeLogFilters }, dispatch),
+	actions: bindActionCreators(
+		{ setLogFilters, addLogFilters, removeLogFilters },
+		dispatch
+	),
 })
 
-const FilterControls = connect(mapStateToProps, mapDispatchToProps)(FilterControlsView)
+const FilterControls = connect(mapStateToProps, mapDispatchToProps)(
+	FilterControlsView
+)
 export default FilterControls
-

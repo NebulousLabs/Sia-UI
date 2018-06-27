@@ -9,9 +9,11 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ setScrolling, setNotScrolling, incrementLogSize }, dispatch),
+	actions: bindActionCreators(
+		{ setScrolling, setNotScrolling, incrementLogSize },
+		dispatch
+	),
 })
 
 const LogView = connect(mapStateToProps, mapDispatchToProps)(LogViewView)
 export default LogView
-

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SearchButton = ({path, actions}) => {
+const SearchButton = ({ path, actions }) => {
 	const handleClick = () => {
 		actions.toggleSearchField()
 		actions.setSearchText('', path)

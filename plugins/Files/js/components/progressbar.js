@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-const ProgressBar = ({progress}) => {
+const ProgressBar = ({ progress }) => {
 	const style = {
 		width: progress.toString() + '%',
 		height: '100%',

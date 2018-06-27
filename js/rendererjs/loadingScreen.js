@@ -16,7 +16,9 @@ const siadConfig = config.attr('siad')
 
 const spinner = document.getElementById('loading-spinner')
 const overlay = document.getElementsByClassName('overlay')[0]
-const overlayText = overlay.getElementsByClassName('centered')[0].getElementsByTagName('p')[0]
+const overlayText = overlay
+	.getElementsByClassName('centered')[0]
+	.getElementsByTagName('p')[0]
 const errorLog = document.getElementById('errorlog')
 overlayText.textContent = 'Loading Sia...'
 
@@ -36,9 +38,22 @@ const startUI = (welcomeMsg, initUI) => {
 	// Construct the status bar component and poll for updates from Siad
 	const updateSyncStatus = async function() {
 		try {
-			const consensusData = await Siad.call(siadConfig.address, {timeout: 500, url: '/consensus'})
-			const gatewayData = await Siad.call(siadConfig.address, {timeout: 500, url: '/gateway'})
-			ReactDOM.render(<StatusBar peers={gatewayData.peers.length} synced={consensusData.synced} blockheight={consensusData.height} />, document.getElementById('statusbar'))
+			const consensusData = await Siad.call(siadConfig.address, {
+				timeout: 500,
+				url: '/consensus',
+			})
+			const gatewayData = await Siad.call(siadConfig.address, {
+				timeout: 500,
+				url: '/gateway',
+			})
+			ReactDOM.render(
+				<StatusBar
+					peers={gatewayData.peers.length}
+					synced={consensusData.synced}
+					blockheight={consensusData.height}
+				/>,
+				document.getElementById('statusbar')
+			)
 			await new Promise((resolve) => setTimeout(resolve, 5000))
 		} catch (e) {
 			await new Promise((resolve) => setTimeout(resolve, 500))
@@ -57,21 +72,24 @@ const startUI = (welcomeMsg, initUI) => {
 // checkSiaPath validates config's Sia path.  returns a promise that is
 // resolved with `true` if siadConfig.path exists or `false` if it does not
 // exist.
-const checkSiaPath = () => new Promise((resolve) => {
-	fs.stat(siadConfig.path, (err) => {
-		if (!err) {
-			resolve(true)
-		} else {
-			resolve(false)
-		}
+const checkSiaPath = () =>
+	new Promise((resolve) => {
+		fs.stat(siadConfig.path, (err) => {
+			if (!err) {
+				resolve(true)
+			} else {
+				resolve(false)
+			}
+		})
 	})
-})
 
 // unexpectedExitHandler handles an unexpected siad exit, displaying the error
 // piped to siad-output.log.
 const unexpectedExitHandler = () => {
 	try {
-		const errorMsg = fs.readFileSync(Path.join(siadConfig.datadir, 'siad-output.log'))
+		const errorMsg = fs.readFileSync(
+			Path.join(siadConfig.datadir, 'siad-output.log')
+		)
 		showError('Siad unexpectedly exited. Error log: ' + errorMsg)
 	} catch (e) {
 		showError('Siad unexpectedly exited.')
@@ -104,7 +122,10 @@ export default async function loadingScreen(initUI) {
 	// check siadConfig.path, and ask for a new path if siad doesn't exist.
 	if (!await checkSiaPath()) {
 		// config.path doesn't exist.  Prompt the user for siad's location
-		dialog.showErrorBox('Siad not found', 'Sia-UI couldn\'t locate siad.  Please navigate to siad.')
+		dialog.showErrorBox(
+			'Siad not found',
+			"Sia-UI couldn't locate siad.  Please navigate to siad."
+		)
 		const siadPath = dialog.showOpenDialog({
 			title: 'Please locate siad.',
 			properties: ['openFile'],
@@ -125,9 +146,11 @@ export default async function loadingScreen(initUI) {
 			'rpc-addr': siadConfig.rpcaddr,
 			'host-addr': siadConfig.hostaddr,
 			'api-addr': siadConfig.address,
-			'modules': 'cghrtw',
+			modules: 'cghrtw',
 		})
-		siadProcess.on('error', (e) => showError('Siad couldnt start: ' + e.toString()))
+		siadProcess.on('error', (e) =>
+			showError('Siad couldnt start: ' + e.toString())
+		)
 		siadProcess.on('close', unexpectedExitHandler)
 		siadProcess.on('exit', unexpectedExitHandler)
 		window.siadProcess = siadProcess
@@ -139,7 +162,8 @@ export default async function loadingScreen(initUI) {
 	// Set a timeout to display a warning message about long load times caused by rescan.
 	setTimeout(() => {
 		if (overlayText.textContent === 'Loading Sia...') {
-			overlayText.innerHTML= 'Loading can take a while after upgrading to a new version. Check the <a style="text-decoration: underline; cursor: pointer" id="releasenotelink">release notes</a> for more details.'
+			overlayText.innerHTML =
+				'Loading can take a while after upgrading to a new version. Check the <a style="text-decoration: underline; cursor: pointer" id="releasenotelink">release notes</a> for more details.'
 
 			document.getElementById('releasenotelink').onclick = () => {
 				shell.openExternal('https://github.com/NebulousLabs/Sia/releases')
@@ -149,7 +173,7 @@ export default async function loadingScreen(initUI) {
 
 	// Wait for this process to become reachable before starting the UI.
 	const sleep = (ms = 0) => new Promise((r) => setTimeout(r, ms))
-	while (await Siad.isRunning(siadConfig.address) === false) {
+	while ((await Siad.isRunning(siadConfig.address)) === false) {
 		await sleep(500)
 	}
 	// Unregister callbacks

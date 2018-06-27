@@ -12,5 +12,7 @@ const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ showConfirmationDialog }, dispatch),
 })
 
-const NewWalletDialog = connect(mapStateToProps, mapDispatchToProps)(NewWalletDialogView)
+const NewWalletDialog = connect(mapStateToProps, mapDispatchToProps)(
+	NewWalletDialogView
+)
 export default NewWalletDialog

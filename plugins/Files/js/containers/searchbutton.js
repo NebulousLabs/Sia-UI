@@ -10,5 +10,7 @@ const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ toggleSearchField, setSearchText }, dispatch),
 })
 
-const SearchButton = connect(mapStateToProps, mapDispatchToProps)(SearchButtonView)
+const SearchButton = connect(mapStateToProps, mapDispatchToProps)(
+	SearchButtonView
+)
 export default SearchButton

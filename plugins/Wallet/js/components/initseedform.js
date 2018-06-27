@@ -1,6 +1,11 @@
 import React from 'react'
 
-const InitSeedForm = ({ initializingSeed, useCustomPassphrase, hideInitSeedForm, createNewWallet }) => {
+const InitSeedForm = ({
+	initializingSeed,
+	useCustomPassphrase,
+	hideInitSeedForm,
+	createNewWallet,
+}) => {
 	if (initializingSeed) {
 		return (
 			<div className="new-wallet-form">
@@ -12,7 +17,10 @@ const InitSeedForm = ({ initializingSeed, useCustomPassphrase, hideInitSeedForm,
 	const handleInitSeedClick = (e) => {
 		e.preventDefault()
 		if (useCustomPassphrase) {
-			createNewWallet(e.target.password.value.trim(), e.target.seed.value.trim())
+			createNewWallet(
+				e.target.password.value.trim(),
+				e.target.seed.value.trim()
+			)
 		} else {
 			createNewWallet(undefined, e.target.seed.value.trim())
 		}
@@ -24,9 +32,16 @@ const InitSeedForm = ({ initializingSeed, useCustomPassphrase, hideInitSeedForm,
 	return (
 		<form className="new-wallet-form" onSubmit={handleInitSeedClick}>
 			<h3> Enter a seed to initialize your wallet from. </h3>
-			<p> This will initialize your wallet from the provided seed, rescanning the blockchain to find all your money. This rescan process can take a while. The blockchain must also be synced. </p>
+			<p>
+				{' '}
+				This will initialize your wallet from the provided seed, rescanning the
+				blockchain to find all your money. This rescan process can take a while.
+				The blockchain must also be synced.{' '}
+			</p>
 			<input type="text" name="seed" placeholder="Seed" autoFocus />
-			{useCustomPassphrase ? <input type="password" placeholder="Desired password" name="password" /> : null}
+			{useCustomPassphrase ? (
+				<input type="password" placeholder="Desired password" name="password" />
+			) : null}
 			<div className="new-wallet-form-buttons">
 				<button type="submit">Confirm</button>
 				<button onClick={handleCancelClick}>Cancel</button>
@@ -36,4 +51,3 @@ const InitSeedForm = ({ initializingSeed, useCustomPassphrase, hideInitSeedForm,
 }
 
 export default InitSeedForm
-

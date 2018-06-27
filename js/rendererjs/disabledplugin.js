@@ -28,10 +28,15 @@ const handleReport = () => {
 	shell.openExternal('https://github.com/NebulousLabs/Sia/issues')
 }
 
-
-const DisabledPlugin = ({errorMsg, startSiad}) => (
+const DisabledPlugin = ({ errorMsg, startSiad }) => (
 	<div style={containerStyle}>
-		<h2>Siad has exited unexpectedly. Please submit a bug report including the error log <a style={reportStyle} onClick={handleReport}>here.</a></h2>
+		<h2>
+			Siad has exited unexpectedly. Please submit a bug report including the
+			error log{' '}
+			<a style={reportStyle} onClick={handleReport}>
+				here.
+			</a>
+		</h2>
 		<h2> Error Log: </h2>
 		<textarea style={errorLogStyle} readOnly>
 			{errorMsg}

@@ -12,5 +12,7 @@ const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ hideAnnounceDialog, updateModal }, dispatch),
 })
 
-const AnnounceDialog = connect(mapStateToProps, mapDispatchToProps)(AnnounceDialogView)
+const AnnounceDialog = connect(mapStateToProps, mapDispatchToProps)(
+	AnnounceDialogView
+)
 export default AnnounceDialog

@@ -1,15 +1,16 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-const ContractorStatus = ({settingAllowance, contractCount}) => (
+const ContractorStatus = ({ settingAllowance, contractCount }) => (
 	<div className="contractor-status">
-		{ settingAllowance ? (
+		{settingAllowance ? (
 			<div>
 				<i className="fa fa-circle-o-notch fa-spin fa-2x fa-fw" />
 				<span>Forming Contracts...</span>
 			</div>
-			) : ( <span> {contractCount} contracts </span> )
-		}
+		) : (
+			<span> {contractCount} contracts </span>
+		)}
 	</div>
 )
 
@@ -19,4 +20,3 @@ ContractorStatus.propTypes = {
 }
 
 export default ContractorStatus
-

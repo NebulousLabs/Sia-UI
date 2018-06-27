@@ -15,7 +15,17 @@ import DragOverlay from './dragoverlay.js'
 import AddFolderButton from '../containers/addfolderbutton.js'
 import AddFolderDialog from '../containers/addfolderdialog.js'
 
-const FileBrowser = ({dragging, dragUploadEnabled, settingAllowance, showAddFolderDialog, showRenameDialog, showUploadDialog, showDeleteDialog, showFileTransfers, actions}) => {
+const FileBrowser = ({
+	dragging,
+	dragUploadEnabled,
+	settingAllowance,
+	showAddFolderDialog,
+	showRenameDialog,
+	showUploadDialog,
+	showDeleteDialog,
+	showFileTransfers,
+	actions,
+}) => {
 	const onDragOver = (e) => {
 		if (!dragUploadEnabled) {
 			return
@@ -30,7 +40,9 @@ const FileBrowser = ({dragging, dragUploadEnabled, settingAllowance, showAddFold
 		e.preventDefault()
 		actions.setNotDragging()
 		// Convert file list into a list of file paths.
-		actions.showUploadDialog(Array.from(e.dataTransfer.files, (file) => file.path))
+		actions.showUploadDialog(
+			Array.from(e.dataTransfer.files, (file) => file.path)
+		)
 	}
 	const onDragLeave = (e) => {
 		if (!dragUploadEnabled) {
@@ -47,7 +59,14 @@ const FileBrowser = ({dragging, dragUploadEnabled, settingAllowance, showAddFold
 	}
 	return (
 		<div className="file-browser-container">
-			<div className="file-browser" onKeyDown={onKeyDown} tabIndex="1" onDragOver={onDragOver} onMouseLeave={onDragLeave} onDrop={onDrop}>
+			<div
+				className="file-browser"
+				onKeyDown={onKeyDown}
+				tabIndex="1"
+				onDragOver={onDragOver}
+				onMouseLeave={onDragLeave}
+				onDrop={onDrop}
+			>
 				{showRenameDialog ? <RenameDialog /> : null}
 				{showUploadDialog ? <UploadDialog /> : null}
 				{showDeleteDialog ? <DeleteDialog /> : null}

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const ConfirmationDialog = ({seed, password, error, actions}) => {
+const ConfirmationDialog = ({ seed, password, error, actions }) => {
 	const onCancelClick = () => actions.hideConfirmationDialog()
 	const onOkClick = (e) => {
 		e.preventDefault()
@@ -18,11 +18,25 @@ const ConfirmationDialog = ({seed, password, error, actions}) => {
 			<div className="confirmation-dialog">
 				<h3> Please confirm your password and seed to continue </h3>
 				<form className="seed-confirmation-form" onSubmit={onOkClick}>
-					<input className="seed-confirmation-input" placeholder="seed" type="text" name="seed" required />
-					<input className="password-confirmation-input" placeholder="password" type="text" name="password" required />
+					<input
+						className="seed-confirmation-input"
+						placeholder="seed"
+						type="text"
+						name="seed"
+						required
+					/>
+					<input
+						className="password-confirmation-input"
+						placeholder="password"
+						type="text"
+						name="password"
+						required
+					/>
 					<div className="confirmation-buttons">
 						<button onClick={onCancelClick}>Go Back</button>
-						<button className="seed-confirmation-button" type="submit">Confirm</button>
+						<button className="seed-confirmation-button" type="submit">
+							Confirm
+						</button>
 					</div>
 				</form>
 				<span className="seed-confirmation-error">{error}</span>

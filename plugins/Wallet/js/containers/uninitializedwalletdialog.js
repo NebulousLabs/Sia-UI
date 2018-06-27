@@ -1,5 +1,11 @@
 import UninitializedWalletDialogView from '../components/uninitializedwalletdialog.js'
-import { showInitSeedForm, hideInitSeedForm, showNewWalletForm, setUseCustomPassphrase, createNewWallet } from '../actions/wallet.js'
+import {
+	showInitSeedForm,
+	hideInitSeedForm,
+	showNewWalletForm,
+	setUseCustomPassphrase,
+	createNewWallet,
+} from '../actions/wallet.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
@@ -10,8 +16,19 @@ const mapStateToProps = (state) => ({
 	initializingSeed: state.wallet.get('initializingSeed'),
 })
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ showInitSeedForm, hideInitSeedForm, showNewWalletForm, setUseCustomPassphrase, createNewWallet}, dispatch),
+	actions: bindActionCreators(
+		{
+			showInitSeedForm,
+			hideInitSeedForm,
+			showNewWalletForm,
+			setUseCustomPassphrase,
+			createNewWallet,
+		},
+		dispatch
+	),
 })
 
-const UninitializedWalletDialog = connect(mapStateToProps, mapDispatchToProps)(UninitializedWalletDialogView)
+const UninitializedWalletDialog = connect(mapStateToProps, mapDispatchToProps)(
+	UninitializedWalletDialogView
+)
 export default UninitializedWalletDialog

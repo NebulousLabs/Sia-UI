@@ -6,11 +6,14 @@ export const addCommand = (command) => ({
 })
 export const updateCommand = (command, id, dataChunk) => ({
 	type: constants.UPDATE_COMMAND,
-	command, id, dataChunk,
+	command,
+	id,
+	dataChunk,
 })
 export const endCommand = (command, id) => ({
 	type: constants.END_COMMAND,
-	command, id,
+	command,
+	id,
 })
 
 export const loadPrevCommand = () => ({

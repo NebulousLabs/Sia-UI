@@ -2,12 +2,31 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import RedundancyStatus from './redundancystatus.js'
 
-const File = ({filename, type, selected, isDragTarget, filesize, available, redundancy, uploadprogress, onDoubleClick, onClick, setDragUploadEnabled, setDragFolderTarget, setDragFileOrigin, handleDragRename, isSiaUIFolder }) => {
-	const handleDrag = () => {
-	}
+const File = ({
+	filename,
+	type,
+	selected,
+	isDragTarget,
+	filesize,
+	available,
+	redundancy,
+	uploadprogress,
+	onDoubleClick,
+	onClick,
+	setDragUploadEnabled,
+	setDragFolderTarget,
+	setDragFileOrigin,
+	handleDragRename,
+	isSiaUIFolder,
+}) => {
+	const handleDrag = () => {}
 	const handleDragStart = () => {
 		setDragUploadEnabled(false)
-		setDragFileOrigin({type: type, name: filename, isSiaUIFolder: isSiaUIFolder})
+		setDragFileOrigin({
+			type: type,
+			name: filename,
+			isSiaUIFolder: isSiaUIFolder,
+		})
 		setDragFolderTarget('')
 	}
 	const handleDragEnd = () => {
@@ -31,7 +50,8 @@ const File = ({filename, type, selected, isDragTarget, filesize, available, redu
 		return 'filebrowser-file'
 	})()
 	return (
-		<li draggable
+		<li
+			draggable
 			onDrag={handleDrag}
 			onDragStart={handleDragStart}
 			onDragEnd={handleDragEnd}
@@ -41,12 +61,20 @@ const File = ({filename, type, selected, isDragTarget, filesize, available, redu
 			className={fileClass}
 		>
 			<div className="filename">
-				{type === 'file' ? <i className="fa fa-file" /> : <i className="fa fa-folder" onClick={onDoubleClick} />}
+				{type === 'file' ? (
+					<i className="fa fa-file" />
+				) : (
+					<i className="fa fa-folder" onClick={onDoubleClick} />
+				)}
 				<div className="name">{filename}</div>
 			</div>
 			<div className="file-info">
 				<span className="filesize">{filesize}</span>
-				<RedundancyStatus available={available} redundancy={redundancy} uploadprogress={uploadprogress} />
+				<RedundancyStatus
+					available={available}
+					redundancy={redundancy}
+					uploadprogress={uploadprogress}
+				/>
 			</div>
 		</li>
 	)

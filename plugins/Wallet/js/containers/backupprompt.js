@@ -11,5 +11,7 @@ const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ hideBackupPrompt }, dispatch),
 })
 
-const BackupPrompt = connect(mapStateToProps, mapDispatchToProps)(BackupPromptView)
+const BackupPrompt = connect(mapStateToProps, mapDispatchToProps)(
+	BackupPromptView
+)
 export default BackupPrompt

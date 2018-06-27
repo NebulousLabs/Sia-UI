@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-const HostStatus = ({connectabilitystatus, workingstatus}) => {
+const HostStatus = ({ connectabilitystatus, workingstatus }) => {
 	if (connectabilitystatus === 'checking' && workingstatus === 'checking') {
 		return (
 			<div className="host-status">
@@ -14,19 +14,26 @@ const HostStatus = ({connectabilitystatus, workingstatus}) => {
 		)
 	}
 
-	if (connectabilitystatus === 'not connectable' && workingstatus === 'not working') {
+	if (
+		connectabilitystatus === 'not connectable' &&
+		workingstatus === 'not working'
+	) {
 		return (
 			<div className="host-status">
 				<i className="fa fa-times offline-icon" />
 				<span> Host Unreachable </span>
 				<div className="host-status-info">
-					Your host is not connectable at the configured net address. Check your UPNP or NAT settings.
+					Your host is not connectable at the configured net address. Check your
+					UPNP or NAT settings.
 				</div>
 			</div>
 		)
 	}
 
-	if (connectabilitystatus === 'connectable' && workingstatus === 'not working') {
+	if (
+		connectabilitystatus === 'connectable' &&
+		workingstatus === 'not working'
+	) {
 		return (
 			<div className="host-status">
 				<i className="fa fa-times inactive-icon" />
@@ -55,4 +62,3 @@ HostStatus.propTypes = {
 }
 
 export default HostStatus
-

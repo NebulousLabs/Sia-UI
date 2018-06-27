@@ -3,12 +3,13 @@ import React from 'react'
 
 const minimumContracts = 14
 
-const UploadButton = ({contracts = minimumContracts, actions}) => {
+const UploadButton = ({ contracts = minimumContracts, actions }) => {
 	const onUploadClick = (type) => () => {
 		if (contracts < minimumContracts) {
 			SiaAPI.showError({
 				title: 'Sia-UI files error',
-				content: 'Not enough contracts to upload.  You must buy storage before uploading, or wait for contracts to form.',
+				content:
+					'Not enough contracts to upload.  You must buy storage before uploading, or wait for contracts to form.',
 			})
 			return
 		}

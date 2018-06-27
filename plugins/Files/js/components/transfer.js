@@ -2,8 +2,8 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import ProgressBar from './progressbar.js'
 
-const Transfer = ({name, progress, status, speed, onClick}) => {
-	const statusText = (status === 'Downloading') ? status + ' - ' + speed : status
+const Transfer = ({ name, progress, status, speed, onClick }) => {
+	const statusText = status === 'Downloading' ? status + ' - ' + speed : status
 	return (
 		<li className="filetransfer" onClick={onClick}>
 			<div className="transfer-info">

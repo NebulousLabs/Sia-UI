@@ -30,13 +30,20 @@ window.onload = async function() {
 		// load the error log and display it in the disabled plugin
 		let errorMsg = 'Siad exited unexpectedly for an unknown reason.'
 		try {
-			errorMsg = fs.readFileSync(Path.join(siadConfig.datadir, 'siad-output.log'), {'encoding': 'utf-8'})
+			errorMsg = fs.readFileSync(
+				Path.join(siadConfig.datadir, 'siad-output.log'),
+				{ encoding: 'utf-8' }
+			)
 		} catch (e) {
-			console.error('error reading error log: ' +  e.toString())
+			console.error('error reading error log: ' + e.toString())
 		}
 
-		document.body.innerHTML = '<div style="width:100%;height:100%;" id="crashdiv"></div>'
-		ReactDOM.render(<DisabledPlugin errorMsg={errorMsg} startSiad={startSiad} />, document.getElementById('crashdiv'))
+		document.body.innerHTML =
+			'<div style="width:100%;height:100%;" id="crashdiv"></div>'
+		ReactDOM.render(
+			<DisabledPlugin errorMsg={errorMsg} startSiad={startSiad} />,
+			document.getElementById('crashdiv')
+		)
 	}
 
 	startSiad = () => {
@@ -45,7 +52,7 @@ window.onload = async function() {
 			'rpc-addr': siadConfig.rpcaddr,
 			'host-addr': siadConfig.hostaddr,
 			'api-addr': siadConfig.address,
-			'modules': 'cghrtw',
+			modules: 'cghrtw',
 		})
 		siadProcess.on('error', renderSiadCrashlog)
 		siadProcess.on('close', renderSiadCrashlog)
@@ -71,12 +78,11 @@ window.onload = async function() {
 	}
 }
 
-
 window.SiaAPI = {
 	call: function(url, callback) {
 		Siad.call(siadConfig.address, url)
-		    .then((res) => callback(null, res))
-				.catch((err) => callback(err, null))
+			.then((res) => callback(null, res))
+			.catch((err) => callback(err, null))
 	},
 	config: config,
 	hastingsToSiacoins: Siad.hastingsToSiacoins,

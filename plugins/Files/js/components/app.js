@@ -3,7 +3,7 @@ import React from 'react'
 import FileBrowser from '../containers/filebrowser.js'
 import AllowanceDialog from '../containers/allowancedialog.js'
 
-const FilesApp = ({showAllowanceDialog}) => (
+const FilesApp = ({ showAllowanceDialog }) => (
 	<div className="app">
 		{showAllowanceDialog ? <AllowanceDialog /> : null}
 		<FileBrowser />

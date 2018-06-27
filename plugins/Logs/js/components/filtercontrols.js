@@ -16,28 +16,28 @@ const filterControlsStyle = {
 	justifyContent: 'center',
 }
 
-const FilterControls = ({logFilters, actions}) => (
+const FilterControls = ({ logFilters, actions }) => (
 	<div style={filterControlsStyle}>
-		{
-			filters.map((filter, key) => (
-				<FilterControl
-					name={filter.name}
-					filters={filter.filters}
-					checked={filter.filters.reduce((isChecked, filtertext) => isChecked || logFilters.includes(filtertext), false)}
-					addLogFilters={actions.addLogFilters}
-					removeLogFilters={actions.removeLogFilters}
-					setLogFilters={actions.setLogFilters}
-					key={key}
-				/>
-			))
-		}
+		{filters.map((filter, key) => (
+			<FilterControl
+				name={filter.name}
+				filters={filter.filters}
+				checked={filter.filters.reduce(
+					(isChecked, filtertext) =>
+						isChecked || logFilters.includes(filtertext),
+					false
+				)}
+				addLogFilters={actions.addLogFilters}
+				removeLogFilters={actions.removeLogFilters}
+				setLogFilters={actions.setLogFilters}
+				key={key}
+			/>
+		))}
 	</div>
 )
-
 
 FilterControls.propTypes = {
 	logFilters: PropTypes.instanceOf(Set).isRequired,
 }
 
 export default FilterControls
-

@@ -15,8 +15,18 @@ import BackupButton from '../containers/backupbutton.js'
 import BackupPrompt from '../containers/backupprompt.js'
 import BalanceInfo from '../containers/balanceinfo.js'
 
-const Wallet = ({showBackupPrompt, siafundbalance, showReceivePrompt, showChangePasswordDialog, showSendPrompt, showNewWalletDialog, showRecoveryDialog, actions }) => {
-	const onSendClick = (currencytype) => () => actions.startSendPrompt(currencytype)
+const Wallet = ({
+	showBackupPrompt,
+	siafundbalance,
+	showReceivePrompt,
+	showChangePasswordDialog,
+	showSendPrompt,
+	showNewWalletDialog,
+	showRecoveryDialog,
+	actions,
+}) => {
+	const onSendClick = (currencytype) => () =>
+		actions.startSendPrompt(currencytype)
 	return (
 		<div className="wallet">
 			<div className="wallet-toolbar">
@@ -25,7 +35,12 @@ const Wallet = ({showBackupPrompt, siafundbalance, showReceivePrompt, showChange
 				<ChangePasswordButton />
 				<LockButton />
 				<RecoverButton />
-				{siafundbalance !== '0' ? <SendButton currencytype="Siafund" onClick={onSendClick('siafunds')} />: null}
+				{siafundbalance !== '0' ? (
+					<SendButton
+						currencytype="Siafund"
+						onClick={onSendClick('siafunds')}
+					/>
+				) : null}
 				<SendButton currencytype="Siacoin" onClick={onSendClick('siacoins')} />
 				<ReceiveButton />
 			</div>

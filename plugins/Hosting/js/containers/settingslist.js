@@ -1,22 +1,30 @@
 import SettingsListView from '../components/settingslist.js'
 import { connect } from 'react-redux'
-import { showToggleAcceptingModal, hideToggleAcceptingModal, updateSettings, pushSettings } from '../actions/actions.js'
+import {
+	showToggleAcceptingModal,
+	hideToggleAcceptingModal,
+	updateSettings,
+	pushSettings,
+} from '../actions/actions.js'
 import { bindActionCreators } from 'redux'
 import { Map } from 'immutable'
 
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({
-		showToggleAcceptingModal,
-		hideToggleAcceptingModal,
-		updateSettings,
-		pushSettings,
-	}, dispatch),
+	actions: bindActionCreators(
+		{
+			showToggleAcceptingModal,
+			hideToggleAcceptingModal,
+			updateSettings,
+			pushSettings,
+		},
+		dispatch
+	),
 })
 
 const mapStateToProps = (state) => ({
 	usersettings: Map({
 		maxduration: Map({
-			name:'Max Duration (Weeks)',
+			name: 'Max Duration (Weeks)',
 			value: state.settingsReducer.get('maxduration'),
 			min: 12,
 		}),
@@ -37,8 +45,12 @@ const mapStateToProps = (state) => ({
 	acceptingContracts: state.settingsReducer.get('acceptingContracts'),
 	settingsChanged: state.settingsReducer.get('settingsChanged'),
 	defaultsettings: state.settingsReducer.get('defaultsettings'),
-	shouldShowToggleAcceptingModal: state.modalReducer.get('shouldShowToggleAcceptingModal'),
+	shouldShowToggleAcceptingModal: state.modalReducer.get(
+		'shouldShowToggleAcceptingModal'
+	),
 })
 
-const SettingsList = connect(mapStateToProps, mapDispatchToProps)(SettingsListView)
+const SettingsList = connect(mapStateToProps, mapDispatchToProps)(
+	SettingsListView
+)
 export default SettingsList

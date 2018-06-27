@@ -4,7 +4,12 @@ import React from 'react'
 const colorBackDisabled = '#C5C5C5'
 const colorBackEnabled = '#00CBA0'
 
-const DirectoryInfoBar = ({path, nfiles, onBackClick, setDragFolderTarget}) => {
+const DirectoryInfoBar = ({
+	path,
+	nfiles,
+	onBackClick,
+	setDragFolderTarget,
+}) => {
 	const backButtonStyle = {
 		color: (() => {
 			if (path === '') {
@@ -20,13 +25,20 @@ const DirectoryInfoBar = ({path, nfiles, onBackClick, setDragFolderTarget}) => {
 	}
 	return (
 		<li onDragOver={handleDragOver} className="directory-infobar">
-			<div style={{cursor: 'pointer'}} className="back-button" onClick={onBackClick}>
+			<div
+				style={{ cursor: 'pointer' }}
+				className="back-button"
+				onClick={onBackClick}
+			>
 				<i className="fa fa-backward" style={backButtonStyle} />
 				<span>Back</span>
 			</div>
 			<div className="directory-info">
-				<span style={{marginRight: '10px'}}> {path} </span>
-				<span style={{marginRight: '10px'}}> {nfiles} {nfiles === 1 ? 'file' : 'files' }</span>
+				<span style={{ marginRight: '10px' }}> {path} </span>
+				<span style={{ marginRight: '10px' }}>
+					{' '}
+					{nfiles} {nfiles === 1 ? 'file' : 'files'}
+				</span>
 			</div>
 		</li>
 	)

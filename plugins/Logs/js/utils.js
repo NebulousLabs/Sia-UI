@@ -16,4 +16,3 @@ export const readdirRecursive = (dir, files = List()) => {
 	})
 	return filelist
 }
-

@@ -12,10 +12,7 @@ import WalletApp from './components/app.js'
 export const initWallet = () => {
 	// initialize the redux store
 	const sagaMiddleware = createSagaMiddleware()
-	const store = createStore(
-		rootReducer,
-		applyMiddleware(sagaMiddleware)
-	)
+	const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
 	sagaMiddleware.run(rootSaga)
 
 	// update state when plugin is focused
@@ -31,4 +28,3 @@ export const initWallet = () => {
 		</Provider>
 	)
 }
-

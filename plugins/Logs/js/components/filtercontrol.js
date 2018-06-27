@@ -1,7 +1,14 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-const FilterControl = ({ name, filters, checked, addLogFilters, removeLogFilters, setLogFilters}) => {
+const FilterControl = ({
+	name,
+	filters,
+	checked,
+	addLogFilters,
+	removeLogFilters,
+	setLogFilters,
+}) => {
 	const filterControlStyle = {
 		width: '100px',
 		height: '50px',
@@ -26,7 +33,7 @@ const FilterControl = ({ name, filters, checked, addLogFilters, removeLogFilters
 	}
 	return (
 		<div style={filterControlStyle} onClick={onFilterClick}>
-			<span style={{WebkitUserSelect: 'none'}}> {name} </span>
+			<span style={{ WebkitUserSelect: 'none' }}> {name} </span>
 		</div>
 	)
 }
@@ -41,4 +48,3 @@ FilterControl.propTypes = {
 }
 
 export default FilterControl
-

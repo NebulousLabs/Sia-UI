@@ -1,7 +1,14 @@
 import AllowanceDialogView from '../components/allowancedialog.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { showAllowanceConfirmation, hideAllowanceConfirmation, closeAllowanceDialog, setAllowance, setFeeEstimate, getStorageEstimate } from '../actions/files.js'
+import {
+	showAllowanceConfirmation,
+	hideAllowanceConfirmation,
+	closeAllowanceDialog,
+	setAllowance,
+	setFeeEstimate,
+	getStorageEstimate,
+} from '../actions/files.js'
 
 const mapStateToProps = (state) => ({
 	unlocked: state.wallet.get('unlocked'),
@@ -12,8 +19,20 @@ const mapStateToProps = (state) => ({
 	confirming: state.allowancedialog.get('confirming'),
 })
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ getStorageEstimate, setFeeEstimate, showAllowanceConfirmation, setAllowance, hideAllowanceConfirmation, closeAllowanceDialog}, dispatch),
+	actions: bindActionCreators(
+		{
+			getStorageEstimate,
+			setFeeEstimate,
+			showAllowanceConfirmation,
+			setAllowance,
+			hideAllowanceConfirmation,
+			closeAllowanceDialog,
+		},
+		dispatch
+	),
 })
 
-const AllowanceDialog = connect(mapStateToProps, mapDispatchToProps)(AllowanceDialogView)
+const AllowanceDialog = connect(mapStateToProps, mapDispatchToProps)(
+	AllowanceDialogView
+)
 export default AllowanceDialog

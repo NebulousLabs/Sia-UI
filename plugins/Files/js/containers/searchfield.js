@@ -11,5 +11,7 @@ const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ setSearchText }, dispatch),
 })
 
-const SearchField = connect(mapStateToProps, mapDispatchToProps)(SearchFieldView)
+const SearchField = connect(mapStateToProps, mapDispatchToProps)(
+	SearchFieldView
+)
 export default SearchField

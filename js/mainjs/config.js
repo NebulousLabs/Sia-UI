@@ -4,11 +4,14 @@ import { app } from 'electron'
 import { version } from '../../package.json'
 import semver from 'semver'
 
-const defaultSiadPath = Path.join(__dirname, '../Sia/' + (process.platform === 'win32' ? 'siad.exe' : 'siad'))
+const defaultSiadPath = Path.join(
+	__dirname,
+	'../Sia/' + (process.platform === 'win32' ? 'siad.exe' : 'siad')
+)
 
 // The default settings
 const defaultConfig = {
-	homePlugin:  'Overview',
+	homePlugin: 'Overview',
 	siad: {
 		path: defaultSiadPath,
 		datadir: Path.join(app.getPath('userData'), './sia'),
@@ -17,11 +20,12 @@ const defaultConfig = {
 		detached: false,
 		address: '127.0.0.1:9980',
 	},
-	closeToTray: process.platform === 'win32' || process.platform === 'darwin' ? true : false,
-	width:	   1024,
-	height:	  768,
-	x:		   0,
-	y:		   0,
+	closeToTray:
+		Boolean(process.platform === 'win32' || process.platform === 'darwin'),
+	width: 1024,
+	height: 768,
+	x: 0,
+	y: 0,
 	version: version,
 }
 
@@ -94,4 +98,3 @@ export default function configManager(filepath) {
 	// Return the config object with the above 3 member functions
 	return config
 }
-

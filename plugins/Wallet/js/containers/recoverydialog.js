@@ -7,8 +7,13 @@ const mapStateToProps = (state) => ({
 	recovering: state.wallet.get('recovering'),
 })
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ recoverSeed, hideSeedRecoveryDialog }, dispatch),
+	actions: bindActionCreators(
+		{ recoverSeed, hideSeedRecoveryDialog },
+		dispatch
+	),
 })
 
-const RecoveryDialog = connect(mapStateToProps, mapDispatchToProps)(RecoveryDialogView)
+const RecoveryDialog = connect(mapStateToProps, mapDispatchToProps)(
+	RecoveryDialogView
+)
 export default RecoveryDialog

@@ -120,4 +120,3 @@ export const setEstimatedScore = (score, conversionRate) => ({
 	score,
 	conversionRate,
 })
-

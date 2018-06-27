@@ -10,5 +10,7 @@ const mapDispatchToProps = (dispatch) => ({
 	actions: bindActionCreators({ hideDeleteDialog, deleteFile }, dispatch),
 })
 
-const DeleteDialog = connect(mapStateToProps, mapDispatchToProps)(DeleteDialogView)
+const DeleteDialog = connect(mapStateToProps, mapDispatchToProps)(
+	DeleteDialogView
+)
 export default DeleteDialog

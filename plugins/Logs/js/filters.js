@@ -28,4 +28,3 @@ export const filters = [
 		filters: ['wallet.log'],
 	},
 ]
-

@@ -8,8 +8,13 @@ const mapStateToProps = (state) => ({
 	path: state.files.get('path'),
 })
 const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ hideUploadDialog, uploadFile, uploadFolder }, dispatch),
+	actions: bindActionCreators(
+		{ hideUploadDialog, uploadFile, uploadFolder },
+		dispatch
+	),
 })
 
-const UploadDialog = connect(mapStateToProps, mapDispatchToProps)(UploadDialogView)
+const UploadDialog = connect(mapStateToProps, mapDispatchToProps)(
+	UploadDialogView
+)
 export default UploadDialog

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SetAllowanceButton = ({actions}) => {
+const SetAllowanceButton = ({ actions }) => {
 	const handleClick = () => actions.showAllowanceDialog()
 	return (
 		<div onClick={handleClick} className="set-allowance-button">

@@ -7,7 +7,6 @@ const Body = ({ actions }) => {
 
 	return (
 		<div className="hosting">
-
 			<div className="help section">
 				<div className="property row">
 					<div className="title">Help</div>
@@ -23,9 +22,14 @@ const Body = ({ actions }) => {
 						To start hosting:
 						<ol>
 							<li>Add a storage folder.</li>
-							<li>Set your prefered price, bandwidth cost, collateral, and duration.</li>
+							<li>
+								Set your prefered price, bandwidth cost, collateral, and
+								duration.
+							</li>
 							<li>Set 'Accepting Contracts' to 'Yes'</li>
-							<li>Announce your host by clicking the above 'Announce' button.</li>
+							<li>
+								Announce your host by clicking the above 'Announce' button.
+							</li>
 						</ol>
 					</div>
 				</div>

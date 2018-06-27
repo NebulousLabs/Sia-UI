@@ -8,4 +8,3 @@ const mapStateToProps = (state) => ({
 
 const ContractorStatus = connect(mapStateToProps)(ContractorStatusView)
 export default ContractorStatus
-
