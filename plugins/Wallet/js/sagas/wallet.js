@@ -166,7 +166,7 @@ function * getTransactionsSaga () {
     const transactions = parseRawTransactions(response)
     yield put(actions.setTransactions(transactions))
   } catch (e) {
-    console.error('error fetching transactions: ' + e.toString())
+    console.error('error fetching transactions: ', e)
   }
 }
 

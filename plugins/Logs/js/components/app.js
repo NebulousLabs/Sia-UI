@@ -1,6 +1,7 @@
 import React from 'react'
 import FilterControls from '../containers/filtercontrols.js'
 import LogView from '../containers/logview.js'
+import { hot } from 'react-hot-loader'
 
 const App = () => (
   <div>
@@ -9,4 +10,4 @@ const App = () => (
   </div>
 )
 
-export default App
+export default hot(module)(App)

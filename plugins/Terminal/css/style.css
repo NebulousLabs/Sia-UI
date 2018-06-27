@@ -15,11 +15,11 @@
 	font-weight: 100;
 	font-size: 12pt;
  	position: absolute;
- 	top: 60px;
+ 	top: 80px;
  	bottom: 0;
  	left: 0;
  	right: 0;
-	height: calc( 100% - 60px );
+	height: calc( 100% - 80px );
 }
 
 .command-history {
@@ -68,7 +68,7 @@
 footer {
 	position: absolute;
 	bottom: 0px;
-	background-color: #00CBA0;
+	background-color: #7f8c8d;
 	width: 100%;
 }
 
@@ -100,7 +100,7 @@ footer {
 	position: absolute;
 	top: 0px;
 	right: 25px;
-	background-color: #00CBA0;
+	background-color: #20EE82;
 	color: #FFF;
 	cursor: pointer;
 	font-size: 1.4em;

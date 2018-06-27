@@ -1,23 +1,43 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Wallet</title>
-		<!-- CSS -->
-		<link rel='stylesheet' href='../../css/roboto-condensed-min.css'>
-		<link rel='stylesheet' href='../../css/pure-min.css'>
-		<link rel='stylesheet' href='../../css/font-awesome.min.css'>
-		<link rel='stylesheet' href='../../css/plugin-standard.css'>
-		<link rel='stylesheet' href='css/style.css'>
-		<link rel='stylesheet' href='css/roboto-mono.css'>
-	</head>
-	<body>
-		<header class='header'>
-			<div class='title'>Terminal</div>
-		</header>
-		<!-- React root -->
-		<div id='react-root'></div>
-		<script src="../../dist/manifest.js"></script>
-		<script src="../../dist/vendor.js"></script>
-		<script src='../../dist/plugins/Terminal.js'></script>
-	</body>
+
+<head>
+	<title>Wallet</title>
+	<!-- CSS -->
+	<link rel='stylesheet' href='../../css/fonts.css'>
+	<link rel='stylesheet' href='../../css/pure-min.css'>
+	<link rel='stylesheet' href='../../css/font-awesome.min.css'>
+	<link rel='stylesheet' href='../../css/plugin-standard.css'>
+	<link rel='stylesheet' href='css/style.css'>
+	<link rel='stylesheet' href='css/roboto-mono.css'>
+</head>
+
+<body>
+	<header class='header'>
+		<div class='title'>Terminal</div>
+	</header>
+	<!-- React root -->
+	<div id='react-root'></div>
+	<script>
+		{
+			const scripts = [];
+
+			// Dynamically insert the bundled app script in the renderer process
+			const port = process.env.PORT || 1212;
+			if (process.env.HOT) {
+				scripts.push('http://localhost:' + port + '/dist/plugins/Terminal.dev.js')
+			} else {
+				scripts.push('../../dist/plugins/Terminal.prod.js')
+				scripts.push('../../dist/commons.prod.js')
+			}
+
+			document.write(
+				scripts
+					.map(script => `<script defer src="${script}"><\/script>`)
+					.join('')
+			);
+		}
+	</script>
+</body>
+
 </html>

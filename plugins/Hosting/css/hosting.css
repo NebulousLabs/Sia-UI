@@ -10,8 +10,10 @@
  * 		Black:	  #000000
  */
 
+ .section {
+	 background: #FBFBFB;
+ }
 .controls {
-	display: inline-block;
 	float: right;
 }
 
@@ -184,7 +186,7 @@
 }
 
 .modal .button.accept {
-	background-color: #00CBA0;
+	background-color: #20EE82;
 	color: white;
 	margin-bottom: 10px;
 }
@@ -198,7 +200,7 @@
 	position: absolute;
 	top: 0px;
 	right: 0px;
-	background-color: #00CBA0;
+	background-color: #20EE82;
 	color: #FFF;
 	cursor: pointer;
 	font-size: 1.4em;
@@ -270,7 +272,7 @@
 	left: calc( 50% - 200px );
 	z-index: 1;
 	width: 400px;
-	background-color: #00CBA0;
+	background-color: #20EE82;
 	border: 1px solid #fff;
 	padding: 10px 10px;
 	border-radius: 20px;
@@ -294,10 +296,6 @@
 
 .section .row {
 	height: 29px;
-}
-
-.property {
-	border-bottom: 1px solid #e0e0e0;
 }
 
 .property .name {
@@ -406,7 +404,7 @@
 	right: -100px;
 	top: 45px;
 	background: #525252;
-	border: 1px solid #00CBA0;
+	border: 1px solid #20EE82;
 	font-size: 18px;
 	padding: 10px 10px 10px 10px;
 	width: 300px;
@@ -434,7 +432,7 @@
 
 .host-status-info:before {
 	border-color: rgba(0, 203, 160, 0);
-	border-bottom-color: #00CBA0;
+	border-bottom-color: #20EE82;
 	border-width: 30px;
 	margin-left: -30px;
 }

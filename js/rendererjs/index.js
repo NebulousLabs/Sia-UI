@@ -13,10 +13,17 @@ import {
 
 const App = remote.app
 const mainWindow = remote.getCurrentWindow()
-const defaultPluginDirectory = Path.join(App.getAppPath(), './plugins')
+const defaultPluginDirectory = Path.join(process.cwd(), 'plugins')
 const defaultHomePlugin = 'Files'
 const config = remote.getGlobal('config')
+const globalPlugins = []
 window.closeToTray = mainWindow.closeToTray
+
+const reloadPlugins = () => {
+  globalPlugins.forEach(plugin => {
+    plugin.reloadIgnoringCache()
+  })
+}
 
 // Called at window.onload by the loading screen.
 // Wait for siad to load, then load the plugin system.

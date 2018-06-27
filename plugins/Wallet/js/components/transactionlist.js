@@ -99,8 +99,8 @@ const TransactionList = ({ transactions, ntransactions, actions, filter }) => {
       <div className='transaction-header'>
         <h2> Recent Transactions </h2>
         <div className='filter-toggle'>
-          <input type='checkbox' onClick={onToggleFilter} checked={filter} />Hide
-          0SC Transactions
+          <input type='checkbox' onClick={onToggleFilter} checked={filter} />
+          Hide 0SC Transactions
         </div>
       </div>
       <table className='pure-table transaction-table'>

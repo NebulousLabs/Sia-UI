@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { hot } from 'react-hot-loader'
 
 // -- helper functions --
 
@@ -26,7 +27,7 @@ const StatusBar = ({ synced, blockheight, peers }) => {
   const progress = estimatedProgress(blockheight)
 
   const redColor = '#E0000B'
-  const greenColor = '#00CBA0'
+  const greenColor = '#20EE82'
   const yellowColor = '#E7D414'
 
   const syncStyle = {
@@ -105,4 +106,4 @@ StatusBar.propTypes = {
   peers: PropTypes.number.isRequired
 }
 
-export default StatusBar
+export default hot(module)(StatusBar)

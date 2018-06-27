@@ -1,7 +1,7 @@
 import { app } from 'electron'
 import Path from 'path'
-import loadConfig from './config.js'
-import initWindow from './initWindow.js'
+import loadConfig from './js/mainjs/config.js'
+import initWindow from './js/mainjs/initWindow.js'
 
 // load config.json manager
 global.config = loadConfig(Path.join(app.getPath('userData'), 'config.json'))

@@ -8,6 +8,11 @@ import rootSaga from './sagas/index.js'
 import App from './containers/app.js'
 import { fetchData } from './actions/files.js'
 
+// If dev enable window reload
+if (process.env.NODE_ENV === 'development') {
+  require('electron-css-reload')()
+}
+
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
 sagaMiddleware.run(rootSaga)
