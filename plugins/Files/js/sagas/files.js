@@ -6,7 +6,18 @@ import * as actions from '../actions/files.js'
 import * as constants from '../constants/files.js'
 import { List } from 'immutable'
 import BigNumber from 'bignumber.js'
-import { ls, uploadDirectory, sendError, allowancePeriod, readableFilesize, siadCall, readdirRecursive, parseDownloads, parseUploads, allowanceMonths } from './helpers.js'
+import {
+  ls,
+  uploadDirectory,
+  sendError,
+  allowancePeriod,
+  readableFilesize,
+  siadCall,
+  readdirRecursive,
+  parseDownloads,
+  parseUploads,
+  allowanceMonths
+} from './helpers.js'
 
 // Query siad for the state of the wallet.
 // dispatch `unlocked` in receiveWalletLockstate
@@ -40,28 +51,38 @@ function * getFilesSaga () {
   }
 }
 
-function * getStorageEstimateSaga(action) {
-	try {
-		const response = yield siadCall('/renter/prices')
-		if (response.storageterabytemonth === '0') {
-			yield put(actions.setStorageEstimate('No Hosts'))
-			return
-		}
-		const storagePerTbMonth = new BigNumber(response.storageterabytemonth)
-		const monthsPerContract = allowanceMonths
-		const uploadPerTb = new BigNumber(response.uploadterabyte)
-		const allowance = new BigNumber(SiaAPI.siacoinsToHastings(action.funds))
-		const contractFees = new BigNumber(response.formcontracts)
+function * getStorageEstimateSaga (action) {
+  try {
+    const response = yield siadCall('/renter/prices')
+    if (response.storageterabytemonth === '0') {
+      yield put(actions.setStorageEstimate('No Hosts'))
+      return
+    }
+    const storagePerTbMonth = new BigNumber(response.storageterabytemonth)
+    const monthsPerContract = allowanceMonths
+    const uploadPerTb = new BigNumber(response.uploadterabyte)
+    const allowance = new BigNumber(SiaAPI.siacoinsToHastings(action.funds))
+    const contractFees = new BigNumber(response.formcontracts)
 
-		const allowanceMinusFees = allowance.minus(contractFees)
-		const storageOverTime = storagePerTbMonth.times(monthsPerContract).plus(uploadPerTb)
+    const allowanceMinusFees = allowance.minus(contractFees)
+    const storageOverTime = storagePerTbMonth
+      .times(monthsPerContract)
+      .plus(uploadPerTb)
 
-		const estimate = allowanceMinusFees.dividedBy(storageOverTime).times(1e12)
-		yield put(actions.setStorageEstimate('~' + readableFilesize(estimate.toPrecision(1))))
-		yield put(actions.setFeeEstimate(SiaAPI.hastingsToSiacoins(response.formcontracts).toString()))
-	} catch (e) {
-		console.error(e)
-	}
+    const estimate = allowanceMinusFees.dividedBy(storageOverTime).times(1e12)
+    yield put(
+      actions.setStorageEstimate(
+        '~' + readableFilesize(estimate.toPrecision(1))
+      )
+    )
+    yield put(
+      actions.setFeeEstimate(
+        SiaAPI.hastingsToSiacoins(response.formcontracts).toString()
+      )
+    )
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 // Get the renter's current allowance and spending.
