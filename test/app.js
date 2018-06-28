@@ -17,7 +17,8 @@ const getSiadChild = (pid) => new Promise((resolve, reject) => {
 			reject(err)
 		}
 		children.forEach((child) => {
-			if (child.COMMAND === 'siad' || child.COMMAND === 'siad.exe') {
+			const commString = child.COMM ? 'COMM' : 'COMMAND'
+			if (child[commString].includes('siad') || child[commString].includes('siad.exe')) {
 				resolve({exists: true, pid: child.PID})
 			}
 		})
@@ -30,14 +31,20 @@ const getSiadChild = (pid) => new Promise((resolve, reject) => {
 const pkillSiad = () => new Promise((resolve, reject) => {
 	psTree(process.pid, (err, children) => {
 		if (err) {
+			console.log('pkill err', err)
 			reject(err)
 		}
 		children.forEach((child) => {
-			if (child.COMMAND === 'siad' || child.COMMAND === 'siad.exe') {
+			const commString = child.COMM ? 'COMM' : 'COMMAND'
+			if (child[commString].includes('siad') || child[commString].includes('siad.exe')) {
 				if (process.platform === 'win32') {
 					spawn('taskkill', ['/pid', child.PID, '/f', '/t'])
 				} else {
-					process.kill(child.PID, 'SIGKILL')
+					try {
+						process.kill(child.PID, 'SIGKILL')
+					} catch (e) {
+						console.log('Error SIGKILL', e)
+					}
 				}
 			}
 		})
@@ -53,11 +60,12 @@ const isProcessRunning = (pid) => {
 		process.kill(pid, 0)
 		return true
 	} catch (e) {
+		console.log(`PID ${pid} not killed, ${e}`)
 		return false
 	}
 }
 
-const electronBinary = process.platform === 'win32' ? 'node_modules\\electron\\dist\\electron.exe' : './node_modules/electron/dist/electron'
+const electronBinary = process.platform === 'win32' ? 'node_modules\\electron\\dist\\electron.exe' : './node_modules/.bin/electron'
 
 // we need functions for mocha's `this` for setting timeouts.
 /* eslint-disable no-invalid-this */
@@ -68,7 +76,7 @@ describe('startup and shutdown behaviour', () => {
 		await pkillSiad()
 	})
 	describe('window closing behaviour', function() {
-		this.timeout(200000)
+		this.timeout(120000)
 		let app
 		let siadProcess
 		beforeEach(async () => {
@@ -81,19 +89,22 @@ describe('startup and shutdown behaviour', () => {
 			await app.start()
 			await app.client.waitUntilWindowLoaded()
 			while (await app.client.isVisible('#overlay-text') === true) {
-				await sleep(10)
+				await sleep(100)
 			}
 		})
 		afterEach(async () => {
+			await pkillSiad()
+			while (isProcessRunning(siadProcess.pid)) {
+				await sleep(100)
+			}
+			let isBrowserWindowDestroyed = false
 			try {
-				await pkillSiad()
-				while (isProcessRunning(siadProcess.pid)) {
-					await sleep(10)
-				}
-				app.webContents.send('quit')
-				await app.stop()
-
+				isBrowserWindowDestroyed = await app.browserWindow.isDestroyed()
 			} catch (e) {
+				isBrowserWindowDestroyed = true
+			}
+			if (!isBrowserWindowDestroyed) {
+				await app.stop()
 			}
 		})
 		it('hides the window and persists in tray if closeToTray = true', async () => {
@@ -104,6 +115,7 @@ describe('startup and shutdown behaviour', () => {
 			await sleep(1000)
 			expect(await app.browserWindow.isDestroyed()).to.be.false
 			expect(await app.browserWindow.isVisible()).to.be.false
+			expect(siadProcess.exists).to.be.true
 			expect(isProcessRunning(siadProcess.pid)).to.be.true
 		})
 		it('quits gracefully on close if closeToTray = false', async () => {
@@ -130,7 +142,9 @@ describe('startup and shutdown behaviour', () => {
 			while (isProcessRunning(pid)) {
 				await sleep(10)
 			}
-			expect(isProcessRunning(siadProcess.pid)).to.be.false
+			if (siadProcess.exists) {
+				expect(isProcessRunning(siadProcess.pid)).to.be.false
+			}
 		})
 	})
 	describe('startup with no siad currently running', function() {
@@ -185,6 +199,7 @@ describe('startup and shutdown behaviour', () => {
 		this.timeout(120000)
 		let app
 		let siadProcess
+		let beforeDone = false
 		before(async () => {
 			if (!fs.existsSync('sia-testing')) {
 				fs.mkdirSync('sia-testing')
@@ -193,7 +208,7 @@ describe('startup and shutdown behaviour', () => {
 				'sia-directory': 'sia-testing',
 			})
 			while (await Siad.isRunning('localhost:9980') === false) {
-				await sleep(10)
+				await sleep(100)
 			}
 			app = new Application({
 				path: electronBinary,
@@ -204,10 +219,14 @@ describe('startup and shutdown behaviour', () => {
 			await app.start()
 			await app.client.waitUntilWindowLoaded()
 			while (await app.client.isVisible('#overlay-text') === true) {
-				await sleep(10)
+				await sleep(500)
 			}
+			beforeDone = true
 		})
 		after(async () => {
+			while (!beforeDone) {
+				await sleep(100)
+			}
 			await pkillSiad()
 			if (app.isRunning()) {
 				app.webContents.send('quit')
