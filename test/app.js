@@ -17,7 +17,8 @@ const getSiadChild = (pid) => new Promise((resolve, reject) => {
 			reject(err)
 		}
 		children.forEach((child) => {
-			if (child.COMM.includes('siad') || child.COMM.includes('siad.exe')) {
+			const commString = child.COMM ? 'COMM' : 'COMMAND'
+			if (child[commString].includes('siad') || child[commString].includes('siad.exe')) {
 				resolve({exists: true, pid: child.PID})
 			}
 		})
@@ -34,7 +35,8 @@ const pkillSiad = () => new Promise((resolve, reject) => {
 			reject(err)
 		}
 		children.forEach((child) => {
-			if (child.COMM.includes('siad') || child.COMM.includes('siad.exe')) {
+			const commString = child.COMM ? 'COMM' : 'COMMAND'
+			if (child[commString].includes('siad') || child[commString].includes('siad.exe')) {
 				if (process.platform === 'win32') {
 					spawn('taskkill', ['/pid', child.PID, '/f', '/t'])
 				} else {
