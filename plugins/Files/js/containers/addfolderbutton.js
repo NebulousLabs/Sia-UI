@@ -4,11 +4,11 @@ import { bindActionCreators } from 'redux'
 import { showAddFolderDialog } from '../actions/files.js'
 
 const mapStateToProps = () => ({})
-const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ showAddFolderDialog }, dispatch),
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators({ showAddFolderDialog }, dispatch)
 })
 
 const AddFolderButton = connect(mapStateToProps, mapDispatchToProps)(
-	AddFolderButtonView
+  AddFolderButtonView
 )
 export default AddFolderButton

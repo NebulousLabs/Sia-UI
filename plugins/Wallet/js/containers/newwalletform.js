@@ -4,11 +4,11 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 const mapStateToProps = () => ({})
-const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ createNewWallet, hideNewWalletForm }, dispatch),
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators({ createNewWallet, hideNewWalletForm }, dispatch)
 })
 
 const NewWalletForm = connect(mapStateToProps, mapDispatchToProps)(
-	NewWalletFormView
+  NewWalletFormView
 )
 export default NewWalletForm

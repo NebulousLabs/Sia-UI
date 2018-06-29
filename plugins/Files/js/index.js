@@ -13,13 +13,13 @@ const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
 sagaMiddleware.run(rootSaga)
 
 const rootElement = (
-	<Provider store={store}>
-		<App />
-	</Provider>
+  <Provider store={store}>
+    <App />
+  </Provider>
 )
 ReactDOM.render(rootElement, document.getElementById('react-root'))
 
 // update state when plugin is focused
 window.onfocus = () => {
-	store.dispatch(fetchData())
+  store.dispatch(fetchData())
 }

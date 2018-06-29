@@ -10,21 +10,21 @@ import WalletApp from './components/app.js'
 // initWallet initializes a new wallet plugin and returns the root react
 // component for the plugin.
 export const initWallet = () => {
-	// initialize the redux store
-	const sagaMiddleware = createSagaMiddleware()
-	const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
-	sagaMiddleware.run(rootSaga)
+  // initialize the redux store
+  const sagaMiddleware = createSagaMiddleware()
+  const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
+  sagaMiddleware.run(rootSaga)
 
-	// update state when plugin is focused
-	window.onfocus = () => {
-		store.dispatch(fetchData())
-	}
+  // update state when plugin is focused
+  window.onfocus = () => {
+    store.dispatch(fetchData())
+  }
 
-	// return the wallet plugin root component, a redux Provider wrapping the
-	// root wallet component
-	return (
-		<Provider store={store}>
-			<WalletApp />
-		</Provider>
-	)
+  // return the wallet plugin root component, a redux Provider wrapping the
+  // root wallet component
+  return (
+    <Provider store={store}>
+      <WalletApp />
+    </Provider>
+  )
 }

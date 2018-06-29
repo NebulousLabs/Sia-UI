@@ -1,23 +1,33 @@
 {
   "presets": [
-    ["env", {
-      "targets": {
-        "electron": "1.6"
-      },
-      "modules": false,
-      "useBuiltIns": true
-    }],
-    "react",
-    "stage-3"
+    [
+      "env",
+      {
+        "targets": {
+          "electron": "2.0.2",
+          "node": 7
+        },
+        "useBuiltIns": true
+      }
+    ],
+    "stage-0",
+    "react"
+  ],
+  "plugins": [
+    "add-module-exports"
   ],
   "env": {
-    "test": {
+    "production": {
       "presets": [
-        "env",
-        "react",
-        "stage-3"
+        "react-optimize"
+      ]
+    },
+    "development": {
+      "plugins": [
+        "transform-class-properties",
+        "transform-es2015-classes",
+        "react-hot-loader/babel"
       ]
     }
-  },
-  "plugins": ["syntax-dynamic-import"]
+  }
 }

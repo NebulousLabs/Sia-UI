@@ -6,11 +6,11 @@ import renamedialog from './renamedialog.js'
 import allowancedialog from './allowancedialog.js'
 
 const rootReducer = combineReducers({
-	wallet,
-	files,
-	deletedialog,
-	renamedialog,
-	allowancedialog,
+  wallet,
+  files,
+  deletedialog,
+  renamedialog,
+  allowancedialog
 })
 
 export default rootReducer

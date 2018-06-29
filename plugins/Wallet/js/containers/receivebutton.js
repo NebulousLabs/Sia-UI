@@ -4,11 +4,11 @@ import { bindActionCreators } from 'redux'
 import { showReceivePrompt } from '../actions/wallet.js'
 
 const mapStateToProps = () => ({})
-const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ showReceivePrompt }, dispatch),
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators({ showReceivePrompt }, dispatch)
 })
 
 const ReceiveButton = connect(mapStateToProps, mapDispatchToProps)(
-	ReceiveButtonView
+  ReceiveButtonView
 )
 export default ReceiveButton

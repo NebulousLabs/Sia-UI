@@ -4,11 +4,11 @@ import { bindActionCreators } from 'redux'
 import { showSeedRecoveryDialog } from '../actions/wallet.js'
 
 const mapStateToProps = () => ({})
-const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ showSeedRecoveryDialog }, dispatch),
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators({ showSeedRecoveryDialog }, dispatch)
 })
 
 const RecoverButton = connect(mapStateToProps, mapDispatchToProps)(
-	RecoverButtonView
+  RecoverButtonView
 )
 export default RecoverButton

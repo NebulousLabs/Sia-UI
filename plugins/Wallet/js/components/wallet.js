@@ -16,52 +16,52 @@ import BackupPrompt from '../containers/backupprompt.js'
 import BalanceInfo from '../containers/balanceinfo.js'
 
 const Wallet = ({
-	showBackupPrompt,
-	siafundbalance,
-	showReceivePrompt,
-	showChangePasswordDialog,
-	showSendPrompt,
-	showNewWalletDialog,
-	showRecoveryDialog,
-	actions,
+  showBackupPrompt,
+  siafundbalance,
+  showReceivePrompt,
+  showChangePasswordDialog,
+  showSendPrompt,
+  showNewWalletDialog,
+  showRecoveryDialog,
+  actions
 }) => {
-	const onSendClick = (currencytype) => () =>
-		actions.startSendPrompt(currencytype)
-	return (
-		<div className="wallet">
-			<div className="wallet-toolbar">
-				<BalanceInfo />
-				<BackupButton />
-				<ChangePasswordButton />
-				<LockButton />
-				<RecoverButton />
-				{siafundbalance !== '0' ? (
-					<SendButton
-						currencytype="Siafund"
-						onClick={onSendClick('siafunds')}
-					/>
-				) : null}
-				<SendButton currencytype="Siacoin" onClick={onSendClick('siacoins')} />
-				<ReceiveButton />
-			</div>
-			{showNewWalletDialog ? <NewWalletDialog /> : null}
-			{showSendPrompt ? <SendPrompt /> : null}
-			{showReceivePrompt ? <ReceivePrompt /> : null}
-			{showRecoveryDialog ? <RecoveryDialog /> : null}
-			{showChangePasswordDialog ? <ChangePasswordDialog /> : null}
-			{showBackupPrompt ? <BackupPrompt /> : null}
-			<TransactionList />
-		</div>
-	)
+  const onSendClick = currencytype => () =>
+    actions.startSendPrompt(currencytype)
+  return (
+    <div className='wallet'>
+      <div className='wallet-toolbar'>
+        <BalanceInfo />
+        <BackupButton />
+        <ChangePasswordButton />
+        <LockButton />
+        <RecoverButton />
+        {siafundbalance !== '0' ? (
+          <SendButton
+            currencytype='Siafund'
+            onClick={onSendClick('siafunds')}
+          />
+        ) : null}
+        <SendButton currencytype='Siacoin' onClick={onSendClick('siacoins')} />
+        <ReceiveButton />
+      </div>
+      {showNewWalletDialog ? <NewWalletDialog /> : null}
+      {showSendPrompt ? <SendPrompt /> : null}
+      {showReceivePrompt ? <ReceivePrompt /> : null}
+      {showRecoveryDialog ? <RecoveryDialog /> : null}
+      {showChangePasswordDialog ? <ChangePasswordDialog /> : null}
+      {showBackupPrompt ? <BackupPrompt /> : null}
+      <TransactionList />
+    </div>
+  )
 }
 
 Wallet.propTypes = {
-	siafundbalance: PropTypes.string.isRequired,
-	showNewWalletDialog: PropTypes.bool,
-	showSendPrompt: PropTypes.bool,
-	showReceivePrompt: PropTypes.bool,
-	showChangePasswordDialog: PropTypes.bool,
-	showBackupPrompt: PropTypes.bool,
+  siafundbalance: PropTypes.string.isRequired,
+  showNewWalletDialog: PropTypes.bool,
+  showSendPrompt: PropTypes.bool,
+  showReceivePrompt: PropTypes.bool,
+  showChangePasswordDialog: PropTypes.bool,
+  showBackupPrompt: PropTypes.bool
 }
 
 export default Wallet

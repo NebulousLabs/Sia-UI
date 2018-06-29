@@ -26,6 +26,7 @@
     "glob": "^7.1.1",
     "jsdom": "^9.12.0",
     "mocha": "5.2.0",
+    "prettier-standard": "8.0.1",
     "prop-types": "^15.5.10",
     "proxyquire": "^1.8.0",
     "ps-tree": "^1.1.0",
@@ -33,6 +34,7 @@
     "react-test-renderer": "^15.5.4",
     "sinon": "^2.2.0",
     "spectron": "3.8.0",
+    "standard": "11.0.1",
     "uglify-js": "git://github.com/mishoo/UglifyJS2.git#harmony-v2.8.22",
     "uglifyjs-webpack-plugin": "^0.4.3",
     "webpack": "^2.5.1"
@@ -55,6 +57,8 @@
   },
   "scripts": {
     "start": "webpack && electron .",
+    "test": "npm run lint && npm run build && npm run test-args",
+    "format": "prettier-standard 'js/**/*.js' 'plugins/**/*.js'",
     "debug": "webpack -d && electron --remote-debugging-port=9222 .",
     "build-production": "webpack --config ./webpack.production.config.js",
     "build": "webpack",
@@ -62,9 +66,8 @@
     "clean": "rm -rf release doc/Sia-UI node_modules Sia config.json **/*.swp npm-debug.log",
     "fresh": "npm run clean && npm install && npm start",
     "test-args": "BABEL_ENV=test mocha --require babel-polyfill --require test/dom.setup.js --compilers js:babel-register --recursive ./test --exit",
-    "test": "npm run lint && npm run build && npm run test-args",
-    "lint": "eslint --max-warnings 0 ./index.js ./plugins ./js ./test",
-    "lint-fix": "eslint --fix ./index.js ./plugins ./js ./test"
+    "lint": "standard --max-warnings 0 ./index.js ./plugins ./js ./test",
+    "lint-fix": "standard --fix ./index.js ./plugins ./js ./test"
   },
   "repository": {
     "type": "git",

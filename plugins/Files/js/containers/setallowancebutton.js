@@ -4,11 +4,11 @@ import { bindActionCreators } from 'redux'
 import { showAllowanceDialog } from '../actions/files.js'
 
 const mapStateToProps = () => ({})
-const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ showAllowanceDialog }, dispatch),
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators({ showAllowanceDialog }, dispatch)
 })
 
 const SetAllowanceButton = connect(mapStateToProps, mapDispatchToProps)(
-	SetAllowanceButtonView
+  SetAllowanceButtonView
 )
 export default SetAllowanceButton

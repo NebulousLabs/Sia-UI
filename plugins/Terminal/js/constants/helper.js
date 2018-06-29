@@ -9,11 +9,11 @@ export const HELP_QMARK = 6
 
 // These commands need a password prompt or other special handling.
 export const specialCommands = [
-	['wallet', 'load', 'seed'],
-	['wallet', 'init-seed'],
-	['wallet', 'unlock'],
-	['wallet', 'load', '033x'],
-	['wallet', 'load', 'siag'],
-	['help'],
-	['?'],
+  ['wallet', 'load', 'seed'],
+  ['wallet', 'init-seed'],
+  ['wallet', 'unlock'],
+  ['wallet', 'load', '033x'],
+  ['wallet', 'load', 'siag'],
+  ['help'],
+  ['?']
 ]

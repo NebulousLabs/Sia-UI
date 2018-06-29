@@ -6,13 +6,13 @@ import AnnounceDialog from '../containers/announce.js'
 import WalletModal from '../containers/walletmodal.js'
 
 const HostingApp = () => (
-	<div className="app">
-		<Header />
-		<Body />
-		<ResizeDialog />
-		<AnnounceDialog />
-		<WalletModal />
-	</div>
+  <div className='app'>
+    <Header />
+    <Body />
+    <ResizeDialog />
+    <AnnounceDialog />
+    <WalletModal />
+  </div>
 )
 
 export default HostingApp
