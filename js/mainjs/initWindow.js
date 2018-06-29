@@ -31,7 +31,7 @@ export default function(config) {
 		)
 	} else {
 		mainWindow.tray = new Tray(
-			Path.join(app.getAppPath(), 'assets', 'tray.png')
+			Path.join(app.getAppPath(), 'assets', 'trayTemplate.png')
 		)
 	}
 	mainWindow.tray.setToolTip('Sia - The Collaborative Cloud.')
