@@ -7,8 +7,7 @@ const PasswordPrompt = ({ password, error, unlocking, actions }) => {
   if (unlocking) {
     return (
       <span className='unlock-status'>
-        {' '}
-        Unlocking your wallet, this may take a while (up to several minutes)...{' '}
+        Unlocking your wallet, this may take a while (up to several minutes)...
       </span>
     )
   }

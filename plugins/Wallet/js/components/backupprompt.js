@@ -8,15 +8,13 @@ const BackupPrompt = ({ primarySeed, auxSeeds, actions }) => {
       <div className='backupprompt'>
         {auxSeeds.length === 0 ? (
           <h3>
-            {' '}
             Write down your seed to back up your wallet. You can restore your
-            wallet using only this seed.{' '}
+            wallet using only this seed.
           </h3>
         ) : (
           <h3>
-            {' '}
             Write down your seeds to back up your wallet. You can restore your
-            wallet using only these seeds.{' '}
+            wallet using only these seeds.
           </h3>
         )}
 

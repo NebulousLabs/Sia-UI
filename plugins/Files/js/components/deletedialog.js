@@ -13,7 +13,7 @@ const DeleteDialog = ({ files, actions }) => {
       <div className='delete-dialog'>
         <h3> Confirm Deletion </h3>
         <div className='delete-text'>
-          Are you sure you want to delete {files.size}{' '}
+          Are you sure you want to delete {files.size}
           {files.size === 1 ? ' file' : ' files'}
         </div>
         <div className='delete-buttons'>

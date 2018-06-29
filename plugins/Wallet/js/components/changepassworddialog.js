@@ -25,9 +25,8 @@ const ChangePasswordDialog = ({ changePasswordError, actions }) => {
         onSubmit={handleChangePasswordClick}
       >
         <h3>
-          {' '}
           Enter your current password, and the new password you wish to replace
-          it with.{' '}
+          it with.
         </h3>
         <input
           className='currentpassword-input'

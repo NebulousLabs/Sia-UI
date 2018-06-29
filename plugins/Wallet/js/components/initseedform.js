@@ -33,10 +33,9 @@ const InitSeedForm = ({
     <form className='new-wallet-form' onSubmit={handleInitSeedClick}>
       <h3> Enter a seed to initialize your wallet from. </h3>
       <p>
-        {' '}
         This will initialize your wallet from the provided seed, rescanning the
         blockchain to find all your money. This rescan process can take a while.
-        The blockchain must also be synced.{' '}
+        The blockchain must also be synced.
       </p>
       <input type='text' name='seed' placeholder='Seed' autoFocus />
       {useCustomPassphrase ? (

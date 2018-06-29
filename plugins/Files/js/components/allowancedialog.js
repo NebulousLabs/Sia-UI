@@ -50,7 +50,7 @@ const AllowanceDialog = ({
       <form onSubmit={onAcceptClick}>
         <div className='allowance-input'>
           <label>
-            Allowance:{' '}
+            Allowance:
             <input
               type='number'
               name='allowance'

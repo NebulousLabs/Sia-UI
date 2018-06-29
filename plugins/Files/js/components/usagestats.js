@@ -47,24 +47,20 @@ const UsageStats = ({
       <div className='spending-breakdown'>
         <ul>
           <li className='allowance-spending-breakdown'>
-            Allowance: {allowance} SC{' '}
+            Allowance: {allowance} SC
           </li>
           <li className='renew-info'>Renews at Block Height: {renewheight}</li>
           <li className='contract-spending-breakdown'>
-            {' '}
-            Contract Spending: {contractspending} SC{' '}
+            Contract Spending: {contractspending} SC
           </li>
           <li className='storage-spending-breakdown'>
-            {' '}
-            Storage Spending: {storagespending} SC{' '}
+            Storage Spending: {storagespending} SC
           </li>
           <li className='upload-spending-breakdown'>
-            {' '}
-            Upload Spending: {uploadspending} SC{' '}
+            Upload Spending: {uploadspending} SC
           </li>
           <li className='download-spending-breakdown'>
-            {' '}
-            Download Spending: {downloadspending} SC{' '}
+            Download Spending: {downloadspending} SC
           </li>
         </ul>
       </div>

@@ -36,7 +36,6 @@ const DirectoryInfoBar = ({
       <div className='directory-info'>
         <span style={{ marginRight: '10px' }}> {path} </span>
         <span style={{ marginRight: '10px' }}>
-          {' '}
           {nfiles} {nfiles === 1 ? 'file' : 'files'}
         </span>
       </div>

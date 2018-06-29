@@ -32,7 +32,7 @@ const DisabledPlugin = ({ errorMsg, startSiad }) => (
   <div style={containerStyle}>
     <h2>
       Siad has exited unexpectedly. Please submit a bug report including the
-      error log{' '}
+      error log
       <a style={reportStyle} onClick={handleReport}>
         here.
       </a>

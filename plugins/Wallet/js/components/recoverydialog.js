@@ -30,13 +30,11 @@ const RecoveryDialog = ({ recovering, actions }) => {
       <form className='recovery-form' onSubmit={handleRecoverClick}>
         <h3> Enter a seed to recover funds from. </h3>
         <p>
-          {' '}
           The entire blockchain will be scanned for outputs belonging to the
-          seed. This takes a while.{' '}
+          seed. This takes a while.
         </p>
         <p>
-          {' '}
-          After the scan completes, these outputs will be sent to your wallet.{' '}
+          After the scan completes, these outputs will be sent to your wallet.
         </p>
         <input type='text' name='seed' autoFocus />
         <div className='recovery-form-buttons'>
