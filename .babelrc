@@ -5,7 +5,7 @@
       {
         "targets": {
           "electron": "2.0.2",
-          "node": 7
+          "node": 8
         },
         "useBuiltIns": true
       }
@@ -17,6 +17,13 @@
     "add-module-exports"
   ],
   "env": {
+    "test": {
+      "presets": [
+        "env",
+        "react",
+        "stage-3"
+      ]
+    },
     "production": {
       "presets": [
         "react-optimize"
@@ -28,6 +35,7 @@
         "transform-es2015-classes",
         "react-hot-loader/babel"
       ]
-    }
+    },
+    "plugins": ["syntax-dynamic-import"]
   }
 }
