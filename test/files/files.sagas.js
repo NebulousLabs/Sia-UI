@@ -31,7 +31,7 @@ const helperMocks = {
 	},
 }
 
-const rootSaga = proxyquire('../../plugins/Files/js/sagas/index.js', helperMocks).default
+const rootSaga = proxyquire('../../plugins/Files/js/sagas/index.js', helperMocks)
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 // Stub the parts of the Sia API that the files plugin uses.
