@@ -10,9 +10,9 @@ import { initPlugin } from './utils/helpers.js'
 // Render the wallet plugin
 const store = createStore(rootReducer)
 const rootElement = (
-	<Provider store={store}>
-		<CommandLine />
-	</Provider>
+  <Provider store={store}>
+    <CommandLine />
+  </Provider>
 )
 
 initPlugin()

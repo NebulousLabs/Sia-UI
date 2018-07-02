@@ -9,21 +9,17 @@ import App from './containers/app.js'
 import { fetchData } from './actions/files.js'
 
 const sagaMiddleware = createSagaMiddleware()
-const store = createStore(
-	rootReducer,
-	applyMiddleware(sagaMiddleware)
-)
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
 sagaMiddleware.run(rootSaga)
 
 const rootElement = (
-	<Provider store={store}>
-		<App />
-	</Provider>
+  <Provider store={store}>
+    <App />
+  </Provider>
 )
 ReactDOM.render(rootElement, document.getElementById('react-root'))
 
 // update state when plugin is focused
 window.onfocus = () => {
-	store.dispatch(fetchData())
+  store.dispatch(fetchData())
 }
-

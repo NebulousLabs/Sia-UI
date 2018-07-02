@@ -3,13 +3,15 @@ import { hideBackupPrompt } from '../actions/wallet.js'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-const mapStateToProps = (state) => ({
-	primarySeed: state.wallet.get('primarySeed'),
-	auxSeeds: state.wallet.get('auxSeeds'),
+const mapStateToProps = state => ({
+  primarySeed: state.wallet.get('primarySeed'),
+  auxSeeds: state.wallet.get('auxSeeds')
 })
-const mapDispatchToProps = (dispatch) => ({
-	actions: bindActionCreators({ hideBackupPrompt }, dispatch),
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators({ hideBackupPrompt }, dispatch)
 })
 
-const BackupPrompt = connect(mapStateToProps, mapDispatchToProps)(BackupPromptView)
+const BackupPrompt = connect(mapStateToProps, mapDispatchToProps)(
+  BackupPromptView
+)
 export default BackupPrompt

@@ -8,28 +8,27 @@ import HostingApp from './components/app.js'
 import * as actions from './actions/actions.js'
 
 export const hostingPlugin = () => {
-	const sagaMiddleware = createSagaMiddleware()
-	const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
-	sagaMiddleware.run(rootSaga)
+  const sagaMiddleware = createSagaMiddleware()
+  const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
+  sagaMiddleware.run(rootSaga)
 
-	store.dispatch(actions.requestDefaultSettings())
-	store.dispatch(actions.fetchData())
+  store.dispatch(actions.requestDefaultSettings())
+  store.dispatch(actions.fetchData())
 
-	const updateState = () => {
-		store.dispatch(actions.fetchData())
-		store.dispatch(actions.getHostStatus())
-	}
+  const updateState = () => {
+    store.dispatch(actions.fetchData())
+    store.dispatch(actions.getHostStatus())
+  }
 
-	// Poll Siad for state changes.
-	setInterval(updateState, 20000)
+  // Poll Siad for state changes.
+  setInterval(updateState, 20000)
 
-	// update state immediately when this plugin is focused
-	window.onfocus = updateState
+  // update state immediately when this plugin is focused
+  window.onfocus = updateState
 
-	return (
-		<Provider store={store}>
-			<HostingApp />
-		</Provider>
-	)
+  return (
+    <Provider store={store}>
+      <HostingApp />
+    </Provider>
+  )
 }
-
