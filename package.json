@@ -29,12 +29,10 @@
   "lint-staged": {
     "linters": {
       "js/**/*.js": [
-        "prettier-standard",
-        "git add"
+        "prettier-standard"
       ],
       "plugins/**/*.js": [
-        "prettier-standard",
-        "git add"
+        "prettier-standard"
       ]
     }
   },
