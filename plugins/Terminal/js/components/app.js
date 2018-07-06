@@ -1,5 +1,6 @@
 import React from 'react'
 import CommandLine from '../containers/commandline.js'
+import { hot } from 'react-hot-loader'
 
 const CommandLineApp = () => (
   <div className='app'>
@@ -7,4 +8,4 @@ const CommandLineApp = () => (
   </div>
 )
 
-export default CommandLineApp
+export default hot(module)(CommandLineApp)

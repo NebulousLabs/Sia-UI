@@ -31,7 +31,6 @@ const getSiadChild = (pid) => new Promise((resolve, reject) => {
 const pkillSiad = () => new Promise((resolve, reject) => {
 	psTree(process.pid, (err, children) => {
 		if (err) {
-			console.log('pkill err', err)
 			reject(err)
 		}
 		children.forEach((child) => {

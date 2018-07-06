@@ -51,7 +51,7 @@ div[tabindex="1"]:focus {
 	outline: 0;
 }
 .selected {
-	border-left: 5px solid #00CBA0;
+	border-left: 5px solid #20EE82;
 	background-color: #F5F5F5 !important;
 }
 .dragtarget {
@@ -75,7 +75,7 @@ div[tabindex="1"]:focus {
 	margin-top: 10px;
 }
 .file-controls i {
-	color: #00CBA0;
+	color: #20EE82;
 	cursor: pointer;
 	margin-left: 10px;
 	margin-right: 10px;
@@ -89,7 +89,6 @@ div[tabindex="1"]:focus {
 .file-transfers {
 	width: 400px;
 	height: 100%;
-	box-shadow:inset 0px 0px 0px 1px #00CBA0;
 	overflow-y: auto;
 	overflow-x: hidden;
 	display: flex;
@@ -187,19 +186,18 @@ div[tabindex="1"]:focus {
 }
 
 .files-toolbar {
+	box-sizing: border-box;
 	width: 100%;
-	padding-left: 20px;
-	height: 50px;
 	min-width: 800px;
+	padding-left: 20px !important;
+	padding-right: 20px !important;
+	min-height: 80px;
 	white-space: nowrap;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	background-color: #4a4a4a;
-	background: linear-gradient(to top, #5A5A5A 15%, #4A4A4A 85%);
+	background-color: #7f8c8d;
 	color: #fff;
-	padding-bottom: 8px;
-	padding-top: 8px;
 	font-size: 16px;
 }
 .set-allowance-button {
@@ -214,11 +212,11 @@ div[tabindex="1"]:focus {
 .upload-button:last-of-type {
 	position: absolute;
 	left: 0px;
-	top: 45px;
+	top: 55px;
 	overflow: hidden;
 	padding: 5px 0px 0px;
 	max-height: 0px;
-	background-color: #575757;
+	background-color: #20EE82;
 	transition: all 1s .1s;
 }
 .upload-button-container:hover .upload-button:last-of-type {
@@ -304,12 +302,14 @@ div[tabindex="1"]:focus {
 	display: none !important;
 	position: absolute;
 	top: 45px;
-	background: #808080;
-	border: 1px solid #00CBA0;
+	background: #ffffff;
+	color: #4F4F4F;
 	font-size: 18px;
 	padding: 10px 10px 10px 10px;
 	width: 300px;
 	white-space: pre-wrap;
+	box-shadow: 0 0 2px 2px rgba(0,0,0,0.1);
+	border-radius: 3px;
 	z-index: 100;
 }
 
@@ -326,20 +326,7 @@ div[tabindex="1"]:focus {
 
 .spending-breakdown > ul {
 	list-style: none;
-}
-
-.spending-breakdown:after {
-	border-color: rgba(82, 82, 82, 0);
-	border-bottom-color: #808080;
-	border-width: 30px;
-	margin-left: -30px;
-}
-
-.spending-breakdown:before {
-	border-color: rgba(0, 203, 160, 0);
-	border-bottom-color: #00CBA0;
-	border-width: 30px;
-	margin-left: -30px;
+	padding: 10px;
 }
 
 .files-usage-info:hover .spending-breakdown {
@@ -361,7 +348,7 @@ div[tabindex="1"]:focus {
 	background-color: #13f1c1;
 }
 .spending-bar > .contract-spending {
-	background-color: #0c4a3d;
+	background-color: #20EE82;
 }
 .spending-bar > .storage-spending {
 	background-color: #03654f;
@@ -394,7 +381,7 @@ div[tabindex="1"]:focus {
 	user-select: none;
 }
 .files-toolbar .buttons div i {
-	color: #00CBA0;
+	color: #F5F5F5;
 }
 .file-transfers .close-button {
 	position: absolute;
@@ -404,6 +391,7 @@ div[tabindex="1"]:focus {
 }
 .file-list h2 {
 	text-align: center;
+	color: #9E9E9E;
 }
 .file-list {
 	width: 100%;
@@ -413,8 +401,9 @@ div[tabindex="1"]:focus {
 	align-items: center;
 	justify-content: flex-start;
 	overflow-y: auto;
-	background-color: #C5C5C5;
+	background-color: #FBFBFB;
 	margin: 0;
+	color: #9E9E9E;
 	cursor: default;
 	-webkit-user-select: none;
 	font-size: 14px;
@@ -459,7 +448,7 @@ div[tabindex="1"]:focus {
 	background-color: #F5F5F5;
 }
 .file-list li i {
-	color: #00CBA0;
+	color: #20EE82;
 	margin-left: 10px;
 	margin-right: 10px;
 }
@@ -480,7 +469,7 @@ div[tabindex="1"]:focus {
 	display: inline-block;
 	width: 80%;
 	height: 25px;
-	border: 2px solid #00CBA0;
+	border: 2px solid #20EE82;
 }
 .drag-overlay {
 	position: absolute;
@@ -499,7 +488,7 @@ div[tabindex="1"]:focus {
 	text-align: center;
 }
 .drag-overlay i {
-	color: #00CBA0;
+	color: #20EE82;
 }
 .drag-overlay h3 {
 	margin-top: .2em;
@@ -698,7 +687,7 @@ div[tabindex="1"]:focus {
 	display: flex;
 }
 .file-buttons i {
-	color: #00CBA0;
+	color: #20EE82;
 }
 .unlock-dialog {
 	width: 100%;
@@ -724,7 +713,7 @@ div[tabindex="1"]:focus {
 	display: inline-block;
 	width: 80%;
 	height: 25px;
-	border: 2px solid #00CBA0;
+	border: 2px solid #20EE82;
 }
 .rename-form {
 	display: inline-block;

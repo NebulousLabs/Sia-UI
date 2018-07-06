@@ -2,6 +2,11 @@
 import { platform } from 'os'
 import { shell } from 'electron'
 
+// If dev enable window reload
+if (process.env.NODE_ENV === 'development') {
+  require('electron-css-reload')()
+}
+
 // Set UI version via package.json.
 document.getElementById('uiversion').innerHTML = VERSION
 

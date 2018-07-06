@@ -8,6 +8,8 @@ doc/Sia-UI
 errors.log
 dist
 sia-testing
+profiles
+test.json
 
 #VSCode
 .vscode

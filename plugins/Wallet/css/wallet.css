@@ -8,7 +8,7 @@
  *    Grey:       #C5C5C5
  *    Grey-Black: #4A4A4A
  *    Black:      #000000
- *    Neon-Green: #00CBA0
+ *    Neon-Green: #20EE82
  */
  .app {
  	position: absolute;
@@ -50,7 +50,7 @@
 	margin-bottom: 8px;
 }
 .password-prompt i {
-	color: #00CBA0;
+	color: #20EE82;
 }
 .password-prompt {
 	display: flex;
@@ -83,7 +83,7 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	background-color: #C5C5C5;
+	background-color: #FBFBFB;
 	margin: 0;
 	padding: 10px;
 }
@@ -98,7 +98,7 @@
 	color: #DC0025;
 }
 .confirmed-icon {
-	color: #00CBA0;
+	color: #20EE82;
 }
 .wallet-address {
 	display: block;
@@ -119,11 +119,14 @@
 	padding-top: 50px;
 }
 .wallet-toolbar {
+	box-sizing: border-box;
 	width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	background-color: #4A4A4A;
+	background-color: #7f8c8d;
+	padding-left: 20px;
+	padding-right: 20px;
 	padding-top: 10px;
 	padding-bottom: 10px;
 	min-height: 60px;
@@ -131,7 +134,7 @@
 .balance-info {
 	padding-left: 10px;
 	padding-right: 10px;
-	color: #DDDDDD;
+	color: #FFFFFF;
 }
 .balance-info span {
 	display: block;
@@ -241,7 +244,7 @@
 	color: #f5f5f5;
 }
 .wallet-toolbar > .wallet-button > i {
-	color: #00CBA0;
+	color: #ffffff;
 }
 .newwallet-dialog {
 	position: absolute;
@@ -313,7 +316,7 @@
 	color: #000000;
 }
 .create-wallet-button i {
-	color: #00CBA0;
+	color: #20EE82;
 }
 .create-wallet-button i:hover {
 	color: #00A785;
@@ -499,16 +502,23 @@ td {
 }
 
 button{
-	background-color: #00CAA2;
+	background-color: #20EE82;
 	border: 0;
 	color: white;
 	border-radius: 10px;
-	padding: 8px;
+	padding: 10px;
 	font-size: 16px;
-	border: 2px solid transparent;
 }
 
 button:hover {
-	background-color: #00BAA2;
-	border: 2px solid gray;
+	background-color: #46CF87;
+}
+
+.transaction-table thead {
+	background-color: #ffffff;
+}
+
+.transaction-table {
+	border: 0px;
+	border-top: 1px solid #9E9E9E;
 }

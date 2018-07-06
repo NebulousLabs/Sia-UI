@@ -23,19 +23,21 @@ export default function (config) {
   })
   // Set mainWindow's closeToTray flag from config.
   // This should be used in the renderer to cancel close() events using window.onbeforeunload
+  // In dev mode, this feature is disabled as Electron cannot find the path for the tray icon.
   mainWindow.closeToTray = config.closeToTray
-
-	if (process.platform === 'win32') {
-		mainWindow.tray = new Tray(
-			Path.join(app.getAppPath(), 'assets', 'trayWin.png')
-		)
-	} else {
-		mainWindow.tray = new Tray(
-			Path.join(app.getAppPath(), 'assets', 'trayTemplate.png')
-		)
-	}
-	mainWindow.tray.setToolTip('Sia - The Collaborative Cloud.')
-	mainWindow.tray.setContextMenu(appTray(mainWindow))
+  if (process.env.NODE_ENV !== 'development') {
+    if (process.platform === 'win32') {
+      mainWindow.tray = new Tray(
+        Path.join(app.getAppPath(), 'assets', 'trayWin.png')
+      )
+    } else {
+      mainWindow.tray = new Tray(
+        Path.join(app.getAppPath(), 'assets', 'trayTemplate.png')
+      )
+    }
+    mainWindow.tray.setToolTip('Sia - The Collaborative Cloud.')
+    mainWindow.tray.setContextMenu(appTray(mainWindow))
+  }
 
   // Load the window's size and position
   mainWindow.setBounds(config)
@@ -43,7 +45,7 @@ export default function (config) {
   mainWindow.on('resize', onBoundsChange(mainWindow, config))
 
   // Load the index.html of the app.
-  mainWindow.loadURL(Path.join('file://', app.getAppPath(), 'index.html'))
+  mainWindow.loadURL(Path.join('file://', process.cwd(), 'app.html'))
   // Choose not to show the menubar
   if (process.platform !== 'darwin') {
     mainWindow.setMenuBarVisibility(false)
@@ -59,5 +61,6 @@ export default function (config) {
       version: releaseName
     })
   }
+
   return mainWindow
 }

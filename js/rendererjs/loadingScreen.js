@@ -6,7 +6,7 @@ import * as Siad from 'sia.js'
 import Path from 'path'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import StatusBar from './statusbar.js'
+import StatusBar from './statusbar'
 
 const dialog = remote.dialog
 const app = remote.app

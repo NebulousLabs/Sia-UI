@@ -1,38 +1,22 @@
-/*  Style Guide:
- *    Transparent: 70% Opacity
- *
- *    White:      #FFFFFF
- *    Grey-White: #F5F5F5
- *    Faint-Grey: #ECECEC
- *    Light-Grey: #DDDDDD
- *    Grey:       #C5C5C5
- *    Grey-Black: #4A4A4A
- *    Black:      #000000
- *    Neon-Green: #00CBA0
- */
-/* Overall rules */
+html,body {
+	position: relative;
+	margin: 0;
+	padding: 0;
+	border-spacing: 0;
+	height: 100%;
+	width: 100%;
+	font-family: 'Metropolis', sans-serif;
+	font-weight: 300;
+	font-size: 18px;
+	-webkit-user-select: none;
+}
+
 .blueprint {
 	display: none;
 }
 
-html,body {
-	position: relative;
-
-	margin: 0;
-	padding: 0;
-	border-spacing: 0;
-
-	height: 100%;
-	width: 100%;
-
-	font-family: 'Roboto Condensed', sans-serif;
-	font-weight: 300;
-	font-size: 18px;
-
-	-webkit-user-select: none;
-}
 .pure-g [class*="pure-u"] {
-	font-family: 'Roboto Condensed', sans-serif;
+	font-family: 'Metropolis', sans-serif;
 	font-weight: 300;
 }
 ::-webkit-scrollbar { 
@@ -49,9 +33,7 @@ html,body {
 .header {
 	height: 80px;
 	width: 100%;
-
-	background-color: #313133;
-	background: linear-gradient(to left, #313133 15%, #0b0e16 85%);
+	background-color: #FFFFFF;
 }
 .logo {
 	padding-left: 20px;
@@ -88,7 +70,7 @@ html,body {
 	cursor: default;
 }
 .status-bar-blockheight {
-	color: #f5f5f5;
+	color: #9E9E9E;
 }
 
 /* Header Buttons */
@@ -108,14 +90,11 @@ html,body {
 #sidebar {
 	position: relative;
 
-	background-color: #D5D3D5;
-	width: 160px;
+	background-color: #F6F6F6;
+	width: 220px;
 	z-index: 5;
 	height: 100%;
-
-	-webkit-box-sizing:border-box;
-	border-left: 0 solid #F5F5F5;
-	border-right: 1px solid #B5B5B5;
+	/* box-shadow: 0 2px 5px 0 rgba(0,0,0,0.30); */
 }
 .button {
 	display: flex;
@@ -141,7 +120,7 @@ html,body {
 .button.current {
 	transition: all .25s;
 	cursor: default;
-	background-color: #00CBA0;
+	background-color: #20EE82;
 	color: #F5F5F5;
 }
 .button.current .icon, .button:hover .icon {
@@ -179,7 +158,7 @@ html,body {
 .webview {
 	position: absolute;
 	height: 100%;
-	min-width: calc(100% - 160px);
+	min-width: calc(100% - 220px);
 	right: 0;
 	opacity: 0;
 	z-index: -1;

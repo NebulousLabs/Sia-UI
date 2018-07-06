@@ -11,7 +11,7 @@ const mock = {
 		'@noCallThru': true,
 	},
 }
-const loadConfig = proxyquire('../js/mainjs/config.js', mock).default
+const loadConfig = proxyquire('../js/mainjs/config.js', mock)
 
 describe('config.js', () => {
 	afterEach(() => {
