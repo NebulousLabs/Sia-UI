@@ -13,7 +13,10 @@ import {
 
 const App = remote.app
 const mainWindow = remote.getCurrentWindow()
-const defaultPluginDirectory = Path.join(process.cwd(), 'plugins')
+const appEntry = process.env.NODE_ENV === 'development'
+  ? process.cwd()
+  : App.getAppPath()
+const defaultPluginDirectory = Path.join(appEntry, 'plugins')
 const defaultHomePlugin = 'Files'
 const config = remote.getGlobal('config')
 const globalPlugins = []
